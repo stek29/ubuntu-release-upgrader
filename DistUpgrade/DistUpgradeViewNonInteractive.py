@@ -22,6 +22,7 @@
 import apt
 import logging
 import time
+import sys
 from DistUpgradeView import DistUpgradeView
 
 class NonInteractiveInstallProgress(apt.progress.InstallProgress):

@@ -30,7 +30,7 @@ import shutil
 import time
 import os.path
 
-from UpdateManager.Common.DistInfo import DistInfo
+from DistInfo import DistInfo
 
 # actual source.list entries
 class SourceEntry:

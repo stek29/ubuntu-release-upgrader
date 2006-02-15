@@ -5,18 +5,10 @@ DIST=dapper
 # cleanup
 rm -f *~ *.bak *.pyc
 
-# update po
-(cd ../po; make update-po)
-
-# copy the mo files
-cp -r ../po/mo .
-
 # make symlink
 if [ ! -h $DIST ]; then
-	ln -s dist-upgrade.py $DIST
+       ln -s dist-upgrade.py $DIST
 fi
 
-# create the tarbal 
-tar -c -z -v --exclude=$DIST.tar.gz --exclude=$0 -f $DIST.tar.gz .
-
-
+# create the tarbal
+tar -c -z -h -v --exclude=debian --exclude=$DIST.tar.gz --exclude=$0 -f $DIST.tar.gz .

@@ -9,7 +9,7 @@ import sys
 if __name__ == "__main__":
 
     logging.basicConfig(level=logging.DEBUG,
-                        filename=os.path.expanduser("~/dist-upgrade.log"),
+                        stream=logging.StreamHandler(sys.stdout),
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode='w')
 

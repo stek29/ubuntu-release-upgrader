@@ -12,3 +12,5 @@ fi
 
 # create the tarbal
 tar -c -z -h -v --exclude=debian --exclude=$DIST.tar.gz --exclude=$0 -f $DIST.tar.gz .
+
+scp dapper.tar.gz people:~/public_html/.autoupgrade

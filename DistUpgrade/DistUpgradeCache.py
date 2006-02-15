@@ -19,9 +19,9 @@ class MyCache(apt.Cache):
 
         # turn on debuging
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
-        fd = os.open(os.path.expanduser("~/dist-upgrade-apt.log"), os.O_RDWR|os.O_CREAT|os.O_TRUNC)
-        os.dup2(fd,1)
-        os.dup2(fd,2)
+        #fd = os.open(os.path.expanduser("~/dist-upgrade-apt.log"), os.O_RDWR|os.O_CREAT|os.O_TRUNC)
+        #os.dup2(fd,1)
+        #os.dup2(fd,2)
 
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = []

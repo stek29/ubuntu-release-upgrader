@@ -30,7 +30,10 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     def conffile(self, current, new):
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
-	sys.stdin.write("y\n")
+	try:
+	  sys.stdin.write("y\n")
+ 	except Exception, e:
+	  logging.error("error '%s' when trying to write to the conffile")
     def updateInterface(self):
 	apt.progress.InstallProgress.updateInterface(self)
 	time.sleep(0.001)

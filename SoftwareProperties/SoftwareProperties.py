@@ -34,9 +34,11 @@ import os
 #sys.path.append("@prefix/share/update-manager/python")
 
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp
+from UpdateManager.Common.HelpViewer import HelpViewer
 import aptsources
 import dialog_add
 import dialog_edit
+import dialog_cache_outdated
 from dialog_apt_key import apt_key
 from utils import *
 
@@ -68,12 +70,19 @@ class SoftwareProperties(SimpleGladeApp):
     #self.gconfclient = gconf.client_get_default()
 
     if parent:
+      self.window_main.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+      self.window_main.show()
       self.window_main.set_transient_for(parent)
 
     # If externally called, reparent to external application.
+    self.options = options
     if options and options.toplevel != None:
+      self.window_main.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+      self.window_main.show()
       toplevel = gtk.gdk.window_foreign_new(int(options.toplevel))
       self.window_main.window.set_transient_for(toplevel)
+    
+    self.window_main.show()
       
     self.init_sourceslist()
     self.reload_sourceslist()
@@ -165,6 +174,10 @@ class SoftwareProperties(SimpleGladeApp):
     else:
         self.checkbutton_unattended.set_active(False)
 
+    self.help_viewer = HelpViewer("update-manager#setting-preferences")
+    if self.help_viewer.check() == False:
+        self.button_help.set_sensitive(False)
+
     # apt-key stuff
     self.apt_key = apt_key()
     self.init_keyslist()
@@ -182,8 +195,13 @@ class SoftwareProperties(SimpleGladeApp):
     tr.set_property("ypad", 10)
     
     source_col = gtk.TreeViewColumn("Description", tr, markup=LIST_MARKUP)
-    source_col.set_max_width(500)
+    #source_col.set_max_width(500)
 
+    toggle = gtk.CellRendererToggle()
+    toggle.connect("toggled", self.on_channel_toggled)
+    toggle_col = gtk.TreeViewColumn("Active", toggle, active=LIST_ENABLED)
+
+    self.treeview_sources.append_column(toggle_col)
     self.treeview_sources.append_column(source_col)
     
     self.sourceslist = aptsources.SourcesList()
@@ -199,9 +217,10 @@ class SoftwareProperties(SimpleGladeApp):
     self.treeview2.append_column(keys_col)
     
   def reload_sourceslist(self):
+    (path_x, path_y) = self.treeview_sources.get_cursor()
     self.source_store.clear()
     for source in self.sourceslist.list:
-      if source.invalid or source.disabled:
+      if source.invalid:
         continue
       (a_type, dist, comps) = self.matcher.match(source)
       
@@ -211,7 +230,15 @@ class SoftwareProperties(SimpleGladeApp):
       contents +="<big><b>%s </b></big> (%s) <small>\n%s</small>" % (dist,a_type, comps)
 
       self.source_store.append([contents, not source.disabled, source])
-      
+    # try to reselect the latest selected channel or if it fails the first
+    # one
+    if len(self.source_store) > 0 and \
+       (path_x == None or self.treeview_sources.set_cursor(path_x)):
+            self.treeview_sources.set_cursor(0)
+    else:
+        # call the cursor_changed signal if no channel is selected
+        self.treeview_sources.emit("cursor_changed")
+
   def reload_keyslist(self):
     self.keys_store.clear()
     for key in self.apt_key.list():
@@ -315,13 +342,20 @@ class SoftwareProperties(SimpleGladeApp):
     for i in cnf.List():
       f.write("APT::Periodic::%s \"%s\";\n" % (i, cnf.FindI(i)))
     f.close()    
-    
+
   def save_sourceslist(self):
     #location = "/etc/apt/sources.list"
     #shutil.copy(location, location + ".save")
     self.sourceslist.backup(".save")
     self.sourceslist.save()
-    
+    # show a dialog that a reload of the channel information is required
+    # only if there is no parent defined
+    if self.modified == True and \
+       self.options.toplevel == None:
+        d = dialog_cache_outdated.DialogCacheOutdated(self.window_main,
+                                                      self.datadir)
+        res = d.run()
+
   def on_add_clicked(self, widget):
     dialog = dialog_add.dialog_add(self.window_main, self.sourceslist,
                                    self.datadir)
@@ -340,7 +374,32 @@ class SoftwareProperties(SimpleGladeApp):
     if dialog.run() == gtk.RESPONSE_OK:
       self.reload_sourceslist()
       self.modified = True
-      
+
+  def on_channel_activated(self, treeview, path, column):
+     """Open the edit dialog if a channel was double clicked"""
+     # check if the channel can be edited
+     if self.button_edit.get_property("sensitive") == True:
+         self.on_edit_clicked(treeview)
+
+  def on_treeview_sources_cursor_changed(self, treeview):
+    """set the sensitiveness of the edit and remove button
+       corresponding to the selected channel"""
+    sel = self.treeview_sources.get_selection()
+    (model, iter) = sel.get_selected()
+    if not iter:
+        # No channel is selected, so disable edit and remove
+        self.button_edit.set_sensitive(False)
+        self.button_remove.set_sensitive(False)
+        return
+    # allow to remove the selected channel
+    self.button_remove.set_sensitive(True)
+    # disable editing of cdrom sources
+    source_entry = model.get_value(iter, LIST_ENTRY_OBJ)
+    if source_entry.uri.startswith("cdrom:"):
+        self.button_edit.set_sensitive(False)
+    else:
+        self.button_edit.set_sensitive(True)
+
   def on_remove_clicked(self, widget):
     sel = self.treeview_sources.get_selection()
     (model, iter) = sel.get_selected()
@@ -392,9 +451,7 @@ class SoftwareProperties(SimpleGladeApp):
     self.quit()
     
   def on_help_button(self, widget):
-    gnome.help_display_desktop(self.gnome_program, 
-                               "update-manager", "update-manager", 
-                               "setting-preferences")
+    self.help_viewer.run()
 
   def on_button_add_cdrom_clicked(self, widget):
     #print "on_button_add_cdrom_clicked()"
@@ -436,6 +493,13 @@ class SoftwareProperties(SimpleGladeApp):
       self.reload_sourceslist()
       self.modified = True
 
+  def on_channel_toggled(self, cell_toggle, path):
+      """Enable or disable the selected channel"""
+      iter = self.source_store.get_iter((int(path),))
+      source_entry = self.source_store.get_value(iter, LIST_ENTRY_OBJ)
+      source_entry.disabled = not source_entry.disabled
+      self.reload_sourceslist()
+      self.modified = True
 
 # FIXME: move this into a different file
 class GtkCdromProgress(apt.progress.CdromProgress, SimpleGladeApp):

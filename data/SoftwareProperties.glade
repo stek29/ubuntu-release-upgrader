@@ -7,7 +7,6 @@
   <property name="border_width">6</property>
   <property name="width_request">580</property>
   <property name="height_request">400</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Software Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER</property>
@@ -18,7 +17,7 @@
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
-  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
@@ -93,6 +92,8 @@
 				  <property name="fixed_height_mode">False</property>
 				  <property name="hover_selection">False</property>
 				  <property name="hover_expand">False</property>
+				  <signal name="row_activated" handler="on_channel_activated" last_modification_time="Fri, 24 Mar 2006 12:56:00 GMT"/>
+				  <signal name="cursor_changed" handler="on_treeview_sources_cursor_changed" last_modification_time="Fri, 24 Mar 2006 13:00:27 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -371,7 +372,7 @@
 			<widget class="GtkCheckButton" id="checkbutton_auto_download">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">_Download updates in the backgound, but do not install them</property>
+			  <property name="label" translatable="yes">_Download updates in the background, but do not install them</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>

@@ -58,7 +58,6 @@ class DistUpgradeControler(object):
 
 
     def updateSourcesList(self):
-        self.sources = SourcesList()
 
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange
@@ -157,7 +156,7 @@ class DistUpgradeControler(object):
         # FIXME: retry here too? just like the DoDistUpgrade?
         #        also remove all files from the lists partial dir!
         currentRetry = 0
-        maxRetries = self.config.get("Network","MaxRetries")
+        maxRetries = int(self.config.get("Network","MaxRetries"))
         while currentRetry < maxRetries:
             try:
                 res = self.cache.update(progress)
@@ -183,17 +182,20 @@ class DistUpgradeControler(object):
         # log the changes for debuging
         self._logChanges()
         # ask the user if he wants to do the changes
-        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives ")
+        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
         st = os.statvfs(archivedir)
         free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
         if self.cache.requiredDownload > free:
-            self._view.error(_("Not enough free space"),
-                             _("There is not enough free space on your "
-                               "system to download the required pacakges. "
-                               "Please free some space before trying again "
-                               "with e.g. 'sudo apt-get clean'"))
-            return False                             
-        res = self._view.confirmChanges(_("Perform Upgrade?"),changes,
+            free_at_least = apt_pkg.SizeToStr(self.cache.requiredDownload-free)
+            self._view.error(_("Not enough free disk space"),
+                             _("The upgrade aborts now. "
+                               "Please free at least %s of disk space. "
+                               "Empty your trash and remove temporary "
+                               "packages of former installations using "
+                               "'sudo apt-get clean'." % free_at_least ))
+            return False
+        res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
+                                        changes,
                                         self.cache.requiredDownload)
         return res
 
@@ -202,18 +204,18 @@ class DistUpgradeControler(object):
         fprogress = self._view.getFetchProgress()
         iprogress = self._view.getInstallProgress()
         # retry the fetching in case of errors
-        maxRetries = self.config.get("Network","MaxRetries")
+        maxRetries = int(self.config.get("Network","MaxRetries"))
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 # installing the packages failed, can't be retried
-                self._view.error(_("Error during commit"),
-                                 _("Some problem occured during the upgrade. "
-                                   "Most likely packages failed to install. "
-                                   "Try 'sudo apt-get install -f' or synaptic "
-                                   "to fix your system."),
+                self._view.error(_("Could not install the upgrades"),
+                                 _("The upgrade aborts now. Your system "
+                                   "can be in an unusable state. A recovery "
+                                   "is now run (dpkg --configure -a)."),
                                  "%s" % e)
+                self._view.getTerminal().call(["dpkg","--configure","-a"])
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -225,11 +227,10 @@ class DistUpgradeControler(object):
         
         # maximum fetch-retries reached without a successful commit
         logging.debug("giving up on fetching after maximum retries")
-        self._view.error(_("Error fetching the packages"),
-                         _("Some problem occured during the fetching "
-                           "of the packages. This is most likely a network "
-                           "problem. Please check your network and try "
-                           "again. "),
+        self._view.error(_("Could not download the upgrades"),
+                         _("The upgrade aborts now. Please check your "\
+                           "internet connection or "\
+                           "installation media and try again. "),
                            "%s" % e)
         # abort here because we want our sources.list back
         self.abort()
@@ -269,9 +270,12 @@ class DistUpgradeControler(object):
         # get changes
         changes = self.cache.getChanges()
         logging.debug("The following packages are remove candidates: %s" % " ".join([pkg.name for pkg in changes]))
+        summary = _("Remove obsolete packages?")
+        actions = [_("_Skip This Step"), _("_Remove")]
+        # FIXME Add an explanation about what obsolete pacages are
+        #explanation = _("")
         if len(changes) > 0 and \
-               self._view.confirmChanges(_("Remove obsolete Packages?"),
-                                         changes, 0):
+               self._view.confirmChanges(summary, changes, 0, actions):
             fprogress = self._view.getFetchProgress()
             iprogress = self._view.getInstallProgress()
             try:
@@ -294,13 +298,16 @@ class DistUpgradeControler(object):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
         self._view.setStep(1)
+
         self.openCache()
-        
+        self.sources = SourcesList()
+     
         if not self.cache.sanityCheck(self._view):
             abort(1)
 
         # run a "apt-get update" now
-        self.doUpdate()
+        if not self.doUpdate():
+            self.abort()
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)
         self.doPreUpdate()

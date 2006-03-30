@@ -19,6 +19,12 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+class DumbTerminal(object):
+    def run(self, cmd):
+        " expects a command in the subprocess style (as a list) "
+        subprocess.call(cmd)
+        
+
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
     def __init__(self):
@@ -32,6 +38,8 @@ class DistUpgradeView(object):
     def getInstallProgress(self):
         " return a install progress object "
         return apt.progress.InstallProgress()
+    def getTerminal(self):
+        return DumbTerminal()
     def updateStatus(self, msg):
         """ update the current status of the distUpgrade based
             on the current view
@@ -65,9 +73,9 @@ class DistUpgradeView(object):
     def confirmRestart(self):
         " generic ask about the restart, can be overriden "
         summary = _("Reboot required")
-        msg =  _("The upgrade is finished now. "
-                 "A reboot is required to "
-                 "now, do you want to do this "
+        msg =  _("The upgrade is finished and "
+                 "a reboot is required. "
+                 "Do you want to do this "
                  "now?")
         return self.askYesNoQuestion(summary, msg)
     def error(self, summary, msg, extended_msg=None):

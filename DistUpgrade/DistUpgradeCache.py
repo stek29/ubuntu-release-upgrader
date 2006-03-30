@@ -18,8 +18,8 @@ class MyCache(apt.Cache):
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
 
         # turn on debuging
-        apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
-        #fd = os.open(os.path.expanduser("~/dist-upgrade-apt.log"), os.O_RDWR|os.O_CREAT|os.O_TRUNC)
+        #apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
+        #fd = os.open("/var/log/dist-upgrade-apt.log", os.O_RDWR|os.O_CREAT|os.O_TRUNC)
         #os.dup2(fd,1)
         #os.dup2(fd,2)
 
@@ -157,6 +157,7 @@ class MyCache(apt.Cache):
             origins = pkg.candidateOrigin
             trusted = False
             for origin in origins:
+                #print origin
                 trusted |= origin.trusted
             if not trusted:
                 untrusted.append(pkg.name)

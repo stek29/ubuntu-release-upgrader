@@ -24,6 +24,12 @@ import logging
 import time
 import sys
 from DistUpgradeView import DistUpgradeView
+import os
+import pty
+
+class NonInteractiveFetchProgress(apt.progress.FetchProgress):
+    def updateStatus(self, uri, descr, shortDescr, status):
+        logging.debug("Fetch: updateStatus %s %s" % (uri, status))
 
 class NonInteractiveInstallProgress(apt.progress.InstallProgress):
     def error(self, pkg, errormsg):
@@ -31,12 +37,21 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
     def conffile(self, current, new):
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
 	try:
-	  sys.stdin.write("y\n")
+          # don't overwrite
+	  self.master_fd.write("n\n")
  	except Exception, e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
     def updateInterface(self):
+        # FIXME: this needs some love ;)
+        print os.read(self.master_fd, 1),
 	apt.progress.InstallProgress.updateInterface(self)
 	time.sleep(0.001)
+    def fork(self):
+        logging.debug("doing a pty.fork()")
+        (self.pid, self.master_fd) = pty.fork()
+        logging.debug("pid is: %s" % self.pid)
+        return self.pid
+        
 
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
@@ -47,7 +62,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         return apt.progress.OpProgress()
     def getFetchProgress(self):
         " return a fetch progress object "
-        return apt.progress.FetchProgress()
+        return NonInteractiveFetchProgress()
     def getInstallProgress(self):
         " return a install progress object "
         return NonInteractiveInstallProgress()

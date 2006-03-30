@@ -33,7 +33,7 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
 	try:
 	  sys.stdin.write("y\n")
  	except Exception, e:
-	  logging.error("error '%s' when trying to write to the conffile")
+	  logging.error("error '%s' when trying to write to the conffile"%e)
     def updateInterface(self):
 	apt.progress.InstallProgress.updateInterface(self)
 	time.sleep(0.001)

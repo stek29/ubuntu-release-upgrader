@@ -38,11 +38,12 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
 	try:
           # don't overwrite
-	  self.master_fd.write("n\n")
+	  os.write(self.master_fd,"n\n")
  	except Exception, e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
     def updateInterface(self):
         # FIXME: this needs some love ;)
+        # like in: READ IT ALL SUCKER until nothing is left
         print os.read(self.master_fd, 1),
 	apt.progress.InstallProgress.updateInterface(self)
 	time.sleep(0.001)

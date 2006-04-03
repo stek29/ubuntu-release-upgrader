@@ -42,10 +42,13 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
  	except Exception, e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
     def updateInterface(self):
+	apt.progress.InstallProgress.updateInterface(self)
         # FIXME: this needs some love ;)
         # like in: READ IT ALL SUCKER until nothing is left
-        print os.read(self.master_fd, 1),
-	apt.progress.InstallProgress.updateInterface(self)
+        try:
+            print os.read(self.master_fd, 1),
+        except:
+            pass
 	time.sleep(0.001)
     def fork(self):
         logging.debug("doing a pty.fork()")

@@ -3,7 +3,7 @@
 DIST=dapper
 
 # cleanup
-rm -f *~ *.bak *.pyc
+rm -f *~ *.bak *.pyc *.moved '#'*
 
 # make symlink
 if [ ! -h $DIST ]; then

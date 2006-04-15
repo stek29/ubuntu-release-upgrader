@@ -32,6 +32,10 @@ class NonInteractiveFetchProgress(apt.progress.FetchProgress):
         logging.debug("Fetch: updateStatus %s %s" % (uri, status))
 
 class NonInteractiveInstallProgress(apt.progress.InstallProgress):
+    def __init__(self):
+        os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+        os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
+
     def error(self, pkg, errormsg):
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     def conffile(self, current, new):

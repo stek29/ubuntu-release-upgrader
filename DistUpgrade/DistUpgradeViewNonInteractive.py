@@ -50,7 +50,7 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         # FIXME: this needs some love ;)
         # like in: READ IT ALL SUCKER until nothing is left
         try:
-            print os.read(self.master_fd, 1),
+            sys.stdout.write("%s" % os.read(self.master_fd, 1))
         except:
             pass
 	time.sleep(0.001)

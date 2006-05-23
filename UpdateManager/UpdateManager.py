@@ -28,7 +28,10 @@ pygtk.require('2.0')
 import gtk
 import gtk.gdk
 import gtk.glade
-import gconf
+try:
+	import gconf
+except:
+	import fakegconf as gconf
 import gobject
 import apt
 import apt_pkg
@@ -94,15 +97,36 @@ class MyCache(apt.Cache):
         # don't touch the gui in this function, it needs to be thread-safe
         pkg = self[name]
 
-        verstr = pkg.candidateVersion
+	# get the src package name
         srcpkg = pkg.sourcePackageName
 
         # assume "main" section 
         src_section = "main"
-        # check if we have something else
-        l = string.split(pkg.section,"/")
+        # use the section of the candidate as a starting point
+	section = pkg._depcache.GetCandidateVer(pkg._pkg).Section
+	
+	# get the source version, start with the binaries version
+	srcver = pkg.candidateVersion
+	try:
+		# try to get the source version of the pkg, this differs
+		# for some (e.g. libnspr4 on ubuntu)
+		srcrecords = apt_pkg.GetPkgSrcRecords()
+		srcrec = srcrecords.Lookup(srcpkg)
+		if srcrec:
+			srcver = srcrecords.Version
+			#print "srcver: %s" % srcver
+			section = srcrecords.Section
+			#print "srcsect: %s" % section
+	except SystemError, e:
+		# catch errors and ignore them,
+		# this feature only works if deb-src are in the sources.list
+		# otherwise we fall back to the binary version number
+		pass
+
+	
+        l = section.split("/")
         if len(l) > 1:
-            sec_section = l[0]
+            src_section = l[0]
 
         # lib is handled special
         prefix = srcpkg[0]
@@ -110,18 +134,18 @@ class MyCache(apt.Cache):
             prefix = "lib" + srcpkg[3]
 
         # stip epoch
-        l = string.split(verstr,":")
+        l = string.split(srcver,":")
         if len(l) > 1:
-            verstr = l[1]
+            srcver = "".join(l[1:])
 
         try:
-            uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, verstr)
+            uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver)
             #print "Trying: %s " % uri
             changelog = urllib2.urlopen(uri)
             #print changelog.read()
             # do only get the lines that are new
             alllines = ""
-            regexp = "^%s \((.*)\)(.*)$" % (srcpkg)
+            regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
 
             i=0
             while True:
@@ -131,7 +155,14 @@ class MyCache(apt.Cache):
                     break
                 match = re.match(regexp,line)
                 if match:
-                    if apt_pkg.VersionCompare(match.group(1),pkg.installedVersion) <= 0:
+		    # FIXME: the installed version can have a epoch, but th
+		    #        changelog does not have one, we do a dumb
+		    #        approach here and just strip it away, but I'm
+		    #        sure that this can lead to problems
+		    installed = pkg.installedVersion
+		    if ":" in installed:
+			    installed = installed.split(":",1)[1]
+                    if apt_pkg.VersionCompare(match.group(1),installed) <= 0:
                         break
                     # EOF (shouldn't really happen)
                 alllines = alllines + line
@@ -146,9 +177,9 @@ class MyCache(apt.Cache):
                                             "later."), srcpkg]
         except IOError:
             if lock.locked():
-                self.all_changes[name] = [_("Failed to download the list"
+                self.all_changes[name] = [_("Failed to download the list "
                                             "of changes. Please "
-                                            "check your internet "
+                                            "check your Internet "
                                             "connection."), srcpkg]
         if lock.locked():
             lock.release()
@@ -179,7 +210,7 @@ class UpdateList:
       msg = ("<big><b>%s</b></big>\n\n%s" % \
             (_("Cannot install all available updates"),
              _("Some updates require the removal of further software. "
-               "Use the function \"Smart Upgrade\" of the package manager "
+               "Use the function \"Mark All Upgrades\" of the package manager "
 	       "\"Synaptic\" or run \"sudo apt-get dist-upgrade\" in a "
 	       "terminal to update your system completely.")))
       dialog = gtk.MessageDialog(self.parent_window, 0, gtk.MESSAGE_INFO,
@@ -212,17 +243,13 @@ class UpdateList:
 class UpdateManager(SimpleGladeApp):
 
   def __init__(self, datadir):
-    icons = gtk.icon_theme_get_default()
-    try:
-        logo=icons.load_icon("update-manager", 48, 0)
-        gtk.window_set_default_icon_list(logo)
-    except:
-        pass
+    gtk.window_set_default_icon_name("update-manager")
 
     self.datadir = datadir
     SimpleGladeApp.__init__(self, datadir+"glade/UpdateManager.glade",
                             None, domain="update-manager")
 
+    self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
     self.button_close.grab_focus()
@@ -282,6 +309,8 @@ class UpdateManager(SimpleGladeApp):
         proxy_host = cnf.Find("Synaptic::httpProxy")
         proxy_port = str(cnf.FindI("Synaptic::httpProxyPort"))
         if proxy_host and proxy_port:
+	  # FIXME: set the proxy for libapt here as well (e.g. for the
+	  #        DistUpgradeFetcher
           proxy_support = urllib2.ProxyHandler({"http":"http://%s:%s" % (proxy_host, proxy_port)})
           opener = urllib2.build_opener(proxy_support)
           urllib2.install_opener(opener)
@@ -295,6 +324,7 @@ class UpdateManager(SimpleGladeApp):
     self.gconfclient = gconf.client_get_default()
     # restore state
     self.restore_state()
+    self.window_main.show()
       
 
   def on_checkbutton_reminder_toggled(self, checkbutton):
@@ -319,7 +349,7 @@ class UpdateManager(SimpleGladeApp):
     
       end_iter = changes_buffer.get_end_iter()
       
-      version_match = re.match("^%s \((.*)\)(.*)$" % (srcpkg), line)
+      version_match = re.match(r'^%s \((.*)\)(.*)$' % re.escape(srcpkg), line)
       #bullet_match = re.match("^.*[\*-]", line)
       author_match = re.match("^.*--.*<.*@.*>.*$", line)
       if version_match:
@@ -407,6 +437,8 @@ class UpdateManager(SimpleGladeApp):
     if name in self.packages:
       self.packages.remove(name)
       self.dl_size -= pkg.packageSize
+      self.label_downsize.set_markup(_("Download size: %s" % \
+                                     apt_pkg.SizeToStr(self.dl_size)))
       if len(self.packages) == 0:
         self.button_install.set_sensitive(False)
 
@@ -415,6 +447,8 @@ class UpdateManager(SimpleGladeApp):
     if name not in self.packages:
       self.packages.append(name)
       self.dl_size += pkg.packageSize
+      self.label_downsize.set_markup(_("Download size: %s" % \
+                                     apt_pkg.SizeToStr(self.dl_size)))
       if len(self.packages) > 0:
         self.button_install.set_sensitive(True)
 
@@ -426,14 +460,18 @@ class UpdateManager(SimpleGladeApp):
           text_download = ""
           self.notebook_details.set_sensitive(False)
           self.treeview_update.set_sensitive(False)
+          self.button_install.set_sensitive(False)
           self.label_downsize.set_text=""
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")
       else:
-          text_header = "<big><b>"+gettext.ngettext("You can install one update", "You can install %s updates" % len(self.store), len(self.store))+"</b></big>"
-          
-          text_download = _("Download size: %s" % apt_pkg.SizeToStr(self.dl_size))
+          text_header = "<big><b>" + \
+                        gettext.ngettext("You can install %s update",
+                                         "You can install %s updates", 
+                                         len(self.store)) % \
+                                        len(self.store) + "</b></big>"
+          text_download = _("Download size: %s") % apt_pkg.SizeToStr(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()
@@ -546,51 +584,6 @@ class UpdateManager(SimpleGladeApp):
     if x > 0 and y > 0:
       self.window_main.resize(x,y)
 
-  def on_button_preferences_clicked(self, widget):
-    """ start gnome-software preferences """
-    # args: "-n" means we take care of the reloading of the
-    # package list ourself
-    #apt_pkg.PkgSystemUnLock()
-    #args = ['/usr/bin/gnome-software-properties', '-n']
-    #child = subprocess.Popen(args)
-    #self.window_main.set_sensitive(False)
-    #res = None
-    #while res == None:
-    #  res = child.poll()
-    #  time.sleep(0.05)
-    ##  while gtk.events_pending():
-    #    gtk.main_iteration()
-    # repository information changed, call "reload"
-    #try:
-    #    apt_pkg.PkgSystemLock()
-    #except SystemError:
-    #	print "Error geting the cache"
-    #    apt_pkg.PkgSystemLock()
-    #    if res > 0:
-    #      self.on_button_reload_clicked(None)
-    #    self.window_main.set_sensitive(True)
-    self.window_main.set_sensitive(False)
-    from SoftwareProperties import SoftwareProperties
-    prop = SoftwareProperties.SoftwareProperties(self.datadir, None)
-    prop.window_main.set_transient_for(self.window_main)
-    prop.run()
-    prop.window_main.hide()
-    if prop.modified:
-        primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
-                  _("Repositories changed")
-        secondary = _("You need to reload the package list from the servers "
-                      "for your changes to take effect. Do you want to do "
-                      "this now?") 
-        dialog = gtk.MessageDialog(self.window_main, 0,
-                               gtk.MESSAGE_INFO,gtk.BUTTONS_YES_NO,"")
-        dialog.set_markup(primary);
-        dialog.format_secondary_text(secondary);
-        res = dialog.run()
-        dialog.destroy()
-        if res == gtk.RESPONSE_YES:
-            self.on_button_reload_clicked(None)
-    self.window_main.set_sensitive(True)
-
   def fillstore(self):
     # use the watch cursor
     self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
@@ -639,12 +632,12 @@ class UpdateManager(SimpleGladeApp):
     dialog.destroy()
     
   def on_button_dist_upgrade_clicked(self, button):
-      print "on_button_dist_upgrade_clicked"
+      #print "on_button_dist_upgrade_clicked"
       fetcher = DistUpgradeFetcher(self, self.new_dist)
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):
-    print "new_dist_available: %s" % upgradable_to.name
+    #print "new_dist_available: %s" % upgradable_to.name
     # check if the user already knowns about this dist
     #seen = self.gconfclient.get_string("/apps/update-manager/seen_dist")
     #if name == seen:
@@ -735,10 +728,16 @@ class UpdateManager(SimpleGladeApp):
               self.on_button_reload_clicked(None)
 
 
-  def main(self):
-    self.meta = MetaRelease()
-    self.meta.connect("new_dist_available",self.new_dist_available)
+  def main(self, options):
+    gconfclient = gconf.client_get_default() 
+    self.meta = MetaRelease(options.devel_release)
     self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
+
+    # check if we are interessted in dist-upgrade information
+    # (we are not by default on dapper)
+    if options.check_dist_upgrades or \
+	   gconfclient.get_bool("/apps/update-manager/check_dist_upgrades"):
+      self.meta.connect("new_dist_available",self.new_dist_available)
     
     while gtk.events_pending():
       gtk.main_iteration()

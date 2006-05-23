@@ -17,12 +17,6 @@ class MyCache(apt.Cache):
         self.config = DistUpgradeConfig()
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
 
-        # turn on debuging
-        apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
-        fd = os.open("/var/log/dist-upgrade-apt.log", os.O_RDWR|os.O_CREAT|os.O_TRUNC)
-        os.dup2(fd,1)
-        os.dup2(fd,2)
-
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = []
         for line in open("removal_blacklist.txt").readlines():
@@ -38,6 +32,10 @@ class MyCache(apt.Cache):
         fetcher = apt_pkg.GetAcquire()
         pm.GetArchives(fetcher, self._list, self._records)
         return fetcher.FetchNeeded
+    @property
+    def additionalRequiredSpace(self):
+        """ get the size of the additonal required space on the fs """
+        return self._depcache.UsrSize
     @property
     def isBroken(self):
         """ is the cache broken """
@@ -215,7 +213,7 @@ class MyCache(apt.Cache):
                     logging.debug("Marking '%s' for upgrade" % key)
                     self[key].markUpgrade()
             except SystemError, e:
-                logging.debug("Can't mark '%s' for upgrade" % key)
+                logging.debug("Can't mark '%s' for upgrade (%s)" % (key,e))
                 return False
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():

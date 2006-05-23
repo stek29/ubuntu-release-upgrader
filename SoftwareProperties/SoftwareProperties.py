@@ -57,6 +57,7 @@ CONF_MAP = {
 class SoftwareProperties(SimpleGladeApp):
 
   def __init__(self, datadir=None, options=None, parent=None):
+    gtk.window_set_default_icon_name("software-properties")
 
     # FIXME: some saner way is needed here
     if datadir == None:
@@ -99,16 +100,16 @@ class SoftwareProperties(SimpleGladeApp):
 
     update_days = apt_pkg.Config.FindI(CONF_MAP["autoupdate"])
 
-    self.combobox_update_interval.append_text("Daily")
-    self.combobox_update_interval.append_text("Every two days")
-    self.combobox_update_interval.append_text("Weekly")
-    self.combobox_update_interval.append_text("Every two weeks")
+    self.combobox_update_interval.append_text(_("Daily"))
+    self.combobox_update_interval.append_text(_("Every two days"))
+    self.combobox_update_interval.append_text(_("Weekly"))
+    self.combobox_update_interval.append_text(_("Every two weeks"))
 
     # If a custom period is defined add an corresponding entry
     if not update_days in self.combobox_interval_mapping.values():
         if update_days > 0:
-            self.combobox_update_interval.append_text(_("Every %s days" 
-                                                      % update_days))
+            self.combobox_update_interval.append_text(_("Every %s days") 
+                                                      % update_days)
             self.combobox_interval_mapping[4] = update_days
     
     for key in self.combobox_interval_mapping:
@@ -130,15 +131,15 @@ class SoftwareProperties(SimpleGladeApp):
 
     delete_days = apt_pkg.Config.FindI(CONF_MAP["max_age"])
 
-    self.combobox_delete_interval.append_text("After one week")
-    self.combobox_delete_interval.append_text("After two weeks")
-    self.combobox_delete_interval.append_text("After one month")
+    self.combobox_delete_interval.append_text(_("After one week"))
+    self.combobox_delete_interval.append_text(_("After two weeks"))
+    self.combobox_delete_interval.append_text(_("After one month"))
 
     # If a custom period is defined add an corresponding entry
     if not delete_days in self.combobox_delete_interval_mapping.values():
         if delete_days > 0 and CONF_MAP["autoclean"] != 0:
-            self.combobox_delete_interval.append_text(_("After %s days" 
-                                                      % delete_days))
+            self.combobox_delete_interval.append_text(_("After %s days") 
+                                                      % delete_days)
             self.combobox_delete_interval_mapping[3] = delete_days
     
     for key in self.combobox_delete_interval_mapping:
@@ -317,31 +318,39 @@ class SoftwareProperties(SimpleGladeApp):
     self.write_config()
     
   def write_config(self):
-    #print "write_config()"
-    periodic = "/etc/apt/apt.conf.d/10periodic"
+    # update the adept file as well if it is there
+    conffiles = ["/etc/apt/apt.conf.d/10periodic",
+                 "/etc/apt/apt.conf.d/15adept-periodic-update"]
 
-    # read the old content
-    content = []
-    if os.path.isfile(periodic):
-      content = open(periodic, "r").readlines()
-    
-    cnf = apt_pkg.Config.SubTree("APT::Periodic")
+    # check (beforehand) if one exists, if not create one
+    for f in conffiles:
+      if os.path.isfile(f):
+        break
+    else:
+      print "No config found, creating one"
+      open(conffiles[0], "w")
 
-    # write a new file without the updated keys
-    f = open(periodic, "w")
-    for line in content:
-      found = False
-      for key in cnf.List():
-        if line.find("APT::Periodic::%s" % (key)) >= 0:
-          found = True
-          break
-      if not found:
-        f.write(line)
+    # now update them
+    for periodic in conffiles:
+      # read the old content first
+      content = []
+      if os.path.isfile(periodic):
+        content = open(periodic, "r").readlines()
+        cnf = apt_pkg.Config.SubTree("APT::Periodic")
 
-    # append the updated keys
-    for i in cnf.List():
-      f.write("APT::Periodic::%s \"%s\";\n" % (i, cnf.FindI(i)))
-    f.close()    
+        # then write a new file without the updated keys
+        f = open(periodic, "w")
+        for line in content:
+          for key in cnf.List():
+            if line.find("APT::Periodic::%s" % (key)) >= 0:
+              break
+          else:
+            f.write(line)
+
+        # and append the updated keys
+        for i in cnf.List():
+          f.write("APT::Periodic::%s \"%s\";\n" % (i, cnf.FindI(i)))
+        f.close()    
 
   def save_sourceslist(self):
     #location = "/etc/apt/sources.list"
@@ -369,8 +378,18 @@ class SoftwareProperties(SimpleGladeApp):
     if not iter:
       return
     source_entry = model.get_value(iter, LIST_ENTRY_OBJ)
-    dialog = dialog_edit.dialog_edit(self.window_main, self.sourceslist,
-                                     source_entry, self.datadir)
+    # see if we know what this thing should look like
+    found_matcher = False
+    for item in aptsources.SourceEntryTemplates(self.datadir).templates:
+      if item.matches(source_entry):
+        found_matcher = True
+        break
+    if found_matcher:
+      dialog = dialog_add.dialog_add(self.window_main, self.sourceslist,
+                                     self.datadir, source_entry)
+    else:
+      dialog = dialog_edit.dialog_edit(self.window_main, self.sourceslist,
+                                       source_entry, self.datadir)
     if dialog.run() == gtk.RESPONSE_OK:
       self.reload_sourceslist()
       self.modified = True
@@ -423,7 +442,7 @@ class SoftwareProperties(SimpleGladeApp):
               _("Error importing selected file"),
               _("The selected file may not be a GPG key file " \
                 "or it might be corrupt."))
-        self.reload_keyslist()
+      self.reload_keyslist()
         
   def remove_key_clicked(self, widget):
     selection = self.treeview2.get_selection()

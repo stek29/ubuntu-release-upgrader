@@ -30,7 +30,7 @@ import re
 import statvfs
 from DistUpgradeConfigParser import DistUpgradeConfig
 
-from aptsources import SourcesList, SourceEntry
+from aptsources import SourcesList, SourceEntry, is_mirror
 from gettext import gettext as _
 from DistUpgradeCache import MyCache
 
@@ -53,11 +53,19 @@ class DistUpgradeControler(object):
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
+        # turn on debuging in the cache
+        apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
+        fd = os.open("/var/log/dist-upgrade-apt.log",
+                     os.O_RDWR|os.O_CREAT|os.O_TRUNC)
+        os.dup2(fd,1)
+        os.dup2(fd,2)
+
     def openCache(self):
         self.cache = MyCache(self._view.getOpCacheProgress())
 
 
-    def updateSourcesList(self):
+    def rewriteSourcesList(self, mirror_check=True):
+        logging.debug("rewriteSourcesList()")
 
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange
@@ -74,39 +82,92 @@ class DistUpgradeControler(object):
                    ]
 
         # list of valid mirrors that we can add
-        valid_mirrors = self.config.getlist("Sources","ValidMirrors")
+        valid_mirrors = self.config.getListFromFile("Sources","ValidMirrors")
+
+        self.sources_disabled = False
 
         # look over the stuff we have
         foundToDist = False
         for entry in self.sources:
+            # ignore invalid records (but update disabled ones)
+            # or cdrom entries
+            if entry.invalid or entry.uri.startswith("cdrom:") or entry.disabled:
+                continue
+            logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or offical site)
             validMirror = False
             for mirror in valid_mirrors:
-                if self.sources.is_mirror(mirror,entry.uri):
+                if not mirror_check or is_mirror(mirror,entry.uri):
                     validMirror = True
+                    # security is a special case
+                    res = not entry.uri.startswith("http://security.ubuntu.com") and not entry.disabled
                     if entry.dist in toDists:
                         # so the self.sources.list is already set to the new
                         # distro
-                        foundToDist = True
+                        logging.debug("entry '%s' is already set to new dist" % entry)
+                        foundToDist |= res
                     elif entry.dist in fromDists:
-                        foundToDist = True
+                        foundToDist |= res
                         entry.dist = toDists[fromDists.index(entry.dist)]
+                        logging.debug("entry '%s' updated to new dist" % entry)
                     else:
                         # disable all entries that are official but don't
-                        # point to the "from" dist
+                        # point to either "to" or "from" dist
                         entry.disabled = True
+                        self.sources_disabled = True
+                        logging.debug("entry '%s' was disabled (unknown dist)" % entry)
                     # it can only be one valid mirror, so we can break here
                     break
             # disable anything that is not from a official mirror
             if not validMirror:
                 entry.disabled = True
+                self.sources_disabled = True
+                logging.debug("entry '%s' was disabled (unknown mirror)" % entry)
+        return foundToDist
 
-        if not foundToDist:
-            # FIXME: offer to write a new self.sources.list entry
-            return self._view.error(_("No valid entry found"),
-                                    _("While scaning your repository "
-                                      "information no valid entry for "
-                                      "the upgrade was found.\n"))
+    def updateSourcesList(self):
+        logging.debug("updateSourcesList()")
+        self.sources = SourcesList()
+        if not self.rewriteSourcesList(mirror_check=True):
+            logging.error("No valid mirror found")
+            res = self._view.askYesNoQuestion(_("No valid mirror found"),
+                             _("While scaning your repository "
+                               "information no mirror entry for "
+                               "the upgrade was found."
+                               "This cam happen if you run a internal "
+                               "mirror or if the mirror information is "
+                               "out of date.\n\n"
+                               "Do you want to rewrite your "
+                               "'sources.list' file anyway? If you choose "
+                               "'Yes' here it will update all '%s' to '%s' "
+                               "entries.\n"
+                               "If you select 'no' the update will cancel."
+                               ) % (self.fromDist, self.toDist))
+            if res:
+                # re-init the sources and try again
+                self.sources = SourcesList()
+                if not self.rewriteSourcesList(mirror_check=False):
+                    #hm, still nothing useful ...
+                    prim = _("Generate default sources?")
+                    secon = _("After scanning your 'sources.list' no "
+                              "valid entry for '%s' was found.\n\n"
+                              "Should default entries for '%s' be "
+                              "added? If you select 'No' the update "
+                              "will cancel.") % (self.fromDist, self.toDist)
+                    if not self._view.askYesNoQuestion(prim, secon):
+                        self.abort()
+
+                    # add some defaults here
+                    # FIXME: find mirror here
+                    uri = "http://archive.ubuntu.com/ubuntu"
+                    comps = ["main","restricted"]
+                    self.sources.add("deb", uri, self.toDist, comps)
+                    self.sources.add("deb", uri, self.toDist+"-updates", comps)
+                    self.sources.add("deb",
+                                     "http://security.ubuntu.com/ubuntu/",
+                                     self.toDist+"-security", comps)
+            else:
+                self.abort()
         
         # write (well, backup first ;) !
         self.sources.backup(self.sources_backup_ext)
@@ -121,11 +182,20 @@ class DistUpgradeControler(object):
             sourceslist = apt_pkg.GetPkgSourceList()
             sourceslist.ReadMainList()
         except SystemError:
+            logging.error("Repository information invalid after updating (we broke it!)")
             self._view.error(_("Repository information invalid"),
                              _("Upgrading the repository information "
                                "resulted in a invalid file. Please "
                                "report this as a bug."))
             return False
+
+        if self.sources_disabled:
+            self._view.information(_("Third party sources disabled"),
+                             _("Some third party entries in your souces.list "
+                               "where disabled. You can re-enable them "
+                               "after the upgrade with the "
+                               "'software-properties' tool or with synaptic."
+                               ))
         return True
 
     def _logChanges(self):
@@ -175,25 +245,66 @@ class DistUpgradeControler(object):
         return False
 
 
+    def _checkFreeSpace(self):
+        " this checks if we have enough free space on /var and /usr"
+        err_sum = _("Not enough free disk space")
+        err_long= _("The upgrade aborts now. "
+                    "Please free at least %s of disk space on %s. "
+                    "Empty your trash and remove temporary "
+                    "packages of former installations using "
+                    "'sudo apt-get clean'.")
+
+        # first check for /var (or where the archives are downloaded too)
+        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
+        st_archivedir = os.statvfs(archivedir)
+        free = st_archivedir[statvfs.F_BAVAIL]*st_archivedir[statvfs.F_FRSIZE]
+        logging.debug("required download: %s " % self.cache.requiredDownload)
+        logging.debug("free on %s: %s " % (archivedir, free))
+        if self.cache.requiredDownload > free:
+            free_at_least = apt_pkg.SizeToStr(self.cache.requiredDownload-free)
+            self._view.error(err_sum, err_long % (free_at_least,archivedir))
+            return False
+        
+        # then check for /usr assuming that all the data goes into /usr
+        # this won't catch space problems when e.g. /boot,/usr/,/ are all
+        # seperated partitions, but with a fragmented
+        # patition layout we can't do a lot better because we don't know
+        # the space-requirements on a per dir basis inside the deb without
+        # looking into each
+        logging.debug("need additional space: %s" % self.cache.additionalRequiredSpace)
+        dir = "/usr"
+        st_usr = os.statvfs(dir)
+        if st_archivedir == st_usr:
+            # we are on the same filesystem, so we need to take the space
+            # for downloading the debs into account
+            free -= self.cache.additionalRequiredSpace
+            logging.debug("/usr on same fs as %s, taking dl-size into account, new free: %s" % (archivedir, free))
+        else:
+            free = st_usr[statvfs.F_BAVAIL]*st_usr[statvfs.F_FRSIZE]
+            logging.debug("/usr on different fs than %s, free: %s" % (archivedir, free))
+
+        if self.cache.additionalRequiredSpace > free:
+            free_at_least = apt_pkg.SizeToStr(self.cache.additionalRequiredSpace-free)
+            logging.error("not enough free space, we need addional %s" % free_at_least)
+            self._view.error(err_sum, err_long % (free_at_least,dir))
+            return False
+
+        # FIXME: we should try to esitmate if "/" has enough free space,
+        # linux-restricted-modules and linux-image- are both putting there
+        # modules there and those take a lot of space
+            
+        return True
+
     def askDistUpgrade(self):
         if not self.cache.distUpgrade(self._view):
             return False
         changes = self.cache.getChanges()
         # log the changes for debuging
         self._logChanges()
-        # ask the user if he wants to do the changes
-        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        st = os.statvfs(archivedir)
-        free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
-        if self.cache.requiredDownload > free:
-            free_at_least = apt_pkg.SizeToStr(self.cache.requiredDownload-free)
-            self._view.error(_("Not enough free disk space"),
-                             _("The upgrade aborts now. "
-                               "Please free at least %s of disk space. "
-                               "Empty your trash and remove temporary "
-                               "packages of former installations using "
-                               "'sudo apt-get clean'." % free_at_least ))
+        # check if we have enough free space 
+        if not self._checkFreeSpace():
             return False
+        # ask the user if he wants to do the changes
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,
                                         self.cache.requiredDownload)
@@ -210,12 +321,12 @@ class DistUpgradeControler(object):
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 # installing the packages failed, can't be retried
+                self._view.getTerminal().call(["dpkg","--configure","-a"])
                 self._view.error(_("Could not install the upgrades"),
                                  _("The upgrade aborts now. Your system "
                                    "can be in an unusable state. A recovery "
-                                   "is now run (dpkg --configure -a)."),
+                                   "was run (dpkg --configure -a)."),
                                  "%s" % e)
-                self._view.getTerminal().call(["dpkg","--configure","-a"])
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -252,7 +363,25 @@ class DistUpgradeControler(object):
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
         logging.debug("forced_obsoletes: %s", self.forced_obsoletes)
 
-                
+        # check what packages got demoted
+        demotions_file = self.config.get("Distro","Demotions")
+        demotions = set()
+        if os.path.exists(demotions_file):
+            map(lambda pkgname: demotions.add(pkgname.strip()),
+                filter(lambda line: not line.startswith("#"),
+                       open(demotions_file).readlines()))
+        installed_demotions = filter(lambda pkg: pkg.isInstalled and pkg.name in demotions, self.cache)
+        if len(installed_demotions) > 0:
+            self._view.information(_("Some software no longer officially "
+                                     "supported"),
+                                   _("These installed packages are "
+                                     "no longer officially supported, "
+                                     "and are now only "
+                                     "community-supported ('universe').\n\n"
+                                     "If you don't have 'universe' enabled "
+                                     "these packages will be suggested for "
+                                     "removal in the next step. "),
+                                   "\n".join([pkg.name for pkg in installed_demotions]))
        
         # mark packages that are now obsolete (and where not obsolete
         # before) to be deleted. make sure to not delete any foreign
@@ -290,6 +419,9 @@ class DistUpgradeControler(object):
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
         self.sources.restoreBackup(self.sources_backup_ext)
+        # generate a new cache
+        self._view.updateStatus(_("Restoring originale system state"))
+        self.openCache()
         sys.exit(1)
 
     
@@ -300,8 +432,6 @@ class DistUpgradeControler(object):
         self._view.setStep(1)
 
         self.openCache()
-        self.sources = SourcesList()
-     
         if not self.cache.sanityCheck(self._view):
             abort(1)
 
@@ -324,6 +454,22 @@ class DistUpgradeControler(object):
         # then open the cache (again)
         self._view.updateStatus(_("Checking package manager"))
         self.openCache()
+        # now check if we still have some key packages after the update
+        # if not something went seriously wrong
+        for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
+            if not self.cache.has_key(pkg):
+                # FIXME: we could offer to add default source entries here,
+                #        but we need to be careful to not duplicate them
+                #        (i.e. the error here could be something else than
+                #        missing sources entires but network errors etc)
+                logging.error("No '%s' after sources.list rewrite+update")
+                self._view.error(_("Invalid package information"),
+                                 _("After your package information was "
+                                   "updated the essential package '%s' can "
+                                   "not be found anymore.\n"
+                                   "This indicates a serious error, please "
+                                   "report this as a bug.") % pkg)
+                self.abort()
 
         # calc the dist-upgrade and see if the removals are ok/expected
         # do the dist-upgrade

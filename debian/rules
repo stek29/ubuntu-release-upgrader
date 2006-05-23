@@ -66,6 +66,7 @@ binary-arch: build install
 	dh_scrollkeeper
 	dh_installmime
 	dh_desktop
+	dh_iconcache
 	dh_gconf
 	dh_installexamples
 #	dh_install
@@ -95,7 +96,7 @@ binary-arch: build install
 arch-build:
 	rm -rf debian/arch-build
 	mkdir -p debian/arch-build/$(PKG)-$(DEBVER)
-	tar -c --exclude=arch-build -f - `bzr inventory` | (cd debian/arch-build/$(PKG)-$(DEBVER);tar xf -)
+	tar -c --exclude=arch-build --no-recursion -f - `bzr inventory` | (cd debian/arch-build/$(PKG)-$(DEBVER);tar xf -)
 	(cd debian/arch-build/$(PKG)-$(DEBVER) && $(DEB_BUILD_PROG))
 
 binary: binary-indep binary-arch

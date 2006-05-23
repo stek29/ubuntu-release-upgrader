@@ -1,12 +1,34 @@
 MUSTFIX:
 --------
+
 * debconf gnome dosn't work (can't connect to the session)
   [ should be fixed with the bugfix on gksu ]
 * display a message that all applications should be closed for the 
   dist-upgrade (and that strange things like a crashing panel can
   happen)
   [done in current dialog]
+* sources.list edit needs to add valid sources if all other sources
+  are commented out
+  (or for sources that can't be identified and rewrite ask the user
+   what to do by just s/breezy/dapper/g?)
+  [Done]
+* inform about commented out sources
+  [Done]
+* fix "no activity for 120s warning" being repeated every sec in the logs
+  [Done]
 
+* [fabbio]: we probably don't want to remove stuff that moved from main
+  to universe (if the user has only main enabled this is considered 
+  obsolete). It would also be nice inform about packages that went from
+  main->universe. We could ship a list of demotions.
+* [kamion]: we could use debconf-frontend=dialog and then detect the ansi
+            seqence that clear the screen and open the terminal then 
+            -> trouble: vte does not give me the raw codes but only the
+                        text (as \n\n\n\n\n... for cls)
+* add "add cdrom" to the "Do upgrade?" screen? And recalc the download 
+  size again then :) ?
+* set bigger timeout than 120s?
+* make the sources.list rewrite even more robust (see launchpad #41023)
 
 breezy->dapper
 --------------

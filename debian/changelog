@@ -1,3 +1,89 @@
+update-manager (0.42.2ubuntu18) dapper; urgency=low
+
+  * data/SoftwareProperties.glade:
+    - fix missing 'translatable="yes"' property (ubuntu: #44409)
+    - increase width to 620 (ubuntu: #40540)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 19 May 2006 01:45:22 +0200
+
+update-manager (0.42.2ubuntu17) dapper; urgency=low
+
+  * debian/control:
+    - depend on later python-apt (#45325)
+  * SoftwareProperties/SoftwareProperties.py:
+    - fix key updating after import (ubuntu #44927)
+  * UpdateManager/UpdateManager.py:
+    - remove debug output
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 19 May 2006 00:04:02 +0200
+
+update-manager (0.42.2ubuntu16) dapper; urgency=low
+
+  * use version and section of the source package (if this information is
+    available) when building the changelog URL (ubuntu #40058)
+  * SoftwareProperties/SoftwareProperties.py:
+    - if no config is found create a new one (ubuntu: #37560)
+  * UpdateManager/UpdateManager.py:
+    - fix problem in changelog reading code when matching against
+      installed versions with epochs (ubuntu: #40058)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 11 May 2006 17:33:40 +0200
+
+update-manager (0.42.2ubuntu15) dapper; urgency=low
+
+  * disable the install button if there no updates (ubuntu: #42284)
+    (Thanks to Sebastian Heinlein)
+  * show main window *after* restoring the size (ubuntu: #42277)
+    (Thanks to Sebastian Heinlein)
+  * fix broken spelling, typos, wording (ubuntu: #42431, #28777, 
+    #40425, #40727)
+  * help/C: merged from the docteam svn (ubuntu: 36092)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue,  2 May 2006 12:13:59 +0200
+
+update-manager (0.42.2ubuntu14) dapper; urgency=low
+
+  * wording/glade file fixes (thanks to Sebastian Heinlein)
+  * many updates to the dist-upgrader code
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 28 Apr 2006 23:04:08 +0200
+
+update-manager (0.42.2ubuntu13) dapper; urgency=low
+
+  * po/POTFILES.in: add missing desktop file (ubuntu: #39410)
+  * UpdateManager/UpdateManager.py: 
+    - fix in the get_changelog logic (ubuntu: #40058)
+    - correct a error in the changelog parser (ubuntu: #40060)
+    - fix download size reporting (ubuntu: #39579)
+  * debian/rules: added dh_iconcache
+  * setup.py: install the icons into the hicolor icon schema
+    (thanks to Sebastian Heinlein)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 20 Apr 2006 18:23:54 +0200
+
+update-manager (0.42.2ubuntu12) dapper; urgency=low
+
+  * channels/*.in: typo fix
+  * po/POTFILES.in: add missing files (ubuntu: #38738)
+  * fix the help string in update-manager (ubuntu: #23274)
+  * fix the bad grammar in "Cannot install all available updates"
+    (ubuntu: #32864)
+  * don't inform about new distro release on dapper by default (can be
+    changed via a gconf setting/commandline switch)
+  * fix UI issue of the edit dialog for given templates (thanks to
+    Chipzz for the patch)
+   
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 12 Apr 2006 20:23:21 +0200
+
+update-manager (0.42.2ubuntu11) dapper; urgency=low
+
+  * debian/control: 
+    - depend on unattended-upgrades
+    - move python-gnome2 to recommends (we only use gconf from it)
+  * UpdateManager/fakegconf.py: update for xubuntu (thanks to Jani Monoses)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed,  5 Apr 2006 14:46:10 +0200
+
 update-manager (0.42.2ubuntu10) dapper; urgency=low
 
   * update-manger: fix a missing import (#36138)
@@ -5,8 +91,10 @@ update-manager (0.42.2ubuntu10) dapper; urgency=low
   * correct dapper version number (#36136)
   * keybindings fixed (#36116)
   * calc the update before downloading the changelog (#36140)
+  * add a fake gconf interface for xubuntu (nop for normal ubuntu)
+    (Thanks to Jani Monoses for the patch)
   
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue,  4 Apr 2006 18:17:16 +0200
 
 update-manager (0.42.2ubuntu9) dapper; urgency=low
 

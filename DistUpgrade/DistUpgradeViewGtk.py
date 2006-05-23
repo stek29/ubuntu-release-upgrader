@@ -46,6 +46,20 @@ from gettext import gettext as _
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
+def FuzzyTimeToStr(sec):
+  " return the time a bit fuzzy (no seconds if time > 60 secs "
+  if sec > 60*60*24:
+    return _("About %li days %li hours %li minutes remaining") % (sec/60/60/24,
+                                                                  (sec/60/60) % 24,
+                                                                  (sec/60) % 60)
+  if sec > 60*60:
+    return _("About %li hours %li minutes remaining") % (sec/60/60,
+                                          (sec/60) % 60)
+  if sec > 60:
+    return _("About %li minutes remaining") % (sec/60)
+  return _("About %li seconds remaining") % sec
+
+
 class GtkOpProgress(apt.progress.OpProgress):
   def __init__(self, progressbar):
       self.progressbar = progressbar
@@ -73,10 +87,11 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
         # if this is set to false the download will cancel
         self.status = parent.label_status
         self.progress = parent.progressbar_cache
+        self.parent = parent
     def mediaChange(self, medium, drive):
       #print "mediaChange %s %s" % (medium, drive)
       msg = _("Please insert '%s' into the drive '%s'" % (medium,drive))
-      dialog = gtk.MessageDialog(parent=self.window_main,
+      dialog = gtk.MessageDialog(parent=self.parent.window_main,
                                  flags=gtk.DIALOG_MODAL,
                                  type=gtk.MESSAGE_QUESTION,
                                  buttons=gtk.BUTTONS_OK_CANCEL)
@@ -105,7 +120,7 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
 
         if self.currentCPS > 0:
             self.status.set_text(_("Downloading file %li of %li at %s/s" % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS))))
-            self.progress.set_text(_("%s remaining" % apt_pkg.TimeToStr(self.eta)))
+            self.progress.set_text(FuzzyTimeToStr(self.eta))
         else:
             self.status.set_text(_("Downloading file %li of %li" % (currentItem, self.totalItems)))
             self.progress.set_text("  ")
@@ -117,7 +132,7 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
 class GtkInstallProgressAdapter(InstallProgress):
     # timeout with no status change when the terminal is expanded
     # automatically
-    TIMEOUT_TERMINAL_ACTIVITY = 120
+    TIMEOUT_TERMINAL_ACTIVITY = 240
     
     def __init__(self,parent):
         InstallProgress.__init__(self)
@@ -196,6 +211,10 @@ class GtkInstallProgressAdapter(InstallProgress):
         
     def fork(self):
         pid = self.term.forkpty(envv=self.env)
+        if pid == 0:
+          # HACK to work around bug in python/vte and unregister the logging
+          #      atexit func in the child
+          sys.exitfunc = lambda: True
         return pid
 
     def statusChange(self, pkg, percent, status):
@@ -208,12 +227,13 @@ class GtkInstallProgressAdapter(InstallProgress):
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()
+          self.activity_timeout_reported = False
           delta = self.last_activity - self.start_time
           time_per_percent = (float(delta)/percent)
           eta = (100.0 - self.percent) * time_per_percent
           # only show if we have some sensible data
-          if eta > 1.0 and eta < (60*60*24*2):
-            self.progress.set_text(_("%s remaining")%apt_pkg.TimeToStr(eta))
+          if eta > 61.0 and eta < (60*60*24*2):
+            self.progress.set_text(FuzzyTimeToStr(eta))
           else:
             self.progress.set_text(" ")
 
@@ -238,7 +258,9 @@ class GtkInstallProgressAdapter(InstallProgress):
         # check about terminal activity
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
-          logging.warning("no activity on terminal for %s seconds" % self.TIMEOUT_TERMINAL_ACTIVITY)
+          if not self.activity_timeout_reported:
+            logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
+            self.activity_timeout_reported = True
           self.parent.expander_terminal.set_expanded(True)
         while gtk.events_pending():
             gtk.main_iteration()
@@ -249,9 +271,19 @@ class DistUpgradeVteTerminal(object):
     self.term = term
     self.parent = parent
   def call(self, cmd):
+    def wait_for_child(widget):
+      #print "wait for child finished"
+      self.finished=True
     self.term.show()
+    self.term.connect("child-exited", wait_for_child)
     self.parent.expander_terminal.set_expanded(True)
     self.term.fork_command(command=cmd[0],argv=cmd)
+    self.finished = False
+    while not self.finished:
+      while gtk.events_pending():
+        gtk.main_iteration()
+      time.sleep(0.1)
+    del self.finished
 
 class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
     " gtk frontend of the distUpgrade tool "
@@ -263,7 +295,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         gtk.window_set_default_icon(icons.load_icon("update-manager", 32, 0))
         SimpleGladeApp.__init__(self, "DistUpgrade.glade",
                                 None, domain="update-manager")
-        self.window_main.set_keep_above(True)
+        # we dont use this currently
+        #self.window_main.set_keep_above(True)
         self.window_main.realize()
         self.window_main.window.set_functions(gtk.gdk.FUNC_MOVE)
         self._opCacheProgress = GtkOpProgress(self.progressbar_cache)
@@ -295,8 +328,11 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
       logging.error("not handled expection:\n%s" % "\n".join(lines))
       self.error(_("A fatal error occured"),
                  _("Please report this as a bug and include the "
-                   "files ~/dist-upgrade.log and ~/dist-upgrade-apt.log "
-                   "in your report. The upgrade aborts now. "),
+                   "files /var/log/dist-upgrade.log and "
+                   "/var/log/dist-upgrade-apt.log "
+                   "in your report. The upgrade aborts now.\n"
+                   "Your original sources.list was saved in "
+                   "/etc/apt/sources.list.distUpgrade."),
                  "\n".join(lines))
       sys.exit(1)
 
@@ -356,6 +392,21 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         attrlist.insert(attr)
         label.set_property("attributes",attrlist)
 
+    def information(self, summary, msg, extended_msg=None):
+      self.dialog_information.set_transient_for(self.window_main)
+      msg = "<big><b>%s</b></big>\n\n%s" % (summary,msg)
+      self.label_information.set_markup(msg)
+      if extended_msg != None:
+        buffer = self.textview_information.get_buffer()
+        buffer.set_text(extended_msg)
+        self.scroll_information.show()
+      else:
+        self.scroll_information.hide()
+      self.dialog_information.realize()
+      self.dialog_information.window.set_functions(gtk.gdk.FUNC_MOVE)
+      self.dialog_information.run()
+      self.dialog_information.hide()
+
     def error(self, summary, msg, extended_msg=None):
         self.dialog_error.set_transient_for(self.window_main)
         #self.expander_terminal.set_expanded(True)
@@ -370,7 +421,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self.dialog_error.realize()
         self.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
         self.dialog_error.run()
-        self.dialog_error.destroy()
+        self.dialog_error.hide()
         return False
 
     def confirmChanges(self, summary, changes, downloadSize, actions=None):
@@ -493,10 +544,10 @@ if __name__ == "__main__":
     cache[pkg].markInstall()
   cache.commit(fp,ip)
   
-  sys.exit(0)
+  #sys.exit(0)
   ip.conffile("TODO","TODO~")
   view.getTerminal().call(["dpkg","--configure","-a"])
-  view.getTerminal().call(["ls"])
+  #view.getTerminal().call(["ls","-R","/usr"])
   view.error("short","long",
              "asfds afsdj af asdf asdf asf dsa fadsf asdf as fasf sextended\n"
              "asfds afsdj af asdf asdf asf dsa fadsf asdf as fasf sextended\n"

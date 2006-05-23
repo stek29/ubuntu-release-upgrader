@@ -33,6 +33,7 @@ class NonInteractiveFetchProgress(apt.progress.FetchProgress):
 
 class NonInteractiveInstallProgress(apt.progress.InstallProgress):
     def __init__(self):
+        apt.progress.InstallProgress.__init__(self)
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
 

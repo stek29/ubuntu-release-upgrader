@@ -72,7 +72,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     def getFetchProgress(self):
         " return a fetch progress object "
         return NonInteractiveFetchProgress()
-    def getInstallProgress(self):
+    def getInstallProgress(self, cache=None):
         " return a install progress object "
         return NonInteractiveInstallProgress()
     def updateStatus(self, msg):

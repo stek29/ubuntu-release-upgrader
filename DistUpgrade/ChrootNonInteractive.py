@@ -9,13 +9,22 @@ import tempfile
 import subprocess
 import shutil
 import logging
+import glob
 
 class Chroot(object):
 
     diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d"]
     apt_options = ["-y"]
             
-    def __init__(self):
+    def __init__(self, datadir=None, resultdir=None):
+        # init the dirs
+        self.datadir = datadir
+        self.resultdir = resultdir
+        if not self.datadir:
+            self.datadir = os.getcwd()
+        if not self.resultdir:
+            self.resultdir = os.path.join(os.getcwd(), "result")
+        # init the rest
         self.config = DistUpgradeConfig()
         self.fromDist = self.config.get("Sources","From")
         proxy=self.config.get("NonInteractive","Proxy")
@@ -74,7 +83,30 @@ class Chroot(object):
         tmpdir = self._unpackToTmpdir(tarball)
         if not tmpdir:
             print "Error extracting tarball"
-        self._runApt(tmpdir, "install",["apache2"])
+        #self._runApt(tmpdir, "install",["apache2"])
+
+        # copy itself to the chroot (resolve symlinks)
+        targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
+        if not os.path.exists(targettmpdir):
+            os.mkdir(targettmpdir)
+        for f in glob.glob("%s/*" % self.datadir):
+            if not os.path.isdir(f):
+                shutil.copy(f, targettmpdir)
+        # run it
+        pid = os.fork()
+        if pid == 0:
+            os.chroot(tmpdir)
+            os.execl("/tmp/dist-upgrade/dist-upgrade.py",
+                     "/tmp/dist-upgrade/dist-upgrade.py")
+        else:
+            print "Parent: waiting for %s" % pid
+            (id, exitstatus) = os.waitpid(pid, 0)
+            print "Child exited (%s, %s)" % (id, exitstatus)
+            for f in glob.glob(tmpdir+"/var/log/dist-upgrade/*"):
+                shutil.copy(f, self.resultdir)
+            print "Removing: '%s'" % tmpdir
+            #shutil.rmtree(tmpdir)
+            
 
     def _unpackToTmpdir(self, baseTarBall):
         tmpdir = tempfile.mkdtemp()
@@ -96,8 +128,9 @@ class Chroot(object):
 
 if __name__ == "__main__":
     chroot = Chroot()
-    tarball = os.getcwd()+"/dist-upgrade-test.tar.gz"
+    tarball = os.getcwd()+"/tarball/dist-upgrade-test.tar.gz"
     if not os.path.exists(tarball):
+        print "No existing tarball found, creating a new one"
         chroot.bootstrap(tarball)
     chroot.upgrade(tarball)
 

@@ -32,8 +32,9 @@ import rfc822
 from subprocess import Popen,PIPE
 
 class Dist(object):
-    def __init__(self, name, date, supported):
+    def __init__(self, name, version, date, supported):
         self.name = name
+        self.version = version
         self.date = date
         self.supported = supported
         self.releaseNotesURI = None
@@ -59,8 +60,15 @@ class MetaRelease(gobject.GObject):
 
     def __init__(self, useDevelopmentRelase=False):
         gobject.GObject.__init__(self)
+        # check what uri to use
         if useDevelopmentRelase:
             self.METARELEASE_URI = self.METARELEASE_URI_UNSTABLE
+        # check if we can access the METARELEASE_FILE
+        if not os.access(self.METARELEASE_FILE, os.F_OK|os.W_OK|os.R_OK):
+            path = os.path.expanduser("~/.update-manager/")
+            if not os.path.exists(path):
+                os.mkdir(path)
+            self.METARELEASE_FILE = os.path.join(path,"meta-release")
         self.metarelease_information = None
         self.downloading = True
         # we start the download thread here and we have a timeout
@@ -105,8 +113,9 @@ class MetaRelease(gobject.GObject):
                 rawdate = index_tag.Section["Date"]
                 date = time.mktime(rfc822.parsedate(rawdate))
                 supported = bool(index_tag.Section["Supported"])
+                version = index_tag.Section["Version"]
                 # add the information to a new date object
-                dist = Dist(name,date,supported)
+                dist = Dist(name, version, date,supported)
                 if index_tag.Section.has_key("ReleaseNotes"):
                     dist.releaseNotesURI = index_tag.Section["ReleaseNotes"]
                 if index_tag.Section.has_key("UpgradeTool"):
@@ -166,6 +175,3 @@ class MetaRelease(gobject.GObject):
             if os.path.exists(self.METARELEASE_FILE):
                 f=open(self.METARELEASE_FILE,"r")
 
-# register in the gobject system, needed for older versions of pygtk,
-# never ones do this automatically
-gobject.type_register(MetaRelease)

@@ -29,9 +29,9 @@ import gtk
 import gtk.gdk
 import gtk.glade
 try:
-	import gconf
+    import gconf
 except:
-	import fakegconf as gconf
+    import fakegconf as gconf
 import gobject
 import apt
 import apt_pkg
@@ -43,6 +43,7 @@ import os
 import os.path
 import urllib2
 import re
+import locale
 import tempfile
 import pango
 import subprocess
@@ -52,6 +53,9 @@ import thread
 import xml.sax.saxutils
 from Common.HelpViewer import HelpViewer
 
+import dbus
+import dbus.service
+import dbus.glib
 
 from gettext import gettext as _
 
@@ -62,12 +66,13 @@ import GtkProgress
 
 from MetaRelease import Dist, MetaRelease
 
+#import pdb
+
 # FIXME:
 # - kill "all_changes" and move the changes into the "Update" class
 
 # list constants
-(LIST_INSTALL, LIST_CONTENTS, LIST_NAME, LIST_SHORTDESC,
- LIST_VERSION, LIST_LONG_DESCR, LIST_PKG) = range(7)
+(LIST_INSTALL, LIST_CONTENTS, LIST_NAME, LIST_PKG) = range(4)
 
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
@@ -80,11 +85,19 @@ CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/chan
 class MyCache(apt.Cache):
     def __init__(self, progress):
         apt.Cache.__init__(self, progress)
+        self._initDepCache()
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
         self.all_changes = {}
+    def _initDepCache(self):
+        #apt_pkg.Config.Set("Debug::pkgPolicy","1")
+        #self.depcache = apt_pkg.GetDepCache(self.cache)
+        #self._depcache = apt_pkg.GetDepCache(self._cache)
+        self._depcache.ReadPinFile()
+        if os.path.exists(SYNAPTIC_PINFILE):
+            self._depcache.ReadPinFile(SYNAPTIC_PINFILE)
+        self._depcache.Init()
     def clean(self):
-        for pkg in self:
-            pkg.markKeep()
+        self._initDepCache()
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
         self._depcache.Upgrade(True)
@@ -92,38 +105,40 @@ class MyCache(apt.Cache):
             self.clean()
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
         self._depcache.Upgrade()
-        
+
     def get_changelog(self, name, lock):
         # don't touch the gui in this function, it needs to be thread-safe
         pkg = self[name]
 
-	# get the src package name
+    # get the src package name
         srcpkg = pkg.sourcePackageName
 
         # assume "main" section 
         src_section = "main"
         # use the section of the candidate as a starting point
-	section = pkg._depcache.GetCandidateVer(pkg._pkg).Section
-	
-	# get the source version, start with the binaries version
-	srcver = pkg.candidateVersion
-	try:
-		# try to get the source version of the pkg, this differs
-		# for some (e.g. libnspr4 on ubuntu)
-		srcrecords = apt_pkg.GetPkgSrcRecords()
-		srcrec = srcrecords.Lookup(srcpkg)
-		if srcrec:
-			srcver = srcrecords.Version
-			#print "srcver: %s" % srcver
-			section = srcrecords.Section
-			#print "srcsect: %s" % section
-	except SystemError, e:
-		# catch errors and ignore them,
-		# this feature only works if deb-src are in the sources.list
-		# otherwise we fall back to the binary version number
-		pass
+        section = pkg._depcache.GetCandidateVer(pkg._pkg).Section
 
-	
+        # get the source version, start with the binaries version
+        binver = pkg.candidateVersion
+        #print "bin: %s" % binver
+        try:
+            # try to get the source version of the pkg, this differs
+            # for some (e.g. libnspr4 on ubuntu)
+            # this feature only works if the correct deb-src are in the 
+            # sources.list
+            # otherwise we fall back to the binary version number
+            srcrecords = apt_pkg.GetPkgSrcRecords()
+            srcrec = srcrecords.Lookup(srcpkg)
+            if srcrec:
+                srcver = srcrecords.Version
+                if apt_pkg.VersionCompare(binver, srcver) > 0:
+                    srcver = binver
+                #print "srcver: %s" % srcver
+                section = srcrecords.Section
+                #print "srcsect: %s" % section
+        except SystemError, e:
+            srcver = binver
+
         l = section.split("/")
         if len(l) > 1:
             src_section = l[0]
@@ -140,7 +155,7 @@ class MyCache(apt.Cache):
 
         try:
             uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver)
-            #print "Trying: %s " % uri
+            # print "Trying: %s " % uri
             changelog = urllib2.urlopen(uri)
             #print changelog.read()
             # do only get the lines that are new
@@ -150,23 +165,26 @@ class MyCache(apt.Cache):
             i=0
             while True:
                 line = changelog.readline()
-                #print line
                 if line == "":
                     break
                 match = re.match(regexp,line)
                 if match:
-		    # FIXME: the installed version can have a epoch, but th
-		    #        changelog does not have one, we do a dumb
-		    #        approach here and just strip it away, but I'm
-		    #        sure that this can lead to problems
-		    installed = pkg.installedVersion
-		    if ":" in installed:
-			    installed = installed.split(":",1)[1]
-                    if apt_pkg.VersionCompare(match.group(1),installed) <= 0:
+                    # FIXME: the installed version can have a epoch, but th
+                    #        changelog does not have one, we do a dumb
+                    #        approach here and just strip it away, but I'm
+                    #        sure that this can lead to problems
+                    installed = pkg.installedVersion
+                    if installed and ":" in installed:
+                        installed = installed.split(":",1)[1]
+                    if installed and \
+                        apt_pkg.VersionCompare(match.group(1),installed)<=0:
                         break
-                    # EOF (shouldn't really happen)
+                # EOF (shouldn't really happen)
                 alllines = alllines + line
 
+            # Print an error if we failed to extract a changelog
+            if len(alllines) == 0:
+                alllines = _("The list of changes is not available")
             # only write if we where not canceld
             if lock.locked():
                 self.all_changes[name] = [alllines, srcpkg]
@@ -184,27 +202,64 @@ class MyCache(apt.Cache):
         if lock.locked():
             lock.release()
 
-        
-
-
 class UpdateList:
+  class UpdateOrigin:
+    def __init__(self, desc, importance):
+      self.packages = []
+      self.importance = importance
+      self.description = desc
+
   def __init__(self, parent_window):
-    self.pkgs = []
+    # a map of packages under their origin
+    pipe = os.popen("lsb_release -c -s")
+    dist = pipe.read().strip()
+    del pipe
+
+    templates = [("%s-security" % dist, "Ubuntu", _("Important security updates"
+                                                    " of Ubuntu"), 10),
+                 ("%s-updates" % dist, "Ubuntu", _("Recommended updates of "
+                                                   "Ubuntu"), 9),
+                 ("%s-proposed" % dist, "Ubuntu", _("Proposed updates for Ubuntu"), 8),
+                 ("%s-backports" % dist, "Ubuntu", _("Backports of Ubuntu"), 7),
+                 (dist, "Ubuntu", _("Updates of Ubuntu"), 6)]
+
+    self.pkgs = {}
+    self.matcher = {}
     self.num_updates = 0
     self.parent_window = parent_window
+    for (origin, archive, desc, importance) in templates:
+        self.matcher[(origin, archive)] = self.UpdateOrigin(desc, importance)
+    self.unknown_origin = self.UpdateOrigin(_("Other updates"), -1)
 
   def update(self, cache):
     held_back = []
     broken = []
+
+    # do the upgrade
     cache.saveDistUpgrade()
+
+    # sort by origin
     for pkg in cache:
       if pkg.markedUpgrade or pkg.markedInstall:
-        self.pkgs.append(pkg)
+        # TRANSLATORS: updates from an 'unknown' origin
+        originstr = _("Other updates")
+        for aorigin in pkg.candidateOrigin:
+          archive = aorigin.archive
+          origin = aorigin.origin
+        if self.matcher.has_key((archive,origin)) and aorigin.trusted:
+          origin_node = self.matcher[(archive,origin)]
+        else:
+          origin_node = self.unknown_origin
+        if not self.pkgs.has_key(origin_node):
+          self.pkgs[origin_node] = []
+        self.pkgs[origin_node].append(pkg)
         self.num_updates = self.num_updates + 1
       elif pkg.isUpgradable:
-        #print "MarkedKeep: %s " % pkg.name
           held_back.append(pkg.name)
-    self.pkgs.sort(lambda x,y: cmp(x.name,y.name))
+    for l in self.pkgs.keys():
+      self.pkgs[l].sort(lambda x,y: cmp(x.name,y.name))
+
+    # check if we have held-back something
     if cache._depcache.KeepCount > 0:
       #print "WARNING, keeping packages"
       msg = ("<big><b>%s</b></big>\n\n%s" % \
@@ -239,10 +294,23 @@ class UpdateList:
       dialog.run()
       dialog.destroy()
 
-        
+
+class UpdateManagerDbusControler(dbus.service.Object):
+    """ this is a helper to provide the UpdateManagerIFace """
+    def __init__(self, parent, bus_name,
+                 object_path='/org/freedesktop/UpdateManagerObject'):
+        dbus.service.Object.__init__(self, bus_name, object_path)
+        self.parent = parent
+
+    @dbus.service.method('org.freedesktop.UpdateManagerIFace')
+    def bringToFront(self):
+        self.parent.window_main.present()
+        return True
+
 class UpdateManager(SimpleGladeApp):
 
   def __init__(self, datadir):
+    self.setupDbus()
     gtk.window_set_default_icon_name("update-manager")
 
     self.datadir = datadir
@@ -269,33 +337,36 @@ class UpdateManager(SimpleGladeApp):
     self.button_close.connect("clicked", lambda w: self.exit())
 
     # the treeview (move into it's own code!)
-    self.store = gtk.ListStore(gobject.TYPE_BOOLEAN, str, str, str, str, str,
-                               gobject.TYPE_PYOBJECT)
+    self.store = gtk.ListStore(gobject.TYPE_BOOLEAN, str, str, gobject.TYPE_PYOBJECT)
     self.treeview_update.set_model(self.store)
     self.treeview_update.set_headers_clickable(True);
 
     tr = gtk.CellRendererText()
-    tr.set_property("xpad", 10)
-    tr.set_property("ypad", 10)
+    tr.set_property("xpad", 6)
+    tr.set_property("ypad", 6)
     cr = gtk.CellRendererToggle()
     cr.set_property("activatable", True)
-    cr.set_property("xpad", 10)
+    cr.set_property("xpad", 6)
     cr.connect("toggled", self.toggled)
-    self.cb = gtk.TreeViewColumn("Install", cr, active=LIST_INSTALL)
-    c0 = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
-    c0.set_resizable(True)
+
+    column_install = gtk.TreeViewColumn("Install", cr)
+    column_install.set_cell_data_func (cr, self.install_column_view_func)
+    column = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
+    column.set_cell_data_func (tr, self.package_column_view_func)
+    column.set_resizable(True)
     major,minor,patch = gtk.pygtk_version
     if (major >= 2) and (minor >= 5):
-      self.cb.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-      self.cb.set_fixed_width(30)
-      c0.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-      c0.set_fixed_width(100)
+      column_install.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+      column_install.set_fixed_width(30)
+      column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+      column.set_fixed_width(100)
       #self.treeview_update.set_fixed_height_mode(True)
 
-    self.treeview_update.append_column(self.cb)
-    self.cb.set_visible(True)
-    self.treeview_update.append_column(c0)
-    self.treeview_update.set_search_column(LIST_NAME)	
+    self.treeview_update.append_column(column_install)
+    column_install.set_visible(True)
+    self.treeview_update.append_column(column)
+    self.treeview_update.set_search_column(LIST_NAME)
+    self.treeview_update.connect("button-press-event", self.show_context_menu)
 
 
     # proxy stuff
@@ -314,6 +385,10 @@ class UpdateManager(SimpleGladeApp):
           proxy_support = urllib2.ProxyHandler({"http":"http://%s:%s" % (proxy_host, proxy_port)})
           opener = urllib2.build_opener(proxy_support)
           urllib2.install_opener(opener)
+	  # install a proxy environment too
+	  if not os.environ.has_key("http_proxy"):
+		  os.putenv("http_proxy",
+			    "http://%s:%s/" % (proxy_host, proxy_port))
 
     # setup the help viewer and disable the help button if there
     # is no viewer available
@@ -325,7 +400,46 @@ class UpdateManager(SimpleGladeApp):
     # restore state
     self.restore_state()
     self.window_main.show()
+
+  def header_column_func(self, cell_layout, renderer, model, iter):
+    pkg = model.get_value(iter, LIST_PKG)
+    if pkg == None:
+      renderer.set_property("sensitive", False)
+    else:
+      renderer.set_property("sensitive", True)
+
+  def install_column_view_func(self, cell_layout, renderer, model, iter):
+    self.header_column_func(cell_layout, renderer, model, iter)
+    pkg = model.get_value(iter, LIST_PKG)
+    to_install = model.get_value(iter, LIST_INSTALL)
+    renderer.set_property("active", to_install)
+    # hide it if we are only a header line
+    renderer.set_property("visible", pkg != None)
       
+  def package_column_view_func(self, cell_layout, renderer, model, iter):
+    self.header_column_func(cell_layout, renderer, model, iter)
+      
+  def setupDbus(self):
+    """ this sets up a dbus listener if none is installed alread """
+    # check if there is another g-a-i already and if not setup one
+    # listening on dbus
+    try:
+        bus = dbus.SessionBus()
+    except:
+        print "warning: could not initiate dbus"
+        return
+    proxy_obj = bus.get_object('org.freedesktop.UpdateManager', 
+                               '/org/freedesktop/UpdateManagerObject')
+    iface = dbus.Interface(proxy_obj, 'org.freedesktop.UpdateManagerIFace')
+    try:
+        iface.bringToFront()
+        #print "send bringToFront"
+        sys.exit(0)
+    except dbus.DBusException, e:
+         print "no listening object (%s) "% e
+         bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
+         self.dbusControler = UpdateManagerDbusControler(self, bus_name)
+
 
   def on_checkbutton_reminder_toggled(self, checkbutton):
     self.gconfclient.set_bool("/apps/update-manager/remind_reload",
@@ -346,24 +460,17 @@ class UpdateManager(SimpleGladeApp):
       return
     
     for line in lines:
-    
       end_iter = changes_buffer.get_end_iter()
-      
-      version_match = re.match(r'^%s \((.*)\)(.*)$' % re.escape(srcpkg), line)
+      version_match = re.match(r'^%s \((.*)\)(.*)\;.*$' % re.escape(srcpkg), line)
       #bullet_match = re.match("^.*[\*-]", line)
       author_match = re.match("^.*--.*<.*@.*>.*$", line)
       if version_match:
         version = version_match.group(1)
+	upload_archive = version_match.group(2).strip()
         version_text = _("Version %s: \n") % version
         changes_buffer.insert_with_tags_by_name(end_iter, version_text, "versiontag")
-      # mvo: disabled for now as it does not catch multi line entries
-      #      (see ubuntu #7034 for rational)
-      #elif bullet_match and not author_match:
-      #  bullet_text = "    " + line + "\n"
-      #  changes_buffer.insert(end_iter, bullet_text)
       elif (author_match):
         pass
-        #chanages_buffer.insert(end_iter, "\n")
       else:
         changes_buffer.insert(end_iter, line+"\n")
         
@@ -378,9 +485,16 @@ class UpdateManager(SimpleGladeApp):
     iter = model.get_iter(path)
 
     # set descr
-    long_desc = model.get_value(iter, LIST_LONG_DESCR)
-    if long_desc == None:
+    pkg = model.get_value(iter, LIST_PKG)
+    if pkg == None or pkg.description == None:
+      changes_buffer = self.textview_changes.get_buffer()
+      changes_buffer.set_text("")
+      desc_buffer = self.textview_descr.get_buffer()
+      desc_buffer.set_text("")
+      self.notebook_details.set_sensitive(False)
       return
+    long_desc = pkg.description
+    self.notebook_details.set_sensitive(True)
     # Skip the first line - it's a duplicate of the summary
     i = long_desc.find("\n")
     long_desc = long_desc[i+1:]
@@ -396,7 +510,7 @@ class UpdateManager(SimpleGladeApp):
     long_desc = p.sub("\n", long_desc)
 
     desc_buffer = self.textview_descr.get_buffer()
-    desc_buffer.set_text(utf8(long_desc))
+    desc_buffer.set_text(long_desc)
 
     # now do the changelog
     name = model.get_value(iter, LIST_NAME)
@@ -432,13 +546,76 @@ class UpdateManager(SimpleGladeApp):
       changes = self.cache.all_changes[name]
       self.set_changes_buffer(changes_buffer, changes[0], name, changes[1])
 
+  def show_context_menu(self, widget, event):
+    """
+    Show a context menu if a right click was performed on an update entry
+    """
+    if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
+        menu = gtk.Menu()
+        item_select_none = gtk.MenuItem(_("Select _None"))
+        item_select_none.connect("activate", self.select_none_updgrades)
+        menu.add(item_select_none)
+        if self.list.num_updates == 0 or len(self.packages) == 0:
+            item_select_none.set_property("sensitive", False)
+        item_select_all = gtk.MenuItem(_("Select _All"))
+        item_select_all.connect("activate", self.select_all_updgrades)
+        menu.add(item_select_all)
+        if self.list.num_updates == len(self.packages) or\
+           self.list.num_updates == 0:
+            item_select_all.set_property("sensitive", False)
+        menu.popup(None, None, None, 0, event.time)
+        menu.show_all()
+        return True
+
+  def select_all_updgrades(self, widget):
+    """
+    Select all updates
+    """
+    iter = self.store.get_iter_first()
+    while iter != None:
+        pkg = self.store.get_value(iter, LIST_PKG)
+        if pkg != None:
+            self.store.set_value(iter, LIST_INSTALL, True)
+            self.add_update(pkg)
+        iter = self.store.iter_next(iter)
+
+  def select_none_updgrades(self, widget):
+    """
+    Select none updates
+    """
+    iter = self.store.get_iter_first()
+    while iter != None:
+        pkg = self.store.get_value(iter, LIST_PKG)
+        if pkg != None:
+            self.store.set_value(iter, LIST_INSTALL, False)
+            self.remove_update(pkg)
+        iter = self.store.iter_next(iter)
+
+  def humanize_size(self, bytes):
+      """
+      Convert a given size in bytes to a nicer better readable unit
+      """
+      if bytes == 0:
+          # TRANSLATORS: download size is 0
+          return _("None")
+      elif bytes < 1024:
+          # TRANSLATORS: download size of very small updates
+          return _("1 KB")
+      elif bytes < 1024 * 1024:
+          # TRANSLATORS: download size of small updates, e.g. "250 KB"
+          return locale.format(_("%.0f KB"), bytes/1024)
+      else:
+          # TRANSLATORS: download size of updates, e.g. "2.3 MB"
+          return locale.format(_("%.1f MB"), bytes / 1024 / 1024)
+
   def remove_update(self, pkg):
     name = pkg.name
     if name in self.packages:
       self.packages.remove(name)
       self.dl_size -= pkg.packageSize
+      # TRANSLATORS: b stands for Bytes
       self.label_downsize.set_markup(_("Download size: %s" % \
-                                     apt_pkg.SizeToStr(self.dl_size)))
+                                     self.humanize_size(self.dl_size)))
       if len(self.packages) == 0:
         self.button_install.set_sensitive(False)
 
@@ -448,7 +625,7 @@ class UpdateManager(SimpleGladeApp):
       self.packages.append(name)
       self.dl_size += pkg.packageSize
       self.label_downsize.set_markup(_("Download size: %s" % \
-                                     apt_pkg.SizeToStr(self.dl_size)))
+                                     self.humanize_size(self.dl_size)))
       if len(self.packages) > 0:
         self.button_install.set_sensitive(True)
 
@@ -469,22 +646,23 @@ class UpdateManager(SimpleGladeApp):
           text_header = "<big><b>" + \
                         gettext.ngettext("You can install %s update",
                                          "You can install %s updates", 
-                                         len(self.store)) % \
-                                        len(self.store) + "</b></big>"
-          text_download = _("Download size: %s") % apt_pkg.SizeToStr(self.dl_size)
+                                         self.list.num_updates) % \
+                                        self.list.num_updates + "</b></big>"
+          text_download = _("Download size: %s") % self.humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()
-          self.treeview_update.set_cursor(0)
+          self.treeview_update.set_cursor(1)
       self.label_header.set_markup(text_header)
       self.label_downsize.set_markup(text_download)
 
   def activate_details(self, expander, data):
     expanded = self.expander_details.get_expanded()
-    if expanded:
-        expander.set_label(_("Hide details"))
-    else:
-        expander.set_label(_("Show details"))
+    self.vbox_updates.set_child_packing(self.expander_details,
+                                        expanded,
+                                        True,
+                                        0,
+                                        True)
     self.gconfclient.set_bool("/apps/update-manager/show_details",expanded)
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
@@ -494,9 +672,9 @@ class UpdateManager(SimpleGladeApp):
       apt_pkg.PkgSystemUnLock()
     except SystemError:
       pass
-#    cmd = ["gksu","--",
-    cmd = ["/usr/sbin/synaptic", "--hide-main-window",  "--non-interactive",
-           "--parent-window-id", "%s" % (id) ]
+    cmd = ["gksu", "--desktop", "/usr/share/applications/synaptic.desktop", 
+           "--", "/usr/sbin/synaptic", "--hide-main-window",  
+           "--non-interactive", "--parent-window-id", "%s" % (id) ]
     if action == INSTALL:
       cmd.append("--progress-str")
       cmd.append("%s" % _("Please wait, this can take some time."))
@@ -535,6 +713,9 @@ class UpdateManager(SimpleGladeApp):
     # don't display apt-listchanges, we already showed the changelog
     os.environ["APT_LISTCHANGES_FRONTEND"]="none"
 
+    # Do not suspend during the update process
+    (dev, cookie) = self.inhibit_sleep()
+
     # set window to insensitive
     self.window_main.set_sensitive(False)
     self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
@@ -549,19 +730,51 @@ class UpdateManager(SimpleGladeApp):
     while gtk.events_pending():
       gtk.main_iteration()
     self.fillstore()
+
+    # Allow suspend after synaptic is finished
+    if cookie != False:
+        self.allow_sleep(dev, cookie)
     self.window_main.set_sensitive(True)
     self.window_main.window.set_cursor(None)
 
-  def toggled(self, renderer, path_string):
+  def inhibit_sleep(self):
+    """Send a dbus signal to gnome-power-manager to not suspend
+    the system"""
+    try:
+      bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
+      devobj = bus.get_object('org.gnome.PowerManager', 
+                              '/org/gnome/PowerManager')
+      dev = dbus.Interface(devobj, "org.gnome.PowerManager")
+      cookie = dev.Inhibit('UpdateManager', 'Updating system')
+      return (dev, cookie)
+    except Exception, e:
+      print "could not send the dbus Inhibit signal: %s" % e
+      return (False, False)
+
+  def allow_sleep(self, dev, cookie):
+    """Send a dbus signal to gnome-power-manager to allow a suspending
+    the system"""
+    dev.UnInhibit(cookie)
+
+  def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """
-    iter = self.store.get_iter_from_string(path_string)
+    iter = self.store.get_iter(path)
+    pkg = self.store.get_value(iter, LIST_PKG)
+    if pkg is None:
+        return
     if self.store.get_value(iter, LIST_INSTALL):
       self.store.set_value(iter, LIST_INSTALL, False)
-      self.remove_update(self.store.get_value(iter, LIST_PKG))
+      self.remove_update(pkg)
     else:
       self.store.set_value(iter, LIST_INSTALL, True)
-      self.add_update(self.store.get_value(iter, LIST_PKG))
+      self.add_update(pkg)
 
+  def on_treeview_update_row_activated(self, treeview, path, column, *args):
+      """
+      If an update row was activated (by pressing space), toggle the 
+      install check box
+      """
+      self.toggled(None, path)
 
   def exit(self):
     """ exit the application, save the state """
@@ -579,6 +792,11 @@ class UpdateManager(SimpleGladeApp):
     """ restore the state (window-size for now) """
     expanded = self.gconfclient.get_bool("/apps/update-manager/show_details")
     self.expander_details.set_expanded(expanded)
+    self.vbox_updates.set_child_packing(self.expander_details,
+                                        expanded,
+                                        True,
+                                        0,
+                                        True)
     (x,y) = self.gconfclient.get_pair("/apps/update-manager/window_size",
                                       gconf.VALUE_INT, gconf.VALUE_INT)
     if x > 0 and y > 0:
@@ -599,17 +817,29 @@ class UpdateManager(SimpleGladeApp):
     self.list.update(self.cache)
     if self.list.num_updates > 0:
       i=0
-      for pkg in self.list.pkgs:
+      origin_list = self.list.pkgs.keys()
+      origin_list.sort(lambda x,y: cmp(x.importance,y.importance))
+      origin_list.reverse()
+      for origin in origin_list:
+        self.store.append([False,'<b><big>%s</big></b>' % origin.description,
+                           origin.description, None])
+        for pkg in self.list.pkgs[origin]:
+          name = xml.sax.saxutils.escape(pkg.name)
+          summary = xml.sax.saxutils.escape(pkg.summary)
+          contents = "<b>%s</b>\n<small>%s\n" % (name, summary)
+          if pkg.installedVersion != None:
+              contents += _("From version %s to %s") % \
+                           (pkg.installedVersion,
+                            pkg.candidateVersion)
+          else:
+              contents += _("Version %s") % pkg.candidateVersion
+          #TRANSLATORS: the b stands for Bytes
+          contents += " " + _("(Size: %s)") % self.humanize_size(pkg.packageSize)
+          contents += "</small>"
 
-        name = xml.sax.saxutils.escape(pkg.name)
-        summary = xml.sax.saxutils.escape(pkg.summary)
-        contents = "<big><b>%s</b></big>\n<small>%s\n\n" % (name, summary)
-        contents = contents + _("New version: %s   (Size: %s)") % (pkg.candidateVersion,apt.SizeToStr(pkg.packageSize)) + "</small>"
-
-        iter = self.store.append([True, contents, pkg.name, pkg.summary,
-                                  pkg.candidateVersion, pkg.description, pkg])
-        self.add_update(pkg)
-        i = i + 1
+          iter = self.store.append([True, contents, pkg.name, pkg])
+          self.add_update(pkg)
+          i = i + 1
 
     self.update_count()
     # use the normal cursor
@@ -637,25 +867,8 @@ class UpdateManager(SimpleGladeApp):
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):
-    #print "new_dist_available: %s" % upgradable_to.name
-    # check if the user already knowns about this dist
-    #seen = self.gconfclient.get_string("/apps/update-manager/seen_dist")
-    #if name == seen:
-    #  return
-    
-    #msg = "<big><b>%s</b></big>\n\n%s" % (_("There is a new release of Ubuntu available!"), _("A new release with the codename '%s' is available. Please see http://www.ubuntulinux.org/ for upgrade instructions.") % name)
-    #dialog = gtk.MessageDialog(self.window_main, 0, gtk.MESSAGE_INFO,
-    #                           gtk.BUTTONS_CLOSE, "")
-    #dialog.set_markup(msg)
-    #check = gtk.CheckButton(_("Never show this message again"))
-    #check.show()
-    #dialog.vbox.pack_start(check)
-    #dialog.run()
-    #if check.get_active():
-    #  self.gconfclient.set_string("/apps/update-manager/seen_dist",name)
-    #dialog.destroy()
     self.frame_new_release.show()
-    self.label_new_release.set_markup("<b>New distribution release '%s' is available</b>" % upgradable_to.name)
+    self.label_new_release.set_markup(_("<b>New distribution release '%s' is available</b>") % upgradable_to.version)
     self.new_dist = upgradable_to
     
 
@@ -665,20 +878,21 @@ class UpdateManager(SimpleGladeApp):
     try:
         apt_pkg.PkgSystemLock()
     except SystemError, e:
-        d = gtk.MessageDialog(parent=self.window_main,
-                              flags=gtk.DIALOG_MODAL,
-                              type=gtk.MESSAGE_ERROR,
-                              buttons=gtk.BUTTONS_CLOSE)
-        d.set_markup("<big><b>%s</b></big>\n\n%s" % (
-            _("Only one software management tool is allowed to "
-              "run at the same time"),
-            _("Please close the other application e.g. 'aptitude' "
-              "or 'Synaptic' first.")))
-        print "error from apt: '%s'" % e
-        d.set_title("")
-        res = d.run()
-        d.destroy()
-        sys.exit()
+        pass
+        #d = gtk.MessageDialog(parent=self.window_main,
+        #                      flags=gtk.DIALOG_MODAL,
+        #                      type=gtk.MESSAGE_ERROR,
+        #                      buttons=gtk.BUTTONS_CLOSE)
+        #d.set_markup("<big><b>%s</b></big>\n\n%s" % (
+        #    _("Only one software management tool is allowed to "
+        #      "run at the same time"),
+        #    _("Please close the other application e.g. 'aptitude' "
+        #      "or 'Synaptic' first.")))
+        #print "error from apt: '%s'" % e
+        #d.set_title("")
+        #res = d.run()
+        #d.destroy()
+        #sys.exit()
 
     try:
         progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
@@ -704,13 +918,6 @@ class UpdateManager(SimpleGladeApp):
         sys.exit(1)
     else:
         progress.hide()
-    #apt_pkg.Config.Set("Debug::pkgPolicy","1")
-    #self.depcache = apt_pkg.GetDepCache(self.cache)
-    self.cache._depcache.ReadPinFile()
-    if os.path.exists(SYNAPTIC_PINFILE):
-        self.cache._depcache.ReadPinFile(SYNAPTIC_PINFILE)
-    self.cache._depcache.Init()
-
 
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform

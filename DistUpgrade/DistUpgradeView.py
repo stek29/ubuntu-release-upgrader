@@ -19,6 +19,25 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+def FuzzyTimeToStr(sec):
+  " return the time a bit fuzzy (no seconds if time > 60 secs "
+  if sec > 60*60*24:
+    return _("%li days %li hours %li minutes") % (sec/60/60/24, (sec/60/60) % 24, (sec/60) % 60)
+  if sec > 60*60:
+    return _("%li hours %li minutes") % (sec/60/60, (sec/60) % 60)
+  if sec > 60:
+    return _("%li minutes") % (sec/60)
+  return _("%li seconds") % sec
+
+def estimatedDownloadTime(requiredDownload):
+    """ get the estimated download time """
+    timeModem = requiredDownload/(56*1024/8)  # 56 kbit 
+    timeDSL = requiredDownload/(1024*1024/8)  # 1Mbit = 1024 kbit
+    s= _("This download will take about %s with a 56k modem and about %s with "
+         "a 1Mbit DSL connection" % (FuzzyTimeToStr(timeModem), FuzzyTimeToStr(timeDSL)))
+    return s
+
+
 class DumbTerminal(object):
     def call(self, cmd):
         " expects a command in the subprocess style (as a list) "
@@ -35,9 +54,9 @@ class DistUpgradeView(object):
     def getFetchProgress(self):
         " return a fetch progress object "
         return apt.progress.FetchProgress()
-    def getInstallProgress(self):
+    def getInstallProgress(self, cache=None):
         " return a install progress object "
-        return apt.progress.InstallProgress()
+        return apt.progress.InstallProgress(cache)
     def getTerminal(self):
         return DumbTerminal()
     def updateStatus(self, msg):

@@ -1,4 +1,6 @@
 
+import warnings
+warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import os
@@ -6,6 +8,7 @@ import re
 import logging
 from gettext import gettext as _
 from DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgradeView import FuzzyTimeToStr
 
 class MyCache(apt.Cache):
     # init
@@ -123,6 +126,21 @@ class MyCache(apt.Cache):
                     for pkg in self.config.getlist(key,"PostUpgrade%s" % rule):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
 
+        # get the distro-specific quirks handler and run it
+        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
+        func = getattr(self, quirksFuncName, None)
+        if func is not None:
+            func()
+
+    def dapperQuirks(self):
+        """ this function works around quirks in the breezy->dapper upgrade """
+        logging.debug("running dapperQuirks handler")
+        if (self.has_key("nvidia-glx") and self["nvidia-glx"].isInstalled and
+            self.has_key("nvidia-settings") and self["nvidia-settings"].isInstalled):
+            logging.debug("nvidia-settings and nvidia-glx is installed")
+            self.markRemove("nvidia-settings")
+            self.markInstall("nvidia-glx")
+
     def distUpgrade(self, view):
         try:
             # upgrade (and make sure this way that the cache is ok)
@@ -142,8 +160,10 @@ class MyCache(apt.Cache):
             # FIXME: change the text to something more useful
             view.error(_("Could not calculate the upgrade"),
                        _("A unresolvable problem occured while "
-                         "calculating the upgrade. Please report "
-                         "this as a bug. "))
+                         "calculating the upgrade.\n\n"
+                         "Please report this bug against the 'update-manager' "
+                         "package and include the files in /var/log/dist-upgrade/ "
+                         "in the bugreport."))
             logging.error("Dist-upgrade failed: '%s'", e)
             return False
 

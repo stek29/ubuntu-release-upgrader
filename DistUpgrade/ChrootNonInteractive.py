@@ -96,6 +96,9 @@ class Chroot(object):
         pid = os.fork()
         if pid == 0:
             os.chroot(tmpdir)
+            os.chdir("/tmp/dist-upgrade")
+            os.system("mount -t devpts devpts /dev/pts")
+            os.system("mount /proc")
             os.execl("/tmp/dist-upgrade/dist-upgrade.py",
                      "/tmp/dist-upgrade/dist-upgrade.py")
         else:
@@ -105,7 +108,9 @@ class Chroot(object):
             for f in glob.glob(tmpdir+"/var/log/dist-upgrade/*"):
                 shutil.copy(f, self.resultdir)
             print "Removing: '%s'" % tmpdir
-            #shutil.rmtree(tmpdir)
+            os.system("umount %s/dev/pts" % tmpdir)
+            os.system("umount %s/proc" % tmpdir)
+            shutil.rmtree(tmpdir)
             
 
     def _unpackToTmpdir(self, baseTarBall):

@@ -25,7 +25,7 @@ class Chroot(object):
         if not self.resultdir:
             self.resultdir = os.path.join(os.getcwd(), "result")
         # init the rest
-        self.config = DistUpgradeConfig()
+        self.config = DistUpgradeConfig(".")
         self.fromDist = self.config.get("Sources","From")
         proxy=self.config.get("NonInteractive","Proxy")
         if proxy:

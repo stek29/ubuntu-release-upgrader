@@ -86,10 +86,20 @@ class AptCdrom(object):
 class DistUpgradeControler(object):
     """ this is the controler that does most of the work """
     
-    def __init__(self, distUpgradeView, cdromPath=None):
-        gettext.bindtextdomain("update-manager",os.path.join(os.getcwd(),"mo"))
+    def __init__(self, distUpgradeView, cdromPath=None, datadir=None):
+        # setup the pathes
+        localedir = "/usr/share/locale/update-manager/"
+        if datadir == None:
+            datadir = os.getcwd()
+            localedir = os.path.join(datadir,"mo")
+            gladedir = datadir
+        self.datadir = datadir
+
+        # init gettext
+        gettext.bindtextdomain("update-manager",localedir)
         gettext.textdomain("update-manager")
 
+        # setup the view
         self._view = distUpgradeView
         self._view.updateStatus(_("Reading cache"))
         self.cache = None
@@ -98,8 +108,8 @@ class DistUpgradeControler(object):
         self.aptcdrom = AptCdrom(distUpgradeView, cdromPath)
         self.useNetwork = True
         
-        # the configuration 
-        self.config = DistUpgradeConfig()
+        # the configuration
+        self.config = DistUpgradeConfig(datadir)
         self.sources_backup_ext = "."+self.config.get("Files","BackupExt")
         
         # some constants here
@@ -112,13 +122,15 @@ class DistUpgradeControler(object):
 
         # turn on debuging in the cache
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
+        apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
+        # FIXME: make this "append"?
         fd = os.open("/var/log/dist-upgrade/apt.log",
                      os.O_RDWR|os.O_CREAT|os.O_TRUNC, 0644)
         os.dup2(fd,1)
         os.dup2(fd,2)
 
     def openCache(self):
-        self.cache = MyCache(self._view.getOpCacheProgress())
+        self.cache = MyCache(self.config, self._view.getOpCacheProgress())
 
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
@@ -376,7 +388,7 @@ class DistUpgradeControler(object):
             free = st_usr[statvfs.F_BAVAIL]*st_usr[statvfs.F_FRSIZE]
             logging.debug("/usr on different fs than %s, free: %s" % (archivedir, free))
 
-        safety_buffer = 1024*1024*75 # 75 Mb
+        safety_buffer = 1024*1024*100 # 100 Mb
         logging.debug("using safety buffer: %s" % safety_buffer)
         if (self.cache.additionalRequiredSpace+safety_buffer) > free:
             free_at_least = apt_pkg.SizeToStr(self.cache.additionalRequiredSpace+safety_buffer-free)
@@ -473,15 +485,15 @@ class DistUpgradeControler(object):
             demoted = [pkg.name for pkg in installed_demotions]	
 	    demoted.sort()
             logging.debug("demoted: '%s'" % " ".join(demoted))
-            self._view.information(_("Some software no longer officially "
-                                     "supported"),
-                                   _("These installed packages are "
-                                     "no longer officially supported, "
-                                     "and are now only "
-                                     "community-supported ('universe').\n\n"
-                                     "If you don't have 'universe' enabled "
+            self._view.information(_("Support for some applications ended"),
+                                   _("Canonical Ltd. no longer provides "
+                                     "support for the following software "
+                                     "packages. You can still get support "
+                                     "from the community.\n\n"
+                                     "If you havn't enabled community "
+                                     "maintained software (universe), "
                                      "these packages will be suggested for "
-                                     "removal in the next step. "),
+                                     "removal in the next step."),
                                    "\n".join(demoted))
        
         # mark packages that are now obsolete (and where not obsolete
@@ -532,6 +544,7 @@ class DistUpgradeControler(object):
         self.aptcdrom.restoreBackup(self.sources_backup_ext)
         # generate a new cache
         self._view.updateStatus(_("Restoring original system state"))
+        self._view.abort()
         self.openCache()
         sys.exit(1)
 

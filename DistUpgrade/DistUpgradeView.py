@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from gettext import gettext as _
+
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
   if sec > 60*60*24:
@@ -42,7 +44,13 @@ class DumbTerminal(object):
     def call(self, cmd):
         " expects a command in the subprocess style (as a list) "
         subprocess.call(cmd)
-        
+
+
+(STEP_PREPARE,
+ STEP_MODIFY_SOURCES,
+ STEP_FETCH_INSTALL,
+ STEP_CLEANUP,
+ STEP_REBOOT) = range(1,6)
 
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
@@ -64,6 +72,9 @@ class DistUpgradeView(object):
             on the current view
         """
         pass
+    def abort():
+        """ provide a visual feedback that the upgrade was aborted """
+        pass
     def setStep(self, step):
         """ we have 5 steps current for a upgrade:
         1. Analyzing the system
@@ -72,6 +83,9 @@ class DistUpgradeView(object):
         4. Post upgrade stuff
         5. Complete
         """
+        pass
+    def hideStep(self, step):
+        " hide a certain step from the GUI "
         pass
     def confirmChanges(self, summary, changes, downloadSize, actions=None):
         """ display the list of changed packages (apt.Package) and

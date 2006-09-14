@@ -24,8 +24,10 @@ import logging
 import time
 import sys
 from DistUpgradeView import DistUpgradeView
+from DistUpgradeConfigParser import DistUpgradeConfig
 import os
 import pty
+import apt_pkg
 
 class NonInteractiveFetchProgress(apt.progress.FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
@@ -36,7 +38,10 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         apt.progress.InstallProgress.__init__(self)
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
-
+        self.config = DistUpgradeConfig(".")
+        if self.config.get("NonInteractive","ForceOverwrite"):
+            apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        
     def error(self, pkg, errormsg):
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     def conffile(self, current, new):

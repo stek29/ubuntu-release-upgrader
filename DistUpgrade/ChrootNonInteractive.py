@@ -16,16 +16,25 @@ class Chroot(object):
     diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d"]
     apt_options = ["-y"]
             
-    def __init__(self, datadir=None, resultdir=None):
+    def __init__(self, profilename, datadir=None, resultdir=None):
         # init the dirs
         self.datadir = datadir
         self.resultdir = resultdir
+        self.profilename = profilename
         if not self.datadir:
             self.datadir = os.getcwd()
         if not self.resultdir:
             self.resultdir = os.path.join(os.getcwd(), "result")
         # init the rest
-        self.config = DistUpgradeConfig(".")
+        cname = "DistUpgrade-%s.cfg" % profilename
+        profile="%s/profile/DistUpgrade-%s.cfg" % (self.datadir,
+                                                   self.profilename)
+        if os.path.exists(profile):
+            self.profile = profile
+            self.config = DistUpgradeConfig(datadir="./profile", name=cname)
+                                            
+        else:
+            raise IOError, "Can't find profile '%s'" % profile
         self.fromDist = self.config.get("Sources","From")
         proxy=self.config.get("NonInteractive","Proxy")
         if proxy:
@@ -92,6 +101,11 @@ class Chroot(object):
         for f in glob.glob("%s/*" % self.datadir):
             if not os.path.isdir(f):
                 shutil.copy(f, targettmpdir)
+        # copy the profile
+        if os.path.exists(self.profile):
+            print "Copying '%s' to '%s' " % (self.profile,targettmpdir)
+            shutil.copy(self.profile,targettmpdir)
+            
         # run it
         pid = os.fork()
         if pid == 0:
@@ -106,7 +120,10 @@ class Chroot(object):
             (id, exitstatus) = os.waitpid(pid, 0)
             print "Child exited (%s, %s)" % (id, exitstatus)
             for f in glob.glob(tmpdir+"/var/log/dist-upgrade/*"):
-                shutil.copy(f, self.resultdir)
+                outdir = os.path.join(self.resultdir,self.profilename)
+                if not os.path.exists(outdir):
+                    os.makedirs(outdir)
+                shutil.copy(f, outdir)
             print "Removing: '%s'" % tmpdir
             os.system("umount %s/dev/pts" % tmpdir)
             os.system("umount %s/proc" % tmpdir)
@@ -132,8 +149,12 @@ class Chroot(object):
     
 
 if __name__ == "__main__":
-    chroot = Chroot()
-    tarball = os.getcwd()+"/tarball/dist-upgrade-test.tar.gz"
+    if len(sys.argv) > 1:
+        profilename = sys.argv[1]
+    else:
+	profilename = "default"
+    chroot = Chroot(profilename)
+    tarball = "%s/tarball/dist-upgrade-%s.tar.gz" % (os.getcwd(),profilename)
     if not os.path.exists(tarball):
         print "No existing tarball found, creating a new one"
         chroot.bootstrap(tarball)

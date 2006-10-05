@@ -1,3 +1,50 @@
+update-manager (0.44.15) edgy; urgency=low
+
+  * added missing python-vte dependency (lp: #63609)
+  * added missing gksu dependency (lp: #63572)
+  * don't remove xchat automatically anymore on upgrade (leftover
+    from breezy->dapper) (lp: #63881)
+  * do not come up with bogus dist-upgrade suggestions
+  * fix bad english grammar (lp: #63761, #63474)
+  * fix in the edgyUpdates quirks handler (lp: #63723)
+  * catch error from _tryMarkObsoleteForRemoval() (lp: #63617)
+  * fix plural forms for ro, pl (lp: #46421)
+  * properly escape comments before displaying them (lp: #63475)
+
+ --
+
+update-manager (0.44.14) edgy; urgency=low
+
+  * fix some incorrect i18n markings (lp: #62681)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon,  2 Oct 2006 14:41:52 +0200
+
+update-manager (0.44.13) edgy; urgency=low
+
+  * fix missing i18n declarations (lp: #62519)
+  * data/glade/SoftwareProperties.glade:
+    - fix missing "translatable" property (lp: #62681)
+  * DistUpgrade:
+    - deal better with the python transition and the hpijs 
+      upgrade (lp: #62948)
+  * UpdateManager/UpdateManager.py:
+    - put the cancel button inside the text-area to avoid flickering
+    - make sure that src_ver is always initialized (thanks to
+      Simira for reporting)
+    - filter python-apt future warning (especially for seb128)
+  * DistUprade/DistUpgradeControler.py:
+    - check for self.sources, self.aptcdrom before using it (lp: #61852)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 23 Sep 2006 00:53:06 +0200
+
+update-manager (0.44.12) edgy; urgency=low
+
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - use '%d' instead of '%s' where appropriate (lp: #60239)
+  * fixed lots of typos (lp: #60633)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 18 Sep 2006 16:37:52 +0200
+
 update-manager (0.44.11) edgy; urgency=low
 
   * UpdateManager/UpdateManager.py:

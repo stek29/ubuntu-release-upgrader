@@ -33,8 +33,7 @@ from gettext import gettext as _
 import os
 import string
 import re
-
-#sys.path.append("@prefix/share/update-manager/python")
+from xml.sax.saxutils import escape
 
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp
 from UpdateManager.Common.HelpViewer import HelpViewer
@@ -45,6 +44,7 @@ import dialog_cache_outdated
 import dialog_add_sources_list
 from dialog_apt_key import apt_key
 from utils import *
+
 
 (LIST_MARKUP, LIST_ENABLED, LIST_ENTRY_OBJ) = range(3)
 
@@ -482,6 +482,9 @@ class SoftwareProperties(SimpleGladeApp):
         for source in self.distro.child_sources:
             if source.template == template:
                 self.sourceslist.remove(source)
+        for source in self.distro.source_code_sources:
+            if source.template == template:
+                self.sourceslist.remove(source)
     else:
         self.distro.add_source(self.sourceslist,
                                      uri=template.base_uri,
@@ -698,7 +701,7 @@ class SoftwareProperties(SimpleGladeApp):
 
     if source.template == None:
         if source.comment:
-            contents = "<b>%s</b>" % source.comment
+            contents = "<b>%s</b>" % escape(source.comment)
             # Only show the components if there are more than one
             if len(source.comps) > 1:
                 for c in source.comps:
@@ -1033,7 +1036,7 @@ class SoftwareProperties(SimpleGladeApp):
                                  type=gtk.MESSAGE_ERROR,
                                  buttons=gtk.BUTTONS_OK,
                                  message_format=None)
-      dialog.set_markup(_("<big><b>Error scaning the CD</b></big>\n\n%s"%msg))
+      dialog.set_markup(_("<big><b>Error scanning the CD</b></big>\n\n%s"%msg))
       res = dialog.run()
       dialog.destroy()
       return

@@ -3,7 +3,10 @@
 DIST=edgy
 
 # cleanup
+echo "Cleaning up"
 rm -f *~ *.bak *.pyc *.moved '#'*
+sudo rm -rf backports/ profile/ result/ tarball/ *.deb
+
 
 # make symlink
 if [ ! -h $DIST ]; then

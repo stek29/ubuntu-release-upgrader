@@ -127,6 +127,8 @@ class Chroot(object):
             print "Removing: '%s'" % tmpdir
             os.system("umount %s/dev/pts" % tmpdir)
             os.system("umount %s/proc" % tmpdir)
+	    # HACK: try to lazy umount it at least
+            #os.system("umount -l %s/proc" % tmpdir)
             shutil.rmtree(tmpdir)
             
 

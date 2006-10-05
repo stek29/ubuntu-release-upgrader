@@ -33,8 +33,11 @@ try:
 except:
     import fakegconf as gconf
 import gobject
+import warnings
+warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
+
 import gettext
 import copy
 import string
@@ -111,10 +114,12 @@ class MyCache(apt.Cache):
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
         self._depcache.Upgrade(True)
+        wouldDelete = self._depcache.DelCount
         if self._depcache.DelCount > 0:
             self.clear()
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
         self._depcache.Upgrade()
+        return wouldDelete
 
     def get_changelog(self, name, lock):
         # don't touch the gui in this function, it needs to be thread-safe
@@ -130,6 +135,7 @@ class MyCache(apt.Cache):
 
         # get the source version, start with the binaries version
         binver = pkg.candidateVersion
+        srcver = pkg.candidateVersion
         #print "bin: %s" % binver
         try:
             # try to get the source version of the pkg, this differs
@@ -204,12 +210,12 @@ class MyCache(apt.Cache):
         except urllib2.HTTPError:
             if lock.locked():
                 self.all_changes[name] = [_("The list of changes is not "
-                                            "available yet. Please try again "
+                                            "available yet.\nPlease try again "
                                             "later."), srcpkg]
         except IOError:
             if lock.locked():
                 self.all_changes[name] = [_("Failed to download the list "
-                                            "of changes. Please "
+                                            "of changes. \nPlease "
                                             "check your Internet "
                                             "connection."), srcpkg]
         if lock.locked():
@@ -233,7 +239,7 @@ class UpdateList:
                  ("%s-updates" % dist, "Ubuntu", _("Recommended updates"), 9),
                  ("%s-proposed" % dist, "Ubuntu", _("Proposed updates"), 8),
                  ("%s-backports" % dist, "Ubuntu", _("Backports"), 7),
-                 (dist, "Ubuntu", _("Normal updates"), 6)]
+                 (dist, "Ubuntu", _("Distribution updates"), 6)]
 
     self.pkgs = {}
     self.matcher = {}
@@ -246,7 +252,7 @@ class UpdateList:
     self.held_back = []
 
     # do the upgrade
-    cache.saveDistUpgrade()
+    self.distUpgradeWouldDelete = cache.saveDistUpgrade()
 
     # sort by origin
     for pkg in cache:
@@ -514,8 +520,11 @@ class UpdateManager(SimpleGladeApp):
         lock = thread.allocate_lock()
         lock.acquire()
         t=thread.start_new_thread(self.cache.get_changelog,(name,lock))
-        changes_buffer.set_text(_("Downloading the list of changes..."))
-        button = self.button_cancel_dl_changelog
+        changes_buffer.set_text("%s\n" % _("Downloading list of changes..."))
+        iter = changes_buffer.get_iter_at_line(1)
+        anchor = changes_buffer.create_child_anchor(iter)
+        button = gtk.Button(stock="gtk-cancel")
+        self.textview_changes.add_child_at_anchor(button, anchor)
         button.show()
         id = button.connect("clicked",
                             lambda w,lock: lock.release(), lock)
@@ -569,23 +578,6 @@ class UpdateManager(SimpleGladeApp):
     self.treeview_update.queue_draw()
     self.setBusy(False)
 
-  def humanize_size(self, bytes):
-      """
-      Convert a given size in bytes to a nicer better readable unit
-      """
-      if bytes == 0:
-          # TRANSLATORS: download size is 0
-          return _("None")
-      elif bytes < 1024:
-          # TRANSLATORS: download size of very small updates
-          return _("1 KB")
-      elif bytes < 1024 * 1024:
-          # TRANSLATORS: download size of small updates, e.g. "250 KB"
-          return locale.format(_("%.0f KB"), bytes/1024)
-      else:
-          # TRANSLATORS: download size of updates, e.g. "2.3 MB"
-          return locale.format(_("%.1f MB"), bytes / 1024 / 1024)
-
   def setBusy(self, flag):
       """ Show a watch cursor if the app is busy for more than 0.3 sec.
       Furthermore provide a loop to handle user interface events """
@@ -602,8 +594,8 @@ class UpdateManager(SimpleGladeApp):
       self.button_install.set_sensitive(self.cache.installCount)
       self.dl_size = self.cache.requiredDownload
       # TRANSLATORS: b stands for Bytes
-      self.label_downsize.set_markup(_("Download size: %s" % \
-                                       self.humanize_size(self.dl_size)))
+      self.label_downsize.set_markup(_("Download size: %s") % \
+                                       humanize_size(self.dl_size))
       
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to
@@ -611,7 +603,7 @@ class UpdateManager(SimpleGladeApp):
       self.refresh_updates_count()
       num_updates = self.cache.installCount
       if num_updates == 0:
-          text_header= "<big><b>"+_("Your system is up-to-date")+"</b></big>"
+          text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
           text_download = ""
           self.notebook_details.set_sensitive(False)
           self.treeview_update.set_sensitive(False)
@@ -621,12 +613,12 @@ class UpdateManager(SimpleGladeApp):
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")
       else:
-          text_header = "<big><b>" + \
-                        gettext.ngettext("You can install %s update",
-                                         "You can install %s updates", 
-                                         num_updates) % \
-                                         num_updates + "</b></big>"
-          text_download = _("Download size: %s") % self.humanize_size(self.dl_size)
+          text_header = "<big><b>%s</b></big>" % \
+                        (gettext.ngettext("You can install %s update",
+                                          "You can install %s updates", 
+                                          num_updates) % \
+                                          num_updates)
+          text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()
@@ -813,16 +805,16 @@ class UpdateManager(SimpleGladeApp):
         for pkg in self.list.pkgs[origin]:
           name = xml.sax.saxutils.escape(pkg.name)
           summary = xml.sax.saxutils.escape(pkg.summary)
-          contents = "<b>%s</b>\n<small>%s\n" % (name, summary)
+          contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           if pkg.installedVersion != None:
-              contents += _("From version %s to %s") % \
-                           (pkg.installedVersion,
-                            pkg.candidateVersion)
+              version =  _("From version %(old_version)s to %(new_version)s") %\
+                         {"old_version" : pkg.installedVersion,
+                          "new_version" : pkg.candidateVersion}
           else:
-              contents += _("Version %s") % pkg.candidateVersion
+              version = _("Version %s") % pkg.candidateVersion
           #TRANSLATORS: the b stands for Bytes
-          contents += " " + _("(Size: %s)") % self.humanize_size(pkg.packageSize)
-          contents += "</small>"
+          size = _("(Size: %s)") % humanize_size(pkg.packageSize)
+          contents = "%s\n<small>%s %s</small>" % (contents, version, size)
 
           self.store.append([contents, pkg.name, pkg])
     self.update_count()
@@ -921,7 +913,7 @@ class UpdateManager(SimpleGladeApp):
   def check_all_updates_installable(self):
     """ Check if all available updates can be installed and suggest
         to run a distribution upgrade if not """
-    if self.list.keepcount > 0:
+    if self.list.distUpgradeWouldDelete > 0:
       self.dialog_dist_upgrade.set_transient_for(self.window_main)
       res = self.dialog_dist_upgrade.run()
       self.dialog_dist_upgrade.hide()

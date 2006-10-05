@@ -5,7 +5,7 @@ class DistUpgradeConfig(ConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg"):
         ConfigParser.__init__(self)
         self.datadir=datadir
-        self.read(datadir+"/"+name)
+        self.read([datadir+"/"+name])
     def getlist(self, section, option):
         try:
             tmp = self.get(section, option)

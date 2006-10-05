@@ -128,7 +128,7 @@ class Chroot(object):
             os.system("umount %s/dev/pts" % tmpdir)
             os.system("umount %s/proc" % tmpdir)
 	    # HACK: try to lazy umount it at least
-            #os.system("umount -l %s/proc" % tmpdir)
+            os.system("umount -l %s/proc" % tmpdir)
             shutil.rmtree(tmpdir)
             
 

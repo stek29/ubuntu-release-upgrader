@@ -202,15 +202,19 @@ class MyCache(apt.Cache):
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
 
-            # then see if meta-pkgs are missing
-            if not self._installMetaPkgs(view):
-                raise SystemError, _("Can't upgrade required meta-packages")
-
             # see if our KeepInstalled rules are honored
             self.keepInstalledRule()
 
             # and if we have some special rules
             self.postUpgradeRule()
+            
+	    # then see if meta-pkgs are missing
+            if not self._installMetaPkgs(view):
+                raise SystemError, _("Can't upgrade required meta-packages")
+
+            # then see if meta-pkgs are missing
+            if not self._installMetaPkgs(view):
+                raise SystemError, _("Can't upgrade required meta-packages")
 
             # see if it all makes sense
             if not self._verifyChanges():
@@ -349,7 +353,7 @@ class MyCache(apt.Cache):
                     self.restore_snapshot()
                     return False
         except (SystemError,KeyError),e:
-            loggging.warning("_tryMarkObsoleteForRemoval failed for '%s' (%s)" % (pkgname,e))
+            logging.warning("_tryMarkObsoleteForRemoval failed for '%s' (%s)" % (pkgname,e))
             self.restore_snapshot()
             return False
         return True

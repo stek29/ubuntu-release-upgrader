@@ -60,7 +60,8 @@ class AptCdrom(object):
         if backup_ext:
             cdromstate = os.path.join(apt_pkg.Config.FindDir("Dir::State"),
                                       apt_pkg.Config.Find("Dir::State::cdroms"))
-            shutil.copy(cdromstate, cdromstate+backup_ext)
+            if os.path.exists(cdromstate):
+                shutil.copy(cdromstate, cdromstate+backup_ext)
         # do the actual work
         apt_pkg.Config.Set("Acquire::cdrom::mount",self.cdrompath)
         apt_pkg.Config.Set("APT::CDROM::NoMount","true")
@@ -319,13 +320,17 @@ class DistUpgradeControler(object):
         inst = []
         up = []
         rm = []
+        held = []
         for pkg in self.cache:
             if pkg.markedInstall: inst.append(pkg.name)
             elif pkg.markedUpgrade: up.append(pkg.name)
             elif pkg.markedDelete: rm.append(pkg.name)
+            elif (pkg.isInstalled and pkg.isUpgradable): held.append(pkg.name)
+        logging.debug("Held-back: %s" % " ".join(held))
         logging.debug("Remove: %s" % " ".join(rm))
         logging.debug("Install: %s" % " ".join(inst))
         logging.debug("Upgrade: %s" % " ".join(up))
+        
 
     def doPreUpgrade(self):
         # FIXME: check out what packages are downloadable etc to

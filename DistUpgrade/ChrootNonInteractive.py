@@ -47,6 +47,12 @@ class Chroot(object):
                               +cmd_options)
         return ret
 
+    def _tryRandomPkgInstall(self, amount):
+        " install 'amount' packages randomly "
+        self._runApt(tmpdir,"install",["python2.4-apt", "python-apt"])
+        shutil.copy("%s/randomInst.py",tmpdir+"/tmp")
+        ret = subprocess.call(["chroot",tmpdir,"/tmp/randomInst.py","%s" % amount])
+
     def bootstrap(self,outfile=None):
         " bootstaps a pristine fromDist tarball"
         if not outfile:
@@ -75,6 +81,9 @@ class Chroot(object):
             print "installing additonal: %s" % pkgs
             ret= self._runApt(tmpdir,"install",pkgs)
             print "apt(2) returned: %s" % ret
+
+        amount = self.config.get("NonInteractive","RandomPkgInstall")
+        self._tryRandomPkgInstall(amount)
 
         print "Cleaning chroot"
         ret = self._runApt(tmpdir,"clean")

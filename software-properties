@@ -64,7 +64,10 @@ if __name__ == "__main__":
                     action="store", type="string", dest="enable_component",
                     help="Enable the specified component of the distro's "\
                     "repositories")
-                   
+  parser.add_option("-x", "--disable-component", 
+                    action="store", type="string", dest="disable_component",
+                    help="Disable the specified component of the distro's "\
+                    "repositories")
 
   (options, args) = parser.parse_args()
   # Check for root permissions
@@ -88,7 +91,13 @@ if __name__ == "__main__":
   file = None
   if len(args) > 0:
     file = args[0]
-  if options.enable_component:
+  if options.disable_component:
+    sourceslist = aptsources.SourcesList()
+    distro = aptsources.Distribution()
+    distro.get_sources(sourceslist)
+    distro.disable_component(sourceslist, options.disable_component)
+    sourceslist.save()
+  elif options.enable_component:
     sourceslist = aptsources.SourcesList()
     distro = aptsources.Distribution()
     distro.get_sources(sourceslist)

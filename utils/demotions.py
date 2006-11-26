@@ -43,8 +43,8 @@ if __name__ == "__main__":
   except OSError:
     pass
 
-  old = Dist("dapper")
-  new = Dist("edgy")
+  old = Dist("edgy")
+  new = Dist("feisty")
   
   # go over the dists to find main pkgs
   for dist in [old, new]:

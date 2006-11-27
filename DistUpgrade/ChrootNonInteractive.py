@@ -39,10 +39,30 @@ class Chroot(object):
         os.putenv("DEBIAN_FRONTEND","noninteractive")
         self.tarball = None
 
+    def _runInChroot(self, chrootdir, command, cmd_options=[]):
+        print "runing: ",command
+        pid = os.fork()
+        if pid == 0:
+            os.chroot(chrootdir)
+            os.system("mount -t devpts devpts /dev/pts")
+            os.system("mount -t sysfs sysfs /sys")
+            os.system("mount /proc")
+            os.system("mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc")
+            os.execv(command[0], command)
+        else:
+            print "Parent: waiting for %s" % pid
+            (id, exitstatus) = os.waitpid(pid, 0)
+            os.system("umount %s/dev/pts" % chrootdir)
+            os.system("umount %s/proc/sys/fs/binfmt_misc" % chrootdir)
+            os.system("umount %s/proc" % chrootdir)
+            os.system("umount %s/sys" % chrootdir)
+	    # HACK: try to lazy umount it at least
+            os.system("umount -l %s/proc" % chrootdir)
+            return exitstatus
+
     def _runApt(self, tmpdir, command, cmd_options=[]):
-        ret = subprocess.call(["chroot",tmpdir, "apt-get", command]
-                              +self.apt_options
-                              +cmd_options)
+        ret = self._runInChroot(tmpdir,
+                                ["/usr/bin/apt-get", command]+self.apt_options+cmd_options)
         return ret
 
     def _tryRandomPkgInstall(self, amount):
@@ -109,6 +129,7 @@ class Chroot(object):
 
         print "Removing chroot"
         shutil.rmtree(tmpdir)
+        return True
 
     def upgrade(self, tarball=None):
         if not tarball:

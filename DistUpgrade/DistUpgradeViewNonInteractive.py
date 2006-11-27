@@ -55,10 +55,7 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
 	apt.progress.InstallProgress.updateInterface(self)
         # FIXME: this needs some love ;)
         # like in: READ IT ALL SUCKER until nothing is left
-        try:
-            sys.stdout.write("%s" % os.read(self.master_fd, 1))
-        except:
-            pass
+        sys.stdout.write("%s" % os.read(self.master_fd, 256))
 	time.sleep(0.001)
     def fork(self):
         logging.debug("doing a pty.fork()")

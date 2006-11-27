@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+from ChrootNonInteractive import Chroot
+import os
+
+
+if __name__ == "__main__":
+
+    parser = OptionParser()
+    parser.add_option("-p", "--profile", dest="profile",
+                      help="write report to FILE")
+    
+    (options, args) = parser.parse_args()
+
+    # init the chroot
+    chroot = Chroot(options.profile, os.getcwd())
+    chroot.bootstrap()
+    chroot.upgrade()

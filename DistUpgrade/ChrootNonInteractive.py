@@ -10,36 +10,34 @@ import subprocess
 import shutil
 import logging
 import glob
+import ConfigParser
 
 class Chroot(object):
 
     diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d"]
     apt_options = ["-y"]
             
-    def __init__(self, profilename, datadir=None, resultdir=None):
+    def __init__(self, profile, basefiledir, resultdir=None):
         # init the dirs
-        self.datadir = datadir
-        self.resultdir = resultdir
-        self.profilename = profilename
-        if not self.datadir:
-            self.datadir = os.getcwd()
-        if not self.resultdir:
-            self.resultdir = os.path.join(os.getcwd(), "result")
+        assert(profile != None)
+        # the files with the dist-upgrade code
+        # (/usr/lib/python2.4/site-packages/DistUpgrade in the deb
+        self.resultdir = os.path.abspath(os.path.dirname(profile))
+        self.basefilesdir = os.path.abspath(basefiledir)
         # init the rest
-        cname = "DistUpgrade-%s.cfg" % profilename
-        profile="%s/profile/DistUpgrade-%s.cfg" % (self.datadir,
-                                                   self.profilename)
         if os.path.exists(profile):
             self.profile = profile
-            self.config = DistUpgradeConfig(datadir="./profile", name=cname)
-                                            
+            self.config = DistUpgradeConfig(datadir=os.path.dirname(profile),
+                                            name=os.path.basename(profile))
         else:
             raise IOError, "Can't find profile '%s'" % profile
+        
         self.fromDist = self.config.get("Sources","From")
         proxy=self.config.get("NonInteractive","Proxy")
         if proxy:
             os.putenv("http_proxy",proxy)
         os.putenv("DEBIAN_FRONTEND","noninteractive")
+        self.tarball = None
 
     def _runApt(self, tmpdir, command, cmd_options=[]):
         ret = subprocess.call(["chroot",tmpdir, "apt-get", command]
@@ -56,8 +54,9 @@ class Chroot(object):
     def bootstrap(self,outfile=None):
         " bootstaps a pristine fromDist tarball"
         if not outfile:
-            outfile = os.getcwd() + "/dist-upgrade-%s.tar.gz" % self.fromDist
+            outfile = os.path.dirname(self.profile) + "/dist-upgrade-%s.tar.gz" % self.fromDist
 
+        outfile = os.path.abspath(outfile)
         tmpdir = tempfile.mkdtemp()
         print "tmpdir is %s" % tmpdir
 
@@ -82,8 +81,11 @@ class Chroot(object):
             ret= self._runApt(tmpdir,"install",pkgs)
             print "apt(2) returned: %s" % ret
 
-        amount = self.config.get("NonInteractive","RandomPkgInstall")
-        self._tryRandomPkgInstall(amount)
+        try:
+            amount = self.config.get("NonInteractive","RandomPkgInstall")
+            self._tryRandomPkgInstall(amount)
+        except ConfigParser.NoOptionError:
+            pass
 
         print "Cleaning chroot"
         ret = self._runApt(tmpdir,"clean")
@@ -95,8 +97,12 @@ class Chroot(object):
 
         print "Removing chroot"
         shutil.rmtree(tmpdir)
+        self.tarball = outfile
 
-    def upgrade(self, tarball):
+    def upgrade(self, tarball=None):
+        if not tarball:
+            tarball = self.tarball
+        assert(tarball != None)
         print "runing upgrade on: %s" % tarball
         tmpdir = self._unpackToTmpdir(tarball)
         if not tmpdir:
@@ -107,7 +113,7 @@ class Chroot(object):
         targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
         if not os.path.exists(targettmpdir):
             os.mkdir(targettmpdir)
-        for f in glob.glob("%s/*" % self.datadir):
+        for f in glob.glob("%s/*" % self.basefilesdir):
             if not os.path.isdir(f):
                 shutil.copy(f, targettmpdir)
         # copy the profile
@@ -129,7 +135,9 @@ class Chroot(object):
             (id, exitstatus) = os.waitpid(pid, 0)
             print "Child exited (%s, %s)" % (id, exitstatus)
             for f in glob.glob(tmpdir+"/var/log/dist-upgrade/*"):
-                outdir = os.path.join(self.resultdir,self.profilename)
+                outdir = os.path.join(self.resultdir,
+                                      self.config.get("NonInteractive","ProfileName")+".result")
+                print "copying result to: ", outdir
                 if not os.path.exists(outdir):
                     os.makedirs(outdir)
                 shutil.copy(f, outdir)

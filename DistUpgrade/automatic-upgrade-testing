@@ -3,7 +3,7 @@
 from optparse import OptionParser
 from ChrootNonInteractive import Chroot
 import os
-
+import sys
 
 if __name__ == "__main__":
 
@@ -15,5 +15,7 @@ if __name__ == "__main__":
 
     # init the chroot
     chroot = Chroot(options.profile, os.getcwd())
-    chroot.bootstrap()
-    chroot.upgrade()
+    if not chroot.bootstrap():
+        sys.exit(1)
+    if not chroot.upgrade():
+        sys.exit(1)

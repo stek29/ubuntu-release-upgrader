@@ -31,7 +31,8 @@ import apt_pkg
 
 class NonInteractiveFetchProgress(apt.progress.FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
-        logging.debug("Fetch: updateStatus %s %s" % (uri, status))
+        #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
+        pass
 
 class NonInteractiveInstallProgress(apt.progress.InstallProgress):
     def __init__(self):

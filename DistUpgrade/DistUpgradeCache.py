@@ -243,6 +243,10 @@ class MyCache(apt.Cache):
 
             # and if we have some special rules
             self.postUpgradeRule()
+            
+	    # then see if meta-pkgs are missing
+            if not self._installMetaPkgs(view):
+                raise SystemError, _("Can't upgrade required meta-packages")
 
             # then see if meta-pkgs are missing
             if not self._installMetaPkgs(view):

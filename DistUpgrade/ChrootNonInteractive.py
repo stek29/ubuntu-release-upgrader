@@ -26,7 +26,7 @@ class Chroot(object):
         self.basefilesdir = os.path.abspath(basefiledir)
         # init the rest
         if os.path.exists(profile):
-            self.profile = profile
+            self.profile = os.path.abspath(profile)
             self.config = DistUpgradeConfig(datadir=os.path.dirname(profile),
                                             name=os.path.basename(profile))
         else:
@@ -55,8 +55,18 @@ class Chroot(object):
         " bootstaps a pristine fromDist tarball"
         if not outfile:
             outfile = os.path.dirname(self.profile) + "/dist-upgrade-%s.tar.gz" % self.fromDist
-
         outfile = os.path.abspath(outfile)
+        self.tarball = outfile
+
+        # don't bootstrap twice if this is something we can cache
+        try:
+            if (self.config.getboolean("NonInteractive","CacheTarball") and
+                os.path.exists(self.tarball) ):
+                return True
+        except ConfigParser.NoOptionError:
+            pass
+        
+        # bootstrap!
         tmpdir = tempfile.mkdtemp()
         print "tmpdir is %s" % tmpdir
 
@@ -97,7 +107,6 @@ class Chroot(object):
 
         print "Removing chroot"
         shutil.rmtree(tmpdir)
-        self.tarball = outfile
 
     def upgrade(self, tarball=None):
         if not tarball:
@@ -119,7 +128,7 @@ class Chroot(object):
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to '%s' " % (self.profile,targettmpdir)
-            shutil.copy(self.profile,targettmpdir)
+            shutil.copy(self.profile, targettmpdir)
             
         # run it
         pid = os.fork()

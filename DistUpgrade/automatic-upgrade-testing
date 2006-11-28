@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+from ChrootNonInteractive import Chroot
+import os
+import sys
+
+# TODO:
+# - show held-back packages 
+# - setup sources.list in chroot to include -update, -security
+#   and (optional) -proposed, -backports and upgrade it prior 
+#   to doing the dist-upgrade
+#
+
+if __name__ == "__main__":
+
+    parser = OptionParser()
+    parser.add_option("-p", "--profile", dest="profile",
+                      help="write report to FILE")
+    
+    (options, args) = parser.parse_args()
+
+    # init the chroot
+    chroot = Chroot(options.profile, os.getcwd())
+    if not chroot.bootstrap():
+        sys.exit(1)
+    if not chroot.upgrade():
+        sys.exit(1)

@@ -79,7 +79,7 @@ class MetaRelease(gobject.GObject):
         
     def get_dist(self):
         " return the codename of the current runing distro "
-        p = Popen(["/bin/lsb_release","-c","-s"],stdout=PIPE)
+        p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
         res = p.wait()
         if res != 0:
             sys.stderr.write("lsb_release returned exitcode: %i\n" % res)

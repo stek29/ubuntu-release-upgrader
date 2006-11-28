@@ -9,7 +9,7 @@
 
 TARGETDIR=../dist-upgrade-build
 SOURCEDIR=`pwd`
-DIST=edgy
+DIST=feisty
 MAINTAINER="Michael Vogt <michael.vogt@ubuntu.com>"
 NOTES=ReleaseAnnouncement
 version=$(date +%Y%m%d.%H%M)

@@ -510,8 +510,8 @@ class DistUpgradeControler(object):
         logging.debug("forced_obsoletes: %s", self.forced_obsoletes)
 
         # check what packages got demoted
-        demotions_file = self.config.get("Distro","Demotions")
         demotions = set()
+        demotions_file = self.config.get("Distro","Demotions")
         if os.path.exists(demotions_file):
             map(lambda pkgname: demotions.add(pkgname.strip()),
                 filter(lambda line: not line.startswith("#"),

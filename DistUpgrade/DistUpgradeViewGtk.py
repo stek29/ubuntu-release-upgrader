@@ -154,6 +154,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         reaper.connect("child-exited", self.child_exited)
         # some options for dpkg to make it die less easily
         apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        apt_pkg.Config.Set("DPkg::StopOnError","False")
 
     def startUpdate(self):
         self.finished = False

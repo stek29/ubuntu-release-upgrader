@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIST=edgy
+DIST=feisty
 
 # cleanup
 echo "Cleaning up"

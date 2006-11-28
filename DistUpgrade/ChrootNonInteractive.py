@@ -210,7 +210,7 @@ class Chroot(object):
 	    # HACK: try to lazy umount it at least
             os.system("umount -l %s/proc" % tmpdir)
             shutil.rmtree(tmpdir)
-            
+            return exitstatus
 
     def _unpackToTmpdir(self, baseTarBall):
         tmpdir = tempfile.mkdtemp()

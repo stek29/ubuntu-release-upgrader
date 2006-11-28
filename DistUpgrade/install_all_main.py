@@ -6,8 +6,10 @@ import apt_pkg
 def blacklisted(name):
 	# we need to blacklist linux-image-* as it does not install
 	# cleanly in the chroot (postinst failes)
-	if name.startswith("linux-image-"):
-		return True
+	blacklist = ["linux-image-","ltsp-client"]
+	for b in blacklist:
+		if name.startswith(b):
+			return True
 	return False
 
 #apt_pkg.Config.Set("Dir::State::status","./empty")
@@ -21,7 +23,7 @@ for pkg in cache:
     for c in pkg.candidateOrigin:
         if c.component == "main":
             current = set([p.name for p in cache if p.markedInstall])
-	    if not pkg.isInstalled:
+	    if not (pkg.isInstalled or blacklisted(pkg.name):
 	            pkg.markInstall()
             new = set([p.name for p in cache if p.markedInstall])
             #if not pkg.markedInstall or len(new) < len(current):
@@ -34,6 +36,11 @@ for pkg in cache:
 #print len(troublemaker)
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:
     cache[pkg].markInstall()
+
+# make sure we don't install blacklisted stuff
+for pkg in cache:
+	if blacklisted(pkg.name):
+		pkg.markKeep()
 
 print "We can install:"
 print len([pkg.name for pkg in cache if pkg.markedInstall])

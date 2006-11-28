@@ -96,10 +96,29 @@ class Chroot(object):
 
         print "diverting"
         self._dpkgDivert(tmpdir)
+
+        # write new sources.list
+        if (self.config.has_option("NonInteractive","Components") and
+            self.config.has_option("NonInteractive","Pockets")):
+            comps = self.config.getlist("NonInteractive","Components")
+            pockets = self.config.getlist("NonInteractive","Pockets")
+            mirror = self.config.get("NonInteractive","Mirror")
+            sourceslist = open(tmpdir+"/etc/apt/sources.list","w")
+            sourceslist.write("deb %s %s %s\n" % (mirror, self.fromDist, " ".join(comps)))
+            for pocket in pockets:
+                sourceslist.write("deb %s %s-%s %s\n" % (mirror, self.fromDist,pocket, " ".join(comps)))
+            sourceslist.close()
+            
+            print open(tmpdir+"/etc/apt/sources.list","r").read()
+            
         
         print "Updating the chroot"
         ret = self._runApt(tmpdir,"update")
-        print "apt returned %s" % ret
+        print "apt update returned %s" % ret
+        if ret != 0:
+            return False
+        ret = self._runApt(tmpdir,"dist-upgrade")
+        print "apt dist-upgrade returned %s" % ret
         if ret != 0:
             return False
 

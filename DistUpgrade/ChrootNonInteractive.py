@@ -33,8 +33,8 @@ class Chroot(object):
             raise IOError, "Can't find profile '%s'" % profile
         
         self.fromDist = self.config.get("Sources","From")
-        proxy=self.config.get("NonInteractive","Proxy")
-        if proxy:
+        if self.config.has_option("NonInteractive","Proxy"):
+            proxy=self.config.get("NonInteractive","Proxy")
             os.putenv("http_proxy",proxy)
         os.putenv("DEBIAN_FRONTEND","noninteractive")
         self.tarball = None
@@ -131,6 +131,14 @@ class Chroot(object):
             print "installing additonal: %s" % pkgs
             ret= self._runApt(tmpdir,"install",pkgs)
             print "apt(2) returned: %s" % ret
+
+        if self.config.has_option("NonInteractive","PostBootstrapScript"):
+            script = self.config.get("NonInteractive","PostBootstrapScript")
+            if os.path.exists(script):
+                shutil.copy(script, os.path.join(tmpdir,"tmp"))
+                self._runInChroot(tmpdir,[os.path.join("/tmp",script)])
+            else:
+                print "WARNING: %s not found" % script
 
         try:
             amount = self.config.get("NonInteractive","RandomPkgInstall")

@@ -6,7 +6,14 @@ import apt_pkg
 def blacklisted(name):
 	# we need to blacklist linux-image-* as it does not install
 	# cleanly in the chroot (postinst failes)
-	blacklist = ["linux-image-","ltsp-client"]
+	blacklist = ["linux-image-","ltsp-client",
+		     "glibc-doc-reference" "libpthread-dev",
+		     "cman", "mysql-server", "fuse-utils",
+		     "ltspfs", "gfs2-tools", "edubuntu-server",
+		     "gnbd-client", "gnbd-server", "mysql-server-5.0",
+		     "rgmanager", "clvm","redhar-cluster-suit",
+		     "system-config-cluster"]
+		     ]
 	for b in blacklist:
 		if name.startswith(b):
 			return True
@@ -23,7 +30,7 @@ for pkg in cache:
     for c in pkg.candidateOrigin:
         if c.component == "main":
             current = set([p.name for p in cache if p.markedInstall])
-	    if not (pkg.isInstalled or blacklisted(pkg.name):
+	    if not (pkg.isInstalled or blacklisted(pkg.name)):
 	            pkg.markInstall()
             new = set([p.name for p in cache if p.markedInstall])
             #if not pkg.markedInstall or len(new) < len(current):

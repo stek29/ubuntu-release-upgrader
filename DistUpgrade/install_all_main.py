@@ -11,9 +11,8 @@ def blacklisted(name):
 		     "cman", "mysql-server", "fuse-utils",
 		     "ltspfs", "gfs2-tools", "edubuntu-server",
 		     "gnbd-client", "gnbd-server", "mysql-server-5.0",
-		     "rgmanager", "clvm","redhar-cluster-suit",
-		     "system-config-cluster"]
-		     ]
+		     "rgmanager", "clvm","redhat-cluster-suit",
+		     "system-config-cluster", "gfs-tools"]
 	for b in blacklist:
 		if name.startswith(b):
 			return True

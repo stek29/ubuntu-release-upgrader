@@ -17,12 +17,12 @@ class Chroot(object):
     diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d"]
     apt_options = ["-y"]
             
-    def __init__(self, profile, basefiledir, resultdir=None):
+    def __init__(self, profile, basefiledir):
         # init the dirs
         assert(profile != None)
         # the files with the dist-upgrade code
         # (/usr/lib/python2.4/site-packages/DistUpgrade in the deb
-        self.resultdir = os.path.abspath(os.path.dirname(profile))
+        self.resultdir = os.path.abspath(os.path.join(os.path.dirname(profile),"result"))
         self.basefilesdir = os.path.abspath(basefiledir)
         # init the rest
         if os.path.exists(profile):
@@ -196,12 +196,8 @@ class Chroot(object):
             (id, exitstatus) = os.waitpid(pid, 0)
             print "Child exited (%s, %s)" % (id, exitstatus)
             for f in glob.glob(tmpdir+"/var/log/dist-upgrade/*"):
-                outdir = os.path.join(self.resultdir,
-                                      self.config.get("NonInteractive","ProfileName")+".result")
-                print "copying result to: ", outdir
-                if not os.path.exists(outdir):
-                    os.makedirs(outdir)
-                shutil.copy(f, outdir)
+                print "copying result to: ", self.resultdir
+                shutil.copy(f, self.resultdir)
             print "Removing: '%s'" % tmpdir
             os.system("umount %s/dev/pts" % tmpdir)
             os.system("umount %s/proc/sys/fs/binfmt_misc" % tmpdir)

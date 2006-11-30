@@ -62,6 +62,10 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
     def fork(self):
         logging.debug("doing a pty.fork()")
         (self.pid, self.master_fd) = pty.fork()
+        if self.pid == 0:
+            # close stdin to prevent retarded maintainer scripts from hanging
+            # with stupid questions
+            os.close(0)
         logging.debug("pid is: %s" % self.pid)
         return self.pid
         

@@ -104,6 +104,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         return True
     def confirmRestart(self):
         " generic ask about the restart, can be overriden "
+	logging.debug("confirmRestart() called")
         return False
     def error(self, summary, msg, extended_msg=None):
         " display a error "

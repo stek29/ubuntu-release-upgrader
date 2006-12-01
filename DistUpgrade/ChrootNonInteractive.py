@@ -14,7 +14,8 @@ import ConfigParser
 
 class Chroot(object):
 
-    diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d"]
+    diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d",
+	       "/sbin/start-stop-daemon"]
     apt_options = ["-y"]
             
     def __init__(self, profile, basefiledir):
@@ -97,6 +98,11 @@ class Chroot(object):
         print "diverting"
         self._dpkgDivert(tmpdir)
 
+        # create some minimal device node
+        print "Creating some devices"
+        os.system("(cd %s/dev ; echo $PWD; ./MAKEDEV null)" % tmpdir)
+        #self._runInChroot(tmpdir, ["/bin/mknod","/dev/null","c","1","3"])
+
         # write new sources.list
         if (self.config.has_option("NonInteractive","Components") and
             self.config.has_option("NonInteractive","Pockets")):
@@ -110,7 +116,6 @@ class Chroot(object):
             sourceslist.close()
             
             print open(tmpdir+"/etc/apt/sources.list","r").read()
-            
         
         print "Updating the chroot"
         ret = self._runApt(tmpdir,"update")
@@ -125,12 +130,16 @@ class Chroot(object):
         print "installing basepkg"
         ret = self._runApt(tmpdir,"install", [self.config.get("NonInteractive","BasePkg")])
         print "apt returned %s" % ret
+        if ret != 0:
+            return False
 
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
         if len(pkgs) > 0:
             print "installing additonal: %s" % pkgs
             ret= self._runApt(tmpdir,"install",pkgs)
             print "apt(2) returned: %s" % ret
+            if ret != 0:
+                return False
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
@@ -148,6 +157,8 @@ class Chroot(object):
 
         print "Cleaning chroot"
         ret = self._runApt(tmpdir,"clean")
+        if ret != 0:
+            return False
 
         print "building tarball: '%s'" % outfile
         os.chdir(tmpdir)
@@ -215,7 +226,7 @@ class Chroot(object):
         if ret != 0:
             return None
         return tmpdir
-        
+
     def _dpkgDivert(self, tmpdir):
         for d in self.diverts:
             cmd = ["chroot",tmpdir,

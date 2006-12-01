@@ -355,7 +355,7 @@ class MyCache(apt.Cache):
                 return False
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
-            logging.debug("no {ubuntu,edubuntu,kubuntu}-desktop pkg installed")
+            logging.debug("none of the '%s' meta-pkgs installed" % metapkgs)
             for key in metapkgs:
                 deps_found = True
                 for pkg in self.config.getlist(key,"KeyDependencies"):

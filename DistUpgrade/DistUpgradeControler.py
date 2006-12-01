@@ -134,7 +134,7 @@ class DistUpgradeControler(object):
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
         fd = os.open("/var/log/dist-upgrade/apt.log",
-                     os.O_RDWR|os.O_CREAT|os.O_APPEND, 0644)
+                     os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
         os.dup2(fd,1)
         os.dup2(fd,2)
 

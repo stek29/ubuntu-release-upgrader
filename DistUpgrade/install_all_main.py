@@ -12,6 +12,9 @@ def blacklisted(name):
 		     "ltspfs", "gfs2-tools", "edubuntu-server",
 		     "gnbd-client", "gnbd-server", "mysql-server-5.0",
 		     "rgmanager", "clvm","redhat-cluster-suit",
+		     # has a funny "can not be upgraded automatically" policy
+		     # see debian #368226
+		     "quagga",
 		     "system-config-cluster", "gfs-tools"]
 	for b in blacklist:
 		if name.startswith(b):

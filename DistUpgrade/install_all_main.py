@@ -7,7 +7,7 @@ def blacklisted(name):
 	# we need to blacklist linux-image-* as it does not install
 	# cleanly in the chroot (postinst failes)
 	blacklist = ["linux-image-","ltsp-client",
-		     "glibc-doc-reference" "libpthread-dev",
+		     "glibc-doc-reference", "libpthread-dev",
 		     "cman", "mysql-server", "fuse-utils",
 		     "ltspfs", "gfs2-tools", "edubuntu-server",
 		     "gnbd-client", "gnbd-server", "mysql-server-5.0",

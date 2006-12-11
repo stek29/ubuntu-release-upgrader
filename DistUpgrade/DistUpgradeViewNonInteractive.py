@@ -28,6 +28,10 @@ from DistUpgradeConfigParser import DistUpgradeConfig
 import os
 import pty
 import apt_pkg
+import select
+import fcntl
+import string
+import re
 
 class NonInteractiveFetchProgress(apt.progress.FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
@@ -65,8 +69,11 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         if self.pid == 0:
             # stdin is /dev/null to prevent retarded maintainer scripts from
             # hanging with stupid questions
-            fd = os.open("/dev/null", os.O_RDONLY)
-            os.dup2(fd, 0)
+            #fd = os.open("/dev/null", os.O_RDONLY)
+            #os.dup2(fd, 0)
+            # *sigh* we can't do this because dpkg explodes when it can't
+            # present its stupid conffile prompt
+            pass
         logging.debug("pid is: %s" % self.pid)
         return self.pid
         

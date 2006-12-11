@@ -57,12 +57,45 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
  	except Exception, e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
     def updateInterface(self):
-	apt.progress.InstallProgress.updateInterface(self)
-        try:
-            sys.stdout.write("%s" % os.read(self.master_fd, 256))
-        except:
-            pass
-	time.sleep(0.001)
+         # from python-apt/apt/progress.py (but modified a bit)
+         # -------------------------------------------------------------
+         if self.statusfd != None:
+             res = select.select([self.statusfd],[],[],0.1)
+             while len(res[0]) > 0:
+                 while not self.read.endswith("\n"):
+                     self.read += os.read(self.statusfd.fileno(),1)
+                 if self.read.endswith("\n"):
+                     s = self.read
+                     #print s
+                     (status, pkg, percent, status_str) = string.split(s, ":")
+                     if status == "pmerror":
+                         self.error(pkg,status_str)
+                     elif status == "pmconffile":
+                         # we get a string like this:
+                         # 'current-conffile' 'new-conffile' useredited distedited
+                         match = re.compile("\s*\'(.*)\'\s*\'(.*)\'.*").match(status_str)
+                         if match:
+                             self.conffile(match.group(1), match.group(2))
+                     elif status == "pmstatus":
+                         if (float(percent) != self.percent or 
+                             status_str != self.status):
+                             self.statusChange(pkg, float(percent), status_str.strip())
+                             self.percent = float(percent)
+                             self.status = string.strip(status_str)
+                 self.read = ""
+                 res = select.select([self.statusfd],[],[],0.1)
+         # -------------------------------------------------------------
+         #fcntl.fcntl(self.master_fd, fcntl.F_SETFL, os.O_NDELAY)
+         res = select.select([self.master_fd],[],[],0.1)
+         while len(res[0]) > 0:
+             try:
+                 s = os.read(self.master_fd, 1)
+                 sys.stdout.write("%s" % s)
+             except OSError,e:
+                 # happens after we are finished because the fd is closed
+                 return
+             res = select.select([self.master_fd],[],[],0.1)
+
     def fork(self):
         logging.debug("doing a pty.fork()")
         (self.pid, self.master_fd) = pty.fork()

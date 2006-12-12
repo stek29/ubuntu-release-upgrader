@@ -103,6 +103,9 @@ class Chroot(object):
         os.system("(cd %s/dev ; echo $PWD; ./MAKEDEV null)" % tmpdir)
         #self._runInChroot(tmpdir, ["/bin/mknod","/dev/null","c","1","3"])
 
+        # set a hostname
+        shutil.copy("/etc/hostname","%s/etc/hostanme" % tmpdir)
+
         # write new sources.list
         if (self.config.has_option("NonInteractive","Components") and
             self.config.has_option("NonInteractive","Pockets")):

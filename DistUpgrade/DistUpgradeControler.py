@@ -378,59 +378,50 @@ class DistUpgradeControler(object):
                     "packages of former installations using "
                     "'sudo apt-get clean'.")
 
-        # gather/log some staticts
+        class FreeSpace(object):
+            " helper class that represents the free space on each mounted fs "
+            def __init__(self, initialFree):
+                self.free = initialFree
+
+        # build fs_free
+        # it has a map of the dirs we are interessted in and it
+        # contains FreeSpace objects
+        fs_free = {}
         mnt_map = {}
-        for d in ["/","/usr","/var","/boot"]:
+        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
+        for d in ["/","/usr","/var","/boot", archivedir, "/home"]:
             st = os.statvfs(d)
             free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
             if st in mnt_map:
                 logging.debug("Dir %s mounted on %s" % (d,mnt_map[st]))
+                fs_free[d] = fs_free[mnt_map[st]]
             else:
                 logging.debug("Free space on %s: %s" % (d,free))
                 mnt_map[st] = d
+                fs_free[d] = FreeSpace(free)
         del mnt_map
+        logging.debug("fs_free contains: '%s'" % fs_free)
 
-        # first check for /var (or where the archives are downloaded too)
-        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        st_archivedir = os.statvfs(archivedir)
-        free = st_archivedir[statvfs.F_BAVAIL]*st_archivedir[statvfs.F_FRSIZE]
-        logging.debug("required download: %s " % self.cache.requiredDownload)
-        logging.debug("free on %s: %s " % (archivedir, free))
-        if self.cache.requiredDownload > free:
-            free_at_least = apt_pkg.SizeToStr(self.cache.requiredDownload-free)
-            logging.error("not enough free space (missing %s)" % free_at_least)
-            self._view.error(err_sum, err_long % (free_at_least,archivedir))
-            return False
-        
-        # then check for /usr assuming that all the data goes into /usr
-        # this won't catch space problems when e.g. /boot,/usr/,/ are all
-        # seperated partitions, but with a fragmented
-        # patition layout we can't do a lot better because we don't know
-        # the space-requirements on a per dir basis inside the deb without
-        # looking into each
-        logging.debug("need additional space: %s" % self.cache.additionalRequiredSpace)
-        dir = "/usr"
-        st_usr = os.statvfs(dir)
-        if st_archivedir == st_usr:
-            # we are on the same filesystem, so we need to take the space
-            # for downloading the debs into account
-            free -= self.cache.requiredDownload
-            logging.debug("/usr on same fs as %s, taking dl-size into account, new free: %s" % (archivedir, free))
-        else:
-            free = st_usr[statvfs.F_BAVAIL]*st_usr[statvfs.F_FRSIZE]
-            logging.debug("/usr on different fs than %s, free: %s" % (archivedir, free))
+        # we check for various sizes:
+        # archivedir is were we download the debs
+        # /usr is assumed to get *all* of the install space (incorrect,
+        #      but as good as we can do currently + savety buffer
+        # /boot is assumed to get at least 50 Mb
+        # /     has a small savety buffer as well
+        for (dir, size) in [(archivedir, self.cache.requiredDownload),
+                            ("/usr", self.cache.additionalRequiredSpace),
+                            ("/usr", 50*1024*1024),  # savetfy buffer /usr
+                            ("/boot", 50*1024*1024), # savetfy buffer /boot
+                            ("/", 10*1024*1024),     # small savetfy buffer /
+                           ]:
+            logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
+            fs_free[dir].free -= size
+            if fs_free[dir].free < 0:
+                free_at_least = apt_pkg.SizeToStr(abs(fs_free[dir].free)+1)
+                logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
+                self._view.error(err_sum, err_long % (free_at_least,dir))
+                return False
 
-        safety_buffer = 1024*1024*100 # 100 Mb
-        logging.debug("using safety buffer: %s" % safety_buffer)
-        if (self.cache.additionalRequiredSpace+safety_buffer) > free:
-            free_at_least = apt_pkg.SizeToStr(self.cache.additionalRequiredSpace+safety_buffer-free)
-            logging.error("not enough free space, we need addional %s" % free_at_least)
-            self._view.error(err_sum, err_long % (free_at_least,dir))
-            return False
-
-        # FIXME: we should try to esitmate if "/" has enough free space,
-        # linux-restricted-modules and linux-image- are both putting there
-        # modules there and those take a lot of space
             
         return True
 
@@ -765,3 +756,9 @@ class DistUpgradeControler(object):
         self.edgyUpgrade()
 
 
+if __name__ == "__main__":
+    print "test"
+    from DistUpgradeView import DistUpgradeView
+    v = DistUpgradeView()
+    dc = DistUpgradeControler(v)
+    dc._checkFreeSpace()

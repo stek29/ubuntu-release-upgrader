@@ -810,7 +810,24 @@ class UpdateManager(SimpleGladeApp):
     self.list = UpdateList()
 
     # fill them again
-    self.list.update(self.cache)
+    try:
+        self.list.update(self.cache)
+    except SystemError, e:
+        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
+               (_("Could not calculate the upgrade"),
+                _("A unresolvable problem occurred while "
+                  "calculating the upgrade.\n\n"
+                  "Please report this bug against the 'update-manager' "
+                  "package and include the following error message:"),
+                e)
+               )
+        dialog = gtk.MessageDialog(self.window_main,
+                                   0, gtk.MESSAGE_ERROR,
+                                   gtk.BUTTONS_CLOSE,"")
+        dialog.set_markup(msg)
+        dialog.vbox.set_spacing(6)
+        dialog.run()
+        dialog.destroy()
     if self.list.num_updates > 0:
       origin_list = self.list.pkgs.keys()
       origin_list.sort(lambda x,y: cmp(x.importance,y.importance))

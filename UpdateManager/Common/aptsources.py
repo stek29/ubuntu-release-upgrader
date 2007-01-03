@@ -485,7 +485,7 @@ class Distribution:
     if self.source_template == None:
         print "Error: could not find a distribution template"
         # FIXME: will go away - only for debugging issues
-        sys.exit(1)
+        #sys.exit(1)
 
     # find main and child sources
     media = []
@@ -518,6 +518,7 @@ class Distribution:
             elif source.type.endswith("-src") and source.disabled == True:
                 self.disabled_sources.append(source)
         if source.invalid == False and\
+           self.source_template and \
            source.template in self.source_template.children:
             if source.disabled == False and source.type == "deb":
                 self.child_sources.append(source)
@@ -531,7 +532,6 @@ class Distribution:
     enabled_comps.extend(cdrom_comps)
     self.enabled_comps = set(enabled_comps)
     self.used_media = set(media)
-
     self.get_mirrors()
   
   def get_mirrors(self):
@@ -539,7 +539,9 @@ class Distribution:
     Provide a set of mirrors where you can get the distribution from
     """
     # the main server is stored in the template
-    self.main_server = self.source_template.base_uri
+    self.main_server = ""
+    if self.source_template:
+      self.main_server = self.source_template.base_uri
 
     # try to guess the nearest mirror from the locale
     # FIXME: for debian we need something different

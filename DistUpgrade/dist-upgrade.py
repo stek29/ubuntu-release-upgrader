@@ -16,6 +16,9 @@ if __name__ == "__main__":
                       action="store_true", default=False)
     parser.add_option("--with-network", dest="withNetwork",action="store_true")
     parser.add_option("--without-network", dest="withNetwork",action="store_false")
+    parser.add_option("--frontend", dest="frontend",default=None,
+                      help="Use frontend. Currently available: \n"\
+                           "DistUpgradeViewText, DistUpgradeViewGtk")
     (options, args) = parser.parse_args()
 
     if not os.path.exists("/var/log/dist-upgrade"):
@@ -26,7 +29,8 @@ if __name__ == "__main__":
                         filemode='w')
 
     config = DistUpgradeConfig(".")
-    requested_view= config.get("View","View")
+    # the commandline overwrites the configfile
+    requested_view= (options.frontend or config.get("View","View"))
     try:
         view_modul = __import__(requested_view)
         view_class = getattr(view_modul, requested_view)

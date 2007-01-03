@@ -257,6 +257,17 @@ class SoftwareProperties(SimpleGladeApp):
     # Setup the checkbuttons for the components
     for checkbutton in self.vbox_dist_comps.get_children():
          self.vbox_dist_comps.remove(checkbutton)
+
+    if not self.distro.source_template:
+      self.frame_internet.hide()
+      label = gtk.Label()
+      label.set_markup("<b>%s</b>" %
+                       _("No information about the distribution"))
+      self.vbox_dist.pack_start(label)
+      self.vbox_dist.reorder_child(label,0)
+      label.show()
+      return
+         
     for comp in self.distro.source_template.components.keys():
         # TRANSLATORS: Label for the components in the Internet section
         #              first %s is the description of the component
@@ -317,8 +328,8 @@ class SoftwareProperties(SimpleGladeApp):
                         self.distro.main_server])
     if self.distro.country != None:
         # TRANSLATORS: %s is a country
-        server_store.append([_("Server for %s") % gettext.dgettext("iso-3166",
-                             self.distro.country).rstrip(),
+        server_store.append([_("Server for %s") % gettext.dgettext("iso_3166",
+                             self.distro.country.rstrip()).rstrip(),
                              self.distro.nearest_server])
     else:
         server_store.append([_("Nearest server"),

@@ -163,6 +163,18 @@ class MyCache(apt.Cache):
         if func is not None:
             func()
 
+    def feistyQuirks(self):
+        """ this function works around quirks in the edgy->feisty upgrade """
+        logging.debug("running feistyQuirks handler")
+        for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
+            if self.has_key(fr) and self.has_key(to):
+                if self[fr].isInstalled and not self[to].markedInstall:
+                    try:
+                        self.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
+                    except SystemError, e:
+                        logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
+        
+
     def edgyQuirks(self):
         """ this function works around quirks in the dapper->edgy upgrade """
         logging.debug("running edgyQuirks handler")
@@ -243,7 +255,7 @@ class MyCache(apt.Cache):
 
             # and if we have some special rules
             self.postUpgradeRule()
-
+            
             # then see if meta-pkgs are missing
             if not self._installMetaPkgs(view):
                 raise SystemError, _("Can't upgrade required meta-packages")
@@ -343,7 +355,7 @@ class MyCache(apt.Cache):
                 return False
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
-            logging.debug("no {ubuntu,edubuntu,kubuntu}-desktop pkg installed")
+            logging.debug("none of the '%s' meta-pkgs installed" % metapkgs)
             for key in metapkgs:
                 deps_found = True
                 for pkg in self.config.getlist(key,"KeyDependencies"):

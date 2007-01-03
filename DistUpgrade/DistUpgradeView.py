@@ -73,7 +73,7 @@ class DistUpgradeView(object):
             on the current view
         """
         pass
-    def abort():
+    def abort(self):
         """ provide a visual feedback that the upgrade was aborted """
         pass
     def setStep(self, step):

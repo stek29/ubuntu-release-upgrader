@@ -400,13 +400,13 @@ class MyCache(apt.Cache):
         try:
             self[pkgname].markDelete()
             for pkg in self.getChanges():
-                if pkg.name not in remove_candidates or \
-                       pkg.name in foreign_pkgs or \
-                       self._inRemovalBlacklist(pkg.name):
+                if (pkg.name not in remove_candidates or 
+                      pkg.name in foreign_pkgs or 
+                      self._inRemovalBlacklist(pkg.name)):
                     self.restore_snapshot()
                     return False
         except (SystemError,KeyError),e:
-            logging.warning("_tryMarkObsoleteForRemoval failed for '%s' (%s)" % (pkgname,e))
+            logging.warning("_tryMarkObsoleteForRemoval failed for '%s' (%s: %s)" % (pkgname, repr(e), e))
             self.restore_snapshot()
             return False
         return True

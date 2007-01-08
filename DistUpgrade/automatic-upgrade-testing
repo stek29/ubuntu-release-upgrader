@@ -5,6 +5,7 @@ from ChrootNonInteractive import Chroot
 import os
 import sys
 import glob
+import shutil
 
 # TODO:
 # - show held-back packages 
@@ -15,7 +16,11 @@ def login(profile, basedir):
     chroot = Chroot(profile, basedir)
     chroot.bootstrap()
     d = chroot._unpackToTmpdir(chroot.tarball)
-    chroot._runInChroot(d, ["/bin/bash"])
+    print "logging into: '%s'" % d
+    chroot._runInChroot(d, ["/bin/sh"])
+    print "Cleaning up"
+    if d:
+        shutil.rmtree(d)
     
 def testUpgrade(profile, basedir):
 

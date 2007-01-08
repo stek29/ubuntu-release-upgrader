@@ -11,6 +11,12 @@ import glob
 # - if no terminal activity for a extended time, send a '\n' on the
 #   terminal (assuming its a stupid maintainer script asking questions)
 
+def login(profile, basedir):
+    chroot = Chroot(profile, basedir)
+    chroot.bootstrap()
+    d = chroot._unpackToTmpdir(chroot.tarball)
+    chroot._runInChroot(d, ["/bin/bash"])
+    
 def testUpgrade(profile, basedir):
 
     # setup log
@@ -40,6 +46,10 @@ if __name__ == "__main__":
     parser.add_option("-a", "--auto", dest="auto", default=False,
                       action="store_true",
                       help="run all tests in profile/ dir")
+    parser.add_option("-l", "--login", dest="login", default=False,
+                      action="store_true",
+                      help="log into the a profile")
+    
     
     (options, args) = parser.parse_args()
     basedir = os.getcwd()
@@ -48,6 +58,8 @@ if __name__ == "__main__":
         for d in glob.glob("./profile/*/DistUpgrade.cfg"):
             #print "Testing: ",d
             testUpgrade(d, basedir)
+    elif options.login:
+        login(options.profile, basedir)
     else:
         testUpgrade(options.profile, basedir)
     

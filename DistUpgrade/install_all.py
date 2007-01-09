@@ -21,7 +21,14 @@ def blacklisted(name):
 		   return True
    return False
 
-#apt_pkg.Config.Set("Dir::State::status","./empty")
+def clear(cache):
+   cache._depcache.Init()
+
+def reapply(cache, pkgnames):
+   for name in pkgnames:
+      cache[name].markInstall(False)
+
+apt_pkg.Config.Set("Dir::State::status","./empty")
 
 cache = apt.Cache()
 group = apt_pkg.GetPkgActionGroup(cache._depcache)
@@ -29,6 +36,7 @@ group = apt_pkg.GetPkgActionGroup(cache._depcache)
 
 # see what gives us problems
 troublemaker = set()
+best = set()
 
 # first install all of main, then the rest
 for comp in ["main",None]:
@@ -49,6 +57,14 @@ for comp in ["main",None]:
                   if len(current-new) > 0:
                      troublemaker.add(pkg.name)
                      print "Installing '%s' caused removals %s" % (pkg.name, current - new)
+                  # FIXME: instead of len() use score() and score packages
+                  #        according to criteria like "in main", "priority" etc
+                  if len(new) >= len(best):
+                     best = new
+                  else:
+                     print "Installing '%s' reduced the set (%s < %s)" % (pkg.name, len(new), len(best))
+                     clear(cache)
+                     reapply(cache, best)
 
 print len(troublemaker)
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:

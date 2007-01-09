@@ -28,7 +28,7 @@ def reapply(cache, pkgnames):
    for name in pkgnames:
       cache[name].markInstall(False)
 
-apt_pkg.Config.Set("Dir::State::status","./empty")
+#apt_pkg.Config.Set("Dir::State::status","./empty")
 
 cache = apt.Cache()
 group = apt_pkg.GetPkgActionGroup(cache._depcache)

@@ -121,6 +121,10 @@ class DistUpgradeFetcher(object):
         except IOError,e:
             # gnupg returned a problem (non-zero exit)
             print "exception from gpg: %s" % e
+            print "Debug information: "
+            print proc.handles['status'].read()
+            print proc.handles['stderr'].read()
+            print proc.handles['logger'].read()
             return False
         if "VALIDSIG" in gpgres:
             return True

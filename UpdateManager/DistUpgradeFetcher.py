@@ -111,6 +111,7 @@ class DistUpgradeFetcher(object):
         """
         gpg = GnuPGInterface.GnuPG()
         gpg.options.extra_args = ['--no-options',
+                                  '--homedir',self.tmpdir,
                                   '--no-default-keyring',
                                   '--keyring', keyring]
         proc = gpg.run(['--verify', signature, file],

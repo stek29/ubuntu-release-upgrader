@@ -14,7 +14,9 @@ import ConfigParser
 
 class Chroot(object):
 
-    diverts = ["/usr/sbin/mkinitrd","/usr/sbin/invoke-rc.d",
+    diverts = ["/usr/sbin/mkinitrd",
+               "/sbin/modprobe",
+               "/usr/sbin/invoke-rc.d",
 	       "/sbin/start-stop-daemon"]
     apt_options = ["-y"]
             
@@ -105,6 +107,14 @@ class Chroot(object):
 
         # set a hostname
         shutil.copy("/etc/hostname","%s/etc/hostanme" % tmpdir)
+
+        # copy the stuff from toChroot/
+        os.chdir("toChroot/")
+        for (dirpath, dirnames, filenames) in os.walk("."):
+            for name in filenames:
+                if not os.path.exists(os.path.join(tmpdir,dirpath,name)):
+                    shutil.copy(os.path.join(dirpath,name), os.path.join(tmpdir,dirpath,name))
+        os.chdir("..")
 
         # write new sources.list
         if (self.config.has_option("NonInteractive","Components") and
@@ -223,6 +233,7 @@ class Chroot(object):
             return (exitstatus == 0)
 
     def _unpackToTmpdir(self, baseTarBall):
+        # unpack the tarball
         tmpdir = tempfile.mkdtemp()
         os.chdir(tmpdir)
         ret = subprocess.call(["tar","xzf",baseTarBall])

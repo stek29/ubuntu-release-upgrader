@@ -6,21 +6,15 @@ import apt_pkg
 def blacklisted(name):
    # we need to blacklist linux-image-* as it does not install
    # cleanly in the chroot (postinst failes)
-   blacklist = ["linux-image-",
-   		"linux-restricted-",
-		"vmware-player-kernel-",
-                "ltsp-client",
-		"xorg-driver-fglrx",
-		"fglrx-control",
-		"glibc-doc-reference", "libpthread-dev",
-		"cman", "mysql-server", "fuse-utils",
-		"ltspfs", "gfs2-tools", "edubuntu-server",
-		"gnbd-client", "gnbd-server", "mysql-server-5.0",
-		"rgmanager", "clvm","redhat-cluster-suit",
-		# has a funny "can not be upgraded automatically" policy
-		# see debian #368226
-		"quagga",
-		"system-config-cluster", "gfs-tools"]
+   blacklist = [
+      # has a funny "can not be upgraded automatically" policy
+      # see debian #368226
+      "quagga",
+      # the following packages try to access /lib/modules/`uname -r` and fail
+      "vmware-player-kernel-",
+      # not installable on a regular machine
+      "ltsp-client",
+      ]
    for b in blacklist:
 	   if name.startswith(b):
 		   return True

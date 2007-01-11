@@ -56,32 +56,32 @@ class DumbTerminal(object):
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
     def __init__(self):
-        print "DistUpgradeView init"
+        print "!!!!!!!!!! DistUpgradeView init"
         pass
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
-        print "DistUpgradeView getOpCacheProgress"
+        print "!!!!!!!!!! DistUpgradeView getOpCacheProgress"
         return apt.progress.OpProgress()
     def getFetchProgress(self):
         " return a fetch progress object "
-        print "DistUpgradeView getFetchProgress"
+        print "!!!!!!!!!! DistUpgradeView getFetchProgress"
         return apt.progress.FetchProgress()
     def getInstallProgress(self, cache=None):
         " return a install progress object "
-        print "DistUpgradeView getInstallProgress"
+        print "!!!!!!!!!! DistUpgradeView getInstallProgress"
         return apt.progress.InstallProgress(cache)
     def getTerminal(self):
-        print "DistUpgradeView getTerminal"
+        print "!!!!!!!!!! DistUpgradeView getTerminal"
         return DumbTerminal()
     def updateStatus(self, msg):
         """ update the current status of the distUpgrade based
             on the current view
         """
-        print "DistUpgradeView updateStatus"
+        print "!!!!!!!!!! DistUpgradeView updateStatus"
         pass
     def abort(self):
         """ provide a visual feedback that the upgrade was aborted """
-        print "DistUpgradeView abort"
+        print "!!!!!!!!!! DistUpgradeView abort"
         pass
     def setStep(self, step):
         """ we have 5 steps current for a upgrade:
@@ -91,16 +91,17 @@ class DistUpgradeView(object):
         4. Post upgrade stuff
         5. Complete
         """
-        print "DistUpgradeView setStep"
+        print "!!!!!!!!!! DistUpgradeView setStep"
         pass
     def hideStep(self, step):
         " hide a certain step from the GUI "
-        print "DistUpgradeView hideStep"
+        print "!!!!!!!!!! DistUpgradeView hideStep"
         pass
     def confirmChanges(self, summary, changes, downloadSize, actions=None):
         """ display the list of changed packages (apt.Package) and
             return if the user confirms them
         """
+        print "!!!!!!!!!! DistUpgradeView confirmChanges"
         self.toInstall = []
         self.toUpgrade = []
         self.toRemove = []
@@ -112,10 +113,9 @@ class DistUpgradeView(object):
             elif pkg.markedDowngrade: self.toDowngrade.append(pkg.name)
         # no re-installs 
         assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toDowngrade) == len(changes))
-        print "DistUpgradeView init"
     def askYesNoQuestion(self, summary, msg):
         " ask a Yes/No question and return True on 'Yes' "
-        print "DistUpgradeView askYesNoQuestion"
+        print "!!!!!!!!!! DistUpgradeView askYesNoQuestion"
         pass
     def confirmRestart(self):
         " generic ask about the restart, can be overriden "
@@ -124,13 +124,13 @@ class DistUpgradeView(object):
                  "a reboot is required. "
                  "Do you want to do this "
                  "now?")
-        print "DistUpgradeView confirmRestart"
+        print "!!!!!!!!!! DistUpgradeView confirmRestart"
         return self.askYesNoQuestion(summary, msg)
     def error(self, summary, msg, extended_msg=None):
         " display a error "
-        print "DistUpgradeView error"
+        print "!!!!!!!!!! DistUpgradeView error"
         pass
     def information(self, summary, msg, extended_msg=None):
         " display a information msg"
-        print "DistUpgradeView information"
+        print "!!!!!!!!!! DistUpgradeView information"
         pass

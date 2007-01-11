@@ -15,6 +15,7 @@ from DistUpgradeControler import DistUpgradeControler
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime
 from window_main import window_main
 from dialog_error import dialog_error
+from dialog_changes import dialog_changes
 
 import gettext
 from gettext import gettext as _
@@ -167,6 +168,33 @@ class DistUpgradeViewKDE(DistUpgradeView):
         print "def getOpCacheProgress(self):"
         return self._opCacheProgress
 
+    def updateStatus(self, msg):
+        self.window_main.label_status.setText("%s" % msg)
+
+    def setStep(self, step):
+        ##FIXME if self.icontheme.rescan_if_needed():
+        ##  logging.debug("icon theme changed, re-reading")
+        # first update the "previous" step as completed
+        ##size = gtk.ICON_SIZE_MENU
+        ##attrlist=pango.AttrList()
+        if self.prev_step:
+            image = getattr(self.window_main,"image_step%i" % self.prev_step)
+            label = getattr(self.window_main,"label_step%i" % self.prev_step)
+            ##arrow = getattr(self.window_main,"arrow_step%i" % self.prev_step)
+            ##label.set_property("attributes",attrlist)
+            ##image.set_from_stock(gtk.STOCK_APPLY, size)
+            image.setPixmap(QPixmap("/usr/share/apps/knetworkconf/pixmaps/kubuntu.png")) ##FIXME
+            image.show()
+            ##arrow.hide()
+        self.prev_step = step
+        # show the an arrow for the current step and make the label bold
+        image = getattr(self.window_main,"image_step%i" % step)
+        label = getattr(self.window_main,"label_step%i" % step)
+        ##arrow = getattr(self.window_main,"arrow_step%i" % step)
+        ##arrow.show()
+        image.hide()
+        label.setText("<b>" + label.text() + "</b>")
+
     def error(self, pkg, errormsg):
         print "error: pkg: " + pkg + " errormsg: " + errormsg
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
@@ -205,4 +233,85 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.hide()
         dialogue.exec_loop()
 
+        return False
+
+    def confirmChanges(self, summary, changes, downloadSize, actions=None):
+        # FIXME: add a whitelist here for packages that we expect to be
+        # removed (how to calc this automatically?)
+        DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
+        pkgs_remove = len(self.toRemove)
+        pkgs_inst = len(self.toInstall)
+        pkgs_upgrade = len(self.toUpgrade)
+        msg = ""
+
+        if pkgs_remove > 0:
+            # FIXME: make those two seperate lines to make it clear
+            #        that the "%" applies to the result of ngettext
+            msg += gettext.ngettext("%d package is going to be removed.",
+                                    "%d packages are going to be removed.",
+                                    pkgs_remove) % pkgs_remove
+            msg += " "
+        if pkgs_inst > 0:
+            msg += gettext.ngettext("%d new package is going to be "
+                                    "installed.",
+                                    "%d new packages are going to be "
+                                    "installed.",pkgs_inst) % pkgs_inst
+            msg += " "
+        if pkgs_upgrade > 0:
+            msg += gettext.ngettext("%d package is going to be upgraded.",
+                                    "%d packages are going to be upgraded.",
+                                    pkgs_upgrade) % pkgs_upgrade
+            msg +=" "
+        if downloadSize > 0:
+            msg += _("\n\nYou have to download a total of %s. ") %\
+                     apt_pkg.SizeToStr(downloadSize)
+            msg += estimatedDownloadTime(downloadSize)
+            msg += "."
+
+        if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
+            msg += "\n\n%s" % _("Fetching and installing the upgrade can take several hours and "\
+                                "cannot be canceled at any time later.")
+
+        msg += "\n\n<b>%s</b>" % _("To prevent data loss close all open "\
+                                   "applications and documents.")
+
+        # Show an error if no actions are planned
+        if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
+            # FIXME: this should go into DistUpgradeController
+            summary = _("Your system is up-to-date")
+            msg = _("There are no upgrades available for your system. "
+                    "The upgrade will now be canceled.")
+            self.error(summary, msg)
+            return False
+
+        ##FIXMEif actions != None:
+        #    self.button_cancel_changes.set_use_stock(False)
+        #    self.button_cancel_changes.set_use_underline(True)
+        #    self.button_cancel_changes.set_label(actions[0])
+        #    self.button_confirm_changes.set_label(actions[1])
+
+        changesDialogue = dialog_changes(self.window_main)
+
+        changesDialogue.label_summary.setText("<big><b>%s</b></big>" % summary)
+        changesDialogue.label_changes.setText(msg)  ##FIXME s/\n/<br>/
+        print "changes: " + msg
+        print "summary: " + summary
+        # fill in the details
+        ##FIXME
+        changesDialogue.treeview_details.clear()
+        for rm in self.toRemove:
+            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("<b>Remove %s</b>") % rm) )
+        for inst in self.toInstall:
+            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Install %s") % inst) )
+        for up in self.toUpgrade:
+            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Upgrade %s") % up) )
+        #self.treeview_details.scroll_to_cell((0,))
+        #self.dialog_changes.set_transient_for(self.window_main)
+        #self.dialog_changes.realize()
+        #self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE)
+        #res = self.dialog_changes.run()
+        res = changesDialogue.exec_loop()
+        #self.dialog_changes.hide()
+        if res == QDialog.Accepted:
+            return True
         return False

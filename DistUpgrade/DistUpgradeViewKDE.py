@@ -11,6 +11,7 @@ import apt
 import apt_pkg
 import os
 
+from apt.progress import InstallProgress
 from DistUpgradeControler import DistUpgradeControler
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime
 from window_main import window_main
@@ -85,7 +86,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
 
         if self.currentCPS > 0:
             self.status.setText(_("Fetching file %li of %li at %s/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
-            self.parent.window_mainm.progress_text.setText("<i>" + _("About %s remaining") % FuzzyTimeToStr(self.eta) + "</i>")
+            self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % FuzzyTimeToStr(self.eta) + "</i>")
         else:
             self.status.setText(_("Fetching file %li of %li") % (currentItem, self.totalItems))
             self.parent.window_main.progress_text.setText("  ")
@@ -93,6 +94,169 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         KApplication.kApplication().processEvents()
         return True
 
+class KDEInstallProgressAdapter(InstallProgress):
+    # timeout with no status change when the terminal is expanded
+    # automatically
+    TIMEOUT_TERMINAL_ACTIVITY = 240
+
+    def __init__(self,parent):
+        InstallProgress.__init__(self)
+        self._cache = None
+        self.label_status = parent.window_main.label_status
+        self.progress = parent.window_main.progressbar_cache
+        self.progress_text = parent.window_main.progress_text
+        ##self.expander = parent.expander_terminal
+        ##self.term = parent._term
+        self.parent = parent
+        # setup the child waiting
+        ##reaper = vte.reaper_get()
+        ##reaper.connect("child-exited", self.child_exited)
+        # some options for dpkg to make it die less easily
+        apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        apt_pkg.Config.Set("DPkg::StopOnError","False")
+
+    def startUpdate(self):
+        self.finished = False
+        # FIXME: add support for the timeout
+        # of the terminal (to display something useful then)
+        # -> longer term, move this code into python-apt 
+        self.label_status.setText(_("Applying changes"))
+        self.progress.setProgress(0)
+        self.progress_text.setText(" ")
+        ##self.expander.set_sensitive(True)
+        ##self.term.show()
+        # if no libgnome2-perl is installed show the terminal
+        frontend="kde"
+        """
+        if self._cache:
+          if not self._cache.has_key("libgnome2-perl") or \
+             not self._cache["libgnome2-perl"].isInstalled:
+            frontend = "dialog"
+            self.expander.set_expanded(True)
+        """
+        self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,
+                    "DEBIAN_FRONTEND=%s" % frontend,
+                    "APT_LISTCHANGES_FRONTEND=none"]
+        # do a bit of time-keeping
+        self.start_time = 0.0
+        self.time_ui = 0.0
+        self.last_activity = 0.0
+        
+    def error(self, pkg, errormsg):
+        print "FIXME error()"
+        logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+        #self.expander_terminal.set_expanded(True)
+        ##self.parent.dialog_error.set_transient_for(self.parent.window_main)
+        summary = _("Could not install '%s'") % pkg
+        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
+                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
+        markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
+        self.parent.dialog_error.realize()
+        self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
+        self.parent.label_error.set_markup(markup)
+        self.parent.textview_error.get_buffer().set_text(utf8(errormsg))
+        self.parent.scroll_error.show()
+        self.parent.dialog_error.run()
+        self.parent.dialog_error.hide()
+
+    def conffile(self, current, new):
+        print "conffile(self, current, new):"
+        logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
+        start = time.time()
+        #self.expander.set_expanded(True)
+        prim = _("Replace the customized configuration file\n'%s'?") % current
+        sec = _("You will lose any changes you have made to this "
+                "configuration file if you choose to replace it with "
+                "a newer version.")
+        markup = "<span weight=\"bold\" size=\"larger\">%s </span> \n\n%s" % (prim, sec)
+        self.parent.label_conffile.set_markup(markup)
+        self.parent.dialog_conffile.set_transient_for(self.parent.window_main)
+
+        # now get the diff
+        if os.path.exists("/usr/bin/diff"):
+          cmd = ["/usr/bin/diff", "-u", current, new]
+          diff = utf8(subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0])
+          self.parent.textview_conffile.get_buffer().set_text(diff)
+        else:
+          self.parent.textview_conffile.get_buffer().set_text(_("The 'diff' command was not found"))
+        res = self.parent.dialog_conffile.run()
+        self.parent.dialog_conffile.hide()
+        self.time_ui += time.time() - start
+        # if replace, send this to the terminal
+        if res == gtk.RESPONSE_YES:
+          self.term.feed_child("y\n")
+        else:
+          self.term.feed_child("n\n")
+        
+    def fork(self):
+        print "fork(self):"
+        pid = self.term.forkpty(envv=self.env)
+        if pid == 0:
+          # HACK to work around bug in python/vte and unregister the logging
+          #      atexit func in the child
+          sys.exitfunc = lambda: True
+        return pid
+
+    def statusChange(self, pkg, percent, status):
+        print "statusChange(self, pkg, percent, status):"
+        # start the timer when the first package changes its status
+        if self.start_time == 0.0:
+          #print "setting start time to %s" % self.start_time
+          self.start_time = time.time()
+        self.progress.set_fraction(float(self.percent)/100.0)
+        self.label_status.set_text(status.strip())
+        # start showing when we gathered some data
+        if percent > 1.0:
+          self.last_activity = time.time()
+          self.activity_timeout_reported = False
+          delta = self.last_activity - self.start_time
+          # time wasted in conffile questions (or other ui activity)
+          delta -= self.time_ui
+          time_per_percent = (float(delta)/percent)
+          eta = (100.0 - self.percent) * time_per_percent
+          # only show if we have some sensible data (60sec < eta < 2days)
+          if eta > 61.0 and eta < (60*60*24*2):
+            self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(eta))
+          else:
+            self.progress.set_text(" ")
+
+    def child_exited(self, term, pid, status):
+        print "child_exited(self, term, pid, status):"
+        self.apt_status = os.WEXITSTATUS(status)
+        self.finished = True
+
+    def waitChild(self):
+        print "waitChild(self):"
+        while not self.finished:
+            self.updateInterface()
+        return self.apt_status
+
+    def finishUpdate(self):
+        print "finishUpdate(self):"
+        self.label_status.set_text("")
+    
+    def updateInterface(self):
+        print "updateInterface(self):"
+        try:
+          InstallProgress.updateInterface(self)
+        except ValueError, e:
+          logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
+          # reset self.read so that it can continue reading and does not loop
+	  self.read = ""
+        # check if we haven't started yet with packages, pulse then
+        if self.start_time == 0.0:
+          self.progress.pulse()
+          time.sleep(0.2)
+        # check about terminal activity
+        if self.last_activity > 0 and \
+           (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
+          if not self.activity_timeout_reported:
+            logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
+            self.activity_timeout_reported = True
+          self.parent.expander_terminal.set_expanded(True)
+        while gtk.events_pending():
+            gtk.main_iteration()
+	time.sleep(0.02)
 
 class DistUpgradeViewKDE(DistUpgradeView):
     "KDE frontend of the distUpgrade tool "
@@ -137,7 +301,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self._fetchProgress = KDEFetchProgressAdapter(self)
         """
         self._cdromProgress = GtkCdromProgressAdapter(self)
-        self._installProgress = GtkInstallProgressAdapter(self)
+        """
+        self._installProgress = KDEInstallProgressAdapter(self)
+        """
         # details dialog
         self.details_list = gtk.ListStore(gobject.TYPE_STRING)
         column = gtk.TreeViewColumn("")
@@ -163,6 +329,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
     def getFetchProgress(self):
         return self._fetchProgress
+
+    def getInstallProgress(self, cache):
+        self._installProgress._cache = cache
+        return self._installProgress
 
     def getOpCacheProgress(self):
         print "def getOpCacheProgress(self):"

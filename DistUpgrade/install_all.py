@@ -7,6 +7,10 @@ def blacklisted(name):
    # we need to blacklist linux-image-* as it does not install
    # cleanly in the chroot (postinst failes)
    blacklist = [
+      # file-overwrite problem with libc6-dev
+      libpthread-dev,
+      # FUBAR (was removed in feisty)
+      glibc-doc-reference,
       # has a funny "can not be upgraded automatically" policy
       # see debian #368226
       "quagga",

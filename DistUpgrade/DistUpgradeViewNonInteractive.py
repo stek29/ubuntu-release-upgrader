@@ -44,7 +44,7 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         self.config = DistUpgradeConfig(".")
-        if self.config.get("NonInteractive","ForceOverwrite"):
+        if self.config.getboolean("NonInteractive","ForceOverwrite")):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         
     def error(self, pkg, errormsg):

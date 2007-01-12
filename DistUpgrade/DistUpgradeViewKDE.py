@@ -80,6 +80,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
     def pulse(self):
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
+        print "KDEFetchProgressAdapter pulse"
         apt.progress.FetchProgress.pulse(self)
         self.progress.setProgress(self.percent)
         ##FIXMEself.progress.setProgress(self.percent/100.0)
@@ -144,7 +145,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.start_time = 0.0
         self.time_ui = 0.0
         self.last_activity = 0.0
-        
+
     def error(self, pkg, errormsg):
         print "FIXME error()"
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
@@ -191,7 +192,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           self.term.feed_child("y\n")
         else:
           self.term.feed_child("n\n")
-        
+
     def fork(self):
         print "fork(self):"
         ##FIXME!!pid = self.term.forkpty(envv=self.env)
@@ -210,7 +211,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             # *sigh* we can't do this because dpkg explodes when it can't
             # present its stupid conffile prompt
             pass
-        logging.debug("pid is: %s" % self.pid)
+        logging.debug(" fork pid is: %s" % self.pid)
         return self.pid
 
     def statusChange(self, pkg, percent, status):
@@ -232,9 +233,9 @@ class KDEInstallProgressAdapter(InstallProgress):
           eta = (100.0 - self.percent) * time_per_percent
           # only show if we have some sensible data (60sec < eta < 2days)
           if eta > 61.0 and eta < (60*60*24*2):
-            self.progress_label.setText(_("About %s remaining") % FuzzyTimeToStr(eta))
+            self.progress_text.setText(_("About %s remaining") % FuzzyTimeToStr(eta))
           else:
-            self.progress_label.setText(" ")
+            self.progress_text.setText(" ")
 
     def child_exited(self, term, pid, status):
         print "child_exited(self, term, pid, status):"
@@ -254,9 +255,7 @@ class KDEInstallProgressAdapter(InstallProgress):
     def updateInterface(self):
         print "updateInterface(self):"
         try:
-          print "trying"
           InstallProgress.updateInterface(self)
-          print "successful"
         except ValueError, e:
           logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
@@ -367,6 +366,13 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def updateStatus(self, msg):
         self.window_main.label_status.setText("%s" % msg)
 
+    def abort(self):
+        step = self.prev_step
+        if step > 0:
+            image = getattr(self.window_main,"image_step%i" % step)
+            image.setPixmap(QPixmap("/usr/share/apps/knetworkconf/pixmaps/kubuntu.png"))
+            image.show()
+
     def setStep(self, step):
         ##FIXME if self.icontheme.rescan_if_needed():
         ##  logging.debug("icon theme changed, re-reading")
@@ -379,7 +385,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             ##arrow = getattr(self.window_main,"arrow_step%i" % self.prev_step)
             ##label.set_property("attributes",attrlist)
             ##image.set_from_stock(gtk.STOCK_APPLY, size)
-            image.setPixmap(QPixmap("/usr/share/apps/knetworkconf/pixmaps/kubuntu.png")) ##FIXME
+            image.setPixmap(QPixmap("/usr/share/icons/crystalsvg/16x16/actions/ok.png"))
             image.show()
             ##arrow.hide()
         self.prev_step = step
@@ -388,7 +394,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         label = getattr(self.window_main,"label_step%i" % step)
         ##arrow = getattr(self.window_main,"arrow_step%i" % step)
         ##arrow.show()
-        image.hide()
+        image.setPixmap(QPixmap("/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png"))
+        image.show()
         label.setText("<b>" + label.text() + "</b>")
 
     def error(self, pkg, errormsg):

@@ -32,7 +32,6 @@ if __name__ == "__main__":
     # the commandline overwrites the configfile
     requested_view= (options.frontend or config.get("View","View"))
     try:
-        print "importing"
         view_modul = __import__(requested_view)
         view_class = getattr(view_modul, requested_view)
         view = view_class()
@@ -41,9 +40,9 @@ if __name__ == "__main__":
         print "can't find %s" % requested_view
         sys.exit(1)
     ##FIXME
-    #app = DistUpgradeControler(view, options)
-
-    #app.run()
+    if requested_view is not "DistUpgradeViewKDE":
+        app = DistUpgradeControler(view, options)
+        app.run()
 
     # testcode to see if the bullets look nice in the dialog
     #for i in range(4):

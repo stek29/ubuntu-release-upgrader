@@ -101,7 +101,7 @@ class DistUpgradeView(object):
         """ display the list of changed packages (apt.Package) and
             return if the user confirms them
         """
-        print "!!!!!!!!!! DistUpgradeView confirmChanges"
+        print "DistUpgradeView confirmChanges"
         self.toInstall = []
         self.toUpgrade = []
         self.toRemove = []

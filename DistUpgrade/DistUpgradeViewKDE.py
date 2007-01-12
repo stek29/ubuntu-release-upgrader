@@ -1,6 +1,7 @@
 from qt import *
 from kdeui import *
 from kdecore import *
+from kparts import konsolePart
 
 import sys
 import logging
@@ -10,6 +11,8 @@ import subprocess
 import apt
 import apt_pkg
 import os
+
+import pty
 
 from apt.progress import InstallProgress
 from DistUpgradeControler import DistUpgradeControler
@@ -160,6 +163,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.parent.dialog_error.hide()
 
     def conffile(self, current, new):
+        ##FIXME
         print "conffile(self, current, new):"
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
         start = time.time()
@@ -190,12 +194,24 @@ class KDEInstallProgressAdapter(InstallProgress):
         
     def fork(self):
         print "fork(self):"
-        pid = self.term.forkpty(envv=self.env)
-        if pid == 0:
-          # HACK to work around bug in python/vte and unregister the logging
-          #      atexit func in the child
-          sys.exitfunc = lambda: True
-        return pid
+        ##FIXME!!pid = self.term.forkpty(envv=self.env)
+        #pid = 1
+        #if pid == 0:
+        #  # HACK to work around bug in python/vte and unregister the logging
+        #  #      atexit func in the child
+        #  sys.exitfunc = lambda: True
+        #return pid
+        (self.pid, self.master_fd) = pty.fork()
+        if self.pid == 0:
+            # stdin is /dev/null to prevent retarded maintainer scripts from
+            # hanging with stupid questions
+            #fd = os.open("/dev/null", os.O_RDONLY)
+            #os.dup2(fd, 0)
+            # *sigh* we can't do this because dpkg explodes when it can't
+            # present its stupid conffile prompt
+            pass
+        logging.debug("pid is: %s" % self.pid)
+        return self.pid
 
     def statusChange(self, pkg, percent, status):
         print "statusChange(self, pkg, percent, status):"
@@ -203,8 +219,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
-        self.progress.set_fraction(float(self.percent)/100.0)
-        self.label_status.set_text(status.strip())
+        self.progress.setProgress(self.percent)
+        self.label_status.setText(status.strip())
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()
@@ -216,9 +232,9 @@ class KDEInstallProgressAdapter(InstallProgress):
           eta = (100.0 - self.percent) * time_per_percent
           # only show if we have some sensible data (60sec < eta < 2days)
           if eta > 61.0 and eta < (60*60*24*2):
-            self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(eta))
+            self.progress_label.setText(_("About %s remaining") % FuzzyTimeToStr(eta))
           else:
-            self.progress.set_text(" ")
+            self.progress_label.setText(" ")
 
     def child_exited(self, term, pid, status):
         print "child_exited(self, term, pid, status):"
@@ -233,19 +249,21 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def finishUpdate(self):
         print "finishUpdate(self):"
-        self.label_status.set_text("")
+        self.label_status.setText("")
     
     def updateInterface(self):
         print "updateInterface(self):"
         try:
+          print "trying"
           InstallProgress.updateInterface(self)
+          print "successful"
         except ValueError, e:
           logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
 	  self.read = ""
         # check if we haven't started yet with packages, pulse then
         if self.start_time == 0.0:
-          self.progress.pulse()
+          ##FIXME self.progress.pulse()  makes it move back and forth
           time.sleep(0.2)
         # check about terminal activity
         if self.last_activity > 0 and \
@@ -253,10 +271,9 @@ class KDEInstallProgressAdapter(InstallProgress):
           if not self.activity_timeout_reported:
             logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
             self.activity_timeout_reported = True
-          self.parent.expander_terminal.set_expanded(True)
-        while gtk.events_pending():
-            gtk.main_iteration()
-	time.sleep(0.02)
+          ##FIXME self.parent.expander_terminal.set_expanded(True)
+        KApplication.kApplication().processEvents()
+        time.sleep(0.02)
 
 class DistUpgradeViewKDE(DistUpgradeView):
     "KDE frontend of the distUpgrade tool "
@@ -320,6 +337,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
         sys.excepthook = self._handleException
         """
 
+        self.box = QHBoxLayout(self.window_main.konsole_frame)
+        self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
+        self.konsole.setAutoStartShell(False)
+        self.konsoleWidget = self.konsole.widget()
+        #self.part = konsoleFactory.createReadOnlyPart("libkonsolepart", self.window_main.konsole_frame)
+        #self.w = self.part.widget()
+        self.box.addWidget(self.konsoleWidget)
+        #self.w.setGeometry(30, 55, 500, 400)
+        self.konsoleWidget.show()
         self.app.exec_loop()
 
     def run(self):

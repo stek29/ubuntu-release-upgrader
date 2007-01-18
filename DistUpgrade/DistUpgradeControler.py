@@ -349,7 +349,7 @@ class DistUpgradeControler(object):
         # FIXME: retry here too? just like the DoDistUpgrade?
         #        also remove all files from the lists partial dir!
         currentRetry = 0
-        maxRetries = int(self.config.get("Network","MaxRetries"))
+        maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.update(progress)
@@ -448,7 +448,7 @@ class DistUpgradeControler(object):
         fprogress = self._view.getFetchProgress()
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
-        maxRetries = int(self.config.get("Network","MaxRetries"))
+        maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)

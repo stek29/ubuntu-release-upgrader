@@ -1,4 +1,4 @@
-#!/usr/bin/python2.4
+#!/usr/bin/python
 
 from DistUpgradeControler import DistUpgradeControler
 from DistUpgradeConfigParser import DistUpgradeConfig

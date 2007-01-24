@@ -164,7 +164,8 @@ class MetaRelease(gobject.GObject):
             req.add_header("If-Modified-Since", lastmodified)
         try:
             uri=urllib2.urlopen(req)
-            if not os.access(self.METARELEASE_FILE,os.W_OK):
+            if (os.path.exists(self.METARELEASE_FILE) and
+                not os.access(self.METARELEASE_FILE,os.W_OK)):
                 os.unlink(self.METARELEASE_FILE)
             f=open(self.METARELEASE_FILE,"w+")
             for line in uri.readlines():

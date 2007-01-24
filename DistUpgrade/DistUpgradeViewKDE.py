@@ -194,6 +194,22 @@ class KDEInstallProgressAdapter(InstallProgress):
           self.term.feed_child("n\n")
 
     def fork(self):
+        print "fork()"
+        (master, slave) = pty.openpty()
+        self.parent.konsole.setPtyFd(master)
+        self.pid = os.fork()
+        if self.pid == 0:
+            print "child"
+            os.dup2(slave, 0)
+            os.dup2(slave, 1)
+            os.dup2(slave, 2)
+            print "child"
+        logging.debug(" fork pid is: %s" % self.pid)
+        print "fork() done"
+        return self.pid
+
+    """
+    def fork(self):
         print "fork(self):"
         ##FIXME!!pid = self.term.forkpty(envv=self.env)
         #pid = 1
@@ -213,6 +229,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             pass
         logging.debug(" fork pid is: %s" % self.pid)
         return self.pid
+    """
 
     def statusChange(self, pkg, percent, status):
         print "statusChange(self, pkg, percent, status):"
@@ -273,6 +290,12 @@ class KDEInstallProgressAdapter(InstallProgress):
           ##FIXME self.parent.expander_terminal.set_expanded(True)
         KApplication.kApplication().processEvents()
         time.sleep(0.02)
+
+    def processExited(self, process):
+        print "processExited(self):"
+        print "exit status: " + str(process.exitStatus())
+        self.finished = True
+        self.apt_status = process.exitStatus()
 
 class DistUpgradeViewKDE(DistUpgradeView):
     "KDE frontend of the distUpgrade tool "
@@ -345,6 +368,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.box.addWidget(self.konsoleWidget)
         #self.w.setGeometry(30, 55, 500, 400)
         self.konsoleWidget.show()
+        app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
         self.app.exec_loop()
 
     def run(self):

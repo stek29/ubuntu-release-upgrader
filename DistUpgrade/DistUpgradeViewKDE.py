@@ -194,15 +194,14 @@ class KDEInstallProgressAdapter(InstallProgress):
           self.term.feed_child("n\n")
 
     def fork(self):
-        print "fork()"
-        (master, slave) = pty.openpty()
-        self.parent.konsole.setPtyFd(master)
+        print "forking"
         self.pid = os.fork()
+        print "forked"
         if self.pid == 0:
             print "child"
-            os.dup2(slave, 0)
-            os.dup2(slave, 1)
-            os.dup2(slave, 2)
+            os.dup2(self.parent.slave, 0)
+            os.dup2(self.parent.slave, 1)
+            os.dup2(self.parent.slave, 2)
             print "child"
         logging.debug(" fork pid is: %s" % self.pid)
         print "fork() done"
@@ -369,6 +368,13 @@ class DistUpgradeViewKDE(DistUpgradeView):
         #self.w.setGeometry(30, 55, 500, 400)
         self.konsoleWidget.show()
         app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
+
+        print "fork()"
+        (self.master, self.slave) = pty.openpty()
+        print "openpty done, calling setPty"
+        self.konsole.setPtyFd(self.master)
+        print "setPtyFd done"
+
         self.app.exec_loop()
 
     def run(self):

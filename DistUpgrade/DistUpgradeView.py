@@ -23,6 +23,9 @@ from gettext import gettext as _
 from apt.progress import InstallProgress
 import subprocess
 
+# directory for the logs
+LOGDIR="/var/log/dist-upgrader/"
+
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
   if sec > 60*60*24:
@@ -47,11 +50,12 @@ class InstallProgress(apt.progress.Installprogress):
       stuff like apport integration
   """
   def error(self, pkg, errormsg):
+    " install error from a package "
     # now run apport
-    s = "/usr/share/apport/dist_upgrader_hook"
+    s = "/usr/share/apport/package_hook"
     if os.path.exists(s):
-      p = subprocess.Popen([s,"--package",pkg], stdin=PIPE)
-      p.stdin.write("ErrorMessage: %s" % errormsg)
+      p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=PIPE)
+      p.stdin.write("ErrorMessage: %s\n" % errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd):

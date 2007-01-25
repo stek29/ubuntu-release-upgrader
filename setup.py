@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from distutils.core import setup, Extension
 import glob
 import os
 
@@ -57,6 +57,7 @@ os.system("sed -i s/^CODENAME=.*/CODENAME=$(lsb_release -c -s)/ DistUpgrade/cdro
     
 setup(name='update-manager',
       version='0.42.2',
+      ext_modules=[Extension('fdsend', ['fdsend/fdsend.c'])],
       packages=[
                 'SoftwareProperties',
                 'UpdateManager',

@@ -36,8 +36,8 @@ import apt
 import apt_pkg
 import os
 
-from apt.progress import InstallProgress
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime
+
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
 
 import gettext
@@ -480,6 +480,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         gtk.main_iteration()
 
     def error(self, summary, msg, extended_msg=None):
+        InstallProgress.error(self, summary, msg, extended_msg)
         self.dialog_error.set_transient_for(self.window_main)
         #self.expander_terminal.set_expanded(True)
         msg="<big><b>%s</b></big>\n\n%s" % (summary, msg)

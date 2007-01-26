@@ -6,6 +6,11 @@ class DistUpgradeConfig(ConfigParser):
         ConfigParser.__init__(self)
         self.datadir=datadir
         self.read([datadir+"/"+name])
+    def getWithDefault(self, section, option, default):
+        try:
+            self.get(section, option)
+        except (NoSectionError, NoOptionError),e:
+            return default
     def getlist(self, section, option):
         try:
             tmp = self.get(section, option)

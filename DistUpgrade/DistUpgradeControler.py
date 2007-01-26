@@ -493,6 +493,10 @@ class DistUpgradeControler(object):
         now_foreign = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
         logging.debug("Obsolete: %s" % " ".join(now_obsolete))
         logging.debug("Foreign: %s" % " ".join(now_foreign))
+        # check if we actually want obsolete removal
+        if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
+            logging.debug("Skipping obsolete Removal")
+            return True
 
         # now get the meta-pkg specific obsoletes and purges
         for pkg in self.config.getlist("Distro","MetaPkgs"):

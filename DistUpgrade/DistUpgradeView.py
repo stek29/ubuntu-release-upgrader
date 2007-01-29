@@ -20,7 +20,7 @@
 #  USA
 
 from gettext import gettext as _
-from apt.progress import InstallProgress
+import apt
 import subprocess
 
 # directory for the logs
@@ -45,7 +45,7 @@ def estimatedDownloadTime(requiredDownload):
     return s
 
 
-class InstallProgress(apt.progress.Installprogress):
+class InstallProgress(apt.progress.InstallProgress):
   """ Base class for InstallProgress that supports some fancy
       stuff like apport integration
   """

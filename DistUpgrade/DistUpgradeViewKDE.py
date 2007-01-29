@@ -540,3 +540,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         if res == QDialog.Accepted:
             return True
         return False
+
+    def askYesNoQuestion(self, summary, msg):
+        restart = QMessageBox.question(self.window_main, summary, msg, QMessageBox.Yes|QMessageBox.Cancel, QMessageBox.Cancel)
+        if restart == QMessageBox.Yes:
+            return True
+        return False

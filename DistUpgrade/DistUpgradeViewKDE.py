@@ -288,7 +288,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             self.activity_timeout_reported = True
           ##FIXME self.parent.expander_terminal.set_expanded(True)
         KApplication.kApplication().processEvents()
-        time.sleep(0.02)
+        time.sleep(0.0000001)
 
     def processExited(self, process):
         print "processExited(self):"
@@ -332,7 +332,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         icons = gtk.icon_theme_get_default()
         """
 
-        QTimer.singleShot(0, self.run)
         self.prev_step = 0 # keep a record of the latest step
 
         self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache)
@@ -374,13 +373,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         print "openpty done, calling setPty"
         self.konsole.setPtyFd(self.master)
         print "setPtyFd done"
-
-        self.app.exec_loop()
-
-    def run(self):
-        print "run()"
-        app = DistUpgradeControler(self, {})
-        app.run()
 
     def getFetchProgress(self):
         return self._fetchProgress

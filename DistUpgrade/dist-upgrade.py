@@ -39,10 +39,8 @@ if __name__ == "__main__":
         logging.error("can't import view '%s'" % requested_view)
         print "can't find %s" % requested_view
         sys.exit(1)
-    ##FIXME
-    if requested_view is not "DistUpgradeViewKDE":
-        app = DistUpgradeControler(view, options)
-        app.run()
+    app = DistUpgradeControler(view, options)
+    app.run()
 
     # testcode to see if the bullets look nice in the dialog
     #for i in range(4):

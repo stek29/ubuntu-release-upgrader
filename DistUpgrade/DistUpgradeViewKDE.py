@@ -7,6 +7,7 @@ import sys
 import logging
 import time
 import subprocess
+import traceback
 
 import apt
 import apt_pkg
@@ -20,6 +21,8 @@ from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTi
 from window_main import window_main
 from dialog_error import dialog_error
 from dialog_changes import dialog_changes
+from dialog_conffile import dialog_conffile
+from crashdialog import CrashDialog
 
 import gettext
 from gettext import gettext as _
@@ -28,8 +31,9 @@ def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
 class KDEOpProgress(apt.progress.OpProgress):
-  def __init__(self, progressbar):
+  def __init__(self, progressbar, progressbar_label):
       self.progressbar = progressbar
+      self.progressbar_label = progressbar_label
       #self.progressbar.set_pulse_step(0.01)
       #self.progressbar.pulse()
 
@@ -43,8 +47,7 @@ class KDEOpProgress(apt.progress.OpProgress):
       KApplication.kApplication().processEvents()
 
   def done(self):
-      pass
-      ##FIXMEself.progressbar.set_text(" ")
+      self.progressbar_label.setText("")
 
 class KDEFetchProgressAdapter(apt.progress.FetchProgress):
     # FIXME: we really should have some sort of "we are at step"
@@ -55,35 +58,28 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         self.status = parent.window_main.label_status
         self.progress = parent.window_main.progressbar_cache
         self.parent = parent
+
     def mediaChange(self, medium, drive):
-      ##FIXME
-      #print "mediaChange %s %s" % (medium, drive)
-      msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
-      dialog = gtk.MessageDialog(parent=self.parent.window_main,
-                                 flags=gtk.DIALOG_MODAL,
-                                 type=gtk.MESSAGE_QUESTION,
-                                 buttons=gtk.BUTTONS_OK_CANCEL)
-      dialog.set_markup(msg)
-      res = dialog.run()
-      #print res
-      dialog.destroy()
-      if  res == gtk.RESPONSE_OK:
+      restart = QMessageBox.question(self.window_main, _("Media Change"), msg, QMessageBox.Ok|QMessageBox.Cancel, QMessageBox.Cancel)
+      if restart == QMessageBox.Yes:
         return True
       return False
+
     def start(self):
         #self.progress.show()
         self.progress.setProgress(0)
         self.status.show()
+
     def stop(self):
         self.parent.window_main.progress_text.setText("  ")
         self.status.setText(_("Fetching is complete"))
+
     def pulse(self):
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
         print "KDEFetchProgressAdapter pulse"
         apt.progress.FetchProgress.pulse(self)
         self.progress.setProgress(self.percent)
-        ##FIXMEself.progress.setProgress(self.percent/100.0)
         currentItem = self.currentItems + 1
         if currentItem > self.totalItems:
             currentItem = self.totalItems
@@ -109,12 +105,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status = parent.window_main.label_status
         self.progress = parent.window_main.progressbar_cache
         self.progress_text = parent.window_main.progress_text
-        ##self.expander = parent.expander_terminal
-        ##self.term = parent._term
         self.parent = parent
-        # setup the child waiting
-        ##reaper = vte.reaper_get()
-        ##reaper.connect("child-exited", self.child_exited)
         # some options for dpkg to make it die less easily
         apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         apt_pkg.Config.Set("DPkg::StopOnError","False")
@@ -127,17 +118,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText(_("Applying changes"))
         self.progress.setProgress(0)
         self.progress_text.setText(" ")
-        ##self.expander.set_sensitive(True)
-        ##self.term.show()
-        # if no libgnome2-perl is installed show the terminal
         frontend="kde"
-        """
-        if self._cache:
-          if not self._cache.has_key("libgnome2-perl") or \
-             not self._cache["libgnome2-perl"].isInstalled:
-            frontend = "dialog"
-            self.expander.set_expanded(True)
-        """
         self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,
                     "DEBIAN_FRONTEND=%s" % frontend,
                     "APT_LISTCHANGES_FRONTEND=none"]
@@ -149,19 +130,18 @@ class KDEInstallProgressAdapter(InstallProgress):
     def error(self, pkg, errormsg):
         print "FIXME error()"
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+        msg="<big><b>%s</b></big>\n\n%s" % (summary, msg)
+
         #self.expander_terminal.set_expanded(True)
         ##self.parent.dialog_error.set_transient_for(self.parent.window_main)
-        summary = _("Could not install '%s'") % pkg
-        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
-                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
-        markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
-        self.parent.dialog_error.realize()
-        self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
-        self.parent.label_error.set_markup(markup)
-        self.parent.textview_error.get_buffer().set_text(utf8(errormsg))
-        self.parent.scroll_error.show()
-        self.parent.dialog_error.run()
-        self.parent.dialog_error.hide()
+        dialogue = dialog_error(self.parent.window_main)
+        dialogue.label_error.setText(msg)
+        if extended_msg != None:
+            dialogue.textview_error.setText(utf8(extended_msg))
+            dialogue.textview_error.show()
+        else:
+            dialogue.textview_error.hide()
+        dialogue.exec_loop()
 
     def conffile(self, current, new):
         ##FIXME
@@ -174,24 +154,25 @@ class KDEInstallProgressAdapter(InstallProgress):
                 "configuration file if you choose to replace it with "
                 "a newer version.")
         markup = "<span weight=\"bold\" size=\"larger\">%s </span> \n\n%s" % (prim, sec)
-        self.parent.label_conffile.set_markup(markup)
-        self.parent.dialog_conffile.set_transient_for(self.parent.window_main)
+        dialogue = dialog_conffile(self.parent.window_main)
+        dialogue.label_conffile.setText(markup)
 
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
           cmd = ["/usr/bin/diff", "-u", current, new]
           diff = utf8(subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0])
-          self.parent.textview_conffile.get_buffer().set_text(diff)
+          dialogue.textview_conffile.setText(diff)
         else:
-          self.parent.textview_conffile.get_buffer().set_text(_("The 'diff' command was not found"))
-        res = self.parent.dialog_conffile.run()
-        self.parent.dialog_conffile.hide()
+          dialogue.textview_conffile.setText(_("The 'diff' command was not found"))
+        result = dialogue.exec_loop()
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
-        if res == gtk.RESPONSE_YES:
-          self.term.feed_child("y\n")
+        if result == QDialog.Accepted:
+            print "result: accepted"
+            self.parent.konsole.sendInput("y\n")
         else:
-          self.term.feed_child("n\n")
+            print "result: rejected"
+            self.parent.konsole.sendInput("n\n")
 
     def fork(self):
         print "forking"
@@ -311,7 +292,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         self.prev_step = 0 # keep a record of the latest step
 
-        self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache)
+        self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache, self.window_main.progress_text)
         self._fetchProgress = KDEFetchProgressAdapter(self)
         """
         self._cdromProgress = GtkCdromProgressAdapter(self)
@@ -329,10 +310,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.vscrollbar_terminal.set_adjustment(self._term.get_adjustment())
         # work around bug in VteTerminal here
         self._term.realize()
+        """
 
         # reasonable fault handler
         sys.excepthook = self._handleException
-        """
 
         self.box = QHBoxLayout(self.window_main.konsole_frame)
         self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
@@ -510,3 +491,24 @@ class DistUpgradeViewKDE(DistUpgradeView):
         if restart == QMessageBox.Yes:
             return True
         return False
+
+    def _handleException(self, exctype, excvalue, exctb):
+        """Crash handler."""
+
+        if (issubclass(exctype, KeyboardInterrupt) or
+            issubclass(exctype, SystemExit)):
+            return
+
+        tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
+        logging.error("Exception in KDE frontend (invoking crash handler):")
+        logging.error(tbtext)
+        dialog = CrashDialog(self.window_main)
+        dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
+        dialog.crash_detail.setText(tbtext)
+        dialog.exec_loop()
+        sys.exit(1)
+
+    def openURL(self, url):
+        #need to run this else kdesu can't run Konqueror
+        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
+        KRun.runURL(KURL(url), "text/html")

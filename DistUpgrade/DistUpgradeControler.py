@@ -139,26 +139,19 @@ class DistUpgradeControler(object):
         #os.dup2(fd,1)
 
     def openCache(self):
-        print "openCache()"
         self.cache = MyCache(self.config, self._view.getOpCacheProgress())
-        print "done openCache()"
 
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
-        print "prepare()"
         try:
-            print "try"
             self.openCache()
         except SystemError, e:
-            print "returning 1"
             logging.error("openCache() failed: '%s'" % e)
             return False
         if not self.cache.sanityCheck(self._view):
-            print "returning 2"
             return False
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  inteligent questions
-        print "here"
         if self.aptcdrom and self.options and self.options.withNetwork == None:
             res = self._view.askYesNoQuestion(_("Fetch data from the network for the upgrade?"),
                                               _("The upgrade can use the network to check "
@@ -169,7 +162,6 @@ class DistUpgradeControler(object):
                                               )
             self.useNetwork = res
             logging.debug("useNetwork: '%s' (selected by user)" % res)
-        print "returning from prepare()"
         return True
 
     def rewriteSourcesList(self, mirror_check=True):
@@ -349,7 +341,6 @@ class DistUpgradeControler(object):
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
 
     def doUpdate(self):
-        print "doUpgrade()"
         if not self.useNetwork:
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
             return True
@@ -620,7 +611,6 @@ class DistUpgradeControler(object):
             pkg = self.cache[pkgname]
             # look for the right version (backport)
             for ver in pkg._pkg.VersionList:
-                print ver.VerStr
                 if self.config.get("Backports","VersionIdent") in ver.VerStr:
                     break
             else:
@@ -628,7 +618,6 @@ class DistUpgradeControler(object):
                 raise Exception, "No backport found!?!"
                 return False
             if ver.FileList == None:
-                print "No FileList for: %s " % self._pkg.Name()
                 return False
             f, index = ver.FileList.pop(0)
             pkg._records.Lookup((f,index))
@@ -676,11 +665,8 @@ class DistUpgradeControler(object):
 
     # this is the core
     def edgyUpgrade(self):
-        print "edgyUpgrade()"
         # sanity check (check for ubuntu-desktop, brokenCache etc)
-        print "calling updateStatus"
         self._view.updateStatus(_("Checking package manager"))
-        print "calling setStep"
         self._view.setStep(1)
         
         if not self.prepare():
@@ -692,7 +678,6 @@ class DistUpgradeControler(object):
                                "package and include the files in "
                                "/var/log/dist-upgrade/ "
                                "in the bugreport." ))
-            print "error, exiting"
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -774,7 +759,6 @@ class DistUpgradeControler(object):
 
 
 if __name__ == "__main__":
-    print "test"
     from DistUpgradeView import DistUpgradeView
     v = DistUpgradeView()
     dc = DistUpgradeControler(v)

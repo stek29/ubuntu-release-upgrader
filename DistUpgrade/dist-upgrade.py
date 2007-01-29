@@ -34,11 +34,11 @@ if __name__ == "__main__":
     try:
         view_modul = __import__(requested_view)
         view_class = getattr(view_modul, requested_view)
-        view = view_class()
     except (ImportError, AttributeError):
         logging.error("can't import view '%s'" % requested_view)
         print "can't find %s" % requested_view
         sys.exit(1)
+    view = view_class()
     app = DistUpgradeControler(view, options)
     app.run()
 

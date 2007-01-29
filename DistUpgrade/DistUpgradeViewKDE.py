@@ -207,29 +207,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         print "fork() done"
         return self.pid
 
-    """
-    def fork(self):
-        print "fork(self):"
-        ##FIXME!!pid = self.term.forkpty(envv=self.env)
-        #pid = 1
-        #if pid == 0:
-        #  # HACK to work around bug in python/vte and unregister the logging
-        #  #      atexit func in the child
-        #  sys.exitfunc = lambda: True
-        #return pid
-        (self.pid, self.master_fd) = pty.fork()
-        if self.pid == 0:
-            # stdin is /dev/null to prevent retarded maintainer scripts from
-            # hanging with stupid questions
-            #fd = os.open("/dev/null", os.O_RDONLY)
-            #os.dup2(fd, 0)
-            # *sigh* we can't do this because dpkg explodes when it can't
-            # present its stupid conffile prompt
-            pass
-        logging.debug(" fork pid is: %s" % self.pid)
-        return self.pid
-    """
-
     def statusChange(self, pkg, percent, status):
         print "statusChange(self, pkg, percent, status):"
         # start the timer when the first package changes its status
@@ -373,6 +350,17 @@ class DistUpgradeViewKDE(DistUpgradeView):
         print "openpty done, calling setPty"
         self.konsole.setPtyFd(self.master)
         print "setPtyFd done"
+        
+        self.window_main.konsole_frame.hide()
+        self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
+        
+    def showTerminal(self):
+        if self.window_main.konsole_frame.isVisible():
+            self.window_main.konsole_frame.hide()
+            self.window_main.showTerminalButton.setText(_("Show Terminal >>>"))
+        else:
+            self.window_main.konsole_frame.show()
+            self.window_main.showTerminalButton.setText(_("<<< Hide Terminal"))
 
     def getFetchProgress(self):
         return self._fetchProgress
@@ -419,30 +407,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         image.setPixmap(QPixmap("/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png"))
         image.show()
         label.setText("<b>" + label.text() + "</b>")
-
-    def error(self, pkg, errormsg):
-        print "error: pkg: " + pkg + " errormsg: " + errormsg
-        logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-        #self.expander_terminal.set_expanded(True)
-        ##self.parent.dialog_error.set_transient_for(self.parent.window_main)
-        summary = _("Could not install '%s'") % pkg
-        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
-                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
-        markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
-        """
-        self.parent.dialog_error.realize()
-        self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
-        self.parent.label_error.set_markup(markup)
-        self.parent.textview_error.get_buffer().set_text(utf8(errormsg))
-        self.parent.scroll_error.show()
-        self.parent.dialog_error.run()
-        self.parent.dialog_error.hide()
-        """
-        ##FIXME
-        dialogue = dialog_error(self.window_main)
-        dialogue.label_error.setText(markup)
-        dialogue.textview_error.setText(utf8(errormsg))
-        dialogue.run()
 
     def error(self, summary, msg, extended_msg=None):
         ##FIXME implement close and report bug buttons

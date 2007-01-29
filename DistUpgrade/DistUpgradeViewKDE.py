@@ -36,9 +36,8 @@ import os
 
 import pty
 
-from apt.progress import InstallProgress
 from DistUpgradeControler import DistUpgradeControler
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from window_main import window_main
 from dialog_error import dialog_error
 from dialog_changes import dialog_changes
@@ -172,6 +171,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.last_activity = 0.0
 
     def error(self, pkg, errormsg):
+        InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         msg="<big><b>%s</b></big><br />%s" % (summary, msg)
 

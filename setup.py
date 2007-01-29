@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from distutils.core import setup, Extension
 import glob
 import os
 
@@ -52,9 +52,12 @@ os.system("cd po; make update-po")
 os.system("cd data; make")
 # and channels
 os.system("cd data/channels; make")
+# and insert the right codename into the upgrade script at build-time
+os.system("sed -i s/^CODENAME=.*/CODENAME=$(lsb_release -c -s)/ DistUpgrade/cdromupgrade")
     
 setup(name='update-manager',
       version='0.42.2',
+#      ext_modules=[Extension('fdsend', ['fdsend/fdsend.c'])],
       packages=[
                 'SoftwareProperties',
                 'UpdateManager',

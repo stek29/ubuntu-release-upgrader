@@ -20,6 +20,11 @@
 #  USA
 
 from gettext import gettext as _
+import apt
+import subprocess
+
+# directory for the logs
+LOGDIR="/var/log/dist-upgrader/"
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
@@ -39,6 +44,19 @@ def estimatedDownloadTime(requiredDownload):
          "and about %s with a 56k modem" % (FuzzyTimeToStr(timeDSL),FuzzyTimeToStr(timeModem)))
     return s
 
+
+class InstallProgress(apt.progress.InstallProgress):
+  """ Base class for InstallProgress that supports some fancy
+      stuff like apport integration
+  """
+  def error(self, pkg, errormsg):
+    " install error from a package "
+    apt.progress.InstallProgress(self, pkg, errormsg)
+    # now run apport
+    s = "/usr/share/apport/package_hook"
+    if os.path.exists(s):
+      p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=PIPE)
+      p.stdin.write("ErrorMessage: %s\n" % errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd):

@@ -358,7 +358,7 @@ class DistUpgradeControler(object):
         # FIXME: retry here too? just like the DoDistUpgrade?
         #        also remove all files from the lists partial dir!
         currentRetry = 0
-        maxRetries = int(self.config.get("Network","MaxRetries"))
+        maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.update(progress)
@@ -457,7 +457,7 @@ class DistUpgradeControler(object):
         fprogress = self._view.getFetchProgress()
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
-        maxRetries = int(self.config.get("Network","MaxRetries"))
+        maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)
@@ -502,6 +502,10 @@ class DistUpgradeControler(object):
         now_foreign = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
         logging.debug("Obsolete: %s" % " ".join(now_obsolete))
         logging.debug("Foreign: %s" % " ".join(now_foreign))
+        # check if we actually want obsolete removal
+        if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
+            logging.debug("Skipping obsolete Removal")
+            return True
 
         # now get the meta-pkg specific obsoletes and purges
         for pkg in self.config.getlist("Distro","MetaPkgs"):

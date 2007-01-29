@@ -6,20 +6,30 @@ import apt_pkg
 def blacklisted(name):
    # we need to blacklist linux-image-* as it does not install
    # cleanly in the chroot (postinst failes)
-   blacklist = ["linux-image-","ltsp-client",
-		"glibc-doc-reference", "libpthread-dev",
-		"cman", "mysql-server", "fuse-utils",
-		"ltspfs", "gfs2-tools", "edubuntu-server",
-		"gnbd-client", "gnbd-server", "mysql-server-5.0",
-		"rgmanager", "clvm","redhat-cluster-suit",
-		# has a funny "can not be upgraded automatically" policy
-		# see debian #368226
-		"quagga",
-		"system-config-cluster", "gfs-tools"]
+   blacklist = [
+      # file-overwrite problem with libc6-dev
+      libpthread-dev,
+      # FUBAR (was removed in feisty)
+      glibc-doc-reference,
+      # has a funny "can not be upgraded automatically" policy
+      # see debian #368226
+      "quagga",
+      # the following packages try to access /lib/modules/`uname -r` and fail
+      "vmware-player-kernel-",
+      # not installable on a regular machine
+      "ltsp-client",
+      ]
    for b in blacklist:
 	   if name.startswith(b):
 		   return True
    return False
+
+def clear(cache):
+   cache._depcache.Init()
+
+def reapply(cache, pkgnames):
+   for name in pkgnames:
+      cache[name].markInstall(False)
 
 #apt_pkg.Config.Set("Dir::State::status","./empty")
 
@@ -29,6 +39,7 @@ group = apt_pkg.GetPkgActionGroup(cache._depcache)
 
 # see what gives us problems
 troublemaker = set()
+best = set()
 
 # first install all of main, then the rest
 for comp in ["main",None]:
@@ -49,6 +60,14 @@ for comp in ["main",None]:
                   if len(current-new) > 0:
                      troublemaker.add(pkg.name)
                      print "Installing '%s' caused removals %s" % (pkg.name, current - new)
+                  # FIXME: instead of len() use score() and score packages
+                  #        according to criteria like "in main", "priority" etc
+                  if len(new) >= len(best):
+                     best = new
+                  else:
+                     print "Installing '%s' reduced the set (%s < %s)" % (pkg.name, len(new), len(best))
+                     clear(cache)
+                     reapply(cache, best)
 
 print len(troublemaker)
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:

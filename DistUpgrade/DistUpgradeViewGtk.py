@@ -36,8 +36,8 @@ import apt
 import apt_pkg
 import os
 
-from apt.progress import InstallProgress
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime
+
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
 
 import gettext
@@ -182,6 +182,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.last_activity = 0.0
         
     def error(self, pkg, errormsg):
+        InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         #self.expander_terminal.set_expanded(True)
         self.parent.dialog_error.set_transient_for(self.parent.window_main)

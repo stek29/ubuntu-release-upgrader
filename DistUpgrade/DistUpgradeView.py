@@ -51,6 +51,7 @@ class InstallProgress(apt.progress.InstallProgress):
   """
   def error(self, pkg, errormsg):
     " install error from a package "
+    apt.progress.InstallProgress(self, pkg, errormsg)
     # now run apport
     s = "/usr/share/apport/package_hook"
     if os.path.exists(s):

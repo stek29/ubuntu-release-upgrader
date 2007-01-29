@@ -101,7 +101,6 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
-        print "KDEFetchProgressAdapter pulse"
         apt.progress.FetchProgress.pulse(self)
         self.progress.setProgress(self.percent)
         currentItem = self.currentItems + 1
@@ -188,17 +187,14 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if result == QDialog.Accepted:
-            print "result: accepted"
             self.parent.konsole.sendInput("y\n")
         else:
-            print "result: rejected"
             self.parent.konsole.sendInput("n\n")
 
     def fork(self):
         """pty voodoo to attach dpkg's pty to konsole"""
         self.pid = os.fork()
         if self.pid == 0:
-            print "child"
             os.dup2(self.parent.slave, 0)
             os.dup2(self.parent.slave, 1)
             os.dup2(self.parent.slave, 2)
@@ -207,7 +203,6 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def statusChange(self, pkg, percent, status):
         """update progress bar and label"""
-        print "statusChange(self, pkg, percent, status):"
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
@@ -230,23 +225,19 @@ class KDEInstallProgressAdapter(InstallProgress):
             self.progress_text.setText(" ")
 
     def child_exited(self, term, pid, status):
-        print "child_exited(self, term, pid, status):"
         self.apt_status = os.WEXITSTATUS(status)
         self.finished = True
 
     def waitChild(self):
-        print "waitChild(self):"
         while not self.finished:
             self.updateInterface()
         return self.apt_status
 
     def finishUpdate(self):
-        print "finishUpdate(self):"
         self.label_status.setText("")
-    
+
     def updateInterface(self):
         """no mainloop in this application, just call processEvents lots here, it's also important to sleep for a minimum amount of time"""
-        print "updateInterface(self):"
         try:
           InstallProgress.updateInterface(self)
         except ValueError, e:
@@ -269,15 +260,12 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def processExited(self, process):
         """slot called by konsole to tell dpkg the child has finished"""
-        print "processExited(self):"
-        print "exit status: " + str(process.exitStatus())
         self.finished = True
         self.apt_status = process.exitStatus()
 
 class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None):
-        print "DistUpgradeViewKDE init()"
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:
@@ -366,7 +354,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         return self._installProgress
 
     def getOpCacheProgress(self):
-        print "def getOpCacheProgress(self):"
         return self._opCacheProgress
 
     def updateStatus(self, msg):
@@ -490,8 +477,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         changesDialogue.label_summary.setText("<big><b>%s</b></big>" % summary)
         changesDialogue.label_changes.setText(msg)  ##FIXME s/\n/<br>/
-        print "changes: " + msg
-        print "summary: " + summary
         # fill in the details
         changesDialogue.treeview_details.clear()
         changesDialogue.treeview_details.setColumnText(0, "Packages")

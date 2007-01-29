@@ -1,3 +1,24 @@
+# DistUpgradeViewKDE.py 
+#  
+#  Copyright (c) 2007 Canonical Ltd
+#  
+#  Author: Jonathan Riddell <jriddell@ubuntu.com>
+# 
+#  This program is free software; you can redistribute it and/or 
+#  modify it under the terms of the GNU General Public License as 
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#  USA
+
 from qt import *
 from kdeui import *
 from kdecore import *
@@ -31,6 +52,7 @@ def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
 class KDEOpProgress(apt.progress.OpProgress):
+  """ methods on the progress bar """
   def __init__(self, progressbar, progressbar_label):
       self.progressbar = progressbar
       self.progressbar_label = progressbar_label
@@ -50,6 +72,7 @@ class KDEOpProgress(apt.progress.OpProgress):
       self.progressbar_label.setText("")
 
 class KDEFetchProgressAdapter(apt.progress.FetchProgress):
+    """ methods for updating the progress bar while fetching packages """
     # FIXME: we really should have some sort of "we are at step"
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
@@ -75,6 +98,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         self.status.setText(_("Fetching is complete"))
 
     def pulse(self):
+        """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
         print "KDEFetchProgressAdapter pulse"
@@ -95,6 +119,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         return True
 
 class KDEInstallProgressAdapter(InstallProgress):
+    """methods for updating the progress bar while installing packages"""
     # timeout with no status change when the terminal is expanded
     # automatically
     TIMEOUT_TERMINAL_ACTIVITY = 240
@@ -128,7 +153,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.last_activity = 0.0
 
     def error(self, pkg, errormsg):
-        print "FIXME error()"
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         msg="<big><b>%s</b></big><br />%s" % (summary, msg)
 
@@ -142,6 +166,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         dialogue.exec_loop()
 
     def conffile(self, current, new):
+        """ask question incase conffile has been changed by user"""
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
         start = time.time()
         prim = _("Replace the customized configuration file\n'%s'?") % current
@@ -170,20 +195,18 @@ class KDEInstallProgressAdapter(InstallProgress):
             self.parent.konsole.sendInput("n\n")
 
     def fork(self):
-        print "forking"
+        """pty voodoo to attach dpkg's pty to konsole"""
         self.pid = os.fork()
-        print "forked"
         if self.pid == 0:
             print "child"
             os.dup2(self.parent.slave, 0)
             os.dup2(self.parent.slave, 1)
             os.dup2(self.parent.slave, 2)
-            print "child"
         logging.debug(" fork pid is: %s" % self.pid)
-        print "fork() done"
         return self.pid
 
     def statusChange(self, pkg, percent, status):
+        """update progress bar and label"""
         print "statusChange(self, pkg, percent, status):"
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
@@ -222,6 +245,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText("")
     
     def updateInterface(self):
+        """no mainloop in this application, just call processEvents lots here, it's also important to sleep for a minimum amount of time"""
         print "updateInterface(self):"
         try:
           InstallProgress.updateInterface(self)
@@ -244,13 +268,14 @@ class KDEInstallProgressAdapter(InstallProgress):
         time.sleep(0.0000001)
 
     def processExited(self, process):
+        """slot called by konsole to tell dpkg the child has finished"""
         print "processExited(self):"
         print "exit status: " + str(process.exitStatus())
         self.finished = True
         self.apt_status = process.exitStatus()
 
 class DistUpgradeViewKDE(DistUpgradeView):
-    "KDE frontend of the distUpgrade tool "
+    """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None):
         print "DistUpgradeViewKDE init()"
         if not datadir:
@@ -273,13 +298,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.app = KApplication()
 
         self.mainWindow = KMainWindow()
-
         self.window_main = window_main(self.mainWindow)
-
         self.mainWindow.setCentralWidget(self.window_main)
         self.mainWindow.show()
-
-        app = KApplication.kApplication()
 
         self.prev_step = 0 # keep a record of the latest step
 
@@ -300,11 +321,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.konsoleWidget.show()
         app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
 
-        print "fork()"
+        #prepare for dpkg pty being attached to konsole
         (self.master, self.slave) = pty.openpty()
-        print "openpty done, calling setPty"
         self.konsole.setPtyFd(self.master)
-        print "setPtyFd done"
 
         self.window_main.konsole_frame.hide()
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
@@ -326,6 +345,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         sys.exit(1)
 
     def openURL(self, url):
+        """start konqueror"""
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
         KRun.runURL(KURL(url), "text/html")
@@ -417,6 +437,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         return False
 
     def confirmChanges(self, summary, changes, downloadSize, actions=None):
+        """show the changes dialogue"""
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)

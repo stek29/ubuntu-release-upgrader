@@ -436,15 +436,15 @@ class UpdateManager(SimpleGladeApp):
     except:
         print "warning: could not initiate dbus"
         return
-    proxy_obj = bus.get_object('org.freedesktop.UpdateManager', 
-                               '/org/freedesktop/UpdateManagerObject')
-    iface = dbus.Interface(proxy_obj, 'org.freedesktop.UpdateManagerIFace')
     try:
+        proxy_obj = bus.get_object('org.freedesktop.UpdateManager', 
+                                   '/org/freedesktop/UpdateManagerObject')
+        iface = dbus.Interface(proxy_obj, 'org.freedesktop.UpdateManagerIFace')
         iface.bringToFront()
         #print "send bringToFront"
         sys.exit(0)
     except dbus.DBusException, e:
-         print "no listening object (%s) "% e
+         #print "no listening object (%s) "% e
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
          self.dbusControler = UpdateManagerDbusControler(self, bus_name)
 

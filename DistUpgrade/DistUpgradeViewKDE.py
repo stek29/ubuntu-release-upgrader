@@ -162,6 +162,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
+        self.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
         dialogue.exec_loop()
 
     def conffile(self, current, new):
@@ -307,7 +308,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.konsoleWidget = self.konsole.widget()
         self.box.addWidget(self.konsoleWidget)
         self.konsoleWidget.show()
-        app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
+        self.app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
 
         #prepare for dpkg pty being attached to konsole
         (self.master, self.slave) = pty.openpty()
@@ -337,6 +338,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
         KRun.runURL(KURL(url), "text/html")
+
+    def reportBug(self, url):
+        """start konqueror"""
+        #need to run this else kdesu can't run Konqueror
+        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
+        KRun.runURL(KURL("https://launchpad.net/distros/ubuntu/+source/update-manager/+filebug"), "text/html")
 
     def showTerminal(self):
         if self.window_main.konsole_frame.isVisible():
@@ -408,8 +415,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         dialogue.exec_loop()
 
     def error(self, summary, msg, extended_msg=None):
-        ##FIXME implement close and report bug buttons
-        #self.expander_terminal.set_expanded(True)
         msg="<big><b>%s</b></big><br />%s" % (summary, msg)
 
         dialogue = dialog_error(self.window_main)
@@ -419,6 +424,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
+        self.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
         dialogue.exec_loop()
 
         return False
@@ -452,16 +458,16 @@ class DistUpgradeViewKDE(DistUpgradeView):
                                     pkgs_upgrade) % pkgs_upgrade
             msg +=" "
         if downloadSize > 0:
-            msg += _("\n\nYou have to download a total of %s. ") %\
+            msg += _("<br />You have to download a total of %s. ") %\
                      apt_pkg.SizeToStr(downloadSize)
             msg += estimatedDownloadTime(downloadSize)
             msg += "."
 
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-            msg += "\n\n%s" % _("Fetching and installing the upgrade can take several hours and "\
+            msg += "<br />%s" % _("Fetching and installing the upgrade can take several hours and "\
                                 "cannot be canceled at any time later.")
 
-        msg += "\n\n<b>%s</b>" % _("To prevent data loss close all open "\
+        msg += "<br /><b>%s</b>" % _("To prevent data loss close all open "\
                                    "applications and documents.")
 
         # Show an error if no actions are planned
@@ -476,7 +482,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         changesDialogue = dialog_changes(self.window_main)
 
         changesDialogue.label_summary.setText("<big><b>%s</b></big>" % summary)
-        changesDialogue.label_changes.setText(msg)  ##FIXME s/\n/<br>/
+        changesDialogue.label_changes.setText(msg)
         # fill in the details
         changesDialogue.treeview_details.clear()
         changesDialogue.treeview_details.setColumnText(0, "Packages")

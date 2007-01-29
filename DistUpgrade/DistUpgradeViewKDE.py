@@ -130,10 +130,8 @@ class KDEInstallProgressAdapter(InstallProgress):
     def error(self, pkg, errormsg):
         print "FIXME error()"
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-        msg="<big><b>%s</b></big>\n\n%s" % (summary, msg)
+        msg="<big><b>%s</b></big><br />%s" % (summary, msg)
 
-        #self.expander_terminal.set_expanded(True)
-        ##self.parent.dialog_error.set_transient_for(self.parent.window_main)
         dialogue = dialog_error(self.parent.window_main)
         dialogue.label_error.setText(msg)
         if extended_msg != None:
@@ -144,11 +142,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         dialogue.exec_loop()
 
     def conffile(self, current, new):
-        ##FIXME
-        print "conffile(self, current, new):"
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
         start = time.time()
-        #self.expander.set_expanded(True)
         prim = _("Replace the customized configuration file\n'%s'?") % current
         sec = _("You will lose any changes you have made to this "
                 "configuration file if you choose to replace it with "
@@ -233,18 +228,18 @@ class KDEInstallProgressAdapter(InstallProgress):
         except ValueError, e:
           logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
-	  self.read = ""
+          self.read = ""
         # check if we haven't started yet with packages, pulse then
         if self.start_time == 0.0:
-          ##FIXME self.progress.pulse()  makes it move back and forth
-          time.sleep(0.2)
+          #Gtk frontend does a pulse here to move bar back and forward, we can't do that in qt
+          time.sleep(0.0000001)
         # check about terminal activity
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
           if not self.activity_timeout_reported:
             logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
             self.activity_timeout_reported = True
-          ##FIXME self.parent.expander_terminal.set_expanded(True)
+          self.parent.konsole_frame.show()
         KApplication.kApplication().processEvents()
         time.sleep(0.0000001)
 
@@ -270,7 +265,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         except Exception, e:
           logging.warning("Error setting locales (%s)" % e)
 
-        about=KAboutData("upgrade-tool","Upgrader","0.1","Dist Upgrade Tool for Kubuntu",KAboutData.License_GPL,"(c) 2007 Canonical Ltd",
+        about=KAboutData("adept_manager","Upgrader","0.1","Dist Upgrade Tool for Kubuntu",KAboutData.License_GPL,"(c) 2007 Canonical Ltd",
         "http://wiki.kubuntu.org/KubuntuUpdateManager", "jriddell@ubuntu.com")
         about.addAuthor("Jonathan Riddell", None,"jriddell@ubuntu.com")
         KCmdLineArgs.init(["./dist-upgrade.py"],about)
@@ -280,37 +275,19 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.mainWindow = KMainWindow()
 
         self.window_main = window_main(self.mainWindow)
-        
+
         self.mainWindow.setCentralWidget(self.window_main)
         self.mainWindow.show()
 
         app = KApplication.kApplication()
 
-        """FIXME set icon
-        icons = gtk.icon_theme_get_default()
-        """
-
         self.prev_step = 0 # keep a record of the latest step
 
         self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache, self.window_main.progress_text)
         self._fetchProgress = KDEFetchProgressAdapter(self)
-        """
-        self._cdromProgress = GtkCdromProgressAdapter(self)
-        """
+        ##FIXME self._cdromProgress = GtkCdromProgressAdapter(self)
+
         self._installProgress = KDEInstallProgressAdapter(self)
-        """
-        # details dialog
-        self.details_list = gtk.ListStore(gobject.TYPE_STRING)
-        column = gtk.TreeViewColumn("")
-        render = gtk.CellRendererText()
-        column.pack_start(render, True)
-        column.add_attribute(render, "markup", 0)
-        self.treeview_details.append_column(column)
-        self.treeview_details.set_model(self.details_list)
-        self.vscrollbar_terminal.set_adjustment(self._term.get_adjustment())
-        # work around bug in VteTerminal here
-        self._term.realize()
-        """
 
         # reasonable fault handler
         sys.excepthook = self._handleException
@@ -319,10 +296,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
         self.konsole.setAutoStartShell(False)
         self.konsoleWidget = self.konsole.widget()
-        #self.part = konsoleFactory.createReadOnlyPart("libkonsolepart", self.window_main.konsole_frame)
-        #self.w = self.part.widget()
         self.box.addWidget(self.konsoleWidget)
-        #self.w.setGeometry(30, 55, 500, 400)
         self.konsoleWidget.show()
         app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
 
@@ -331,10 +305,31 @@ class DistUpgradeViewKDE(DistUpgradeView):
         print "openpty done, calling setPty"
         self.konsole.setPtyFd(self.master)
         print "setPtyFd done"
-        
+
         self.window_main.konsole_frame.hide()
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
-        
+
+    def _handleException(self, exctype, excvalue, exctb):
+        """Crash handler."""
+
+        if (issubclass(exctype, KeyboardInterrupt) or
+            issubclass(exctype, SystemExit)):
+            return
+
+        tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
+        logging.error("Exception in KDE frontend (invoking crash handler):")
+        logging.error(tbtext)
+        dialog = CrashDialog(self.window_main)
+        dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
+        dialog.crash_detail.setText(tbtext)
+        dialog.exec_loop()
+        sys.exit(1)
+
+    def openURL(self, url):
+        #need to run this else kdesu can't run Konqueror
+        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
+        KRun.runURL(KURL(url), "text/html")
+
     def showTerminal(self):
         if self.window_main.konsole_frame.isVisible():
             self.window_main.konsole_frame.hide()
@@ -357,42 +352,58 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def updateStatus(self, msg):
         self.window_main.label_status.setText("%s" % msg)
 
+    def hideStep(self, step):
+        image = getattr(self.window_main,"image_step%i" % step)
+        label = getattr(self.window_main,"label_step%i" % step)
+        image.hide()
+        label.hide()
+
     def abort(self):
         step = self.prev_step
         if step > 0:
             image = getattr(self.window_main,"image_step%i" % step)
-            image.setPixmap(QPixmap("/usr/share/apps/knetworkconf/pixmaps/kubuntu.png"))
+            iconLoader = KIconLoader()
+            cancelIcon = iconLoader.loadIcon("cancel", KIcon.Small)
+            image.setPixmap(cancelIcon)
             image.show()
 
     def setStep(self, step):
-        ##FIXME if self.icontheme.rescan_if_needed():
-        ##  logging.debug("icon theme changed, re-reading")
-        # first update the "previous" step as completed
-        ##size = gtk.ICON_SIZE_MENU
-        ##attrlist=pango.AttrList()
+        iconLoader = KIconLoader()
         if self.prev_step:
             image = getattr(self.window_main,"image_step%i" % self.prev_step)
             label = getattr(self.window_main,"label_step%i" % self.prev_step)
-            ##arrow = getattr(self.window_main,"arrow_step%i" % self.prev_step)
-            ##label.set_property("attributes",attrlist)
-            ##image.set_from_stock(gtk.STOCK_APPLY, size)
-            image.setPixmap(QPixmap("/usr/share/icons/crystalsvg/16x16/actions/ok.png"))
+            okIcon = iconLoader.loadIcon("ok", KIcon.Small)
+            image.setPixmap(okIcon)
             image.show()
             ##arrow.hide()
         self.prev_step = step
         # show the an arrow for the current step and make the label bold
         image = getattr(self.window_main,"image_step%i" % step)
         label = getattr(self.window_main,"label_step%i" % step)
-        ##arrow = getattr(self.window_main,"arrow_step%i" % step)
-        ##arrow.show()
-        image.setPixmap(QPixmap("/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png"))
+        arrowIcon = iconLoader.loadIcon("1rightarrow", KIcon.Small)
+        image.setPixmap(arrowIcon)
         image.show()
         label.setText("<b>" + label.text() + "</b>")
+
+    def information(self, summary, msg, extended_msg=None):
+        msg = "<big><b>%s</b></big><br />%s" % (summary,msg)
+        dialogue = dialog_error(self.window_main)
+        dialogue.label_error.setText(msg)
+        if extended_msg != None:
+            dialogue.textview_error.setText(utf8(extended_msg))
+            dialogue.textview_error.show()
+        else:
+            dialogue.textview_error.hide()
+        dialogue.button_bugreport.hide()
+        iconLoader = KIconLoader()
+        messageIcon = iconLoader.loadIcon("messagebox_info", KIcon.Panel)
+        dialogue.image.setPixmap(messageIcon)
+        dialogue.exec_loop()
 
     def error(self, summary, msg, extended_msg=None):
         ##FIXME implement close and report bug buttons
         #self.expander_terminal.set_expanded(True)
-        msg="<big><b>%s</b></big>\n\n%s" % (summary, msg)
+        msg="<big><b>%s</b></big><br />%s" % (summary, msg)
 
         dialogue = dialog_error(self.window_main)
         dialogue.label_error.setText(msg)
@@ -454,12 +465,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
             self.error(summary, msg)
             return False
 
-        ##FIXMEif actions != None:
-        #    self.button_cancel_changes.set_use_stock(False)
-        #    self.button_cancel_changes.set_use_underline(True)
-        #    self.button_cancel_changes.set_label(actions[0])
-        #    self.button_confirm_changes.set_label(actions[1])
-
         changesDialogue = dialog_changes(self.window_main)
 
         changesDialogue.label_summary.setText("<big><b>%s</b></big>" % summary)
@@ -467,21 +472,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
         print "changes: " + msg
         print "summary: " + summary
         # fill in the details
-        ##FIXME
         changesDialogue.treeview_details.clear()
+        changesDialogue.treeview_details.setColumnText(0, "Packages")
         for rm in self.toRemove:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("<b>Remove %s</b>") % rm) )
+            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Remove %s") % rm) )
         for inst in self.toInstall:
             changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Install %s") % inst) )
         for up in self.toUpgrade:
             changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Upgrade %s") % up) )
-        #self.treeview_details.scroll_to_cell((0,))
-        #self.dialog_changes.set_transient_for(self.window_main)
-        #self.dialog_changes.realize()
-        #self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE)
-        #res = self.dialog_changes.run()
         res = changesDialogue.exec_loop()
-        #self.dialog_changes.hide()
         if res == QDialog.Accepted:
             return True
         return False
@@ -491,24 +490,3 @@ class DistUpgradeViewKDE(DistUpgradeView):
         if restart == QMessageBox.Yes:
             return True
         return False
-
-    def _handleException(self, exctype, excvalue, exctb):
-        """Crash handler."""
-
-        if (issubclass(exctype, KeyboardInterrupt) or
-            issubclass(exctype, SystemExit)):
-            return
-
-        tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
-        logging.error("Exception in KDE frontend (invoking crash handler):")
-        logging.error(tbtext)
-        dialog = CrashDialog(self.window_main)
-        dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
-        dialog.crash_detail.setText(tbtext)
-        dialog.exec_loop()
-        sys.exit(1)
-
-    def openURL(self, url):
-        #need to run this else kdesu can't run Konqueror
-        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
-        KRun.runURL(KURL(url), "text/html")

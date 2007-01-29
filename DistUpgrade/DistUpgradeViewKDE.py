@@ -51,6 +51,26 @@ from gettext import gettext as _
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
+class KDECdromProgressAdapter(apt.progress.CdromProgress):
+    """ Report the cdrom add progress """
+    def __init__(self, parent):
+        self.status = parent.window_main.label_status
+        self.progress = parent.window_main.progressbar_cache
+        self.parent = parent
+
+    def update(self, text, step):
+        """ update is called regularly so that the gui can be redrawn """
+        if text:
+          self.status.setText(text)
+        self.progressbar.setProgress(percent)
+        KApplication.kApplication().processEvents()
+
+    def askCdromName(self):
+        return (False, "")
+
+    def changeCdrom(self):
+        return False
+
 class KDEOpProgress(apt.progress.OpProgress):
   """ methods on the progress bar """
   def __init__(self, progressbar, progressbar_label):
@@ -295,7 +315,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache, self.window_main.progress_text)
         self._fetchProgress = KDEFetchProgressAdapter(self)
-        ##FIXME self._cdromProgress = GtkCdromProgressAdapter(self)
+        self._cdromProgress = KDECdromProgressAdapter(self)
 
         self._installProgress = KDEInstallProgressAdapter(self)
 
@@ -362,6 +382,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
     def getOpCacheProgress(self):
         return self._opCacheProgress
+
+    def getCdromProgress(self):
+        return self._cdromProgress
 
     def updateStatus(self, msg):
         self.window_main.label_status.setText("%s" % msg)
@@ -458,16 +481,16 @@ class DistUpgradeViewKDE(DistUpgradeView):
                                     pkgs_upgrade) % pkgs_upgrade
             msg +=" "
         if downloadSize > 0:
-            msg += _("<br />You have to download a total of %s. ") %\
+            msg += _("<p>You have to download a total of %s. ") %\
                      apt_pkg.SizeToStr(downloadSize)
             msg += estimatedDownloadTime(downloadSize)
             msg += "."
 
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-            msg += "<br />%s" % _("Fetching and installing the upgrade can take several hours and "\
+            msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
                                 "cannot be canceled at any time later.")
 
-        msg += "<br /><b>%s</b>" % _("To prevent data loss close all open "\
+        msg += "<p><b>%s</b>" % _("To prevent data loss close all open "\
                                    "applications and documents.")
 
         # Show an error if no actions are planned

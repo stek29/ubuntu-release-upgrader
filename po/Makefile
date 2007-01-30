@@ -1,4 +1,6 @@
 
+top_srcdir=`pwd`/..
+
 DOMAIN=update-manager
 PO_FILES := $(wildcard *.po)
 CONTACT=sebastian.heinlein@web.de

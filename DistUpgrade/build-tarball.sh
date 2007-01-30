@@ -10,6 +10,9 @@ rm -f *~ *.bak *.pyc *.moved '#'* *.rej *.orig
 # update po
 (cd ../po; make update-po)
 
+# make the kde-gui
+for file in *ui; do kdepyuic $${file}; done
+
 # copy the mo files
 cp -r ../po/mo .
 

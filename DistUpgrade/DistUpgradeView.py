@@ -20,8 +20,9 @@
 #  USA
 
 from gettext import gettext as _
-import apt
 import subprocess
+import apt
+import os
 
 # directory for the logs
 LOGDIR="/var/log/dist-upgrader/"
@@ -51,11 +52,11 @@ class InstallProgress(apt.progress.InstallProgress):
   """
   def error(self, pkg, errormsg):
     " install error from a package "
-    apt.progress.InstallProgress(self, pkg, errormsg)
+    apt.progress.InstallProgress.error(self, pkg, errormsg)
     # now run apport
     s = "/usr/share/apport/package_hook"
     if os.path.exists(s):
-      p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=PIPE)
+      p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
       p.stdin.write("ErrorMessage: %s\n" % errormsg)
 
 class DumbTerminal(object):

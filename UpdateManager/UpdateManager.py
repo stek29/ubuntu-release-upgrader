@@ -776,7 +776,7 @@ class UpdateManager(SimpleGladeApp):
   def exit(self):
     """ exit the application, save the state """
     self.save_state()
-    gtk.main_quit()
+    #gtk.main_quit()
     sys.exit(0)
 
   def save_state(self):

@@ -8,7 +8,6 @@ from DistUtilsExtra.distutils_extra import build_extra, build_l10n, \
 
 setup(name='update-manager',
       version='0.42.2',
-      ext_modules=[Extension('fdsend', ['fdsend/fdsend.c'])],
       packages=[
                 'UpdateManager',
                 'UpdateManager.Common',

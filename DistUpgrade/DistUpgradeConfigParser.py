@@ -1,4 +1,4 @@
-from ConfigParser import ConfigParser, NoOptionError
+from ConfigParser import ConfigParser, NoOptionError, NoSectionError
 
 
 class DistUpgradeConfig(ConfigParser):

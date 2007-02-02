@@ -16,4 +16,3 @@ $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
 	$(if $(wildcard /usr/bin/dh_desktop),dh_desktop -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
 	$(if $(wildcard /usr/bin/dh_iconcache),dh_iconcache -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
 endif
-

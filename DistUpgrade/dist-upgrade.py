@@ -18,7 +18,7 @@ if __name__ == "__main__":
     parser.add_option("--without-network", dest="withNetwork",action="store_false")
     parser.add_option("--frontend", dest="frontend",default=None,
                       help="Use frontend. Currently available: \n"\
-                           "DistUpgradeViewText, DistUpgradeViewGtk")
+                           "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE")
     (options, args) = parser.parse_args()
 
     if not os.path.exists("/var/log/dist-upgrade"):
@@ -34,13 +34,12 @@ if __name__ == "__main__":
     try:
         view_modul = __import__(requested_view)
         view_class = getattr(view_modul, requested_view)
-        view = view_class()
     except (ImportError, AttributeError):
         logging.error("can't import view '%s'" % requested_view)
         print "can't find %s" % requested_view
         sys.exit(1)
+    view = view_class()
     app = DistUpgradeControler(view, options)
-
     app.run()
 
     # testcode to see if the bullets look nice in the dialog

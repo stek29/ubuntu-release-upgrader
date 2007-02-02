@@ -611,7 +611,6 @@ class DistUpgradeControler(object):
             pkg = self.cache[pkgname]
             # look for the right version (backport)
             for ver in pkg._pkg.VersionList:
-                print ver.VerStr
                 if self.config.get("Backports","VersionIdent") in ver.VerStr:
                     break
             else:
@@ -619,7 +618,6 @@ class DistUpgradeControler(object):
                 raise Exception, "No backport found!?!"
                 return False
             if ver.FileList == None:
-                print "No FileList for: %s " % self._pkg.Name()
                 return False
             f, index = ver.FileList.pop(0)
             pkg._records.Lookup((f,index))
@@ -761,7 +759,6 @@ class DistUpgradeControler(object):
 
 
 if __name__ == "__main__":
-    print "test"
     from DistUpgradeView import DistUpgradeView
     v = DistUpgradeView()
     dc = DistUpgradeControler(v)

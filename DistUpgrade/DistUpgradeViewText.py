@@ -69,6 +69,7 @@ class DistUpgradeViewText(DistUpgradeView):
 
     def _handleException(self, type, value, tb):
       import traceback
+      print
       lines = traceback.format_exception(type, value, tb)
       logging.error("not handled expection:\n%s" % "\n".join(lines))
       self.error(_("A fatal error occured"),
@@ -91,17 +92,21 @@ class DistUpgradeViewText(DistUpgradeView):
     def getCdromProgress(self):
         return self._cdromProgress
     def updateStatus(self, msg):
+      print
       print msg
     def abort(self):
+      print
       print _("Aborting")
     def setStep(self, step):
       self.last_step = step
     def information(self, summary, msg, extended_msg=None):
+      print
       print summary
       print msg
       if extended_msg:
         print extended_msg
     def error(self, summary, msg, extended_msg=None):
+      print
       print summary
       print msg
       if extended_msg:
@@ -112,8 +117,9 @@ class DistUpgradeViewText(DistUpgradeView):
       pkgs_remove = len(self.toRemove)
       pkgs_inst = len(self.toInstall)
       pkgs_upgrade = len(self.toUpgrade)
-      msg = ""
+      msg = "\n"
 
+      # FIXME: show detailed packages
       if pkgs_remove > 0:
         # FIXME: make those two seperate lines to make it clear
         #        that the "%" applies to the result of ngettext
@@ -121,25 +127,25 @@ class DistUpgradeViewText(DistUpgradeView):
                                 "%d packages are going to be removed.",
                                 pkgs_remove) % pkgs_remove
         msg += " "
-        if pkgs_inst > 0:
-          msg += gettext.ngettext("%d new package is going to be "
-                                  "installed.",
-                                  "%d new packages are going to be "
-                                  "installed.",pkgs_inst) % pkgs_inst
-          msg += " "
-        if pkgs_upgrade > 0:
-          msg += gettext.ngettext("%d package is going to be upgraded.",
-                                  "%d packages are going to be upgraded.",
-                                  pkgs_upgrade) % pkgs_upgrade
-          msg +=" "
-        if downloadSize > 0:
-          msg += _("\n\nYou have to download a total of %s. ") %\
-                 apt_pkg.SizeToStr(downloadSize)
-          msg += estimatedDownloadTime(downloadSize)
-          msg += "."
-        if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-          msg += "\n\n%s" % _("Fetching and installing the upgrade can take several hours and "\
-                              "cannot be canceled at any time later.")
+      if pkgs_inst > 0:
+        msg += gettext.ngettext("%d new package is going to be "
+                                "installed.",
+                                "%d new packages are going to be "
+                                "installed.",pkgs_inst) % pkgs_inst
+        msg += " "
+      if pkgs_upgrade > 0:
+        msg += gettext.ngettext("%d package is going to be upgraded.",
+                                "%d packages are going to be upgraded.",
+                                pkgs_upgrade) % pkgs_upgrade
+        msg +=" "
+      if downloadSize > 0:
+        msg += _("\n\nYou have to download a total of %s. ") %\
+               apt_pkg.SizeToStr(downloadSize)
+        msg += estimatedDownloadTime(downloadSize)
+        msg += "."
+      if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
+        msg += "\n\n%s" % _("Fetching and installing the upgrade can take several hours and "\
+                            "cannot be canceled at any time later.")
 
       # Show an error if no actions are planned
       if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
@@ -153,11 +159,12 @@ class DistUpgradeViewText(DistUpgradeView):
       return self.askYesNoQuestion(summary, msg)
 
     def askYesNoQuestion(self, summary, msg):
+      print
       print summary
       print msg
-      print _("Continue [Yn] "),
+      print _("Continue [yN] "),
       res = sys.stdin.readline()
-      if res.strip().lower().startswith("y"):
+      if res.strip().lower().startswith(_("y")):
         return True
       return False
     

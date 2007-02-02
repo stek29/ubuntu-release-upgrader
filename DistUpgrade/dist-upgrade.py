@@ -6,19 +6,23 @@ import logging
 import os
 import sys
 from optparse import OptionParser
+from gettext import gettext as _
 
 if __name__ == "__main__":
 
     parser = OptionParser()
     parser.add_option("-c", "--cdrom", dest="cdromPath", default=None,
-                      help="Use the given path to search for a cdrom with upgradable packages")
+                      help=_("Use the given path to search for a cdrom with upgradable packages"))
     parser.add_option("--have-backports", dest="haveBackports",
                       action="store_true", default=False)
     parser.add_option("--with-network", dest="withNetwork",action="store_true")
     parser.add_option("--without-network", dest="withNetwork",action="store_false")
     parser.add_option("--frontend", dest="frontend",default=None,
-                      help="Use frontend. Currently available: \n"\
-                           "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE")
+                      help=_("Use frontend. Currently available: \n"\
+                             "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"))
+    parser.add_option("--mode", dest="mode",default="desktop",
+                      help=_("Use special upgrade mode. Available:\n"\
+                             "desktop, server"))
     (options, args) = parser.parse_args()
 
     if not os.path.exists("/var/log/dist-upgrade"):

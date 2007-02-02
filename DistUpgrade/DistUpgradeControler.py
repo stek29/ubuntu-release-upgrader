@@ -117,6 +117,11 @@ class DistUpgradeControler(object):
         else:
             cdrompath = None
         self.aptcdrom = AptCdrom(distUpgradeView, cdrompath)
+
+        # we act differently in server mode
+        self.serverMode = False
+        if self.options.mode == "server":
+            self.serverMode = True
         
         # the configuration
         self.config = DistUpgradeConfig(datadir)
@@ -337,6 +342,8 @@ class DistUpgradeControler(object):
         # compare the list after the update again
         self.obsolete_pkgs = self.cache._getObsoletesPkgs()
         self.foreign_pkgs = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
+        if self.serverMode:
+            self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
 
@@ -426,8 +433,11 @@ class DistUpgradeControler(object):
         return True
 
     def askDistUpgrade(self):
-        if not self.cache.distUpgrade(self._view):
+        if not self.cache.distUpgrade(self._view, self.serverMode):
             return False
+        if self.serverMode:
+            if not self.cache.installTasks(self.tasks):
+                return False
         changes = self.cache.getChanges()
         # log the changes for debuging
         self._logChanges()

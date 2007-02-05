@@ -149,8 +149,41 @@ class DistUpgradeControler(object):
     def openCache(self):
         self.cache = MyCache(self.config, self._view.getOpCacheProgress())
 
+    def _sshMagic(self):
+        """ this will check for server mode and if we run over ssh.
+            if this is the case, we will ask and spawn a additional
+            daemon (to be sure we have a spare one around in case
+            of trouble)
+        """
+        if (self.serverMode and
+            (os.environ.has_key("SSH_CONNECTION") or
+             os.environ.has_key("SSH_TTY"))):
+            port = 9004
+            res = self._view.askYesNoQuestion(
+                _("Continue runing under SSH?"),
+                _("This session appears to be runing under ssh. "
+                  "It is not recommended to perform a upgrade "
+                  "over ssh currently because in case of failure "
+                "it is harder to recover.\n\n"
+                  "If you continue, a additional ssh daemon will be "
+                  "started at port '%s'.\n"
+                  "Do you want to continue?") % port)
+            # abort
+            if res == False:
+                sys.exit(1)
+            res = subprocess.call(["/usr/sbin/sshd","-p",str(port)])
+            if res == 0:
+                self._view.information(
+                    _("Starting additional sshd"),
+                    _("To make recovery in case of failure easier a "
+                      "additional sshd will be started on port '%s'. "
+                      "If anything goes wrong with the runing ssh "
+                      "you can still connect to the additional one.\n"
+                      ) % port)
+
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
+        self._sshMagic()
         try:
             self.openCache()
         except SystemError, e:
@@ -679,7 +712,7 @@ class DistUpgradeControler(object):
         os.execve(sys.argv[0],args, os.environ)
 
     # this is the core
-    def edgyUpgrade(self):
+    def fullUpgrade(self):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
         self._view.setStep(1)
@@ -770,7 +803,7 @@ class DistUpgradeControler(object):
             subprocess.call(["reboot"])
         
     def run(self):
-        self.edgyUpgrade()
+        self.fullUpgrade()
 
 
 if __name__ == "__main__":

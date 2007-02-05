@@ -34,7 +34,10 @@ import shutil
 import glob
 from DistUpgradeConfigParser import DistUpgradeConfig
 
-from aptsources import SourcesList, SourceEntry, Distribution, is_mirror
+from sourceslist import SourcesList, SourceEntry, is_mirror
+from distro import Distribution, get_distro
+
+
 from gettext import gettext as _
 import gettext
 from DistUpgradeCache import MyCache
@@ -173,10 +176,12 @@ class DistUpgradeControler(object):
         logging.debug("rewriteSourcesList()")
 
         # enable main (we always need this!)
-        distro = Distribution()
+        distro = get_distro()
+        # FIXME: get_sources() needs to be called to init
+        #        self.main_sources, this should be fixed in python-apt
         distro.get_sources(self.sources)
         # make sure that main is enabled
-        distro.enable_component(self.sources, "main")
+        distro.enable_component("main")
 
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange

@@ -1,16 +1,16 @@
 Source: update-manager
 Section: gnome
 Priority: optional
+XS-Python-Version: all
 Maintainer: Michael Vogt <michael.vogt@ubuntu.com>
-Build-Depends: debhelper (>= 5.0.38), python-dev, python-central (>= 0.5.6), python-kde3-dev
+Build-Depends: debhelper (>= 5.0.38), python-dev, python-central (>= 0.5.6), python-kde3-dev, python-distutils-extra
 Build-Depends-Indep: libxml-parser-perl, scrollkeeper, intltool
 Standards-Version: 3.7.2
-XS-Python-Version: current
 
 Package: update-manager
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, python-glade2, python-apt (>= 0.6.16.2), synaptic (>= 0.57.8), lsb-release,  python-gnupginterface, unattended-upgrades, gksu, iso-codes, python-dbus, python-vte, python-gconf
 XB-Python-Version: ${python:Versions}
+Depends: ${python:Depends}, ${misc:Depends}, python-glade2, python-apt (>= 0.6.16.2), synaptic (>= 0.57.8), lsb-release,  python-gnupginterface, gksu, python-dbus, python-vte, python-gconf
 Description: GNOME application that manages apt updates
  This is the GNOME apt update manager. It checks for updates and lets the user
  choose which to install.

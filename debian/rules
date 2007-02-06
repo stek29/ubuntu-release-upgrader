@@ -16,3 +16,10 @@ $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
 	$(if $(wildcard /usr/bin/dh_desktop),dh_desktop -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
 	$(if $(wildcard /usr/bin/dh_iconcache),dh_iconcache -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
 endif
+
+arch-build::
+        rm -rf debian/arch-build
+        mkdir debian/arch-build
+        bzr checkout --lightweight . debian/arch-build/$(PKG)-$(DEBVER)
+        (cd debian/arch-build/$(PKG)-$(DEBVER) && $(DEB_BUILD_PROG))
+

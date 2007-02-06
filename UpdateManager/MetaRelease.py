@@ -46,6 +46,7 @@ class MetaRelease(gobject.GObject):
     # some constants
     METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
     METARELEASE_URI_UNSTABLE = "http://changelogs.ubuntu.com/meta-release-development"
+    METARELEASE_URI_PROPOSED = "http://changelogs.ubuntu.com/meta-release-proposed"
     METARELEASE_FILE = "/var/lib/update-manager/meta-release"
 
     __gsignals__ = { 
@@ -58,11 +59,13 @@ class MetaRelease(gobject.GObject):
 
         }
 
-    def __init__(self, useDevelopmentRelase=False):
+    def __init__(self, useDevelopmentRelase=False, useProposed=False):
         gobject.GObject.__init__(self)
         # check what uri to use
         if useDevelopmentRelase:
             self.METARELEASE_URI = self.METARELEASE_URI_UNSTABLE
+        elif useProposed:
+            self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
         # check if we can access the METARELEASE_FILE
         if not os.access(self.METARELEASE_FILE, os.F_OK|os.W_OK|os.R_OK):
             path = os.path.expanduser("~/.update-manager/")

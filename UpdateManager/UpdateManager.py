@@ -962,7 +962,7 @@ class UpdateManager(SimpleGladeApp):
 
   def main(self, options):
     gconfclient = gconf.client_get_default() 
-    self.meta = MetaRelease(options.devel_release)
+    self.meta = MetaRelease(options.devel_release, options.use_proposed)
     self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
 
     # check if we are interessted in dist-upgrade information

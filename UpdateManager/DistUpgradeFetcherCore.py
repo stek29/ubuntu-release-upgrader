@@ -34,9 +34,9 @@ from gettext import gettext as _
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "
     
-    def __init__(self, new_dist):
+    def __init__(self, new_dist, progress):
         self.new_dist = new_dist
-        self._progress = apt.progress.FetchProgress()
+        self._progress = progress
 
     def showReleaseNotes(self):
         return True

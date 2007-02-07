@@ -23,7 +23,6 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
-import GtkProgress
 from ReleaseNotesViewer import ReleaseNotesViewer
 from Common.utils import *
 from DistUpgradeFetcherCore import DistUpgradeFetcherCore
@@ -32,16 +31,11 @@ import urllib2
 
 class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
 
-    def __init__(self, new_dist, parent):
-        DistUpgradeFetcherCore.__init__(self,new_dist)
+    def __init__(self, new_dist, progress, parent):
+        DistUpgradeFetcherCore.__init__(self,new_dist,progress)
         self.parent = parent
         self.window_main = parent.window_main
-        self._progress = GtkProgress.GtkFetchProgress(self.parent,
-                                             _("Downloading the upgrade "
-                                               "tool"),
-                                             _("The upgrade tool will "
-                                               "guide you through the "
-                                               "upgrade process."))
+
     def error(self, summary, message):
         return error(self.window_main, summary, message)
 

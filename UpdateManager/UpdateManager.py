@@ -872,7 +872,13 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self)
+      progress = GtkProgress.GtkFetchProgress(self.parent,
+                                              _("Downloading the upgrade "
+                                                "tool"),
+                                              _("The upgrade tool will "
+                                                "guide you through the "
+                                                "upgrade process."))
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=progress)
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):

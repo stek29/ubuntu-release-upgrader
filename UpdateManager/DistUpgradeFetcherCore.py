@@ -37,6 +37,8 @@ class DistUpgradeFetcherCore(object):
     def __init__(self, new_dist, progress):
         self.new_dist = new_dist
         self._progress = progress
+        # options to pass to the release upgrader when it is run
+        self.run_options = []
 
     def showReleaseNotes(self):
         return True
@@ -133,7 +135,7 @@ class DistUpgradeFetcherCore(object):
         if os.getuid() != 0:
             os.execv("/usr/bin/gksu",["gksu",self.script])
         else:
-            os.execv(self.script,[self.script])
+            os.execv(self.script,[self.script]+self.run_options)
 
     def cleanup(self):
       # cleanup

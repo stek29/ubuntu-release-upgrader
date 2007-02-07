@@ -46,9 +46,9 @@ class MetaReleaseCore(object):
     METARELEASE_URI_PROPOSED = "http://changelogs.ubuntu.com/meta-release-proposed"
     METARELEASE_FILE = "/var/lib/update-manager/meta-release"
 
-    def __init__(self, useDevelopmentRelase=False, useProposed=False):
+    def __init__(self, useDevelopmentRelease=False, useProposed=False):
         # check what uri to use
-        if useDevelopmentRelase:
+        if useDevelopmentRelease:
             self.METARELEASE_URI = self.METARELEASE_URI_UNSTABLE
         elif useProposed:
             self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
@@ -60,9 +60,10 @@ class MetaReleaseCore(object):
             self.METARELEASE_FILE = os.path.join(path,"meta-release")
         self.metarelease_information = None
         self.downloading = True
+        # information about the available dists
+        self.new_dist = None
+        self.no_longer_supported = None
         # we start the download thread here and we have a timeout
-        # in the gtk space to test if the download already finished
-        # this is needed because gtk is not thread-safe
         t=thread.start_new_thread(self.download, ())
         #t=thread.start_new_thread(self.check, ())
 
@@ -70,12 +71,12 @@ class MetaReleaseCore(object):
         """ virtual function that is called when the distro is no longer
             supported
         """
-        pass
+        self.no_longer_supported = dist
     def new_dist_available(self, dist):
         """ virtual function that is called when a new distro release
             is available
         """
-        pass
+        self.new_dist = dist
 
     def get_dist(self):
         " return the codename of the current runing distro "
@@ -88,7 +89,6 @@ class MetaReleaseCore(object):
     
     def check(self):
         #print "check"
-        #time.sleep(1000)
         # check if we have a metarelease_information file
         if self.metarelease_information != None:
             self.parse()
@@ -178,4 +178,5 @@ class MetaReleaseCore(object):
             if os.path.exists(self.METARELEASE_FILE):
                 f=open(self.METARELEASE_FILE,"r")
         # now check the information we have
+        self.downloading = False
         self.check()

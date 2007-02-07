@@ -32,6 +32,7 @@ import re
 import statvfs
 import shutil
 import glob
+import time
 from DistUpgradeConfigParser import DistUpgradeConfig
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
@@ -186,8 +187,24 @@ class DistUpgradeControler(object):
             and we have network - we will then try to fetch a update
             of ourself
         """  
-        pass
-
+        from MetaRelease import MetaReleaseCore
+        from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
+        # FIXME: during testing, we want "useDevelopmentRelease"
+        #        but not after the release
+        m = MetaReleaseCore(useDevelopmentRelease=False)
+        # this will timeout eventually
+        while m.downloading:
+            time.sleep(0.5)
+        if m.new_dist is None:
+            logging.error("No new dist found")
+            return False
+        # we have a new dist
+        progress = self._view.getFetchProgress()
+        fetcher = DistUpgradeFetcherSelf(new_dist=m.new_dist,
+                                         progress=progress,
+                                         options=self.options,
+                                         view=self._view)
+        fetcher.run()
     
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
@@ -211,7 +228,8 @@ class DistUpgradeControler(object):
                                               )
             self.useNetwork = res
             logging.debug("useNetwork: '%s' (selected by user)" % res)
-            self._tryUpdateSelf()
+            if res:
+                self._tryUpdateSelf()
         return True
 
     def rewriteSourcesList(self, mirror_check=True):

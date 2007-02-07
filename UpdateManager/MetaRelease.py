@@ -169,5 +169,5 @@ class MetaReleaseCore(object):
                 f=open(self.METARELEASE_FILE,"r")
         # now check the information we have
         self.downloading = False
-        self.metarelease_information != None:
+        if self.metarelease_information != None:
             self.parse()

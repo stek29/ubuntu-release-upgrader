@@ -1,0 +1,37 @@
+#!/usr/bin/python
+
+import warnings
+warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
+import apt
+
+from UpdateManager.MetaRelease import MetaReleaseCore
+from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherCore
+from optparse import OptionParser
+from gettext import gettext as _
+import time
+import sys
+
+if __name__ == "__main__":
+
+  parser = OptionParser()
+  parser.add_option ("-d", "--devel-release", action="store_true",
+                     dest="devel_release", default=False,
+                     help=_("Check if upgrading to the latest devel release "
+                          "is possible"))
+  (options, args) = parser.parse_args()
+
+  print _("Checking for a new ubuntu release")
+  m = MetaReleaseCore(useDevelopmentRelease=options.devel_release)
+  # this will timeout eventually
+  while m.downloading:
+	  time.sleep(0.5)
+  if m.new_dist is None:
+	  print _("No new release found")
+	  sys.exit(1)
+  # we have a new dist
+  progress = apt.progress.TextFetchProgress()
+  fetcher = DistUpgradeFetcherCore(new_dist=m.new_dist,
+				   progress=progress,
+				   options=options)
+  fetcher.run_options += ["--mode=server","--frontend=DistUpgradeViewText"]
+  fetcher.run()

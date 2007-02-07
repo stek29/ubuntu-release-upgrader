@@ -44,6 +44,11 @@ class DistUpgradeFetcherCore(object):
         return True
 
     def error(self, summary, message):
+        """ dummy implementation for error display, should be overwriten
+            by subclasses that want to more fancy method
+        """
+        print summary
+        print message
         return False
 
     def authenticate(self):

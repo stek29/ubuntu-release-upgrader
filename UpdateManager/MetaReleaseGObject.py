@@ -54,10 +54,10 @@ class MetaRelease(MetaReleaseCore,gobject.GObject):
         keepRuning = True
         if self.no_longer_supported is not None:
             keepRuning = False
-            self.emit("dist_no_longer_supported",dist)
+            self.emit("dist_no_longer_supported",self.no_longer_supported )
         if self.new_dist is not None:
             keepRuning = False
-            self.emit("new_dist_available",dist)            
+            self.emit("new_dist_available", self.new_dist)            
         return keepRuning
 
 

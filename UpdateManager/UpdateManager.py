@@ -67,7 +67,7 @@ from Common.SimpleGladeApp import SimpleGladeApp
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 import GtkProgress
 
-from MetaRelease import Dist
+from Core.MetaRelease import Dist
 from MetaReleaseGObject import MetaRelease
 
 #import pdb

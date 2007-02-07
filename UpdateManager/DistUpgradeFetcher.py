@@ -25,7 +25,7 @@ import gtk
 
 from ReleaseNotesViewer import ReleaseNotesViewer
 from Common.utils import *
-from DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 import urllib2
 

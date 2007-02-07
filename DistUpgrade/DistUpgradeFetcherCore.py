@@ -1,1 +1,1 @@
-../UpdateManager/DistUpgradeFetcherCore.py
+../UpdateManager/Core/DistUpgradeFetcherCore.py

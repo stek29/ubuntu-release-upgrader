@@ -5,6 +5,9 @@ class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
     def __init__(self, new_dist, progress, options, view):
         DistUpgradeFetcherCore.__init__(self,new_dist,progress)
         self.view = view
+        # user seleced to use the network, otherwise it would not be
+        # possible to download self
+        self.options += ["--with-network"]
         # make sure to run self with proper options
         if options.cdromPath is not None:
             self.run_options += ["--cdrom=%s" % options.cdromPath]

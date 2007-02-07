@@ -28,7 +28,7 @@ import apt_pkg
 import time
 import rfc822
 from subprocess import Popen,PIPE
-from MetaRelease import MetaReleaseCore
+from Core.MetaRelease import MetaReleaseCore
 
 class MetaRelease(MetaReleaseCore,gobject.GObject):
 

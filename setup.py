@@ -12,10 +12,11 @@ setup(name='update-manager',
       packages=[
                 'UpdateManager',
                 'UpdateManager.Common',
+                'UpdateManager.Core',
                 'DistUpgrade'
                 ],
       scripts=[
-               'update-manager',
+               'update-manager', "do-release-upgrade"
                ],
       data_files=[
                   ('share/update-manager/glade',

@@ -4,8 +4,8 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 
-from UpdateManager.MetaRelease import MetaReleaseCore
-from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherCore
+from UpdateManager.Core.MetaRelease import MetaReleaseCore
+from UpdateManager.Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from optparse import OptionParser
 from gettext import gettext as _
 import time
@@ -31,7 +31,8 @@ if __name__ == "__main__":
   # we have a new dist
   progress = apt.progress.TextFetchProgress()
   fetcher = DistUpgradeFetcherCore(new_dist=m.new_dist,
-				   progress=progress,
-				   options=options)
-  fetcher.run_options += ["--mode=server","--frontend=DistUpgradeViewText"]
+				   progress=progress)
+  fetcher.run_options += ["--mode=server",
+                          "--frontend=DistUpgradeViewText"
+                          ]
   fetcher.run()

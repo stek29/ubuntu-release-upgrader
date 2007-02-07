@@ -1,1 +1,1 @@
-../UpdateManager/MetaRelease.py
+../UpdateManager/Core/MetaRelease.py

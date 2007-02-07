@@ -181,6 +181,14 @@ class DistUpgradeControler(object):
                       "you can still connect to the additional one.\n"
                       ) % port)
 
+    def _tryUpdateSelf(self):
+        """ this is a helper that is run if we are started from a CD
+            and we have network - we will then try to fetch a update
+            of ourself
+        """  
+        pass
+
+    
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
         self._sshMagic()
@@ -203,6 +211,7 @@ class DistUpgradeControler(object):
                                               )
             self.useNetwork = res
             logging.debug("useNetwork: '%s' (selected by user)" % res)
+            self._tryUpdateSelf()
         return True
 
     def rewriteSourcesList(self, mirror_check=True):

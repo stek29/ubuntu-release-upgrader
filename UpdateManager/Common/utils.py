@@ -22,7 +22,7 @@ def error(parent, summary, message):
   d.set_title("")
   res = d.run()
   d.destroy()
-  return
+  return False
 
 def humanize_size(bytes):
     """

@@ -64,7 +64,7 @@ from gettext import gettext as _
 
 from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
-from DistUpgradeFetcher import DistUpgradeFetcher
+from DistUpgradeFetcher import DistUpgradeFetcherGtk
 import GtkProgress
 
 from MetaRelease import Dist, MetaRelease
@@ -872,7 +872,7 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      fetcher = DistUpgradeFetcher(self, self.new_dist)
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self)
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):

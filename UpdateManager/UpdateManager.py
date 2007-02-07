@@ -67,7 +67,8 @@ from Common.SimpleGladeApp import SimpleGladeApp
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 import GtkProgress
 
-from MetaRelease import Dist, MetaRelease
+from MetaRelease import Dist
+from MetaReleaseGObject import MetaRelease
 
 #import pdb
 
@@ -872,7 +873,7 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      progress = GtkProgress.GtkFetchProgress(self.parent,
+      progress = GtkProgress.GtkFetchProgress(self,
                                               _("Downloading the upgrade "
                                                 "tool"),
                                               _("The upgrade tool will "

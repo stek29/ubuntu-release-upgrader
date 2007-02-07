@@ -87,16 +87,6 @@ class MetaReleaseCore(object):
         dist = string.strip(p.stdout.readline())
         return dist
     
-    def check(self):
-        #print "check"
-        # check if we have a metarelease_information file
-        if self.metarelease_information != None:
-            self.parse()
-            # return False makes g_timeout() stop
-            return False
-        # no information yet, keep runing
-        return True
-            
     def parse(self):
         #print "parse"
         current_dist_name = self.get_dist()
@@ -179,4 +169,5 @@ class MetaReleaseCore(object):
                 f=open(self.METARELEASE_FILE,"r")
         # now check the information we have
         self.downloading = False
-        self.check()
+        self.metarelease_information != None:
+            self.parse()

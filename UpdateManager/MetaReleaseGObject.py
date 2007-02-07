@@ -45,11 +45,19 @@ class MetaRelease(MetaReleaseCore,gobject.GObject):
     def __init__(self, useDevelopmentRelase=False, useProposed=False):
         gobject.GObject.__init__(self)
         MetaReleaseCore.__init__(self, useDevelopmentRelase, useProposed)
+        # in the gtk space to test if the download already finished
+        # this is needed because gtk is not thread-safe
+        gobject.timeout_add(1000, self.check)
 
-    def dist_no_longer_supported(self, dist):
-        self.emit("dist_no_longer_supported",dist)
-
-    def new_dist_available(self, dist):
-        self.emit("new_dist_available",dist)
+    def check(self):
+        # check if we have a metarelease_information file
+        keepRuning = True
+        if self.no_longer_supported is not None:
+            keepRuning = False
+            self.emit("dist_no_longer_supported",dist)
+        if self.new_dist is not None:
+            keepRuning = False
+            self.emit("new_dist_available",dist)            
+        return keepRuning
 
 

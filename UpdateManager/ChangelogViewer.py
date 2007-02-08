@@ -87,6 +87,7 @@ class ChangelogViewer(gtk.TextView):
         search_items = [ ("http://", ws+brak+punct, "http://"),
                          ("LP#", ws+brak+dot, MALONE),
                          ("LP: #", ws+brak+dot, MALONE),
+                         ("lp: #", ws+brak+dot, MALONE),
                          ("LP:#",  ws+brak+dot, MALONE),
                          ("Malone: #", ws+brak+dot, MALONE),
                          ("Malone:#", ws+brak+dot, MALONE),

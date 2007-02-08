@@ -399,7 +399,7 @@ class UpdateManager(SimpleGladeApp):
           if use_auth:
               auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
               auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
-              proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pass,host, port)
+              proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
           else:
               proxy = "http://%s:%s/" % (host, port)
       if proxy:

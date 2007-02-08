@@ -77,19 +77,26 @@ class ChangelogViewer(gtk.TextView):
         CVE = "http://cve.mitre.org/cgi-bin/cvename.cgi?name="
         # some convinient end-markers
         ws = [" ","\t","\n"]
-        brak = [")","]",">",".",",","!"]
+        brak = [")","]",">"]
+        punct = [",","!"]
+        dot = ["."]+punct
         # search items are start-str, list-of-end-strs, url-prefix
-        search_items = [ ("http://", ws+brak, "http://"),
-                         ("LP#", ws+brak, MALONE),
-                         ("LP: #", ws+brak, MALONE),
-                         ("LP:#",  ws+brak, MALONE),
-                         ("Malone: #", ws+brak, MALONE),
-                         ("Malone:#", ws+brak, MALONE),
-                         ("Ubuntu: #", ws+brak, MALONE),
-                         ("Ubuntu:#", ws+brak, MALONE),
-                         ("Closes: #",ws+brak, DEBIAN),
-                         ("Closes:#",ws+brak, DEBIAN),
-                         ("CVE-", ws+brak, CVE),
+        # a lot of this search is "TEH SUCK"(tm) because of limitations
+        # in iter.forward_search()
+        # - i.e. no insensitive searching, no regexp
+        search_items = [ ("http://", ws+brak+punct, "http://"),
+                         ("LP#", ws+brak+dot, MALONE),
+                         ("LP: #", ws+brak+dot, MALONE),
+                         ("LP:#",  ws+brak+dot, MALONE),
+                         ("Malone: #", ws+brak+dot, MALONE),
+                         ("Malone:#", ws+brak+dot, MALONE),
+                         ("Ubuntu: #", ws+brak+dot, MALONE),
+                         ("Ubuntu:#", ws+brak+dot, MALONE),
+                         ("Closes: #",ws+brak+dot, DEBIAN),
+                         ("Closes:#",ws+brak+dot, DEBIAN),
+                         ("closes:#",ws+brak+dot, DEBIAN),
+                         ("closes: #",ws+brak+dot, DEBIAN),
+                         ("CVE-", ws+brak+dot, CVE),
                        ]
         # init
         iter = buffer.get_iter_at_offset(iter_end.get_offset() - len(text))
@@ -97,32 +104,33 @@ class ChangelogViewer(gtk.TextView):
 
         # search for the next match in the buffer
         for (start_str, end_list, url_prefix) in search_items:
-            ret = iter.forward_search(start_str,
-                                      gtk.TEXT_SEARCH_VISIBLE_ONLY,
-                                      iter_end)
-            # if we reach the end break the loop
-            if not ret:
-                continue
-            # get the position of the protocol prefix
-            (match_start, match_end) = ret
-            match_suffix = match_end.copy()
-            match_tmp = match_end.copy()
             while True:
-                # extend the selection to the complete search item
-                if match_tmp.forward_char():
-                    text =  match_end.get_text(match_tmp)
-                    if text in end_list:
-                        break
-                else:
+                ret = iter.forward_search(start_str,
+                                          gtk.TEXT_SEARCH_VISIBLE_ONLY,
+                                          iter_end)
+                # if we reach the end break the loop
+                if not ret:
                     break
-                match_end = match_tmp.copy()
-            
-            # call the tagging method for the complete URL
-            url = url_prefix + match_suffix.get_text(match_end)
-            
-            self.tag_link(match_start, match_end, url)
-            # set the starting point for the next search
-            iter = match_end
+                # get the position of the protocol prefix
+                (match_start, match_end) = ret
+                match_suffix = match_end.copy()
+                match_tmp = match_end.copy()
+                while True:
+                    # extend the selection to the complete search item
+                    if match_tmp.forward_char():
+                        text =  match_end.get_text(match_tmp)
+                        if text in end_list:
+                            break
+                    else:
+                        break
+                    match_end = match_tmp.copy()
+
+                # call the tagging method for the complete URL
+                url = url_prefix + match_suffix.get_text(match_end)
+
+                self.tag_link(match_start, match_end, url)
+                # set the starting point for the next search
+                iter = match_end
 
     def event_after(self, text_view, event):
         """callback for mouse click events"""

@@ -65,6 +65,7 @@ from gettext import gettext as _
 from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
+from ChangelogViewer import ChangelogViewer
 import GtkProgress
 
 from Core.MetaRelease import Dist
@@ -313,6 +314,9 @@ class UpdateManager(SimpleGladeApp):
     self.dl_size = 0
 
     # create text view
+    self.textview_changes = ChangelogViewer()
+    self.textview_changes.show()
+    self.scrolledwindow_changes.add(self.textview_changes)
     changes_buffer = self.textview_changes.get_buffer()
     changes_buffer.create_tag("versiontag", weight=pango.WEIGHT_BOLD)
 

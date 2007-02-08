@@ -302,6 +302,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         about=KAboutData("adept_manager","Upgrader","0.1","Dist Upgrade Tool for Kubuntu",KAboutData.License_GPL,"(c) 2007 Canonical Ltd",
         "http://wiki.kubuntu.org/KubuntuUpdateManager", "jriddell@ubuntu.com")
         about.addAuthor("Jonathan Riddell", None,"jriddell@ubuntu.com")
+        about.addAuthor("Michael Vogt", None,"michael.vogt@ubuntu.com")
         KCmdLineArgs.init(["./dist-upgrade.py"],about)
 
         self.app = KApplication()

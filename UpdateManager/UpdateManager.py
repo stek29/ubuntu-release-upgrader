@@ -64,10 +64,12 @@ from gettext import gettext as _
 
 from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
-from DistUpgradeFetcher import DistUpgradeFetcher
+from DistUpgradeFetcher import DistUpgradeFetcherGtk
+from ChangelogViewer import ChangelogViewer
 import GtkProgress
 
-from MetaRelease import Dist, MetaRelease
+from Core.MetaRelease import Dist
+from MetaReleaseGObject import MetaRelease
 
 #import pdb
 
@@ -312,6 +314,9 @@ class UpdateManager(SimpleGladeApp):
     self.dl_size = 0
 
     # create text view
+    self.textview_changes = ChangelogViewer()
+    self.textview_changes.show()
+    self.scrolledwindow_changes.add(self.textview_changes)
     changes_buffer = self.textview_changes.get_buffer()
     changes_buffer.create_tag("versiontag", weight=pango.WEIGHT_BOLD)
 
@@ -394,7 +399,7 @@ class UpdateManager(SimpleGladeApp):
           if use_auth:
               auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
               auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
-              proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pass,host, port)
+              proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
           else:
               proxy = "http://%s:%s/" % (host, port)
       if proxy:
@@ -872,7 +877,13 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      fetcher = DistUpgradeFetcher(self, self.new_dist)
+      progress = GtkProgress.GtkFetchProgress(self,
+                                              _("Downloading the upgrade "
+                                                "tool"),
+                                              _("The upgrade tool will "
+                                                "guide you through the "
+                                                "upgrade process."))
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=progress)
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):
@@ -962,7 +973,7 @@ class UpdateManager(SimpleGladeApp):
 
   def main(self, options):
     gconfclient = gconf.client_get_default() 
-    self.meta = MetaRelease(options.devel_release)
+    self.meta = MetaRelease(options.devel_release, options.use_proposed)
     self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
 
     # check if we are interessted in dist-upgrade information

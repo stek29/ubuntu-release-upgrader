@@ -32,9 +32,13 @@ import re
 import statvfs
 import shutil
 import glob
+import time
 from DistUpgradeConfigParser import DistUpgradeConfig
 
-from aptsources import SourcesList, SourceEntry, Distribution, is_mirror
+from sourceslist import SourcesList, SourceEntry, is_mirror
+from distro import Distribution, get_distro
+
+
 from gettext import gettext as _
 import gettext
 from DistUpgradeCache import MyCache
@@ -117,6 +121,11 @@ class DistUpgradeControler(object):
         else:
             cdrompath = None
         self.aptcdrom = AptCdrom(distUpgradeView, cdrompath)
+
+        # we act differently in server mode
+        self.serverMode = False
+        if self.options.mode == "server":
+            self.serverMode = True
         
         # the configuration
         self.config = DistUpgradeConfig(datadir)
@@ -141,8 +150,65 @@ class DistUpgradeControler(object):
     def openCache(self):
         self.cache = MyCache(self.config, self._view.getOpCacheProgress())
 
+    def _sshMagic(self):
+        """ this will check for server mode and if we run over ssh.
+            if this is the case, we will ask and spawn a additional
+            daemon (to be sure we have a spare one around in case
+            of trouble)
+        """
+        if (self.serverMode and
+            (os.environ.has_key("SSH_CONNECTION") or
+             os.environ.has_key("SSH_TTY"))):
+            port = 9004
+            res = self._view.askYesNoQuestion(
+                _("Continue runing under SSH?"),
+                _("This session appears to be runing under ssh. "
+                  "It is not recommended to perform a upgrade "
+                  "over ssh currently because in case of failure "
+                "it is harder to recover.\n\n"
+                  "If you continue, a additional ssh daemon will be "
+                  "started at port '%s'.\n"
+                  "Do you want to continue?") % port)
+            # abort
+            if res == False:
+                sys.exit(1)
+            res = subprocess.call(["/usr/sbin/sshd","-p",str(port)])
+            if res == 0:
+                self._view.information(
+                    _("Starting additional sshd"),
+                    _("To make recovery in case of failure easier a "
+                      "additional sshd will be started on port '%s'. "
+                      "If anything goes wrong with the runing ssh "
+                      "you can still connect to the additional one.\n"
+                      ) % port)
+
+    def _tryUpdateSelf(self):
+        """ this is a helper that is run if we are started from a CD
+            and we have network - we will then try to fetch a update
+            of ourself
+        """  
+        from MetaRelease import MetaReleaseCore
+        from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
+        # FIXME: during testing, we want "useDevelopmentRelease"
+        #        but not after the release
+        m = MetaReleaseCore(useDevelopmentRelease=False)
+        # this will timeout eventually
+        while m.downloading:
+            time.sleep(0.5)
+        if m.new_dist is None:
+            logging.error("No new dist found")
+            return False
+        # we have a new dist
+        progress = self._view.getFetchProgress()
+        fetcher = DistUpgradeFetcherSelf(new_dist=m.new_dist,
+                                         progress=progress,
+                                         options=self.options,
+                                         view=self._view)
+        fetcher.run()
+    
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
+        self._sshMagic()
         try:
             self.openCache()
         except SystemError, e:
@@ -162,16 +228,20 @@ class DistUpgradeControler(object):
                                               )
             self.useNetwork = res
             logging.debug("useNetwork: '%s' (selected by user)" % res)
+            if res:
+                self._tryUpdateSelf()
         return True
 
     def rewriteSourcesList(self, mirror_check=True):
         logging.debug("rewriteSourcesList()")
 
         # enable main (we always need this!)
-        distro = Distribution()
+        distro = get_distro()
+        # FIXME: get_sources() needs to be called to init
+        #        self.main_sources, this should be fixed in python-apt
         distro.get_sources(self.sources)
         # make sure that main is enabled
-        distro.enable_component(self.sources, "main")
+        distro.enable_component("main")
 
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange
@@ -337,6 +407,8 @@ class DistUpgradeControler(object):
         # compare the list after the update again
         self.obsolete_pkgs = self.cache._getObsoletesPkgs()
         self.foreign_pkgs = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
+        if self.serverMode:
+            self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
 
@@ -426,8 +498,11 @@ class DistUpgradeControler(object):
         return True
 
     def askDistUpgrade(self):
-        if not self.cache.distUpgrade(self._view):
+        if not self.cache.distUpgrade(self._view, self.serverMode):
             return False
+        if self.serverMode:
+            if not self.cache.installTasks(self.tasks):
+                return False
         changes = self.cache.getChanges()
         # log the changes for debuging
         self._logChanges()
@@ -664,7 +739,7 @@ class DistUpgradeControler(object):
         os.execve(sys.argv[0],args, os.environ)
 
     # this is the core
-    def edgyUpgrade(self):
+    def fullUpgrade(self):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
         self._view.setStep(1)
@@ -755,7 +830,7 @@ class DistUpgradeControler(object):
             subprocess.call(["reboot"])
         
     def run(self):
-        self.edgyUpgrade()
+        self.fullUpgrade()
 
 
 if __name__ == "__main__":

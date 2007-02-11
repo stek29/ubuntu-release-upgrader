@@ -245,7 +245,7 @@ class MyCache(apt.Cache):
             self.markRemove("nvidia-settings")
             self.markInstall("nvidia-glx")
 
-    def distUpgrade(self, view):
+    def distUpgrade(self, view, serverMode):
         try:
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
@@ -255,10 +255,11 @@ class MyCache(apt.Cache):
 
             # and if we have some special rules
             self.postUpgradeRule()
-            
-            # then see if meta-pkgs are missing
-            if not self._installMetaPkgs(view):
-                raise SystemError, _("Can't upgrade required meta-packages")
+
+            # install missing meta-packages (if not in server upgrade mode)
+            if not serverMode:
+                if not self._installMetaPkgs(view):
+                    raise SystemError, _("Can't upgrade required meta-packages")
 
             # see if it all makes sense
             if not self._verifyChanges():
@@ -324,6 +325,42 @@ class MyCache(apt.Cache):
                 return False
         return True
 
+    @property
+    def installedTasks(self):
+        tasks = {}
+        installed_tasks = set()
+        for pkg in self:
+            pkg._lookupRecord()
+            for line in pkg._records.Record.split("\n"):
+                if line.startswith("Task:"):
+                    for task in (line[len("Task:"):]).split(","):
+                        task = task.strip()
+                        if not tasks.has_key(task):
+                            tasks[task] = set()
+                        tasks[task].add(pkg.name)
+        for task in tasks:
+            installed = True
+            for pkgname in tasks[task]:
+                if not self[pkgname].isInstalled:
+                    installed = False
+                    break
+            if installed:
+                installed_tasks.add(task)
+        return installed_tasks
+            
+    def installTasks(self, tasks):
+        for pkg in self:
+            if pkg.markedInstall or pkg.isInstalled:
+                continue
+            pkg._lookupRecord()
+            for line in pkg._records.Record.split("\n"):
+                if line.startswith("Task:"):
+                    for task in (line[len("Task:"):]).split(","):
+                        task = task.strip()
+                        if task in tasks:
+                            pkg.markInstall()
+        return True
+    
     def _installMetaPkgs(self, view):
         # helper for this func
         def metaPkgInstalled():
@@ -445,3 +482,6 @@ if __name__ == "__main__":
 	import DistUpgradeConfigParser
 	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."))
 	c.clear()
+        c.installedTasks
+        c.installTasks(["ubuntu-desktop"])
+        print c.getChanges()

@@ -19,9 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import pygtk
-pygtk.require('2.0')
-import gobject
 import thread
 import urllib2
 import os
@@ -41,29 +38,24 @@ class Dist(object):
         self.upgradeTool = None
         self.upgradeToolSig = None
 
-class MetaRelease(gobject.GObject):
+class MetaReleaseCore(object):
 
     # some constants
     METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
     METARELEASE_URI_UNSTABLE = "http://changelogs.ubuntu.com/meta-release-development"
+    METARELEASE_URI_PROPOSED = "http://changelogs.ubuntu.com/meta-release-proposed"
     METARELEASE_FILE = "/var/lib/update-manager/meta-release"
 
-    __gsignals__ = { 
-        'new_dist_available' : (gobject.SIGNAL_RUN_LAST,
-                                gobject.TYPE_NONE,
-                                (gobject.TYPE_PYOBJECT,)),
-        'dist_no_longer_supported' : (gobject.SIGNAL_RUN_LAST,
-                                      gobject.TYPE_NONE,
-                                      ())
-
-        }
-
-    def __init__(self, useDevelopmentRelase=False):
-        gobject.GObject.__init__(self)
+    def __init__(self, useDevelopmentRelease=False, useProposed=False):
         # check what uri to use
-        if useDevelopmentRelase:
+        if useDevelopmentRelease:
             self.METARELEASE_URI = self.METARELEASE_URI_UNSTABLE
+        elif useProposed:
+            self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
         # check if we can access the METARELEASE_FILE
+        #
+        # FIXME: we get FALSE here if the file does not exists!
+        #
         if not os.access(self.METARELEASE_FILE, os.F_OK|os.W_OK|os.R_OK):
             path = os.path.expanduser("~/.update-manager/")
             if not os.path.exists(path):
@@ -71,12 +63,24 @@ class MetaRelease(gobject.GObject):
             self.METARELEASE_FILE = os.path.join(path,"meta-release")
         self.metarelease_information = None
         self.downloading = True
+        # information about the available dists
+        self.new_dist = None
+        self.no_longer_supported = None
         # we start the download thread here and we have a timeout
-        # in the gtk space to test if the download already finished
-        # this is needed because gtk is not thread-safe
         t=thread.start_new_thread(self.download, ())
-        gobject.timeout_add(1000,self.check)
-        
+        #t=thread.start_new_thread(self.check, ())
+
+    def dist_no_longer_supported(self, dist):
+        """ virtual function that is called when the distro is no longer
+            supported
+        """
+        self.no_longer_supported = dist
+    def new_dist_available(self, dist):
+        """ virtual function that is called when a new distro release
+            is available
+        """
+        self.new_dist = dist
+
     def get_dist(self):
         " return the codename of the current runing distro "
         p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
@@ -84,19 +88,8 @@ class MetaRelease(gobject.GObject):
         if res != 0:
             sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
         dist = string.strip(p.stdout.readline())
-        #dist = "breezy"
         return dist
     
-    def check(self):
-        #print "check"
-        # check if we have a metarelease_information file
-        if self.metarelease_information != None:
-            self.parse()
-            # return False makes g_timeout() stop
-            return False
-        # no information yet, keep runing
-        return True
-            
     def parse(self):
         #print "parse"
         current_dist_name = self.get_dist()
@@ -145,9 +138,9 @@ class MetaRelease(gobject.GObject):
         # only warn if unsupported and a new dist is available (because 
         # the development version is also unsupported)
         if upgradable_to != "" and not current_dist.supported:
-            self.emit("dist_no_longer_supported",upgradabl_to)
+            self.dist_no_longer_supported(upgradabl_to)
         elif upgradable_to != "":
-            self.emit("new_dist_available",upgradable_to)
+            self.new_dist_available(upgradable_to)
 
         # parsing done and sucessfully
         return True
@@ -177,4 +170,7 @@ class MetaRelease(gobject.GObject):
         except urllib2.URLError:
             if os.path.exists(self.METARELEASE_FILE):
                 f=open(self.METARELEASE_FILE,"r")
-
+        # now check the information we have
+        self.downloading = False
+        if self.metarelease_information != None:
+            self.parse()

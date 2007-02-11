@@ -74,6 +74,16 @@ class Chroot(object):
         shutil.copy("%s/randomInst.py",tmpdir+"/tmp")
         ret = subprocess.call(["chroot",tmpdir,"/tmp/randomInst.py","%s" % amount])
 
+    def _getTmpDir(self):
+        tmpdir = self.config.getWithDefault("NonInteractive","Tempdir",None)
+        if tmpdir is None:
+            tmpdir = tempfile.mkdtemp()
+        else:
+            if os.path.exists(tmpdir):
+                shutil.rmtree(tmpdir)
+            os.makedirs(tmpdir)
+        return tmpdir
+    
     def bootstrap(self,outfile=None):
         " bootstaps a pristine fromDist tarball"
         if not outfile:
@@ -90,7 +100,7 @@ class Chroot(object):
             pass
         
         # bootstrap!
-        tmpdir = tempfile.mkdtemp()
+        tmpdir = self._getTmpDir()
         print "tmpdir is %s" % tmpdir
 
         print "bootstraping to %s" % outfile
@@ -234,7 +244,7 @@ class Chroot(object):
 
     def _unpackToTmpdir(self, baseTarBall):
         # unpack the tarball
-        tmpdir = tempfile.mkdtemp()
+        tmpdir = self._getTmpDir()
         os.chdir(tmpdir)
         ret = subprocess.call(["tar","xzf",baseTarBall])
         if ret != 0:

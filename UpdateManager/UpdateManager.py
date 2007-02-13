@@ -811,7 +811,25 @@ class UpdateManager(SimpleGladeApp):
 
     # clean most objects
     self.dl_size = 0
-    self.initCache()
+    try:
+        self.initCache()
+    except SystemError, e:
+        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
+               (_("Could not initialize the package information"),
+                _("A unresolvable problem occurred while "
+                  "intializing the package information.\n\n"
+                  "Please report this bug against the 'update-manager' "
+                  "package and include the following error message:\n"),
+                e)
+               )
+        dialog = gtk.MessageDialog(self.window_main,
+                                   0, gtk.MESSAGE_ERROR,
+                                   gtk.BUTTONS_CLOSE,"")
+        dialog.set_markup(msg)
+        dialog.vbox.set_spacing(6)
+        dialog.run()
+        dialog.destroy()
+        sys.exit(1)
     self.store.clear()
     self.list = UpdateList()
 

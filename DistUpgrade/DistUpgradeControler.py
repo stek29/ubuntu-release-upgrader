@@ -124,7 +124,7 @@ class DistUpgradeControler(object):
 
         # we act differently in server mode
         self.serverMode = False
-        if self.options.mode == "server":
+        if self.options and self.options.mode == "server":
             self.serverMode = True
         
         # the configuration

@@ -157,9 +157,15 @@ class MetaReleaseCore(object):
             req.add_header("If-Modified-Since", lastmodified)
         try:
             uri=urllib2.urlopen(req)
+            # sometime there is a root owned meta-relase file
+            # there, try to remove it so that we get it
+            # with proper permissions
             if (os.path.exists(self.METARELEASE_FILE) and
                 not os.access(self.METARELEASE_FILE,os.W_OK)):
-                os.unlink(self.METARELEASE_FILE)
+                try:
+                    os.unlink(self.METARELEASE_FILE)
+                except OSError,e:
+                    print "Can't unlink '%s' (%s)" % (self.METARELEASE_FILE,e)
             f=open(self.METARELEASE_FILE,"w+")
             for line in uri.readlines():
                 f.write(line)

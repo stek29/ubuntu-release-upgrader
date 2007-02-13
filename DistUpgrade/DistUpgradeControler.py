@@ -827,7 +827,8 @@ class DistUpgradeControler(object):
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
         if self._view.confirmRestart():
-            subprocess.call(["reboot"])
+            p = subprocess.Popen("/sbin/reboot")
+            sys.exit(0)
         
     def run(self):
         self.fullUpgrade()

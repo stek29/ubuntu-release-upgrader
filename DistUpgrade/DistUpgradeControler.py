@@ -380,7 +380,8 @@ class DistUpgradeControler(object):
                              _("Some third party entries in your sources.list "
                                "were disabled. You can re-enable them "
                                "after the upgrade with the "
-                               "'software-properties' tool or with synaptic."
+                               "'software-properties' tool or "
+                               "your package manager."
                                ))
         return True
 

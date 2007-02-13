@@ -235,7 +235,8 @@ class UpdateList:
     pipe = os.popen("lsb_release -c -s")
     dist = pipe.read().strip()
     del pipe
-
+    self.distUpgradeWouldDelete = 0
+    
     templates = [("%s-security" % dist, "Ubuntu", _("Important security updates")
                                                     , 10),
                  ("%s-updates" % dist, "Ubuntu", _("Recommended updates"), 9),

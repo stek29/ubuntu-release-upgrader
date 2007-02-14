@@ -1,29 +1,72 @@
 #!/usr/bin/make -f
-  
-DEB_AUTO_CLEANUP_RCS            := yes
-
-DEB_PYTHON_SYSTEM=pycentral
-
-# Add here any variable or target overrides you need
-
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/python-distutils.mk
-
-ifdef _cdbs_rules_debhelper
-$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
-	dh_scrollkeeper -p$(cdbs_curpkg) $(DEB_DH_SCROLLKEEPER_ARGS)
-	$(if $(wildcard /usr/bin/dh_gconf),dh_gconf -p$(cdbs_curpkg) $(DEB_DH_GCONF_ARGS))
-	$(if $(wildcard /usr/bin/dh_desktop),dh_desktop -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
-	$(if $(wildcard /usr/bin/dh_iconcache),dh_iconcache -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
-endif
 
 PKG=update-manager
-DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
+DEBVER=$(shell LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
 DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
 
-arch-build::
+ARCH=all
+DIST=$(shell lsb_release -c -s)
+TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	python setup.py build
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	python setup.py clean --all
+	find . -name "*.so" -exec rm {} \;
+	find . -name "*.o" -exec rm {} \;
+	find . -name "*.pyc" -exec rm {} \;
+	rm -f build-stamp
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean
+	dh_installdirs
+	python setup.py install --prefix=$(CURDIR)/debian/tmp/usr
+
+# Build architecture-independent files here.
+binary-indep: build install
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_install
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_pycentral
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+	# now the dist-upgrader special tarball
+	cd DistUpgrade/ && ./build-tarball.sh  && tar czvf ../../$(TARNAME) ReleaseAnnouncement $(DIST).tar.gz
+	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
+
+binary: binary-indep binary-arch
+
+arch-build: 
+	# update the demotions
+	(cd utils && ./demotions.py)
+	# build it
 	rm -rf debian/arch-build
 	mkdir -p debian/arch-build/$(PKG)-$(DEBVER)
 	tar -c --exclude=arch-build --no-recursion -f - `bzr inventory` | (cd debian/arch-build/$(PKG)-$(DEBVER);tar xf -)
 	(cd debian/arch-build/$(PKG)-$(DEBVER) && $(DEB_BUILD_PROG))
 
+.PHONY: build clean binary-indep binary-arch binary install arch-build

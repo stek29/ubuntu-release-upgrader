@@ -1,6 +1,8 @@
 #!/bin/sh
 
-DIST=feisty
+set -e
+
+DIST=$(lsb_release -c -s)
 
 # cleanup
 echo "Cleaning up"
@@ -10,8 +12,13 @@ rm -f *~ *.bak *.pyc *.moved '#'* *.rej *.orig
 # update po
 (cd ../po; make update-po)
 
+# update demotions
+#(cd ../utils/ ; ./demotions.py )
+
 # make the kde-gui
-for file in *ui; do kdepyuic $${file}; done
+for file in *.ui; do 
+    kdepyuic $file 
+done
 
 # copy the mo files
 cp -r ../po/mo .

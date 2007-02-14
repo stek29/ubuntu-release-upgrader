@@ -249,12 +249,16 @@ class DistUpgradeControler(object):
         fromDists = [self.fromDist,
                      self.fromDist+"-security",
                      self.fromDist+"-updates",
-                     self.fromDist+"-backports"
+                     self.fromDist+"-proposed",
+                     self.fromDist+"-backports",
+                     self.fromDist+"-commercial"
                     ]
         toDists = [self.toDist,
                    self.toDist+"-security",
                    self.toDist+"-updates",
-                   self.toDist+"-backports"
+                   self.toDist+"-proposed",
+                   self.toDist+"-backports",
+                   self.toDist+"-commercial"
                    ]
 
         # list of valid mirrors that we can add
@@ -278,7 +282,7 @@ class DistUpgradeControler(object):
             # ignore cdrom sources otherwise
             elif entry.uri.startswith("cdrom:"):
                 continue
-                
+
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or offical site)
             validMirror = False

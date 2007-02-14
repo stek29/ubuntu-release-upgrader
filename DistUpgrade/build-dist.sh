@@ -19,6 +19,9 @@ if [ ! -d $TARGETDIR/$version ]; then
 	mkdir -p $TARGETDIR/$version
 fi
 
+# update demotions
+(cd ../utils/ ; ./demotions.py )
+
 #build the actual dist-upgrader tarball
 ./build-tarball.sh
 

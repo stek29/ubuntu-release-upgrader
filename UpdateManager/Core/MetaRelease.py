@@ -25,6 +25,7 @@ import os
 import string
 import apt_pkg
 import time
+import sys
 import rfc822
 from subprocess import Popen,PIPE
 
@@ -87,6 +88,7 @@ class MetaReleaseCore(object):
         res = p.wait()
         if res != 0:
             sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
+            return "unknown distribution"
         dist = string.strip(p.stdout.readline())
         return dist
     

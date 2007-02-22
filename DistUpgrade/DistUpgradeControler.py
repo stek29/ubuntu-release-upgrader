@@ -494,7 +494,7 @@ class DistUpgradeControler(object):
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
             if fs_free[dir].free < 0:
-                free_at_least = apt_pkg.SizeToStr(abs(fs_free[dir].free)+1)
+                free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
                 logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
                 self._view.error(err_sum, err_long % (free_at_least,dir))
                 return False

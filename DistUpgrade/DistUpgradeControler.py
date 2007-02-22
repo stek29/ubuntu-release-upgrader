@@ -488,7 +488,7 @@ class DistUpgradeControler(object):
         for (dir, size) in [(archivedir, self.cache.requiredDownload),
                             ("/usr", self.cache.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),  # savetfy buffer /usr
-                            ("/boot", 50*1024*1024), # savetfy buffer /boot
+                            ("/boot", 40*1024*1024), # savetfy buffer /boot
                             ("/", 10*1024*1024),     # small savetfy buffer /
                            ]:
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))

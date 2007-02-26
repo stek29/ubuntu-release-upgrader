@@ -55,7 +55,11 @@ binary-arch: build install
 	dh_md5sums
 	dh_builddeb
 	# now the dist-upgrader special tarball
-	cd DistUpgrade/ && ./build-tarball.sh  && tar czvf ../../$(TARNAME) ReleaseAnnouncement $(DIST).tar.gz
+	(cd DistUpgrade/ && \
+	 ./build-tarball.sh && \
+	mkdir $(DEBVER)  && \
+	cp $(DIST).tar.gz ReleaseAnnouncement $(DEBVER) && \
+	tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )	
 	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
 
 binary: binary-indep binary-arch

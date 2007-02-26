@@ -757,7 +757,7 @@ class UpdateManager(SimpleGladeApp):
     pkg = self.store.get_value(iter, LIST_PKG)
     # make sure that we don't allow to toggle deactivated updates
     # this is needed for the call by the row activation callback
-    if pkg.name in self.list.held_back:
+    if pkg is None or pkg.name in self.list.held_back:
         return False
     self.setBusy(True)
     # update the cache

@@ -235,7 +235,8 @@ class UpdateList:
     pipe = os.popen("lsb_release -c -s")
     dist = pipe.read().strip()
     del pipe
-
+    self.distUpgradeWouldDelete = 0
+    
     templates = [("%s-security" % dist, "Ubuntu", _("Important security updates")
                                                     , 10),
                  ("%s-updates" % dist, "Ubuntu", _("Recommended updates"), 9),
@@ -756,7 +757,7 @@ class UpdateManager(SimpleGladeApp):
     pkg = self.store.get_value(iter, LIST_PKG)
     # make sure that we don't allow to toggle deactivated updates
     # this is needed for the call by the row activation callback
-    if pkg.name in self.list.held_back:
+    if pkg is None or pkg.name in self.list.held_back:
         return False
     self.setBusy(True)
     # update the cache
@@ -810,7 +811,25 @@ class UpdateManager(SimpleGladeApp):
 
     # clean most objects
     self.dl_size = 0
-    self.initCache()
+    try:
+        self.initCache()
+    except SystemError, e:
+        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
+               (_("Could not initialize the package information"),
+                _("A unresolvable problem occurred while "
+                  "intializing the package information.\n\n"
+                  "Please report this bug against the 'update-manager' "
+                  "package and include the following error message:\n"),
+                e)
+               )
+        dialog = gtk.MessageDialog(self.window_main,
+                                   0, gtk.MESSAGE_ERROR,
+                                   gtk.BUTTONS_CLOSE,"")
+        dialog.set_markup(msg)
+        dialog.vbox.set_spacing(6)
+        dialog.run()
+        dialog.destroy()
+        sys.exit(1)
     self.store.clear()
     self.list = UpdateList()
 

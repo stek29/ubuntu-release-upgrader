@@ -7,16 +7,16 @@
 
 import string
 import atexit
-
-CONFIG_FILE="/root/.update-manager-conf"
+import os.path
 
 class FakeGconf:
 	
 	def __init__(self):
+		self.CONFIG_FILE=os.path.expanduser("~/.update-manager-conf")
 		self.config = {}
 		try:
 			#execute python file which contains the dictionary called config
-			exec open (CONFIG_FILE) 
+			exec open (self.CONFIG_FILE) 
 			self.config = config
 		except:
 			pass
@@ -45,7 +45,7 @@ class FakeGconf:
 
 	#Save current dictionary to config file
 	def save(self):
-		file = open(CONFIG_FILE, "w")
+		file = open(self.CONFIG_FILE, "w")
 		data = "config = {"
 		for i in self.config:
 			data +=  "'"+i+"'" + ":" + str(self.config[i])+",\n"

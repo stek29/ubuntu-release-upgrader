@@ -124,7 +124,7 @@ class DistUpgradeControler(object):
 
         # we act differently in server mode
         self.serverMode = False
-        if self.options.mode == "server":
+        if self.options and self.options.mode == "server":
             self.serverMode = True
         
         # the configuration
@@ -249,12 +249,16 @@ class DistUpgradeControler(object):
         fromDists = [self.fromDist,
                      self.fromDist+"-security",
                      self.fromDist+"-updates",
-                     self.fromDist+"-backports"
+                     self.fromDist+"-proposed",
+                     self.fromDist+"-backports",
+                     self.fromDist+"-commercial"
                     ]
         toDists = [self.toDist,
                    self.toDist+"-security",
                    self.toDist+"-updates",
-                   self.toDist+"-backports"
+                   self.toDist+"-proposed",
+                   self.toDist+"-backports",
+                   self.toDist+"-commercial"
                    ]
 
         # list of valid mirrors that we can add
@@ -278,7 +282,7 @@ class DistUpgradeControler(object):
             # ignore cdrom sources otherwise
             elif entry.uri.startswith("cdrom:"):
                 continue
-                
+
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or offical site)
             validMirror = False
@@ -380,7 +384,8 @@ class DistUpgradeControler(object):
                              _("Some third party entries in your sources.list "
                                "were disabled. You can re-enable them "
                                "after the upgrade with the "
-                               "'software-properties' tool or with synaptic."
+                               "'software-properties' tool or "
+                               "your package manager."
                                ))
         return True
 
@@ -483,13 +488,13 @@ class DistUpgradeControler(object):
         for (dir, size) in [(archivedir, self.cache.requiredDownload),
                             ("/usr", self.cache.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),  # savetfy buffer /usr
-                            ("/boot", 50*1024*1024), # savetfy buffer /boot
+                            ("/boot", 40*1024*1024), # savetfy buffer /boot
                             ("/", 10*1024*1024),     # small savetfy buffer /
                            ]:
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
             if fs_free[dir].free < 0:
-                free_at_least = apt_pkg.SizeToStr(abs(fs_free[dir].free)+1)
+                free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
                 logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
                 self._view.error(err_sum, err_long % (free_at_least,dir))
                 return False
@@ -827,7 +832,8 @@ class DistUpgradeControler(object):
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
         if self._view.confirmRestart():
-            subprocess.call(["reboot"])
+            p = subprocess.Popen("/sbin/reboot")
+            sys.exit(0)
         
     def run(self):
         self.fullUpgrade()

@@ -1,8 +1,51 @@
+update-manager (1:0.57.5) feisty; urgency=low
+
+  * UpdateManager/UpdateManager.py:
+    - check for None in toggled() (LP#88032)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 26 Feb 2007 15:41:51 +0100
+
+update-manager (1:0.57.4) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeControler.py:
+    - workaround problem in python-apt (no support for PyLong in SizeToStr)
+      LP#84019
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - keep a reference of the svg pibbuf loader around (LP#86699)
+  * UpdateManager/fakegconf.py:
+    - fix crash on xubuntu when gconf is not available (LP#86673)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 22 Feb 2007 16:09:18 +0100
+
+update-manager (0.57.3) feisty; urgency=low
+
+  * debian/rules:
+    - build a raw-dist-upgrader in additon to the debs
+  * data/glade/UpdateManager.glade:
+    - fix bad grammar (thanks to Matthew Thomas) LP#85258
+    - make Update Manager the consistent name (thanks to Matthew Thomas) 
+      LP#85253
+  * merged ReleaseAnnouncement wording update from Brian Murray
+  * UpdateManager/Core/MetaRelease.py:
+    - fix missing import (LP#85515)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 22 Feb 2007 16:09:10 +0100
+
+update-manager (0.57.2) feisty; urgency=low
+
+  * fix crash in upgrade mode (LP#84915)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Feb 2007 18:41:17 +0100
+
 update-manager (0.57.1) feisty; urgency=low
 
   * fix proxy authentication parser (lp: #83563)
+  * fix crash in check_all_updates_installable() (LP#84776)
+  * fix exception when strange permissions are set on meta-release
+    file (LP#84724)
+  * fix error dialog if cache init fails (LP#83185)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Thu,  8 Feb 2007 20:31:29 +0100
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Feb 2007 13:27:09 +0100
 
 update-manager (0.57) feisty; urgency=low
 

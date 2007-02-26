@@ -43,6 +43,10 @@ class ChangelogViewer(gtk.TextView):
         # setup the buffer and signals
         self.set_property("editable", False)
         self.set_cursor_visible(False)
+        # set some margin
+        self.set_right_margin(4)
+        self.set_left_margin(4)
+        self.set_pixels_above_lines(4)
         self.buffer = gtk.TextBuffer()
         self.set_buffer(self.buffer)
         self.connect("event-after", self.event_after)

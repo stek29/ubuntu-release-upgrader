@@ -19,7 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import gettext
 from gettext import gettext as _
 import subprocess
 import apt
@@ -30,15 +29,13 @@ LOGDIR="/var/log/dist-upgrader/"
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
-  s = ""
   if sec > 60*60*24:
-    s += gettext.ngettext("%li day ","%li days ", sec/60/60/24) % sec/60/60/24
+    return _("%li days %li hours %li minutes") % (sec/60/60/24, (sec/60/60) % 24, (sec/60) % 60)
   if sec > 60*60:
-    s += gettext.ngettext("%li hour ","%li hours ", sec/60/60) % sec/60/60
+    return _("%li hours %li minutes") % (sec/60/60, (sec/60) % 60)
   if sec > 60:
-    s += gettext.ngettext("%li minute ","%li minutes ", sec/60) % sec/60
-  s += gettext.ngettext("%li second", "%li seconds", sec) % sec
-  return s
+    return _("%li minutes") % (sec/60)
+  return _("%li seconds") % sec
 
 def estimatedDownloadTime(requiredDownload):
     """ get the estimated download time """

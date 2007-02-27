@@ -182,7 +182,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        self.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
+        self.dialogue.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
         dialogue.exec_loop()
 
     def conffile(self, current, new):
@@ -448,7 +448,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        self.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
+        self.app.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
         dialogue.exec_loop()
 
         return False

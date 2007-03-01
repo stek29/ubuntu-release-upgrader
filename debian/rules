@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 PKG=update-manager
-DEBVER=$(shell LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
+DEBVER=$(shell LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
 
 ARCH=all
@@ -34,6 +34,15 @@ install: build
 
 # Build architecture-independent files here.
 binary-indep: build install
+	dh_testdir
+	dh_testroot
+	# now the dist-upgrader special tarball
+	(cd DistUpgrade/ && \
+	 ./build-tarball.sh && \
+	mkdir $(DEBVER)  && \
+	cp $(DIST).tar.gz ReleaseAnnouncement $(DEBVER) && \
+	tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )	
+	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
 
 # Build architecture-dependent files here.
 binary-arch: build install
@@ -54,13 +63,6 @@ binary-arch: build install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
-	# now the dist-upgrader special tarball
-	(cd DistUpgrade/ && \
-	 ./build-tarball.sh && \
-	mkdir $(DEBVER)  && \
-	cp $(DIST).tar.gz ReleaseAnnouncement $(DEBVER) && \
-	tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )	
-	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
 
 binary: binary-indep binary-arch
 

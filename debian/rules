@@ -8,10 +8,13 @@ ARCH=all
 DIST=$(shell lsb_release -c -s)
 TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
 
+PYVERS=$(shell pyversions -vr)
+
 build: build-stamp
-build-stamp:
+build-stamp: $(PYVERS:%=build-python%)
+build-python%:
 	dh_testdir
-	python setup.py build
+	python$* setup.py build
 	touch $@
 
 clean:
@@ -30,7 +33,10 @@ install: build
 	dh_testroot
 	dh_clean
 	dh_installdirs
-	python setup.py install --prefix=$(CURDIR)/debian/tmp/usr
+	set -e; \
+	for v in $(PYVERS); do \
+	  python$$v setup.py install --prefix=$(CURDIR)/debian/tmp/usr; \
+	done
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -38,10 +44,10 @@ binary-indep: build install
 	dh_testroot
 	# now the dist-upgrader special tarball
 	(cd DistUpgrade/ && \
-	 ./build-tarball.sh && \
-	mkdir $(DEBVER)  && \
-	cp $(DIST).tar.gz ReleaseAnnouncement $(DEBVER) && \
-	tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )	
+	   ./build-tarball.sh && \
+	   mkdir $(DEBVER)  && \
+	   cp $(DIST).tar.gz ReleaseAnnouncement $(DEBVER) && \
+	   tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )
 	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
 
 # Build architecture-dependent files here.
@@ -57,7 +63,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_pycentral
+	DH_PYCENTRAL=nomove dh_pycentral
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

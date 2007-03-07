@@ -190,15 +190,16 @@ class MyCache(apt.Cache):
                     break
                 match = re.match(regexp,line)
                 if match:
-                    # FIXME: the installed version can have a epoch, but th
-                    #        changelog does not have one, we do a dumb
-                    #        approach here and just strip it away, but I'm
-                    #        sure that this can lead to problems
+                    # strip epoch from installed version
+                    # and from changelog too
                     installed = pkg.installedVersion
                     if installed and ":" in installed:
                         installed = installed.split(":",1)[1]
+                    changelogver = match.group(1)
+                    if changelogver and ":" in changelogver:
+                        changelogver = changelogver.split(":",1)[1]
                     if installed and \
-                        apt_pkg.VersionCompare(match.group(1),installed)<=0:
+                        apt_pkg.VersionCompare(changelogver,installed)<=0:
                         break
                 # EOF (shouldn't really happen)
                 alllines = alllines + line

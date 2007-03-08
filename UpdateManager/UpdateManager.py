@@ -615,10 +615,14 @@ class UpdateManager(SimpleGladeApp):
 
   def refresh_updates_count(self):
       self.button_install.set_sensitive(self.cache.installCount)
-      self.dl_size = self.cache.requiredDownload
-      # TRANSLATORS: b stands for Bytes
-      self.label_downsize.set_markup(_("Download size: %s") % \
-                                       humanize_size(self.dl_size))
+      try:
+          self.dl_size = self.cache.requiredDownload
+          # TRANSLATORS: b stands for Bytes
+          self.label_downsize.set_markup(_("Download size: %s") % \
+                                         humanize_size(self.dl_size))
+      except SystemError, e:
+          print "requiredDownload could not be calculated: %s" % e
+          self.label_downsize.set_markup(_("Unknown download size"))
       
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to

@@ -161,8 +161,8 @@ class DistUpgradeControler(object):
              os.environ.has_key("SSH_TTY"))):
             port = 9004
             res = self._view.askYesNoQuestion(
-                _("Continue runing under SSH?"),
-                _("This session appears to be runing under ssh. "
+                _("Continue running under SSH?"),
+                _("This session appears to be running under ssh. "
                   "It is not recommended to perform a upgrade "
                   "over ssh currently because in case of failure "
                 "it is harder to recover.\n\n"
@@ -178,7 +178,7 @@ class DistUpgradeControler(object):
                     _("Starting additional sshd"),
                     _("To make recovery in case of failure easier a "
                       "additional sshd will be started on port '%s'. "
-                      "If anything goes wrong with the runing ssh "
+                      "If anything goes wrong with the running ssh "
                       "you can still connect to the additional one.\n"
                       ) % port)
 
@@ -321,7 +321,7 @@ class DistUpgradeControler(object):
         if not self.rewriteSourcesList(mirror_check=True):
             logging.error("No valid mirror found")
             res = self._view.askYesNoQuestion(_("No valid mirror found"),
-                             _("While scaning your repository "
+                             _("While scanning your repository "
                                "information no mirror entry for "
                                "the upgrade was found."
                                "This cam happen if you run a internal "
@@ -645,7 +645,7 @@ class DistUpgradeControler(object):
             except (SystemError, IOError), e:
                 logging.error("cache.commit() in doPostUpgrade() failed: %s" % e)
                 self._view.error(_("Error during commit"),
-                                 _("Some problem occured during the clean-up. "
+                                 _("A problem occured during the clean-up. "
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)

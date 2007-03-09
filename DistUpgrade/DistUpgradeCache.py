@@ -416,7 +416,7 @@ class MyCache(apt.Cache):
                          "ubuntu-desktop, kubuntu-desktop or "
                          "edubuntu-desktop package and it was not "
                          "possible to detect which version of "
-                        "ubuntu you are running.\n "
+                        "Ubuntu you are running.\n "
                          "Please install one of the packages "
                          "above first using synaptic or "
                          "apt-get before proceeding."))

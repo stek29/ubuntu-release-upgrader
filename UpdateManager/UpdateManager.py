@@ -822,7 +822,7 @@ class UpdateManager(SimpleGladeApp):
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not initialize the package information"),
                 _("A unresolvable problem occurred while "
-                  "intializing the package information.\n\n"
+                  "initializing the package information.\n\n"
                   "Please report this bug against the 'update-manager' "
                   "package and include the following error message:\n"),
                 e)

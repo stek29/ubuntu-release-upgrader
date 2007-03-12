@@ -23,6 +23,7 @@ from qt import *
 from kdeui import *
 from kdecore import *
 from kparts import konsolePart
+from dcopext import DCOPClient, DCOPApp # used to quit adept
 
 import sys
 import logging
@@ -337,6 +338,18 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         self.window_main.konsole_frame.hide()
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
+
+        # create a new DCOP-Client:
+        client = DCOPClient()
+        # connect the client to the local DCOP-server:
+        client.attach()
+
+        for qcstring_app in client.registeredApplications():
+            app = str(qcstring_app)
+            if app.startswith("adept"): 
+                adept = DCOPApp(qcstring_app, client)
+                adeptInterface = adept.object("MainApplication-Interface")
+                adeptInterface.quit()
 
     def _handleException(self, exctype, excvalue, exctb):
         """Crash handler."""

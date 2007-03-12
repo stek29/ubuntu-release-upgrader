@@ -342,7 +342,11 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         # -> this avoid the issue that during the dapper->edgy upgrade
         #    the loaders move from /usr/lib/gtk/2.4.0/loaders to 2.10.0
         self.pngloader = gtk.gdk.PixbufLoader("png")
-        self.svgloader = gtk.gdk.PixbufLoader("svg")
+        try:
+          self.svgloader = gtk.gdk.PixbufLoader("svg")
+        except gobject.GError, e:
+          logging.warning("svg pixbuf loader failed (%s)" % e)
+          pass
         
         self.window_main.realize()
         self.window_main.window.set_functions(gtk.gdk.FUNC_MOVE)

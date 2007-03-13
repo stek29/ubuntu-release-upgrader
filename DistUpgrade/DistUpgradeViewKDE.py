@@ -23,6 +23,7 @@ from qt import *
 from kdeui import *
 from kdecore import *
 from kparts import konsolePart
+from kio import KRun
 from dcopext import DCOPClient, DCOPApp # used to quit adept
 
 import sys
@@ -174,7 +175,10 @@ class KDEInstallProgressAdapter(InstallProgress):
     def error(self, pkg, errormsg):
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-        msg="<big><b>%s</b></big><br />%s" % (summary, msg)
+        summary = _("Could not install '%s'") % pkg
+        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
+                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
+        msg = "<big><b>%s</b></big><br />%s" % (summary, msg)
 
         dialogue = dialog_error(self.parent.window_main)
         dialogue.label_error.setText(msg)
@@ -274,7 +278,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
           if not self.activity_timeout_reported:
-            logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
+            logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.text()))
             self.activity_timeout_reported = True
           self.parent.konsole_frame.show()
         KApplication.kApplication().processEvents()

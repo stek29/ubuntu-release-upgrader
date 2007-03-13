@@ -182,8 +182,8 @@ class KDEInstallProgressAdapter(InstallProgress):
 
         dialogue = dialog_error(self.parent.window_main)
         dialogue.label_error.setText(msg)
-        if extended_msg != None:
-            dialogue.textview_error.setText(utf8(extended_msg))
+        if errormsg != None:
+            dialogue.textview_error.setText(utf8(errormsg))
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()

@@ -817,7 +817,10 @@ class DistUpgradeControler(object):
         if not self.askDistUpgrade():
             self.abort()
 
-        self._view.updateStatus(_("Upgrading"))            
+        # kill update-notifier now to supress reboot required
+        subprocess.call(["killall","update-notifier"])
+        # no do the upgrade
+        self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
             # don't abort here, because it would restore the sources.list
             sys.exit(1) 

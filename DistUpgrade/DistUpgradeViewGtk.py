@@ -166,9 +166,6 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.progress.set_text(" ")
         self.expander.set_sensitive(True)
         self.term.show()
-        # kill update-notifier now to supress reboot required
-        # notifications and similar nonsens
-        subprocess.call(["killall","update-notifier"])
         # if no libgnome2-perl is installed show the terminal
         frontend="gnome"
         if self._cache:

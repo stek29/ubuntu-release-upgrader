@@ -280,7 +280,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           if not self.activity_timeout_reported:
             logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.text()))
             self.activity_timeout_reported = True
-          self.parent.konsole_frame.show()
+          self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()
         time.sleep(0.0000001)
 

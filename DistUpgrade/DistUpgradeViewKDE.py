@@ -377,7 +377,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
         KRun.runURL(KURL(url), "text/html")
 
-    def reportBug(self, url):
+    def reportBug(self):
         """start konqueror"""
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
@@ -450,6 +450,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             dialogue.textview_error.hide()
         dialogue.button_bugreport.hide()
+        dialogue.setCaption("Information")
         iconLoader = KIconLoader()
         messageIcon = iconLoader.loadIcon("messagebox_info", KIcon.Panel)
         dialogue.image.setPixmap(messageIcon)
@@ -465,6 +466,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
+        dialogue.button_close.show()
         self.app.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
         dialogue.exec_loop()
 

@@ -24,8 +24,8 @@ import subprocess
 import apt
 import os
 
-# directory for the logs
-LOGDIR="/var/log/dist-upgrader/"
+from DistUpgradeApport import run_apport
+
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
@@ -58,10 +58,7 @@ class InstallProgress(apt.progress.InstallProgress):
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    s = "/usr/share/apport/package_hook"
-    if os.path.exists(s):
-      p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
-      p.stdin.write("ErrorMessage: %s\n" % errormsg)
+    run_apport(pkg, errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd):

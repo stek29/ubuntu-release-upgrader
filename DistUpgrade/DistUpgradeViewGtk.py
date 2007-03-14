@@ -36,6 +36,7 @@ import apt
 import apt_pkg
 import os
 
+from DistUpgradeApport import run_apport
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
@@ -378,6 +379,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
       import traceback
       lines = traceback.format_exception(type, value, tb)
       logging.error("not handled expection:\n%s" % "\n".join(lines))
+      run_apport("update-manager", "UnhandledException")
       self.error(_("A fatal error occured"),
                  _("Please report this as a bug and include the "
                    "files /var/log/dist-upgrade/main.log and "

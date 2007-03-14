@@ -38,10 +38,10 @@ from DistUpgradeConfigParser import DistUpgradeConfig
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro
 
-
 from gettext import gettext as _
 import gettext
 from DistUpgradeCache import MyCache
+from DistUpgradeApport import run_apport
 
 class AptCdrom(object):
     def __init__(self, view, path):
@@ -533,6 +533,8 @@ class DistUpgradeControler(object):
             try:
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
+                errormsg = "SystemError in cache.commit(): %s" % e
+                run_apport("update-manager", errormsg)
                 # installing the packages failed, can't be retried
                 logging.error("SystemError from cache.commit(): %s" % e)
                 self._view.getTerminal().call(["dpkg","--configure","-a"])

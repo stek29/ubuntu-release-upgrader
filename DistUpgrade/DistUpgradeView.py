@@ -123,7 +123,7 @@ class DistUpgradeView(object):
             elif pkg.markedDowngrade: self.toDowngrade.append(pkg.name)
         # no re-installs 
         assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toDowngrade) == len(changes))
-    def askYesNoQuestion(self, summary, msg):
+    def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "
         pass
     def confirmRestart(self):

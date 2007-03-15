@@ -579,12 +579,16 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
             return True
         return False
 
-    def askYesNoQuestion(self, summary, msg):
+    def askYesNoQuestion(self, summary, msg, default='No'):
         msg = "<big><b>%s</b></big>\n\n%s" % (summary,msg)
         dialog = gtk.MessageDialog(parent=self.window_main,
                                    flags=gtk.DIALOG_MODAL,
                                    type=gtk.MESSAGE_QUESTION,
                                    buttons=gtk.BUTTONS_YES_NO)
+        if default == 'No':
+          dialog.set_default_response(gtk.RESPONSE_NO)
+        else:
+          dialog.set_default_response(gtk.RESPONSE_YES)
         dialog.set_markup(msg)
         res = dialog.run()
         dialog.destroy()

@@ -540,7 +540,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             return True
         return False
 
-    def askYesNoQuestion(self, summary, msg):
+    def askYesNoQuestion(self, summary, msg, default='No'):
         restart = QMessageBox.question(self.window_main, summary, msg, QMessageBox.Yes|QMessageBox.Cancel, QMessageBox.Cancel)
         if restart == QMessageBox.Yes:
             return True

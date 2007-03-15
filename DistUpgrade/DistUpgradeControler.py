@@ -219,12 +219,15 @@ class DistUpgradeControler(object):
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  inteligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:
-            res = self._view.askYesNoQuestion(_("Fetch data from the network for the upgrade?"),
-                                              _("The upgrade can use the network to check "
-                                                "the latest updates and to fetch packages that are not on the "
-                                                "current CD.\n"
-                                                "If you have fast or inexpensive network access you should answer "
-                                                "'Yes' here. If networking is expensive for you choose 'No'.")
+            res = self._view.askYesNoQuestion(_("Include latest updates from the Internet?"),
+                                              _("The upgrade process can automatically download "
+                                                "the latest updates and install them during the "
+                                                "upgrade.  The upgrade will take longer, but when "
+                                                "it is complete, your system will be fully up to "
+                                                "date.  You can choose not to do this, but you "
+                                                "should install the latest updates soon after "
+                                                "upgrading."),
+                                              'Yes'
                                               )
             self.useNetwork = res
             logging.debug("useNetwork: '%s' (selected by user)" % res)

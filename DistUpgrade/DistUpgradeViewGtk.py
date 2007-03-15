@@ -240,7 +240,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
-        self.progress.set_fraction(float(self.percent)/100.0)
+        self.progress.set_fraction(float(percent)/100.0)
         self.label_status.set_text(status.strip())
         # start showing when we gathered some data
         if percent > 1.0:
@@ -250,7 +250,7 @@ class GtkInstallProgressAdapter(InstallProgress):
           # time wasted in conffile questions (or other ui activity)
           delta -= self.time_ui
           time_per_percent = (float(delta)/percent)
-          eta = (100.0 - self.percent) * time_per_percent
+          eta = (100.0 - percent) * time_per_percent
           # only show if we have some sensible data (60sec < eta < 2days)
           if eta > 61.0 and eta < (60*60*24*2):
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(eta))
@@ -633,8 +633,12 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    cache[pkg].markInstall()
+    if cache[pkg].isInstalled:
+      cache[pkg].markDelete()
+    else:
+      cache[pkg].markInstall()
   cache.commit(fp,ip)
+  gtk.main()
   sys.exit(0)
   
   #sys.exit(0)

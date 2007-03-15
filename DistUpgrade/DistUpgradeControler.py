@@ -41,7 +41,7 @@ from distro import Distribution, get_distro
 from gettext import gettext as _
 import gettext
 from DistUpgradeCache import MyCache
-from DistUpgradeApport import run_apport
+from DistUpgradeApport import *
 
 class AptCdrom(object):
     def __init__(self, view, path):
@@ -536,19 +536,23 @@ class DistUpgradeControler(object):
             try:
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
-                errormsg = "SystemError in cache.commit(): %s" % e
-                run_apport("update-manager", errormsg)
-                # installing the packages failed, can't be retried
                 logging.error("SystemError from cache.commit(): %s" % e)
+                # check if the installprogress catched a pkgfailure, if not, generate a fallback here
+                if iprogress.pkg_failures == 0:
+                    errormsg = "SystemError in cache.commit(): %s" % e
+                    apport_pkgfailure("update-manager", errormsg)
+                # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
-                self._view.error(_("Could not install the upgrades"),
-                                 _("The upgrade aborts now. Your system "
-                                   "could be in an unusable state. A recovery "
-                                   "was run (dpkg --configure -a).\n\n"
-                                   "Please report this bug against the 'update-manager' "
-                                   "package and include the files in /var/log/dist-upgrade/ "
-                                   "in the bugreport."),
-                                 "%s" % e)
+                # invoke the frontend now
+                msg = _("The upgrade aborts now. Your system "
+                        "could be in an unusable state. A recovery "
+                        "was run (dpkg --configure -a).")
+                if not run_apport():
+                    msg += _("\n\nPlease report this bug against the 'update-manager' "
+                             "package and include the files in /var/log/dist-upgrade/ "
+                             "in the bugreport.\n"
+                             "%s" % e)
+                self._view.error(_("Could not install the upgrades"), msg)
                 return False
             except IOError, e:
                 # fetch failed, will be retried

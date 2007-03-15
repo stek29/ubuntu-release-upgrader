@@ -36,7 +36,7 @@ import apt
 import apt_pkg
 import os
 
-from DistUpgradeApport import run_apport
+from DistUpgradeApport import *
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
@@ -376,18 +376,25 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         sys.excepthook = self._handleException
 
     def _handleException(self, type, value, tb):
+      # we handle the exception here, hand it to apport and run the
+      # apport gui manually after it because we kill u-m during the upgrade
+      # to prevent it from poping up for reboot notifications or FF restart
+      # notifications or somesuch
       import traceback
       lines = traceback.format_exception(type, value, tb)
       logging.error("not handled expection:\n%s" % "\n".join(lines))
-      run_apport("update-manager", "UnhandledException")
-      self.error(_("A fatal error occured"),
-                 _("Please report this as a bug and include the "
-                   "files /var/log/dist-upgrade/main.log and "
-                   "/var/log/dist-upgrade/apt.log "
-                   "in your report. The upgrade aborts now.\n"
-                   "Your original sources.list was saved in "
-                   "/etc/apt/sources.list.distUpgrade."),
-                 "\n".join(lines))
+      # we can't be sure that apport will run in the middle of a upgrade
+      # so we still show a error message here
+      apport_crash(type, value, tb)
+      if not run_apport():
+        self.error(_("A fatal error occured"),
+                   _("Please report this as a bug (if you haven't already) and include the"
+                     "files /var/log/dist-upgrade/main.log and "
+                     "/var/log/dist-upgrade/apt.log "
+                     "in your report. The upgrade aborts now.\n"
+                     "Your original sources.list was saved in "
+                     "/etc/apt/sources.list.distUpgrade."),
+                   "\n".join(lines))
       sys.exit(1)
 
     def getTerminal(self):

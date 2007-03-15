@@ -24,7 +24,7 @@ import subprocess
 import apt
 import os
 
-from DistUpgradeApport import run_apport
+from DistUpgradeApport import *
 
 
 def FuzzyTimeToStr(sec):
@@ -50,15 +50,20 @@ class InstallProgress(apt.progress.InstallProgress):
   """ Base class for InstallProgress that supports some fancy
       stuff like apport integration
   """
+  def __init__(self):
+    apt.progress.InstallProgress.__init__(self)
+    self.pkg_failures = 0
+
   def error(self, pkg, errormsg):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)
+    self.pkg_failures += 1
     if "/" in pkg:
       pkg = os.path.basename(pkg)
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    run_apport(pkg, errormsg)
+    apport_pkgfailure(pkg, errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd):

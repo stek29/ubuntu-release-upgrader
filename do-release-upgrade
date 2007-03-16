@@ -18,6 +18,10 @@ if __name__ == "__main__":
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
                           "is possible"))
+  parser.add_option ("-f", "--frontend", default="DistUpgradeViewText",
+                     dest="frontend", 
+                     help=_("Run the specified frontend"))
+
   (options, args) = parser.parse_args()
 
   print _("Checking for a new ubuntu release")
@@ -33,6 +37,6 @@ if __name__ == "__main__":
   fetcher = DistUpgradeFetcherCore(new_dist=m.new_dist,
 				   progress=progress)
   fetcher.run_options += ["--mode=server",
-                          "--frontend=DistUpgradeViewText"
+                          "--frontend=%s" % options.frontend,
                           ]
   fetcher.run()

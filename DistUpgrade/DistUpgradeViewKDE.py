@@ -354,6 +354,13 @@ class DistUpgradeViewKDE(DistUpgradeView):
                 adept = DCOPApp(qcstring_app, client)
                 adeptInterface = adept.object("MainApplication-Interface")
                 adeptInterface.quit()
+        # for some reason we need to start the main loop to get everything displayed
+        # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
+        QTimer.singleShot(10, self.exitMainLoop)
+        self.app.exec_loop()
+
+    def exitMainLoop(self):
+        self.app.exit()
 
     def _handleException(self, exctype, excvalue, exctb):
         """Crash handler."""

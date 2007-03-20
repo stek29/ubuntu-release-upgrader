@@ -7,7 +7,7 @@ class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
         self.view = view
         # user seleced to use the network, otherwise it would not be
         # possible to download self
-        self.options += ["--with-network"]
+        run_options = ["--with-network"]
         # make sure to run self with proper options
         if options.cdromPath is not None:
             self.run_options += ["--cdrom=%s" % options.cdromPath]

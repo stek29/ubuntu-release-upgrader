@@ -546,7 +546,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             msg += unicode(estimatedDownloadTime(downloadSize), 'UTF-8')
             msg += "."
 
-        msg = unicode(msg, 'utf-8')
+        ##msg = unicode(msg, 'utf-8')
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
             msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
                                 "cannot be canceled at any time later.")

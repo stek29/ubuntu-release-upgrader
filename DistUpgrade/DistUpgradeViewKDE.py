@@ -47,10 +47,13 @@ from dialog_conffile import dialog_conffile
 from crashdialog import CrashDialog
 
 import gettext
-from gettext import gettext as _
+from gettext import gettext as gett
+
+def _(str):
+    return unicode(gett(str), 'UTF-8')
 
 def utf8(str):
-  return unicode(str, 'latin1').encode('utf-8')
+  return unicode(str, 'UTF-8')
 
 class KDECdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress """
@@ -104,8 +107,9 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         self.parent = parent
 
     def mediaChange(self, medium, drive):
-      restart = QMessageBox.question(self.window_main, _("Media Change"), msg, QMessageBox.Ok|QMessageBox.Cancel, QMessageBox.Cancel)
-      if restart == QMessageBox.Yes:
+      msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
+      change = QMessageBox.question(self.window_main, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
+      if change == QMessageBox.Ok:
         return True
       return False
 
@@ -129,7 +133,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
             currentItem = self.totalItems
 
         if self.currentCPS > 0:
-            self.status.setText(_("Fetching file %li of %li at %s/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+            self.status.setText(_("Fetching file %li of %li at %sb/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
             self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % FuzzyTimeToStr(self.eta) + "</i>")
         else:
             self.status.setText(_("Fetching file %li of %li") % (currentItem, self.totalItems))
@@ -354,6 +358,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
                 adept = DCOPApp(qcstring_app, client)
                 adeptInterface = adept.object("MainApplication-Interface")
                 adeptInterface.quit()
+
+        # init gettext
+        gettext.bindtextdomain("update-manager",localedir)
+        gettext.textdomain("update-manager")
+        self.translate_widget_children()
+
         # for some reason we need to start the main loop to get everything displayed
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
         QTimer.singleShot(10, self.exitMainLoop)
@@ -361,6 +371,20 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
     def exitMainLoop(self):
         self.app.exit()
+
+    def translate_widget_children(self, parentWidget=None):
+        if parentWidget == None:
+            parentWidget = self.window_main
+
+        if parentWidget.children() != None:
+            for widget in parentWidget.children():
+                self.translate_widget(widget)
+                self.translate_widget_children(widget)
+
+    def translate_widget(self, widget):
+        if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
+            if str(widget.text()) != "":
+                widget.setText(_(str(widget.text())))
 
     def _handleException(self, exctype, excvalue, exctb):
         """Crash handler."""
@@ -412,7 +436,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         return self._cdromProgress
 
     def updateStatus(self, msg):
-        self.window_main.label_status.setText("%s" % msg)
+        #self.window_main.label_status.setText("%s" % msg)
+        print "updateStatus: " + msg
+        self.window_main.label_status.setText(unicode(msg, 'UTF-8'))
 
     def hideStep(self, step):
         image = getattr(self.window_main,"image_step%i" % step)
@@ -508,11 +534,19 @@ class DistUpgradeViewKDE(DistUpgradeView):
                                     pkgs_upgrade) % pkgs_upgrade
             msg +=" "
         if downloadSize > 0:
+            print "type: " + str(type(apt_pkg.SizeToStr(downloadSize))) + apt_pkg.SizeToStr(downloadSize)
+            print "type: "+ str(type(_("<p>You have to download a total of %s. "))) + _("<p>You have to download a total of %s. ") 
+            print "type: " + str(type(msg))
+            msg = unicode(msg, 'UTF-8')
+            #string = _("<p>You have to download a total of %s. ")
+            #msg += string % apt_pkg.SizeToStr(downloadSize)
+            #msg += _("<p>You have to download a total of %s. ") %\
             msg += _("<p>You have to download a total of %s. ") %\
                      apt_pkg.SizeToStr(downloadSize)
-            msg += estimatedDownloadTime(downloadSize)
+            msg += unicode(estimatedDownloadTime(downloadSize), 'UTF-8')
             msg += "."
 
+        msg = unicode(msg, 'utf-8')
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
             msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
                                 "cannot be canceled at any time later.")
@@ -530,8 +564,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
             return False
 
         changesDialogue = dialog_changes(self.window_main)
+        self.translate_widget_children(changesDialogue)
 
-        changesDialogue.label_summary.setText("<big><b>%s</b></big>" % summary)
+        summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
+        changesDialogue.label_summary.setText(summaryText)
         changesDialogue.label_changes.setText(msg)
         # fill in the details
         changesDialogue.treeview_details.clear()
@@ -548,7 +584,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         return False
 
     def askYesNoQuestion(self, summary, msg, default='No'):
-        restart = QMessageBox.question(self.window_main, summary, msg, QMessageBox.Yes|QMessageBox.Cancel, QMessageBox.Cancel)
+        restart = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode(msg, 'UTF-8'), QMessageBox.Yes, QMessageBox.No)
         if restart == QMessageBox.Yes:
             return True
         return False

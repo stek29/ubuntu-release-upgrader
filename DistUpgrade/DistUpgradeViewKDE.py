@@ -238,7 +238,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
         self.progress.setProgress(self.percent)
-        self.label_status.setText(status.strip())
+        self.label_status.setText(unicode(status.strip(), 'UTF-8'))
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()

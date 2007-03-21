@@ -187,7 +187,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        self.dialogue.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
+        dialogue.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
         dialogue.exec_loop()
 
     def conffile(self, current, new):

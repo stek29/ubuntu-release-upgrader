@@ -245,7 +245,15 @@ class MyCache(apt.Cache):
             self.markRemove("nvidia-settings")
             self.markInstall("nvidia-glx")
 
-    def distUpgrade(self, view, serverMode):
+    def distUpgrade(self, view, serverMode, logfd):
+        def _restore_fds(stdout, stderr):
+            os.dup2(stdout, 1)
+            os.dup2(stderr, 2)
+        if serverMode:
+            old_stdout = os.dup(1)
+            old_stderr = os.dup(2)
+            os.dup2(logfd, 1)
+            os.dup2(logfd, 2)
         try:
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
@@ -273,6 +281,7 @@ class MyCache(apt.Cache):
                          "package and include the files in /var/log/dist-upgrade/ "
                          "in the bugreport."))
             logging.error("Dist-upgrade failed: '%s'", e)
+            if serverMode: _restore_fds(old_stdout, old_stderr)
             return False
 
         # check the trust of the packages that are going to change
@@ -307,7 +316,9 @@ class MyCache(apt.Cache):
                          "You may want to try again later. See below for a "
                          "list of unauthenticated packages."),
                        "\n".join(untrusted))
+            if serverMode: _restore_fds(old_stdout, old_stderr)
             return False
+        if serverMode: _restore_fds(old_stdout, old_stderr)
         return True
 
     def _verifyChanges(self):

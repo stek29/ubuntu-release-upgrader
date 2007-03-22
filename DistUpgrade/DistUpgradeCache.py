@@ -413,7 +413,7 @@ class MyCache(apt.Cache):
             # FIXME: provide a list
             view.error(_("Can't guess meta-package"),
                        _("Your system does not contain a "
-                         "ubuntu-desktop, kubuntu-desktop or "
+                         "ubuntu-desktop, kubuntu-desktop, xubuntu-desktop or "
                          "edubuntu-desktop package and it was not "
                          "possible to detect which version of "
                         "Ubuntu you are running.\n "

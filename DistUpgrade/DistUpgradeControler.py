@@ -38,10 +38,10 @@ from DistUpgradeConfigParser import DistUpgradeConfig
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro
 
-
 from gettext import gettext as _
 import gettext
 from DistUpgradeCache import MyCache
+from DistUpgradeApport import *
 
 class AptCdrom(object):
     def __init__(self, view, path):
@@ -161,8 +161,8 @@ class DistUpgradeControler(object):
              os.environ.has_key("SSH_TTY"))):
             port = 9004
             res = self._view.askYesNoQuestion(
-                _("Continue runing under SSH?"),
-                _("This session appears to be runing under ssh. "
+                _("Continue running under SSH?"),
+                _("This session appears to be running under ssh. "
                   "It is not recommended to perform a upgrade "
                   "over ssh currently because in case of failure "
                 "it is harder to recover.\n\n"
@@ -178,7 +178,7 @@ class DistUpgradeControler(object):
                     _("Starting additional sshd"),
                     _("To make recovery in case of failure easier a "
                       "additional sshd will be started on port '%s'. "
-                      "If anything goes wrong with the runing ssh "
+                      "If anything goes wrong with the running ssh "
                       "you can still connect to the additional one.\n"
                       ) % port)
 
@@ -219,12 +219,15 @@ class DistUpgradeControler(object):
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  inteligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:
-            res = self._view.askYesNoQuestion(_("Fetch data from the network for the upgrade?"),
-                                              _("The upgrade can use the network to check "
-                                                "the latest updates and to fetch packages that are not on the "
-                                                "current CD.\n"
-                                                "If you have fast or inexpensive network access you should answer "
-                                                "'Yes' here. If networking is expensive for you choose 'No'.")
+            res = self._view.askYesNoQuestion(_("Include latest updates from the Internet?"),
+                                              _("The upgrade process can automatically download "
+                                                "the latest updates and install them during the "
+                                                "upgrade.  The upgrade will take longer, but when "
+                                                "it is complete, your system will be fully up to "
+                                                "date.  You can choose not to do this, but you "
+                                                "should install the latest updates soon after "
+                                                "upgrading."),
+                                              'Yes'
                                               )
             self.useNetwork = res
             logging.debug("useNetwork: '%s' (selected by user)" % res)
@@ -321,7 +324,7 @@ class DistUpgradeControler(object):
         if not self.rewriteSourcesList(mirror_check=True):
             logging.error("No valid mirror found")
             res = self._view.askYesNoQuestion(_("No valid mirror found"),
-                             _("While scaning your repository "
+                             _("While scanning your repository "
                                "information no mirror entry for "
                                "the upgrade was found."
                                "This cam happen if you run a internal "
@@ -533,17 +536,23 @@ class DistUpgradeControler(object):
             try:
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
-                # installing the packages failed, can't be retried
                 logging.error("SystemError from cache.commit(): %s" % e)
+                # check if the installprogress catched a pkgfailure, if not, generate a fallback here
+                if iprogress.pkg_failures == 0:
+                    errormsg = "SystemError in cache.commit(): %s" % e
+                    apport_pkgfailure("update-manager", errormsg)
+                # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
-                self._view.error(_("Could not install the upgrades"),
-                                 _("The upgrade aborts now. Your system "
-                                   "could be in an unusable state. A recovery "
-                                   "was run (dpkg --configure -a).\n\n"
-                                   "Please report this bug against the 'update-manager' "
-                                   "package and include the files in /var/log/dist-upgrade/ "
-                                   "in the bugreport."),
-                                 "%s" % e)
+                # invoke the frontend now
+                msg = _("The upgrade aborts now. Your system "
+                        "could be in an unusable state. A recovery "
+                        "was run (dpkg --configure -a).")
+                if not run_apport():
+                    msg += _("\n\nPlease report this bug against the 'update-manager' "
+                             "package and include the files in /var/log/dist-upgrade/ "
+                             "in the bugreport.\n"
+                             "%s" % e)
+                self._view.error(_("Could not install the upgrades"), msg)
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -645,7 +654,7 @@ class DistUpgradeControler(object):
             except (SystemError, IOError), e:
                 logging.error("cache.commit() in doPostUpgrade() failed: %s" % e)
                 self._view.error(_("Error during commit"),
-                                 _("Some problem occured during the clean-up. "
+                                 _("A problem occured during the clean-up. "
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
@@ -817,7 +826,10 @@ class DistUpgradeControler(object):
         if not self.askDistUpgrade():
             self.abort()
 
-        self._view.updateStatus(_("Upgrading"))            
+        # kill update-notifier now to supress reboot required
+        subprocess.call(["killall","update-notifier"])
+        # no do the upgrade
+        self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
             # don't abort here, because it would restore the sources.list
             sys.exit(1) 

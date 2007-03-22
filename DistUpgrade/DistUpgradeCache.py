@@ -166,6 +166,7 @@ class MyCache(apt.Cache):
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """
         logging.debug("running feistyQuirks handler")
+        # ndisrwapper changed again *sigh*
         for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
             if self.has_key(fr) and self.has_key(to):
                 if self[fr].isInstalled and not self[to].markedInstall:
@@ -173,7 +174,6 @@ class MyCache(apt.Cache):
                         self.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
                     except SystemError, e:
                         logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
-        
 
     def edgyQuirks(self):
         """ this function works around quirks in the dapper->edgy upgrade """
@@ -413,10 +413,10 @@ class MyCache(apt.Cache):
             # FIXME: provide a list
             view.error(_("Can't guess meta-package"),
                        _("Your system does not contain a "
-                         "ubuntu-desktop, kubuntu-desktop or "
+                         "ubuntu-desktop, kubuntu-desktop, xubuntu-desktop or "
                          "edubuntu-desktop package and it was not "
                          "possible to detect which version of "
-                        "ubuntu you are running.\n "
+                        "Ubuntu you are running.\n "
                          "Please install one of the packages "
                          "above first using synaptic or "
                          "apt-get before proceeding."))

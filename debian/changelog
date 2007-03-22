@@ -1,3 +1,144 @@
+update-manager (1:0.59.8) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - fix crash in error dialog (LP#94229)
+    - i18n KDE frontend
+  * DistUpgrade/DistUpgradeCache.py:
+    - mention xubuntu-desktop too (LP#94443)
+
+ --
+
+update-manager (1:0.59.7) feisty; urgency=low
+
+  * NEWS: removed empty file (LP#92250)
+  * DistUpgrade/DistUpgradeControler.py:
+    - fix wording of the "use network" question
+    - better apport integration
+    - fix in the progress reporting where the report was off-by-one
+  * DistUpgrade/DistUpgradeFetcherSelf.py:
+    - fix run_options argument
+  * UpdateManager/Core/MetaRelease.py:
+    - fix race conditin in download thread (thanks to Matt
+      Zimmerman for reporting the issue)
+  * do-release-upgrade:
+    - added option --frontend, --mode
+  
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 21 Mar 2007 10:04:45 +0100
+
+update-manager (1:0.59.6) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeView.py, DistUpgradeControler.py:
+    - fixes in the apport integration
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 14 Mar 2007 18:22:06 +0100
+
+update-manager (1:0.59.5) feisty; urgency=low
+
+  * UpdateManager/fakegconf.py:
+    - Fix missing {get,set}_string() in fakegconf
+  * DistUpgrade/dialog_changes.ui
+    - Fix alignment of image
+  * DistUpgrade/dialog_error.ui
+    - Fix caption
+    - Make text box read only
+  * DistUpgrade/DistUpgradeViewKDE.py
+    - remove unused argument to reportBug()
+    - fix caption of information box
+    - show close button on error box
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 14 Mar 2007 11:05:22 +0000
+
+update-manager (1:0.59.4) feisty; urgency=low
+
+  * data/glade/UpdateManager.glade:
+    - improve the wording of the dist-upgrade required dialog (LP#88706)
+  * update-manager:
+    - set better dialog caption (LP#88706)
+  * DistUpgrade/DistUpgradeControler.py:
+    - supress reboot notification when a upgrade is in progress (LP#91999)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Mar 2007 22:11:11 +0100
+
+update-manager (1:0.59.3) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - Fix incorrect variable name, LP No 91887
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 13 Mar 2007 20:05:22 +0000
+
+update-manager (1:0.59.2) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - Fix reference to konsole_frame (LP No 84717 comment 33)
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 13 Mar 2007 11:12:01 +0000
+
+update-manager (1:0.59.1) feisty; urgency=low
+
+  [ Michael Vogt ]
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - do not fail if loading the svg pixbuf loader fails (LP#91593)
+
+  [ Jonathan Riddell ]
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - import KRun, closes https://launchpad.net/bugs/91072
+    - fix non-existant variable use, closes https://launchpad.net/bugs/91386
+    - fix incorrect method name, closes https://launchpad.net/bugs/91295
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 12 Mar 2007 19:00:07 +0000
+
+update-manager (1:0.59) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeViewKDE.py
+    - quit any running instances of Adept
+  * DistUpgrade/dist-upgrade.py
+    - improve error message when failing to load frontend
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 12 Mar 2007 13:08:07 +0000
+
+update-manager (1:0.58) feisty; urgency=low
+
+  * UpdateManager/UpdateManager.py:
+    - do not crash if download size can not be calculated (LP#90547)
+  * fix build for all python versions (thanks to doko for help!) 
+    (LP#90269)
+  * strip changelog epoch too (LP#45566)
+  * fix spelling mistakes (thanks to Bruce Cowan, LP#90833)
+  * update download size if "check/uncheck" all was selected from 
+    right-click menu
+  * correct download speed string (LP#73721)
+  * fix in the german translation (LP#68384)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri,  9 Mar 2007 14:58:36 +0100
+
+update-manager (1:0.57.8) feisty; urgency=low
+
+  * debian/rules:
+    - moved dist-upgrade_$version generation to binary-indep
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri,  2 Mar 2007 10:49:53 +0100
+
+update-manager (1:0.57.7) feisty; urgency=low
+
+  * DistUpgrade/DistUpgradeView.py:
+    - revert earlier commit in FuzzyTimeToStr() to make it not crash
+  * debian/rules:
+    - strip the epoch before runing dpkg-addfiles
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 28 Feb 2007 14:25:39 +0100
+
+update-manager (1:0.57.6) feisty; urgency=low
+
+  [ Jonathan Riddell ]
+  * DistUpgrade/DistUpgradeViewKDE.py
+    - Fix crash with incorrect connect() calls
+
+  [ Michael Vogt ]
+  * UpdateManager/ChangelogViewer.py:
+    - fix some margins (thanks to Sebastian Heinlein)
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 27 Feb 2007 21:32:45 +0000
+
 update-manager (1:0.57.5) feisty; urgency=low
 
   * UpdateManager/UpdateManager.py:

@@ -33,6 +33,14 @@ class FakeGconf:
 		key = self.keyname(key)
 		self.config[key] = value
 
+	def get_string(self, key):
+		key = self.keyname(key)
+		return self.config.setdefault(self.keyname(key), "")
+
+	def set_string(self, key):
+		key = self.keyname(key)
+		self.config[key] = value
+
 	# FIXME assume type is int for now
 	def get_pair(self, key, ta = None, tb = None):
 		key = self.keyname(key)

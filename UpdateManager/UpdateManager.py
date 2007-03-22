@@ -190,15 +190,16 @@ class MyCache(apt.Cache):
                     break
                 match = re.match(regexp,line)
                 if match:
-                    # FIXME: the installed version can have a epoch, but th
-                    #        changelog does not have one, we do a dumb
-                    #        approach here and just strip it away, but I'm
-                    #        sure that this can lead to problems
+                    # strip epoch from installed version
+                    # and from changelog too
                     installed = pkg.installedVersion
                     if installed and ":" in installed:
                         installed = installed.split(":",1)[1]
+                    changelogver = match.group(1)
+                    if changelogver and ":" in changelogver:
+                        changelogver = changelogver.split(":",1)[1]
                     if installed and \
-                        apt_pkg.VersionCompare(match.group(1),installed)<=0:
+                        apt_pkg.VersionCompare(changelogver,installed)<=0:
                         break
                 # EOF (shouldn't really happen)
                 alllines = alllines + line
@@ -589,6 +590,7 @@ class UpdateManager(SimpleGladeApp):
     self.setBusy(True)
     self.cache.saveDistUpgrade()
     self.treeview_update.queue_draw()
+    self.refresh_updates_count()
     self.setBusy(False)
 
   def select_none_updgrades(self, widget):
@@ -598,6 +600,7 @@ class UpdateManager(SimpleGladeApp):
     self.setBusy(True)
     self.cache.clear()
     self.treeview_update.queue_draw()
+    self.refresh_updates_count()
     self.setBusy(False)
 
   def setBusy(self, flag):
@@ -614,10 +617,14 @@ class UpdateManager(SimpleGladeApp):
 
   def refresh_updates_count(self):
       self.button_install.set_sensitive(self.cache.installCount)
-      self.dl_size = self.cache.requiredDownload
-      # TRANSLATORS: b stands for Bytes
-      self.label_downsize.set_markup(_("Download size: %s") % \
-                                       humanize_size(self.dl_size))
+      try:
+          self.dl_size = self.cache.requiredDownload
+          # TRANSLATORS: b stands for Bytes
+          self.label_downsize.set_markup(_("Download size: %s") % \
+                                         humanize_size(self.dl_size))
+      except SystemError, e:
+          print "requiredDownload could not be calculated: %s" % e
+          self.label_downsize.set_markup(_("Unknown download size"))
       
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to
@@ -699,7 +706,7 @@ class UpdateManager(SimpleGladeApp):
   def on_button_install_clicked(self, widget):
     #print "on_button_install_clicked"
     self.invoke_manager(INSTALL)
-
+    
   def invoke_manager(self, action):
     # check first if no other package manager is runing
 
@@ -808,7 +815,6 @@ class UpdateManager(SimpleGladeApp):
   def fillstore(self):
     # use the watch cursor
     self.setBusy(True)
-
     # clean most objects
     self.dl_size = 0
     try:
@@ -817,7 +823,7 @@ class UpdateManager(SimpleGladeApp):
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not initialize the package information"),
                 _("A unresolvable problem occurred while "
-                  "intializing the package information.\n\n"
+                  "initializing the package information.\n\n"
                   "Please report this bug against the 'update-manager' "
                   "package and include the following error message:\n"),
                 e)
@@ -832,7 +838,6 @@ class UpdateManager(SimpleGladeApp):
         sys.exit(1)
     self.store.clear()
     self.list = UpdateList()
-
     # fill them again
     try:
         self.list.update(self.cache)

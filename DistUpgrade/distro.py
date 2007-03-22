@@ -1,1 +1,1 @@
-/usr/share/pycentral/python-apt/site-packages/aptsources/distro.py
+/usr/lib/python2.5/site-packages/aptsources/distro.py

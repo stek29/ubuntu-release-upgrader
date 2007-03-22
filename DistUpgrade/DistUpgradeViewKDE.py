@@ -23,6 +23,8 @@ from qt import *
 from kdeui import *
 from kdecore import *
 from kparts import konsolePart
+from kio import KRun
+from dcopext import DCOPClient, DCOPApp # used to quit adept
 
 import sys
 import logging
@@ -45,10 +47,13 @@ from dialog_conffile import dialog_conffile
 from crashdialog import CrashDialog
 
 import gettext
-from gettext import gettext as _
+from gettext import gettext as gett
+
+def _(str):
+    return unicode(gett(str), 'UTF-8')
 
 def utf8(str):
-  return unicode(str, 'latin1').encode('utf-8')
+  return unicode(str, 'UTF-8')
 
 class KDECdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress """
@@ -102,8 +107,9 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         self.parent = parent
 
     def mediaChange(self, medium, drive):
-      restart = QMessageBox.question(self.window_main, _("Media Change"), msg, QMessageBox.Ok|QMessageBox.Cancel, QMessageBox.Cancel)
-      if restart == QMessageBox.Yes:
+      msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
+      change = QMessageBox.question(self.window_main, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
+      if change == QMessageBox.Ok:
         return True
       return False
 
@@ -127,7 +133,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
             currentItem = self.totalItems
 
         if self.currentCPS > 0:
-            self.status.setText(_("Fetching file %li of %li at %s/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+            self.status.setText(_("Fetching file %li of %li at %sb/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
             self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % FuzzyTimeToStr(self.eta) + "</i>")
         else:
             self.status.setText(_("Fetching file %li of %li") % (currentItem, self.totalItems))
@@ -173,16 +179,19 @@ class KDEInstallProgressAdapter(InstallProgress):
     def error(self, pkg, errormsg):
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-        msg="<big><b>%s</b></big><br />%s" % (summary, msg)
+        summary = _("Could not install '%s'") % pkg
+        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
+                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
+        msg = "<big><b>%s</b></big><br />%s" % (summary, msg)
 
         dialogue = dialog_error(self.parent.window_main)
         dialogue.label_error.setText(msg)
-        if extended_msg != None:
-            dialogue.textview_error.setText(utf8(extended_msg))
+        if errormsg != None:
+            dialogue.textview_error.setText(utf8(errormsg))
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        self.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
+        dialogue.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
         dialogue.exec_loop()
 
     def conffile(self, current, new):
@@ -229,7 +238,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
         self.progress.setProgress(self.percent)
-        self.label_status.setText(status.strip())
+        self.label_status.setText(unicode(status.strip(), 'UTF-8'))
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()
@@ -273,9 +282,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
           if not self.activity_timeout_reported:
-            logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
+            logging.warning("no activity on terminal for %s seconds" % (self.TIMEOUT_TERMINAL_ACTIVITY))
             self.activity_timeout_reported = True
-          self.parent.konsole_frame.show()
+          self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()
         time.sleep(0.0000001)
 
@@ -338,6 +347,45 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.window_main.konsole_frame.hide()
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
+        # create a new DCOP-Client:
+        client = DCOPClient()
+        # connect the client to the local DCOP-server:
+        client.attach()
+
+        for qcstring_app in client.registeredApplications():
+            app = str(qcstring_app)
+            if app.startswith("adept"): 
+                adept = DCOPApp(qcstring_app, client)
+                adeptInterface = adept.object("MainApplication-Interface")
+                adeptInterface.quit()
+
+        # init gettext
+        gettext.bindtextdomain("update-manager",localedir)
+        gettext.textdomain("update-manager")
+        self.translate_widget_children()
+
+        # for some reason we need to start the main loop to get everything displayed
+        # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
+        QTimer.singleShot(10, self.exitMainLoop)
+        self.app.exec_loop()
+
+    def exitMainLoop(self):
+        self.app.exit()
+
+    def translate_widget_children(self, parentWidget=None):
+        if parentWidget == None:
+            parentWidget = self.window_main
+
+        if parentWidget.children() != None:
+            for widget in parentWidget.children():
+                self.translate_widget(widget)
+                self.translate_widget_children(widget)
+
+    def translate_widget(self, widget):
+        if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
+            if str(widget.text()) != "":
+                widget.setText(_(str(widget.text())))
+
     def _handleException(self, exctype, excvalue, exctb):
         """Crash handler."""
 
@@ -360,7 +408,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
         KRun.runURL(KURL(url), "text/html")
 
-    def reportBug(self, url):
+    def reportBug(self):
         """start konqueror"""
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
@@ -388,7 +436,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         return self._cdromProgress
 
     def updateStatus(self, msg):
-        self.window_main.label_status.setText("%s" % msg)
+        #self.window_main.label_status.setText("%s" % msg)
+        print "updateStatus: " + msg
+        self.window_main.label_status.setText(unicode(msg, 'UTF-8'))
 
     def hideStep(self, step):
         image = getattr(self.window_main,"image_step%i" % step)
@@ -426,13 +476,14 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def information(self, summary, msg, extended_msg=None):
         msg = "<big><b>%s</b></big><br />%s" % (summary,msg)
         dialogue = dialog_error(self.window_main)
-        dialogue.label_error.setText(msg)
+        dialogue.label_error.setText(utf8(msg))
         if extended_msg != None:
             dialogue.textview_error.setText(utf8(extended_msg))
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
         dialogue.button_bugreport.hide()
+        dialogue.setCaption("Information")
         iconLoader = KIconLoader()
         messageIcon = iconLoader.loadIcon("messagebox_info", KIcon.Panel)
         dialogue.image.setPixmap(messageIcon)
@@ -448,7 +499,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        self.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
+        dialogue.button_close.show()
+        self.app.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
         dialogue.exec_loop()
 
         return False
@@ -482,11 +534,19 @@ class DistUpgradeViewKDE(DistUpgradeView):
                                     pkgs_upgrade) % pkgs_upgrade
             msg +=" "
         if downloadSize > 0:
+            print "type: " + str(type(apt_pkg.SizeToStr(downloadSize))) + apt_pkg.SizeToStr(downloadSize)
+            print "type: "+ str(type(_("<p>You have to download a total of %s. "))) + _("<p>You have to download a total of %s. ") 
+            print "type: " + str(type(msg))
+            msg = unicode(msg, 'UTF-8')
+            #string = _("<p>You have to download a total of %s. ")
+            #msg += string % apt_pkg.SizeToStr(downloadSize)
+            #msg += _("<p>You have to download a total of %s. ") %\
             msg += _("<p>You have to download a total of %s. ") %\
                      apt_pkg.SizeToStr(downloadSize)
-            msg += estimatedDownloadTime(downloadSize)
+            msg += unicode(estimatedDownloadTime(downloadSize), 'UTF-8')
             msg += "."
 
+        ##msg = unicode(msg, 'utf-8')
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
             msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
                                 "cannot be canceled at any time later.")
@@ -504,8 +564,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
             return False
 
         changesDialogue = dialog_changes(self.window_main)
+        self.translate_widget_children(changesDialogue)
 
-        changesDialogue.label_summary.setText("<big><b>%s</b></big>" % summary)
+        summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
+        changesDialogue.label_summary.setText(summaryText)
         changesDialogue.label_changes.setText(msg)
         # fill in the details
         changesDialogue.treeview_details.clear()
@@ -521,8 +583,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
             return True
         return False
 
-    def askYesNoQuestion(self, summary, msg):
-        restart = QMessageBox.question(self.window_main, summary, msg, QMessageBox.Yes|QMessageBox.Cancel, QMessageBox.Cancel)
+    def askYesNoQuestion(self, summary, msg, default='No'):
+        restart = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode(msg, 'UTF-8'), QMessageBox.Yes, QMessageBox.No)
         if restart == QMessageBox.Yes:
             return True
         return False

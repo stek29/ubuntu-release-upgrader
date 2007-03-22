@@ -19,26 +19,23 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import gettext
 from gettext import gettext as _
 import subprocess
 import apt
 import os
 
-# directory for the logs
-LOGDIR="/var/log/dist-upgrader/"
+from DistUpgradeApport import *
+
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
-  s = ""
   if sec > 60*60*24:
-    s += gettext.ngettext("%li day ","%li days ", sec/60/60/24) % sec/60/60/24
+    return _("%li days %li hours %li minutes") % (sec/60/60/24, (sec/60/60) % 24, (sec/60) % 60)
   if sec > 60*60:
-    s += gettext.ngettext("%li hour ","%li hours ", sec/60/60) % sec/60/60
+    return _("%li hours %li minutes") % (sec/60/60, (sec/60) % 60)
   if sec > 60:
-    s += gettext.ngettext("%li minute ","%li minutes ", sec/60) % sec/60
-  s += gettext.ngettext("%li second", "%li seconds", sec) % sec
-  return s
+    return _("%li minutes") % (sec/60)
+  return _("%li seconds") % sec
 
 def estimatedDownloadTime(requiredDownload):
     """ get the estimated download time """
@@ -53,18 +50,20 @@ class InstallProgress(apt.progress.InstallProgress):
   """ Base class for InstallProgress that supports some fancy
       stuff like apport integration
   """
+  def __init__(self):
+    apt.progress.InstallProgress.__init__(self)
+    self.pkg_failures = 0
+
   def error(self, pkg, errormsg):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)
+    self.pkg_failures += 1
     if "/" in pkg:
       pkg = os.path.basename(pkg)
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    s = "/usr/share/apport/package_hook"
-    if os.path.exists(s):
-      p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
-      p.stdin.write("ErrorMessage: %s\n" % errormsg)
+    apport_pkgfailure(pkg, errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd):
@@ -129,7 +128,7 @@ class DistUpgradeView(object):
             elif pkg.markedDowngrade: self.toDowngrade.append(pkg.name)
         # no re-installs 
         assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toDowngrade) == len(changes))
-    def askYesNoQuestion(self, summary, msg):
+    def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "
         pass
     def confirmRestart(self):

@@ -36,6 +36,7 @@ import apt
 import apt_pkg
 import os
 
+from DistUpgradeApport import *
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
@@ -126,7 +127,7 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
             currentItem = self.totalItems
 
         if self.currentCPS > 0:
-            self.status.set_text(_("Fetching file %li of %li at %s/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+            self.status.set_text(_("Fetching file %li of %li at %sb/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(self.eta))
         else:
             self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.totalItems))
@@ -239,7 +240,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
-        self.progress.set_fraction(float(self.percent)/100.0)
+        self.progress.set_fraction(float(percent)/100.0)
         self.label_status.set_text(status.strip())
         # start showing when we gathered some data
         if percent > 1.0:
@@ -249,7 +250,7 @@ class GtkInstallProgressAdapter(InstallProgress):
           # time wasted in conffile questions (or other ui activity)
           delta -= self.time_ui
           time_per_percent = (float(delta)/percent)
-          eta = (100.0 - self.percent) * time_per_percent
+          eta = (100.0 - percent) * time_per_percent
           # only show if we have some sensible data (60sec < eta < 2days)
           if eta > 61.0 and eta < (60*60*24*2):
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(eta))
@@ -342,7 +343,11 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         # -> this avoid the issue that during the dapper->edgy upgrade
         #    the loaders move from /usr/lib/gtk/2.4.0/loaders to 2.10.0
         self.pngloader = gtk.gdk.PixbufLoader("png")
-        self.svgloader = gtk.gdk.PixbufLoader("svg")
+        try:
+          self.svgloader = gtk.gdk.PixbufLoader("svg")
+        except gobject.GError, e:
+          logging.warning("svg pixbuf loader failed (%s)" % e)
+          pass
         
         self.window_main.realize()
         self.window_main.window.set_functions(gtk.gdk.FUNC_MOVE)
@@ -371,17 +376,25 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         sys.excepthook = self._handleException
 
     def _handleException(self, type, value, tb):
+      # we handle the exception here, hand it to apport and run the
+      # apport gui manually after it because we kill u-m during the upgrade
+      # to prevent it from poping up for reboot notifications or FF restart
+      # notifications or somesuch
       import traceback
       lines = traceback.format_exception(type, value, tb)
       logging.error("not handled expection:\n%s" % "\n".join(lines))
-      self.error(_("A fatal error occured"),
-                 _("Please report this as a bug and include the "
-                   "files /var/log/dist-upgrade/main.log and "
-                   "/var/log/dist-upgrade/apt.log "
-                   "in your report. The upgrade aborts now.\n"
-                   "Your original sources.list was saved in "
-                   "/etc/apt/sources.list.distUpgrade."),
-                 "\n".join(lines))
+      # we can't be sure that apport will run in the middle of a upgrade
+      # so we still show a error message here
+      apport_crash(type, value, tb)
+      if not run_apport():
+        self.error(_("A fatal error occured"),
+                   _("Please report this as a bug (if you haven't already) and include the"
+                     "files /var/log/dist-upgrade/main.log and "
+                     "/var/log/dist-upgrade/apt.log "
+                     "in your report. The upgrade aborts now.\n"
+                     "Your original sources.list was saved in "
+                     "/etc/apt/sources.list.distUpgrade."),
+                   "\n".join(lines))
       sys.exit(1)
 
     def getTerminal(self):
@@ -573,12 +586,16 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
             return True
         return False
 
-    def askYesNoQuestion(self, summary, msg):
+    def askYesNoQuestion(self, summary, msg, default='No'):
         msg = "<big><b>%s</b></big>\n\n%s" % (summary,msg)
         dialog = gtk.MessageDialog(parent=self.window_main,
                                    flags=gtk.DIALOG_MODAL,
                                    type=gtk.MESSAGE_QUESTION,
                                    buttons=gtk.BUTTONS_YES_NO)
+        if default == 'No':
+          dialog.set_default_response(gtk.RESPONSE_NO)
+        else:
+          dialog.set_default_response(gtk.RESPONSE_YES)
         dialog.set_markup(msg)
         res = dialog.run()
         dialog.destroy()
@@ -616,8 +633,12 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    cache[pkg].markInstall()
+    if cache[pkg].isInstalled:
+      cache[pkg].markDelete()
+    else:
+      cache[pkg].markInstall()
   cache.commit(fp,ip)
+  gtk.main()
   sys.exit(0)
   
   #sys.exit(0)

@@ -476,7 +476,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def information(self, summary, msg, extended_msg=None):
         msg = "<big><b>%s</b></big><br />%s" % (summary,msg)
         dialogue = dialog_error(self.window_main)
-        dialogue.label_error.setText(msg)
+        dialogue.label_error.setText(utf8(msg))
         if extended_msg != None:
             dialogue.textview_error.setText(utf8(extended_msg))
             dialogue.textview_error.show()

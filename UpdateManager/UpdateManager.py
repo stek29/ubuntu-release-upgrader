@@ -756,7 +756,10 @@ class UpdateManager(SimpleGladeApp):
   def allow_sleep(self, dev, cookie):
     """Send a dbus signal to gnome-power-manager to allow a suspending
     the system"""
-    dev.UnInhibit(cookie)
+    try:
+        dev.UnInhibit(cookie)
+    except Exception, e:
+      print "could not send the dbus UnInhibit signal: %s" % e
 
   def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """

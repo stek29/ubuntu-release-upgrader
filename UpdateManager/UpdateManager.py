@@ -757,7 +757,7 @@ class UpdateManager(SimpleGladeApp):
     """Send a dbus signal to gnome-power-manager to allow a suspending
     the system"""
     try:
-        dev.UnInhibit(cookie)
+      dev.UnInhibit(cookie)
     except Exception, e:
       print "could not send the dbus UnInhibit signal: %s" % e
 

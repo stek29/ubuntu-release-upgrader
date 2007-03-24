@@ -61,6 +61,13 @@ class MetaReleaseCore(object):
             path = os.path.expanduser("~/.update-manager/")
             if not os.path.exists(path):
                 os.mkdir(path)
+                # When called by sudo avoid creating files owned by root
+                # in the users home dir
+                if os.getenv("SUDO_UID") and \
+                   os.getenv("SUDO_UID") != os.getuid():
+                    os.chown(path,
+                             int(os.getenv("SUDO_UID")),
+                             int(os.getenv("SUDO_GID")))
             self.METARELEASE_FILE = os.path.join(path,"meta-release")
         self.metarelease_information = None
         self.downloading = True
@@ -175,6 +182,13 @@ class MetaReleaseCore(object):
             f.seek(0,0)
             self.metarelease_information=f
             uri.close()
+            # When called by sudo avoid creating files owned by root
+            # in the users home dir
+            if os.getenv("SUDO_UID") and \
+               os.getenv("SUDO_UID") != os.getuid():
+                os.chown(self.METARELEASE_FILE, 
+                         int(os.getenv("SUDO_UID")),
+                         int(os.getenv("SUDO_GID")))
         except urllib2.URLError:
             if os.path.exists(self.METARELEASE_FILE):
                 f=open(self.METARELEASE_FILE,"r")

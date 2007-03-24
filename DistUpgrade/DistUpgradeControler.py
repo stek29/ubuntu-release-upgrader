@@ -144,8 +144,10 @@ class DistUpgradeControler(object):
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
         fd = os.open("/var/log/dist-upgrade/apt.log",
                      os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
-        os.dup2(fd,2)
-        #os.dup2(fd,1)
+        if not self.serverMode:
+            os.dup2(fd,2)
+            os.dup2(fd,1)
+        self.logfd = fd
 
     def openCache(self):
         self.cache = MyCache(self.config, self._view.getOpCacheProgress())
@@ -506,7 +508,7 @@ class DistUpgradeControler(object):
         return True
 
     def askDistUpgrade(self):
-        if not self.cache.distUpgrade(self._view, self.serverMode):
+        if not self.cache.distUpgrade(self._view, self.serverMode, self.logfd):
             return False
         if self.serverMode:
             if not self.cache.installTasks(self.tasks):

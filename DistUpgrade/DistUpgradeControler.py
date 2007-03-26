@@ -465,21 +465,41 @@ class DistUpgradeControler(object):
             def __init__(self, initialFree):
                 self.free = initialFree
 
-        # build fs_free
-        # it has a map of the dirs we are interessted in and it
-        # contains FreeSpace objects
-        fs_free = {}
+        def make_fs_id(d):
+            """ return 'id' of a directory so that directories on the
+                same filesystem get the same id (simply the mount_point)
+            """
+            for mount_point in mounted:
+                if d.startswith(mount_point):
+                    return mount_point
+            return "/"
+
+        # this is all a bit complicated
+        # 1) check what is mounted (in mounted)
+        # 2) create FreeSpace objects for the dirs we are interessted in
+        #    (mnt_map)
+        # 3) use the  mnt_map to check if we have enough free space and
+        #    if not tell the user how much is missing
+        mounted = []
         mnt_map = {}
+        fs_free = {}
+        for line in open("/proc/mounts"):
+            (what, where, fs, options, a, b) = line.split()
+            if not where in mounted:
+                mounted.append(where)
+        # make sure mounted is sorted by longest path
+        mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
         archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
         for d in ["/","/usr","/var","/boot", archivedir, "/home"]:
+            fs_id = make_fs_id(d)
             st = os.statvfs(d)
             free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
-            if st in mnt_map:
-                logging.debug("Dir %s mounted on %s" % (d,mnt_map[st]))
-                fs_free[d] = fs_free[mnt_map[st]]
+            if fs_id in mnt_map:
+                logging.debug("Dir %s mounted on %s" % (d,mnt_map[fs_id]))
+                fs_free[d] = fs_free[mnt_map[fs_id]]
             else:
                 logging.debug("Free space on %s: %s" % (d,free))
-                mnt_map[st] = d
+                mnt_map[fs_id] = d
                 fs_free[d] = FreeSpace(free)
         del mnt_map
         logging.debug("fs_free contains: '%s'" % fs_free)
@@ -855,6 +875,8 @@ class DistUpgradeControler(object):
 
 if __name__ == "__main__":
     from DistUpgradeView import DistUpgradeView
+    from DistUpgradeCache import MyCache
     v = DistUpgradeView()
     dc = DistUpgradeControler(v)
+    dc.openCache()
     dc._checkFreeSpace()

@@ -546,12 +546,21 @@ class DistUpgradeViewKDE(DistUpgradeView):
             msg += unicode(estimatedDownloadTime(downloadSize), 'UTF-8')
             msg += "."
 
-        ##msg = unicode(msg, 'utf-8')
-        if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-            msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
+        #seems to change what's needed between edgy and feisty
+        try:
+            if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
+                msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
                                 "cannot be canceled at any time later.")
 
-        msg += "<p><b>%s</b>" % _("To prevent data loss close all open "\
+            msg += "<p><b>%s</b>" % _("To prevent data loss close all open "\
+                                   "applications and documents.")
+        except UnicodeDecodeError:
+            msg = unicode(msg, 'utf-8')
+            if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
+                msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
+                                "cannot be canceled at any time later.")
+
+            msg += "<p><b>%s</b>" % _("To prevent data loss close all open "\
                                    "applications and documents.")
 
         # Show an error if no actions are planned

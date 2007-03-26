@@ -223,6 +223,7 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def fork(self):
         """pty voodoo to attach dpkg's pty to konsole"""
+        self.parent.newKonsole()
         self.pid = os.fork()
         if self.pid == 0:
             os.dup2(self.parent.slave, 0)
@@ -336,20 +337,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # reasonable fault handler
         sys.excepthook = self._handleException
 
-        self.box = QHBoxLayout(self.window_main.konsole_frame)
-        self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
-        self.window_main.konsole_frame.setMinimumSize(500, 400)
-        self.konsole.setAutoStartShell(False)
-        self.konsoleWidget = self.konsole.widget()
-        self.box.addWidget(self.konsoleWidget)
-        self.konsoleWidget.show()
-        self.app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
-
-        #prepare for dpkg pty being attached to konsole
-        (self.master, self.slave) = pty.openpty()
-        self.konsole.setPtyFd(self.master)
+        self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
 
         self.window_main.konsole_frame.hide()
+        self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
         # create a new DCOP-Client:
@@ -373,6 +364,21 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
         QTimer.singleShot(10, self.exitMainLoop)
         self.app.exec_loop()
+
+    def newKonsole(self):
+        self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
+        self.window_main.konsole_frame.setMinimumSize(500, 400)
+        self.konsole.setAutoStartShell(False)
+        self.konsoleWidget = self.konsole.widget()
+        self.konsole_frame_layout.addWidget(self.konsoleWidget)
+        self.konsoleWidget.show()
+        self.app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
+
+        #prepare for dpkg pty being attached to konsole
+        (self.master, self.slave) = pty.openpty()
+        self.konsole.setPtyFd(self.master)
+
+        self.window_main.showTerminalButton.setEnabled(True)
 
     def exitMainLoop(self):
         self.app.exit()
@@ -480,6 +486,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
     def information(self, summary, msg, extended_msg=None):
         msg = "<big><b>%s</b></big><br />%s" % (summary,msg)
+
         dialogue = dialog_error(self.window_main)
         dialogue.label_error.setText(utf8(msg))
         if extended_msg != None:
@@ -514,6 +521,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         """show the changes dialogue"""
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
+
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
         pkgs_remove = len(self.toRemove)
         pkgs_inst = len(self.toInstall)

@@ -338,6 +338,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         self.box = QHBoxLayout(self.window_main.konsole_frame)
         self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
+        self.window_main.konsole_frame.setMinimumSize(500, 400)
         self.konsole.setAutoStartShell(False)
         self.konsoleWidget = self.konsole.widget()
         self.box.addWidget(self.konsoleWidget)

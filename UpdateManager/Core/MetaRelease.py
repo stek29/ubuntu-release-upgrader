@@ -53,11 +53,12 @@ class MetaReleaseCore(object):
             self.METARELEASE_URI = self.METARELEASE_URI_UNSTABLE
         elif useProposed:
             self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
-        # check if we can access the METARELEASE_FILE
-        #
-        # FIXME: we get FALSE here if the file does not exists!
-        #
-        if not os.access(self.METARELEASE_FILE, os.F_OK|os.W_OK|os.R_OK):
+
+        # check if we can write to the global location, if not,
+        # write to homedir
+        try:
+            open(self.METARELEASE_FILE,"a")
+        except IOError, e:
             path = os.path.expanduser("~/.update-manager-core/")
             if not os.path.exists(path):
                 os.mkdir(path)

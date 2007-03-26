@@ -49,6 +49,9 @@ class TextCdromProgressAdapter(apt.progress.CdromProgress):
 class DistUpgradeViewText(DistUpgradeView):
     " text frontend of the distUpgrade tool "
     def __init__(self, datadir=None):
+        # its important to have a debconf frontend for
+        # packages like "quagga"
+        os.environ["DEBIAN_FRONTEND"] = "dialog"
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:

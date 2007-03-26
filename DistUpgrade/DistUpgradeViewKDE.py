@@ -298,6 +298,18 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.finished = True
         self.apt_status = process.exitStatus()
 
+# inherit from the class created in window_main.ui
+# to add the handler for closing the window
+class UpgraderMainWindow(window_main):
+
+    def setParent(self, parentRef):
+        self.parent = parentRef
+
+    def closeEvent(self, event):
+        close = self.parent.on_window_main_delete_event()
+        if close:
+          event.accept()
+
 class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None):
@@ -321,10 +333,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         self.app = KApplication()
 
-        self.mainWindow = KMainWindow()
-        self.window_main = window_main(self.mainWindow)
-        self.mainWindow.setCentralWidget(self.window_main)
-        self.mainWindow.show()
+        self.window_main = UpgraderMainWindow()
+        self.window_main.setParent(self)
+        self.window_main.show()
 
         self.prev_step = 0 # keep a record of the latest step
 
@@ -614,5 +625,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def askYesNoQuestion(self, summary, msg, default='No'):
         restart = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode(msg, 'UTF-8'), QMessageBox.Yes, QMessageBox.No)
         if restart == QMessageBox.Yes:
+            return True
+        return False
+
+    def on_window_main_delete_event(self):
+        text = _("""<b><big>Cancel the running upgrade?</big></b>
+
+The system could be in an unusable state if you cancel the upgrade. You are strongly adviced to resume the upgrade.""")
+        text = text.replace("\n", "<br />")
+        cancel = QMessageBox.warning(self.window_main, _("Cancel Upgrade?"), text, QMessageBox.Yes, QMessageBox.No)
+        if cancel == QMessageBox.Yes:
             return True
         return False

@@ -580,6 +580,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
         changesDialogue = dialog_changes(self.window_main)
         self.translate_widget_children(changesDialogue)
 
+        if actions != None:
+            cancel = actions[0].replace("_", "")
+            changesDialogue.button_cancel_changes.setText(cancel)
+            confirm = actions[1].replace("_", "")
+            changesDialogue.button_confirm_changes.setText(confirm)
+
         summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
         changesDialogue.label_summary.setText(summaryText)
         changesDialogue.label_changes.setText(msg)

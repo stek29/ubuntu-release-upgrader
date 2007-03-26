@@ -282,7 +282,11 @@ class KDEInstallProgressAdapter(InstallProgress):
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
           if not self.activity_timeout_reported:
-            logging.warning("no activity on terminal for %s seconds" % (self.TIMEOUT_TERMINAL_ACTIVITY))
+            #FIXME bug 95465, I can't recreate this, so here's a hacky fix
+            try:
+                logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.text()))
+            except UnicodeEncodeError:
+                logging.warning("no activity on terminal for %s seconds" % (self.TIMEOUT_TERMINAL_ACTIVITY))
             self.activity_timeout_reported = True
           self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()

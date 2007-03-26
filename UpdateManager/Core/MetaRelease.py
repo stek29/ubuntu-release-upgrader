@@ -58,7 +58,7 @@ class MetaReleaseCore(object):
         # FIXME: we get FALSE here if the file does not exists!
         #
         if not os.access(self.METARELEASE_FILE, os.F_OK|os.W_OK|os.R_OK):
-            path = os.path.expanduser("~/.update-manager/")
+            path = os.path.expanduser("~/.update-manager-core/")
             if not os.path.exists(path):
                 os.mkdir(path)
             self.METARELEASE_FILE = os.path.join(path,"meta-release")

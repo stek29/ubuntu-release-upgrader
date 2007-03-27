@@ -28,8 +28,7 @@ import apt
 import apt_pkg
 import os
 
-from apt.progress import InstallProgress
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 
 import gettext
 from gettext import gettext as _
@@ -179,8 +178,8 @@ class DistUpgradeViewText(DistUpgradeView):
 if __name__ == "__main__":
   
   view = DistUpgradeViewText()
-  view.confirmChanges("xx",[], 100)
-  sys.exit(0)
+  #view.confirmChanges("xx",[], 100)
+  #sys.exit(0)
 
   fp = apt.progress.TextFetchProgress()
   ip = apt.progress.InstallProgress()

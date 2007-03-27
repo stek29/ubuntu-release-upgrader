@@ -35,6 +35,10 @@ import glob
 import time
 from DistUpgradeConfigParser import DistUpgradeConfig
 
+# FIXME: we need this only for the later "isinstance()" check
+#        this should probably be solved in some different way
+from DistUpgradeViewText import DistUpgradeViewText
+
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro
 
@@ -144,7 +148,8 @@ class DistUpgradeControler(object):
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
         fd = os.open("/var/log/dist-upgrade/apt.log",
                      os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
-        if not self.serverMode:
+        # log the complete output if we do not run in text-mode
+        if not isinstance(self._view, DistUpgradeViewText):
             os.dup2(fd,2)
             os.dup2(fd,1)
         self.logfd = fd

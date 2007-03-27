@@ -155,7 +155,9 @@ class DistUpgradeControler(object):
         self.logfd = fd
 
     def openCache(self):
-        self.cache = MyCache(self.config, self._view.getOpCacheProgress())
+        self.cache = MyCache(self.config,
+                             self._view,
+                             self._view.getOpCacheProgress())
 
     def _sshMagic(self):
         """ this will check for server mode and if we run over ssh.

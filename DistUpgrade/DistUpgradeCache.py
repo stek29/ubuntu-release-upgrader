@@ -14,11 +14,11 @@ from DistUpgradeView import FuzzyTimeToStr
 
 class MyCache(apt.Cache):
     # init
-    def __init__(self, config, progress=None):
+    def __init__(self, config, view, progress=None):
         apt.Cache.__init__(self, progress)
         self.to_install = []
         self.to_remove = []
-
+        self.view = view
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
 
@@ -175,7 +175,33 @@ class MyCache(apt.Cache):
                     try:
                         self.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
                     except SystemError, e:
-                        logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
+                        logging.warning("Failed to apply %s->%s install (%s)" % (fr, to, e))
+        # deal with NFS upgrades, edgy can mount nfs without portmap/nfs-common
+        #                         but feisty can't
+        if (" nfs " in open("/proc/mounts").read() 
+            and self.has_key("nfs-common") 
+            #and not (self["nfs-common"].isInstalled or
+            #         self["nfs-common"].markedInstall)
+            ):
+            logging.debug("Found nfs mount and no nfs-common, selecting it")
+            if self.view.askYesNoQuestion(_("Install NFS support tools?"),
+                                          _("Your system is using the network "
+                                            "file system (NFS) without the "
+                                            "'nfs-common' package. "
+                                            "\n\n"
+                                            "If you select 'yes' now the "
+                                            "package will be added during "
+                                            "the upgrade. That will open "
+                                            "a network port. If you select "
+                                            "'no' the NFS imports will "
+                                            "no longer work after the upgrade."
+                                            ),
+                                          default='yes'):
+                try:
+                    self["nfs-common"].markInstall()
+                except SystemError, e:
+                    logging.warning("can't install nfs-common")
+            
 
     def edgyQuirks(self):
         """ this function works around quirks in the dapper->edgy upgrade """

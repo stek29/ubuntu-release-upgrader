@@ -17,6 +17,8 @@ class Chroot(object):
     diverts = ["/usr/sbin/mkinitrd",
                "/sbin/modprobe",
                "/usr/sbin/invoke-rc.d",
+               # install-info has a locking problem quite often
+               "/usr/sbin/install-info",
 	       "/sbin/start-stop-daemon"]
     apt_options = ["-y"]
             

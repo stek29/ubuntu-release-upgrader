@@ -108,7 +108,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
 
     def mediaChange(self, medium, drive):
       msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
-      change = QMessageBox.question(self.window_main, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
+      change = QMessageBox.question(self.parent.window_main, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
       if change == QMessageBox.Ok:
         return True
       return False

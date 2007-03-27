@@ -66,7 +66,7 @@ class DistUpgradeViewText(DistUpgradeView):
         self._opCacheProgress = apt.progress.OpTextProgress()
         self._fetchProgress = apt.progress.TextFetchProgress()
         self._cdromProgress = TextCdromProgressAdapter()
-        self._installProgress = apt.progress.InstallProgress()
+        self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
 
     def _handleException(self, type, value, tb):

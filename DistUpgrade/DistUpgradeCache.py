@@ -6,6 +6,8 @@ import apt_pkg
 import os
 import re
 import logging
+from subprocess import Popen, PIPE
+
 from gettext import gettext as _
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
@@ -245,6 +247,26 @@ class MyCache(apt.Cache):
             self.markRemove("nvidia-settings")
             self.markInstall("nvidia-glx")
 
+    def checkForKernel(self):
+        """ check for the runing kernel and try to ensure that we have
+            a updated version
+        """
+        uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        logging.debug("Kernel uname: '%s' " % uname)
+        try:
+            (version, build, flavour) = uname.split("-")
+        except Exception, e:
+            logging.warning("Can't parse kernel uname: %s" % e)
+            return Falseif
+        kernel = "linux-image-%s" % flavour
+        if not self.has_key(kernel):
+            logging.warning("No kernel: '%s'" % kernel)
+            return False
+        if not (self[kernel].isInstalled or self[kernel].markedInstall):
+            logging.debug("Selecting new kernel '%s'" % kernel)
+            self[kernel].markInstall()
+        return True
+
     def distUpgrade(self, view, serverMode, logfd):
         def _restore_fds(stdout, stderr):
             os.dup2(stdout, 1)
@@ -263,6 +285,9 @@ class MyCache(apt.Cache):
 
             # and if we have some special rules
             self.postUpgradeRule()
+
+            # check if we got a new kernel
+            self.checkForKernel()
 
             # install missing meta-packages (if not in server upgrade mode)
             if not serverMode:

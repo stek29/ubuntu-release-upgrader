@@ -180,8 +180,8 @@ class MyCache(apt.Cache):
         #                         but feisty can't
         if (" nfs " in open("/proc/mounts").read() 
             and self.has_key("nfs-common") 
-            #and not (self["nfs-common"].isInstalled or
-            #         self["nfs-common"].markedInstall)
+            and not (self["nfs-common"].isInstalled or
+                     self["nfs-common"].markedInstall)
             ):
             logging.debug("Found nfs mount and no nfs-common, selecting it")
             if self.view.askYesNoQuestion(_("Install NFS support tools?"),

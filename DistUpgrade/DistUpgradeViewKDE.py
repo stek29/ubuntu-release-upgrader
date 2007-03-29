@@ -226,6 +226,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.parent.newKonsole()
         self.pid = os.fork()
         if self.pid == 0:
+            os.environ["DEBIAN_FRONTEND"] = "kde"
             os.dup2(self.parent.slave, 0)
             os.dup2(self.parent.slave, 1)
             os.dup2(self.parent.slave, 2)

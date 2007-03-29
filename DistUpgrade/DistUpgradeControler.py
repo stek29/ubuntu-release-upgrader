@@ -217,7 +217,19 @@ class DistUpgradeControler(object):
     
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
+        # first check if that is a good upgrade
+        release = subprocess.Popen(["lsb_release","-c","-s"],
+                                   stdout=subprocess.PIPE).communicate()[0].strip()
+        logging.debug("lsb-release: '%s'" % release)
+        if not (release == self.fromDist or release == self.toDist):
+            logging.error("Bad upgrade: '%s' != '%s' " % (release, self.fromDist))
+            self._view.error(_("Can not upgrade"),
+                             _("A upgrade from '%s' to '%s' is not "
+                               "supoprted with this tool." % (release, self.toDist)))
+            sys.exit(1)
+        # do the ssh check and warn if we run under ssh
         self._sshMagic()
+        # open cache
         try:
             self.openCache()
         except SystemError, e:

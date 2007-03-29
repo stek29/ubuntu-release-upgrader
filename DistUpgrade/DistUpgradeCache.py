@@ -282,8 +282,8 @@ class MyCache(apt.Cache):
         try:
             (version, build, flavour) = uname.split("-")
         except Exception, e:
-            logging.warning("Can't parse kernel uname: %s" % e)
-            return Falseif
+            logging.warning("Can't parse kernel uname: '%s' (self compiled?)" % e)
+            return False
         kernel = "linux-image-%s" % flavour
         if not self.has_key(kernel):
             logging.warning("No kernel: '%s'" % kernel)

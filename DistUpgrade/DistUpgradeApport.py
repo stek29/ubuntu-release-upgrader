@@ -39,7 +39,7 @@ def run_apport():
         if os.path.exists(p):
             ret = subprocess.call(p)
             return (ret == 0)
-    logging.debug("can't find apport gui in '%s'" % l)
+    logging.debug("can't find apport gui")
     return False
 
 

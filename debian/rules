@@ -75,6 +75,7 @@ binary: binary-indep binary-arch
 arch-build: 
 	# update the demotions
 	(cd utils && ./demotions.py)
+	(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
 	# update version
 	echo "VERSION='$(DEBVER)'" > DistUpgrade/DistUpgradeVersion.py
 	# build it

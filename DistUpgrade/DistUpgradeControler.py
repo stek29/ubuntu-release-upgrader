@@ -582,18 +582,18 @@ class DistUpgradeControler(object):
                 if iprogress.pkg_failures == 0:
                     errormsg = "SystemError in cache.commit(): %s" % e
                     apport_pkgfailure("update-manager", errormsg)
-                # installing the packages failed, can't be retried
-                self._view.getTerminal().call(["dpkg","--configure","-a"])
                 # invoke the frontend now
                 msg = _("The upgrade aborts now. Your system "
                         "could be in an unusable state. A recovery "
-                        "was run (dpkg --configure -a).")
+                        "will run now (dpkg --configure -a).")
                 if not run_apport():
                     msg += _("\n\nPlease report this bug against the 'update-manager' "
                              "package and include the files in /var/log/dist-upgrade/ "
                              "in the bugreport.\n"
                              "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
+                # installing the packages failed, can't be retried
+                self._view.getTerminal().call(["dpkg","--configure","-a"])
                 return False
             except IOError, e:
                 # fetch failed, will be retried

@@ -313,15 +313,19 @@ class DistUpgradeControler(object):
             for mirror in valid_mirrors:
                 if not mirror_check or is_mirror(mirror,entry.uri):
                     validMirror = True
-                    # security is a special case
-                    res = not entry.uri.startswith("http://security.ubuntu.com") and not entry.disabled
+                    # disabled/security/commercial are special cases
+                    validTo = True
+                    if (entry.disabled or
+                        entry.uri.startswith("http://security.ubuntu.com") or
+                        entry.uri.startswith("http://archive.canonical.com"):
+                        validTo = False
                     if entry.dist in toDists:
                         # so the self.sources.list is already set to the new
                         # distro
                         logging.debug("entry '%s' is already set to new dist" % entry)
-                        foundToDist |= res
+                        foundToDist |= validTo
                     elif entry.dist in fromDists:
-                        foundToDist |= res
+                        foundToDist |= validTo
                         entry.dist = toDists[fromDists.index(entry.dist)]
                         logging.debug("entry '%s' updated to new dist" % entry)
                     else:

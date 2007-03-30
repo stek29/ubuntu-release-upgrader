@@ -34,14 +34,19 @@ if __name__ == "__main__":
 
     config = DistUpgradeConfig(".")
     # the commandline overwrites the configfile
-    requested_view= (options.frontend or config.get("View","View"))
-    try:
-        view_modul = __import__(requested_view)
-        view_class = getattr(view_modul, requested_view)
-    except (ImportError, AttributeError), error:
-        logging.error("can't import view '%s'" % requested_view)
-        print "can't load %s" % requested_view
-        print "error: " + str(error)
+    for requested_view in [options.frontend]+config.getlist("View","View"):
+        if not requested_view:
+            continue
+        try:
+            view_modul = __import__(requested_view)
+            view_class = getattr(view_modul, requested_view)
+            break
+        except (ImportError, AttributeError, TypeError), e:
+            logging.warning("can't import view '%s' (%s)" % (requested_view,e))
+            print "can't load %s (%s)" % (requested_view, e)
+    else:
+        logging.error("No view can be imported, aboring")
+        print "No view can be imported, aboring"
         sys.exit(1)
     view = view_class()
     app = DistUpgradeControler(view, options)

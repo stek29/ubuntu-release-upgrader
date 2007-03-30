@@ -20,7 +20,7 @@ def apport_crash(type, value, tb):
     if os.path.exists('/var/crash/_usr_bin_update-manager.0.crash'):
         report = Report()
         for f in os.listdir("/var/log/dist-upgrade/"):
-            report[f.replace(".","")] = (open(os.path.join("/var/log/dist-upgrade",f)), )
+            report[f.replace(".","").replace("-","")] = (open(os.path.join("/var/log/dist-upgrade",f)), )
         report.add_to_existing('/var/crash/_usr_bin_update-manager.0.crash')
     return True
 

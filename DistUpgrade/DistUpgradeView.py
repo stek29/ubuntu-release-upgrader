@@ -66,7 +66,7 @@ class InstallProgress(apt.progress.InstallProgress):
     apport_pkgfailure(pkg, errormsg)
 
 class DumbTerminal(object):
-    def call(self, cmd):
+    def call(self, cmd, hide=False):
         " expects a command in the subprocess style (as a list) "
         import subprocess
         subprocess.call(cmd)

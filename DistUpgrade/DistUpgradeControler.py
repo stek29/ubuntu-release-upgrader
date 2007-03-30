@@ -699,6 +699,10 @@ class DistUpgradeControler(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
+        # now run the post-upgrade fixup scripts (if any)
+        for script in self.config.getlist("Distro","PostInstallScripts"):
+            logging.debug("Runing PostInstallScript: '%s'" % script)
+            self._view.getTerminal().call([script], hidden=True)
             
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """

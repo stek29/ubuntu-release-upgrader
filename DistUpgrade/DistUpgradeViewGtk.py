@@ -295,13 +295,15 @@ class DistUpgradeVteTerminal(object):
   def __init__(self, parent, term):
     self.term = term
     self.parent = parent
-  def call(self, cmd):
+  def call(self, cmd, hidden=False):
     def wait_for_child(widget):
       #print "wait for child finished"
       self.finished=True
     self.term.show()
     self.term.connect("child-exited", wait_for_child)
-    self.parent.expander_terminal.set_expanded(True)
+    self.parent.expander_terminal.set_sensitive(True)
+    if hidden==False:
+      self.parent.expander_terminal.set_expanded(True)
     self.term.fork_command(command=cmd[0],argv=cmd)
     self.finished = False
     while not self.finished:
@@ -415,7 +417,6 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
 
     def _term_content_changed(self, term):
         " called when the *visible* part of the terminal changes "
-
         # get the current visible text, 
         current_text = self._term.get_text(lambda a,b,c,d: True)
         # see what we have currently and only print stuff that wasn't

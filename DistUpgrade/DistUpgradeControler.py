@@ -774,7 +774,7 @@ class DistUpgradeControler(object):
             not os.environ["SUDO_USER"] in admin_group):
             admin_user = os.environ["SUDO_USER"]
             logging.info("SUDO_USER=%s is not in admin group" % admin_user)
-            cmd = ["usermod","-a","-G","admin",user]
+            cmd = ["usermod","-a","-G","admin",admin_user]
             res = subprocess.call(cmd)
             logging.debug("cmd: %s returned %i" % (cmd, res))
         

@@ -703,6 +703,59 @@ class DistUpgradeControler(object):
         for script in self.config.getlist("Distro","PostInstallScripts"):
             logging.debug("Runing PostInstallScript: '%s'" % script)
             self._view.getTerminal().call([script], hidden=True)
+        # now run the quirksHandler 
+        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
+        func = getattr(self, quirksFuncName, None)
+        if func is not None:
+            func()
+
+    def _rewriteFstab(self):
+        " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
+        logging.debug("_rewriteFstab()")
+        replaced = 0
+        lines = []
+        # we have one cdrom to convert
+        for line in open("/etc/fstab"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                lines.append(line)
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                lines.append(line)
+                continue
+            # edgy kernel has /dev/cdrom -> /dev/hd?
+            # feisty kernel (for a lot of chipsets) /dev/cdrom -> /dev/scd0
+            # this breaks static mounting (LP#86424)
+            #
+            # we convert here to /dev/cdrom only if current /dev/cdrom
+            # points to the device in /etc/fstab already. this ensures
+            # that we don't break anything or that we get it wrong
+            # for systems with two (or more) cdroms. this is ok, because
+            # we convert under the old kernel
+            if ("iso9660" in fstype and
+                device != "/dev/cdrom" and
+                os.path.exists("/dev/cdrom") and
+                os.path.realpath("/dev/cdrom") == device
+                ):
+                logging.debug("replacing '%s' " % line)
+                line = line.replace(device,"/dev/cdrom")
+                logging.debug("replacied line is '%s' " % line)
+                replaced += 1
+            lines.append(line)
+        # we have converted a line (otherwise we would have exited already)
+        if replaced > 0:
+            logging.debug("writing new /etc/fstab")
+            shutil.copy("/etc/fstab","/etc/fstab.edgy")
+            open("/etc/fstab","w").write("\n".join(lines))
+        return True
+
+    def feistyQuirks(self):
+        """ this function works around quirks in the edgy->feisty upgrade """
+        logging.debug("running Controler.feistyQuirks handler")
+        self._rewriteFstab()
             
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
@@ -901,5 +954,6 @@ if __name__ == "__main__":
     from DistUpgradeCache import MyCache
     v = DistUpgradeView()
     dc = DistUpgradeControler(v)
-    dc.openCache()
-    dc._checkFreeSpace()
+    #dc.openCache()
+    #dc._checkFreeSpace()
+    dc._rewriteFstab()

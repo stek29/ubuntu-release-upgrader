@@ -75,6 +75,8 @@ binary: binary-indep binary-arch
 arch-build: 
 	# update the demotions
 	(cd utils && ./demotions.py)
+	# update version
+	echo "VERSION='$(DEBVER)'" > DistUpgrade/DistUpgradeVersion.py
 	# build it
 	rm -rf debian/arch-build
 	mkdir -p debian/arch-build/$(PKG)-$(DEBVER)

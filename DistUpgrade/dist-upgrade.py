@@ -32,6 +32,9 @@ if __name__ == "__main__":
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode='w')
 
+    from DistUpgradeVersion import VERSION
+    logging.info("release-upgrader version '%s' started" % VERSION)
+
     config = DistUpgradeConfig(".")
     # the commandline overwrites the configfile
     for requested_view in [options.frontend]+config.getlist("View","View"):

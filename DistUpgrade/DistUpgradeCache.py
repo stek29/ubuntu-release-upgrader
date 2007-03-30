@@ -12,6 +12,10 @@ from gettext import gettext as _
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
+# FIXME: we need this only for the later "isinstance()" check
+#        this should probably be solved in some different way
+from DistUpgradeViewText import DistUpgradeViewText
+
 class MyCache(apt.Cache):
     # init
     def __init__(self, config, view, progress=None):
@@ -272,7 +276,8 @@ class MyCache(apt.Cache):
         def _restore_fds(stdout, stderr):
             os.dup2(stdout, 1)
             os.dup2(stderr, 2)
-        if serverMode:
+        text_mode = isinstance(view, DistUpgradeViewText)
+        if text_mode:
             old_stdout = os.dup(1)
             old_stderr = os.dup(2)
             os.dup2(logfd, 1)
@@ -297,6 +302,7 @@ class MyCache(apt.Cache):
 
             # see if it all makes sense
             if not self._verifyChanges():
+                if text_mode: _restore_fds(old_stdout, old_stderr)
                 raise SystemError, _("A essential package would have to be removed")
         except SystemError, e:
             # FIXME: change the text to something more useful
@@ -307,7 +313,7 @@ class MyCache(apt.Cache):
                          "package and include the files in /var/log/dist-upgrade/ "
                          "in the bugreport."))
             logging.error("Dist-upgrade failed: '%s'", e)
-            if serverMode: _restore_fds(old_stdout, old_stderr)
+            if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
 
         # check the trust of the packages that are going to change
@@ -342,9 +348,9 @@ class MyCache(apt.Cache):
                          "You may want to try again later. See below for a "
                          "list of unauthenticated packages."),
                        "\n".join(untrusted))
-            if serverMode: _restore_fds(old_stdout, old_stderr)
+            if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
-        if serverMode: _restore_fds(old_stdout, old_stderr)
+        if text_mode: _restore_fds(old_stdout, old_stderr)
         return True
 
     def _verifyChanges(self):

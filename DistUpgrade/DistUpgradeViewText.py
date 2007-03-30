@@ -158,7 +158,24 @@ class DistUpgradeViewText(DistUpgradeView):
         self.error(summary, msg)
         return False
 
-      return self.askYesNoQuestion(summary, msg)
+      print
+      print summary
+      print msg
+      print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
+      while True:
+        res = sys.stdin.readline()
+        # TRANSLATORS: the "y" is "yes"
+        if res.strip().lower().startswith(_("y")):
+          return True
+        # TRANSLATORS: the "n" is "no"
+        elif res.strip().lower().startswith(_("n")):
+          return False
+        # TRANSLATORS: the "d" is "details"
+        elif res.strip().lower().startswith(_("d")):
+          print
+          print _("Remove: %s\n" % " ".join(self.toRemove))
+          print _("Install: %s\n" % " ".join(self.toInstall))
+          print _("Upgrade: %s\n" % " ".join(self.toUpgrade))
 
     def askYesNoQuestion(self, summary, msg):
       print

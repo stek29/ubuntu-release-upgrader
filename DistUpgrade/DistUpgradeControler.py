@@ -752,10 +752,34 @@ class DistUpgradeControler(object):
             open("/etc/fstab","w").write("\n".join(lines))
         return True
 
+    def _checkAdminGroup(self):
+        " check if the current sudo user is in the admin group "
+        logging.debug("_checkAdminGroup")
+        import grp
+        try:
+            admin_group = grp.getgrnam("admin").gr_mem
+        except KeyError, e:
+            logging.warning("System has no admin group (%s)" % e)
+            subprocess.call(["addgroup","--system","admin"])
+        admin_group = grp.getgrnam("admin").gr_mem
+        # if the current SUDO_USER is not in the admin group
+        # we add him - this is no security issue because
+        # the user is already root so adding him to the admin group
+        # does not change anything
+        if (os.environ.has_key("SUDO_USER") and
+            not os.environ["SUDO_USER"] in admin_group):
+            admin_user = os.environ["SUDO_USER"]
+            logging.info("SUDO_USER=%s is not in admin group" % admin_user)
+            cmd = ["usermod","-a","-G","admin",user]
+            res = subprocess.call(cmd)
+            logging.debug("cmd: %s returned %i" % (cmd, res))
+        
+
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """
         logging.debug("running Controler.feistyQuirks handler")
         self._rewriteFstab()
+        self._checkAdminGroup()
             
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
@@ -956,4 +980,5 @@ if __name__ == "__main__":
     dc = DistUpgradeControler(v)
     #dc.openCache()
     #dc._checkFreeSpace()
-    dc._rewriteFstab()
+    #dc._rewriteFstab()
+    dc._checkAdminGroup()

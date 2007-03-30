@@ -200,7 +200,7 @@ class DistUpgradeControler(object):
         from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
         # FIXME: during testing, we want "useDevelopmentRelease"
         #        but not after the release
-        m = MetaReleaseCore(useDevelopmentRelease=False)
+        m = MetaReleaseCore(useDevelopmentRelease=True)
         # this will timeout eventually
         while m.downloading:
             time.sleep(0.5)
@@ -317,7 +317,7 @@ class DistUpgradeControler(object):
                     validTo = True
                     if (entry.disabled or
                         entry.uri.startswith("http://security.ubuntu.com") or
-                        entry.uri.startswith("http://archive.canonical.com"):
+                        entry.uri.startswith("http://archive.canonical.com")):
                         validTo = False
                     if entry.dist in toDists:
                         # so the self.sources.list is already set to the new

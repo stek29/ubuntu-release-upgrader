@@ -706,7 +706,13 @@ class DistUpgradeControler(object):
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             logging.debug("Runing PostInstallScript: '%s'" % script)
-            self._view.getTerminal().call([script], hidden=True)
+            try:
+                # work around kde being clever
+                if script.startswith("./"):
+                    os.chmod(script, 0755)
+                self._view.getTerminal().call([script], hidden=True)
+            except Exception, e:
+                logging.error("gor error from PostInstallScript %s (%s)" % (script, e))
         # now run the quirksHandler 
         quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
         func = getattr(self, quirksFuncName, None)

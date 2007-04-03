@@ -259,14 +259,22 @@ class DistUpgradeControler(object):
     def rewriteSourcesList(self, mirror_check=True):
         logging.debug("rewriteSourcesList()")
 
-        # enable main (we always need this!)
-        distro = get_distro()
-        # FIXME: get_sources() needs to be called to init
-        #        self.main_sources, this should be fixed in python-apt
-        distro.get_sources(self.sources)
-        # make sure that main is enabled
-        distro.enable_component("main")
-
+        # check if we need to enable main
+        if mirror_check == True and self.useNetwork:
+            # now check if the base-meta pkgs are available in
+            # the archive or only available as "now"
+            # -> if not that means that "main" is missing and we
+            #    need to  enable it
+            for pkgname in self.config.getlist("Distro","BaseMetaPkgs"):
+                if ((len(self.cache[pkgname].candidateOrigin) == 0)
+                    or
+                    (len(self.cache[pkgname].candidateOrigin) == 1 and
+                     self.cache[pkgname].candidateOrigin[0].archive == "now")):
+                    distro = get_distro()
+                    distro.get_sources(self.sources)
+                    distro.enable_component("main")
+                    break
+            
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange
         #  component names here)

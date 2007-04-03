@@ -160,6 +160,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         apt_pkg.Config.Set("DPkg::StopOnError","False")
 
     def startUpdate(self):
+        InstallProgress.startUpdate(self)
         self.finished = False
         # FIXME: add support for the timeout
         # of the terminal (to display something useful then)

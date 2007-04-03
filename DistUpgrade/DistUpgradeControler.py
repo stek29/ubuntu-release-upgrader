@@ -360,7 +360,7 @@ class DistUpgradeControler(object):
                              _("While scanning your repository "
                                "information no mirror entry for "
                                "the upgrade was found."
-                               "This cam happen if you run a internal "
+                               "This can happen if you run a internal "
                                "mirror or if the mirror information is "
                                "out of date.\n\n"
                                "Do you want to rewrite your "

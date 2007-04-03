@@ -54,6 +54,12 @@ class InstallProgress(apt.progress.InstallProgress):
     apt.progress.InstallProgress.__init__(self)
     self.pkg_failures = 0
 
+  def startUpdate(self):
+    # workaround #95325 (edgy->feisty)
+    ap = "/var/lib/dpkg/info/apache2-common.prerm"
+    if os.path.exists(ap):
+      os.unlink(ap)
+        
   def error(self, pkg, errormsg):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)

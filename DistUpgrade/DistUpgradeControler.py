@@ -687,6 +687,7 @@ class DistUpgradeControler(object):
         logging.debug("Start checking for obsolete pkgs")
         for pkgname in remove_candidates:
             if pkgname not in self.foreign_pkgs:
+                self._view.processEvents()
                 if not self.cache._tryMarkObsoleteForRemoval(pkgname, remove_candidates, self.foreign_pkgs):
                     logging.debug("'%s' scheduled for remove but not in remove_candiates, skipping", pkgname)
         logging.debug("Finish checking for obsolete pkgs")

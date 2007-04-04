@@ -151,3 +151,7 @@ class DistUpgradeView(object):
     def information(self, summary, msg, extended_msg=None):
         " display a information msg"
         pass
+    def processEvents(self):
+        """ process gui events (to keep the gui alive during a long
+            computation """
+        pass

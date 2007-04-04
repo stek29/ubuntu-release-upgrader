@@ -615,6 +615,10 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
             return True
         return False
 
+    def processEvents(self):
+        while gtk.events_pending():
+            gtk.main_iteration()
+
     def on_window_main_delete_event(self, widget, event):
         self.dialog_cancel.set_transient_for(self.window_main)
         self.dialog_cancel.realize()

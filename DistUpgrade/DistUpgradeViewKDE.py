@@ -630,6 +630,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
             return True
         return False
 
+    def processEvents(self):
+        KApplication.kApplication().processEvents()
+
     def on_window_main_delete_event(self):
         text = _("""<b><big>Cancel the running upgrade?</big></b>
 

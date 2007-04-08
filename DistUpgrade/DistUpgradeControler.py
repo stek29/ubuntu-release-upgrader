@@ -200,10 +200,11 @@ class DistUpgradeControler(object):
         from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
         # FIXME: during testing, we want "useDevelopmentRelease"
         #        but not after the release
-        m = MetaReleaseCore(useDevelopmentRelease=True)
+        m = MetaReleaseCore(useDevelopmentRelease=False)
         # this will timeout eventually
         while m.downloading:
-            time.sleep(0.5)
+            self._view.processEvents()
+            time.sleep(0.1)
         if m.new_dist is None:
             logging.error("No new dist found")
             return False

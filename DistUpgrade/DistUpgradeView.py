@@ -55,10 +55,14 @@ class InstallProgress(apt.progress.InstallProgress):
     self.pkg_failures = 0
 
   def startUpdate(self):
-    # workaround #95325 (edgy->feisty)
-    ap = "/var/lib/dpkg/info/apache2-common.prerm"
-    if os.path.exists(ap):
-      os.unlink(ap)
+    # apache: workaround #95325 (edgy->feisty)
+    # pango-libthai #103384 (edgy->feisty)
+    bad_scripts = ["/var/lib/dpkg/info/apache2-common.prerm",
+                   "/var/lib/dpkg/info/pango-libthai.postrm",
+                   ]
+    for ap in bad_scripts:
+      if os.path.exists(ap):
+        os.unlink(ap)
         
   def error(self, pkg, errormsg):
     " install error from a package "

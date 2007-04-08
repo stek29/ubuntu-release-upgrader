@@ -51,7 +51,7 @@ class Chroot(object):
             os.chroot(chrootdir)
             os.system("mount -t devpts devpts /dev/pts")
             os.system("mount -t sysfs sysfs /sys")
-            os.system("mount /proc")
+            os.system("mount -t proc proc /proc")
             os.system("mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc")
             os.execv(command[0], command)
         else:
@@ -223,7 +223,7 @@ class Chroot(object):
             os.chdir("/tmp/dist-upgrade")
             os.system("mount -t devpts devpts /dev/pts")
             os.system("mount -t sysfs sysfs /sys")
-            os.system("mount /proc")
+            os.system("mount -t proc proc /proc")
             os.system("mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc")
             os.execl("/tmp/dist-upgrade/dist-upgrade.py",
                      "/tmp/dist-upgrade/dist-upgrade.py")

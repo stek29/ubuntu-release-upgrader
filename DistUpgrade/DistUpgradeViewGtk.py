@@ -626,9 +626,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         res = self.dialog_cancel.run()
         self.dialog_cancel.hide()
         if res == gtk.RESPONSE_CANCEL:
-            #FIXME: this does not work correctly and leaves a stalled
-            #       dist-upgrade.py process
-            self.destroy()
+            sys.exit(1)
         return True
 
 if __name__ == "__main__":

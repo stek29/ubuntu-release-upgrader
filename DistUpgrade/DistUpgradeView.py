@@ -62,6 +62,7 @@ class InstallProgress(apt.progress.InstallProgress):
                    ]
     for ap in bad_scripts:
       if os.path.exists(ap):
+        logging.debug("removing bad script '%s'" % ap)
         os.unlink(ap)
         
   def error(self, pkg, errormsg):

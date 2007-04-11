@@ -969,7 +969,7 @@ class DistUpgradeControler(object):
             self.abort()
 
         # kill update-notifier now to supress reboot required
-        subprocess.call(["killall","update-notifier"])
+        subprocess.call(["killall","-q","update-notifier"])
         # no do the upgrade
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():

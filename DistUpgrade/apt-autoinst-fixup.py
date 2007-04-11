@@ -25,6 +25,10 @@ if apt_pkg.VersionCompare(cache["python-apt"].installedVersion, min_version) < 0
 # figure out what needs fixup
 logging.debug("Starting to check for auto-install states that need fixup")
 need_fixup = set()
+
+# work around #105663
+need_fixup.add("mdadm")
+
 for pkg in cache:
     if pkg.isInstalled and pkg.section == "metapackages":
         logging.debug("Found installed meta-pkg: '%s' " % pkg.name)

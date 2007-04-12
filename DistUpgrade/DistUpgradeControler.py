@@ -215,6 +215,27 @@ class DistUpgradeControler(object):
                                          options=self.options,
                                          view=self._view)
         fetcher.run()
+
+    def _pythonSymlinkCheck(self):
+        """ check if sanity check, that /usr/bin/python points to the default
+            python version. Users tend to modify this symlink, which then
+            breaks stuff in obscure ways (Ubuntu #75557)
+        """
+        logging.debug("_pythonSymlinkCheck run")
+        from ConfigParser import SafeConfigParser, NoOptionError
+        if os.path.exists('/usr/share/python/debian_defaults'):
+            config = SafeConfigParser()
+            config.readfp(file('/usr/share/python/debian_defaults'))
+            try:
+                expected_default = config.get('DEFAULT', 'default-version')
+            except NoOptionError:
+                logging.debug("no default version for python found in '%s'" % config)
+                return False
+            fs_default_version = os.readlink('/usr/bin/python')
+            if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)):
+                logging.debug("python symlink points to: '%s', but expected is '%s' or '%s'" % (fs_default_version, expected_default, os.path.join('/usr/bin', expected_default)))
+                return False
+        return True
     
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
@@ -230,6 +251,13 @@ class DistUpgradeControler(object):
             sys.exit(1)
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
+        # check python version
+        if not self._pythonSymlinkCheck():
+            logging.error("pythonSymlinkCheck() failed, aborting")
+            self._view.error(_("Can not upgrade"),
+                             _("Your python install is corrupted. "
+                               "Please fix the '/usr/bin/python' symlink."))
+            sys.exit(1)
         # open cache
         try:
             self.openCache()

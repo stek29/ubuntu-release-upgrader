@@ -46,6 +46,7 @@ from dialog_changes import dialog_changes
 from dialog_conffile import dialog_conffile
 from crashdialog import CrashDialog
 
+import select
 import gettext
 from gettext import gettext as gett
 
@@ -284,6 +285,19 @@ class KDEInstallProgressAdapter(InstallProgress):
           self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()
         time.sleep(0.0000001)
+
+    def waitChild(self):
+        while True:
+            try:
+                select.select([self.statusfd],[],[], self.selectTimeout)
+            except Exception, e:
+                #logging.warning("select interrupted '%s'" % e)
+                pass
+            self.updateInterface()
+            (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
+            if pid == self.child_pid:
+                break
+        return os.WEXITSTATUS(res)
 
 # inherit from the class created in window_main.ui
 # to add the handler for closing the window
@@ -626,3 +640,19 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
         if cancel == QMessageBox.Yes:
             return True
         return False
+
+
+
+if __name__ == "__main__":
+  
+  view = DistUpgradeViewKDE()
+  fp = KDEFetchProgressAdapter(view)
+  ip = KDEInstallProgressAdapter(view)
+
+  cache = apt.Cache()
+  for pkg in sys.argv[1:]:
+    if cache[pkg].isInstalled:
+      cache[pkg].markDelete(purge=True)
+    else:
+      cache[pkg].markInstall()
+  cache.commit(fp,ip)

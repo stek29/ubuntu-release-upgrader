@@ -6,14 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2007-04-08 11:06+0200\n"
-"PO-Revision-Date: 2006-10-16 11:04+0000\n"
+"POT-Creation-Date: 2007-04-13 11:22+0200\n"
+"PO-Revision-Date: 2007-04-09 04:42+0000\n"
 "Last-Translator: Tiago Silva <tiagosilva29@gmail.com>\n"
 "Language-Team: Ubuntu Portuguese Team <ubuntu-pt.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Rosetta-Export-Date: 2007-04-09 10:38:09+0000\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:97
 msgid "Broken packages"
@@ -87,7 +88,6 @@ msgid "Can't guess meta-package"
 msgstr "Impossível de descobrir meta-pacote"
 
 #: ../DistUpgrade/DistUpgradeCache.py:458
-#, fuzzy
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -95,15 +95,15 @@ msgid ""
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"O seu sistema não contém o pacote ubuntu-desktop, kubuntu-desktop ou "
-"edubuntu-desktop e portanto não foi possível detectar que versão do ubuntu "
-"está a executar.\n"
-" Por favor instale um dos pacotes acima mencionados usando o synaptic ou apt-"
-"get antes de continuar."
+"O seu sistema não contém o pacote ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop ou edubuntu-desktop, portanto não é possível detectar qual a versão "
+"do ubuntu que está a executar.\n"
+" Por favor instale um dos pacotes acima mencionados usando o synaptic ouo  "
+"apt-get antes de continuar."
 
 #: ../DistUpgrade/DistUpgradeControler.py:83
 msgid "Failed to add the CD"
-msgstr "Falha ao adicionar o CD"
+msgstr "Falhou ao adicionar o CD"
 
 #: ../DistUpgrade/DistUpgradeControler.py:84
 #, python-format
@@ -126,7 +126,7 @@ msgstr "A ler a cache"
 
 #: ../DistUpgrade/DistUpgradeControler.py:173
 msgid "Continue running under SSH?"
-msgstr ""
+msgstr "Continuar a correr sobre SSH?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:174
 #, python-format
@@ -138,10 +138,16 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
+"Esta sessão aparenta estar a correr sobre ssh. Não é recomendado actualmente "
+"fazer a actualização sobre ssh, porque em caso de falha, é difícil de "
+"recuperar.\n"
+"\n"
+"Se continuar, um processo adicional do ssh será iniciado na porta '%s'.\n"
+"Deseja continuar ?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:187
 msgid "Starting additional sshd"
-msgstr ""
+msgstr "A iniciar um sshd adicional"
 
 #: ../DistUpgrade/DistUpgradeControler.py:188
 #, python-format
@@ -150,35 +156,49 @@ msgid ""
 "on port '%s'. If anything goes wrong with the running ssh you can still "
 "connect to the additional one.\n"
 msgstr ""
+"Para recuperar facilmente em caso de falha, um sshd adicional arrancará na "
+"porta '%s'. Se alguma coisa correr mal com o ssh actual, você poderá ligar-"
+"se ao adicional.\n"
 
-#: ../DistUpgrade/DistUpgradeControler.py:227
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeControler.py:248
+#: ../DistUpgrade/DistUpgradeControler.py:257
 msgid "Can not upgrade"
-msgstr "A preparar actualização"
+msgstr "Impossível actualizar"
 
-#: ../DistUpgrade/DistUpgradeControler.py:228
+#: ../DistUpgrade/DistUpgradeControler.py:249
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
 msgstr ""
+"Uma actualização de '%s' para '%s' não é suportada por esta ferramenta."
 
-#: ../DistUpgrade/DistUpgradeControler.py:244
-msgid "Include latest updates from the Internet?"
+#: ../DistUpgrade/DistUpgradeControler.py:258
+msgid ""
+"Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeControler.py:245
+#: ../DistUpgrade/DistUpgradeControler.py:272
+msgid "Include latest updates from the Internet?"
+msgstr "Incluir últimas actualizações a partir da Internet?"
+
+#: ../DistUpgrade/DistUpgradeControler.py:273
 msgid ""
 "The upgrade process can automatically download the latest updates and "
 "install them during the upgrade.  The upgrade will take longer, but when it "
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"O processo de actualização da distribuição pode fazer a descarga das últimas "
+"actualizações e instalá-las durante o processo de actualização. A "
+"actualização vai demorar algum tempo, mas quando estiver completa, o sistema "
+"ficará em dia. Poderá escolher não fazer isto, mas deverá instalar as "
+"últimas actualizações depois de actualizar a distribuição."
 
-#: ../DistUpgrade/DistUpgradeControler.py:360
+#: ../DistUpgrade/DistUpgradeControler.py:388
 msgid "No valid mirror found"
 msgstr "Nenhum repositório válido encontrada"
 
-#: ../DistUpgrade/DistUpgradeControler.py:361
-#, fuzzy, python-format
+#: ../DistUpgrade/DistUpgradeControler.py:389
+#, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
 "was found.This can happen if you run a internal mirror or if the mirror "
@@ -188,21 +208,21 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'no' the update will cancel."
 msgstr ""
-"Enquanto estava a verificar a informação do seu repositório, nenhum "
-"repositório válido para os pacotes foi encontrado. Isto pode acontecer se "
+"Enquanto estava a verificar a informação do seu repositório, não foi "
+"encontrado nenhum repositório válido para os pacotes. Isto pode acontecer se "
 "estiver a correr um repositório interno ou se a informação do repositório "
-"estiver desactualizada.↵\n"
-"↵\n"
+"estiver desactualizada.\n"
+"\n"
 "Tem a certeza que quer re-escrever o seu ficheiro 'sources.list' na mesma? "
-"Se escolher 'Sim' ele vai actualizar todos os '%s' para '%s' pacotes.↵\n"
+"Se escolher 'Sim' ele vai actualizar todos os '%s' para '%s' pacotes.\n"
 "Se escolher \"não\" a actualização irá ser cancelada."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeControler.py:378
+#: ../DistUpgrade/DistUpgradeControler.py:406
 msgid "Generate default sources?"
 msgstr "Gerar as fontes padrão?"
 
-#: ../DistUpgrade/DistUpgradeControler.py:379
+#: ../DistUpgrade/DistUpgradeControler.py:407
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -216,11 +236,11 @@ msgstr ""
 "Deverão ser adicionadas entradas para '%s'? Se seleccionar 'Não' a "
 "actualização será cancelada."
 
-#: ../DistUpgrade/DistUpgradeControler.py:413
+#: ../DistUpgrade/DistUpgradeControler.py:441
 msgid "Repository information invalid"
 msgstr "Informação de repositório inválida"
 
-#: ../DistUpgrade/DistUpgradeControler.py:414
+#: ../DistUpgrade/DistUpgradeControler.py:442
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -228,26 +248,25 @@ msgstr ""
 "A actualização da informação de repositório resultou num ficheiro inválido. "
 "Por favor reporte este erro."
 
-#: ../DistUpgrade/DistUpgradeControler.py:420
+#: ../DistUpgrade/DistUpgradeControler.py:448
 msgid "Third party sources disabled"
 msgstr "Fontes de terceiros desactivadas"
 
-#: ../DistUpgrade/DistUpgradeControler.py:421
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeControler.py:449
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
-"Algumas entradas de terceiros em 'sources.list' foram desactivadas. Pode "
+"Algumas entradas de terceiros em sources.list foram desactivadas. Pode "
 "reactivá-las depois da actualização com a ferramenta 'propriedades-software' "
-"ou com o synaptic."
+"ou com o gestor de pacotes."
 
-#: ../DistUpgrade/DistUpgradeControler.py:478
+#: ../DistUpgrade/DistUpgradeControler.py:506
 msgid "Error during update"
 msgstr "Erro durante a actualização"
 
-#: ../DistUpgrade/DistUpgradeControler.py:479
+#: ../DistUpgrade/DistUpgradeControler.py:507
 msgid ""
 "A problem occured during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -256,11 +275,11 @@ msgstr ""
 "tipo de problema na rede, por favor verifique a sua ligação à rede e volte a "
 "tentar."
 
-#: ../DistUpgrade/DistUpgradeControler.py:488
+#: ../DistUpgrade/DistUpgradeControler.py:516
 msgid "Not enough free disk space"
 msgstr "Não existe espaço livre em disco suficiente"
 
-#: ../DistUpgrade/DistUpgradeControler.py:489
+#: ../DistUpgrade/DistUpgradeControler.py:517
 #, python-format
 msgid ""
 "The upgrade aborts now. Please free at least %s of disk space on %s. Empty "
@@ -272,25 +291,21 @@ msgstr ""
 "usando 'sudo apt-get clean'."
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeControler.py:575
+#: ../DistUpgrade/DistUpgradeControler.py:603
 msgid "Do you want to start the upgrade?"
 msgstr "Deseja iniciar a actualização?"
 
 #. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeControler.py:599
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeControler.py:627
 msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"A actualização abortará agora. O seu sistema poderá estar num estado "
-"inutilizável. Foi efectuada uma recuperação (dpkg --configure -a).\n"
-"\n"
-"Por favor relate este erro sobre o pacote 'update-manager' e inclua os "
-"ficheiros contidos em /var/log/dist-upgrade/ no relatório de erro."
+"A actualização abortou. O seu sistema poderá estar num estado inutilizável. "
+"Irá ser agora efectuada uma recuperação (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeControler.py:603
-#, fuzzy, python-format
+#: ../DistUpgrade/DistUpgradeControler.py:631
+#, python-format
 msgid ""
 "\n"
 "\n"
@@ -298,19 +313,21 @@ msgid ""
 "files in /var/log/dist-upgrade/ in the bugreport.\n"
 "%s"
 msgstr ""
-"A actualização será agora abortada. Por favor relate a ocorrência deste erro "
-"no pacote 'update-manager' e inclua os ficheiros que se encontram em /var/"
-"log/dist-upgrade/ no relatório de erro."
+"\n"
+"\n"
+"Por favor relate este erro sobre o pacote 'update-manager' e inclua os "
+"ficheiros contidos em /var/log/dist-upgrade/ no relatório de erro.\n"
+"%s"
 
-#: ../DistUpgrade/DistUpgradeControler.py:607
+#: ../DistUpgrade/DistUpgradeControler.py:635
 msgid "Could not install the upgrades"
 msgstr "Impossível de instalar as actualizações"
 
-#: ../DistUpgrade/DistUpgradeControler.py:621
+#: ../DistUpgrade/DistUpgradeControler.py:649
 msgid "Could not download the upgrades"
 msgstr "Impossível de descarregar as actualizações"
 
-#: ../DistUpgrade/DistUpgradeControler.py:622
+#: ../DistUpgrade/DistUpgradeControler.py:650
 msgid ""
 "The upgrade aborts now. Please check your internet connection or "
 "installation media and try again. "
@@ -318,11 +335,11 @@ msgstr ""
 "A actualização abortará agora. Por favor verifique a sua ligação à internet "
 "ou media de instalação e volte a tentar. "
 
-#: ../DistUpgrade/DistUpgradeControler.py:662
+#: ../DistUpgrade/DistUpgradeControler.py:690
 msgid "Support for some applications ended"
 msgstr "O suporte para algumas aplicações já terminou."
 
-#: ../DistUpgrade/DistUpgradeControler.py:663
+#: ../DistUpgrade/DistUpgradeControler.py:691
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -336,53 +353,52 @@ msgstr ""
 "Caso não tenha activado o software mantido pela comunidade (universe),  irá "
 "ser sugerida a remoção destes pacotes no próximo passo."
 
-#: ../DistUpgrade/DistUpgradeControler.py:699
+#: ../DistUpgrade/DistUpgradeControler.py:727
 msgid "Remove obsolete packages?"
 msgstr "Remover Pacotes obsoletos?"
 
-#: ../DistUpgrade/DistUpgradeControler.py:700
+#: ../DistUpgrade/DistUpgradeControler.py:728
 msgid "_Skip This Step"
 msgstr "_Saltar Este Passo"
 
-#: ../DistUpgrade/DistUpgradeControler.py:700
+#: ../DistUpgrade/DistUpgradeControler.py:728
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../DistUpgrade/DistUpgradeControler.py:711
+#: ../DistUpgrade/DistUpgradeControler.py:739
 msgid "Error during commit"
 msgstr "Erro ao submeter"
 
-#: ../DistUpgrade/DistUpgradeControler.py:712
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeControler.py:740
 msgid ""
 "A problem occured during the clean-up. Please see the below message for more "
 "information. "
 msgstr ""
 "Ocorreu algum problema durante a limpeza. Por favor verifique a mensagem "
-"abaixo para mais informação. "
+"abaixo para mais informações. "
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeControler.py:811
+#: ../DistUpgrade/DistUpgradeControler.py:839
 msgid "Restoring original system state"
 msgstr "A restaurar o estado original do sistema"
 
-#: ../DistUpgrade/DistUpgradeControler.py:865
+#: ../DistUpgrade/DistUpgradeControler.py:893
 #, python-format
 msgid "Fetching backport of '%s'"
 msgstr "A obter backport de '%s'"
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeControler.py:900
-#: ../DistUpgrade/DistUpgradeControler.py:943
+#: ../DistUpgrade/DistUpgradeControler.py:928
+#: ../DistUpgrade/DistUpgradeControler.py:971
 msgid "Checking package manager"
 msgstr "A verificar gestor de pacotes"
 
-#: ../DistUpgrade/DistUpgradeControler.py:905
+#: ../DistUpgrade/DistUpgradeControler.py:933
 msgid "Preparing the upgrade failed"
 msgstr "A preparação da actualização falhou"
 
-#: ../DistUpgrade/DistUpgradeControler.py:906
+#: ../DistUpgrade/DistUpgradeControler.py:934
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
@@ -392,15 +408,15 @@ msgstr ""
 "reporte este erro no pacote 'update-manager' e inclua os ficheiros contidos "
 "em /var/log/dist-upgrade/ no relatório de erro."
 
-#: ../DistUpgrade/DistUpgradeControler.py:929
+#: ../DistUpgrade/DistUpgradeControler.py:957
 msgid "Updating repository information"
 msgstr "A Actualizar informação de repositórios"
 
-#: ../DistUpgrade/DistUpgradeControler.py:954
+#: ../DistUpgrade/DistUpgradeControler.py:982
 msgid "Invalid package information"
 msgstr "Informação de pacotes inválida"
 
-#: ../DistUpgrade/DistUpgradeControler.py:955
+#: ../DistUpgrade/DistUpgradeControler.py:983
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -415,20 +431,20 @@ msgstr ""
 "'update-manager' e inclua os ficheiros contidos em /var/log/dist-upgrade/ no "
 "relatório de erro."
 
-#: ../DistUpgrade/DistUpgradeControler.py:967
+#: ../DistUpgrade/DistUpgradeControler.py:995
 msgid "Asking for confirmation"
 msgstr "A pedir confirmação"
 
 #. no do the upgrade
-#: ../DistUpgrade/DistUpgradeControler.py:974
+#: ../DistUpgrade/DistUpgradeControler.py:1002
 msgid "Upgrading"
 msgstr "A actualizar"
 
-#: ../DistUpgrade/DistUpgradeControler.py:981
+#: ../DistUpgrade/DistUpgradeControler.py:1009
 msgid "Searching for obsolete software"
 msgstr "À procura de software obsoleto"
 
-#: ../DistUpgrade/DistUpgradeControler.py:986
+#: ../DistUpgrade/DistUpgradeControler.py:1014
 msgid "System upgrade is complete."
 msgstr "A actualização do sistema está completa."
 
@@ -446,9 +462,9 @@ msgstr "A transferência está completa"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:130
 #: ../DistUpgrade/DistUpgradeViewKDE.py:136
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching file %li of %li at %sb/s"
-msgstr "A obter o ficheiro %li de %li a %s/s"
+msgstr "A obter o ficheiro %li de %li a %sb/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:131
 #: ../DistUpgrade/DistUpgradeViewGtk.py:257
@@ -470,7 +486,7 @@ msgstr "A obter o ficheiro %li de %li"
 #: ../DistUpgrade/DistUpgradeViewGtk.py:166
 #: ../DistUpgrade/DistUpgradeViewKDE.py:168
 msgid "Applying changes"
-msgstr "Aplicando alterações"
+msgstr "A aplicar as alterações"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:191
 #: ../DistUpgrade/DistUpgradeViewKDE.py:183
@@ -518,16 +534,15 @@ msgid "A fatal error occured"
 msgstr "Ocorreu um erro fatal"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:394
-#, fuzzy
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
 "var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Por favor relate este erro e inclua os ficheiros /var/log/dist-upgrade/main."
-"log e /var/log/dist-upgrade/apt.log no seu relatório de erro. A actualização "
-"abortará agora.\n"
+"Por favor relate este erro (se ainda não o tiver feito) e inclua os "
+"ficheiros /var/log/dist-upgrade/main.log e /var/log/dist-upgrade/apt.log no "
+"seu relatório de erro. A actualização abortou.\n"
 "O ficheiro original sources.list foi guardado em /etc/apt/sources.list."
 "distUpgrade."
 
@@ -566,7 +581,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Tem que descarregar um de %s. "
+"Tem que descarregar um total de %s. "
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:550
 #: ../DistUpgrade/DistUpgradeViewKDE.py:578
@@ -620,35 +635,29 @@ msgid "Upgrade %s"
 msgstr "Actualizar %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:111
-#, fuzzy
 msgid "Media Change"
-msgstr "Editar Repositório"
+msgstr "Alterar Media"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:444
-#, fuzzy
 msgid "Show Terminal >>>"
-msgstr "Consola"
+msgstr "Mostrar Consola >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:447
-#, fuzzy
 msgid "<<< Hide Terminal"
-msgstr "Consola"
+msgstr "<<< Esconder Consola"
 
 #. string = _("<p>You have to download a total of %s. ")
 #. msg += string % apt_pkg.SizeToStr(downloadSize)
 #. msg += _("<p>You have to download a total of %s. ") %#: ../DistUpgrade/DistUpgradeViewKDE.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:570
-#, fuzzy, python-format
+#, python-format
 msgid "<p>You have to download a total of %s. "
-msgstr ""
-"\n"
-"\n"
-"Tem que descarregar um de %s. "
+msgstr "<p>Tem que descarregar um total de %s. "
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:617
-#, fuzzy, python-format
+#, python-format
 msgid "Remove %s"
-msgstr "_Remover"
+msgstr "Remover %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:637
 #: ../DistUpgrade/DistUpgrade.glade.h:2
@@ -664,9 +673,8 @@ msgstr ""
 "actualização. É aconselhado a prosseguir com a actualização."
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:641
-#, fuzzy
 msgid "Cancel Upgrade?"
-msgstr "_Cancelar a Actualização"
+msgstr "_Cancelar Actualização"
 
 #: ../DistUpgrade/DistUpgradeView.py:33
 #, python-format
@@ -699,11 +707,11 @@ msgstr ""
 "Esta transferência levará aprox. %s com uma ligação DSL de 1Mbit e aprox. %s "
 "com um modem 56k"
 
-#: ../DistUpgrade/DistUpgradeView.py:146
+#: ../DistUpgrade/DistUpgradeView.py:147
 msgid "Reboot required"
 msgstr "Necessário reiniciar"
 
-#: ../DistUpgrade/DistUpgradeView.py:147
+#: ../DistUpgrade/DistUpgradeView.py:148
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
@@ -712,18 +720,24 @@ msgstr ""
 #: ../DistUpgrade/dist-upgrade.py:15
 msgid "Use the given path to search for a cdrom with upgradable packages"
 msgstr ""
+"Utilize o caminho fornecido para pesquisar os pacotes actualizáveis no "
+"leitor de cds"
 
 #: ../DistUpgrade/dist-upgrade.py:21
 msgid ""
 "Use frontend. Currently available: \n"
 "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 msgstr ""
+"Utilize o frontend. Actualmente disponíveis: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 
 #: ../DistUpgrade/dist-upgrade.py:24
 msgid ""
 "Use special upgrade mode. Available:\n"
 "desktop, server"
 msgstr ""
+"Utilize o modo especial de actualização. Disponível:\n"
+"desktop, server"
 
 #. testcode to see if the bullets look nice in the dialog
 #. for i in range(4):
@@ -742,13 +756,12 @@ msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Iniciar a actualização?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-#, fuzzy
 msgid "<b><big>Upgrading Ubuntu to version 7.04</big></b>"
-msgstr "<b><big>A actualizar o Ubuntu para a versão 6.10</big></b>"
+msgstr "<b><big>A actualizar o Ubuntu para a versão 7.04</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
-msgstr "A efectuar limpeza"
+msgstr "A efectuar a limpeza"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
@@ -764,7 +777,7 @@ msgstr "A obter e instalar actualizações"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:12
 msgid "Modifying the software channels"
-msgstr "A modificar os repositórios de software"
+msgstr "A modificar os repositórios de aplicações"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Preparing the upgrade"
@@ -804,11 +817,11 @@ msgstr "_Reiniciar agora"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:22
 msgid "_Resume Upgrade"
-msgstr "_Retomar Actualização?"
+msgstr "_Retomar Actualização"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Start Upgrade"
-msgstr "_Iniciar a Actualização"
+msgstr "_Iniciar Actualização"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:87
 msgid "Could not find the release notes"
@@ -901,19 +914,18 @@ msgstr "_Verificar Todos"
 #: ../UpdateManager/UpdateManager.py:623 ../UpdateManager/UpdateManager.py:650
 #, python-format
 msgid "Download size: %s"
-msgstr "Tamanho do download: %s"
+msgstr "Tamanho da descarga: %s"
 
 #: ../UpdateManager/UpdateManager.py:627
-#, fuzzy
 msgid "Unknown download size"
-msgstr "Tamanho do download: %s"
+msgstr "Tamanho da descarga desconhecido: %s"
 
 #: ../UpdateManager/UpdateManager.py:646
 #, python-format
 msgid "You can install %s update"
 msgid_plural "You can install %s updates"
-msgstr[0] "Pode instalar %s actualização"
-msgstr[1] "Pode instalar %s actualizações"
+msgstr[0] "Pode instalar a actualização %s"
+msgstr[1] "Pode instalar as actualizações %s"
 
 #: ../UpdateManager/UpdateManager.py:679
 msgid "Please wait, this can take some time."
@@ -928,35 +940,32 @@ msgid "Checking for updates"
 msgstr "Verificar por actualizações disponíveis"
 
 #: ../UpdateManager/UpdateManager.py:827
-#, fuzzy
 msgid "Could not initialize the package information"
-msgstr "Informação de pacotes inválida"
+msgstr "Impossível inicializar a informação do pacote"
 
 #: ../UpdateManager/UpdateManager.py:828
-#, fuzzy
 msgid ""
 "A unresolvable problem occurred while initializing the package information.\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
-"Um problema irresolúvel ocorreu ao calcular a actualização. \n"
+"Um problema insolúvel ocorreu ao inicializar a informação do pacote.\n"
 "\n"
-"Por favor reporte este erro no pacote 'update-manager' e inclua os ficheiros "
-"contidos em /var/log/dist-upgrade/ no seu relatório de erro."
+"Por favor reporte este erro no pacote 'update-manager' e inclua a seguinte "
+"mensagem de erro:\n"
 
 #: ../UpdateManager/UpdateManager.py:850
-#, fuzzy
 msgid ""
 "A unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
 msgstr ""
-"Um problema irresolúvel ocorreu ao calcular a actualização. \n"
+"Um problema insolúvel ocorreu ao calcular a actualização. \n"
 "\n"
-"Por favor reporte este erro no pacote 'update-manager' e inclua os ficheiros "
-"contidos em /var/log/dist-upgrade/ no seu relatório de erro."
+"Por favor reporte este erro no pacote 'update-manager' e inclua a seguinte "
+"mensagem de erro:"
 
 #: ../UpdateManager/UpdateManager.py:875
 #, python-format
@@ -994,17 +1003,18 @@ msgstr "A descarregar a ferramenta de actualização"
 
 #: ../UpdateManager/UpdateManager.py:910
 msgid "The upgrade tool will guide you through the upgrade process."
-msgstr "A ferramenta de actualização guiá-lo-á pelo processo de actualização."
+msgstr ""
+"A ferramenta de actualização irá guiá-lo pelo processo de actualização."
 
 #: ../UpdateManager/UpdateManager.py:918
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
-msgstr "<b>Está disponível a nova versão '%s' da distribuição</b>"
+msgstr "<b>Nova versão '%s' da distribuição está disponível</b>"
 
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:957
 msgid "Software index is broken"
-msgstr "O índice de software está quebrado"
+msgstr "O índice de aplicações está quebrado"
 
 #: ../UpdateManager/UpdateManager.py:958
 msgid ""
@@ -1012,7 +1022,7 @@ msgid ""
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
 msgstr ""
-"É impossível instalar ou remover qualquer software. Por favor utilize o "
+"É impossível instalar ou remover qualquer aplicação. Por favor utilize o "
 "gestor de pacotes \"Synaptic\" ou execute \"sudo apt-get install -f\" numa "
 "consola para corrigir este problema em primeiro lugar."
 
@@ -1025,7 +1035,7 @@ msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
 "Isto é provavelmente um erro na ferramenta de actualização. Por favor "
-"reporte o problema."
+"reporte o erro."
 
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:129
 msgid "Upgrade tool signature"
@@ -1041,11 +1051,11 @@ msgstr "Falha a obter"
 
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:157
 msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "Falha a obter a actualização. Poderá existir um problema de rede. "
+msgstr "Falhou ao obter a actualização. Poderá existir um problema de rede. "
 
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:161
 msgid "Failed to extract"
-msgstr "Falha ao extrair"
+msgstr "Falhou ao extrair"
 
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:162
 msgid ""
@@ -1098,15 +1108,11 @@ msgstr "<big><b>Mantenha o seu sistema actualizado</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr ""
-"<big><b>Não é possível instalar todas as actualizações</b></big>\r\n"
-"\r\n"
-"%s"
+msgstr "<big><b>Não é possível instalar todas as actualizações</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
-#, fuzzy
 msgid "<big><b>Starting Update Manager</b></big>"
-msgstr "<big><b>A iniciar o gestor de actualizações</b></big>"
+msgstr "<big><b>A iniciar o Gestor de Actualizações</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:7
 msgid "Changes"
@@ -1118,23 +1124,21 @@ msgstr "Verific_ar"
 
 #: ../data/glade/UpdateManager.glade.h:9
 msgid "Check the software channels for new updates"
-msgstr "Verificar os repositórios de software por novas actualizações"
+msgstr "Verificar os repositórios de aplicações por novas actualizações"
 
 #: ../data/glade/UpdateManager.glade.h:10
 msgid "Description"
 msgstr "Descrição"
 
 #: ../data/glade/UpdateManager.glade.h:11
-#, fuzzy
 msgid "Description of update"
-msgstr "_Actualizações de Distribuição"
+msgstr "Descrição da actualização"
 
 #: ../data/glade/UpdateManager.glade.h:12
 msgid "Release Notes"
-msgstr "Notas de lançamento"
+msgstr "Notas de Lançamento"
 
 #: ../data/glade/UpdateManager.glade.h:13
-#, fuzzy
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
@@ -1143,11 +1147,13 @@ msgid ""
 " ◦ Unofficial software packages not provided by Ubuntu\n"
 " ◦ Normal changes of a pre-release version of Ubuntu"
 msgstr ""
-"Execute uma actualização de distribuição para instalar tantas actualizações "
-"quanto possível.\n"
+"Execute uma actualização parcial, para instalar tantas actualizações quanto "
+"possível. \n"
 "\n"
-"Isto pode ter sido causado por uma actualização incompleta, pacotes de "
-"software não oficiais ou a utilização de uma versão em desenvolvimento."
+"Isto pode ter sido causado por:\n"
+" ◦ Uma actualização incompleta\n"
+" ◦ Pacotes de aplicação não disponibilizados pelo Ubuntu\n"
+" ◦ Alterações normais de uma versão em desenvolvimento"
 
 #: ../data/glade/UpdateManager.glade.h:19
 msgid "Show progress of single files"
@@ -1158,7 +1164,7 @@ msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
 msgstr ""
-"Actualizações de software podem corrigir erros, eliminar problemas de "
+"Actualizações de aplicações podem corrigir erros, eliminar problemas de "
 "segurança, e fornecer novas funcionalidades."
 
 #: ../data/glade/UpdateManager.glade.h:21
@@ -1187,14 +1193,12 @@ msgid "_Install Updates"
 msgstr "_Instalar Actualizações"
 
 #: ../data/glade/UpdateManager.glade.h:27
-#, fuzzy
 msgid "_Partial Upgrade"
-msgstr "_Iniciar a Actualização"
+msgstr "_Actualização Parcial"
 
 #: ../data/glade/UpdateManager.glade.h:28
-#, fuzzy
 msgid "_Upgrade"
-msgstr "A_ctualização"
+msgstr "_Actualizar"
 
 #: ../data/glade/UpdateManager.glade.h:29
 msgid "updates"
@@ -1206,7 +1210,7 @@ msgstr "Mostrar e instalar actualizações disponíveis"
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "System Update Tool"
-msgstr ""
+msgstr "Ferramenta de Actualização do Sistema"
 
 #: ../data/update-manager.schemas.in.h:1
 msgid ""
@@ -1218,7 +1222,7 @@ msgstr ""
 
 #: ../data/update-manager.schemas.in.h:2
 msgid "Check for new distribution releases"
-msgstr "Verificar por novos lançamentos de distribuições"
+msgstr "Verificar novos lançamentos da distribuição"
 
 #: ../data/update-manager.schemas.in.h:3
 msgid ""
@@ -1254,49 +1258,45 @@ msgid "The window size"
 msgstr "Tamanho da Janela"
 
 #: ../update-manager:51
-#, fuzzy
 msgid "Check if a new distribution release is available"
-msgstr "Verificar por novos lançamentos de distribuições"
+msgstr "Verificar se está disponível uma nova distribuição"
 
 #: ../update-manager:54 ../do-release-upgrade:19
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr ""
+"Verifique se é possível actualizar para a última versão em desenvolvimento"
 
 #: ../update-manager:58 ../update-manager:61
 msgid "Try to run a dist-upgrade"
-msgstr ""
+msgstr "Tente executar um dist-upgrade"
 
 #: ../update-manager:74
-#, fuzzy
 msgid "Running partial upgrade"
-msgstr "_Iniciar a Actualização"
+msgstr "_Iniciar actualização parcial"
 
 #: ../update-manager:87
-#, fuzzy
 msgid "Upgrade complete"
-msgstr "A actualização está completa"
+msgstr "Actualização completa"
 
 #: ../update-manager:88
-#, fuzzy
 msgid "The upgrade was completed."
-msgstr "A actualização do sistema está completa."
+msgstr "A actualização está completa."
 
 #: ../do-release-upgrade:23
 msgid "Run the specified frontend"
-msgstr ""
+msgstr "Executar o frontend específico"
 
 #: ../do-release-upgrade:26
 msgid "Run in a special upgrade mode"
-msgstr ""
+msgstr "Executar em modo especial de actualização"
 
 #: ../do-release-upgrade:30
-#, fuzzy
 msgid "Checking for a new ubuntu release"
-msgstr "Verificar por novos lançamentos de distribuições"
+msgstr "Verificar lançamento de nova distribuição"
 
 #: ../do-release-upgrade:36
 msgid "No new release found"
-msgstr ""
+msgstr "Não existem novos lançamentos"
 
 #, fuzzy
 #~ msgid "Fetching file %li of %li at %s/s"

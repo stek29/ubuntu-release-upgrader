@@ -322,7 +322,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         # FIXME: i18n must be somewhere relative do this dir
         try:
-          bindtextdomain("update-manager", localedir)
+          gettext.bindtextdomain("update-manager", localedir)
           gettext.textdomain("update-manager")
         except Exception, e:
           logging.warning("Error setting locales (%s)" % e)

@@ -168,10 +168,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText(_("Applying changes"))
         self.progress.setProgress(0)
         self.progress_text.setText(" ")
-        frontend="kde"
-        self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,
-                    "DEBIAN_FRONTEND=%s" % frontend,
-                    "APT_LISTCHANGES_FRONTEND=none"]
         # do a bit of time-keeping
         self.start_time = 0.0
         self.time_ui = 0.0
@@ -228,6 +224,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.pid = os.fork()
         if self.pid == 0:
             os.environ["DEBIAN_FRONTEND"] = "kde"
+            os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
             os.dup2(self.parent.slave, 0)
             os.dup2(self.parent.slave, 1)
             os.dup2(self.parent.slave, 2)

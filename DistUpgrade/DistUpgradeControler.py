@@ -231,7 +231,11 @@ class DistUpgradeControler(object):
             except NoOptionError:
                 logging.debug("no default version for python found in '%s'" % config)
                 return False
-            fs_default_version = os.readlink('/usr/bin/python')
+            try:
+                fs_default_version = os.readlink('/usr/bin/python')
+            except OSError, e:
+                logging.error("os.readlink failed (%s)" % e)
+                return False
             if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)):
                 logging.debug("python symlink points to: '%s', but expected is '%s' or '%s'" % (fs_default_version, expected_default, os.path.join('/usr/bin', expected_default)))
                 return False

@@ -221,15 +221,17 @@ class KDEInstallProgressAdapter(InstallProgress):
     def fork(self):
         """pty voodoo to attach dpkg's pty to konsole"""
         self.parent.newKonsole()
-        self.pid = os.fork()
-        if self.pid == 0:
+        self.child_pid = os.fork()
+        if self.child_pid == 0:
+            os.setsid()
+            #os.environ["TERM"] = "linux"
             os.environ["DEBIAN_FRONTEND"] = "kde"
             os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
             os.dup2(self.parent.slave, 0)
             os.dup2(self.parent.slave, 1)
             os.dup2(self.parent.slave, 2)
-        logging.debug(" fork pid is: %s" % self.pid)
-        return self.pid
+        logging.debug(" fork pid is: %s" % self.child_pid)
+        return self.child_pid
 
     def statusChange(self, pkg, percent, status):
         """update progress bar and label"""
@@ -253,15 +255,6 @@ class KDEInstallProgressAdapter(InstallProgress):
             self.progress_text.setText(_("About %s remaining") % FuzzyTimeToStr(eta))
           else:
             self.progress_text.setText(" ")
-
-    def child_exited(self, term, pid, status):
-        self.apt_status = os.WEXITSTATUS(status)
-        self.finished = True
-
-    def waitChild(self):
-        while not self.finished:
-            self.updateInterface()
-        return self.apt_status
 
     def finishUpdate(self):
         self.label_status.setText("")
@@ -291,11 +284,6 @@ class KDEInstallProgressAdapter(InstallProgress):
           self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()
         time.sleep(0.0000001)
-
-    def processExited(self, process):
-        """slot called by konsole to tell dpkg the child has finished"""
-        self.finished = True
-        self.apt_status = process.exitStatus()
 
 # inherit from the class created in window_main.ui
 # to add the handler for closing the window
@@ -382,7 +370,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.konsoleWidget = self.konsole.widget()
         self.konsole_frame_layout.addWidget(self.konsoleWidget)
         self.konsoleWidget.show()
-        self.app.connect(self.konsole, SIGNAL("processExited(KProcess*)"), self._installProgress.processExited)
 
         #prepare for dpkg pty being attached to konsole
         (self.master, self.slave) = pty.openpty()

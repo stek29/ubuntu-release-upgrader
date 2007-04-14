@@ -349,6 +349,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # reasonable fault handler
         sys.excepthook = self._handleException
 
+        self.konsole = None
         self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
 
         self.window_main.konsole_frame.hide()
@@ -378,6 +379,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.app.exec_loop()
 
     def newKonsole(self):
+        if self.konsole is not None:
+            self.konsole.widget().hide()
         self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
         self.window_main.konsole_frame.setMinimumSize(500, 400)
         self.konsole.setAutoStartShell(False)

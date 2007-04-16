@@ -54,6 +54,8 @@ def _(str):
     return unicode(gett(str), 'UTF-8')
 
 def utf8(str):
+  if isinstance(str, unicode):
+      return str
   return unicode(str, 'UTF-8')
 
 class KDECdromProgressAdapter(apt.progress.CdromProgress):
@@ -647,7 +649,7 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
 
 
 if __name__ == "__main__":
-  
+
   view = DistUpgradeViewKDE()
   fp = KDEFetchProgressAdapter(view)
   ip = KDEInstallProgressAdapter(view)

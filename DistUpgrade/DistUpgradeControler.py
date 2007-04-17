@@ -555,6 +555,7 @@ class DistUpgradeControler(object):
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
         archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
         for d in ["/","/usr","/var","/boot", archivedir, "/home"]:
+            d = os.path.realpath(d)
             fs_id = make_fs_id(d)
             st = os.statvfs(d)
             free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
@@ -580,6 +581,7 @@ class DistUpgradeControler(object):
                             ("/boot", 40*1024*1024), # savetfy buffer /boot
                             ("/", 10*1024*1024),     # small savetfy buffer /
                            ]:
+            dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
             if fs_free[dir].free < 0:

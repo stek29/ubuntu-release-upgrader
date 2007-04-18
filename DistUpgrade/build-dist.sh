@@ -12,7 +12,7 @@ SOURCEDIR=`pwd`
 DIST=feisty
 MAINTAINER="Michael Vogt <michael.vogt@ubuntu.com>"
 NOTES=ReleaseAnnouncement
-version=$(date +%Y%m%d.%H%M)
+version=$(cd ..;LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 
 # create targetdir
 if [ ! -d $TARGETDIR/$version ]; then

@@ -62,7 +62,7 @@ class KDECdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress """
     def __init__(self, parent):
         self.status = parent.window_main.label_status
-        self.progress = parent.window_main.progressbar_cache
+        self.progressbar = parent.window_main.progressbar_cache
         self.parent = parent
 
     def update(self, text, step):

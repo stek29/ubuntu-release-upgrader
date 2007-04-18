@@ -69,7 +69,7 @@ class KDECdromProgressAdapter(apt.progress.CdromProgress):
         """ update is called regularly so that the gui can be redrawn """
         if text:
           self.status.setText(text)
-        self.progressbar.setProgress(percent)
+        self.progressbar.setProgress(step/float(self.totalSteps))
         KApplication.kApplication().processEvents()
 
     def askCdromName(self):

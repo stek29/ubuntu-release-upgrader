@@ -160,7 +160,7 @@ class MetaReleaseCore(object):
         if os.access(self.METARELEASE_FILE, os.W_OK):
             lastmodified = os.stat(self.METARELEASE_FILE).st_mtime
         if lastmodified > 0:
-            req.add_header("If-Modified-Since", lastmodified)
+            req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
         try:
             uri=urllib2.urlopen(req)
             # sometime there is a root owned meta-relase file

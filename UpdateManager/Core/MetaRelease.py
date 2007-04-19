@@ -154,6 +154,9 @@ class MetaReleaseCore(object):
         #print "download"
         lastmodified = 0
         req = urllib2.Request(self.METARELEASE_URI)
+        # make sure that we always get the latest file (#107716)
+        req.add_header("Cache-Control", "No-Cache")
+        req.add_header("Pragma", "no-cache")
         if os.access(self.METARELEASE_FILE, os.W_OK):
             lastmodified = os.stat(self.METARELEASE_FILE).st_mtime
         if lastmodified > 0:

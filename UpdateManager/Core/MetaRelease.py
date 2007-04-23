@@ -181,7 +181,7 @@ class MetaReleaseCore(object):
             uri.close()
         except urllib2.URLError:
             if os.path.exists(self.METARELEASE_FILE):
-                f=open(self.METARELEASE_FILE,"r")
+                self.metarelease_information=open(self.METARELEASE_FILE,"r")
         # now check the information we have
         if self.metarelease_information != None:
             self.parse()

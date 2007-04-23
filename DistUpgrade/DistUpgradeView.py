@@ -68,6 +68,7 @@ class InstallProgress(apt.progress.InstallProgress):
   def error(self, pkg, errormsg):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)
+    logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     self.pkg_failures += 1
     if "/" in pkg:
       pkg = os.path.basename(pkg)

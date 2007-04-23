@@ -474,7 +474,7 @@ class MyCache(apt.Cache):
 
     def _tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
         # sanity check
-        if self._inRemovalBlacklist(pkgname)):
+        if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False
         # this is a delete candidate, only actually delete,

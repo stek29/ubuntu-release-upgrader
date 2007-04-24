@@ -639,7 +639,7 @@ class DistUpgradeControler(object):
             apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
         minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
-        self._rewriteAptPeriodic(self, 10, True)
+        self._rewriteAptPeriodic(10, True)
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -667,7 +667,7 @@ class DistUpgradeControler(object):
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
-                self._rewriteAptPeriodic(self, minAge)
+                self._rewriteAptPeriodic(minAge)
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -675,7 +675,7 @@ class DistUpgradeControler(object):
                 currentRetry += 1
                 continue
             # no exception, so all was fine, we are done
-            self._rewriteAptPeriodic(self, minAge)
+            self._rewriteAptPeriodic(minAge)
             return True
         
         # maximum fetch-retries reached without a successful commit

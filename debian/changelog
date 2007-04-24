@@ -3,6 +3,8 @@ update-manager (1:0.59.22) feisty-updates; urgency=low
   * DistUpgrade/DistUpgradeControler.py:
     - fix free space check when the dir checked is a symlink
       (LP#106804)
+    - increase minAge for the apt cleanup cron job during the upgrade
+      to fix race for people with very slow network (LP#109548)
   * cdromupgrade:
     - do not call any authentication mechanism, that is the
       responsibility of the user (LP#107431)

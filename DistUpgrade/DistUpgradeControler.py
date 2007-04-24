@@ -611,10 +611,36 @@ class DistUpgradeControler(object):
                                         self.cache.requiredDownload)
         return res
 
+    def _rewriteAptPeriodic(self, minAge, makeBackup=False):
+        # rewrite apt minage cleanup to avoid 
+        for name in ["/etc/apt/apt.conf.d/20archive",
+                     "/etc/apt/apt.conf.d/25adept-archive-limits"]:
+            if not os.path.exists(name):
+                logging.debug("no file '%s'" % name)
+                break
+            try:
+                outname = "%s.distUpgrade" % name
+                out = open(outname, "w")
+                for line in open(name):
+                    if line.startswith("APT::Archives::MinAge"):
+                        logging.debug("setting MinAge to %s" % minAge)
+                        line = 'APT::Archives::MinAge "%s";\n' % minAge
+                    out.write(line)
+                if makeBackup:
+                    shutil.copy(name, name+".save")
+                out.close()
+                os.rename(outname, name)
+            except Exception, e:
+                logging.waring("failed to modify '%s' (%s)" % (name, e))
+    
     def doDistUpgrade(self):
         if self.options and self.options.haveBackports:
             backportsdir = os.getcwd()+"/backports"
             apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
+        # rewrite cleanup minAge for a package to 10 days
+        minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
+        self._rewriteAptPeriodic(self, 10, True)
+        # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
         iprogress = self._view.getInstallProgress(self.cache)
@@ -641,6 +667,7 @@ class DistUpgradeControler(object):
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
+                self._rewriteAptPeriodic(self, minAge)
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -648,6 +675,7 @@ class DistUpgradeControler(object):
                 currentRetry += 1
                 continue
             # no exception, so all was fine, we are done
+            self._rewriteAptPeriodic(self, minAge)
             return True
         
         # maximum fetch-retries reached without a successful commit
@@ -1035,4 +1063,6 @@ if __name__ == "__main__":
     #dc.openCache()
     #dc._checkFreeSpace()
     #dc._rewriteFstab()
-    dc._checkAdminGroup()
+    #dc._checkAdminGroup()
+    #print apt_pkg.Config.Find("APT::Archives::MinAge")
+    #dc._rewriteAptPeriodic(2)

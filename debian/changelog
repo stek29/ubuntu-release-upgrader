@@ -1,4 +1,4 @@
-update-manager (1:0.59.22) feisty-proposed; urgency=low
+update-manager (1:0.60) gutsy; urgency=low
 
   * DistUpgrade/DistUpgradeControler.py:
     - fix free space check when the dir checked is a symlink
@@ -20,10 +20,13 @@ update-manager (1:0.59.22) feisty-proposed; urgency=low
     - check RemovalBlacklist early when removing a package to
       work-around crash in problem resolver (LP#109014)
   * DistUpgrade/DistUpgrade.cfg:
+    - updated for gutsy
     - add "ltsp-client", "ltspfsd" to the remove list to ensure that
       it does not get installed on a regular system (LP#109638)
+  * DistUpgrade/DistUpgradeApport.py:
+    - protect against errors when launching apport (LP#108131)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 24 Apr 2007 12:59:59 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 24 Apr 2007 16:39:26 +0200
 
 update-manager (1:0.59.21) feisty-proposed; urgency=low
 

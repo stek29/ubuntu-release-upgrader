@@ -28,9 +28,13 @@ def apport_pkgfailure(pkg, errormsg):
     LOGDIR="/var/log/dist-upgrader/"
     s = "/usr/share/apport/package_hook"
     if os.path.exists(s):
-        p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
-        p.stdin.write("ErrorMessage: %s\n" % errormsg)
-        p.stdin.close()
+        try:
+            p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
+            p.stdin.write("ErrorMessage: %s\n" % errormsg)
+            p.stdin.close()
+        except Exception, e:
+            logging.warning("Failed to run apport (%s)" % e)
+            return False
         return True
     return False
 

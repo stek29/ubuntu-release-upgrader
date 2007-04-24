@@ -548,7 +548,11 @@ class DistUpgradeControler(object):
         mnt_map = {}
         fs_free = {}
         for line in open("/proc/mounts"):
-            (what, where, fs, options, a, b) = line.split()
+            try:
+                (what, where, fs, options, a, b) = line.split()
+            except ValueError, e:
+                logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
+                continue
             if not where in mounted:
                 mounted.append(where)
         # make sure mounted is sorted by longest path

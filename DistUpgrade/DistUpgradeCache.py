@@ -15,6 +15,7 @@ from DistUpgradeView import FuzzyTimeToStr
 # FIXME: we need this only for the later "isinstance()" check
 #        this should probably be solved in some different way
 from DistUpgradeViewText import DistUpgradeViewText
+from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 
 class MyCache(apt.Cache):
     # init
@@ -276,7 +277,8 @@ class MyCache(apt.Cache):
         def _restore_fds(stdout, stderr):
             os.dup2(stdout, 1)
             os.dup2(stderr, 2)
-        text_mode = isinstance(view, DistUpgradeViewText)
+        text_mode = (isinstance(view, DistUpgradeViewText) or
+                     isinstance(view, DistUpgradeViewNonInteractive))
         if text_mode:
             old_stdout = os.dup(1)
             old_stderr = os.dup(2)

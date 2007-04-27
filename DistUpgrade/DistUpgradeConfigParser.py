@@ -14,7 +14,7 @@ class DistUpgradeConfig(ConfigParser):
     def getlist(self, section, option):
         try:
             tmp = self.get(section, option)
-        except NoOptionError:
+        except (NoSectionError,NoOptionError),e:
             return []
         items = [x.strip() for x in tmp.split(",")]
         return items

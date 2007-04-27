@@ -1,6 +1,8 @@
 
 import sys
 import os
+import warnings
+warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 
 
@@ -35,7 +37,7 @@ class Chroot(object):
             self.config = DistUpgradeConfig(datadir=os.path.dirname(profile),
                                             name=os.path.basename(profile))
         else:
-            raise IOError, "Can't find profile '%s'" % profile
+            raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
         
         self.fromDist = self.config.get("Sources","From")
         if self.config.has_option("NonInteractive","Proxy"):
@@ -43,6 +45,30 @@ class Chroot(object):
             os.putenv("http_proxy",proxy)
         os.putenv("DEBIAN_FRONTEND","noninteractive")
         self.tarball = None
+        self.cachedir = None
+        try:
+            self.cachedir = self.config.get("NonInteractive","CacheDebs")
+        except ConfigParser.NoOptionError:
+            pass
+        # init a sensible environment (to ensure proper operation if
+        # run from cron)
+        os.environ["PATH"] = "/usr/sbin:/usr/bin:/sbin:/bin"
+
+
+    def _umount(self, chrootdir):
+        umount_list = []
+        for line in open("/proc/mounts"):
+            (dev, mnt, fs, options, d, p) = line.split()
+            if mnt.startswith(chrootdir):
+                umount_list.append(mnt)
+        # now sort and umount by reverse length (to ensure
+        # we umount /sys/fs/binfmt_misc before /sys)
+        umount_list.sort(key=len)
+        umount_list.reverse()
+        # do the list
+        for mpoint in umount_list:
+            print "Umount '%s'" % mpoint
+            os.system("umount %s" % mpoint)
 
     def _runInChroot(self, chrootdir, command, cmd_options=[]):
         print "runing: ",command
@@ -57,12 +83,7 @@ class Chroot(object):
         else:
             print "Parent: waiting for %s" % pid
             (id, exitstatus) = os.waitpid(pid, 0)
-            os.system("umount %s/dev/pts" % chrootdir)
-            os.system("umount %s/proc/sys/fs/binfmt_misc" % chrootdir)
-            os.system("umount %s/proc" % chrootdir)
-            os.system("umount %s/sys" % chrootdir)
-	    # HACK: try to lazy umount it at least
-            os.system("umount -l %s/proc" % chrootdir)
+            self._umount(chrootdir)
             return exitstatus
 
     def _runApt(self, tmpdir, command, cmd_options=[]):
@@ -76,12 +97,24 @@ class Chroot(object):
         shutil.copy("%s/randomInst.py",tmpdir+"/tmp")
         ret = subprocess.call(["chroot",tmpdir,"/tmp/randomInst.py","%s" % amount])
 
+    def _cacheDebs(self, tmpdir):
+        # see if the debs should be cached
+        if self.cachedir:
+            print "Caching debs"
+            for f in glob.glob(tmpdir+"/var/cache/apt/archives/*.deb"):
+                if not os.path.exists(self.cachedir+"/"+os.path.basename(f)):
+                    try:
+                        shutil.copy(f,self.cachedir)
+                    except IOError, e:
+                        print "Can't copy '%s' (%s)" % (f,e)
+
     def _getTmpDir(self):
         tmpdir = self.config.getWithDefault("NonInteractive","Tempdir",None)
         if tmpdir is None:
             tmpdir = tempfile.mkdtemp()
         else:
             if os.path.exists(tmpdir):
+                self._umount(tmpdir)
                 shutil.rmtree(tmpdir)
             os.makedirs(tmpdir)
         return tmpdir
@@ -108,6 +141,8 @@ class Chroot(object):
         print "bootstraping to %s" % outfile
         ret = subprocess.call(["debootstrap", self.fromDist,tmpdir, self.config.get("NonInteractive","Mirror")])
         print "debootstrap returned: %s" % ret
+        if ret != 0:
+            return False
 
         print "diverting"
         self._dpkgDivert(tmpdir)
@@ -141,7 +176,10 @@ class Chroot(object):
             sourceslist.close()
             
             print open(tmpdir+"/etc/apt/sources.list","r").read()
-        
+
+        # move the cache debs
+        self._populateWithCachedDebs(tmpdir)
+                
         print "Updating the chroot"
         ret = self._runApt(tmpdir,"update")
         print "apt update returned %s" % ret
@@ -158,13 +196,16 @@ class Chroot(object):
         if ret != 0:
             return False
 
+        CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
-        if len(pkgs) > 0:
-            print "installing additonal: %s" % pkgs
-            ret= self._runApt(tmpdir,"install",pkgs)
+        while(len(pkgs)) > 0:
+            print "installing additonal: %s" % pkgs[:CMAX]
+            ret= self._runApt(tmpdir,"install",pkgs[:CMAX])
             print "apt(2) returned: %s" % ret
             if ret != 0:
+                self._cacheDebs(tmpdir)
                 return False
+            pkgs = pkgs[CMAX+1:]
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
@@ -180,6 +221,9 @@ class Chroot(object):
         except ConfigParser.NoOptionError:
             pass
 
+        print "Caching debs"
+        self._cacheDebs(tmpdir)
+
         print "Cleaning chroot"
         ret = self._runApt(tmpdir,"clean")
         if ret != 0:
@@ -194,6 +238,17 @@ class Chroot(object):
         shutil.rmtree(tmpdir)
         return True
 
+    def _populateWithCachedDebs(self, tmpdir):
+        # now populate with hardlinks for the debs
+        if self.cachedir:
+            print "Linking cached debs into chroot"
+            for f in glob.glob(self.cachedir+"/*.deb"):
+                try:
+                    os.link(f, tmpdir+"/var/cache/apt/archives/%s"  % os.path.basename(f))
+                except OSError, e:
+                    print "Can't link: %s (%s)" % (f,e)
+        return True
+
     def upgrade(self, tarball=None):
         if not tarball:
             tarball = self.tarball
@@ -204,6 +259,8 @@ class Chroot(object):
             print "Error extracting tarball"
         #self._runApt(tmpdir, "install",["apache2"])
 
+        self._populateWithCachedDebs(tmpdir)
+        
         # copy itself to the chroot (resolve symlinks)
         targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
         if not os.path.exists(targettmpdir):
@@ -230,17 +287,14 @@ class Chroot(object):
         else:
             print "Parent: waiting for %s" % pid
             (id, exitstatus) = os.waitpid(pid, 0)
-            print "Child exited (%s, %s)" % (id, exitstatus)
+            print "Child exited (%s, %s): %s" % (id, exitstatus, os.WEXITSTATUS(exitstatus))
+            # copy the result
             for f in glob.glob(tmpdir+"/var/log/dist-upgrade/*"):
                 print "copying result to: ", self.resultdir
                 shutil.copy(f, self.resultdir)
-            print "Removing: '%s'" % tmpdir
-            os.system("umount %s/dev/pts" % tmpdir)
-            os.system("umount %s/proc/sys/fs/binfmt_misc" % tmpdir)
-            os.system("umount %s/proc" % tmpdir)
-            os.system("umount %s/sys" % tmpdir)
-	    # HACK: try to lazy umount it at least
-            os.system("umount -l %s/proc" % tmpdir)
+            # cache debs and cleanup
+            self._cacheDebs(tmpdir)
+            self._umount(tmpdir)
             shutil.rmtree(tmpdir)
             return (exitstatus == 0)
 

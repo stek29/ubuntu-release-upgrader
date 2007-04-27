@@ -46,68 +46,86 @@ class NonInteractiveInstallProgress(apt.progress.InstallProgress):
         self.config = DistUpgradeConfig(".")
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        # default to 600 sec timeout
+        self.timeout = 600
+        try:
+            self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
+        except Exception, e:
+            pass
         
     def error(self, pkg, errormsg):
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     def conffile(self, current, new):
-        logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
+        logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)
 	try:
           # don't overwrite
 	  os.write(self.master_fd,"n\n")
  	except Exception, e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
+
+    def startUpdate(self):
+        self.last_activity = time.time()
+          
     def updateInterface(self):
-         # from python-apt/apt/progress.py (but modified a bit)
-         # -------------------------------------------------------------
-         if self.statusfd != None:
-             res = select.select([self.statusfd],[],[],0.1)
-             while len(res[0]) > 0:
-                 while not self.read.endswith("\n"):
-                     self.read += os.read(self.statusfd.fileno(),1)
-                 if self.read.endswith("\n"):
-                     s = self.read
-                     #print s
-                     (status, pkg, percent, status_str) = string.split(s, ":")
-                     if status == "pmerror":
-                         self.error(pkg,status_str)
-                     elif status == "pmconffile":
-                         # we get a string like this:
-                         # 'current-conffile' 'new-conffile' useredited distedited
-                         match = re.compile("\s*\'(.*)\'\s*\'(.*)\'.*").match(status_str)
-                         if match:
-                             self.conffile(match.group(1), match.group(2))
-                     elif status == "pmstatus":
-                         if (float(percent) != self.percent or 
-                             status_str != self.status):
-                             self.statusChange(pkg, float(percent), status_str.strip())
-                             self.percent = float(percent)
-                             self.status = string.strip(status_str)
-                 self.read = ""
-                 res = select.select([self.statusfd],[],[],0.1)
-         # -------------------------------------------------------------
-         #fcntl.fcntl(self.master_fd, fcntl.F_SETFL, os.O_NDELAY)
-         res = select.select([self.master_fd],[],[],0.1)
-         while len(res[0]) > 0:
-             try:
-                 s = os.read(self.master_fd, 1)
-                 sys.stdout.write("%s" % s)
-             except OSError,e:
-                 # happens after we are finished because the fd is closed
-                 return
-             res = select.select([self.master_fd],[],[],0.1)
+        if self.statusfd == None:
+            return
+
+        if (self.last_activity + self.timeout) < time.time():
+            logging.warning("no activity %s seconds (%s) - sending ctrl-c" % (self.timeout, self.status))
+            os.write(self.master_fd,chr(3))
+
+
+        # read status fd from dpkg
+        # from python-apt/apt/progress.py (but modified a bit)
+        # -------------------------------------------------------------
+        res = select.select([self.statusfd],[],[],0.1)
+        while len(res[0]) > 0:
+            self.last_activity = time.time()
+            while not self.read.endswith("\n"):
+                self.read += os.read(self.statusfd.fileno(),1)
+            if self.read.endswith("\n"):
+                s = self.read
+                #print s
+                (status, pkg, percent, status_str) = string.split(s, ":")
+                if status == "pmerror":
+                    self.error(pkg,status_str)
+                elif status == "pmconffile":
+                    # we get a string like this:
+                    # 'current-conffile' 'new-conffile' useredited distedited
+                    match = re.compile("\s*\'(.*)\'\s*\'(.*)\'.*").match(status_str)
+                    if match:
+                        self.conffile(match.group(1), match.group(2))
+                elif status == "pmstatus":
+                    if (float(percent) != self.percent or 
+                        status_str != self.status):
+                        self.statusChange(pkg, float(percent), status_str.strip())
+                        self.percent = float(percent)
+                        self.status = string.strip(status_str)
+                        sys.stdout.write("[%s] %s: %s\n" % (float(percent), pkg, status_str.strip()))
+                        sys.stdout.flush()
+            self.read = ""
+            res = select.select([self.statusfd],[],[],0.1)
+        # -------------------------------------------------------------
+
+        #fcntl.fcntl(self.master_fd, fcntl.F_SETFL, os.O_NDELAY)
+        # read master fd (terminal output)
+        res = select.select([self.master_fd],[],[],0.1)
+        while len(res[0]) > 0:
+           self.last_activity = time.time()
+           try:
+               s = os.read(self.master_fd, 1)
+               sys.stdout.write("%s" % s)
+           except OSError,e:
+               # happens after we are finished because the fd is closed
+               return
+           res = select.select([self.master_fd],[],[],0.1)
+        sys.stdout.flush()
 
     def fork(self):
         logging.debug("doing a pty.fork()")
         (self.pid, self.master_fd) = pty.fork()
-        if self.pid == 0:
-            # stdin is /dev/null to prevent retarded maintainer scripts from
-            # hanging with stupid questions
-            #fd = os.open("/dev/null", os.O_RDONLY)
-            #os.dup2(fd, 0)
-            # *sigh* we can't do this because dpkg explodes when it can't
-            # present its stupid conffile prompt
-            pass
-        logging.debug("pid is: %s" % self.pid)
+        if self.pid != 0:
+            logging.debug("pid is: %s" % self.pid)
         return self.pid
         
 
@@ -156,3 +174,20 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         logging.error("%s %s (%s)" % (summary, msg, extended_msg))
     def abort(self):
         logging.error("view.abort called")
+
+
+if __name__ == "__main__":
+
+  view = DistUpgradeViewNonInteractive()
+  fp = NonInteractiveFetchProgress()
+  ip = NonInteractiveInstallProgress()
+
+  cache = apt.Cache()
+  for pkg in sys.argv[1:]:
+    #if cache[pkg].isInstalled:
+    #  cache[pkg].markDelete()
+    #else:
+    cache[pkg].markInstall()
+  cache.commit(fp,ip)
+  time.sleep(2)
+  sys.exit(0)

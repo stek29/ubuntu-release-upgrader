@@ -34,6 +34,7 @@ class QemuUpgradeTestBackend(UpgradeTestBackend):
         # create image
         # FIXME: - make a proper parition table to get grub installed
         #        - create swap (different hdd) as well
+        #        - use qemu-img instead of dd
         res = subprocess.call(["dd",
                                "if=/dev/zero",
                                "of=%s" % image,
@@ -42,7 +43,7 @@ class QemuUpgradeTestBackend(UpgradeTestBackend):
         assert(res == 0)
         res = subprocess.call(["mkfs.ext2","-F",image])
         assert(res == 0)
-        res = subprocess.call(["mount","-o","loop",image, target])
+        res = subprocess.call(["mount","-o","loop,rw",image, target])
         assert(res == 0)
         # FIXME: what we *really* want here is a d-i install with
         #        proper pre-seeding, but debootstrap will have to do for now
@@ -59,11 +60,9 @@ class QemuUpgradeTestBackend(UpgradeTestBackend):
         os.chdir("..")
 
         # setup fstab
-        # FIXME: we can only enable the rootfs when the image is
-        #        unmounted before booting into it
         open(target+"/etc/fstab","w").write("""
 proc /proc proc defaults 0 0
-#/dev/hda / ext3 defaults,errors=remount-ro 0 1
+/dev/hda / ext3 defaults,errors=remount-ro 0 1
 """)
         # modify /etc/network/interfaces
         open(target+"/etc/hosts","w").write("""
@@ -83,7 +82,6 @@ iface eth0 inet dhcp
         res = self._runAptInTarget(target, "install", ["linux-image-generic"])
         assert(res == 0)
         
-        
         # write the first-boot script
         os.mkdir(target+"/upgrade-tester")
         first_boot=target+"/upgrade-tester/first-boot"
@@ -101,12 +99,18 @@ apt-get install -y ubuntu-standard >> $LOG
 touch /upgrade-tester/first-boot-finished
 """)
         os.chmod(first_boot, 0755)
-        # paranoia
-        subprocess.call(["sync"])
+
         # run the first-boot script
         open(target+"/etc/rc.local","w").write("""
 /upgrade-tester/first-boot
 """)
+
+        # remount, ro to read the kernel (sync + mount -o remount,ro might
+        # work as well)
+        subprocess.call(["umount", target])
+        res = subprocess.call(["mount","-o","loop,ro",image, target])
+        assert(res == 0)
+        
         try: os.unlink("qemu.pid")
         except: pass
         res = subprocess.call(["qemu",
@@ -155,8 +159,13 @@ mkdir /var/log/dist-upgrade
 
 touch /upgrade-tester/upgrade-finished
 """)
-        # paranoia
-        subprocess.call(["sync"])
+
+        # remount, ro to read the kernel (sync + mount -o remount,ro might
+        # work as well)
+        subprocess.call(["umount", target])
+        res = subprocess.call(["mount","-o","loop,ro",image, target])
+        assert(res == 0)
+
         # start qemu
         try: os.unlink("qemu.pid")
         except: pass

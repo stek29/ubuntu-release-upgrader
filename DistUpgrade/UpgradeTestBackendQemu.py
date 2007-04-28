@@ -6,6 +6,15 @@ import subprocess
 import os.path
 import shutil
 import glob
+import time
+import signal
+
+# TODO:
+# - refactor and move common code to UpgradeTestBackend
+# - convert ChrootNonInteractive 
+# - find a better way to know when a install is finished
+# - benchmark qemu/qemu+kqemu/kvm/chroot
+# - write tests (unittest, doctest?)
 
 class QemuUpgradeTestBackend(UpgradeTestBackend):
     " very hacky qemu backend "
@@ -34,12 +43,7 @@ class QemuUpgradeTestBackend(UpgradeTestBackend):
         # create image
         # FIXME: - make a proper parition table to get grub installed
         #        - create swap (different hdd) as well
-        #        - use qemu-img instead of dd
-        res = subprocess.call(["dd",
-                               "if=/dev/zero",
-                               "of=%s" % image,
-                               "bs=1M",
-                               "count=%s" % size])
+        res = subprocess.call(["qemu-img", "create", image, "%sM" % size])
         assert(res == 0)
         res = subprocess.call(["mkfs.ext2","-F",image])
         assert(res == 0)
@@ -85,18 +89,24 @@ iface eth0 inet dhcp
         # write the first-boot script
         os.mkdir(target+"/upgrade-tester")
         first_boot=target+"/upgrade-tester/first-boot"
-        # FIXME: install NonInteractive/BasePkg
+        # FIXME: - install NonInteractive/BasePkg
+        #        - make sure the thing re-tries, with proxies
+        #          a read quite often fails (that we run the install twice)
         open(first_boot,"w").write("""
 #!/bin/sh
-LOG=/upgrade-tester/first-boot.log
+LOG=/var/log/dist-upgrade/first-boot.log
 
 export http_proxy=http://10.0.2.2:3128/
 
+mkdir /var/log/dist-upgrade
 apt-get update > $LOG
 apt-get install -y python-apt >> $LOG
 apt-get install -y ubuntu-standard >> $LOG
+apt-get install -y ubuntu-standard >> $LOG
 
 touch /upgrade-tester/first-boot-finished
+sync
+halt
 """)
         os.chmod(first_boot, 0755)
 
@@ -110,20 +120,14 @@ touch /upgrade-tester/first-boot-finished
         subprocess.call(["umount", target])
         res = subprocess.call(["mount","-o","loop,ro",image, target])
         assert(res == 0)
-        
-        try: os.unlink("qemu.pid")
-        except: pass
-        res = subprocess.call(["qemu",
-                               "-pidfile", "qemu.pid",
+        p = subprocess.Popen(["qemu",
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
                                ])
-        # FIXME: - find a way to know when qemu actually finished
-        #          (runing halt does not seem to stop it, currently 
-        #           the window needs to be closed manually (sucks big time)
-        #        - copy the clean image into the profile dir
+        self._waitForFile(p.pid,target+"/upgrade-tester/first-boot-finished",
+                          image, target)
 
     def upgrade(self):
         # copy the upgrade into target+/upgrader-tester/
@@ -158,6 +162,8 @@ mkdir /var/log/dist-upgrade
 (cd /upgrade-tester ; ./dist-upgrade.py >> $LOG)
 
 touch /upgrade-tester/upgrade-finished
+sync
+halt
 """)
 
         # remount, ro to read the kernel (sync + mount -o remount,ro might
@@ -167,19 +173,39 @@ touch /upgrade-tester/upgrade-finished
         assert(res == 0)
 
         # start qemu
-        try: os.unlink("qemu.pid")
-        except: pass
-        # we shouldn't need to pass -kernel, -initrd if grub is properly
-        # runing
-        res = subprocess.call(["qemu",
-                               "-pidfile", "qemu.pid",
+        # FIXME: - we shouldn't need to pass -kernel, -initrd if
+        #          grub is properly runing
+        #        - copy the clean image into the profile dir
+        p = subprocess.Popen(["qemu",
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
-                               ])
+                              ])
+        self._waitForFile(p.pid, target+"/upgrade-tester/upgrade-finished",
+                          image, target)
+
+                          
+    def _waitForFile(self, pid, stamp_file, image, target):
+        " helper to wait for stamp file to appear on fs "
         # FIXME: same as in bootstrap, we currently do not know
         #        when qemu is finished
+        # give it time to shut down
+        # FIXME: this sucks, integreate stamp-file into rc6 or something
+        while True:
+            if os.path.exists(stamp_file):
+                break
+            time.sleep(10)
+            # remount to see what changed
+            # FIXME: suckx again, we need a better method
+            subprocess.call(["umount", target])
+            subprocess.call(["mount","-o","loop,ro",image, target])
+        # give it time to shut down
+        # FIXME: this sucks, integreate stamp-file into rc6 or something
+        time.sleep(10)
+        print "Killing %s" % pid
+        os.kill(pid, signal.SIGTERM)
+        return True
         
 
 if __name__ == "__main__":

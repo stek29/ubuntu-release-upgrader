@@ -15,6 +15,14 @@ import signal
 # - find a better way to know when a install is finished
 # - benchmark qemu/qemu+kqemu/kvm/chroot
 # - write tests (unittest, doctest?)
+# - instead of copy the file in upgrade() use -snapshot
+# - when 0.9.0 is available use "-no-reboot" and make
+#   the scripts reboot, this this will exit qemu
+# - offer "test-upgrade" feature on real system, run it
+#   as "qemu -hda /dev/hda -snapshot foo -append init=/upgrade-test"
+#   (this *should* write the stuff to the snapshot file
+# - add a "kvm" mode to the backend (qemu/kvm should have identical
+#   command line options
 
 class QemuUpgradeTestBackend(UpgradeTestBackend):
     " very hacky qemu backend "

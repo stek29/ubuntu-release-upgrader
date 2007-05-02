@@ -29,6 +29,13 @@ import signal
 class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"
 
+    # FIXME: make this part of the config file
+    qemu_options = [
+        "-no-reboot",    # exit on reboot
+        "-m","256",        # memory to use
+        "-localtime",
+        ]
+
     def __init__(self, profile, basedir):
         UpgradeTestBackend.__init__(self, profile, basedir)
 
@@ -48,7 +55,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         basepkg = self.config.get("NonInteractive","BasePkg")
 
         image="/tmp/qemu-upgrade-test.image"
-        size=1500
+        size=3000
         target="/mnt/qemu-upgrade-test"
         arch = "i386"
         
@@ -82,7 +89,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # setup fstab
         open(target+"/etc/fstab","w").write("""
 proc /proc proc defaults 0 0
-/dev/hda / ext3 defaults,errors=remount-ro 0 1
+/dev/hda / ext3 defaults,errors=remount-ro 0 0
 """)
         # modify /etc/network/interfaces
         open(target+"/etc/hosts","w").write("""
@@ -137,12 +144,11 @@ reboot
         res = subprocess.call(["mount","-o","loop,ro",image, target])
         assert(res == 0)
         ret = subprocess.call(["qemu",
-                              "-no-reboot",
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
-                               ])
+                               ]+self.qemu_options)
 
         # FIXME: find a way to figure if the bootstrap was a success
         subprocess.call(["umount", target])
@@ -155,8 +161,6 @@ reboot
         # copy the upgrade into target+/upgrader-tester/
         # modify /etc/rc.local to run 
         #  (cd /dist-upgrader ; ./dist-upgrade.py)
-        basefilesdir = "."
-        profile = "profile/server/DistUpgrade.cfg"
         image="/tmp/qemu-upgrade-test.image"
         target="/mnt/qemu-upgrade-test"
 
@@ -166,13 +170,13 @@ reboot
         assert(res == 0)
 
         upgrade_tester_dir = os.path.join(target,"upgrade-tester")
-        for f in glob.glob("%s/*" % basefilesdir):
+        for f in glob.glob("%s/*" % self.basefilesdir):
             if not os.path.isdir(f):
                 shutil.copy(f, upgrade_tester_dir)
         # copy the profile
-        if os.path.exists(profile):
-            print "Copying '%s' to '%s' " % (profile, upgrade_tester_dir)
-            shutil.copy(profile, upgrade_tester_dir)
+        if os.path.exists(self.profile):
+            print "Copying '%s' to '%s' " % (self.profile, upgrade_tester_dir)
+            shutil.copy(self.profile, upgrade_tester_dir)
         # make sure we run the upgrade
         open(target+"/etc/rc.local","w").write("""
 #!/bin/sh
@@ -200,16 +204,20 @@ reboot
         #          grub is properly runing
         #        - copy the clean image into the profile dir
         ret = subprocess.call(["qemu",
-                             "-no-reboot",
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
-                              ])
+                              ]+self.qemu_options)
         # FIXME: find a way to figure if the upgrade was a success
         subprocess.call(["umount", target])
         res = subprocess.call(["mount","-o","loop,ro",image, target])
         assert(res == 0)
+
+        # copy the result
+        for f in glob.glob(target+"/var/log/dist-upgrade/*"):
+            print "copying result to: ", self.resultdir
+            shutil.copy(f, self.resultdir)
 
         return True
                           

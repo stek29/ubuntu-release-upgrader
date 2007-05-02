@@ -1,8 +1,10 @@
 # qemu backend
 
 from UpgradeTestBackend import UpgradeTestBackend
+from DistUpgradeConfigParser import DistUpgradeConfig
 
 import subprocess
+import os
 import os.path
 import shutil
 import glob
@@ -29,7 +31,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     def __init__(self, profile, basedir):
         UpgradeTestBackend.__init__(self, profile, basedir)
-        self.apt_options = ["-y","--allow-unauthenticated"]
 
     def _runAptInTarget(self, target, command, cmd_options=[]):
         res = subprocess.call(["chroot", target,
@@ -37,12 +38,18 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                               command]+ self.apt_options + cmd_options)
         return res
 
+    def _getProxyLine(self):
+        if self.config.has_option("NonInteractive","Proxy"):
+            return "export http_proxy=%s" % self.config.get("NonInteractive","Proxy")
+        return ""
+
     def bootstrap(self):
+        mirror = self.config.get("NonInteractive","Mirror")
+        basepkg = self.config.get("NonInteractive","BasePkg")
+
         image="/tmp/qemu-upgrade-test.image"
         size=1500
         target="/mnt/qemu-upgrade-test"
-        fromDist = "edgy"
-        mirror = "http://de.archive.ubuntu.com/ubuntu"
         arch = "i386"
         
         if not os.path.exists(target):
@@ -60,7 +67,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         assert(res == 0)
         # FIXME: what we *really* want here is a d-i install with
         #        proper pre-seeding, but debootstrap will have to do for now
-        res = subprocess.call(["debootstrap", "--arch", arch, fromDist, target, mirror])
+        res = subprocess.call(["debootstrap", "--arch", arch, self.fromDist, target, mirror])
         assert(res == 0)
         
         # copy the stuff from toChroot/
@@ -105,16 +112,17 @@ iface eth0 inet dhcp
 #!/bin/sh
 LOG=/var/log/dist-upgrade/first-boot.log
 
-export http_proxy=http://10.0.2.2:3128/
+# proxy (if required)
+%s
 
 mkdir /var/log/dist-upgrade
 apt-get update > $LOG
 apt-get install -y python-apt >> $LOG
-apt-get install -y ubuntu-standard >> $LOG
-apt-get install -y ubuntu-standard >> $LOG
+apt-get install -y %s >> $LOG
+apt-get install -y %s >> $LOG
 
 reboot
-""")
+""" % (self._getProxyLine(), basepkg, basepkg))
         os.chmod(first_boot, 0755)
 
         # run the first-boot script
@@ -135,7 +143,12 @@ reboot
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
                                ])
+
         # FIXME: find a way to figure if the bootstrap was a success
+        subprocess.call(["umount", target])
+        res = subprocess.call(["mount","-o","loop,ro",image, target])
+        assert(res == 0)
+        
         return True
 
     def upgrade(self):
@@ -165,14 +178,16 @@ reboot
 #!/bin/sh
 
 LOG=/var/log/dist-upgrade/out.log
-export http_proxy=http://10.0.2.2:3128/
+
+#proxy (if required)
+%s
 
 mkdir /var/log/dist-upgrade
 (cd /upgrade-tester ; ./dist-upgrade.py >> $LOG)
 
 touch /upgrade-tester/upgrade-finished
 reboot
-""")
+""" % self._getProxyLine())
 
         # remount, ro to read the kernel (sync + mount -o remount,ro might
         # work as well)
@@ -192,6 +207,10 @@ reboot
                                "-append", "root=/dev/hda",
                               ])
         # FIXME: find a way to figure if the upgrade was a success
+        subprocess.call(["umount", target])
+        res = subprocess.call(["mount","-o","loop,ro",image, target])
+        assert(res == 0)
+
         return True
                           
         

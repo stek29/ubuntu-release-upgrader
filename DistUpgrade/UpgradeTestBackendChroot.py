@@ -23,37 +23,10 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                # install-info has a locking problem quite often
                "/usr/sbin/install-info",
 	       "/sbin/start-stop-daemon"]
-    apt_options = ["-y"]
-            
+
     def __init__(self, profile, basefiledir):
-        # init the dirs
-        assert(profile != None)
-        # the files with the dist-upgrade code
-        # (/usr/lib/python2.4/site-packages/DistUpgrade in the deb
-        self.resultdir = os.path.abspath(os.path.join(os.path.dirname(profile),"result"))
-        self.basefilesdir = os.path.abspath(basefiledir)
-        # init the rest
-        if os.path.exists(profile):
-            self.profile = os.path.abspath(profile)
-            self.config = DistUpgradeConfig(datadir=os.path.dirname(profile),
-                                            name=os.path.basename(profile))
-        else:
-            raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
-        
-        self.fromDist = self.config.get("Sources","From")
-        if self.config.has_option("NonInteractive","Proxy"):
-            proxy=self.config.get("NonInteractive","Proxy")
-            os.putenv("http_proxy",proxy)
-        os.putenv("DEBIAN_FRONTEND","noninteractive")
+        UpgradeTestBackend.__init__(self, profile, basefiledir)
         self.tarball = None
-        self.cachedir = None
-        try:
-            self.cachedir = self.config.get("NonInteractive","CacheDebs")
-        except ConfigParser.NoOptionError:
-            pass
-        # init a sensible environment (to ensure proper operation if
-        # run from cron)
-        os.environ["PATH"] = "/usr/sbin:/usr/bin:/sbin:/bin"
 
 
     def _umount(self, chrootdir):

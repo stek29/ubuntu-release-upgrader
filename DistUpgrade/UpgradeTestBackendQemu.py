@@ -25,7 +25,7 @@ import signal
 #   command line options
 
 class QemuUpgradeTestBackend(UpgradeTestBackend):
-    " very hacky qemu backend "
+    " very hacky qemu backend - need qemu >= 0.9.0"
 
     def __init__(self):
         self.apt_options = ["-y","--allow-unauthenticated"]
@@ -112,9 +112,7 @@ apt-get install -y python-apt >> $LOG
 apt-get install -y ubuntu-standard >> $LOG
 apt-get install -y ubuntu-standard >> $LOG
 
-touch /upgrade-tester/first-boot-finished
-sync
-halt
+reboot
 """)
         os.chmod(first_boot, 0755)
 
@@ -128,14 +126,13 @@ halt
         subprocess.call(["umount", target])
         res = subprocess.call(["mount","-o","loop,ro",image, target])
         assert(res == 0)
-        p = subprocess.Popen(["qemu",
+        ret = subprocess.call(["qemu",
+                              "-no-reboot",
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
                                ])
-        self._waitForFile(p.pid,target+"/upgrade-tester/first-boot-finished",
-                          image, target)
 
     def upgrade(self):
         # copy the upgrade into target+/upgrader-tester/
@@ -170,8 +167,7 @@ mkdir /var/log/dist-upgrade
 (cd /upgrade-tester ; ./dist-upgrade.py >> $LOG)
 
 touch /upgrade-tester/upgrade-finished
-sync
-halt
+reboot
 """)
 
         # remount, ro to read the kernel (sync + mount -o remount,ro might
@@ -184,14 +180,13 @@ halt
         # FIXME: - we shouldn't need to pass -kernel, -initrd if
         #          grub is properly runing
         #        - copy the clean image into the profile dir
-        p = subprocess.Popen(["qemu",
+        ret = subprocess.call(["qemu",
+                             "-no-reboot",
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
                               ])
-        self._waitForFile(p.pid, target+"/upgrade-tester/upgrade-finished",
-                          image, target)
 
                           
     def _waitForFile(self, pid, stamp_file, image, target):

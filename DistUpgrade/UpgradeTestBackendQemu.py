@@ -30,6 +30,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"
 
     # FIXME: make this part of the config file
+    qemu_binary = "qemu"
+    #qemu_binary = "kvm"
+    
     qemu_options = [
         "-no-reboot",    # exit on reboot
         "-m","256",        # memory to use
@@ -143,7 +146,7 @@ reboot
         subprocess.call(["e2fsck", "-p", "-f", "-v", image])
         res = subprocess.call(["mount","-o","loop,ro",image, target])
         assert(res == 0)
-        ret = subprocess.call(["qemu",
+        ret = subprocess.call([self.qemu_binary,
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,
@@ -203,7 +206,7 @@ reboot
         # FIXME: - we shouldn't need to pass -kernel, -initrd if
         #          grub is properly runing
         #        - copy the clean image into the profile dir
-        ret = subprocess.call(["qemu",
+        ret = subprocess.call([self.qemu_binary,
                                "-hda", image,
                                "-kernel", "%s/boot/vmlinuz" % target,
                                "-initrd", "%s/boot/initrd.img" % target,

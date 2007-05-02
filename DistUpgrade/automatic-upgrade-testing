@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 from optparse import OptionParser
-from ChrootNonInteractive import Chroot
 import os
 import sys
 import glob
@@ -9,17 +8,19 @@ import shutil
 
 import datetime
 
+from UpgradeTestBackend import UpgradeTestBackend
+
 # TODO:
 # - show held-back packages 
 # - if no terminal activity for a extended time, send a '\n' on the
 #   terminal (assuming its a stupid maintainer script asking questions)
 
-def login(profile, basedir):
-    chroot = Chroot(profile, basedir)
-    chroot.bootstrap()
-    d = chroot._unpackToTmpdir(chroot.tarball)
+# FIXME: move this into the generic backend code
+def login(backend):
+    backend.bootstrap()
+    d = backend._unpackToTmpdir(backend.tarball)
     print "logging into: '%s'" % d
-    chroot._runInChroot(d, ["/bin/sh"])
+    backend._runInChroot(d, ["/bin/sh"])
     print "Cleaning up"
     if d:
         shutil.rmtree(d)
@@ -28,9 +29,19 @@ def flushBuffer(fd):
     sys.stdout.flush()
     sys.stderr.flush()
     os.fsync(fd)
+
+def createBackend(backend_name, profile, basedir):
+    try:
+        backend_modul = __import__(backend_name)
+        backend_class = getattr(backend_modul, backend_name)
+    except (ImportError, AttributeError, TypeError), e:
+        print "Can not import: %s (%s) " % (backend_name, e)
+        return None
+    return backend_class(profile, basedir)
     
-    
-def testUpgrade(profile, basedir):
+def testUpgrade(backend_name, profile, basedir):
+    backend = createBackend(backend_name, options.profile, basedir)
+    assert(backend != None)
     os.chdir(basedir)
     if not os.path.exists(profile):
         print "ERROR: Can't find '%s' " % profile
@@ -49,12 +60,11 @@ def testUpgrade(profile, basedir):
 
     try:
         # init the chroot
-        chroot = Chroot(profile, basedir)
-        if not chroot.bootstrap():
+        if not backend.bootstrap():
             print "FAILED: bootstrap for '%s'" % profile
             flushBuffer(fd)
             return False
-        if not chroot.upgrade():
+        if not backend.upgrade():
             print "FAILED: upgrade for '%s'" % profile
             flushBuffer(fd)
             return False
@@ -75,6 +85,10 @@ if __name__ == "__main__":
     parser.add_option("-l", "--login", dest="login", default=False,
                       action="store_true",
                       help="log into the a profile")
+    parser.add_option("-b", "--backend", dest="backend",
+                      default="UpgradeTestBackendChroot",
+                      help="UpgradeTestBackend to use: UpgradeTestBackendChroot, UpgradeTestBackendQemu")
+    
     
     (options, args) = parser.parse_args()
     basedir = os.getcwd()
@@ -88,10 +102,11 @@ if __name__ == "__main__":
             os.dup2(fd1, 1)
             os.dup2(fd2, 2)
             print "Testing '%s'" % d
-            testUpgrade(d, basedir)
+            testUpgrade(options.backend, options.profile, basedir)
     elif options.login:
-        login(options.profile, basedir)
+        backend = createBackend(options.backend, options.profile, basedir)
+        login(backend)
     else:
-        testUpgrade(options.profile, basedir)
+        testUpgrade(options.backend, options.profile, basedir)
     
 

@@ -24,10 +24,11 @@ import signal
 # - add a "kvm" mode to the backend (qemu/kvm should have identical
 #   command line options
 
-class QemuUpgradeTestBackend(UpgradeTestBackend):
+class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"
 
-    def __init__(self):
+    def __init__(self, profile, basedir):
+        UpgradeTestBackend.__init__(self, profile, basedir)
         self.apt_options = ["-y","--allow-unauthenticated"]
 
     def _runAptInTarget(self, target, command, cmd_options=[]):
@@ -124,6 +125,7 @@ reboot
         # remount, ro to read the kernel (sync + mount -o remount,ro might
         # work as well)
         subprocess.call(["umount", target])
+        subprocess.call(["e2fsck", "-p", "-f", "-v", image])
         res = subprocess.call(["mount","-o","loop,ro",image, target])
         assert(res == 0)
         ret = subprocess.call(["qemu",
@@ -133,6 +135,8 @@ reboot
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
                                ])
+        # FIXME: find a way to figure if the bootstrap was a success
+        return True
 
     def upgrade(self):
         # copy the upgrade into target+/upgrader-tester/
@@ -187,28 +191,9 @@ reboot
                                "-initrd", "%s/boot/initrd.img" % target,
                                "-append", "root=/dev/hda",
                               ])
-
-                          
-    def _waitForFile(self, pid, stamp_file, image, target):
-        " helper to wait for stamp file to appear on fs "
-        # FIXME: same as in bootstrap, we currently do not know
-        #        when qemu is finished
-        # give it time to shut down
-        # FIXME: this sucks, integreate stamp-file into rc6 or something
-        while True:
-            if os.path.exists(stamp_file):
-                break
-            time.sleep(10)
-            # remount to see what changed
-            # FIXME: suckx again, we need a better method
-            subprocess.call(["umount", target])
-            subprocess.call(["mount","-o","loop,ro",image, target])
-        # give it time to shut down
-        # FIXME: this sucks, integreate stamp-file into rc6 or something
-        time.sleep(10)
-        print "Killing %s" % pid
-        os.kill(pid, signal.SIGTERM)
+        # FIXME: find a way to figure if the upgrade was a success
         return True
+                          
         
 
 if __name__ == "__main__":
@@ -217,7 +202,7 @@ if __name__ == "__main__":
     #        and automatic-upgrade code
     # see also /usr/sbin/qemu-make-debian-root
     
-    qemu = QemuUpgradeTestBackend()
+    qemu = UpgradeTestBackendQemu()
     qemu.bootstrap()
     qemu.upgrade()
 

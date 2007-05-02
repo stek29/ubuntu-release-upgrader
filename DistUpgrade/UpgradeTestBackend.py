@@ -9,7 +9,7 @@ class UpgradeTestBackend(object):
         should implement - very basic currently :)
     """
     
-    def __init__(self, profile):
+    def __init__(self, profile, basedir):
         " init the backend with the given profile "
         pass
     

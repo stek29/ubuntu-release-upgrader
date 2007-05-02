@@ -5,8 +5,9 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 
-
 from DistUpgradeConfigParser import DistUpgradeConfig
+from UpgradeTestBackend import UpgradeTestBackend
+
 import tempfile
 import subprocess
 import shutil
@@ -14,7 +15,7 @@ import logging
 import glob
 import ConfigParser
 
-class Chroot(object):
+class UpgradeTestBackendChroot(UpgradeTestBackend):
 
     diverts = ["/usr/sbin/mkinitrd",
                "/sbin/modprobe",

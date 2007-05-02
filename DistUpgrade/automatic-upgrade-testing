@@ -40,7 +40,7 @@ def createBackend(backend_name, profile, basedir):
     return backend_class(profile, basedir)
     
 def testUpgrade(backend_name, profile, basedir):
-    backend = createBackend(backend_name, options.profile, basedir)
+    backend = createBackend(backend_name, profile, basedir)
     assert(backend != None)
     os.chdir(basedir)
     if not os.path.exists(profile):
@@ -102,7 +102,7 @@ if __name__ == "__main__":
             os.dup2(fd1, 1)
             os.dup2(fd2, 2)
             print "Testing '%s'" % d
-            testUpgrade(options.backend, options.profile, basedir)
+            testUpgrade(options.backend, d, basedir)
     elif options.login:
         backend = createBackend(options.backend, options.profile, basedir)
         login(backend)

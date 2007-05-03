@@ -23,7 +23,7 @@ import apt
 import logging
 import time
 import sys
-from DistUpgradeView import DistUpgradeView
+from DistUpgradeView import DistUpgradeView, InstallProgress
 from DistUpgradeConfigParser import DistUpgradeConfig
 import os
 import pty
@@ -38,9 +38,9 @@ class NonInteractiveFetchProgress(apt.progress.FetchProgress):
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         pass
 
-class NonInteractiveInstallProgress(apt.progress.InstallProgress):
+class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self):
-        apt.progress.InstallProgress.__init__(self)
+        InstallProgress.__init__(self)
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         self.config = DistUpgradeConfig(".")

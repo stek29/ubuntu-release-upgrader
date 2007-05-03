@@ -25,6 +25,9 @@ import signal
 #   (this *should* write the stuff to the snapshot file
 # - add a "kvm" mode to the backend (qemu/kvm should have identical
 #   command line options
+# - add "runInTarget()" that will write a marker file so that we can
+#   re-run a command if it fails the first time (or fails because
+#   a fsck was done and reboot needed in the VM etc)
 
 class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"
@@ -35,8 +38,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     
     qemu_options = [
         "-no-reboot",    # exit on reboot
-        "-m","256",        # memory to use
+        "-m","256",      # memory to use
         "-localtime",
+        "-vnc","localhost:0",      
         ]
 
     def __init__(self, profile, basedir):
@@ -58,7 +62,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         basepkg = self.config.get("NonInteractive","BasePkg")
 
         image="/tmp/qemu-upgrade-test.image"
-        size=3000
+        size=4000
         target="/mnt/qemu-upgrade-test"
         arch = "i386"
         
@@ -109,7 +113,10 @@ iface eth0 inet dhcp
         #        - install grub/lilo/... as well
         res = self._runAptInTarget(target, "clean")
         assert(res == 0)
-        res = self._runAptInTarget(target, "install", ["linux-image-generic"])
+        kernel="linux-image-generic"
+        if self.config.has_option("NonInteractive","Kernel"):
+            kernel = self.config.get("NonInteractive","Kernel")
+        res = self._runAptInTarget(target, "install", [kernel])
         assert(res == 0)
         
         # write the first-boot script

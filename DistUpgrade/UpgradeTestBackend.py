@@ -9,6 +9,24 @@ import ConfigParser
 import os
 import os.path
 
+# refactor the code so that we have
+# UpgradeTest - the controler object
+# UpgradeTestImage - abstraction for chroot/qemu/xen
+
+class UpgradeTestImage(object):
+    def runInTarget(self, command):
+        pass
+    def copyToImage(self, fromFile, toFile):
+        pass
+    def copyFromImage(self, fromFile, toFile):
+        pass
+    def bootstrap(self):
+        pass
+    def start(self):
+        pass
+    def stop(self):
+        pass
+
 class UpgradeTestBackend(object):
     """ This is a abstrace interface that all backends (chroot, qemu)
         should implement - very basic currently :)

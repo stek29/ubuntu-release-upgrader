@@ -752,6 +752,9 @@ class DistUpgradeControler(object):
             # unsupported software
             remove_candidates = set(installed_demotions)
         remove_candidates |= set(self.forced_obsoletes)
+        # see if we actually have to do anything here
+        if not self.config.getboolean("Distro","RemoveObsoletes"):
+            remove_candidates = set()
         logging.debug("remove_candidates: '%s'" % remove_candidates)
         logging.debug("Start checking for obsolete pkgs")
         for pkgname in remove_candidates:

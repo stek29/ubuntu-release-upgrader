@@ -14,7 +14,6 @@ import signal
 # TODO:
 # - refactor and move common code to UpgradeTestBackend
 # - convert ChrootNonInteractive 
-# - find a better way to know when a install is finished
 # - benchmark qemu/qemu+kqemu/kvm/chroot
 # - write tests (unittest, doctest?)
 # - instead of copy the file in upgrade() use -snapshot
@@ -25,9 +24,12 @@ import signal
 #   (this *should* write the stuff to the snapshot file
 # - add a "kvm" mode to the backend (qemu/kvm should have identical
 #   command line options
+# - setup a ssh daemon in target and use that to run the commands
+# - find a better way to know when a install is finished
 # - add "runInTarget()" that will write a marker file so that we can
 #   re-run a command if it fails the first time (or fails because
 #   a fsck was done and reboot needed in the VM etc)
+
 
 class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"

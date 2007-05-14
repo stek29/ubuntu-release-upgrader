@@ -533,7 +533,8 @@ class DistUpgradeControler(object):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
         err_long= _("The upgrade aborts now. "
-                    "Please free at least %s of disk space on %s. "
+                    "Please free at least an additional %s of disk "
+                    "space on %s. "
                     "Empty your trash and remove temporary "
                     "packages of former installations using "
                     "'sudo apt-get clean'.")

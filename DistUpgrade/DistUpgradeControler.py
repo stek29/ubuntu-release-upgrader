@@ -45,7 +45,7 @@ from distro import Distribution, get_distro
 
 from gettext import gettext as _
 import gettext
-from DistUpgradeCache import MyCache
+from DistUpgradeCache import MyCache, CacheException, CacheExceptionLockingFailed
 from DistUpgradeApport import *
 
 class AptCdrom(object):
@@ -157,9 +157,21 @@ class DistUpgradeControler(object):
         self.logfd = fd
 
     def openCache(self):
-        self.cache = MyCache(self.config,
-                             self._view,
-                             self._view.getOpCacheProgress())
+        if not self.cache is None:
+            self.cache.releaseLock()
+        try:
+            self.cache = MyCache(self.config,
+                                 self._view,
+                                 self._view.getOpCacheProgress())
+        except CacheExceptionLockingFailed, e:
+            logging.error("Cache can not be locked (%s)" % e)
+            self._view.error(_("Unable to get exclusive lock"),
+                             _("This usually means that another "
+                               "package management application "
+                               "(like apt-get or aptitude) "
+                               "already running. Please close that "
+                               "application first."));
+            sys.exit(1)
 
     def _sshMagic(self):
         """ this will check for server mode and if we run over ssh.

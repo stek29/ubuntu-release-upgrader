@@ -17,15 +17,26 @@ from DistUpgradeView import FuzzyTimeToStr
 from DistUpgradeViewText import DistUpgradeViewText
 from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 
+class CacheException(Exception):
+    pass
+class CacheExceptionLockingFailed(CacheException):
+    pass
+
 class MyCache(apt.Cache):
     # init
-    def __init__(self, config, view, progress=None):
+    def __init__(self, config, view, progress=None, lock=True):
         apt.Cache.__init__(self, progress)
         self.to_install = []
         self.to_remove = []
         self.view = view
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
+        # acquire lock
+        if lock:
+            try:
+                apt_pkg.PkgSystemLock()
+            except SystemError, e:
+                raise CacheExceptionLockingFailed, e
 
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
@@ -48,6 +59,8 @@ class MyCache(apt.Cache):
         return self._depcache.BrokenCount > 0
 
     # methods
+    def releaseLock(self):
+        apt_pkg.PkgSystemUnLock()
     def downloadable(self, pkg, useCandidate=True):
         " check if the given pkg can be downloaded "
         if useCandidate:

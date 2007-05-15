@@ -289,7 +289,10 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                    "--rename",d]
             ret = subprocess.call(cmd)
             shutil.copy(tmpdir+"/bin/true",tmpdir+d)
-    
+
+    def test(self):
+        # FIXME: add some sanity testing here
+        return True
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

@@ -71,3 +71,6 @@ class UpgradeTestBackend(object):
         " upgrade a given install "
         pass
 
+    def test(self):
+        " test if the upgrade was successful "
+        pass

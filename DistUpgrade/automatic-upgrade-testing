@@ -68,6 +68,9 @@ def testUpgrade(backend_name, profile, basedir):
             print "FAILED: upgrade for '%s'" % profile
             flushBuffer(fd)
             return False
+        if not backend.test():
+            print "FAILED: test for '%s'" % profile
+            return False
     except Exception, e:
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
         flushBuffer(fd)

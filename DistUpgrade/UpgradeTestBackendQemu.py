@@ -364,7 +364,15 @@ export APT_LISTCHANGES_FRONTEND=none
             shutil.copy(f, self.resultdir)
 
         return True
-                          
+
+    def test(self):
+        # FIXME: add some tests here to see if the upgrade worked
+        # this should include:
+        # - new kernel is runing (run uname -r in target)
+        # - did it sucessfully rebootet
+        # - is X runing
+        # ...
+        return True
         
 
 if __name__ == "__main__":

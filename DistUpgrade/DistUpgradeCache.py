@@ -32,12 +32,11 @@ class MyCache(apt.Cache):
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
         # acquire lock
-        if lock:
-            try:
-                apt_pkg.PkgSystemLock()
-            except SystemError, e:
-                raise CacheExceptionLockingFailed, e
-
+        #if lock:
+        #    try:
+        #        apt_pkg.PkgSystemLock()
+        #    except SystemError, e:
+        #        raise CacheExceptionLockingFailed, e
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
 

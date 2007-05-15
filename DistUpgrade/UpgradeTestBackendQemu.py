@@ -38,8 +38,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"
 
     # FIXME: make this part of the config file
-    #qemu_binary = "qemu"
-    qemu_binary = "kvm"
+    qemu_binary = "qemu"
+    #qemu_binary = "kvm"
     
     qemu_options = [
         "-m","512",      # memory to use
@@ -293,6 +293,8 @@ export APT_LISTCHANGES_FRONTEND=none
         # FIXME: consider using killall qemu instead
         if self.qemu_pid:
             self._runInImage(["/sbin/reboot"])
+            print "waiting for qemu to shutdown"
+            self.qemu_pid.wait()
             self.qemu_pid = None
 
     def upgrade(self):
@@ -340,7 +342,8 @@ export APT_LISTCHANGES_FRONTEND=none
         subprocess.call(["umount", self.target])
         res = subprocess.call(["mount","-o","loop,ro",self.image, self.target])
         assert(res == 0)
-        
+
+        print "starting new qemu instance"
         # start qemu
         self.start()
 
@@ -348,6 +351,8 @@ export APT_LISTCHANGES_FRONTEND=none
         ret = self._runInImage(["(cd /upgrade-tester/ ; ./dist-upgrade.py; sync)"])
         # FIXME: - do something useful with ret
         #        - reboot and see what things look like
+
+        self.stop()
 
         subprocess.call(["umount", self.target])
         res = subprocess.call(["mount","-o","loop,ro",self.image, self.target])

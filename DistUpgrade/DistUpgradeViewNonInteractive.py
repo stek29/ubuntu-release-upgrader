@@ -168,7 +168,12 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     def confirmRestart(self):
         " generic ask about the restart, can be overriden "
 	logging.debug("confirmRestart() called")
-        return False
+        # ignore if we don't have this option
+        try:
+            # rebooting here makes sense if we run e.g. in qemu
+            return self.config.getboolean("NonInteractive","RealReboot")
+        except Exception, e:
+            return False
     def error(self, summary, msg, extended_msg=None):
         " display a error "
         logging.error("%s %s (%s)" % (summary, msg, extended_msg))

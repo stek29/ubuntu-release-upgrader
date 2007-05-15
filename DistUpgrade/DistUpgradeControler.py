@@ -157,8 +157,8 @@ class DistUpgradeControler(object):
         self.logfd = fd
 
     def openCache(self):
-        if not self.cache is None:
-            self.cache.releaseLock()
+        #if not self.cache is None:
+        #    self.cache.releaseLock()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -766,7 +766,7 @@ class DistUpgradeControler(object):
             remove_candidates = set(installed_demotions)
         remove_candidates |= set(self.forced_obsoletes)
         # see if we actually have to do anything here
-        if not self.config.getboolean("Distro","RemoveObsoletes"):
+        if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
             remove_candidates = set()
         logging.debug("remove_candidates: '%s'" % remove_candidates)
         logging.debug("Start checking for obsolete pkgs")

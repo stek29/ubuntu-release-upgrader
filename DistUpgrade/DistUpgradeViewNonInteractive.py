@@ -132,7 +132,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
     def __init__(self):
-        pass
+        self.config = DistUpgradeConfig(".")
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
         return apt.progress.OpProgress()
@@ -173,6 +173,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
             # rebooting here makes sense if we run e.g. in qemu
             return self.config.getboolean("NonInteractive","RealReboot")
         except Exception, e:
+            logging.debug("no RealReboot found, returning false (%s) " % e)
             return False
     def error(self, summary, msg, extended_msg=None):
         " display a error "

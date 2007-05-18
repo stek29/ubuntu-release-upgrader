@@ -8,9 +8,9 @@ def blacklisted(name):
    # cleanly in the chroot (postinst failes)
    blacklist = [
       # file-overwrite problem with libc6-dev
-      libpthread-dev,
+      "libpthread-dev",
       # FUBAR (was removed in feisty)
-      glibc-doc-reference,
+      "glibc-doc-reference",
       # has a funny "can not be upgraded automatically" policy
       # see debian #368226
       "quagga",

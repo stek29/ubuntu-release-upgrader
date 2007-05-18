@@ -11,6 +11,7 @@ import glob
 import time
 import signal
 import signal
+import crypt
 
 # TODO:
 # - refactor and move common code to UpgradeTestBackend
@@ -39,7 +40,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     # FIXME: make this part of the config file
     qemu_binary = "qemu"
-    #qemu_binary = "kvm"
+    qemu_binary = "kvm"
     
     qemu_options = [
         "-m","512",      # memory to use
@@ -60,15 +61,27 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.qemu_pid = None
         
     def _runAptInTarget(self, command, cmd_options=[]):
-        res = subprocess.call(["chroot", self.target,
+        ret = subprocess.call(["chroot", self.target,
                               "/usr/bin/apt-get",
                               command]+ self.apt_options + cmd_options)
-        return res
+        return ret
 
     def _getProxyLine(self):
         if self.config.has_option("NonInteractive","Proxy"):
             return "export http_proxy=%s" % self.config.get("NonInteractive","Proxy")
         return ""
+
+    def _copyToImage(self, fromF, toF):
+        ret = subprocess.call(["scp",
+                               "-P","54321",
+                               "-q","-q", # shut it up
+                               "-i",self.ssh_key,
+                               "-o", "StrictHostKeyChecking=no",
+                               "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
+                               fromF,
+                               "root@localhost:%s" %  toF,
+                               ])
+        return ret
 
     def _runInImage(self, command):
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
@@ -145,7 +158,7 @@ iface eth0 inet dhcp
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 """ % self._getProxyLine())
-        
+
         # generate ssh keypair with empty passphrase
         if not os.path.exists(self.ssh_key):
             # *sigh* can't use subprocess.call() here, its too clever
@@ -224,7 +237,8 @@ export APT_LISTCHANGES_FRONTEND=none
         #subprocess.call(cmd, shell=True)
         # remount, ro to read the kernel (sync + mount -o remount,ro might
         # work as well)
-        
+
+        subprocess.call(["sync"])
         subprocess.call(["umount", self.target])
         subprocess.call(["e2fsck", "-p", "-f", "-v", self.image])
         # FIXME: find a way to figure if the bootstrap was a success
@@ -236,7 +250,12 @@ export APT_LISTCHANGES_FRONTEND=none
 
         # FIXME: setup proxy
         pass
-    
+
+        # setup root pw
+        print "adding user 'test' to virtual machine"
+        ret = self._runInImage(["useradd","-p",crypt.crypt("test","sa"),"test"])
+        assert(ret == 0)
+
         # install some useful stuff (and set DEBIAN_FRONTEND and
         # debconf priority)
         ret = self._runInImage(["apt-get","update"])
@@ -258,8 +277,8 @@ export APT_LISTCHANGES_FRONTEND=none
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
             if os.path.exists(script):
-                shutil.copy(script, os.path.join(tmpdir,"tmp"))
-                self._runInImage(tmpdir,[os.path.join("/tmp",script)])
+                self._copyToImage(script, "/tmp")
+                self._runInImage([os.path.join("/tmp",script)])
             else:
                 print "WARNING: %s not found" % script
 

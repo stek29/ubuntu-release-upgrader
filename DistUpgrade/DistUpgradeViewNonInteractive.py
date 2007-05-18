@@ -32,6 +32,8 @@ import select
 import fcntl
 import string
 import re
+import subprocess
+import copy
 
 class NonInteractiveFetchProgress(apt.progress.FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
@@ -55,6 +57,45 @@ class NonInteractiveInstallProgress(InstallProgress):
         
     def error(self, pkg, errormsg):
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+        # re-run maintainer script with sh -x to get a better idea
+        # what went wrong
+        #
+        # FIXME: this is just a approximation for now, we also need
+        #        to pass:
+        #        - a version after configure
+        #        - a version after remove (if upgrade to new version)
+        #
+        #        not everything is a shell script
+        #
+        # if the new preinst fails, its not yet in /var/lib/dpkg/info
+        # so this is inaccurate as well
+        prefix = "/var/lib/dpkg/info/"
+        error_map = { "post-installation" : ("postinst","configure"),
+                      "pre-installation"  : ("preinst", "configure"),
+                      "pre-removal" : ("prerm","remvove"),
+                      "post-removal": ("postrm","remove"),
+                    }
+        for msg in error_map:
+            if msg in errormsg:
+                environ = copy.copy(os.environ)
+                maintainer_script = "%s/%s.%s" % (prefix, pkg,error_map[msg][0])
+                interp = open(maintainer_script).readline()[2:].strip()
+                if ("bash" in interp) or ("/bin/sh" in interp):
+                    debug_opts = "-x"
+                elif ("perl" in interp):
+                    debug_opts = "-d"
+                    environ["PERLDB_OPTS"] = "AutoTrace NonStop"
+                else:
+                    logging.warning("unknown interpreter: '%s'" % interp)
+                logging.debug("re-runing %s with %s %s (%s)", (error_map[msg][0], interp, debug_opts, environ))
+                cmd = [interp, debug_opts,
+                       maintainer_script,
+                       error_map[msg][1],
+                      ]
+                print cmd
+                ret = subprocess.call(cmd, env=environ)
+                logging.debug("%s script returned: %s" % (error_map[msg][0],ret))
+        
     def conffile(self, current, new):
         logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)
 	try:
@@ -187,6 +228,8 @@ if __name__ == "__main__":
   view = DistUpgradeViewNonInteractive()
   fp = NonInteractiveFetchProgress()
   ip = NonInteractiveInstallProgress()
+
+  ip.error("linux-image-2.6.17-10-generic","post-installation script failed")
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:

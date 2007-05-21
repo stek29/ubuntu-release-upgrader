@@ -3,6 +3,7 @@
 from UpgradeTestBackend import UpgradeTestBackend
 from DistUpgradeConfigParser import DistUpgradeConfig
 
+import ConfigParser
 import subprocess
 import os
 import os.path
@@ -13,6 +14,7 @@ import signal
 import signal
 import crypt
 import tempfile
+import copy
 
 # TODO:
 # - refactor and move common code to UpgradeTestBackend
@@ -64,11 +66,20 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.target = os.path.join(tmpdir, "qemu-upgrade-test")
         if not os.path.exists(self.target):
             os.makedirs(self.target)
+
+    def _getEnvWithProxy(self):
+        env = copy.copy(os.environ)
+        try:
+            env["http_proxy"] = self.config.get("NonInteractive","Proxy")
+        except ConfigParser.NoOptionError:
+            pass
+        return env
         
     def _runAptInTarget(self, command, cmd_options=[]):
         ret = subprocess.call(["chroot", self.target,
                               "/usr/bin/apt-get",
-                              command]+ self.apt_options + cmd_options)
+                              command]+ self.apt_options + cmd_options,
+                              env=self._getEnvWithProxy())
         return ret
 
     def _getProxyLine(self):
@@ -99,7 +110,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                                "-i",self.ssh_key,
                                "-o", "StrictHostKeyChecking=no",
                                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-                               ]+command)
+                               ]+command,
+                              env=self._getEnvWithProxy())
         return ret
 
     def bootstrap(self):
@@ -128,7 +140,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         #        proper pre-seeding, but debootstrap will have to do for now
         #        best from a netboot install so that we do not have to
         #        do anthing here 
-        res = subprocess.call(["debootstrap", "--arch", arch, self.fromDist, self.target, mirror])
+        res = subprocess.call(["debootstrap", "--arch", arch, self.fromDist, self.target, mirror], env=self._getEnvWithProxy())
         assert(res == 0)
         
         # copy the stuff from toChroot/

@@ -72,6 +72,8 @@ def testUpgrade(backend_name, profile, basedir):
             print "FAILED: test for '%s'" % profile
             return False
     except Exception, e:
+        import traceback
+        traceback.print_exc()
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
         flushBuffer(fd)
         return False

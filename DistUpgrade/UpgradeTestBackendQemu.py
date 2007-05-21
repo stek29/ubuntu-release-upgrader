@@ -43,7 +43,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     # FIXME: make this part of the config file
     qemu_binary = "qemu"
-    qemu_binary = "kvm"
+    #qemu_binary = "kvm"
     
     qemu_options = [
         "-m","512",      # memory to use
@@ -76,10 +76,14 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         return env
         
     def _runAptInTarget(self, command, cmd_options=[]):
-        ret = subprocess.call(["chroot", self.target,
-                              "/usr/bin/apt-get",
-                              command]+ self.apt_options + cmd_options,
-                              env=self._getEnvWithProxy())
+        # run apt, retry up to 5 times (network failures, timeouts etc)
+        for i in range(5):
+            ret = subprocess.call(["chroot", self.target,
+                                   "/usr/bin/apt-get",
+                                   command]+ self.apt_options + cmd_options,
+                                  env=self._getEnvWithProxy())
+            if ret == 0:
+                break
         return ret
 
     def _getProxyLine(self):
@@ -102,6 +106,10 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     def _runInImage(self, command, withProxy=True):
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
         #     -o StrictHostKeyChecking=no
+        #
+        # FIXME: proxy handling sux big time
+        # we can't use subprocess.call(..,env=) here as ssh strips
+        # the environment by default
         cmd = command
         try:
             if withProxy:
@@ -389,7 +397,7 @@ export APT_LISTCHANGES_FRONTEND=none
         self.start()
 
         # start the upgrader
-        ret = self._runInImage(["(cd /upgrade-tester/ ; ./dist-upgrade.py; sync)"], withProxy=False)
+        ret = self._runInImage(["(%s ;cd /upgrade-tester/ ; ./dist-upgrade.py; sync)" % self._getProxyLine()], withProxy=False)
         # FIXME: - do something useful with ret
         #        - reboot and see what things look like
 

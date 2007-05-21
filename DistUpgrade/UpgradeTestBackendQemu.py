@@ -12,6 +12,7 @@ import time
 import signal
 import signal
 import crypt
+import tempfile
 
 # TODO:
 # - refactor and move common code to UpgradeTestBackend
@@ -53,12 +54,16 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     def __init__(self, profile, basedir):
         UpgradeTestBackend.__init__(self, profile, basedir)
-        self.ssh_key = os.path.dirname(profile)+"/ssh-key"
-        # FIXME: this needs to go into the profile dir
-        self.image="/tmp/qemu-upgrade-test.image"
-        # FIXME: this needs to be a config option
-        self.target="/mnt/qemu-upgrade-test"
         self.qemu_pid = None
+        self.ssh_key = os.path.dirname(profile)+"/ssh-key"
+        # setup mount dir/imagefile location
+        tmpdir = self.config.getWithDefault("NonInteractive","Tempdir",None)
+        if tmpdir is None:
+            tmpdir = tempfile.mkdtemp()
+        self.image = os.path.join(tmpdir,"qemu-upgrade-test.image")
+        self.target = os.path.join(tmpdir, "qemu-upgrade-test")
+        if not os.path.exists(self.target):
+            os.makedirs(self.target)
         
     def _runAptInTarget(self, command, cmd_options=[]):
         ret = subprocess.call(["chroot", self.target,
@@ -100,8 +105,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     def bootstrap(self):
         mirror = self.config.get("NonInteractive","Mirror")
         basepkg = self.config.get("NonInteractive","BasePkg")
-
-        size=4000
+        size = int(self.config.getWithDefault("NonInteractive","ImageSize","4000"))
+        
         arch = "i386"
 
         if not os.path.exists(self.target):

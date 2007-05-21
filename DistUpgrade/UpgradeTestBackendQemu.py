@@ -99,9 +99,15 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                                ])
         return ret
 
-    def _runInImage(self, command):
+    def _runInImage(self, command, withProxy=True):
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
         #     -o StrictHostKeyChecking=no
+        cmd = command
+        try:
+            if withProxy:
+                cmd = ["http_proxy=%s" % self.config.get("NonInteractive","Proxy")] + command
+        except ConfigParser.NoOptionError:
+            pass
         ret = subprocess.call(["ssh",
                                "-l","root",
                                "-p","54321",
@@ -110,8 +116,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                                "-i",self.ssh_key,
                                "-o", "StrictHostKeyChecking=no",
                                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-                               ]+command,
-                              env=self._getEnvWithProxy())
+                               ]+cmd)
         return ret
 
     def bootstrap(self):
@@ -384,7 +389,7 @@ export APT_LISTCHANGES_FRONTEND=none
         self.start()
 
         # start the upgrader
-        ret = self._runInImage(["(cd /upgrade-tester/ ; ./dist-upgrade.py; sync)"])
+        ret = self._runInImage(["(cd /upgrade-tester/ ; ./dist-upgrade.py; sync)"], withProxy=False)
         # FIXME: - do something useful with ret
         #        - reboot and see what things look like
 

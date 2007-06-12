@@ -277,10 +277,9 @@ class MyCache(apt.Cache):
             logging.warning("Can't parse kernel uname: '%s' (self compiled?)" % e)
             return False
         # now check if we have a SMP system
-        if (os.path.exists("/proc/cpuinfo") and flavour == "386"):
-            cpuinfo = open("/proc/cpuinfo").readlines()
-            if len(filter(lambda l: l.startswith("processor"),cpuinfo)) > 1:
-                flavour = "generic"
+        if "WARNING: NR_CUPS" in Popen(["dmesg"],stdout=PIPE).communicate()[0]:
+            logging.debug("UP kernel on SMP system!?!")
+            flavour = "generic"
         kernel = "linux-image-%s" % flavour
         if not self.has_key(kernel):
             logging.warning("No kernel: '%s'" % kernel)

@@ -86,9 +86,10 @@ class DumbTerminal(object):
 
 (STEP_PREPARE,
  STEP_MODIFY_SOURCES,
- STEP_FETCH_INSTALL,
+ STEP_FETCH,
+ STEP_INSTALL,
  STEP_CLEANUP,
- STEP_REBOOT) = range(1,6)
+ STEP_REBOOT) = range(1,7)
 
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
@@ -114,9 +115,10 @@ class DistUpgradeView(object):
         """ provide a visual feedback that the upgrade was aborted """
         pass
     def setStep(self, step):
-        """ we have 5 steps current for a upgrade:
+        """ we have 6 steps current for a upgrade:
         1. Analyzing the system
         2. Updating repository information
+        3. fetch packages
         3. Performing the upgrade
         4. Post upgrade stuff
         5. Complete

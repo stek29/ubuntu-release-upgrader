@@ -35,8 +35,7 @@ import glob
 import time
 from DistUpgradeConfigParser import DistUpgradeConfig
 
-# FIXME: we need this only for the later "isinstance()" check
-#        this should probably be solved in some different way
+import DistUpgradeView
 from DistUpgradeViewText import DistUpgradeViewText
 from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 
@@ -651,14 +650,46 @@ class DistUpgradeControler(object):
                 os.rename(outname, name)
             except Exception, e:
                 logging.waring("failed to modify '%s' (%s)" % (name, e))
-    
-    def doDistUpgrade(self):
+
+    def doDistUpgradeFetching(self):
         if self.options and self.options.haveBackports:
             backportsdir = os.getcwd()+"/backports"
             apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
         minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
         self._rewriteAptPeriodic(10, True)
+        # get the upgrade
+        currentRetry = 0
+        fprogress = self._view.getFetchProgress()
+        iprogress = self._view.getInstallProgress(self.cache)
+        # retry the fetching in case of errors
+        maxRetries = self.config.getint("Network","MaxRetries")
+        while currentRetry < maxRetries:
+            try:
+                pm = apt_pkg.GetPackageManager(self.cache._depcache)
+                fetcher = apt_pkg.GetAcquire(fprogress)
+                res = self.cache._fetchArchives(fetcher, pm)
+            except IOError, e:
+                # fetch failed, will be retried
+                logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
+                currentRetry += 1
+                continue
+            # no exception, so all was fine, we are done
+            self._rewriteAptPeriodic(minAge)
+            return True
+        
+        # maximum fetch-retries reached without a successful commit
+        logging.error("giving up on fetching after maximum retries")
+        self._view.error(_("Could not download the upgrades"),
+                         _("The upgrade aborts now. Please check your "\
+                           "internet connection or "\
+                           "installation media and try again. "),
+                           "%s" % e)
+        # abort here because we want our sources.list back
+        self.abort()
+        
+    
+    def doDistUpgrade(self):
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -982,7 +1013,7 @@ class DistUpgradeControler(object):
     def fullUpgrade(self):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
-        self._view.setStep(1)
+        self._view.setStep(DistUpgradeView.STEP_PREPARE)
         
         if not self.prepare():
             logging.error("self.prepared() failed")
@@ -1009,7 +1040,7 @@ class DistUpgradeControler(object):
         self.doPreUpgrade()
 
         # update sources.list
-        self._view.setStep(2)
+        self._view.setStep(DistUpgradeView.STEP_MODIFY_SOURCES)
         self._view.updateStatus(_("Updating repository information"))
         if not self.updateSourcesList():
             self.abort()
@@ -1047,26 +1078,33 @@ class DistUpgradeControler(object):
 
         # calc the dist-upgrade and see if the removals are ok/expected
         # do the dist-upgrade
-        self._view.setStep(3)
         self._view.updateStatus(_("Asking for confirmation"))
         if not self.askDistUpgrade():
             self.abort()
 
+        # fetch the stuff
+        self._view.setStep(DistUpgradeView.STEP_FETCH)
+        self._view.updateStatus(_("Fetching"))
+        if not self.doDistUpgradeFetching():
+            self.abort()
+
+        # now do the upgrade
+        # 
         # kill update-notifier now to supress reboot required
         subprocess.call(["killall","-q","update-notifier"])
-        # no do the upgrade
+        self._view.setStep(DistUpgradeView.STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
             # don't abort here, because it would restore the sources.list
             sys.exit(1) 
             
         # do post-upgrade stuff
-        self._view.setStep(4)
+        self._view.setStep(DistUpgradeView.STEP_CLEANUP)
         self._view.updateStatus(_("Searching for obsolete software"))
         self.doPostUpgrade()
 
         # done, ask for reboot
-        self._view.setStep(5)
+        self._view.setStep(DistUpgradeView.STEP_REBOOT)
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
         if self._view.confirmRestart():

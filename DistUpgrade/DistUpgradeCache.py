@@ -96,7 +96,7 @@ class MyCache(apt.Cache):
             pkg.markDelete()
         for name in self.to_install:
             pkg = self[name]
-            pkg.markInstall()
+            pkg.markInstall(autoFix=False, autoInst=False)
 
     def sanityCheck(self, view):
         """ check if the cache is ok and if the required metapkgs

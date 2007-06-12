@@ -277,7 +277,8 @@ class MyCache(apt.Cache):
             logging.warning("Can't parse kernel uname: '%s' (self compiled?)" % e)
             return False
         # now check if we have a SMP system
-        if "WARNING: NR_CUPS" in Popen(["dmesg"],stdout=PIPE).communicate()[0]:
+        dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
+        if "WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
             flavour = "generic"
         kernel = "linux-image-%s" % flavour

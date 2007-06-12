@@ -546,8 +546,12 @@ class MyCache(apt.Cache):
 
 if __name__ == "__main__":
 	import DistUpgradeConfigParser
-	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."))
+        import DistUpgradeView
+	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
+                    DistUpgradeView.DistUpgradeView())
 	c.clear()
+        c.create_snapshot()
         c.installedTasks
         c.installTasks(["ubuntu-desktop"])
         print c.getChanges()
+        c.restore_snapshot()

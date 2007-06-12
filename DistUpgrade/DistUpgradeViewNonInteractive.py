@@ -43,6 +43,7 @@ class NonInteractiveFetchProgress(apt.progress.FetchProgress):
 class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self):
         InstallProgress.__init__(self)
+        logging.debug("seting up environ for non-interactive use")
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         self.config = DistUpgradeConfig(".")

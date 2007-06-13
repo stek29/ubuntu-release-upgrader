@@ -611,7 +611,33 @@ class DistUpgradeControler(object):
             
         return True
 
+
     def askDistUpgrade(self):
+        # check what packages got demoted and ask the user
+        # if those shall be removed
+        demotions = set()
+        demotions_file = self.config.get("Distro","Demotions")
+        if os.path.exists(demotions_file):
+            map(lambda pkgname: demotions.add(pkgname.strip()),
+                filter(lambda line: not line.startswith("#"),
+                       open(demotions_file).readlines()))
+        self.installed_demotions = filter(lambda pkg: pkg.isInstalled and pkg.name in demotions, self.cache)
+        if len(self.installed_demotions) > 0:
+            demoted = [pkg.name for pkg in self.installed_demotions]	
+	    demoted.sort()
+            logging.debug("demoted: '%s'" % " ".join(demoted))
+            self._view.information(_("Support for some applications ended"),
+                                   _("Canonical Ltd. no longer provides "
+                                     "support for the following software "
+                                     "packages. You can still get support "
+                                     "from the community.\n\n"
+                                     "If you have not enabled community "
+                                     "maintained software (universe), "
+                                     "these packages will be suggested for "
+                                     "removal at the end of the upgrade."),
+                                   "\n".join(demoted))
+            # FIXME: integrate this into main upgrade dialog!?!
+
         if not self.cache.distUpgrade(self._view, self.serverMode, self.logfd):
             return False
         if self.serverMode:
@@ -759,29 +785,6 @@ class DistUpgradeControler(object):
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
         logging.debug("forced_obsoletes: %s", self.forced_obsoletes)
 
-        # check what packages got demoted
-        demotions = set()
-        demotions_file = self.config.get("Distro","Demotions")
-        if os.path.exists(demotions_file):
-            map(lambda pkgname: demotions.add(pkgname.strip()),
-                filter(lambda line: not line.startswith("#"),
-                       open(demotions_file).readlines()))
-        installed_demotions = filter(lambda pkg: pkg.isInstalled and pkg.name in demotions, self.cache)
-        if len(installed_demotions) > 0:
-            demoted = [pkg.name for pkg in installed_demotions]	
-	    demoted.sort()
-            logging.debug("demoted: '%s'" % " ".join(demoted))
-            self._view.information(_("Support for some applications ended"),
-                                   _("Canonical Ltd. no longer provides "
-                                     "support for the following software "
-                                     "packages. You can still get support "
-                                     "from the community.\n\n"
-                                     "If you have not enabled community "
-                                     "maintained software (universe), "
-                                     "these packages will be suggested for "
-                                     "removal in the next step."),
-                                   "\n".join(demoted))
-       
         # mark packages that are now obsolete (and where not obsolete
         # before) to be deleted. make sure to not delete any foreign
         # (that is, not from ubuntu) packages
@@ -794,7 +797,7 @@ class DistUpgradeControler(object):
             # initial remove candidates when no network is used should
             # be the demotions to make sure we don't leave potential
             # unsupported software
-            remove_candidates = set(installed_demotions)
+            remove_candidates = set(self.installed_demotions)
         remove_candidates |= set(self.forced_obsoletes)
         # see if we actually have to do anything here
         if not self.config.getWithDefault("Distro","RemoveObsoletes", True):

@@ -39,6 +39,7 @@ class MyCache(apt.Cache):
         #        raise CacheExceptionLockingFailed, e
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
+        self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
 
     # properties
     @property
@@ -269,10 +270,9 @@ class MyCache(apt.Cache):
         """ check for the runing kernel and try to ensure that we have
             a updated version
         """
-        uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
-        logging.debug("Kernel uname: '%s' " % uname)
+        logging.debug("Kernel uname: '%s' " % self.uname)
         try:
-            (version, build, flavour) = uname.split("-")
+            (version, build, flavour) = self.uname.split("-")
         except Exception, e:
             logging.warning("Can't parse kernel uname: '%s' (self compiled?)" % e)
             return False
@@ -492,7 +492,10 @@ class MyCache(apt.Cache):
         return False
 
     def _tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
-        # sanity check
+        # sanity check, first see if it looks like a runing kernel pkg
+        if pkgname.endswith(self.uname):
+            logging.debug("skipping runing kernel pkg '%s'" % pkgname)
+            return False
         if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False

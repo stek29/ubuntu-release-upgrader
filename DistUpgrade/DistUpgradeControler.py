@@ -817,6 +817,12 @@ class DistUpgradeControler(object):
             # unsupported software
             remove_candidates = set(self.installed_demotions)
         remove_candidates |= set(self.forced_obsoletes)
+
+        # no go for the unused dependencies
+        unused_dependencies = self.cache._getUnusedDependencies()
+        logging.debug("Unused dependencies: %s" %" ".join(unused_dependencies))
+        remove_candidates |= set(unused_dependencies)
+
         # see if we actually have to do anything here
         if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
             remove_candidates = set()

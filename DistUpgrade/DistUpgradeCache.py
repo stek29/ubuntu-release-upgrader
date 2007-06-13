@@ -91,6 +91,7 @@ class MyCache(apt.Cache):
 
     def restore_snapshot(self):
         """ restore a snapshot """
+        actiongroup = apt_pkg.GetPkgActionGroup(self._depcache)
         self.clear()
         for name in self.to_remove:
             pkg = self[name]
@@ -502,6 +503,7 @@ class MyCache(apt.Cache):
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well
+        actiongroup = apt_pkg.GetPkgActionGroup(self._depcache)
         self.create_snapshot()
         try:
             self[pkgname].markDelete()
@@ -525,6 +527,14 @@ class MyCache(apt.Cache):
                 if not self.downloadable(pkg):
                     obsolete_pkgs.add(pkg.name)
         return obsolete_pkgs
+
+    def _getUnusedDependencies(self):
+        " get all package names that are not downloadable "
+        unused_dependencies =set()        
+        for pkg in self:
+            if pkg.isInstalled and self._depcache.IsGarbage(pkg._pkg):
+                unused_dependencies.add(pkg.name)
+        return unused_dependencies
 
     def _getForeignPkgs(self, allowed_origin, fromDist, toDist):
         """ get all packages that are installed from a foreign repo

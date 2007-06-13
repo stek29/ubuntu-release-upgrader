@@ -698,6 +698,7 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_reload_clicked(self, widget):
     #print "on_button_reload_clicked"
+    self.check_metarelease()
     self.invoke_manager(UPDATE)
 
   def on_button_help_clicked(self, widget):
@@ -998,17 +999,25 @@ class UpdateManager(SimpleGladeApp):
                    "/usr/share/applications/update-manager.desktop",
                    "--", "/usr/bin/update-manager", "--dist-upgrade")
 
-  def main(self, options):
-    gconfclient = gconf.client_get_default() 
-    self.meta = MetaRelease(options.devel_release, options.use_proposed)
-    self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
+  def check_metarelease(self):
+      " check for new meta-release information "
+      gconfclient = gconf.client_get_default()
+      self.meta = MetaRelease(self.options.devel_release,
+                              self.options.use_proposed)
+      self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
+      # check if we are interessted in dist-upgrade information
+      # (we are not by default on dapper)
+      if self.options.check_dist_upgrades or \
+             gconfclient.get_bool("/apps/update-manager/check_dist_upgrades"):
+          self.meta.connect("new_dist_available",self.new_dist_available)
+      
 
-    # check if we are interessted in dist-upgrade information
-    # (we are not by default on dapper)
-    if options.check_dist_upgrades or \
-	   gconfclient.get_bool("/apps/update-manager/check_dist_upgrades"):
-      self.meta.connect("new_dist_available",self.new_dist_available)
-    
+  def main(self, options):
+    self.options = options
+
+    # check for new distributin information
+    self.check_metarelease()
+
     while gtk.events_pending():
       gtk.main_iteration()
 

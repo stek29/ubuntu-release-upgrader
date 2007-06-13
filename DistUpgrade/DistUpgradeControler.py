@@ -532,6 +532,7 @@ class DistUpgradeControler(object):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
         err_long= _("The upgrade aborts now. "
+                    "The upgrade needs a total of %s free space on disk %s. "
                     "Please free at least an additional %s of disk "
                     "space on %s. "
                     "Empty your trash and remove temporary "
@@ -605,7 +606,7 @@ class DistUpgradeControler(object):
             if fs_free[dir].free < 0:
                 free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
                 logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
-                self._view.error(err_sum, err_long % (free_at_least,dir))
+                self._view.error(err_sum, err_long % (size, dir, free_at_least,dir))
                 return False
 
             
@@ -682,7 +683,7 @@ class DistUpgradeControler(object):
             backportsdir = os.getcwd()+"/backports"
             apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
-        minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
+        self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
         self._rewriteAptPeriodic(10, True)
         # get the upgrade
         currentRetry = 0
@@ -700,8 +701,6 @@ class DistUpgradeControler(object):
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
                 currentRetry += 1
                 continue
-            # no exception, so all was fine, we are done
-            self._rewriteAptPeriodic(minAge)
             return True
         
         # maximum fetch-retries reached without a successful commit
@@ -743,7 +742,7 @@ class DistUpgradeControler(object):
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
-                self._rewriteAptPeriodic(minAge)
+                self._rewriteAptPeriodic(self.apt_minAge)
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -751,7 +750,7 @@ class DistUpgradeControler(object):
                 currentRetry += 1
                 continue
             # no exception, so all was fine, we are done
-            self._rewriteAptPeriodic(minAge)
+            self._rewriteAptPeriodic(self.apt_minAge)
             return True
         
         # maximum fetch-retries reached without a successful commit

@@ -47,6 +47,11 @@ import gettext
 from DistUpgradeCache import MyCache, CacheException, CacheExceptionLockingFailed
 from DistUpgradeApport import *
 
+# some constant
+# the inird space required in /boot for each kernel
+KERNEL_INITRD_SIZE = 10*1024*1024
+
+
 class AptCdrom(object):
     def __init__(self, view, path):
         self.view = view
@@ -588,16 +593,30 @@ class DistUpgradeControler(object):
         del mnt_map
         logging.debug("fs_free contains: '%s'" % fs_free)
 
+        # now calculate the space that is required on /boot
+        # we do this by checking how many linux-image-$ver packages
+        # are installed or going to be installed
+        space_in_boot = 0
+        for pkg in self.cache:
+            # we match against everything that looks like a kernel
+            # and add space check to filter out metapackages
+            if re.match("^linux-(image|image-debug)-[0-9.]*-.*", pkg.name):
+                if pkg.markedInstall:
+                    logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
+                    space_in_boot += KERNEL_INITRD_SIZE
+                elif (pkg.markedUpgrade or pkg.isInstalled):
+                    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, 2*KERNEL_INITRD_SIZE))
+                    space_in_boot += 2*KERNEL_INITRD_SIZE # creates .bak
+
         # we check for various sizes:
         # archivedir is were we download the debs
         # /usr is assumed to get *all* of the install space (incorrect,
         #      but as good as we can do currently + savety buffer
-        # /boot is assumed to get at least 50 Mb
         # /     has a small savety buffer as well
         for (dir, size) in [(archivedir, self.cache.requiredDownload),
                             ("/usr", self.cache.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),  # savetfy buffer /usr
-                            ("/boot", 40*1024*1024), # savetfy buffer /boot
+                            ("/boot", space_in_boot), 
                             ("/", 10*1024*1024),     # small savetfy buffer /
                            ]:
             dir = os.path.realpath(dir)

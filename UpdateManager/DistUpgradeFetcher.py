@@ -28,6 +28,7 @@ from Common.utils import *
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 import urllib2
+import os
 
 class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
 

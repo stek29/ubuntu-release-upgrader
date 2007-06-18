@@ -16,6 +16,19 @@ from UpdateManager.DistUpgradeFetcher import *
 
 def _(s): return s
 
+# FIXME: use dogtail
+# something like (needs to run as a seperate process):
+# 
+# from dogtail.procedural import *
+#         focus.application('displayconfig-gtk')
+#        focus.frame('Screen and Graphics Preferences')
+#        click("Plug 'n' Play", roleName='push button')
+#        focus.window('Choose Screen')
+#        select('Flat Panel 1024x768', roleName='table cell')
+#        keyCombo("Return")
+#        click('OK', roleName='push button')
+
+
 class TestMetaReleaseGUI(unittest.TestCase):
     def setUp(self):
         self.new_dist = None

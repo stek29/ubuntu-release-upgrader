@@ -79,7 +79,12 @@ if __name__ == "__main__":
     controler.prepare()
     controler.doPreUpgrade()
     if controler.askDistUpgrade():
-      view.setStep(STEP_FETCH_INSTALL)
+      view.setStep(STEP_FETCH)
+      view.updateStatus(_("Fetching"))
+      if not controler.doDistUpgradeFetching():
+        sys.exit(1)
+      view.setStep(STEP_INSTALL)
+      view.updateStatus(_("Upgrading"))
       if not controler.doDistUpgrade():
         sys.exit(1)
       view.setStep(STEP_CLEANUP)

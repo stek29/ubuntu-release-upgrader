@@ -288,6 +288,11 @@ class DistUpgradeControler(object):
             return False
         if not self.cache.sanityCheck(self._view):
             return False
+
+        if not self.checkViewDepends():
+            logging.error("checkViewDepends() failed")
+            return False
+
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  inteligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:
@@ -956,6 +961,43 @@ class DistUpgradeControler(object):
         self.openCache()
         sys.exit(1)
 
+    def _checkDep(self, depstr):
+        " check if a given depends can be satisfied "
+        for or_group in apt_pkg.ParseDepends(depstr):
+            logging.debug("checking: '%s' " % or_group)
+            for dep in or_group:
+                depname = dep[0]
+                ver = dep[1]
+                oper = dep[2]
+                if not self.cache.has_key(depname):
+                    logging.error("_checkDep: '%s' not in cache" % depname)
+                    return False
+                inst = self.cache[depname]
+                instver = inst.installedVersion
+                if (instver != None and
+                    apt_pkg.CheckDep(instver,oper,ver) == True):
+                    return True
+        logging.error("depends '%s' is not satisfied" % depstr)
+        return False
+                
+    def checkViewDepends(self):
+        " check if depends are satisfied "
+        logging.debug("checkViewDepends()")
+        res = True
+        # now check if anything from $foo-updates is required
+        depends = self.config.getlist("View","Depends")
+        depends.extend(self.config.getlist(self._view.__class__.__name__,
+                                           "Depends"))
+        for dep in depends:
+            logging.debug("depends: '%s'", dep)
+            res &= self._checkDep(dep)
+            if not res:
+                self._view.error(_("Required depends is not installed"),
+                                 _("The required dependency '%s' is not "
+                                   "installed. " % dep))
+                sys.exit(1)
+        return res 
+
     def getRequiredBackports(self):
         " download the backports specified in DistUpgrade.cfg "
         logging.debug("getRequiredBackports()")
@@ -1038,11 +1080,11 @@ class DistUpgradeControler(object):
         " setup the required backports in a evil way "
         # setup some pathes to make sure the new stuff is used
         os.environ["LD_LIBRARY_PATH"] = backportsdir+"/usr/lib"
-        os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info]1])
+        os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info[1])
         os.environ["PATH"] = "%s:%s" % (backportsdir+"/usr/bin",
                                         os.getenv("PATH"))
         # now exec self again
-        args = sys.argv+["--have-prerequists"]
+        args = sys.argv + ["--have-prerequists"]
         if self.useNetwork:
             args.append("--with-network")
         else:

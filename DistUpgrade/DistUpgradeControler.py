@@ -992,6 +992,8 @@ class DistUpgradeControler(object):
             logging.debug("depends: '%s'", dep)
             res &= self._checkDep(dep)
             if not res:
+                # FIXME: instead of error out, fetch and install it
+                #        here
                 self._view.error(_("Required depends is not installed"),
                                  _("The required dependency '%s' is not "
                                    "installed. " % dep))

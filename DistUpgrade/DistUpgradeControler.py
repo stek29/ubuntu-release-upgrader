@@ -698,9 +698,10 @@ class DistUpgradeControler(object):
                 logging.waring("failed to modify '%s' (%s)" % (name, e))
 
     def doDistUpgradeFetching(self):
-        if self.options and self.options.haveBackports:
+        if self.options and self.options.havePrerequists:
             backportsdir = os.getcwd()+"/backports"
-            apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
+            if os.path.exists(backportsdir+"/usr/bin/dpkg"):
+                apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
         self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
         self._rewriteAptPeriodic(10, True)
@@ -957,8 +958,13 @@ class DistUpgradeControler(object):
 
     def getRequiredBackports(self):
         " download the backports specified in DistUpgrade.cfg "
+        logging.debug("getRequiredBackports()")
+        res = True
+
         # add the backports sources.list fragment
-        shutil.copy(self.config.get("Backports","SourcesList"),
+        # FIXME: add country mirror here
+        sourceslistd = self.config.get("PreRequists","SourcesList")
+        shutil.copy(sourceslistd,
                     apt_pkg.Config.FindDir("Dir::Etc::sourceparts"))
         # run update
         self.doUpdate()
@@ -977,21 +983,27 @@ class DistUpgradeControler(object):
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
-        # FIXME: add a version line to the cfg file to make sure
-        #        we get the right version file! and add sanity checking
-        #        that we don't get (accidently) the edgy version
-        for pkgname in self.config.getlist("Backports","Packages"):
+        # FIXME: rewrite the thing so that the regular fetch/commit
+        #        interface is used. that is no problem because we
+        #        use a release-upgrader-$foo prefix for the pacakges
+        #        now
+        # FIXME: sanity check the origin (just for savetfy)
+        for pkgname in self.config.getlist("PreRequists","Packages"):
+            if not self.cache.has_key(pkgname):
+                logging.error("Can not find backport '%s'" % pkgname)
+                res = False
+                continue
             pkg = self.cache[pkgname]
             # look for the right version (backport)
-            for ver in pkg._pkg.VersionList:
-                if self.config.get("Backports","VersionIdent") in ver.VerStr:
-                    break
-            else:
-                # FIXME: be more clever here (exception)
-                raise Exception, "No backport found!?!"
-                return False
+            ver = cache._depcache.CandidateVer(pkg._pkg)
+            if not ver:
+                logging.error("No candidate for '%s'" % pkgname)
+                res = False
+                continue
             if ver.FileList == None:
-                return False
+                logging.error("No ver.FileList for '%s'" % pkgname)
+                res = False
+                continue
             f, index = ver.FileList.pop(0)
             pkg._records.Lookup((f,index))
             path = apt_pkg.ParseSection(pkg._records.Record)["Filename"]
@@ -1008,28 +1020,29 @@ class DistUpgradeControler(object):
         res = fetcher.Run()
         if res != fetcher.ResultContinue:
             # ick! error ...
-            return False
+            res = False
 
         # reset the cache dir
-        os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+"/backport-source.list")
+        os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)
         os.chdir(cwd)
         # unpack it
         for deb in glob.glob(backportsdir+"/*.deb"):
             ret = os.system("dpkg-deb -x %s %s" % (deb, backportsdir))
             # FIXME: do error checking
-        return self.setupRequiredBackports(backportsdir)
+        if res:
+            return self.setupRequiredBackports(backportsdir)
+        return res
 
     def setupRequiredBackports(self, backportsdir):
         " setup the required backports in a evil way "
         # setup some pathes to make sure the new stuff is used
         os.environ["LD_LIBRARY_PATH"] = backportsdir+"/usr/lib"
-        os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python2.4/site-packages/"
+        os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info]1])
         os.environ["PATH"] = "%s:%s" % (backportsdir+"/usr/bin",
                                         os.getenv("PATH"))
-
         # now exec self again
-        args = sys.argv+["--have-backports"]
+        args = sys.argv+["--have-prerequists"]
         if self.useNetwork:
             args.append("--with-network")
         else:
@@ -1055,9 +1068,23 @@ class DistUpgradeControler(object):
 
         # mvo: commented out for now, see #54234, this needs to be
         #      refactored to use a arch=any tarball
-        #if self.options and self.options.haveBackports == False:
-        #    # get backported packages (if needed)
-        #    self.getRequiredBackports()
+        if (self.config.has_section("PreRequists") and
+            self.options and
+            self.options.havePrerequists == False):
+            # get backported packages (if needed)
+            if not self.getRequiredBackports():
+                self._view.error(_("Getting upgrade pre-requists failed"),
+                                 _("The system was unable to get the "
+                                   "pre-requists for the upgrade. "
+                                   "The upgrade will abort now and restore "
+                                   "the original system state.\n"
+                                   "\n"
+                                   "Please report this as a bug "
+                                   "against the 'update-manager' "
+                                   "package and include the files in "
+                                   "/var/log/dist-upgrade/ "
+                                   "in the bugreport." ))
+                self.abort()
 
         # run a "apt-get update" now
         if not self.doUpdate():

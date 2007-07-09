@@ -72,6 +72,7 @@ class DistUpgradeFetcherCore(object):
         gpg.options.extra_args = ['--no-options',
                                   '--homedir',self.tmpdir,
                                   '--no-default-keyring',
+                                  '--ignore-time-conflict',
                                   '--keyring', keyring]
         proc = gpg.run(['--verify', signature, file],
                        create_fhs=['status','logger','stderr'])

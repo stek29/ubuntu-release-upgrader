@@ -411,7 +411,7 @@ class DistUpgradeControler(object):
                     # to ports.ubuntu.com
                     if apt_pkg.Config.Find("APT::Architecture") == "powerpc":
                         logging.debug("moving powerpc source entry to 'ports.ubuntu.com' ")
-                        entry.uri = "http://ports.ubuntu.com/ubuntu"
+                        entry.uri = "http://ports.ubuntu.com/"
                     
                     # we found a valid mirror for this line,
                     # so we can break here

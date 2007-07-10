@@ -338,15 +338,13 @@ class DistUpgradeControler(object):
                      self.fromDist+"-security",
                      self.fromDist+"-updates",
                      self.fromDist+"-proposed",
-                     self.fromDist+"-backports",
-                     self.fromDist+"-commercial"
+                     self.fromDist+"-backports"
                     ]
         toDists = [self.toDist,
                    self.toDist+"-security",
                    self.toDist+"-updates",
                    self.toDist+"-proposed",
-                   self.toDist+"-backports",
-                   self.toDist+"-commercial"
+                   self.toDist+"-backports"
                    ]
 
         # list of valid mirrors that we can add
@@ -369,6 +367,17 @@ class DistUpgradeControler(object):
                 continue
             # ignore cdrom sources otherwise
             elif entry.uri.startswith("cdrom:"):
+                continue
+
+            # special case for archive.canonical.com that needs to
+            # be rewritten
+            cdist = "%s-commercial" % self.fromDist
+            if (not entry.disabled and
+                entry.uri.startswith("http://archive.canonical.com/ubuntu") and
+                entry.dist == cdist):
+                entry.dist = self.toDist
+                entry.comps = ["commercial"]
+                logging.debug("transitioned commerical to '%s' " % entry)
                 continue
 
             logging.debug("examining: '%s'" % entry)

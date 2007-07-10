@@ -797,10 +797,16 @@ class DistUpgradeControler(object):
         # abort here because we want our sources.list back
         self.abort()
 
-
-
     def doPostUpgrade(self):
+        # reopen cache
         self.openCache()
+
+        # now run the quirksHandler 
+        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
+        func = getattr(self, quirksFuncName, None)
+        if func is not None:
+            func()
+
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
         now_obsolete = self.cache._getObsoletesPkgs()
@@ -880,11 +886,6 @@ class DistUpgradeControler(object):
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("gor error from PostInstallScript %s (%s)" % (script, e))
-        # now run the quirksHandler 
-        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
 
     def _rewriteFstab(self):
         " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
@@ -951,6 +952,29 @@ class DistUpgradeControler(object):
             res = subprocess.call(cmd)
             logging.debug("cmd: %s returned %i" % (cmd, res))
         
+
+    def _checkAndRemoveEvms(self):
+        " check if evms is in use and if not, remove it "
+        # we have one cdrom to convert
+        for line in open("/proc/mounts"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                continue
+            if "evms" in device:
+                logging.debug("found evms device in line '%s', skipping " % line)
+                return False
+        self.forced_obsoletes.extend(["evms","libevms-2.5"])
+        return True
+
+    def gutsyQuirks(self):
+        """ this function works around quirks in the feisty->gutsy upgrade """
+        logging.debug("running Controler.gutsyQuirks handler")
+        self._checkAndRemoveEvms()
 
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """

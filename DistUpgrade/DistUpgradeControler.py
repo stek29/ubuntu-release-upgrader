@@ -407,7 +407,14 @@ class DistUpgradeControler(object):
                         entry.disabled = True
                         self.sources_disabled = True
                         logging.debug("entry '%s' was disabled (unknown dist)" % entry)
-                    # it can only be one valid mirror, so we can break here
+                    # check if the arch is powerpc and if so, transition
+                    # to ports.ubuntu.com
+                    if apt_pkg.Config.Find("APT::Architecture") == "powerpc":
+                        logging.debug("moving powerpc source entry to 'ports.ubuntu.com' ")
+                        entry.uri = "http://ports.ubuntu.com/ubuntu"
+                    
+                    # we found a valid mirror for this line,
+                    # so we can break here
                     break
             # disable anything that is not from a official mirror
             if not validMirror:

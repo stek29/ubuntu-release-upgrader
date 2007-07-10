@@ -409,7 +409,9 @@ class DistUpgradeControler(object):
                         logging.debug("entry '%s' was disabled (unknown dist)" % entry)
                     # check if the arch is powerpc and if so, transition
                     # to ports.ubuntu.com
-                    if apt_pkg.Config.Find("APT::Architecture") == "powerpc":
+                    if (entry.type == "deb" and
+                        apt_pkg.Config.Find("APT::Architecture") == "powerpc"):
+                        
                         logging.debug("moving powerpc source entry to 'ports.ubuntu.com' ")
                         entry.uri = "http://ports.ubuntu.com/"
                     

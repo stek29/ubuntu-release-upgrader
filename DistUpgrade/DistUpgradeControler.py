@@ -408,7 +408,7 @@ class DistUpgradeControler(object):
                         self.sources_disabled = True
                         logging.debug("entry '%s' was disabled (unknown dist)" % entry)
                     # check if the arch is powerpc and if so, transition
-                    # to ports.ubuntu.com
+                    # to ports.ubuntu.com (got demoted in gutsy)
                     if (entry.type == "deb" and
                         apt_pkg.Config.Find("APT::Architecture") == "powerpc"):
                         

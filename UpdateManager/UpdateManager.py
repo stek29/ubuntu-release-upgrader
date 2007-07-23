@@ -88,8 +88,8 @@ CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/chan
 
 
 class MyCache(apt.Cache):
-    def __init__(self, progress):
-        apt.Cache.__init__(self, progress)
+    def __init__(self, progress, rootdir=None):
+        apt.Cache.__init__(self, progress, rootdir)
         self._initDepCache()
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
         self.all_changes = {}
@@ -122,7 +122,33 @@ class MyCache(apt.Cache):
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
         self._depcache.Upgrade()
         return wouldDelete
-
+    def matchPackageOrigin(self, pkg, matcher):
+        """ match 'pkg' origin against 'matcher', take versions between
+            installedVersion and candidateVersion into account too
+            Useful if installed pkg A v1.0 is available in both
+            -updates (as v1.2) and -security (v1.1). we want to display
+            it as a security update then
+        """
+        inst_ver = pkg._pkg.CurrentVer
+        cand_ver = self._depcache.GetCandidateVer(pkg._pkg)
+        # init with empty match
+        update_origin = matcher[(None,None)]
+        for ver in pkg._pkg.VersionList:
+            # discard is < than installed ver
+            if (inst_ver and
+                apt_pkg.VersionCompare(ver.VerStr, inst_ver.VerStr) <= 0):
+                #print "skipping '%s' " % ver.VerStr
+                continue
+            # check if we have a match
+            for(verFileIter,index) in ver.FileList:
+                if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
+                    indexfile = pkg._list.FindIndex(verFileIter)
+                    if indexfile and indexfile.IsTrusted:
+                        match = matcher[verFileIter.Archive, verFileIter.Origin]
+                        if match.importance > update_origin.importance:
+                            update_origin = match
+        return update_origin
+        
     def get_changelog(self, name, lock):
         # don't touch the gui in this function, it needs to be thread-safe
         pkg = self[name]
@@ -237,20 +263,24 @@ class UpdateList:
     dist = pipe.read().strip()
     del pipe
     self.distUpgradeWouldDelete = 0
-    
-    templates = [("%s-security" % dist, "Ubuntu", _("Important security updates")
-                                                    , 10),
-                 ("%s-updates" % dist, "Ubuntu", _("Recommended updates"), 9),
-                 ("%s-proposed" % dist, "Ubuntu", _("Proposed updates"), 8),
-                 ("%s-backports" % dist, "Ubuntu", _("Backports"), 7),
-                 (dist, "Ubuntu", _("Distribution updates"), 6)]
-
     self.pkgs = {}
-    self.matcher = {}
     self.num_updates = 0
-    for (origin, archive, desc, importance) in templates:
-        self.matcher[(origin, archive)] = self.UpdateOrigin(desc, importance)
-    self.unknown_origin = self.UpdateOrigin(_("Other updates"), -1)
+    self.matcher = self.initMatcher(dist)
+    
+  def initMatcher(self, dist):
+      # (origin, archive, description, importance)
+      matcher_templates = [
+          ("%s-security" % dist, "Ubuntu", _("Important security updates"),10),
+          ("%s-updates" % dist, "Ubuntu", _("Recommended updates"), 9),
+          ("%s-proposed" % dist, "Ubuntu", _("Proposed updates"), 8),
+          ("%s-backports" % dist, "Ubuntu", _("Backports"), 7),
+          (dist, "Ubuntu", _("Distribution updates"), 6)
+      ]
+      matcher = {}
+      for (origin, archive, desc, importance) in matcher_templates:
+          matcher[(origin, archive)] = self.UpdateOrigin(desc, importance)
+      matcher[(None,None)] = self.UpdateOrigin(_("Other updates"), -1)
+      return matcher
 
   def update(self, cache):
     self.held_back = []
@@ -266,15 +296,8 @@ class UpdateList:
             # FIXME: do something more sensible here (but what?)
             print "WARNING: upgradable but no canidateOrigin?!?: ", pkg.name
             continue
-        # TRANSLATORS: updates from an 'unknown' origin
-        originstr = _("Other updates")
-        for aorigin in pkg.candidateOrigin:
-          archive = aorigin.archive
-          origin = aorigin.origin
-        if self.matcher.has_key((archive,origin)) and aorigin.trusted:
-          origin_node = self.matcher[(archive,origin)]
-        else:
-          origin_node = self.unknown_origin
+        # check where the package belongs
+        origin_node = cache.matchPackageOrigin(pkg, self.matcher)
         if not self.pkgs.has_key(origin_node):
           self.pkgs[origin_node] = []
         self.pkgs[origin_node].append(pkg)

@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2007-04-13 13:53+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-07-25 20:24+0200\n"
 "PO-Revision-Date: 2007-04-09 04:38+0000\n"
 "Last-Translator: Malkhaz Barkalaya <malxaz@gmail.com>\n"
 "Language-Team: Georgian <geognome@googlegroups.com>\n"
@@ -20,11 +20,11 @@ msgstr ""
 "X-Generator: KBabel 1.11.2\n"
 "X-Rosetta-Export-Date: 2007-04-13 08:49:25+0000\n"
 
-#: ../DistUpgrade/DistUpgradeCache.py:97
+#: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
 msgstr "დაზიანებული პაკეტები"
 
-#: ../DistUpgrade/DistUpgradeCache.py:98
+#: ../DistUpgrade/DistUpgradeCache.py:113
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
@@ -33,21 +33,21 @@ msgstr ""
 "პროგრამით. ჯერ გამართეთ დაზიანებული პაკეტები (synaptic ან apt-get) და შემდეგ "
 "გააგრძელეთ."
 
-#: ../DistUpgrade/DistUpgradeCache.py:301
+#: ../DistUpgrade/DistUpgradeCache.py:321
 msgid "Can't upgrade required meta-packages"
 msgstr "საჭირო მეტა-პაკეტების განახლება ვერ მოხერხდა"
 
-#: ../DistUpgrade/DistUpgradeCache.py:306
+#: ../DistUpgrade/DistUpgradeCache.py:326
 msgid "A essential package would have to be removed"
 msgstr "ამით საჭირო პაკეტი წაიშლება"
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:309
-#: ../UpdateManager/UpdateManager.py:849
+#: ../DistUpgrade/DistUpgradeCache.py:329
+#: ../UpdateManager/UpdateManager.py:873
 msgid "Could not calculate the upgrade"
 msgstr "სისტემა ვერ მომზადდა განახლებისათვის"
 
-#: ../DistUpgrade/DistUpgradeCache.py:310
+#: ../DistUpgrade/DistUpgradeCache.py:330
 msgid ""
 "A unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -60,11 +60,11 @@ msgstr ""
 "დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
 
 #. FIXME: maybe ask a question here? instead of failing?
-#: ../DistUpgrade/DistUpgradeCache.py:345
+#: ../DistUpgrade/DistUpgradeCache.py:365
 msgid "Error authenticating some packages"
 msgstr "ზოგიერთი პაკეტის ავთენთიფიკაციის შეცდომა"
 
-#: ../DistUpgrade/DistUpgradeCache.py:346
+#: ../DistUpgrade/DistUpgradeCache.py:366
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -74,12 +74,12 @@ msgstr ""
 "ხარვეზი. სცადეთ მოგვიანებით. ქვევით იხილეთ არააუთენთიფიცირებული პაკეტების "
 "სია."
 
-#: ../DistUpgrade/DistUpgradeCache.py:449
+#: ../DistUpgrade/DistUpgradeCache.py:469
 #, python-format
 msgid "Can't install '%s'"
 msgstr "'%s' ვერ დაყენდა"
 
-#: ../DistUpgrade/DistUpgradeCache.py:450
+#: ../DistUpgrade/DistUpgradeCache.py:470
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -87,11 +87,11 @@ msgstr ""
 "საჭირო პაკეტის დაყენება ვერ მოხერხდა. შეატყობინეთ ამ ხარვეზის შესახებ. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:457
+#: ../DistUpgrade/DistUpgradeCache.py:477
 msgid "Can't guess meta-package"
 msgstr "მეტა-პაკეტი ვერ შეირჩა"
 
-#: ../DistUpgrade/DistUpgradeCache.py:458
+#: ../DistUpgrade/DistUpgradeCache.py:478
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -104,11 +104,11 @@ msgstr ""
 " სანამ გააგრძელებდეთ, დააყენეთ რომელიმე მათგანი synaptic ან apt-get-ის "
 "მეშვეობით."
 
-#: ../DistUpgrade/DistUpgradeControler.py:83
+#: ../DistUpgrade/DistUpgradeControler.py:88
 msgid "Failed to add the CD"
 msgstr "ვერ განხორციელდა CD-ს დამატება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:84
+#: ../DistUpgrade/DistUpgradeControler.py:89
 #, python-format
 msgid ""
 "There was a error adding the CD, the upgrade will abort. Please report this "
@@ -123,15 +123,25 @@ msgstr ""
 "ინფორმაცია  ხარვეზის შესახებ:\n"
 "'%s'"
 
-#: ../DistUpgrade/DistUpgradeControler.py:116
+#: ../DistUpgrade/DistUpgradeControler.py:121
 msgid "Reading cache"
 msgstr "ქეშის კითხვა"
 
+#: ../DistUpgrade/DistUpgradeControler.py:172
+msgid "Unable to get exclusive lock"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeControler.py:173
+msgid ""
+"This usually means that another package management application (like apt-get "
+"or aptitude) already running. Please close that application first."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeControler.py:191
 msgid "Continue running under SSH?"
 msgstr "გავაგრძელოთ SSH-ს გამოყენებით?"
 
-#: ../DistUpgrade/DistUpgradeControler.py:174
+#: ../DistUpgrade/DistUpgradeControler.py:192
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -147,11 +157,11 @@ msgstr ""
 "გაგრძელების შემთხვევაში, '%s' პორტზე  დამატებითი ssh დემონი გაიშვება.\n"
 "გნებავთ გაგრძელება?"
 
-#: ../DistUpgrade/DistUpgradeControler.py:187
+#: ../DistUpgrade/DistUpgradeControler.py:205
 msgid "Starting additional sshd"
 msgstr "დამატებითი sshd-ს გაშვება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:188
+#: ../DistUpgrade/DistUpgradeControler.py:206
 #, python-format
 msgid ""
 "To make recovery in case of failure easier a additional sshd will be started "
@@ -162,26 +172,26 @@ msgstr ""
 "sshd. თუ ssh-სესიას რაიმე პრობლემა შეექმნა, მოგეცემათ საშუალება დამატებითი "
 "შეერთება გამოიყენოთ.\n"
 
-#: ../DistUpgrade/DistUpgradeControler.py:252
-#: ../DistUpgrade/DistUpgradeControler.py:261
+#: ../DistUpgrade/DistUpgradeControler.py:270
+#: ../DistUpgrade/DistUpgradeControler.py:279
 msgid "Can not upgrade"
 msgstr "შეუძლებელია განახლების ჩატარება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:253
+#: ../DistUpgrade/DistUpgradeControler.py:271
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeControler.py:262
+#: ../DistUpgrade/DistUpgradeControler.py:280
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeControler.py:276
+#: ../DistUpgrade/DistUpgradeControler.py:299
 msgid "Include latest updates from the Internet?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeControler.py:277
+#: ../DistUpgrade/DistUpgradeControler.py:300
 msgid ""
 "The upgrade process can automatically download the latest updates and "
 "install them during the upgrade.  The upgrade will take longer, but when it "
@@ -189,11 +199,11 @@ msgid ""
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeControler.py:392
+#: ../DistUpgrade/DistUpgradeControler.py:433
 msgid "No valid mirror found"
 msgstr "არ მოინახა შესაბამისი სარკე"
 
-#: ../DistUpgrade/DistUpgradeControler.py:393
+#: ../DistUpgrade/DistUpgradeControler.py:434
 #, fuzzy, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -213,11 +223,11 @@ msgstr ""
 "უარის შემთხვევაში განახლება არ მოხდება."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeControler.py:410
+#: ../DistUpgrade/DistUpgradeControler.py:451
 msgid "Generate default sources?"
 msgstr "გავუშვათ ნაგულისხმევი წყაროების გენერაცია?"
 
-#: ../DistUpgrade/DistUpgradeControler.py:411
+#: ../DistUpgrade/DistUpgradeControler.py:452
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -231,11 +241,11 @@ msgstr ""
 "დავამატოთ ნაგულისხმევი ჩანაწერები '%s'-სთვის? უარის შემთხვევაში განახლება არ "
 "მოხდება."
 
-#: ../DistUpgrade/DistUpgradeControler.py:445
+#: ../DistUpgrade/DistUpgradeControler.py:486
 msgid "Repository information invalid"
 msgstr "რეპოზიტორიების ინფორმაცია არასწორია"
 
-#: ../DistUpgrade/DistUpgradeControler.py:446
+#: ../DistUpgrade/DistUpgradeControler.py:487
 #, fuzzy
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
@@ -244,12 +254,12 @@ msgstr ""
 "რეპოზიტორიების განახლების შედეგად დაზიანდა ფაილი. შეატყობინეთ ამ ხარვეზის "
 "შესახებ."
 
-#: ../DistUpgrade/DistUpgradeControler.py:452
+#: ../DistUpgrade/DistUpgradeControler.py:493
 #, fuzzy
 msgid "Third party sources disabled"
 msgstr "მესამე რიგის წყაროები გამორთულია"
 
-#: ../DistUpgrade/DistUpgradeControler.py:453
+#: ../DistUpgrade/DistUpgradeControler.py:494
 #, fuzzy
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
@@ -260,11 +270,11 @@ msgstr ""
 "შეგეძლებათ მათი ჩართვა ინსტრუმენტ 'software-properties' ან პაკეტ-მენეჯერის "
 "საშუალებით."
 
-#: ../DistUpgrade/DistUpgradeControler.py:510
+#: ../DistUpgrade/DistUpgradeControler.py:551
 msgid "Error during update"
 msgstr "შეცდომა განახლებისას"
 
-#: ../DistUpgrade/DistUpgradeControler.py:511
+#: ../DistUpgrade/DistUpgradeControler.py:552
 msgid ""
 "A problem occured during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -272,29 +282,63 @@ msgstr ""
 "განახლებისას მოხდა შეცდომა. როგორც წესი ეს არის კავშირის პრობლემა, შეამოწმეთ "
 "თქვენი კავშირი და სცადეთ კიდევ ერთხელ."
 
-#: ../DistUpgrade/DistUpgradeControler.py:520
+#: ../DistUpgrade/DistUpgradeControler.py:561
 msgid "Not enough free disk space"
 msgstr "დისკზე არ არის საკმარისი თავისუფალი ადგილი"
 
-#: ../DistUpgrade/DistUpgradeControler.py:521
-#, python-format
+#: ../DistUpgrade/DistUpgradeControler.py:562
+#, fuzzy, python-format
 msgid ""
-"The upgrade aborts now. Please free at least %s of disk space on %s. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
+"The upgrade aborts now. The upgrade needs a total of %s free space on disk %"
+"s. Please free at least an additional %s of disk space on %s. Empty your "
+"trash and remove temporary packages of former installations using 'sudo apt-"
+"get clean'."
 msgstr ""
 "განახლება შეწყვეტილია. გაათავისუფლეთ არანაკლებ %s ზომის ადგილი %s დისკზე. "
 "გამოიყენეთ 'sudo apt-get clean' ურნიდან ფაილებისა და წინა ინსტალაციის "
 "დროებითი პაკეტების წასაშლელად."
 
+#: ../DistUpgrade/DistUpgradeControler.py:672
+msgid "Support for some applications ended"
+msgstr "ზოგ პროგრამას მხარდაჭერა აღარა აქვს"
+
+#: ../DistUpgrade/DistUpgradeControler.py:673
+#, fuzzy
+msgid ""
+"Canonical Ltd. no longer provides support for the following software "
+"packages. You can still get support from the community.\n"
+"\n"
+"If you have not enabled community maintained software (universe), these "
+"packages will be suggested for removal at the end of the upgrade."
+msgstr ""
+"ამ პაკეტებს Canonical Ltd.-ს ნაცვლად მხარს საზოგადოება უჭერს.\n"
+"\n"
+"თუ თქვენ არა გაქვთ საზოგადოების რეპოზიტორია (universe), მაშინ შემდეგ ეტაპზე "
+"შემოთავაზებული იქნება ამ პაკეტების წაშლა."
+
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeControler.py:607
+#: ../DistUpgrade/DistUpgradeControler.py:696
 #, fuzzy
 msgid "Do you want to start the upgrade?"
 msgstr "დავიწყოთ განახლება?"
 
+#: ../DistUpgrade/DistUpgradeControler.py:753
+#: ../DistUpgrade/DistUpgradeControler.py:803
+msgid "Could not download the upgrades"
+msgstr "განახლებების ჩამოტვირთვა ვერ ხერხდება"
+
+#: ../DistUpgrade/DistUpgradeControler.py:754
+#: ../DistUpgrade/DistUpgradeControler.py:804
+#, fuzzy
+msgid ""
+"The upgrade aborts now. Please check your internet connection or "
+"installation media and try again. "
+msgstr ""
+"განახლება შეწყვეტილია. შეამოწმეთ ქსელი და საინსტალაციო დისკი და კიდევ "
+"სცადეთ. "
+
 #. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeControler.py:631
+#: ../DistUpgrade/DistUpgradeControler.py:779
 #, fuzzy
 msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
@@ -306,7 +350,7 @@ msgstr ""
 "შეატყობინეთ ხარვეზის შესახებ 'update-manager' პაკეტის საშუალებით, "
 "შეტყობინებაში ჩართეთ ფაილები var/log/dist-upgrade/-დან."
 
-#: ../DistUpgrade/DistUpgradeControler.py:635
+#: ../DistUpgrade/DistUpgradeControler.py:783
 #, fuzzy, python-format
 msgid ""
 "\n"
@@ -320,58 +364,27 @@ msgstr ""
 "განახლება შეწყვეტილია. შეატყობინეთ 'update-manager'-ის ეს ხარვეზი, ანგარიშს "
 "დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
 
-#: ../DistUpgrade/DistUpgradeControler.py:639
+#: ../DistUpgrade/DistUpgradeControler.py:787
 msgid "Could not install the upgrades"
 msgstr "განახლებების დაყენება ვერ ხერხდება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:653
-msgid "Could not download the upgrades"
-msgstr "განახლებების ჩამოტვირთვა ვერ ხერხდება"
-
-#: ../DistUpgrade/DistUpgradeControler.py:654
-#, fuzzy
-msgid ""
-"The upgrade aborts now. Please check your internet connection or "
-"installation media and try again. "
-msgstr ""
-"განახლება შეწყვეტილია. შეამოწმეთ ქსელი და საინსტალაციო დისკი და კიდევ "
-"სცადეთ. "
-
-#: ../DistUpgrade/DistUpgradeControler.py:694
-msgid "Support for some applications ended"
-msgstr "ზოგ პროგრამას მხარდაჭერა აღარა აქვს"
-
-#: ../DistUpgrade/DistUpgradeControler.py:695
-#, fuzzy
-msgid ""
-"Canonical Ltd. no longer provides support for the following software "
-"packages. You can still get support from the community.\n"
-"\n"
-"If you have not enabled community maintained software (universe), these "
-"packages will be suggested for removal in the next step."
-msgstr ""
-"ამ პაკეტებს Canonical Ltd.-ს ნაცვლად მხარს საზოგადოება უჭერს.\n"
-"\n"
-"თუ თქვენ არა გაქვთ საზოგადოების რეპოზიტორია (universe), მაშინ შემდეგ ეტაპზე "
-"შემოთავაზებული იქნება ამ პაკეტების წაშლა."
-
-#: ../DistUpgrade/DistUpgradeControler.py:731
+#: ../DistUpgrade/DistUpgradeControler.py:873
 msgid "Remove obsolete packages?"
 msgstr "წავშალოთ მოძველებული პაკეტები?"
 
-#: ../DistUpgrade/DistUpgradeControler.py:732
+#: ../DistUpgrade/DistUpgradeControler.py:874
 msgid "_Skip This Step"
 msgstr "ეტაპის გა_მოტოვება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:732
+#: ../DistUpgrade/DistUpgradeControler.py:874
 msgid "_Remove"
 msgstr "_წაშლა"
 
-#: ../DistUpgrade/DistUpgradeControler.py:743
+#: ../DistUpgrade/DistUpgradeControler.py:885
 msgid "Error during commit"
 msgstr "შეცდომა გადაცემისას"
 
-#: ../DistUpgrade/DistUpgradeControler.py:744
+#: ../DistUpgrade/DistUpgradeControler.py:886
 #, fuzzy
 msgid ""
 "A problem occured during the clean-up. Please see the below message for more "
@@ -379,27 +392,33 @@ msgid ""
 msgstr "შეცდომა გასუფთავებისას. დაწვრილებით იხილეთ ქვემოთ. "
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeControler.py:843
+#: ../DistUpgrade/DistUpgradeControler.py:1003
 msgid "Restoring original system state"
 msgstr "სისტემის საწყისი მდგომარეობის აღდგენა"
 
-#: ../DistUpgrade/DistUpgradeControler.py:897
+#. FIXME: instead of error out, fetch and install it
+#. here
+#: ../DistUpgrade/DistUpgradeControler.py:1041
+msgid "Required depends is not installed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeControler.py:1042
 #, python-format
-msgid "Fetching backport of '%s'"
-msgstr "%s'-ის მიღება backport-იდან"
+msgid "The required dependency '%s' is not installed. "
+msgstr ""
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeControler.py:932
-#: ../DistUpgrade/DistUpgradeControler.py:975
+#: ../DistUpgrade/DistUpgradeControler.py:1133
+#: ../DistUpgrade/DistUpgradeControler.py:1190
 msgid "Checking package manager"
 msgstr "პროგრამული მენეჯერის შემოწმება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:937
+#: ../DistUpgrade/DistUpgradeControler.py:1138
 msgid "Preparing the upgrade failed"
 msgstr "შეცდომა განახლების მომზადებისას"
 
-#: ../DistUpgrade/DistUpgradeControler.py:938
+#: ../DistUpgrade/DistUpgradeControler.py:1139
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
@@ -408,15 +427,32 @@ msgstr ""
 "მოხდა დაუდგენელი შეცდომა განახლების მომზადებისას. შეატყობინეთ 'update-"
 "manager'-ის ეს ხარვეზი, ანგარიშს დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
 
-#: ../DistUpgrade/DistUpgradeControler.py:961
+#: ../DistUpgrade/DistUpgradeControler.py:1154
+#, fuzzy
+msgid "Getting upgrade pre-requists failed"
+msgstr "შეცდომა განახლების მომზადებისას"
+
+#: ../DistUpgrade/DistUpgradeControler.py:1155
+#, fuzzy
+msgid ""
+"The system was unable to get the pre-requists for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"Please report this as a bug against the 'update-manager' package and include "
+"the files in /var/log/dist-upgrade/ in the bugreport."
+msgstr ""
+"მოხდა დაუდგენელი შეცდომა განახლების მომზადებისას. შეატყობინეთ 'update-"
+"manager'-ის ეს ხარვეზი, ანგარიშს დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
+
+#: ../DistUpgrade/DistUpgradeControler.py:1176
 msgid "Updating repository information"
 msgstr "რეპოზიტორიის ინფორმაციის განახლება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:986
+#: ../DistUpgrade/DistUpgradeControler.py:1201
 msgid "Invalid package information"
 msgstr "ინფორმაცია პაკეტის შესახებ არასწორია"
 
-#: ../DistUpgrade/DistUpgradeControler.py:987
+#: ../DistUpgrade/DistUpgradeControler.py:1202
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -430,51 +466,56 @@ msgstr ""
 "ეს სერიოზული შეცდომაა, შეატყობინეთ 'update-manager'-ის ეს ხარვეზი, ანგარიშს "
 "დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
 
-#: ../DistUpgrade/DistUpgradeControler.py:999
+#. calc the dist-upgrade and see if the removals are ok/expected
+#. do the dist-upgrade
+#: ../DistUpgrade/DistUpgradeControler.py:1213
 msgid "Asking for confirmation"
 msgstr "დასტურის მოთხოვნა"
 
-#. no do the upgrade
-#: ../DistUpgrade/DistUpgradeControler.py:1006
+#: ../DistUpgrade/DistUpgradeControler.py:1219 ../update-manager:83
+msgid "Fetching"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeControler.py:1228 ../update-manager:87
 msgid "Upgrading"
 msgstr "მიმდინარეობს განახლება"
 
-#: ../DistUpgrade/DistUpgradeControler.py:1013
+#: ../DistUpgrade/DistUpgradeControler.py:1235
 msgid "Searching for obsolete software"
 msgstr "მოძველებული პროდუქტების ძებნა"
 
-#: ../DistUpgrade/DistUpgradeControler.py:1018
+#: ../DistUpgrade/DistUpgradeControler.py:1240
 msgid "System upgrade is complete."
 msgstr "სისტემის განახლება დასრულებულია."
 
 #. print "mediaChange %s %s" % (medium, drive)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:101
-#: ../DistUpgrade/DistUpgradeViewKDE.py:110
+#: ../DistUpgrade/DistUpgradeViewGtk.py:107
+#: ../DistUpgrade/DistUpgradeViewKDE.py:113
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "ჩადევით '%s'  '%s'-ში"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:119
-#: ../DistUpgrade/DistUpgradeViewKDE.py:123
+#: ../DistUpgrade/DistUpgradeViewGtk.py:126
+#: ../DistUpgrade/DistUpgradeViewKDE.py:126
 msgid "Fetching is complete"
 msgstr "ჩატვირთვა დასრულებულია"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:130
-#: ../DistUpgrade/DistUpgradeViewKDE.py:136
+#: ../DistUpgrade/DistUpgradeViewGtk.py:138
+#: ../DistUpgrade/DistUpgradeViewKDE.py:139
 #, python-format
 msgid "Fetching file %li of %li at %sb/s"
 msgstr "იტვირთება %li ფაილი %li-დან, სიჩქარე - %s ბ/წმ"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:131
-#: ../DistUpgrade/DistUpgradeViewGtk.py:257
-#: ../DistUpgrade/DistUpgradeViewKDE.py:137
-#: ../DistUpgrade/DistUpgradeViewKDE.py:256
+#: ../DistUpgrade/DistUpgradeViewGtk.py:139
+#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewKDE.py:140
+#: ../DistUpgrade/DistUpgradeViewKDE.py:258
 #, python-format
 msgid "About %s remaining"
 msgstr "დარჩა დაახლოებით %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:133
-#: ../DistUpgrade/DistUpgradeViewKDE.py:139
+#: ../DistUpgrade/DistUpgradeViewGtk.py:141
+#: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "იტვირთება %li ფაილი %li-დან"
@@ -482,29 +523,28 @@ msgstr "იტვირთება %li ფაილი %li-დან"
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
-#: ../DistUpgrade/DistUpgradeViewGtk.py:166
-#: ../DistUpgrade/DistUpgradeViewKDE.py:168
+#: ../DistUpgrade/DistUpgradeViewGtk.py:174
+#: ../DistUpgrade/DistUpgradeViewKDE.py:171
 msgid "Applying changes"
 msgstr "ცვლილებების დამტკიცება"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:191
-#: ../DistUpgrade/DistUpgradeViewKDE.py:183
+#: ../DistUpgrade/DistUpgradeViewGtk.py:199
+#: ../DistUpgrade/DistUpgradeViewKDE.py:182
 #, python-format
 msgid "Could not install '%s'"
 msgstr "ვერ დადგა '%s'"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:192
-#: ../DistUpgrade/DistUpgradeViewKDE.py:184
+#: ../DistUpgrade/DistUpgradeViewGtk.py:200
+#: ../DistUpgrade/DistUpgradeViewKDE.py:183
+#, python-format
 msgid ""
-"The upgrade aborts now. Please report this bug against the 'update-manager' "
-"package and include the files in /var/log/dist-upgrade/ in the bugreport."
+"The upgrade will continue but the '%s' package may be in a not working "
+"state. Please consider submitting a bugreport about it."
 msgstr ""
-"განახლება შეწყვეტილია. შეატყობინეთ 'update-manager'-ის ეს ხარვეზი, ანგარიშს "
-"დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
 
 #. self.expander.set_expanded(True)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:207
-#: ../DistUpgrade/DistUpgradeViewKDE.py:202
+#: ../DistUpgrade/DistUpgradeViewGtk.py:216
+#: ../DistUpgrade/DistUpgradeViewKDE.py:201
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -513,8 +553,8 @@ msgstr ""
 "გადავაწეროთ ადრინდელს განახლებული კონფიგურაციის ფაილი\n"
 "'%s'?"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:208
-#: ../DistUpgrade/DistUpgradeViewKDE.py:203
+#: ../DistUpgrade/DistUpgradeViewGtk.py:217
+#: ../DistUpgrade/DistUpgradeViewKDE.py:202
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -522,16 +562,16 @@ msgstr ""
 "თუ დაეთანხმებით, კონფიგურაციის ფაილში თქვენს მიერ ადრე შეტანილი ცვლილებები "
 "დაიკარგება."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:221
-#: ../DistUpgrade/DistUpgradeViewKDE.py:216
+#: ../DistUpgrade/DistUpgradeViewGtk.py:230
+#: ../DistUpgrade/DistUpgradeViewKDE.py:215
 msgid "The 'diff' command was not found"
 msgstr "'diff' ბრძანება ვერ მოინახა"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:393
+#: ../DistUpgrade/DistUpgradeViewGtk.py:402
 msgid "A fatal error occured"
 msgstr "ფატალური შეცდომა"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:394
+#: ../DistUpgrade/DistUpgradeViewGtk.py:403
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
 "var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
@@ -545,28 +585,28 @@ msgstr ""
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:528
-#: ../DistUpgrade/DistUpgradeViewKDE.py:547
+#: ../DistUpgrade/DistUpgradeViewGtk.py:537
+#: ../DistUpgrade/DistUpgradeViewKDE.py:550
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "წაიშლება %d პაკეტი."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:533
-#: ../DistUpgrade/DistUpgradeViewKDE.py:552
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
+#: ../DistUpgrade/DistUpgradeViewKDE.py:555
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "დადგება %d ახალი პაკეტი."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:539
-#: ../DistUpgrade/DistUpgradeViewKDE.py:558
+#: ../DistUpgrade/DistUpgradeViewGtk.py:548
+#: ../DistUpgrade/DistUpgradeViewKDE.py:561
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "განახლდება %d პაკეტი."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:544
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #, python-format
 msgid ""
 "\n"
@@ -577,9 +617,9 @@ msgstr ""
 "\n"
 "სულ გადმოიტვირთება %s. "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:550
-#: ../DistUpgrade/DistUpgradeViewKDE.py:578
-#: ../DistUpgrade/DistUpgradeViewKDE.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:559
+#: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewKDE.py:589
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
@@ -587,71 +627,71 @@ msgstr ""
 "განახლების გადმოტვირთვასა და დაყენებას სჭირდება რამდენიმე საათი და მისი "
 "შეწყვეტა არ არის სასურველი."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:553
-#: ../DistUpgrade/DistUpgradeViewKDE.py:581
-#: ../DistUpgrade/DistUpgradeViewKDE.py:589
+#: ../DistUpgrade/DistUpgradeViewGtk.py:562
+#: ../DistUpgrade/DistUpgradeViewKDE.py:584
+#: ../DistUpgrade/DistUpgradeViewKDE.py:592
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "დახურეთ გახსნილი პროგრამები და დოკუმენტები, მონაცემების დაკარგვის თავიდან "
 "ასაცილებლად."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:559
-#: ../DistUpgrade/DistUpgradeViewKDE.py:595
-#: ../UpdateManager/UpdateManager.py:635
+#: ../DistUpgrade/DistUpgradeViewGtk.py:568
+#: ../DistUpgrade/DistUpgradeViewKDE.py:598
+#: ../UpdateManager/UpdateManager.py:658
 msgid "Your system is up-to-date"
 msgstr "თქვენი სისტემა განახლებულია"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
-#: ../DistUpgrade/DistUpgradeViewKDE.py:596
+#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewKDE.py:599
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
 msgstr "თქვენი სისტემისათვის არ არის განახლებები. პროცედურა შეწყვეტილია."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:576
+#: ../DistUpgrade/DistUpgradeViewGtk.py:585
 #, python-format
 msgid "<b>Remove %s</b>"
 msgstr "<b> ამოშლა %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:578
-#: ../DistUpgrade/DistUpgradeViewKDE.py:619
+#: ../DistUpgrade/DistUpgradeViewGtk.py:587
+#: ../DistUpgrade/DistUpgradeViewKDE.py:622
 #, python-format
 msgid "Install %s"
 msgstr "ინსტალაცია %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:580
-#: ../DistUpgrade/DistUpgradeViewKDE.py:621
+#: ../DistUpgrade/DistUpgradeViewGtk.py:589
+#: ../DistUpgrade/DistUpgradeViewKDE.py:624
 #, python-format
 msgid "Upgrade %s"
 msgstr "განახლდება %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:111
+#: ../DistUpgrade/DistUpgradeViewKDE.py:114
 msgid "Media Change"
 msgstr "მედიის შეცვლა"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:444
+#: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Terminal >>>"
 msgstr "აჩვენე ტერმინალი >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:447
+#: ../DistUpgrade/DistUpgradeViewKDE.py:450
 msgid "<<< Hide Terminal"
 msgstr "<<< დამალე ტერმინალი"
 
 #. string = _("<p>You have to download a total of %s. ")
 #. msg += string % apt_pkg.SizeToStr(downloadSize)
-#. msg += _("<p>You have to download a total of %s. ") %#: ../DistUpgrade/DistUpgradeViewKDE.py:564
-#: ../DistUpgrade/DistUpgradeViewKDE.py:570
+#. msg += _("<p>You have to download a total of %s. ") %#: ../DistUpgrade/DistUpgradeViewKDE.py:567
+#: ../DistUpgrade/DistUpgradeViewKDE.py:573
 #, python-format
 msgid "<p>You have to download a total of %s. "
 msgstr "<p>სულ გადმოიტვირთება %s. "
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:617
+#: ../DistUpgrade/DistUpgradeViewKDE.py:620
 #, fuzzy, python-format
 msgid "Remove %s"
 msgstr "_წაშლა"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:637
+#: ../DistUpgrade/DistUpgradeViewKDE.py:640
 #: ../DistUpgrade/DistUpgrade.glade.h:2
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
@@ -664,7 +704,7 @@ msgstr ""
 "განახლების შეწყვეტამ შეიძლება სისტემას მუშაობის უნარი დაუკარგოს. დაბეჯითებით "
 "გირჩევთ არ შეწყვიტოთ განახლების პროცესი."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:641
+#: ../DistUpgrade/DistUpgradeViewKDE.py:644
 #, fuzzy
 msgid "Cancel Upgrade?"
 msgstr "განახლების _შეწყვეტა"
@@ -699,11 +739,11 @@ msgid ""
 msgstr ""
 "ჩამოტვირთვის ხანგრძლივობა: %s - 1Mbit DSL-სათვის,  %s 56k-მოდემისათვის."
 
-#: ../DistUpgrade/DistUpgradeView.py:147
+#: ../DistUpgrade/DistUpgradeView.py:150
 msgid "Reboot required"
 msgstr "საჭიროა გადატვირთვა"
 
-#: ../DistUpgrade/DistUpgradeView.py:148
+#: ../DistUpgrade/DistUpgradeView.py:151
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr "განახლება დასრულდა, საჭიროა გადატვირთვა. გადავიტვირთოთ ახლა?"
@@ -751,7 +791,7 @@ msgstr "<b><big>განახლების დაწყება</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
 #, fuzzy
-msgid "<b><big>Upgrading Ubuntu to version 7.04</big></b>"
+msgid "<b><big>Upgrading Ubuntu to version 7.10</big></b>"
 msgstr "<b><big>Ubuntu-ს განახლება 6.10 ვერსიამდე</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
@@ -767,73 +807,84 @@ msgid "Difference between the files"
 msgstr "განსხვავება ფაილებს შორის"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:11
-msgid "Fetching and installing the upgrades"
-msgstr "მიმდინარეობს განახლებების ჩამოქაჩვა და დაყენება"
+#, fuzzy
+msgid "Distribution Upgrade"
+msgstr "_დისტრიბუტივის განახლება"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:12
+#, fuzzy
+msgid "Fetching the upgrades"
+msgstr "განახლებისათვის მომზადება"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:13
+#, fuzzy
+msgid "Installing the upgrades"
+msgstr "მიმდინარეობს განახლებების ჩამოქაჩვა და დაყენება"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:14
 #, fuzzy
 msgid "Modifying the software channels"
 msgstr "პროგრამების მიღების არხების შეცვლა"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:13
+#: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Preparing the upgrade"
 msgstr "განახლებისათვის მომზადება"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:14
+#: ../DistUpgrade/DistUpgrade.glade.h:16
 msgid "Restarting the system"
 msgstr "სისტემის გადატვირთვა"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:15
+#: ../DistUpgrade/DistUpgrade.glade.h:17
 msgid "Terminal"
 msgstr "ტერმინალი"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:16
+#: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
 msgstr "განახლების _შეწყვეტა"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:17
+#: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
 msgstr "_გაგრძელება"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:18
+#: ../DistUpgrade/DistUpgrade.glade.h:20
 #, fuzzy
 msgid "_Keep"
 msgstr "_შენარჩუნება"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:19
+#: ../DistUpgrade/DistUpgrade.glade.h:21
 msgid "_Replace"
 msgstr "_ჩანაცვლება"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:20
+#: ../DistUpgrade/DistUpgrade.glade.h:22
 msgid "_Report Bug"
 msgstr "_ხარვეზის ანგარიშის გაგზავნა"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:21
+#: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
 msgstr "_გადატვირთვა"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:22
+#: ../DistUpgrade/DistUpgrade.glade.h:24
 msgid "_Resume Upgrade"
 msgstr "განახლების _გაგრძელება"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:23
+#: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
 msgstr "განახლების _დაწყება"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:87
+#: ../UpdateManager/DistUpgradeFetcher.py:90
 #, fuzzy
 msgid "Could not find the release notes"
 msgstr "ვერ მოინახა ვერსიის შენიშვნები"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:88
+#: ../UpdateManager/DistUpgradeFetcher.py:91
 msgid "The server may be overloaded. "
 msgstr "შესაძლებელია სერვერი გადატვირთულია. "
 
-#: ../UpdateManager/DistUpgradeFetcher.py:98
+#: ../UpdateManager/DistUpgradeFetcher.py:101
 msgid "Could not download the release notes"
 msgstr "შეუძლებელია ვერსიის შენიშვნების გადმოწერა"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:99
+#: ../UpdateManager/DistUpgradeFetcher.py:102
 msgid "Please check your internet connection."
 msgstr "შეამოწმეთ ინტერნეტ-კავშირი."
 
@@ -847,11 +898,11 @@ msgstr "მე-%(current)li ფაილის გადმოწერა %(tot
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "მე-%(current)li ფაილის გადმოწერა %(total)li-დან"
 
-#: ../UpdateManager/UpdateManager.py:209
+#: ../UpdateManager/UpdateManager.py:235
 msgid "The list of changes is not available"
 msgstr "ცვლილებების სია არ არის ხელმისაწვდომი."
 
-#: ../UpdateManager/UpdateManager.py:215
+#: ../UpdateManager/UpdateManager.py:241
 msgid ""
 "The list of changes is not available yet.\n"
 "Please try again later."
@@ -859,7 +910,7 @@ msgstr ""
 "ცვლილებების სია ჯერჯერობით არ არის ხელმისაწვდომი.\n"
 "სცადეთ მოგვიანებით."
 
-#: ../UpdateManager/UpdateManager.py:220
+#: ../UpdateManager/UpdateManager.py:246
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
@@ -867,84 +918,83 @@ msgstr ""
 "ვერ განხორციელდა ცვლილებების სიის გადმოწერა.\n"
 "შეამოწმეთ ინტერნეტ-კავშირი."
 
-#: ../UpdateManager/UpdateManager.py:241
+#: ../UpdateManager/UpdateManager.py:273
 msgid "Important security updates"
 msgstr "უსაფრთხოებისთვის მნიშვნელოვანი განახლებები"
 
-#: ../UpdateManager/UpdateManager.py:243
+#: ../UpdateManager/UpdateManager.py:274
 msgid "Recommended updates"
 msgstr "რეკომენდებული განახლებები"
 
-#: ../UpdateManager/UpdateManager.py:244
+#: ../UpdateManager/UpdateManager.py:275
 msgid "Proposed updates"
 msgstr "შემოთავაზებული განახლებები"
 
-#: ../UpdateManager/UpdateManager.py:245
+#: ../UpdateManager/UpdateManager.py:276
 #, fuzzy
 msgid "Backports"
 msgstr "ბექპორტები"
 
-#: ../UpdateManager/UpdateManager.py:246
+#: ../UpdateManager/UpdateManager.py:277
 msgid "Distribution updates"
 msgstr "დისტრიბუტივის განახლებები"
 
-#. TRANSLATORS: updates from an 'unknown' origin
-#: ../UpdateManager/UpdateManager.py:253 ../UpdateManager/UpdateManager.py:270
+#: ../UpdateManager/UpdateManager.py:282
 msgid "Other updates"
 msgstr "სხვა განახლებები"
 
-#: ../UpdateManager/UpdateManager.py:485
+#: ../UpdateManager/UpdateManager.py:508
 #, python-format
 msgid "Version %s: \n"
 msgstr "ვერსია %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:546
+#: ../UpdateManager/UpdateManager.py:569
 msgid "Downloading list of changes..."
 msgstr "მიმდინარეობს ცვლილებათა სიის გადმოწერა..."
 
-#: ../UpdateManager/UpdateManager.py:573
+#: ../UpdateManager/UpdateManager.py:596
 msgid "_Uncheck All"
 msgstr "_ყველას გაუქმება"
 
-#: ../UpdateManager/UpdateManager.py:579
+#: ../UpdateManager/UpdateManager.py:602
 msgid "_Check All"
 msgstr "_ყველას მონიშვნა"
 
 #. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:623 ../UpdateManager/UpdateManager.py:650
+#: ../UpdateManager/UpdateManager.py:646 ../UpdateManager/UpdateManager.py:673
 #, python-format
 msgid "Download size: %s"
 msgstr "ჩამოსატვირთის ზომა: %s"
 
-#: ../UpdateManager/UpdateManager.py:627
+#: ../UpdateManager/UpdateManager.py:650
 msgid "Unknown download size"
 msgstr "ჩამოსატვირთი მონაცემების გაურკვეველი ზომა"
 
-#: ../UpdateManager/UpdateManager.py:646
+#: ../UpdateManager/UpdateManager.py:669
 #, python-format
 msgid "You can install %s update"
 msgid_plural "You can install %s updates"
 msgstr[0] "თქვენ შეგიძლიათ %s განახლების ჩადგმა"
 
-#: ../UpdateManager/UpdateManager.py:679
+#: ../UpdateManager/UpdateManager.py:702
 msgid "Please wait, this can take some time."
 msgstr "გთხოვთ მოითმინოთ, მიმდინარე პროცესს საკმაო დრო სჭირდება."
 
-#: ../UpdateManager/UpdateManager.py:681
+#: ../UpdateManager/UpdateManager.py:704
 #, fuzzy
 msgid "Update is complete"
 msgstr "განახლება დასრულებულია"
 
-#: ../UpdateManager/UpdateManager.py:732
+#: ../UpdateManager/UpdateManager.py:756
 msgid "Checking for updates"
 msgstr "განახლებების არსებობის შემოწმება"
 
-#: ../UpdateManager/UpdateManager.py:827
+#: ../UpdateManager/UpdateManager.py:851
 #, fuzzy
 msgid "Could not initialize the package information"
 msgstr "ინფორმაცია პაკეტის შესახებ ვერ ინიციალიზდება"
 
-#: ../UpdateManager/UpdateManager.py:828
+#: ../UpdateManager/UpdateManager.py:852
 #, fuzzy
 msgid ""
 "A unresolvable problem occurred while initializing the package information.\n"
@@ -957,7 +1007,7 @@ msgstr ""
 "შეატყობინეთ ეს ხარვეზი 'update-manager' პაკეტის საშუალებით, შეტყობინებას "
 "დაურთეთ შემდეგი ინფორმაცია:\n"
 
-#: ../UpdateManager/UpdateManager.py:850
+#: ../UpdateManager/UpdateManager.py:874
 #, fuzzy
 msgid ""
 "A unresolvable problem occurred while calculating the upgrade.\n"
@@ -970,27 +1020,27 @@ msgstr ""
 "შეატყობინეთ ეს ხარვეზი 'update-manager' პაკეტის საშუალებით, შეტყობინებას "
 "დაურთეთ შემდეგი ინფორმაცია"
 
-#: ../UpdateManager/UpdateManager.py:875
+#: ../UpdateManager/UpdateManager.py:899
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "%(old_version)s ვერსიიდან %(new_version)s-მდე"
 
-#: ../UpdateManager/UpdateManager.py:879
+#: ../UpdateManager/UpdateManager.py:903
 #, python-format
 msgid "Version %s"
 msgstr "ვერსია %s"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:881
+#: ../UpdateManager/UpdateManager.py:905
 #, python-format
 msgid "(Size: %s)"
 msgstr "(ზომა: %s)"
 
-#: ../UpdateManager/UpdateManager.py:892
+#: ../UpdateManager/UpdateManager.py:916
 msgid "Your distribution is not supported anymore"
 msgstr "თქვენს დისტრიბუტივს აღარ გააჩნია მხარდაჭერა"
 
-#: ../UpdateManager/UpdateManager.py:893
+#: ../UpdateManager/UpdateManager.py:917
 msgid ""
 "You will not get any further security fixes or critical updates. Upgrade to "
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
@@ -1000,26 +1050,26 @@ msgstr ""
 "განაახლეთ სისტემა უბუნტუ-ლინუქსის ახალ ვერსიამდე. იხილეთ http://www.ubuntu."
 "com."
 
-#: ../UpdateManager/UpdateManager.py:908
+#: ../UpdateManager/UpdateManager.py:932
 #, fuzzy
 msgid "Downloading the upgrade tool"
 msgstr "მიმდინარეობს განახლების უტილიტის გადმოწერა"
 
-#: ../UpdateManager/UpdateManager.py:910
+#: ../UpdateManager/UpdateManager.py:934
 msgid "The upgrade tool will guide you through the upgrade process."
 msgstr "განახლების უტილიტა დაგეხმარებათ განახლების მიმდინარეობისას."
 
-#: ../UpdateManager/UpdateManager.py:918
+#: ../UpdateManager/UpdateManager.py:942
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr "<b>ხელმისწვდომია ახალი გამოშვება '%s'</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:957
+#: ../UpdateManager/UpdateManager.py:981
 msgid "Software index is broken"
 msgstr "პროგრამების სიის ინდექსი დაზიანებულია"
 
-#: ../UpdateManager/UpdateManager.py:958
+#: ../UpdateManager/UpdateManager.py:982
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1028,37 +1078,37 @@ msgstr ""
 "შეუძლებელია პროგრამების დაყენება ან წაშლა. ჯერ გამოასწორეთ დეფექტი პაკეტების "
 "მენეჯერით Synaptic ან ტერმინალში \"sudo apt-get install -f\" ბრძანებით."
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:112
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:114
 msgid "Could not run the upgrade tool"
 msgstr "განახლების უტილიტა ვერ გაიშვა"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:113
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:115
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
 "როგორც სჩანს, ეს განახლების უტილიტის ბრალია. გაგზავნეთ ხარვეზის შეტყობინება"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:129
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
 msgid "Upgrade tool signature"
 msgstr "განახლების უტილიტის ხელმოწერა"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:132
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:138
 msgid "Upgrade tool"
 msgstr "განახლების უტილიტა"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:156
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:162
 msgid "Failed to fetch"
 msgstr "მიღება ვერ მოხერხდა"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:157
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:163
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr "ვერ მოხერხდა განახლების მიღება. შესაძლოა ქსელის პრობლემა იყოს. "
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:161
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:167
 msgid "Failed to extract"
 msgstr "განარქივება ვერ განხორციელდა"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:162
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:168
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -1066,11 +1116,11 @@ msgstr ""
 "განახლების განარქივება ვერ განხორციელდა. შესაძლოა ქსელის ან სერვერის "
 "პრობლემა იყოს. "
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:167
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:173
 msgid "Verfication failed"
 msgstr "შეცდომა გადამოწმებისას"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:168
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
@@ -1078,12 +1128,12 @@ msgstr ""
 "განახლების შეჯერება წარუმატებლად დამთავრდა. შესაძლოა ქსელის ან სერვერის "
 "პრობლემა იყოს. "
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:173
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:179
 #, fuzzy
 msgid "Authentication failed"
 msgstr "აუთენტიფიკაცია ვერ მოხერხდა"
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:180
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -1280,11 +1330,11 @@ msgstr ""
 msgid "Running partial upgrade"
 msgstr "განახლების _დაწყება"
 
-#: ../update-manager:87
+#: ../update-manager:92
 msgid "Upgrade complete"
 msgstr "განახლება დასრულებულია"
 
-#: ../update-manager:88
+#: ../update-manager:93
 #, fuzzy
 msgid "The upgrade was completed."
 msgstr "სისტემის განახლება დასრულებულია."
@@ -1306,6 +1356,17 @@ msgstr "დისტრიბუტივის ახალი გამოშ�
 msgid "No new release found"
 msgstr ""
 
+#~ msgid "Fetching backport of '%s'"
+#~ msgstr "%s'-ის მიღება backport-იდან"
+
+#~ msgid ""
+#~ "The upgrade aborts now. Please report this bug against the 'update-"
+#~ "manager' package and include the files in /var/log/dist-upgrade/ in the "
+#~ "bugreport."
+#~ msgstr ""
+#~ "განახლება შეწყვეტილია. შეატყობინეთ 'update-manager'-ის ეს ხარვეზი, "
+#~ "ანგარიშს დაურთეთ ფაილები /var/log/dist-upgrade/-დან."
+
 #, fuzzy
 #~ msgid "Fetching file %li of %li at %s/s"
 #~ msgstr "იტვირთება %li ფაილი %li-დან, სიჩქარე - %s/წმ"
@@ -1323,9 +1384,6 @@ msgstr ""
 #~ "რომლებიც არ არის ამ CD-ზე.\n"
 #~ "დაეთანხმეთ განახლების მიღებას, ან უარი თქვით, თუ თქვენი ქსელი ძალიან "
 #~ "ნელია ან ძვირი."
-
-#~ msgid "_Distribution Upgrade"
-#~ msgstr "_დისტრიბუტივის განახლება"
 
 #~ msgid "Changes and description of the update"
 #~ msgstr "განახლების აღწერა და ცვლილებები"

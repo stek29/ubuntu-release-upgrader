@@ -3,10 +3,7 @@
 from distutils.core import setup, Extension
 import glob
 import os
-from DistUtilsExtra.distutils_extra import build_extra, build_l10n, \
-                                           build_icons, build_help
-
-
+from DistUtilsExtra.command import *
 
 setup(name='update-manager',
       version='0.56',
@@ -30,8 +27,8 @@ setup(name='update-manager',
                    glob.glob("DistUpgrade/*.cfg")
                   ),
                   ],
-      cmdclass = { "build" : build_extra,
-                   "build_l10n" :  build_l10n,
-                   "build_help" :  build_help,
-                   "build_icons" :  build_icons }
-     )
+      cmdclass = { "build" : build_extra.build_extra,
+                   "build_i18n" :  build_i18n.build_i18n,
+                   "build_help" :  build_help.build_help,
+                   "build_icons" :  build_icons.build_icons }
+      )

@@ -67,7 +67,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
     def showReleaseNotes(self):
       # FIXME: care about i18n! (append -$lang or something)
       if self.new_dist.releaseNotesURI != None:
-          uri = self.new_dist.releaseNotesURI
+          uri = self._expandUri(self.new_dist.releaseNotesURI)
           self.window_main.set_sensitive(False)
           self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
           while gtk.events_pending():

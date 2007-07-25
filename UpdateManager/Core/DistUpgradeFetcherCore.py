@@ -20,6 +20,7 @@
 #  USA
 
 
+from string import Template
 import os
 import apt_pkg
 import apt
@@ -115,21 +116,25 @@ class DistUpgradeFetcherCore(object):
                           "Please report it as a bug"))
         return True
 
+    def _expandUri(self, uri):
+        uri_template = Template(uri)
+        m = os.environ['LANG'][:2]+"."
+        if m == 'C.':
+            m=''
+        return uri_template.safe_substitute(countrymirror=m)
+
     def fetchDistUpgrader(self):
-        # now download the tarball with the upgrade script
+        " download the tarball with the upgrade script "
         self.tmpdir = tmpdir = tempfile.mkdtemp()
         os.chdir(tmpdir)
-
         # turn debugging on here (if required)
         #apt_pkg.Config.Set("Debug::Acquire::http","1")
-
         fetcher = apt_pkg.GetAcquire(self._progress)
-
         if self.new_dist.upgradeToolSig != None:
-            uri = self.new_dist.upgradeToolSig
+            uri = self._expandUri(self.new_dist.upgradeToolSig)
             af = apt_pkg.GetPkgAcqFile(fetcher,uri, descr=_("Upgrade tool signature"))
         if self.new_dist.upgradeTool != None:
-            self.uri = self.new_dist.upgradeTool
+            self.uri = self._expandUri(self.new_dist.upgradeTool)
             af = apt_pkg.GetPkgAcqFile(fetcher,self.uri, descr=_("Upgrade tool"))
             if fetcher.Run() != fetcher.ResultContinue:
                 return False

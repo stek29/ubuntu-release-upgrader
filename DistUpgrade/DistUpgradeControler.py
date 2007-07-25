@@ -723,6 +723,8 @@ class DistUpgradeControler(object):
     def doDistUpgradeFetching(self):
         if self.options and self.options.havePrerequists:
             backportsdir = os.getcwd()+"/backports"
+            logging.info("using backports in '%s' " % backportsdir)
+            logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
             if os.path.exists(backportsdir+"/usr/bin/dpkg"):
                 apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
@@ -1067,8 +1069,6 @@ class DistUpgradeControler(object):
         os.chdir(backportsdir)
         apt_pkg.Config.Set("Dir::Cache::archives",backportsdir)
 
-        # mark the backports for upgrade and get them
-        fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
         # FIXME: rewrite the thing so that the regular fetch/commit
         #        interface is used. that is no problem because we
         #        use a release-upgrader-$foo prefix for the pacakges
@@ -1081,7 +1081,7 @@ class DistUpgradeControler(object):
                 continue
             pkg = self.cache[pkgname]
             # look for the right version (backport)
-            ver = cache._depcache.CandidateVer(pkg._pkg)
+            ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
             if not ver:
                 logging.error("No candidate for '%s'" % pkgname)
                 res = False
@@ -1090,32 +1090,24 @@ class DistUpgradeControler(object):
                 logging.error("No ver.FileList for '%s'" % pkgname)
                 res = False
                 continue
-            f, index = ver.FileList.pop(0)
-            pkg._records.Lookup((f,index))
-            path = apt_pkg.ParseSection(pkg._records.Record)["Filename"]
-            for (packagefile,i) in ver.FileList:
-		indexfile = self.cache._list.FindIndex(packagefile)
-		if indexfile:
-                    match = re.match(r"<.*ArchiveURI='(.*)'>$",
-                                    str(indexfile))
-                    if match:
-                        uri = match.group(1) + path
-                        apt_pkg.GetPkgAcqFile(fetcher, uri=uri,
-                                              size=ver.Size,
-                                              descr=_("Fetching backport of '%s'") % pkgname)
-        res = fetcher.Run()
-        if res != fetcher.ResultContinue:
-            # ick! error ...
-            res = False
+            pkg.markInstall()
 
+        # mark the backports for upgrade and get them
+        fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
+        pm = apt_pkg.GetPackageManager(self.cache._depcache)
+        try:
+            res = True
+            self.cache._fetchArchives(fetcher, pm)
+        except IOError, e:
+            res = False
         # reset the cache dir
         os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)
         os.chdir(cwd)
         # unpack it
-        for deb in glob.glob(backportsdir+"/*.deb"):
-            ret = os.system("dpkg-deb -x %s %s" % (deb, backportsdir))
-            # FIXME: do error checking
+        for deb in glob.glob(backportsdir+"/*.udeb"):
+            if os.system("dpkg-deb -x %s %s" % (deb, backportsdir)) != 0:
+                res = False
         if res:
             return self.setupRequiredBackports(backportsdir)
         return res

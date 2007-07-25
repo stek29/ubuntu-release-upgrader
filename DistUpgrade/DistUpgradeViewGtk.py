@@ -96,27 +96,35 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
         self.status = parent.label_status
         self.progress = parent.progressbar_cache
         self.parent = parent
+        self.canceled = False
+        self.button_cancel = parent.button_fetch_cancel
+        self.button_cancel.connect('clicked', self.cancelClicked)
+    def cancelClicked(self, widget):
+        logging.debug("cancelClicked")
+        self.canceled = True
     def mediaChange(self, medium, drive):
-      #print "mediaChange %s %s" % (medium, drive)
-      msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
-      dialog = gtk.MessageDialog(parent=self.parent.window_main,
-                                 flags=gtk.DIALOG_MODAL,
-                                 type=gtk.MESSAGE_QUESTION,
-                                 buttons=gtk.BUTTONS_OK_CANCEL)
-      dialog.set_markup(msg)
-      res = dialog.run()
-      #print res
-      dialog.destroy()
-      if  res == gtk.RESPONSE_OK:
-        return True
-      return False
+        #print "mediaChange %s %s" % (medium, drive)
+        msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
+        dialog = gtk.MessageDialog(parent=self.parent.window_main,
+                                   flags=gtk.DIALOG_MODAL,
+                                   type=gtk.MESSAGE_QUESTION,
+                                   buttons=gtk.BUTTONS_OK_CANCEL)
+        dialog.set_markup(msg)
+        res = dialog.run()
+        dialog.destroy()
+        if res == gtk.RESPONSE_OK:
+            return True
+        return False
     def start(self):
-        #self.progress.show()
+        logging.debug("start")
         self.progress.set_fraction(0)
         self.status.show()
+        self.button_cancel.show()
     def stop(self):
+        logging.debug("stop")
         self.progress.set_text(" ")
         self.status.set_text(_("Fetching is complete"))
+        self.button_cancel.hide()
     def pulse(self):
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
@@ -135,7 +143,7 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
 
         while gtk.events_pending():
             gtk.main_iteration()
-        return True
+        return (not self.canceled)
 
 class GtkInstallProgressAdapter(InstallProgress):
     # timeout with no status change when the terminal is expanded
@@ -189,8 +197,9 @@ class GtkInstallProgressAdapter(InstallProgress):
         #self.expander_terminal.set_expanded(True)
         self.parent.dialog_error.set_transient_for(self.parent.window_main)
         summary = _("Could not install '%s'") % pkg
-        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
-                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
+        msg = _("The upgrade will continue but the '%s' package may be "
+                "in a not working state. Please consider submitting a "
+                "bugreport about it.") % pkg
         markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
         self.parent.dialog_error.realize()
         self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)

@@ -180,10 +180,10 @@ class KDEInstallProgressAdapter(InstallProgress):
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         summary = _("Could not install '%s'") % pkg
-        msg = _("The upgrade aborts now. Please report this bug against the 'update-manager' "
-                "package and include the files in /var/log/dist-upgrade/ in the bugreport.")
+        msg = _("The upgrade will continue but the '%s' package may be "
+                "in a not working state. Please consider submitting a "
+                "bugreport about it.") % pkg
         msg = "<big><b>%s</b></big><br />%s" % (summary, msg)
-
         dialogue = dialog_error(self.parent.window_main)
         dialogue.label_error.setText(utf8(msg))
         if errormsg != None:

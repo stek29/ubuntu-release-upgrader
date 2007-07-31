@@ -25,12 +25,15 @@ import os
 import apt_pkg
 import apt
 import tarfile
+import socket
+import urlparse
 import urllib2
 import tempfile
 import shutil
+import sys
 import GnuPGInterface
 from gettext import gettext as _
-
+from UpdateManager.Common.utils import country_mirror
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "
@@ -96,7 +99,10 @@ class DistUpgradeFetcherCore(object):
 
     def extractDistUpgrader(self):
           # extract the tarbal
-          print "extracting '%s'" % (self.tmpdir+"/"+os.path.basename(self.uri))
+          fname = os.path.join(self.tmpdir,os.path.basename(self.uri))
+          print "extracting '%s'" % fname
+          if not os.path.exists(fname):
+              return False
           tar = tarfile.open(self.tmpdir+"/"+os.path.basename(self.uri),"r")
           for tarinfo in tar:
               tar.extract(tarinfo)
@@ -118,10 +124,16 @@ class DistUpgradeFetcherCore(object):
 
     def _expandUri(self, uri):
         uri_template = Template(uri)
-        m = os.environ['LANG'][:2]+"."
-        if m == 'C.':
-            m=''
-        return uri_template.safe_substitute(countrymirror=m)
+        m = country_mirror()
+        new_uri = uri_template.safe_substitute(countrymirror=m)
+        # be paranoid and check if the given uri actually exists
+        host = urlparse.urlparse(new_uri)[1]
+        try:
+            socket.gethostbyname(host)
+        except socket.gaierror,e:
+            print >> sys.stderr, "host '%s' could not be resolved" % host
+            new_uri = uri_template.safe_substitute(countrymirror='')
+        return new_uri
 
     def fetchDistUpgrader(self):
         " download the tarball with the upgrade script "

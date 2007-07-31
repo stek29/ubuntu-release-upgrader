@@ -1,6 +1,25 @@
-import gtk
 from gettext import gettext as _
 import locale
+import os
+
+def country_mirror():
+  # special cases go here
+  lang_mirror = { 'C'     : '',
+                }
+  # no lang, no mirror
+  if not os.environ.has_key('LANG'):
+    return ''
+  lang = os.environ['LANG']
+  # check if it is a special case
+  if lang_mirror.has_key(lang[:5]):
+    return lang_mirror[lang[:5]]
+  # now check for the most comon form (en_US.UTF-8)
+  if "_" in lang:
+    country = lang.split(".")[0].split("_")[1]
+    return country+"."
+  else:
+    return lang[:2]+"."
+  return ''
 
 def str_to_bool(str):
   if str == "0" or str.upper() == "FALSE":
@@ -10,8 +29,8 @@ def str_to_bool(str):
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
-
 def error(parent, summary, message):
+  import gtk
   d = gtk.MessageDialog(parent=parent,
                         flags=gtk.DIALOG_MODAL,
                         type=gtk.MESSAGE_ERROR,

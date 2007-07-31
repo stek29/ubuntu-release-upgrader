@@ -33,11 +33,14 @@ import statvfs
 import shutil
 import glob
 import time
-from DistUpgradeConfigParser import DistUpgradeConfig
+from string import Template
 
 import DistUpgradeView
+from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeViewText import DistUpgradeViewText
 from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
+
+from utils import country_mirror
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro
@@ -527,7 +530,7 @@ class DistUpgradeControler(object):
         logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
 
-    def doUpdate(self):
+    def doUpdate(self, showErrors=True):
         if not self.useNetwork:
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
             return True
@@ -548,11 +551,12 @@ class DistUpgradeControler(object):
             return True
 
         logging.error("doUpdate() failed complettely")
-        self._view.error(_("Error during update"),
-                         _("A problem occured during the update. "
-                           "This is usually some sort of network "
-                           "problem, please check your network "
-                           "connection and retry."), "%s" % e)
+        if showErrors:
+            self._view.error(_("Error during update"),
+                             _("A problem occured during the update. "
+                               "This is usually some sort of network "
+                               "problem, please check your network "
+                               "connection and retry."), "%s" % e)
         return False
 
 
@@ -1049,13 +1053,19 @@ class DistUpgradeControler(object):
         logging.debug("getRequiredBackports()")
         res = True
 
-        # add the backports sources.list fragment
-        # FIXME: add country mirror here
+        # add the backports sources.list fragment and do mirror substitution
+        mirror = country_mirror()
         sourceslistd = self.config.get("PreRequists","SourcesList")
-        shutil.copy(sourceslistd,
-                    apt_pkg.Config.FindDir("Dir::Etc::sourceparts"))
-        # run update
-        self.doUpdate()
+        outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), sourceslistd), "w")
+        for line in open(sourceslistd):
+            template = Template(line)
+            outfile.write(template.safe_substitute(countrymirror=mirror))
+        outfile.close()
+                    
+        # run update (but ignore errors in case the countrymirror
+        # substitution goes wrong, real errors will be caught later
+        # when the cache is searched for the backport packages)
+        self.doUpdate(showErrors=False)
         self.openCache()
         
         # save cachedir and setup new one

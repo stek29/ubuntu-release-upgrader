@@ -28,7 +28,6 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         UpgradeTestBackend.__init__(self, profile, basefiledir)
         self.tarball = None
 
-
     def _umount(self, chrootdir):
         umount_list = []
         for line in open("/proc/mounts"):
@@ -113,7 +112,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         print "tmpdir is %s" % tmpdir
 
         print "bootstraping to %s" % outfile
-        ret = subprocess.call(["debootstrap", self.fromDist,tmpdir, self.config.get("NonInteractive","Mirror")])
+        ret = subprocess.call(["debootstrap", self.fromDist, tmpdir, self.config.get("NonInteractive","Mirror")])
         print "debootstrap returned: %s" % ret
         if ret != 0:
             return False
@@ -159,7 +158,9 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         print "apt update returned %s" % ret
         if ret != 0:
             return False
-        ret = self._runApt(tmpdir,"dist-upgrade")
+        # run it three times to work around network issues
+        for i in range(3):
+            ret = self._runApt(tmpdir,"dist-upgrade")
         print "apt dist-upgrade returned %s" % ret
         if ret != 0:
             return False
@@ -239,13 +240,18 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
         if not os.path.exists(targettmpdir):
             os.mkdir(targettmpdir)
-        for f in glob.glob("%s/*" % self.basefilesdir):
+        for f in glob.glob("%s/*" % os.path.join(self.basefilesdir,"DistUpgrade")):
             if not os.path.isdir(f):
                 shutil.copy(f, targettmpdir)
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to '%s' " % (self.profile,targettmpdir)
             shutil.copy(self.profile, targettmpdir)
+        # copy the .cfg and .list stuff from there too
+        for f in glob.glob("%s/*.cfg" % (os.path.dirname(self.profile))):
+            shutil.copy(f, targettmpdir)
+        for f in glob.glob("%s/*.list" % (os.path.dirname(self.profile))):
+            shutil.copy(f, targettmpdir)
             
         # run it
         pid = os.fork()

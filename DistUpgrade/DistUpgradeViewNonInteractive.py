@@ -79,8 +79,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         for msg in error_map:
             if msg in errormsg:
                 environ = copy.copy(os.environ)
-                maintainer_script = "%s/%s.%s" % (prefix, pkg,error_map[msg][0])
-                interp = open(maintainer_script).readline()[2:].strip()
+                maintainer_script = "%s/%s.%s" % (prefix, pkg, error_map[msg][0])
+                interp = open(maintainer_script).readline()[2:].strip().split()[0]
                 if ("bash" in interp) or ("/bin/sh" in interp):
                     debug_opts = "-x"
                 elif ("perl" in interp):
@@ -88,7 +88,7 @@ class NonInteractiveInstallProgress(InstallProgress):
                     environ["PERLDB_OPTS"] = "AutoTrace NonStop"
                 else:
                     logging.warning("unknown interpreter: '%s'" % interp)
-                logging.debug("re-runing %s with %s %s (%s)", (error_map[msg][0], interp, debug_opts, environ))
+                logging.debug("re-runing %s with %s %s (%s)" % (error_map[msg][0], interp, debug_opts, environ))
                 cmd = [interp, debug_opts,
                        maintainer_script,
                        error_map[msg][1],

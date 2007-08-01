@@ -8,6 +8,7 @@ import shutil
 
 import datetime
 
+sys.path = [os.path.normpath(os.path.join(os.getcwd(),"../DistUpgrade"))] + sys.path
 from UpgradeTestBackend import UpgradeTestBackend
 
 # TODO:
@@ -82,7 +83,7 @@ def testUpgrade(backend_name, profile, basedir):
 if __name__ == "__main__":
 
     parser = OptionParser()
-    parser.add_option("-p", "--profile", dest="profile", default="default",
+    parser.add_option("-p", "--profile", dest="profile", default="profile/ubuntu/DistUpgrade.cfg",
                       help="write report to FILE")
     parser.add_option("-a", "--auto", dest="auto", default=False,
                       action="store_true",
@@ -102,16 +103,22 @@ if __name__ == "__main__":
     fd1 = os.dup(1)
     fd2 = os.dup(2)
 
-    if options.auto:
-        for d in glob.glob("./profile/*/DistUpgrade.cfg"):
-            os.dup2(fd1, 1)
-            os.dup2(fd2, 2)
-            print "Testing '%s'" % d
-            testUpgrade(options.backend, d, basedir)
-    elif options.login:
-        backend = createBackend(options.backend, options.profile, basedir)
-        login(backend)
-    else:
-        testUpgrade(options.backend, options.profile, basedir)
-    
+    res = True
+    try:
+        if options.auto:
+            for d in glob.glob("./profile/*/DistUpgrade.cfg"):
+                os.dup2(fd1, 1)
+                os.dup2(fd2, 2)
+                print "Testing '%s'" % d
+                res &= testUpgrade(options.backend, d, basedir)
+        elif options.login:
+            backend = createBackend(options.backend, options.profile, basedir)
+            login(backend)
+        else:
+            res &= testUpgrade(options.backend, options.profile, basedir)
+    except Exception, e:
+        print "ERROR: expection caught '%s' " % e
+        res = False
 
+    # return error
+    sys.exit(not res)

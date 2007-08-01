@@ -43,7 +43,7 @@ from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 from utils import country_mirror
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
-from distro import Distribution, get_distro
+from distro import Distribution, get_distro, NoDistroTemplateException
 
 from gettext import gettext as _
 import gettext
@@ -325,13 +325,23 @@ class DistUpgradeControler(object):
             # -> if not that means that "main" is missing and we
             #    need to  enable it
             for pkgname in self.config.getlist("Distro","BaseMetaPkgs"):
-                if ((len(self.cache[pkgname].candidateOrigin) == 0)
+                if ((not self.cache.has_key(pkgname)
+                     or
+                     len(self.cache[pkgname].candidateOrigin) == 0)
                     or
                     (len(self.cache[pkgname].candidateOrigin) == 1 and
-                     self.cache[pkgname].candidateOrigin[0].archive == "now")):
-                    distro = get_distro()
-                    distro.get_sources(self.sources)
-                    distro.enable_component("main")
+                     self.cache[pkgname].candidateOrigin[0].archive == "now")
+                   ):
+                    try:
+                        distro = get_distro()
+                        distro.get_sources(self.sources)
+                        distro.enable_component("main")
+                    except NoDistroTemplateException,e :
+                        # fallback if everything else does not work,
+                        # we replace the sources.list with a single
+                        # line to ubuntu-main
+                        s = "deb http://archive.ubuntu.com/ubuntu %s main" % self.toDist
+                        open("/etc/apt/sources.list","w").write(s)
                     break
             
         # this must map, i.e. second in "from" must be the second in "to"
@@ -1056,6 +1066,9 @@ class DistUpgradeControler(object):
         # add the backports sources.list fragment and do mirror substitution
         mirror = country_mirror()
         sourceslistd = self.config.get("PreRequists","SourcesList")
+        if not os.path.exists(sourceslistd):
+            logging.error("sourceslist not found '%s'" % sourceslistd)
+            return False
         outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), sourceslistd), "w")
         for line in open(sourceslistd):
             template = Template(line)
@@ -1087,19 +1100,16 @@ class DistUpgradeControler(object):
         for pkgname in self.config.getlist("PreRequists","Packages"):
             if not self.cache.has_key(pkgname):
                 logging.error("Can not find backport '%s'" % pkgname)
-                res = False
-                continue
+                return False
             pkg = self.cache[pkgname]
             # look for the right version (backport)
             ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
             if not ver:
                 logging.error("No candidate for '%s'" % pkgname)
-                res = False
-                continue
+                return False
             if ver.FileList == None:
                 logging.error("No ver.FileList for '%s'" % pkgname)
-                res = False
-                continue
+                return False
             pkg.markInstall()
 
         # mark the backports for upgrade and get them
@@ -1129,6 +1139,10 @@ class DistUpgradeControler(object):
         os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info[1])
         os.environ["PATH"] = "%s:%s" % (backportsdir+"/usr/bin",
                                         os.getenv("PATH"))
+        # copy logigng so that it gets not overwritten
+        logging.shutdown()
+        shutil.copy("/var/log/dist-upgrade/main.log",
+                    "/var/log/dist-upgrade/main_pre_req.log")
         # now exec self again
         args = sys.argv + ["--have-prerequists"]
         if self.useNetwork:
@@ -1233,7 +1247,8 @@ class DistUpgradeControler(object):
         # now do the upgrade
         # 
         # kill update-notifier now to supress reboot required
-        subprocess.call(["killall","-q","update-notifier"])
+        if os.path.exists("/usr/bin/killall"):
+            subprocess.call(["killall","-q","update-notifier"])
         self._view.setStep(DistUpgradeView.STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():

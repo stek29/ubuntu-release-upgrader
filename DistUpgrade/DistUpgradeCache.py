@@ -122,6 +122,9 @@ class MyCache(apt.Cache):
         logging.debug("Installing '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
             self[pkg].markInstall()
+            if not (self[pkg].markedInstall or self[pkg].markedUpgrade):
+                logging.error("Installing/upgrading '%s' failed" % pkg)
+                #raise (SystemError, "Installing '%s' failed" % pkg)
     def markRemove(self, pkg, reason=""):
         logging.debug("Removing '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
@@ -291,6 +294,19 @@ class MyCache(apt.Cache):
             self[kernel].markInstall()
         return True
 
+    def checkPriority(self):
+        # tuple of priorites we require to be installed 
+        need = ('required', )
+        # stuff that its ok not to have
+        removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
+        # check now
+        for pkg in self:
+            if (pkg.candidateDownloadable and
+                (not pkg.isInstalled or not pkg.markedInstall) and
+                not pkg.name in removeEssentialOk and
+                pkg.priority in need):
+                self.markInstall(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
+
     def distUpgrade(self, view, serverMode, logfd):
         def _restore_fds(stdout, stderr):
             os.dup2(stdout, 1)
@@ -305,6 +321,9 @@ class MyCache(apt.Cache):
         try:
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
+
+            # check that everythink in priority required is installed
+            self.checkPriority()
 
             # see if our KeepInstalled rules are honored
             self.keepInstalledRule()
@@ -357,7 +376,10 @@ class MyCache(apt.Cache):
                 trusted |= origin.trusted
             if not trusted:
                 untrusted.append(pkg.name)
-        if len(untrusted) > 0:
+        b = self.config.getWithDefault("Distro","AllowUnauthenticated", False)
+        if b:
+            logging.warning("AllowUnauthenticated set!")
+        if (len(untrusted) > 0 and not b):
             untrusted.sort()
             logging.error("Unauthenticated packages found: '%s'" % \
                           " ".join(untrusted))

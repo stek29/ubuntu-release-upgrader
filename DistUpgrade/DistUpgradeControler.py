@@ -340,6 +340,7 @@ class DistUpgradeControler(object):
                         # fallback if everything else does not work,
                         # we replace the sources.list with a single
                         # line to ubuntu-main
+                        logging.warning('get_distro().enable_component("man") failed, overwriting sources.list instead as last resort')
                         s = "deb http://archive.ubuntu.com/ubuntu %s main" % self.toDist
                         open("/etc/apt/sources.list","w").write(s)
                     break

@@ -63,6 +63,12 @@ class MetaReleaseCore(object):
             if not os.path.exists(path):
                 os.mkdir(path)
             self.METARELEASE_FILE = os.path.join(path,"meta-release")
+        # if it is empty, remove it to avoid I-M-S hits on empty file
+        try:
+            if os.path.getsize(self.METARELEASE_FILE) == 0:
+                os.unlink(self.METARELEASE_FILE)
+        except Exception, e:
+            pass
         self.metarelease_information = None
         self.downloading = True
         # information about the available dists

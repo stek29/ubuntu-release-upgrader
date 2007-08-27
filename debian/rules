@@ -79,11 +79,11 @@ binary: binary-indep binary-arch
 
 arch-build: 
 	# update the demotions
-	#(cd utils && ./demotions.py)
-	#(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
+	(cd utils && ./demotions.py)
+	(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
 	# run the test-suit
 	echo "Runing integrated tests"
-	#(cd tests && for test in *.py; do python $$test; done)
+	(cd tests && for test in *.py; do python $$test; done)
 	# update version
 	echo "VERSION='$(DEBVER)'" > DistUpgrade/DistUpgradeVersion.py
 	# build it

@@ -663,7 +663,7 @@ class DistUpgradeControler(object):
             if fs_free[dir].free < 0:
                 free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
                 logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
-                self._view.error(err_sum, err_long % (size, dir, free_at_least,dir))
+                self._view.error(err_sum, err_long % (apt_pkg.SizeToStr(size), dir, free_at_least,dir))
                 return False
 
             

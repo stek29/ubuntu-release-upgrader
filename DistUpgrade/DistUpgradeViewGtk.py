@@ -116,12 +116,12 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
             return True
         return False
     def start(self):
-        logging.debug("start")
+        #logging.debug("start")
         self.progress.set_fraction(0)
         self.status.show()
         self.button_cancel.show()
     def stop(self):
-        logging.debug("stop")
+        #logging.debug("stop")
         self.progress.set_text(" ")
         self.status.set_text(_("Fetching is complete"))
         self.button_cancel.hide()
@@ -324,7 +324,7 @@ class DistUpgradeVteTerminal(object):
 
 class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
     " gtk frontend of the distUpgrade tool "
-    def __init__(self, datadir=None):
+    def __init__(self, datadir=None, logdir=None):
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
           gladedir=os.getcwd()
@@ -419,7 +419,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self._term.connect("contents-changed", self._term_content_changed)
         self._terminal_lines = []
         try:
-          self._terminal_log = open("/var/log/dist-upgrade/term.log","w")
+          self._terminal_log = open(os.path.join(self.logdir,"term.log"),"w")
         except IOError:
           # if something goes wrong (permission denied etc), use stdout
           self._terminal_log = sys.stdout
@@ -587,7 +587,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
             self.details_list.append([_("Install %s") % inst])
         for up in self.toUpgrade:
             self.details_list.append([_("Upgrade %s") % up])
-        self.treeview_details.scroll_to_cell((0,))
+        self.treeview_details.set_cursor((0,))
+        self.treeview_details.scroll_to_point(0,0)
         self.dialog_changes.set_transient_for(self.window_main)
         self.dialog_changes.realize()
         self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE)

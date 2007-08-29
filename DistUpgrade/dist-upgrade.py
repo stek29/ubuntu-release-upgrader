@@ -25,17 +25,20 @@ if __name__ == "__main__":
                              "desktop, server"))
     (options, args) = parser.parse_args()
 
-    if not os.path.exists("/var/log/dist-upgrade"):
-        os.mkdir("/var/log/dist-upgrade")
+    config = DistUpgradeConfig(".")
+
+    logdir = config.get("Files","LogDir")
+    if not os.path.exists(logdir):
+        os.mkdir(logdir)
     logging.basicConfig(level=logging.DEBUG,
-                        filename="/var/log/dist-upgrade/main.log",
+                        filename=os.path.join(logdir,"main.log"),
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode='w')
 
     from DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)
 
-    config = DistUpgradeConfig(".")
+    
     # the commandline overwrites the configfile
     for requested_view in [options.frontend]+config.getlist("View","View"):
         if not requested_view:
@@ -51,7 +54,7 @@ if __name__ == "__main__":
         logging.error("No view can be imported, aboring")
         print "No view can be imported, aboring"
         sys.exit(1)
-    view = view_class()
+    view = view_class(logdir=logdir)
     app = DistUpgradeControler(view, options)
     app.run()
 

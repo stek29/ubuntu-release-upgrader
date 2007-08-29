@@ -315,7 +315,7 @@ class UpgraderMainWindow(window_main):
 
 class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
-    def __init__(self, datadir=None):
+    def __init__(self, datadir=None, logdir=None):
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:

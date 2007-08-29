@@ -33,6 +33,7 @@ import statvfs
 import shutil
 import glob
 import time
+import copy
 from string import Template
 
 import DistUpgradeView
@@ -154,7 +155,8 @@ class DistUpgradeControler(object):
         # turn on debuging in the cache
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
-        fd = os.open("/var/log/dist-upgrade/apt.log",
+        logdir = self.config.get("Files","LogDir")
+        fd = os.open(os.path.join(logdir,"apt.log"),
                      os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
         # log the complete output if we do not run in text-mode
         if not (isinstance(self._view, DistUpgradeViewText) or
@@ -332,6 +334,7 @@ class DistUpgradeControler(object):
                     (len(self.cache[pkgname].candidateOrigin) == 1 and
                      self.cache[pkgname].candidateOrigin[0].archive == "now")
                    ):
+                    logging.debug("BaseMetaPkg '%s' has no candidateOrigin" % pkgname)
                     try:
                         distro = get_distro()
                         distro.get_sources(self.sources)
@@ -368,7 +371,7 @@ class DistUpgradeControler(object):
 
         # look over the stuff we have
         foundToDist = False
-        for entry in self.sources:
+        for entry in self.sources.list[:]:
 
             # ignore invalid records or disabled ones
             if entry.invalid or entry.disabled:
@@ -384,7 +387,7 @@ class DistUpgradeControler(object):
                 continue
 
             # special case for archive.canonical.com that needs to
-            # be rewritten
+            # be rewritten (for pre-gutsy upgrades)
             cdist = "%s-commercial" % self.fromDist
             if (not entry.disabled and
                 entry.uri.startswith("http://archive.canonical.com/ubuntu") and
@@ -392,6 +395,17 @@ class DistUpgradeControler(object):
                 entry.dist = self.toDist
                 entry.comps = ["commercial"]
                 logging.debug("transitioned commerical to '%s' " % entry)
+                # FIXME: enable this below if we go with pockets for
+                #        the commercial repository
+                # now add the various pockets
+                #for (enabled, dist) in [(True, "%s-security"),
+                #                        (True, "%s-updates"),
+                #                        (False,"%s-proposed")
+                #                       ]:
+                #    e = copy.copy(entry)
+                #    e.dist = dist % self.toDist
+                #    e.disabled = not enabled
+                #    self.sources.list.insert(self.sources.list.index(entry)+1, e)
                 continue
 
             logging.debug("examining: '%s'" % entry)

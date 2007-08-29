@@ -302,7 +302,7 @@ class MyCache(apt.Cache):
         # check now
         for pkg in self:
             if (pkg.candidateDownloadable and
-                (not pkg.isInstalled or not pkg.markedInstall) and
+                not (pkg.isInstalled or pkg.markedInstall) and
                 not pkg.name in removeEssentialOk and
                 pkg.priority in need):
                 self.markInstall(pkg.name, "priority in required set '%s' but not scheduled for install" % need)

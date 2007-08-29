@@ -1,10 +1,25 @@
-update-manager (1:0.70) gutsy; urgency=low
+update-manager (1:0.70) UNRELEASED; urgency=low
 
   * DistUpgrade/DistUpgradeControler.py:
     - show human readable size when displaying "not enough free space" 
       error
+    - when rewriting sources.list, transition the commercial
+      package archive to the new location
+  * DistUpgrade/DistUpgradeCache.py:
+    - fix bogus log messages about missing "required" priority packages
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - remove debug messages
+  * DistUpgrade/DistUpgrade.cfg:
+    - remove gnome-cups-manager on upgrade, system-config-printer 
+      replaces it (LP: #107766)
+    - set cursor to the start of the details list (LP: #134873)
+  * DistUpgrade/dist-upgrade.py, DistUpgrade/DistUpgradeViewText.py,
+    DistUpgrade/DistUpgradeViewKDE.py, DistUpgrade/DistUpgradeViewGtk.py:
+    - make logdir a config option too
+  * tests/test_sources_list.py, tests/data-sources-list-test:
+    - added tests for sources.list rewriting
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 27 Aug 2007 16:39:10 +0200
 
 update-manager (1:0.69) gutsy; urgency=low
 

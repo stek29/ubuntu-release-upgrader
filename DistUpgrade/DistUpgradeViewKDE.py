@@ -38,6 +38,8 @@ import os
 
 import pty
 
+from DistUpgradeApport import *
+
 from DistUpgradeControler import DistUpgradeControler
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from window_main import window_main
@@ -425,13 +427,21 @@ class DistUpgradeViewKDE(DistUpgradeView):
             issubclass(exctype, SystemExit)):
             return
 
-        tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
-        logging.error("Exception in KDE frontend (invoking crash handler):")
-        logging.error(tbtext)
-        dialog = CrashDialog(self.window_main)
-        dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
-        dialog.crash_detail.setText(tbtext)
-        dialog.exec_loop()
+        # we handle the exception here, hand it to apport and run the
+        # apport gui manually after it because we kill u-m during the upgrade
+        # to prevent it from poping up for reboot notifications or FF restart
+        # notifications or somesuch
+        lines = traceback.format_exception(exctype, excvalue, exctb)
+        logging.error("not handled expection in KDE frontend:\n%s" % "\n".join(lines))
+        # we can't be sure that apport will run in the middle of a upgrade
+        # so we still show a error message here
+        apport_crash(exctype, excvalue, exctb)
+        if not run_apport():
+            tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
+            dialog = CrashDialog(self.window_main)
+            dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
+            dialog.crash_detail.setText(tbtext)
+            dialog.exec_loop()
         sys.exit(1)
 
     def openURL(self, url):

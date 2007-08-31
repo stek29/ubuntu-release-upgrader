@@ -24,7 +24,7 @@ from kdeui import *
 from kdecore import *
 from kparts import konsolePart
 from kio import KRun
-from dcopext import DCOPClient, DCOPApp # used to quit adept
+#from dcopext import DCOPClient, DCOPApp # used to quit adept
 
 import sys
 import logging
@@ -358,17 +358,22 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
-        # create a new DCOP-Client:
-        client = DCOPClient()
-        # connect the client to the local DCOP-server:
-        client.attach()
+        # Don't use dcop until kdesudo supports it
+        ## create a new DCOP-Client:
+        #client = DCOPClient()
+        ## connect the client to the local DCOP-server:
+        #client.attach()
 
-        for qcstring_app in client.registeredApplications():
-            app = str(qcstring_app)
-            if app.startswith("adept"): 
-                adept = DCOPApp(qcstring_app, client)
-                adeptInterface = adept.object("MainApplication-Interface")
-                adeptInterface.quit()
+        #for qcstring_app in client.registeredApplications():
+        #    app = str(qcstring_app)
+        #    if app.startswith("adept"): 
+        #        adept = DCOPApp(qcstring_app, client)
+        #        adeptInterface = adept.object("MainApplication-Interface")
+        #        adeptInterface.quit()
+
+        # This works just as well
+        subprocess.call(["killall", "adept_manager"])
+        subprocess.call(["killall", "adept_updater"])
 
         # init gettext
         gettext.bindtextdomain("update-manager",localedir)

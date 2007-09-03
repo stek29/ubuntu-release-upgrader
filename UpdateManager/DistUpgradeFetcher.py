@@ -43,15 +43,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         return error(self.window_main, summary, message)
 
     def runDistUpgrader(self):
-        # inhibit sleep
-        try:
-            bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
-            devobj = bus.get_object('org.gnome.PowerManager', 
-                                    '/org/gnome/PowerManager')
-            dev = dbus.Interface(devobj, "org.gnome.PowerManager")
-            cookie = dev.Inhibit('UpdateManager', 'Updating system')
-        except Exception, e:
-            print "could not send the dbus Inhibit signal: %s" % e
+        inhibit_sleep()
         # now run it with sudo
         if os.getuid() != 0:
             os.execv("/usr/bin/gksu",["gksu",self.script])
@@ -59,10 +51,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
             os.execv(self.script,[self.script]+self.run_options)
         # we shouldn't come to this point, but if we do, undo our
         # inhibit sleep
-        try:
-            dev.UnInhibit(cookie)
-        except Exception, e:
-            print "could not send the dbus UnInhibit signal: %s" % e
+        allow_sleep()
 
     def showReleaseNotes(self):
       # FIXME: care about i18n! (append -$lang or something)

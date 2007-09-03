@@ -738,7 +738,7 @@ class UpdateManager(SimpleGladeApp):
     os.environ["APT_LISTCHANGES_FRONTEND"]="none"
 
     # Do not suspend during the update process
-    (dev, cookie) = self.inhibit_sleep()
+    (dev, cookie) = inhibit_sleep()
 
     # set window to insensitive
     self.window_main.set_sensitive(False)
@@ -758,32 +758,9 @@ class UpdateManager(SimpleGladeApp):
 
     # Allow suspend after synaptic is finished
     if cookie != False:
-        self.allow_sleep(dev, cookie)
+        allow_sleep(dev, cookie)
     self.window_main.set_sensitive(True)
     self.window_main.window.set_cursor(None)
-
-
-  def inhibit_sleep(self):
-    """Send a dbus signal to gnome-power-manager to not suspend
-    the system"""
-    try:
-      bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
-      devobj = bus.get_object('org.gnome.PowerManager', 
-                              '/org/gnome/PowerManager')
-      dev = dbus.Interface(devobj, "org.gnome.PowerManager")
-      cookie = dev.Inhibit('UpdateManager', 'Updating system')
-      return (dev, cookie)
-    except Exception, e:
-      print "could not send the dbus Inhibit signal: %s" % e
-      return (False, False)
-
-  def allow_sleep(self, dev, cookie):
-    """Send a dbus signal to gnome-power-manager to allow a suspending
-    the system"""
-    try:
-      dev.UnInhibit(cookie)
-    except Exception, e:
-      print "could not send the dbus UnInhibit signal: %s" % e
 
   def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """

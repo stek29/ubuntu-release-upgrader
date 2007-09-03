@@ -23,6 +23,10 @@ update-manager (1:0.70) gutsy; urgency=low
   * DistUpgrade/dist-upgrade.py, DistUpgrade/DistUpgradeViewText.py,
     DistUpgrade/DistUpgradeViewKDE.py, DistUpgrade/DistUpgradeViewGtk.py:
     - make logdir a config option too
+  * UpdateManager/UpdateManager.py, UpdateManager/Common/utils.py:
+    - move inhibit_sleep(), allow_sleep() into common code and call
+      the freedesktop dbus interface instead of the deprecated gnome
+      interface
   * tests/test_sources_list.py, tests/data-sources-list-test:
     - added tests for sources.list rewriting
 

@@ -393,7 +393,7 @@ class DistUpgradeControler(object):
                 entry.uri.startswith("http://archive.canonical.com/ubuntu") and
                 entry.dist == cdist):
                 entry.dist = self.toDist
-                entry.comps = ["commercial"]
+                entry.comps = ["partner"]
                 logging.debug("transitioned commerical to '%s' " % entry)
                 # FIXME: enable this below if we go with pockets for
                 #        the commercial repository

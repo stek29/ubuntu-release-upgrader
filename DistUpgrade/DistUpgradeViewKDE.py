@@ -205,23 +205,34 @@ class KDEInstallProgressAdapter(InstallProgress):
                 "configuration file if you choose to replace it with "
                 "a newer version.")
         markup = "<span weight=\"bold\" size=\"larger\">%s </span> \n\n%s" % (prim, sec)
-        dialogue = dialog_conffile(self.parent.window_main)
-        dialogue.label_conffile.setText(markup)
+        self.confDialogue = dialog_conffile(self.parent.window_main)
+        self.confDialogue.label_conffile.setText(markup)
+        self.confDialogue.textview_conffile.hide()
+        self.app.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
 
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
           cmd = ["/usr/bin/diff", "-u", current, new]
           diff = utf8(subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0])
-          dialogue.textview_conffile.setText(diff)
+          self.confDialogue.textview_conffile.setText(diff)
         else:
-          dialogue.textview_conffile.setText(_("The 'diff' command was not found"))
-        result = dialogue.exec_loop()
+          self.confDialogue.textview_conffile.setText(_("The 'diff' command was not found"))
+        result = self.confDialogue.exec_loop()
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if result == QDialog.Accepted:
             self.parent.konsole.sendInput("y\n")
         else:
             self.parent.konsole.sendInput("n\n")
+
+    def showTerminal(self):
+        if self.confDialogue.textview_conffile.isVisible():
+            self.confDialogue.textview_conffile.hide()
+            self.confDialogue.showTerminalButton.setText(_("Show Difference >>>"))
+        else:
+            self.confDialogue.textview_conffile.show()
+            self.confDialogue.showTerminalButton.setText(_("<<< Hide Difference"))
+       
 
     def fork(self):
         """pty voodoo to attach dpkg's pty to konsole"""

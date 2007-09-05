@@ -325,6 +325,7 @@ class DistUpgradeVteTerminal(object):
 class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
     " gtk frontend of the distUpgrade tool "
     def __init__(self, datadir=None, logdir=None):
+        self.logdir = logdir
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
           gladedir=os.getcwd()
@@ -420,7 +421,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self._terminal_lines = []
         try:
           self._terminal_log = open(os.path.join(self.logdir,"term.log"),"w")
-        except IOError:
+        except Exception, e:
           # if something goes wrong (permission denied etc), use stdout
           self._terminal_log = sys.stdout
         return self._term

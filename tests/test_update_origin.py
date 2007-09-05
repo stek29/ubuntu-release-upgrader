@@ -17,6 +17,7 @@ class testOriginMatcher(unittest.TestCase):
         self.dpkg_status.flush()
         self.cache = MyCache(apt.progress.OpProgress(), os.path.join(os.getcwd(),"apt/"))
         self.cache.update()
+        self.cache.open(apt.progress.OpProgress())
 
     def testOriginMatcherSimple(self):
         test_pkgs = set()
@@ -32,7 +33,7 @@ class testOriginMatcher(unittest.TestCase):
             pkg = self.cache[pkgname]
             self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
                              matcher[("dapper-security","Ubuntu")],
-                             "pkg '%s' is not in dapper-security but in '%s' instead" % (pkg.name, str(self.cache.matchPackageOrigin(pkg, matcher))))
+                             "pkg '%s' is not in dapper-security but in '%s' instead" % (pkg.name, self.cache.matchPackageOrigin(pkg, matcher).description))
         
 
     def testOriginMatcherWithVersionInUpdatesAndSecurity(self):

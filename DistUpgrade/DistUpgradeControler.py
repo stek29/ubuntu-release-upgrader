@@ -394,6 +394,7 @@ class DistUpgradeControler(object):
                 entry.dist == cdist):
                 entry.dist = self.toDist
                 entry.comps = ["partner"]
+                entry.disabled = True
                 logging.debug("transitioned commerical to '%s' " % entry)
                 # FIXME: enable this below if we go with pockets for
                 #        the commercial repository

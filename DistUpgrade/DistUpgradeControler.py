@@ -590,9 +590,9 @@ class DistUpgradeControler(object):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
         err_long= _("The upgrade aborts now. "
-                    "The upgrade needs a total of %s free space on disk %s. "
+                    "The upgrade needs a total of %s free space on disk '%s'. "
                     "Please free at least an additional %s of disk "
-                    "space on %s. "
+                    "space on '%s'. "
                     "Empty your trash and remove temporary "
                     "packages of former installations using "
                     "'sudo apt-get clean'.")
@@ -601,6 +601,7 @@ class DistUpgradeControler(object):
             " helper class that represents the free space on each mounted fs "
             def __init__(self, initialFree):
                 self.free = initialFree
+                self.need = 0
 
         def make_fs_id(d):
             """ return 'id' of a directory so that directories on the
@@ -675,10 +676,11 @@ class DistUpgradeControler(object):
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
+            fs_free[dir].need += size
             if fs_free[dir].free < 0:
                 free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
                 logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
-                self._view.error(err_sum, err_long % (apt_pkg.SizeToStr(size), dir, free_at_least,dir))
+                self._view.error(err_sum, err_long % (apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least, make_fs_id(dir)))
                 return False
 
             

@@ -6,12 +6,16 @@ update-manager (1:0.72) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgrade.cfg:
     - use "release-upgrader-dpkg", "release-upgrader-apt" as
       update-pre-requists to fully support dpkg triggers (LP: #134000)
-  * DistUpgrade/prerequists-sources.list:
-    - POINTS TO DOGFOOD CURRENTLY DO NOT RELEASE
+    - add mythubuntu-desktop to the valid metapackages
   * DistUpgrade/DistUpgradeControler.py:
     - fix pre-requists fetching, do not run the resolver as the udebss
       are not installable on a regular system
     - generate more log information to make diagnosing problems easier
+    - setup RELEASE_UPGRADE_IN_PROGRESS environemnt
+    - use custom invoke-rc.d during the upgrade so that failures to
+      restart a daemon are not fatal
+  * DistUpgrade/prerequists-sources.list:
+    - point to the archive for the pre-requists now
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 07 Sep 2007 15:43:02 +0200
 

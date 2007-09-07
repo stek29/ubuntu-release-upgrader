@@ -149,6 +149,11 @@ class DistUpgradeControler(object):
         self.toDist = self.config.get("Sources","To")
         self.origin = self.config.get("Sources","ValidOrigin")
 
+        # setup env var 
+        os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
+        os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported"
+                                        os.environ["PATH"])
+
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
@@ -1110,10 +1115,6 @@ class DistUpgradeControler(object):
         os.chdir(backportsdir)
         apt_pkg.Config.Set("Dir::Cache::archives",backportsdir)
 
-        # FIXME: rewrite the thing so that the regular fetch/commit
-        #        interface is used. that is no problem because we
-        #        use a release-upgrader-$foo prefix for the pacakges
-        #        now
         # FIXME: sanity check the origin (just for savetfy)
         for pkgname in self.config.getlist("PreRequists","Packages"):
             if not self.cache.has_key(pkgname):
@@ -1162,7 +1163,7 @@ class DistUpgradeControler(object):
         os.environ["LD_LIBRARY_PATH"] = backportsdir+"/usr/lib"
         os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info[1])
         os.environ["PATH"] = "%s:%s" % (backportsdir+"/usr/bin",
-                                        os.getenv("PATH"))
+                                        os.environ["PATH"])
         # copy logigng so that it gets not overwritten
         logging.shutdown()
         shutil.copy("/var/log/dist-upgrade/main.log",

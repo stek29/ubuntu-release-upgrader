@@ -1128,22 +1128,28 @@ class DistUpgradeControler(object):
             if ver.FileList == None:
                 logging.error("No ver.FileList for '%s'" % pkgname)
                 return False
-            pkg.markInstall()
+            logging.debug("marking '%s' for install" % pkgname)
+            pkg.markInstall(autoInst=False, autoFix=False)
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
         pm = apt_pkg.GetPackageManager(self.cache._depcache)
+        # now get it
         try:
             res = True
             self.cache._fetchArchives(fetcher, pm)
         except IOError, e:
             res = False
+        # debug output
+        for item in fetcher.Items:
+            logging.debug("pre-requists item: '%s' " % item)
         # reset the cache dir
         os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)
         os.chdir(cwd)
         # unpack it
         for deb in glob.glob(backportsdir+"/*.udeb"):
+            logging.debug("extracting udeb '%s' " % deb)
             if os.system("dpkg-deb -x %s %s" % (deb, backportsdir)) != 0:
                 res = False
         if res:

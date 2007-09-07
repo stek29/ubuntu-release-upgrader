@@ -45,8 +45,6 @@ class MetaReleaseCore(object):
     METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
     METARELEASE_URI_UNSTABLE = "http://changelogs.ubuntu.com/meta-release-development"
     METARELEASE_URI_PROPOSED = "http://changelogs.ubuntu.com/meta-release-proposed"
-    METARELEASE_FILE = "/var/lib/update-manager/meta-release"
-
     def __init__(self, useDevelopmentRelease=False, useProposed=False):
         # check what uri to use
         if useDevelopmentRelease:
@@ -54,6 +52,9 @@ class MetaReleaseCore(object):
         elif useProposed:
             self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
 
+        # build the metarelease_file name
+        self.METARELEASE_FILE = os.path.join("/var/lib/update-manager/",
+                                            os.path.basename(self.METARELEASE_URI))
         # check if we can write to the global location, if not,
         # write to homedir
         try:
@@ -62,7 +63,7 @@ class MetaReleaseCore(object):
             path = os.path.expanduser("~/.update-manager-core/")
             if not os.path.exists(path):
                 os.mkdir(path)
-            self.METARELEASE_FILE = os.path.join(path,"meta-release")
+            self.METARELEASE_FILE = os.path.join(path,os.path.basename(self.METARELEASE_URI))
         # if it is empty, remove it to avoid I-M-S hits on empty file
         try:
             if os.path.getsize(self.METARELEASE_FILE) == 0:

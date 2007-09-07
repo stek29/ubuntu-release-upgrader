@@ -151,7 +151,7 @@ class DistUpgradeControler(object):
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
-        os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported"
+        os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
 
         # forced obsoletes

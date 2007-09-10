@@ -1144,6 +1144,9 @@ class DistUpgradeControler(object):
         # debug output
         for item in fetcher.Items:
             logging.debug("pre-requists item: '%s' " % item)
+            if not item.IsTrusted:
+                logging.error("pre-requists item '%s' is NOT trusted" % item.DescURI)
+                return False
         # reset the cache dir
         os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)

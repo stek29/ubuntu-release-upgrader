@@ -290,7 +290,7 @@ class UpdateList:
 
     # sort by origin
     for pkg in cache:
-      if pkg.isUpgradable:
+      if pkg.isUpgradable or pkg.markedInstall:
         if pkg.candidateOrigin == None:
             # can happen for e.g. loged packages
             # FIXME: do something more sensible here (but what?)

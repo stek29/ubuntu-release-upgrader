@@ -2,8 +2,7 @@
 
 import os
 import sys
-sys.path = [os.path.normpath(os.path.join(os.getcwd(),"../"))] + sys.path
-
+sys.path.insert(0,"../")
 
 import apt
 import unittest

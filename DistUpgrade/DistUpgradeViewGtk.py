@@ -588,10 +588,13 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
             self.details_list.append([_("Install %s") % inst])
         for up in self.toUpgrade:
             self.details_list.append([_("Upgrade %s") % up])
+        self.dialog_changes.set_transient_for(self.window_main)
+        # work around problem that scroll_to() does not 
+        # work when it is not realized
+        self.dialog_changes.realize()
+        self.treeview_details.realize()
         self.treeview_details.set_cursor((0,))
         self.treeview_details.scroll_to_point(0,0)
-        self.dialog_changes.set_transient_for(self.window_main)
-        self.dialog_changes.realize()
         self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE)
         res = self.dialog_changes.run()
         self.dialog_changes.hide()

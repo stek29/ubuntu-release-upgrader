@@ -9,6 +9,10 @@ echo "Cleaning up"
 rm -f *~ *.bak *.pyc *.moved '#'* *.rej *.orig
 #sudo rm -rf backports/ profile/ result/ tarball/ *.deb
 
+# automatically generate codename for the distro in the 
+# cdromupgrade script
+sed -i s/^CODENAME=.*/CODENAME=$DIST/ cdromupgrade
+
 # update po
 (cd ../po; make update-po)
 

@@ -33,7 +33,10 @@ import shutil
 import sys
 import GnuPGInterface
 from gettext import gettext as _
-from UpdateManager.Common.utils import country_mirror
+try:
+    from utils import country_mirror
+except ImportError:
+    from UpdateManager.Common.utils import country_mirror
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "

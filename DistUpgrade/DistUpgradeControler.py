@@ -1085,7 +1085,10 @@ class DistUpgradeControler(object):
         " download the backports specified in DistUpgrade.cfg "
         logging.debug("getRequiredBackports()")
         res = True
-        backportslist = self.config.getlist("PreRequists","Packages"):
+        backportsdir = os.path.join(os.getcwd(),"backports")
+        if not os.path.exists(backportsdir):
+            os.mkdir(backportsdir)
+        backportslist = self.config.getlist("PreRequists","Packages")
 
         # if we have them on the CD we are fine
         if self.aptcdrom and not self.useNetwork:
@@ -1095,11 +1098,11 @@ class DistUpgradeControler(object):
             found_pkgs = set()
             for udeb in glob.glob(p+"*_*.udeb"):
                 logging.debug("copying pre-req '%s' to '%s'" % (udeb, backportsdir))
-                found_pkgs.add(udeb.split("_")[0])
+                found_pkgs.add(os.path.basename(udeb).split("_")[0])
                 shutil.copy(udeb, backportsdir)
             # now check if we got all backports on the CD
             if not set(backportslist) == found_pkgs:
-                logging.error("Expected backports: '%s' but got '%s'" % (backportslist, found_pkgs))
+                logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
             return self.setupRequiredBackports(backportsdir)
 
@@ -1124,9 +1127,6 @@ class DistUpgradeControler(object):
         # save cachedir and setup new one
         cachedir = apt_pkg.Config.Find("Dir::Cache::archives")
         cwd = os.getcwd()
-        backportsdir = os.path.join(os.getcwd(),"backports")
-        if not os.path.exists(backportsdir):
-            os.mkdir(backportsdir)
         if not os.path.exists(os.path.join(backportsdir,"partial")):
             os.mkdir(os.path.join(backportsdir,"partial"))
         os.chdir(backportsdir)
@@ -1172,6 +1172,9 @@ class DistUpgradeControler(object):
 
     def setupRequiredBackports(self, backportsdir):
         " setup the required backports in a evil way "
+        if not glob.glob(backportsdir+"/*.udeb"):
+            logging.error("no backports found but setupRequiredBackports() called??!")
+            return False
         # unpack the backports first
         for deb in glob.glob(backportsdir+"/*.udeb"):
             logging.debug("extracting udeb '%s' " % deb)

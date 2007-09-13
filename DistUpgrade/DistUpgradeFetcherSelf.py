@@ -1,3 +1,5 @@
+import logging
+import shutil
 
 from DistUpgradeFetcherCore import DistUpgradeFetcherCore
 
@@ -16,3 +18,13 @@ class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
 
     def error(self, summary, message):
         return self.view.error(summary, message)
+
+    def runDistUpgrader(self):
+        " overwrite to ensure that the log is copied "
+        # copy logigng so that it gets not overwritten
+        logging.info("runDistUpgrader() called, re-exec self")
+        logging.shutdown()
+        shutil.copy("/var/log/dist-upgrade/main.log",
+                    "/var/log/dist-upgrade/main_update_self.log")
+        # re-exec self
+        DistUpgradeFetcherCore.runDistUpgrader(self)

@@ -26,6 +26,9 @@ setup(name='update-manager',
                   ('share/update-manager/',
                    glob.glob("DistUpgrade/*.cfg")
                   ),
+                  ('share/man/man8',
+                   glob.glob('data/*.8')
+                  ),
                   ],
       cmdclass = { "build" : build_extra.build_extra,
                    "build_i18n" :  build_i18n.build_i18n,

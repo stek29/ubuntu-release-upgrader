@@ -1085,6 +1085,23 @@ class DistUpgradeControler(object):
         " download the backports specified in DistUpgrade.cfg "
         logging.debug("getRequiredBackports()")
         res = True
+        backportslist = self.config.getlist("PreRequists","Packages"):
+
+        # if we have them on the CD we are fine
+        if self.aptcdrom and not self.useNetwork:
+            logging.debug("Searching for pre-requists on CDROM")
+            p = os.path.join(self.aptcdrom.cdrompath,
+                             "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.Config.Find("APT::Architecture"))
+            found_pkgs = set()
+            for udeb in glob.glob(p+"*_*.udeb"):
+                logging.debug("copying pre-req '%s' to '%s'" % (udeb, backportsdir))
+                found_pkgs.add(udeb.split("_")[0])
+                shutil.copy(udeb, backportsdir)
+            # now check if we got all backports on the CD
+            if not set(backportslist) == found_pkgs:
+                logging.error("Expected backports: '%s' but got '%s'" % (backportslist, found_pkgs))
+                return False
+            return self.setupRequiredBackports(backportsdir)
 
         # add the backports sources.list fragment and do mirror substitution
         mirror = country_mirror()
@@ -1116,7 +1133,7 @@ class DistUpgradeControler(object):
         apt_pkg.Config.Set("Dir::Cache::archives",backportsdir)
 
         # FIXME: sanity check the origin (just for savetfy)
-        for pkgname in self.config.getlist("PreRequists","Packages"):
+        for pkgname in backportslist:
             if not self.cache.has_key(pkgname):
                 logging.error("Can not find backport '%s'" % pkgname)
                 return False
@@ -1151,17 +1168,15 @@ class DistUpgradeControler(object):
         os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)
         os.chdir(cwd)
-        # unpack it
-        for deb in glob.glob(backportsdir+"/*.udeb"):
-            logging.debug("extracting udeb '%s' " % deb)
-            if os.system("dpkg-deb -x %s %s" % (deb, backportsdir)) != 0:
-                res = False
-        if res:
-            return self.setupRequiredBackports(backportsdir)
-        return res
+        return self.setupRequiredBackports(backportsdir)
 
     def setupRequiredBackports(self, backportsdir):
         " setup the required backports in a evil way "
+        # unpack the backports first
+        for deb in glob.glob(backportsdir+"/*.udeb"):
+            logging.debug("extracting udeb '%s' " % deb)
+            if os.system("dpkg-deb -x %s %s" % (deb, backportsdir)) != 0:
+                return False
         # setup some pathes to make sure the new stuff is used
         os.environ["LD_LIBRARY_PATH"] = backportsdir+"/usr/lib"
         os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info[1])

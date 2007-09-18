@@ -42,6 +42,7 @@ class testSourcesListUpdate(unittest.TestCase):
 deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse universe
 deb http://de.archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
 deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 """)
         # check that the backup file was created correctly
         self.assert_(subprocess.call(
@@ -86,6 +87,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         self._verifySources("""
 deb http://ports.ubuntu.com/ gutsy main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
+
+deb http://ports.ubuntu.com/ gutsy-security main restricted
 """)
         apt_pkg.Config.Set("APT::Architecture",arch)
         

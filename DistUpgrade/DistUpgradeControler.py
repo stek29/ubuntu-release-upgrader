@@ -1193,7 +1193,7 @@ class DistUpgradeControler(object):
         else:
             args.append("--without-network")
         # work around kde being clever
-        if os.access(sys.argv[0], os.X_OK):
+        if not os.access(sys.argv[0], os.X_OK):
             os.chmod(sys.argv[0], 0755)
         os.execve(sys.argv[0],args, os.environ)
 

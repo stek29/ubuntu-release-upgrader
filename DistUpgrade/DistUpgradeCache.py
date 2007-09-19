@@ -187,6 +187,20 @@ class MyCache(apt.Cache):
         if func is not None:
             func()
 
+    def gutsyQuirks(self):
+        """ this function works around quirks in the feisty->gutsy upgrade """
+        logging.debug("running gutsyQuirks handler")
+        try:
+            (version, build, flavour) = self.uname.split("-")
+            if flavour == 'lowlatency':
+                kernel = "linux-image-generic"
+                if not (self[kernel].isInstalled or self[kernel].markedInstall):
+                    logging.debug("Selecting new kernel '%s'" % kernel)
+                    self[kernel].markInstall()
+        except Exception, e:
+            logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
+
+
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """
         logging.debug("running feistyQuirks handler")

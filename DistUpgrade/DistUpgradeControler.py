@@ -928,9 +928,6 @@ class DistUpgradeControler(object):
         for script in self.config.getlist("Distro","PostInstallScripts"):
             logging.debug("Runing PostInstallScript: '%s'" % script)
             try:
-                # work around kde being clever
-                if script.startswith("./"):
-                    os.chmod(script, 0755)
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("gor error from PostInstallScript %s (%s)" % (script, e))
@@ -1195,6 +1192,9 @@ class DistUpgradeControler(object):
             args.append("--with-network")
         else:
             args.append("--without-network")
+        # work around kde being clever
+        if os.access(sys.argv[0], os.X_OK):
+            os.chmod(sys.argv[0], 0755)
         os.execve(sys.argv[0],args, os.environ)
 
     # this is the core

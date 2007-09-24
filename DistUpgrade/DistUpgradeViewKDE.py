@@ -31,6 +31,7 @@ import logging
 import time
 import subprocess
 import traceback
+import tempfile
 
 import apt
 import apt_pkg
@@ -373,7 +374,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
-        copyXauth = "/tmp/dist-upgrade-xauthority"
+        copyXauth = tempfile.mktemp("", "adept")
         if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
             shutil.copy(os.environ['XAUTHORITY'], "/tmp/dist-upgrade-xauthority")
             os.environ["XAUTHORITY"] = "/tmp/dist-upgrade-xauthority"

@@ -701,11 +701,10 @@ class DistUpgradeControler(object):
             map(lambda pkgname: demotions.add(pkgname.strip()),
                 filter(lambda line: not line.startswith("#"),
                        open(demotions_file).readlines()))
-        self.installed_demotions = filter(lambda pkg: pkg.isInstalled and pkg.name in demotions, self.cache)
+        self.installed_demotions = [pkg.name for pkg in self.cache if pkg.isInstalled and pkg.name in demotions]
         if len(self.installed_demotions) > 0:
-            demoted = [pkg.name for pkg in self.installed_demotions]	
-	    demoted.sort()
-            logging.debug("demoted: '%s'" % " ".join(demoted))
+	    self.installed_demotions.sort()
+            logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
             self._view.information(_("Support for some applications ended"),
                                    _("Canonical Ltd. no longer provides "
                                      "support for the following software "
@@ -715,7 +714,7 @@ class DistUpgradeControler(object):
                                      "maintained software (universe), "
                                      "these packages will be suggested for "
                                      "removal at the end of the upgrade."),
-                                   "\n".join(demoted))
+                                   "\n".join(self.installed_demotions))
             # FIXME: integrate this into main upgrade dialog!?!
 
         if not self.cache.distUpgrade(self._view, self.serverMode, self.logfd):

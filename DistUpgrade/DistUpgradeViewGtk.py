@@ -241,7 +241,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         pid = self.term.forkpty(envv=self.env)
         if pid == 0:
           # WORKAROUND for broken feisty vte where envv does not work)
-          for env self.env:
+          for env in self.env:
             (key, value) = env.split("=")
             os.environ[key] = value
           # HACK to work around bug in python/vte and unregister the logging

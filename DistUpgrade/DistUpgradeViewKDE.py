@@ -376,8 +376,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
         copyXauth = tempfile.mktemp("", "adept")
         if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
-            shutil.copy(os.environ['XAUTHORITY'], "/tmp/dist-upgrade-xauthority")
-            os.environ["XAUTHORITY"] = "/tmp/dist-upgrade-xauthority"
+            shutil.copy(os.environ['XAUTHORITY'], copyXauth)
+            os.environ["XAUTHORITY"] = copyXauth
 
         # Note that with kdesudo this needs --nonewdcop
         ## create a new DCOP-Client:

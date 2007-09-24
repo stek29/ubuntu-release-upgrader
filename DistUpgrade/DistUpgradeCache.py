@@ -6,6 +6,7 @@ import apt_pkg
 import os
 import re
 import logging
+import string
 from subprocess import Popen, PIPE
 
 from gettext import gettext as _
@@ -210,7 +211,7 @@ class MyCache(apt.Cache):
                 except Exception, e:
                     logging.error("can't parse line '%s'" % line)
                     continue
-                if "nfs" in device:
+                if "nfs" in fstype:
                     logging.debug("found nfs mount in line '%s', marking nfs-common for install " % line)
                     self["nfs-common"].markInstall()
                     break

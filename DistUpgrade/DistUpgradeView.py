@@ -140,6 +140,11 @@ class DistUpgradeView(object):
             elif pkg.markedUpgrade: self.toUpgrade.append(pkg.name)
             elif pkg.markedDelete: self.toRemove.append(pkg.name)
             elif pkg.markedDowngrade: self.toDowngrade.append(pkg.name)
+        # sort it
+        self.toInstall.sort()
+        self.toUpgrade.sort()
+        self.toRemove.sort()
+        self.toDowngrade.sort()
         # no re-installs 
         assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toDowngrade) == len(changes))
     def askYesNoQuestion(self, summary, msg, default='No'):

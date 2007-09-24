@@ -173,9 +173,12 @@ class DistUpgradeViewText(DistUpgradeView):
         # TRANSLATORS: the "d" is "details"
         elif res.strip().lower().startswith(_("d")):
           print
-          print _("Remove: %s\n" % " ".join(self.toRemove))
-          print _("Install: %s\n" % " ".join(self.toInstall))
-          print _("Upgrade: %s\n" % " ".join(self.toUpgrade))
+          if len(self.toRemove) > 0:
+              print _("Remove: %s\n" % " ".join(self.toRemove))
+          if len(self.toInstall) > 0:
+              print _("Install: %s\n" % " ".join(self.toInstall))
+          if len(self.toUpgrade) > 0:
+              print _("Upgrade: %s\n" % " ".join(self.toUpgrade))
 
     def askYesNoQuestion(self, summary, msg):
       print

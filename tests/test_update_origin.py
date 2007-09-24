@@ -14,7 +14,7 @@ class testOriginMatcher(unittest.TestCase):
     def setUp(self):
         self.dpkg_status = open("apt/var/lib/dpkg/status","w")
         self.dpkg_status.flush()
-        self.cache = MyCache(apt.progress.OpProgress(), os.path.join(os.getcwd(),"apt/"))
+        self.cache = MyCache(apt.progress.OpProgress(), rootdir=os.path.join(os.getcwd(),"apt/"))
         self.cache.update()
         self.cache.open(apt.progress.OpProgress())
 
@@ -70,16 +70,17 @@ class testOriginMatcher(unittest.TestCase):
                               "Status: install ok installed\n"
                               "Installed-Size: 1\n"
                               "Version: %s\n"
-                              "Description: foo\n"
+                              "Description: foo\n\n"
                               % (pkg.name, sec_ver.VerStr))
             self.dpkg_status.flush()
         self.cache.open(apt.progress.OpProgress())
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
-            self.assert_(pkg._pkg.CurrentVer != None)
+            self.assert_(pkg._pkg.CurrentVer != None,
+                         "no package '%s' installed" % pkg.name)
             self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
                              matcher[("dapper-updates","Ubuntu")],
-                             "package '%s' from dapper-updates is labeld -security even though we have marked this version as installed already" % pkg.name)
+                             "package '%s' (%s) from dapper-updates is labeld '%s' even though we have marked this version as installed already" % (pkg.name, pkg.candidateVersion, self.cache.matchPackageOrigin(pkg, matcher).description))
 
 
 if __name__ == "__main__":

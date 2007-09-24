@@ -143,7 +143,7 @@ class MyCache(apt.Cache):
             for(verFileIter,index) in ver.FileList:
                 if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
                     indexfile = pkg._list.FindIndex(verFileIter)
-                    if indexfile and indexfile.IsTrusted:
+                    if indexfile: # and indexfile.IsTrusted:
                         match = matcher[verFileIter.Archive, verFileIter.Origin]
                         if match.importance > update_origin.importance:
                             update_origin = match

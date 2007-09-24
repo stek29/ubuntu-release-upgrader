@@ -179,8 +179,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         # if no libgnome2-perl is installed show the terminal
         frontend="gnome"
         if self._cache:
-          if not self._cache.has_key("libgnome2-perl") or \
-             not self._cache["libgnome2-perl"].isInstalled:
+          if (not self._cache.has_key("libgnome2-perl") or 
+              not self._cache["libgnome2-perl"].isInstalled):
             frontend = "dialog"
             self.expander.set_expanded(True)
         self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,
@@ -240,6 +240,10 @@ class GtkInstallProgressAdapter(InstallProgress):
     def fork(self):
         pid = self.term.forkpty(envv=self.env)
         if pid == 0:
+          # WORKAROUND for broken feisty vte where envv does not work)
+          for env self.env:
+            (key, value) = env.split("=")
+            os.environ[key] = value
           # HACK to work around bug in python/vte and unregister the logging
           #      atexit func in the child
           sys.exitfunc = lambda: True

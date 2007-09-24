@@ -190,6 +190,7 @@ class MyCache(apt.Cache):
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
         logging.debug("running gutsyQuirks handler")
+        # lowlatency kernel flavour vanished from feisty->gutsy
         try:
             (version, build, flavour) = self.uname.split("-")
             if flavour == 'lowlatency':
@@ -199,7 +200,22 @@ class MyCache(apt.Cache):
                     self[kernel].markInstall()
         except Exception, e:
             logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
-
+        # fix feisty->gutsy utils-linux -> nfs-common transition (LP: #141559)
+        try:
+            for line in map(string.strip, open("/proc/mounts")):
+                if line == '' or line.startswith("#"):
+                    continue
+                try:
+                    (device, mount_point, fstype, options, a, b) = line.split()
+                except Exception, e:
+                    logging.error("can't parse line '%s'" % line)
+                    continue
+                if "nfs" in device:
+                    logging.debug("found nfs mount in line '%s', marking nfs-common for install " % line)
+                    self["nfs-common"].markInstall()
+                    break
+        except Exception, e:
+            logging.warning("problem while transitioning util-linux -> nfs-common (%s)" % e)
 
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """

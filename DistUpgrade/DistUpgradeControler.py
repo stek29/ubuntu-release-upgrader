@@ -996,10 +996,8 @@ class DistUpgradeControler(object):
             res = subprocess.call(cmd)
             logging.debug("cmd: %s returned %i" % (cmd, res))
         
-
     def _checkAndRemoveEvms(self):
         " check if evms is in use and if not, remove it "
-        # we have one cdrom to convert
         for line in open("/proc/mounts"):
             line = line.strip()
             if line == '' or line.startswith("#"):

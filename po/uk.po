@@ -6,18 +6,78 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk(5)\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-19 23:09+0100\n"
-"PO-Revision-Date: 2007-04-09 04:45+0000\n"
+"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
+"POT-Creation-Date: 2007-09-24 11:00+0200\n"
+"PO-Revision-Date: 2007-09-15 16:42+0000\n"
 "Last-Translator: Vadim Abramchuck <abramm@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: KBabel 1.11.2\n"
-"X-Rosetta-Export-Date: 2007-04-13 08:49:09+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:105 ../UpdateManager/Common/utils.py:105
+msgid "None"
+msgstr ""
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:108 ../UpdateManager/Common/utils.py:108
+msgid "1 KB"
+msgstr ""
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:111 ../UpdateManager/Common/utils.py:111
+#, python-format
+msgid "%.0f KB"
+msgstr ""
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:114 ../UpdateManager/Common/utils.py:114
+#, python-format
+msgid "%.1f MB"
+msgstr ""
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, python-format
+msgid "Server for %s"
+msgstr ""
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr ""
+
+#: ../DistUpgrade/distro.py:235
+msgid "Custom servers"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr "Вживати наступний шлях для пошуку компакт-диска з пакетами поновлення"
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"Використовувати інтерфейс. В наявності: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid ""
+"Use special upgrade mode. Available:\n"
+"desktop, server"
+msgstr ""
+"Використовувати спеціальний режим поновлення:\n"
+"desktop, server"
 
 #: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
@@ -53,6 +113,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
+"При розрахункуі оновлення виникла нерозв'язна проблема.\n"
+"\n"
+"Будь-ласка сповістіть про помилку у пакеті 'update-manager' та включіть "
+"файли з /var/log/dist-upgrade/ у своє повідомлення."
 
 #. FIXME: maybe ask a question here? instead of failing?
 #: ../DistUpgrade/DistUpgradeCache.py:401
@@ -103,7 +167,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeControler.py:92
 msgid "Failed to add the CD"
-msgstr ""
+msgstr "Не вдалося додати компакт-диск"
 
 #: ../DistUpgrade/DistUpgradeControler.py:93
 #, python-format
@@ -114,27 +178,34 @@ msgid ""
 "The error message was:\n"
 "'%s'"
 msgstr ""
+"Виникла помилка при додавання компакт-диску, поновлення буде припинено. "
+"Повідомте про цю помилку якщо це є правильний компакт-диск Ubuntu.\n"
+"Повідомлення про помилку:\n"
+"'%s'"
 
 #: ../DistUpgrade/DistUpgradeControler.py:125
 msgid "Reading cache"
 msgstr "Зчитування кешу"
 
 #: ../DistUpgrade/DistUpgradeControler.py:182
+#, fuzzy
 msgid "Unable to get exclusive lock"
-msgstr ""
+msgstr "Не вдалося отримати ексклюзивне блокування"
 
 #: ../DistUpgrade/DistUpgradeControler.py:183
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
+"Це зазвичай значить, що запущено інший менеджер пакунків (наприклад, apt-get "
+"або aptitude). Будь ласка, спочатку закрийте цю програму."
 
 #: ../DistUpgrade/DistUpgradeControler.py:201
 msgid "Continue running under SSH?"
-msgstr ""
+msgstr "Продовжити роботу через SSH?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:202
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
 "perform a upgrade over ssh currently because in case of failure it is harder "
@@ -143,10 +214,15 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
+"Виглядає що цей сеанс працює через ssh. Не рекомендується проводити "
+"поновлення через ssh тому-що у випадку невдачі відновлення буде складнішим.\n"
+"\n"
+"Якщо Ви продовжите, додатковий демон ssh буде запущено на порті '%s'.\n"
+"Продовжити?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:215
 msgid "Starting additional sshd"
-msgstr ""
+msgstr "Запуск додаткового sshd"
 
 #: ../DistUpgrade/DistUpgradeControler.py:216
 #, python-format
@@ -155,6 +231,9 @@ msgid ""
 "on port '%s'. If anything goes wrong with the running ssh you can still "
 "connect to the additional one.\n"
 msgstr ""
+"Для спрощення відновлення у випадку невдачі поновлення додатковий sshd буде "
+"запущений на порті '%s'. Якщо буде щось погане з поточний sshd, Ви зможете "
+"з'єднатися з додатковим.\n"
 
 #: ../DistUpgrade/DistUpgradeControler.py:280
 #: ../DistUpgrade/DistUpgradeControler.py:289
@@ -165,16 +244,18 @@ msgstr "Підготовка до апгрейду системи"
 #: ../DistUpgrade/DistUpgradeControler.py:281
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
-msgstr ""
+msgstr "Поновлення з '%s' до '%s' цією програмою не підтримується."
 
 #: ../DistUpgrade/DistUpgradeControler.py:290
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
+"Ваше встановлення пакету python пошкоджене. Виправте посилання '/usr/bin/"
+"python'."
 
 #: ../DistUpgrade/DistUpgradeControler.py:309
 msgid "Include latest updates from the Internet?"
-msgstr ""
+msgstr "Включити найновіші поновленнч з Intenet?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:310
 msgid ""
@@ -183,6 +264,10 @@ msgid ""
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"Процес поновлення може автоматично завантажити найновіші поновлення і "
+"встановити їх протягом поновлення. Поновлення триматиме довше, але по "
+"закінченню, система буде повністю поновлена. Ви можете не робити цього, але "
+"маєте встановити найновіші поновлення пізніше."
 
 #: ../DistUpgrade/DistUpgradeControler.py:467
 msgid "No valid mirror found"
@@ -213,6 +298,10 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No' the update will "
 "cancel."
 msgstr ""
+"Після сканування  вашого 'sources.list', не було знайдено дійсного запису "
+"для '%s' .\n"
+"\n"
+"Додати за умовчанням  '%s' ? Якщо ви вибирете 'Ні', оновлення буде відмінено."
 
 #: ../DistUpgrade/DistUpgradeControler.py:520
 msgid "Repository information invalid"
@@ -223,12 +312,12 @@ msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
 msgstr ""
-"Поновлення файлу сховищ призвело його до пошкодження. Будь ласка, сповістіть "
+"Поновлення файлу сховищ призвело до його пошкодження. Будь ласка, сповістіть "
 "про це як про помилку."
 
 #: ../DistUpgrade/DistUpgradeControler.py:527
 msgid "Third party sources disabled"
-msgstr ""
+msgstr "Сторонні джерела відключені"
 
 #: ../DistUpgrade/DistUpgradeControler.py:528
 msgid ""
@@ -236,9 +325,11 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
+"Деякі сторонні джерела у Вашому sources.list були відключені. Ви можете "
+"знову включити їх після поновлення за допомогою програми 'software-"
+"properties' чи менеджера пакетів."
 
 #: ../DistUpgrade/DistUpgradeControler.py:586
-#, fuzzy
 msgid "Error during update"
 msgstr "Помилка під час поновлення"
 
@@ -247,8 +338,8 @@ msgid ""
 "A problem occured during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
-"Під час оновлення сталася помилка. Це зазвичай викликано проблемами у "
-"мережі, будь ласка, перевірте ваше мережеве підключення та спробуйте знову."
+"Під час поновлення сталася помилка. Це зазвичай викликано проблемами у "
+"мережі, будь ласка, перевірте Ваше мережеве підключення та спробуйте знову."
 
 #: ../DistUpgrade/DistUpgradeControler.py:596
 msgid "Not enough free disk space"
@@ -268,7 +359,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeControler.py:709
 msgid "Support for some applications ended"
-msgstr ""
+msgstr "Підтримка деяких програм закінчилася"
 
 #: ../DistUpgrade/DistUpgradeControler.py:710
 msgid ""
@@ -278,6 +369,12 @@ msgid ""
 "If you have not enabled community maintained software (universe), these "
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
+"Canonical Ltd. більше не надає підтримку наступним пакетам програм. Ви все "
+"ще можете отримувати підтримку від спільноти.\n"
+"\n"
+"Якщо у Вас не включене підтримуване спільнотою програмне забезпечення "
+"(universe), ці пакети будуть запропоновані до видалення в кінці процедури "
+"поновлення."
 
 #. ask the user if he wants to do the changes
 #: ../DistUpgrade/DistUpgradeControler.py:733
@@ -342,7 +439,7 @@ msgstr "Видалити"
 
 #: ../DistUpgrade/DistUpgradeControler.py:922
 msgid "Error during commit"
-msgstr ""
+msgstr "Помилка при фіксації"
 
 #: ../DistUpgrade/DistUpgradeControler.py:923
 #, fuzzy
@@ -356,18 +453,18 @@ msgstr ""
 #. generate a new cache
 #: ../DistUpgrade/DistUpgradeControler.py:1037
 msgid "Restoring original system state"
-msgstr ""
+msgstr "Відновлення первісного стану системи"
 
 #. FIXME: instead of error out, fetch and install it
 #. here
 #: ../DistUpgrade/DistUpgradeControler.py:1075
 msgid "Required depends is not installed"
-msgstr ""
+msgstr "Необхідний пакет (залежність) не встановлений"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1076
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr ""
+msgstr "Необхідний пакет (залежність) '%s' не встановлений. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
@@ -378,7 +475,7 @@ msgstr "Перевірка менеджера пакунків"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1208
 msgid "Preparing the upgrade failed"
-msgstr ""
+msgstr "Підготовка до оновлення не вдалася"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1209
 msgid ""
@@ -386,10 +483,13 @@ msgid ""
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bugreport."
 msgstr ""
+"Підготовка системи до оновлення не вдалася. Повідомте про це як про помилку "
+"щодо пакету 'update-manager' та включіть файли з /var/log/dist-upgrade/ в "
+"звіт."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1224
 msgid "Getting upgrade pre-requists failed"
-msgstr ""
+msgstr "Помилка отримання необхідних файлів дял поновлення"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1225
 #, fuzzy
@@ -400,8 +500,6 @@ msgid ""
 "Please report this as a bug against the 'update-manager' package and include "
 "the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
-"\n"
-"\n"
 "Під час розрахунку оновлення виникла невиправна помилка. Будь ласка, "
 "повідомте про це як про помилку програми."
 
@@ -422,6 +520,10 @@ msgid ""
 "manager' package and include the files in /var/log/dist-upgrade/ in the "
 "bugreport."
 msgstr ""
+"Важливий пакет '%s' не може бути знайдений після поновлення інформації про "
+"пакети.\n"
+"Це вказує на серйозну помилку, повідомте про це як про помилку щодо пакету "
+"'update-manager' та включіть файли з /var/log/dist-upgrade/ в звіт."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
@@ -431,7 +533,7 @@ msgstr "Запит підтвердження"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1289 ../update-manager:83
 msgid "Fetching"
-msgstr ""
+msgstr "Отримання"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1299 ../update-manager:87
 msgid "Upgrading"
@@ -455,7 +557,7 @@ msgstr "Вставте '%s' в привід '%s'"
 #: ../DistUpgrade/DistUpgradeViewGtk.py:126
 #: ../DistUpgrade/DistUpgradeViewKDE.py:128
 msgid "Fetching is complete"
-msgstr ""
+msgstr "Отримання завершено"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:138
 #: ../DistUpgrade/DistUpgradeViewKDE.py:141
@@ -464,18 +566,18 @@ msgid "Fetching file %li of %li at %sb/s"
 msgstr "Завантажується файл %li of %li at %s/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:270
 #: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:271
 #, python-format
 msgid "About %s remaining"
-msgstr ""
+msgstr "Приблизно '%s' залишилось"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:141
 #: ../DistUpgrade/DistUpgradeViewKDE.py:144
 #, python-format
 msgid "Fetching file %li of %li"
-msgstr ""
+msgstr "Отримання файлу %li з %li"
 
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
@@ -499,6 +601,8 @@ msgid ""
 "The upgrade will continue but the '%s' package may be in a not working "
 "state. Please consider submitting a bugreport about it."
 msgstr ""
+"Поновлення продовжиться, але пакет '%s' може бути в неробочому стані. Прошу "
+"надіслати повідомлення про цю помилку."
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:216
@@ -508,6 +612,8 @@ msgid ""
 "Replace the customized configuration file\n"
 "'%s'?"
 msgstr ""
+"Замінити змінений користувачем конфігураційний файл\n"
+"'%s'?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:217
 #: ../DistUpgrade/DistUpgradeViewKDE.py:204
@@ -515,17 +621,20 @@ msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
 msgstr ""
+"Ви втратите всі зроблені Вами у цьому конфігураційному файлі зміни якщо "
+"заміните його новою версією."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:230
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 msgid "The 'diff' command was not found"
 msgstr "Команда 'diff' не знайдена"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:403
+#: ../DistUpgrade/DistUpgradeViewGtk.py:407
+#: ../DistUpgrade/DistUpgradeViewText.py:77
 msgid "A fatal error occured"
 msgstr "Виникла невиправна помилка"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:404
+#: ../DistUpgrade/DistUpgradeViewGtk.py:408
 #, fuzzy
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
@@ -538,82 +647,96 @@ msgstr ""
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:538
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
 #: ../DistUpgrade/DistUpgradeViewKDE.py:576
+#: ../DistUpgrade/DistUpgradeViewText.py:128
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+"Copy text   \t\r\n"
+"1 пакет буде видалено."
+msgstr[1] "%d пакети буде видалено."
+msgstr[2] "%d пакетів буде видалено."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:543
+#: ../DistUpgrade/DistUpgradeViewGtk.py:547
 #: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewText.py:133
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Буде встановлено 1 новий пакет."
+msgstr[1] "Буде встановлено %d нових пекети."
+msgstr[2] "Буде встановлено %d нових пекетів."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:549
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #: ../DistUpgrade/DistUpgradeViewKDE.py:587
+#: ../DistUpgrade/DistUpgradeViewText.py:139
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Буде поновлено 1 пакет."
+msgstr[1] "Буде поновлено %d пакети."
+msgstr[2] "Буде поновлено %d пакетів."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:554
+#: ../DistUpgrade/DistUpgradeViewGtk.py:558
+#: ../DistUpgrade/DistUpgradeViewText.py:144
 #, python-format
 msgid ""
 "\n"
 "\n"
 "You have to download a total of %s. "
 msgstr ""
+"\n"
+"\n"
+"Вам треба завантажити всього %s. "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
+#: ../DistUpgrade/DistUpgradeViewGtk.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:607
 #: ../DistUpgrade/DistUpgradeViewKDE.py:615
+#: ../DistUpgrade/DistUpgradeViewText.py:149
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
 msgstr ""
+"Отримання та встановлення поновлень може тривати кілька годин і вже не може "
+"бути скасовано пізніше."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:563
+#: ../DistUpgrade/DistUpgradeViewGtk.py:567
 #: ../DistUpgrade/DistUpgradeViewKDE.py:610
 #: ../DistUpgrade/DistUpgradeViewKDE.py:618
 msgid "To prevent data loss close all open applications and documents."
 msgstr "Для запобігання втраті інформації закрийте усі програми та документи."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewGtk.py:573
 #: ../DistUpgrade/DistUpgradeViewKDE.py:624
+#: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../UpdateManager/UpdateManager.py:658
 #, fuzzy
 msgid "Your system is up-to-date"
 msgstr "Ваша система оновлена!"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:574
 #: ../DistUpgrade/DistUpgradeViewKDE.py:625
+#: ../DistUpgrade/DistUpgradeViewText.py:156
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
-msgstr ""
+msgstr "Немає поновлень дял Вашої системи. Поновлення буде скасовано."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:590
 #, fuzzy, python-format
 msgid "<b>Remove %s</b>"
 msgstr "<b>Видалити %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:588
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #: ../DistUpgrade/DistUpgradeViewKDE.py:648
 #, fuzzy, python-format
 msgid "Install %s"
 msgstr "Встановити %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:650
 #, python-format
 msgid "Upgrade %s"
@@ -678,22 +801,22 @@ msgstr "Оновити"
 #: ../DistUpgrade/DistUpgradeView.py:33
 #, python-format
 msgid "%li days %li hours %li minutes"
-msgstr ""
+msgstr "%li днів %li годин %li хвилин"
 
 #: ../DistUpgrade/DistUpgradeView.py:35
 #, python-format
 msgid "%li hours %li minutes"
-msgstr ""
+msgstr "%li годин %li хвилин"
 
 #: ../DistUpgrade/DistUpgradeView.py:37
 #, python-format
 msgid "%li minutes"
-msgstr ""
+msgstr "%li хвилин"
 
 #: ../DistUpgrade/DistUpgradeView.py:38
 #, python-format
 msgid "%li seconds"
-msgstr ""
+msgstr "%li секунд"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
@@ -703,6 +826,8 @@ msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem"
 msgstr ""
+"Це завантаження триватиме приблизно %s через 1Мбіт DSL з'єднання або "
+"приблизно %s через 56к модем"
 
 #: ../DistUpgrade/DistUpgradeView.py:150
 msgid "Reboot required"
@@ -715,26 +840,149 @@ msgstr ""
 "Виконання оновлення завершено. Необхідно перезавантажити систему. "
 "Перезавантажити зара?"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:123
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
+#, fuzzy
+msgid "Could not run the upgrade tool"
+msgstr "Неможливо провести апргрейд системи"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:124
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
+#, fuzzy
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-msgstr ""
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
+msgstr "Вибраний ключ неможливо видалити. Сповістіть про це як про помилку."
 
-#: ../DistUpgrade/dist-upgrade.py:24
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:150
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
+msgid "Upgrade tool signature"
+msgstr "Підпис інструменту оновлення"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:153
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
+msgid "Upgrade tool"
+msgstr "Інструмент оновлення"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Failed to fetch"
+msgstr "Не вдалося отримати"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:178
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr ""
+"Отримання оновлення зазнало краху. Це може бути викликано пробемою у мережі. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:182
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
+msgid "Failed to extract"
+msgstr "Не вдалося розпакувати"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:183
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
 msgid ""
-"Use special upgrade mode. Available:\n"
-"desktop, server"
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Не вдалося розпакувати поновлення. Можливо, виникла проблема в мережі або на "
+"сервері. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:188
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
+msgid "Verfication failed"
+msgstr "Перевірка зазнала краху"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:189
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Не вдалося перевірити наявність поновлення. Можливо, виникла проблема в "
+"мережі або на сервері. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:194
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
+#, fuzzy
+msgid "Authentication failed"
+msgstr "Аутентифікація зазнала краху"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:195
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr ""
+"Аутенфікація поновлення зазнала краху. Це може бути викликано проблемою з "
+"мережею або сервером. "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, fuzzy
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+"Будь ласка, повідмте це я помилку, включивши в повідомлення файли ~/dist-"
+"upgrade.log and ~/dist-upgrade-apt.log . Апргрейд щойно перервано."
+
+#: ../DistUpgrade/DistUpgradeViewText.py:101
+msgid "Aborting"
 msgstr ""
 
-#. testcode to see if the bullets look nice in the dialog
-#. for i in range(4):
-#. view.setStep(i+1)
-#. app.openCache()
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#: ../DistUpgrade/DistUpgradeViewText.py:184
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "Пр_одовжити"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#, fuzzy
+msgid "Details [d]"
+msgstr "Деталі"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:168
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:171
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:174
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "Видалити"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:177
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "Встановити %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:178
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "Оновити %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#, fuzzy
+msgid "Restart required"
+msgstr "Необхідно перезавантажити систему"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+msgid "To fully ugprade, please restart"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
@@ -749,7 +997,7 @@ msgstr "<b><big>Почати оновлення?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
 msgid "<b><big>Upgrading Ubuntu to version 7.10</big></b>"
-msgstr ""
+msgstr "<b><big>Поновлення Ubuntu до версії 7.10</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
@@ -796,11 +1044,11 @@ msgstr "Термінал"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
-msgstr ""
+msgstr "_Скасувати поновлення"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
-msgstr ""
+msgstr "Пр_одовжити"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
@@ -825,7 +1073,7 @@ msgstr "Продовжити оновлення"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
-msgstr ""
+msgstr "_Почати поновлення"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:79
 msgid "Could not find the release notes"
@@ -846,52 +1094,56 @@ msgstr "Будь ласка, перевірте ваше з'єднання з І
 #: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr ""
+msgstr "Завантаження файлу %(current)li з %(total)li із швидкістю %(speed)s/с"
 
 #: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
-msgstr ""
+msgstr "Завантаження файлу %(current)li з %(total)li"
 
 #: ../UpdateManager/UpdateManager.py:235
 msgid "The list of changes is not available"
-msgstr ""
+msgstr "Немає списку змін"
 
 #: ../UpdateManager/UpdateManager.py:241
 msgid ""
 "The list of changes is not available yet.\n"
 "Please try again later."
 msgstr ""
+"Ще немає списку зімн.\n"
+"Прошу спробувати пізніше."
 
 #: ../UpdateManager/UpdateManager.py:246
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
+"Помилка завантаження списку змін. \n"
+"Перевірте з'єднання з Internet."
 
 #: ../UpdateManager/UpdateManager.py:273
 msgid "Important security updates"
-msgstr ""
+msgstr "Важливі поновлення безпеки"
 
 #: ../UpdateManager/UpdateManager.py:274
 msgid "Recommended updates"
-msgstr ""
+msgstr "Рекоменодовані поновлення"
 
 #: ../UpdateManager/UpdateManager.py:275
 msgid "Proposed updates"
-msgstr ""
+msgstr "Пропоновані поновлення"
 
 #: ../UpdateManager/UpdateManager.py:276
 msgid "Backports"
-msgstr ""
+msgstr "Backports"
 
 #: ../UpdateManager/UpdateManager.py:277
 msgid "Distribution updates"
-msgstr ""
+msgstr "Поновлення дистрибутиву"
 
 #: ../UpdateManager/UpdateManager.py:282
 msgid "Other updates"
-msgstr ""
+msgstr "Інше поновлення"
 
 #: ../UpdateManager/UpdateManager.py:508
 #, python-format
@@ -900,15 +1152,15 @@ msgstr "Версія %s: \n"
 
 #: ../UpdateManager/UpdateManager.py:569
 msgid "Downloading list of changes..."
-msgstr ""
+msgstr "Завантаження списку змін..."
 
 #: ../UpdateManager/UpdateManager.py:596
 msgid "_Uncheck All"
-msgstr ""
+msgstr "_Скасувати позначку всього"
 
 #: ../UpdateManager/UpdateManager.py:602
 msgid "_Check All"
-msgstr ""
+msgstr "_Позначити все"
 
 #. TRANSLATORS: b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:646 ../UpdateManager/UpdateManager.py:673
@@ -939,7 +1191,7 @@ msgstr "Оновлення завершено"
 
 #: ../UpdateManager/UpdateManager.py:756
 msgid "Checking for updates"
-msgstr ""
+msgstr "Перевірка поновлень"
 
 #: ../UpdateManager/UpdateManager.py:828
 #, fuzzy
@@ -971,18 +1223,18 @@ msgstr ""
 #: ../UpdateManager/UpdateManager.py:876
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr ""
+msgstr "Від версії %(old_version)s до %(new_version)s"
 
 #: ../UpdateManager/UpdateManager.py:880
 #, python-format
 msgid "Version %s"
-msgstr ""
+msgstr "Версія %s"
 
 #. TRANSLATORS: the b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:882
 #, python-format
 msgid "(Size: %s)"
-msgstr ""
+msgstr "(Розмір %s)"
 
 #: ../UpdateManager/UpdateManager.py:893
 msgid "Your distribution is not supported anymore"
@@ -1010,12 +1262,12 @@ msgstr "Інструмент оновлення проведе Вас через
 #: ../UpdateManager/UpdateManager.py:919
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
-msgstr ""
+msgstr "<b>Новий реліз дистрибутива '%s'</b>"
 
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:958
 msgid "Software index is broken"
-msgstr ""
+msgstr "Індекс програм пошкоджений"
 
 #: ../UpdateManager/UpdateManager.py:959
 msgid ""
@@ -1023,67 +1275,9 @@ msgid ""
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
 msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
-#, fuzzy
-msgid "Could not run the upgrade tool"
-msgstr "Неможливо провести апргрейд системи"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
-#, fuzzy
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr "Вибраний ключ неможливо видалити. Сповістіть про це як про помилку."
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
-msgid "Upgrade tool signature"
-msgstr "Підпис інструменту оновлення"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
-msgid "Upgrade tool"
-msgstr "Інструмент оновлення"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Failed to fetch"
-msgstr "Не вдалося отримати"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr ""
-"Отримання оновлення зазнало краху. Це може бути викликано пробемою у мережі. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
-msgid "Failed to extract"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
-msgid "Verfication failed"
-msgstr "Перевірка зазнала краху"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
-#, fuzzy
-msgid "Authentication failed"
-msgstr "Аутентифікація зазнала краху"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr ""
-"Аутенфікація поновлення зазнала краху. Це може бути викликано проблемою з "
-"мережею або сервером. "
+"Встановлення або видалення програм неможливо. Для виправлення цієї ситуації "
+"використовуйте менеджер пакетів \"Synaptic\" або запустите в терміналі "
+"\"sudo apt-get install -f\"."
 
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
@@ -1092,14 +1286,18 @@ msgid ""
 "Your system does not check for updates automatically. You can configure this "
 "behavior in <i>Software Sources</i> on the <i>Internet Updates</i> tab."
 msgstr ""
+"<b><big>Ви мусите перевіряти наявність поновлень вручну</big></b>\n"
+"Ваша система не перевіряє наявність поновлень автоматично. Ви можете "
+"увімкнути автоматичну перевірку в <i>Джерела програм</i> на закладці "
+"<i>Поновлення з Internet</i>."
 
 #: ../data/glade/UpdateManager.glade.h:4
 msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr ""
+msgstr "<big><b>Не забувайте оновлювати систему</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr ""
+msgstr "<big><b>Не всі поновлення можливо встановити</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
 #, fuzzy
@@ -1112,11 +1310,11 @@ msgstr "Зміни"
 
 #: ../data/glade/UpdateManager.glade.h:8
 msgid "Chec_k"
-msgstr ""
+msgstr "Перевір_ка"
 
 #: ../data/glade/UpdateManager.glade.h:9
 msgid "Check the software channels for new updates"
-msgstr ""
+msgstr "Перевірити канали программ на наявність поновлень"
 
 #: ../data/glade/UpdateManager.glade.h:10
 msgid "Description"
@@ -1129,7 +1327,7 @@ msgstr "Опис"
 
 #: ../data/glade/UpdateManager.glade.h:12
 msgid "Release Notes"
-msgstr ""
+msgstr "Відомості про релізе"
 
 #: ../data/glade/UpdateManager.glade.h:13
 msgid ""
@@ -1143,7 +1341,7 @@ msgstr ""
 
 #: ../data/glade/UpdateManager.glade.h:19
 msgid "Show progress of single files"
-msgstr ""
+msgstr "Показувати прогрес для окремих файлів"
 
 #: ../data/glade/UpdateManager.glade.h:20
 msgid ""
@@ -1164,15 +1362,15 @@ msgstr "Менеджер оновлення"
 
 #: ../data/glade/UpdateManager.glade.h:23
 msgid "Upgrade to the latest version of Ubuntu"
-msgstr ""
+msgstr "Оновити систему до найновішої версії Ubuntu"
 
 #: ../data/glade/UpdateManager.glade.h:24
 msgid "_Check"
-msgstr ""
+msgstr "_Перевірити"
 
 #: ../data/glade/UpdateManager.glade.h:25
 msgid "_Hide this information in the future"
-msgstr ""
+msgstr "_Не показувати цю інформацію надалі"
 
 #: ../data/glade/UpdateManager.glade.h:26
 #, fuzzy
@@ -1191,7 +1389,7 @@ msgstr "Оновити"
 
 #: ../data/glade/UpdateManager.glade.h:29
 msgid "updates"
-msgstr ""
+msgstr "поновлення"
 
 #: ../data/update-manager.desktop.in.h:1
 msgid "Show and install available updates"
@@ -1199,17 +1397,19 @@ msgstr "Показати та встановити наявні оновленн
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "System Update Tool"
-msgstr ""
+msgstr "Інструмент для поновлення системи"
 
 #: ../data/update-manager.schemas.in.h:1
 msgid ""
 "Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
+"Автоматично перевіряти наявність нової версії дистрибутива і пропонувати "
+"оновлення (якщо можливо)."
 
 #: ../data/update-manager.schemas.in.h:2
 msgid "Check for new distribution releases"
-msgstr ""
+msgstr "Перевірити на наявність нових релізов дистрибутива"
 
 #: ../data/update-manager.schemas.in.h:3
 msgid ""
@@ -1273,15 +1473,15 @@ msgstr ""
 
 #: ../do-release-upgrade:26
 msgid "Run in a special upgrade mode"
-msgstr ""
+msgstr "Виконати в спеціальному режимі поновлення"
 
 #: ../do-release-upgrade:30
 msgid "Checking for a new ubuntu release"
-msgstr ""
+msgstr "Перевірка нової версії Ubuntu"
 
 #: ../do-release-upgrade:36
 msgid "No new release found"
-msgstr ""
+msgstr "Нової версії не знайдено"
 
 #, fuzzy
 #~ msgid "Fetching file %li of %li at %s/s"
@@ -1478,14 +1678,10 @@ msgstr ""
 #~ msgid "%s package is going to be removed."
 #~ msgid_plural "%s packages are going to be removed."
 #~ msgstr[0] "%s пакунків буде видалено."
-#~ msgstr[1] ""
-#~ msgstr[2] ""
 
 #~ msgid "%s new package is going to be installed."
 #~ msgid_plural "%s new packages are going to be installed."
 #~ msgstr[0] "%s пакунків буде встановлено."
-#~ msgstr[1] ""
-#~ msgstr[2] ""
 
 #~ msgid "%s package is going to be upgraded."
 #~ msgid_plural "%s packages are going to be upgraded."

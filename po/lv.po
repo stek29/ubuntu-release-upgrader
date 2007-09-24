@@ -8,18 +8,78 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lp-upd-manager-lv\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-19 23:09+0100\n"
-"PO-Revision-Date: 2007-04-08 08:15+0000\n"
+"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
+"POT-Creation-Date: 2007-09-24 11:00+0200\n"
+"PO-Revision-Date: 2007-09-12 05:45+0000\n"
 "Last-Translator: Raivis Dejus <orvils@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
-"X-Generator: KBabel 1.11.2\n"
-"X-Rosetta-Export-Date: 2007-04-13 08:48:51+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:105 ../UpdateManager/Common/utils.py:105
+msgid "None"
+msgstr "Nekas"
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:108 ../UpdateManager/Common/utils.py:108
+msgid "1 KB"
+msgstr ""
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:111 ../UpdateManager/Common/utils.py:111
+#, fuzzy, python-format
+msgid "%.0f KB"
+msgstr "%.1f MB"
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:114 ../UpdateManager/Common/utils.py:114
+#, python-format
+msgid "%.1f MB"
+msgstr "%.1f MB"
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, fuzzy, python-format
+msgid "Server for %s"
+msgstr "Serveris: %s"
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr "Galvenais serveris"
+
+#: ../DistUpgrade/distro.py:235
+#, fuzzy
+msgid "Custom servers"
+msgstr "Tuvākais serveris"
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr "Lietot doto ceļu, lai atrastu cdrom ar jauninājumu pakotnēm"
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"Lietot saskarni. Šobrīd pieejamās: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid ""
+"Use special upgrade mode. Available:\n"
+"desktop, server"
+msgstr ""
+"Lietot speciālu atjaunināšanas veidu, Pieejamās iespējas:\n"
+"desktop, server"
 
 #: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
@@ -54,6 +114,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
+"Aprēķinot atjaunināšanu notika neatrisināma problēma. \n"
+"Lūdzu paziņojiet par šo blusu atjaunināšanas pārvaldnieka ('update-manager') "
+"sadaļā un pievienojiet failus, kas atrodas direktorijā /var/log/dist-"
+"upgrade/."
 
 #. FIXME: maybe ask a question here? instead of failing?
 #: ../DistUpgrade/DistUpgradeCache.py:401
@@ -93,6 +157,11 @@ msgid ""
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
+"Jūsu sistēmai nav ne ubuntu, ne kubuntu, ne xubuntu vai edubuntu darbvirsmas "
+"pakotnes un nebija iespējams noteiktu, kura Ubuntu versija jums ir "
+"uzstādīta.\n"
+" Pirms turpināt, lūdzu, uzstādiet vienu no augstākminētajām pakotnēm "
+"izmantojot synaptic vai apt-get."
 
 #: ../DistUpgrade/DistUpgradeControler.py:92
 msgid "Failed to add the CD"
@@ -107,6 +176,11 @@ msgid ""
 "The error message was:\n"
 "'%s'"
 msgstr ""
+"Pievienojot CD gadījās kļūda un atjaunināšana tiks pārtraukta. Lūdzu, "
+"paziņojiet par to kā par blusu, ja šis ir īsts Ubuntu CD.\n"
+"\n"
+"Kļūdas paziņojums bija:\n"
+"'%s'"
 
 #: ../DistUpgrade/DistUpgradeControler.py:125
 msgid "Reading cache"
@@ -114,13 +188,15 @@ msgstr "Lasa kešu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:182
 msgid "Unable to get exclusive lock"
-msgstr ""
+msgstr "Nevarēju iegūt ekskluzīvu aizslēgu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:183
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
+"Parasti tas nozīmē, ka cita pakotņu pārvaldības aplikācija (piemēram apt-get "
+"vai aptitude) jau darbojas. Lūdzu, vispirms aizveriet to."
 
 #: ../DistUpgrade/DistUpgradeControler.py:201
 msgid "Continue running under SSH?"
@@ -136,6 +212,11 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
+"Šķiet, ka šī sesija darbojas ar ssh. Pašlaik nav ieteicams veikt "
+"atjaunināšanu pār ssh, jo neizdošanās gadījumā atgūties būs grūtāk.\n"
+"\n"
+"Ja jūs tomēr turpināsiet, papildus ssh dēmons tiks sāknēts portā '%s'.\n"
+"Vai vēlaties turpināt?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:215
 msgid "Starting additional sshd"
@@ -148,6 +229,9 @@ msgid ""
 "on port '%s'. If anything goes wrong with the running ssh you can still "
 "connect to the additional one.\n"
 msgstr ""
+"Lai neizdošanās gadījumā padarītu atgūšanos vieglāku, portā '%s' tiks "
+"sāknēts papildus sshd. Ja kaut kas nenotiks, kā vajag ar darbojošos ssh, jūs "
+"vēl varēsiet pieslēgties pie papildus ssh.\n"
 
 #: ../DistUpgrade/DistUpgradeControler.py:280
 #: ../DistUpgrade/DistUpgradeControler.py:289
@@ -157,12 +241,14 @@ msgstr "Nevar atjaunināt"
 #: ../DistUpgrade/DistUpgradeControler.py:281
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
-msgstr ""
+msgstr "Jauninājums no '%s' uz '%s' ar šo rīku netiek atbalstīta."
 
 #: ../DistUpgrade/DistUpgradeControler.py:290
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
+"Jūsu python instalācija ir bojāta. Lūdzu salabojiet `/usr/bin/python` "
+"simlinku."
 
 #: ../DistUpgrade/DistUpgradeControler.py:309
 msgid "Include latest updates from the Internet?"
@@ -175,6 +261,11 @@ msgid ""
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"Atjaunināšanas process var automātiski lejuplādēt jaunākos atjauninājumus un "
+"uzstādīt tos atjaunināšanas laikā. Atjaunināšana būs ilgāka, bet, kad tā "
+"beigsies, jūsu sistēma būs pilnībā atjaunināta. Jūs varat izvēlēties to "
+"nedarīt, bet jums vajadzētu uzstādīt jaunākos atjauninājumus drīzumā pēc "
+"atjaunināšanas."
 
 #: ../DistUpgrade/DistUpgradeControler.py:467
 msgid "No valid mirror found"
@@ -191,6 +282,13 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'no' the update will cancel."
 msgstr ""
+"Skenējot jūsu krātuvju informāciju netika atrasts spoguļa ieraksts. Ta "
+"iespējams gadījumos, ja lietojat iekšējo spoguli vai spoguļu informācija ir "
+"novecojusi.\n"
+"\n"
+"Vai tomēr vēlaties pārrakstīt 'sources.list' failu? Ja izvēlēsieties 'Jā', "
+"tad tiks pārrakstīti visi '%s' uz '%s' ierakstiem.\n"
+"Ja nē - modernizēšana tiks pārtraukta."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeControler.py:485
@@ -205,6 +303,10 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No' the update will "
 "cancel."
 msgstr ""
+"Pārbaudot jūsu 'sources.list', netika atrasts derīgs ieraksts priekš ' %s'.\n"
+"\n"
+"Vai nepieciešams pievienot noklusētos '%s' ierakstus? Ja izvēlēsieties 'Nē' "
+"atjaunināšana tiks atcelta."
 
 #: ../DistUpgrade/DistUpgradeControler.py:520
 msgid "Repository information invalid"
@@ -215,6 +317,8 @@ msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
 msgstr ""
+"Krātuves informācijas atjaunināšana radīja nederīgu failu. Lūdzu, paziņojiet "
+"par to kā par kļūdu."
 
 #: ../DistUpgrade/DistUpgradeControler.py:527
 msgid "Third party sources disabled"
@@ -226,6 +330,9 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
+"Daži trešās puses ieraksti jūsu 'sources.list' failā tika slēgti. Pēc "
+"sistēmas modernizēšanas tos varat atkal ieslēgt  ar 'software-properties' "
+"rīku vai jūsu pakotņu menedžeri."
 
 #: ../DistUpgrade/DistUpgradeControler.py:586
 msgid "Error during update"
@@ -236,6 +343,9 @@ msgid ""
 "A problem occured during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
+"Atjaunināšanas laikā gadījās kāda kļūme. Parasti tas nozīmē, ka ir bijusi "
+"kāda problēma ar tīklu. Lūdzu, pārbaudiet pieslēgumu tīklam un mēģiniet "
+"vēlreiz."
 
 #: ../DistUpgrade/DistUpgradeControler.py:596
 msgid "Not enough free disk space"
@@ -249,10 +359,14 @@ msgid ""
 "trash and remove temporary packages of former installations using 'sudo apt-"
 "get clean'."
 msgstr ""
+"Atjaunināšna tiks pārtraukta. Atjaunināšanai ir nepieciešama %s liela brīva "
+"vieta uz diska '%s'. Lūdzu atbrīvojiet papildus %s uz diska '%s'. Iztīriet "
+"atkritumkasti un atbrīvojieties no iepriekšējo instalāciju pagaidu pakotnēm "
+"izpildot komandu 'sudo apt-get clean'."
 
 #: ../DistUpgrade/DistUpgradeControler.py:709
 msgid "Support for some applications ended"
-msgstr ""
+msgstr "Atbalsts dažām aplikācijām ir beidzies"
 
 #: ../DistUpgrade/DistUpgradeControler.py:710
 msgid ""
@@ -262,6 +376,11 @@ msgid ""
 "If you have not enabled community maintained software (universe), these "
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
+"Canonical Ltd. turpmāk neuzturēs atbalstu sekojošajām pakotnēm. Tomēr jūs "
+"joprojām varat saņemt atbalstu no kopienas.\n"
+"\n"
+"Ja neesat ieslēguši kopienas uzturētās pakotnes (universe), tad pēc "
+"modernizēšanas vēlams šīs pakotnes noņemt."
 
 #. ask the user if he wants to do the changes
 #: ../DistUpgrade/DistUpgradeControler.py:733
@@ -288,6 +407,8 @@ msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
+"Modernizēšana tiek pārtraukta. Jūsu sistēma var būt nelietojamā stāvoklī. "
+"Tūlīt tiks iedarbināts atgūšanas rīks (dpkg --configure -a)."
 
 #: ../DistUpgrade/DistUpgradeControler.py:820
 #, python-format
@@ -298,6 +419,12 @@ msgid ""
 "files in /var/log/dist-upgrade/ in the bugreport.\n"
 "%s"
 msgstr ""
+"\n"
+"\n"
+"Lūdzu, paziņojiet par šo kā par 'update-manager' (atjaunināšanas "
+"pārvaldnieka) pakotnes blusu un iekļaujiet  savā paziņojumā failus no /var/"
+"log/dist-upgrade/.\n"
+"%s"
 
 #: ../DistUpgrade/DistUpgradeControler.py:824
 msgid "Could not install the upgrades"
@@ -313,7 +440,7 @@ msgstr "_Izlaist šo soli"
 
 #: ../DistUpgrade/DistUpgradeControler.py:911
 msgid "_Remove"
-msgstr "_Izņemt"
+msgstr "_Noņemt"
 
 #: ../DistUpgrade/DistUpgradeControler.py:922
 msgid "Error during commit"
@@ -324,6 +451,8 @@ msgid ""
 "A problem occured during the clean-up. Please see the below message for more "
 "information. "
 msgstr ""
+"Satīrīšanas laikā gadījās kļūda. Lūdzu, izlasiet zemāk redzamo ziņu, lai "
+"iegūtu vairāk informācijas. "
 
 #. generate a new cache
 #: ../DistUpgrade/DistUpgradeControler.py:1037
@@ -334,12 +463,12 @@ msgstr "Atjaunot uz sākotnējo sistēmas stāvokli"
 #. here
 #: ../DistUpgrade/DistUpgradeControler.py:1075
 msgid "Required depends is not installed"
-msgstr ""
+msgstr "Nav uzstādītas nepieciešamās atkarības."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1076
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr ""
+msgstr "Nav uzstādīta nepieciešamā atkarība '%s'. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
@@ -350,7 +479,7 @@ msgstr "Pārbaudu pakotņu parvaldnieku"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1208
 msgid "Preparing the upgrade failed"
-msgstr ""
+msgstr "Atjaunināšanas sagatavošana neizdevās"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1209
 msgid ""
@@ -358,10 +487,13 @@ msgid ""
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bugreport."
 msgstr ""
+"Sistēmas sagatavošana atjaunināšanai neizdevās. Lūdzu, paziņojiet par to kā "
+"par blusu 'update-manager' (atjaunināšanas pārvaldnieka) pakotnē un "
+"iekļaujiet savā ziņojumā failus no /var/log/dist-upgrade/."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1224
 msgid "Getting upgrade pre-requists failed"
-msgstr ""
+msgstr "Neizdevās atjaunināšanas priekšnosacījumu sagatavošana"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1225
 msgid ""
@@ -371,6 +503,11 @@ msgid ""
 "Please report this as a bug against the 'update-manager' package and include "
 "the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
+"Sistēmai neizdevās sagatavot atjaunināšanas priekšnosacījumus. Atjaunināšana "
+"tiks pārtraukta un atjunots sistēmas iepriekšējais stāvoklis.\n"
+"\n"
+"Lūdzu, ziņojiet par to kā par 'update-manager' pakotnes kļūdu un "
+"pievienojiet failus no /var/log/dist-upgrade/ kļūdas ziņojumā."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1246
 msgid "Updating repository information"
@@ -389,6 +526,11 @@ msgid ""
 "manager' package and include the files in /var/log/dist-upgrade/ in the "
 "bugreport."
 msgstr ""
+"Pēc pakotņu informācijas atjaunināšanas vairs nebija iespējams atrast "
+"būtisku pakotni '%s'.\n"
+"Tas norāda uz nopietnu kļūdu. Lūdzu, paziņojiet par šo blusu 'update-"
+"manager' (pakotņu pārvaldnieka) pakotnē un iekļaujiet failus no /var/log/"
+"dist-upgrada/ savā ziņojumā."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
@@ -398,7 +540,7 @@ msgstr "Jautā apstiprinājumu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1289 ../update-manager:83
 msgid "Fetching"
-msgstr ""
+msgstr "Velk"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1299 ../update-manager:87
 msgid "Upgrading"
@@ -417,7 +559,7 @@ msgstr "Sistēmas atjaunināšana ir pabeigta."
 #: ../DistUpgrade/DistUpgradeViewKDE.py:115
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
-msgstr ""
+msgstr "Lūdzu, ievietojiet '%s' dzinī '%s'"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:126
 #: ../DistUpgrade/DistUpgradeViewKDE.py:128
@@ -428,21 +570,21 @@ msgstr "Pakotnes ir savāktas"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:141
 #, python-format
 msgid "Fetching file %li of %li at %sb/s"
-msgstr ""
+msgstr "Velku failu %li no %li ar ātrumu %s/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:270
 #: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:271
 #, python-format
 msgid "About %s remaining"
-msgstr ""
+msgstr "Atlicis aptuveni %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:141
 #: ../DistUpgrade/DistUpgradeViewKDE.py:144
 #, python-format
 msgid "Fetching file %li of %li"
-msgstr ""
+msgstr "Iegūstu failu %li no %li"
 
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
@@ -450,7 +592,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewGtk.py:174
 #: ../DistUpgrade/DistUpgradeViewKDE.py:173
 msgid "Applying changes"
-msgstr ""
+msgstr "Pielietoju izmaiņas"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:199
 #: ../DistUpgrade/DistUpgradeViewKDE.py:184
@@ -465,6 +607,8 @@ msgid ""
 "The upgrade will continue but the '%s' package may be in a not working "
 "state. Please consider submitting a bugreport about it."
 msgstr ""
+"Modernizēšana tiks turpināta, bet pakotne '%s' varbūt nebūs darba kārtībā. "
+"Lūdzu, izvērtējiet, vai nosūtīt par to kļūdas ziņojumu."
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:216
@@ -491,31 +635,39 @@ msgstr ""
 msgid "The 'diff' command was not found"
 msgstr "Komanda 'diff' netika atrasta"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:403
+#: ../DistUpgrade/DistUpgradeViewGtk.py:407
+#: ../DistUpgrade/DistUpgradeViewText.py:77
 msgid "A fatal error occured"
 msgstr "Notikusi fatāla kļūda"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:404
+#: ../DistUpgrade/DistUpgradeViewGtk.py:408
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
 "var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
+"Lūdzu, paziņojiet par šo kā par blusu (ja jūs jau to neesat izdarījis) un "
+"iekļaujiet savā paziņojumā failus no /var/log/dist-upgrade/main.log un /var/"
+"log/dist-upgrade/apt.log. Atjaunināšana tagad tiek pārtraukta.\n"
+"Jūsu sākotnējais sources.list saraksts tika saglabāts direktorijā /etc/apt/"
+"sources.list.distUpgrade."
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:538
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
 #: ../DistUpgrade/DistUpgradeViewKDE.py:576
+#: ../DistUpgrade/DistUpgradeViewText.py:128
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "%d pakotne tiks noņemta"
 msgstr[1] "%d pakotnes tiks noņemtas"
-msgstr[2] ""
+msgstr[2] "%d pakotnes tiks noņemtas"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:543
+#: ../DistUpgrade/DistUpgradeViewGtk.py:547
 #: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewText.py:133
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
@@ -523,8 +675,9 @@ msgstr[0] "%d pakotnes tiks uzstādītas"
 msgstr[1] "%d pakotne tiks uzstādīta"
 msgstr[2] "%d pakotnes tiks uzstādītas"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:549
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #: ../DistUpgrade/DistUpgradeViewKDE.py:587
+#: ../DistUpgrade/DistUpgradeViewText.py:139
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
@@ -532,7 +685,8 @@ msgstr[0] "%d pakotne tiks atjaunināta"
 msgstr[1] "%d pakotne tiks atjaunināta"
 msgstr[2] "%d pakotnes tiks atjauninātas"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:554
+#: ../DistUpgrade/DistUpgradeViewGtk.py:558
+#: ../DistUpgrade/DistUpgradeViewText.py:144
 #, python-format
 msgid ""
 "\n"
@@ -543,46 +697,51 @@ msgstr ""
 "\n"
 "Kopumā jums jālejupielādē %s "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
+#: ../DistUpgrade/DistUpgradeViewGtk.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:607
 #: ../DistUpgrade/DistUpgradeViewKDE.py:615
+#: ../DistUpgrade/DistUpgradeViewText.py:149
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
 msgstr ""
+"Jauninājuma failu ievākšana un instalācija var prasīt vairākas stundas un "
+"vēlāk to nebūs iespējams apturēt."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:563
+#: ../DistUpgrade/DistUpgradeViewGtk.py:567
 #: ../DistUpgrade/DistUpgradeViewKDE.py:610
 #: ../DistUpgrade/DistUpgradeViewKDE.py:618
 msgid "To prevent data loss close all open applications and documents."
-msgstr ""
+msgstr "Aizveriet aplikācijas un dokumentus, lai izvairītos no datu zudumiem."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewGtk.py:573
 #: ../DistUpgrade/DistUpgradeViewKDE.py:624
+#: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../UpdateManager/UpdateManager.py:658
 msgid "Your system is up-to-date"
 msgstr "Nav jaunu atjauninājumu"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:574
 #: ../DistUpgrade/DistUpgradeViewKDE.py:625
+#: ../DistUpgrade/DistUpgradeViewText.py:156
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
-msgstr ""
+msgstr "Jūsu sistēmai jauninājumi nav pieejami. Modernizēšana tiks pārtraukta."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:590
 #, python-format
 msgid "<b>Remove %s</b>"
-msgstr ""
+msgstr "<b>Noņemt %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:588
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #: ../DistUpgrade/DistUpgradeViewKDE.py:648
 #, python-format
 msgid "Install %s"
 msgstr "Uzstāda %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:650
 #, python-format
 msgid "Upgrade %s"
@@ -594,19 +753,19 @@ msgstr "Avota maiņa"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Show Difference >>>"
-msgstr ""
+msgstr "Parādīt atšķirības >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:234
 msgid "<<< Hide Difference"
-msgstr ""
+msgstr "<<< Nerādīt atšķirības"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:473
 msgid "Show Terminal >>>"
-msgstr ""
+msgstr "Parādīt termināli >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:476
 msgid "<<< Hide Terminal"
-msgstr ""
+msgstr "<<< Noslēpt termināli"
 
 #. string = _("<p>You have to download a total of %s. ")
 #. msg += string % apt_pkg.SizeToStr(downloadSize)
@@ -614,12 +773,12 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewKDE.py:599
 #, python-format
 msgid "<p>You have to download a total of %s. "
-msgstr ""
+msgstr "<p>Jums pavisam nepieciešams lejupielādēt %s. "
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:646
 #, python-format
 msgid "Remove %s"
-msgstr ""
+msgstr "Novākt %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:666
 #: ../DistUpgrade/DistUpgrade.glade.h:2
@@ -629,6 +788,10 @@ msgid ""
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly adviced to resume the upgrade."
 msgstr ""
+"<b><big>Pārtraukt pašlaik notiekošo atjaunināšanu?</big></b>\n"
+"\n"
+"Ja jūs pārtrauksiet atjaunināšanu, sistēma var kļūt nelietojama. Jums būtu "
+"vēlams turpināt atjaunināšanas procesu."
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:670
 msgid "Cancel Upgrade?"
@@ -672,45 +835,166 @@ msgstr "Nepieciešama pārstartēšana"
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
-"Uzlabošana ir pabeigta un ir nepieciešama pārstartēšana. Vai vēlies to veikt "
-"tagad?"
+"Atjaunināšana ir pabeigta un ir nepieciešama sistēmas pārstartēšana. Vai "
+"vēlies to veikt tagad?"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:123
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
+msgid "Could not run the upgrade tool"
+msgstr "Nevarēju palaist jauninājumu rīku"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:124
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
+"Droši vien tā ir kļūda jauninājuma rīkā. Lūdz,  paziņojiet par to kā par "
+"blusu"
 
-#: ../DistUpgrade/dist-upgrade.py:24
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:150
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
+msgid "Upgrade tool signature"
+msgstr "Atjaunināšanas rīka paraksts"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:153
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
+msgid "Upgrade tool"
+msgstr "Atjaunināšanas rīks"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Failed to fetch"
+msgstr "Neizdevās novilkt"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:178
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr "Neizdevās novilkt atjauninājumu. Tā var būt tīkla problēma. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:182
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
+msgid "Failed to extract"
+msgstr "Neizdevās atarhivēt"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:183
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
 msgid ""
-"Use special upgrade mode. Available:\n"
-"desktop, server"
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Neizdevās atarhivēt jauninājumu. Tā var būt gan tīkla, gan servera problēma. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:188
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
+msgid "Verfication failed"
+msgstr "Neizdevās pārbaude"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:189
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Neizdevās jauninājuma pārbaude. Tā var būt gan tīkla, gan servera problēma. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:194
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
+msgid "Authentication failed"
+msgstr "Autentifikācija neveiksmīga"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:195
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr ""
+"Atjaunināšanas autentifikācijas neizdevās. Iespējams nedarbojas tīkls vai "
+"serveris. "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, fuzzy
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+"Lūdzu, paziņojiet par šo kā par blusu (ja jūs jau to neesat izdarījis) un "
+"iekļaujiet savā paziņojumā failus no /var/log/dist-upgrade/main.log un /var/"
+"log/dist-upgrade/apt.log. Atjaunināšana tagad tiek pārtraukta.\n"
+"Jūsu sākotnējais sources.list saraksts tika saglabāts direktorijā /etc/apt/"
+"sources.list.distUpgrade."
+
+#: ../DistUpgrade/DistUpgradeViewText.py:101
+msgid "Aborting"
 msgstr ""
 
-#. testcode to see if the bullets look nice in the dialog
-#. for i in range(4):
-#. view.setStep(i+1)
-#. app.openCache()
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#: ../DistUpgrade/DistUpgradeViewText.py:184
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "_Turpināt"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#, fuzzy
+msgid "Details [d]"
+msgstr "Sīkāka informācija"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:168
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:171
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:174
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "Novākt %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:177
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "Uzstāda %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:178
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "Atjaunina %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#, fuzzy
+msgid "Restart required"
+msgstr "Nepieciešama pārstartēšana"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+msgid "To fully ugprade, please restart"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
 
 #: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
+msgstr "<b><big>Lai pabeigtu atjaunināšanu, pārstartējiet datoru</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:6
 msgid "<b><big>Start the upgrade?</big></b>"
-msgstr ""
+msgstr "<b><big>Sākt atjaunināšanu?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-#, fuzzy
 msgid "<b><big>Upgrading Ubuntu to version 7.10</big></b>"
-msgstr "<b><big>Atjaunina Ubuntu uz 7.04 versiju</big></b>"
+msgstr "<b><big>Atjaunina Ubuntu uz 7.10 versiju</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
@@ -718,34 +1002,31 @@ msgstr "Satīra"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
-msgstr "Detaļas"
+msgstr "Sīkāka informācija"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
-msgstr ""
+msgstr "Atšķirība starp failiem"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:11
-#, fuzzy
 msgid "Distribution Upgrade"
-msgstr "_Sākt uzlabošanu"
+msgstr "Distributīva atjaunināšana"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:12
-#, fuzzy
 msgid "Fetching the upgrades"
-msgstr "Nevar uzstādīt autjauninājumus"
+msgstr "Iegūst atjauninājumus"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:13
-#, fuzzy
 msgid "Installing the upgrades"
-msgstr "Nevar uzstādīt autjauninājumus"
+msgstr "Uzstāda atjauninājumus"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Modifying the software channels"
-msgstr ""
+msgstr "Modificē programmatūras kanālus"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Preparing the upgrade"
-msgstr ""
+msgstr "Sagatavo atjaunināšanu"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:16
 msgid "Restarting the system"
@@ -757,7 +1038,7 @@ msgstr "Terminālis"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
-msgstr "_Atclet uzlabošanu"
+msgstr "_Atclet atjaunināšanu"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
@@ -781,15 +1062,15 @@ msgstr "Pā_rstartēt tagad"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:24
 msgid "_Resume Upgrade"
-msgstr "_Turpināt uzlabošanu"
+msgstr "_Turpināt atjaunināšanu"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
-msgstr "_Sākt uzlabošanu"
+msgstr "_Sākt atjaunināšanu"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:79
 msgid "Could not find the release notes"
-msgstr ""
+msgstr "Nevarēju atrast piezīmes par laidienu"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:80
 msgid "The server may be overloaded. "
@@ -797,61 +1078,65 @@ msgstr "Serveris var būt pārslogots. "
 
 #: ../UpdateManager/DistUpgradeFetcher.py:90
 msgid "Could not download the release notes"
-msgstr ""
+msgstr "Nevarēju lejupielādēt laidiena piezīmes"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:91
 msgid "Please check your internet connection."
-msgstr "Lūdzu, pārbaudi savu interneta savienojumu."
+msgstr "Lūdzu, pārbaudiet savu interneta savienojumu."
 
 #: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr ""
+msgstr "Lejupielādē failu %(current)li no %(total)li ar %(speed)s/s"
 
 #: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
-msgstr ""
+msgstr "Lejupielādē failu %(current)li no %(total)li"
 
 #: ../UpdateManager/UpdateManager.py:235
 msgid "The list of changes is not available"
-msgstr ""
+msgstr "Nav pieejams izmaiņu saraksts"
 
 #: ../UpdateManager/UpdateManager.py:241
 msgid ""
 "The list of changes is not available yet.\n"
 "Please try again later."
 msgstr ""
+"Izmaiņu saraksts nav pieejams,\n"
+"Lūdzu, mēģiniet vēlāk."
 
 #: ../UpdateManager/UpdateManager.py:246
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
+"Neizdevās lejupielādēt izmaiņu sarakstu. \n"
+"Lūdzu, pārbaudiet internet savienojumu."
 
 #: ../UpdateManager/UpdateManager.py:273
 msgid "Important security updates"
-msgstr ""
+msgstr "Svarīgi drošības atjauninājumi"
 
 #: ../UpdateManager/UpdateManager.py:274
 msgid "Recommended updates"
-msgstr ""
+msgstr "Ieteiktie atjauninājumi"
 
 #: ../UpdateManager/UpdateManager.py:275
 msgid "Proposed updates"
-msgstr ""
+msgstr "Piedāvātie atjauninājumi"
 
 #: ../UpdateManager/UpdateManager.py:276
 msgid "Backports"
-msgstr ""
+msgstr "Bakporti"
 
 #: ../UpdateManager/UpdateManager.py:277
 msgid "Distribution updates"
-msgstr ""
+msgstr "Distribūcijas atjauninājumi"
 
 #: ../UpdateManager/UpdateManager.py:282
 msgid "Other updates"
-msgstr ""
+msgstr "Citi atjauninājumi"
 
 #: ../UpdateManager/UpdateManager.py:508
 #, python-format
@@ -860,49 +1145,49 @@ msgstr "Versija %s: \n"
 
 #: ../UpdateManager/UpdateManager.py:569
 msgid "Downloading list of changes..."
-msgstr ""
+msgstr "Lejuplādēju izmaiņu sarakstu..."
 
 #: ../UpdateManager/UpdateManager.py:596
 msgid "_Uncheck All"
-msgstr ""
+msgstr "_Atiezīmēt visu"
 
 #: ../UpdateManager/UpdateManager.py:602
 msgid "_Check All"
-msgstr ""
+msgstr "Ie_zīmēt visu"
 
 #. TRANSLATORS: b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:646 ../UpdateManager/UpdateManager.py:673
 #, python-format
 msgid "Download size: %s"
-msgstr ""
+msgstr "Lejuplādēs izmērs: %s"
 
 #: ../UpdateManager/UpdateManager.py:650
 msgid "Unknown download size"
-msgstr ""
+msgstr "Nezināms lejuplādes izmērs"
 
 #: ../UpdateManager/UpdateManager.py:669
 #, python-format
 msgid "You can install %s update"
 msgid_plural "You can install %s updates"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Jūs varat uzstādīt %s atjauninājumu"
+msgstr[1] "Jūs varat uzstādīt %s atjauninājumus"
+msgstr[2] "Jūs varat uzstādīt %s atjauninājumus"
 
 #: ../UpdateManager/UpdateManager.py:702
 msgid "Please wait, this can take some time."
-msgstr ""
+msgstr "Lūdzu, uzgaidiet. Tas var prasīt kādu laiku."
 
 #: ../UpdateManager/UpdateManager.py:704
 msgid "Update is complete"
-msgstr ""
+msgstr "Atjaunināšana ir pabeigta"
 
 #: ../UpdateManager/UpdateManager.py:756
 msgid "Checking for updates"
-msgstr ""
+msgstr "Meklē atjauninājumus"
 
 #: ../UpdateManager/UpdateManager.py:828
 msgid "Could not initialize the package information"
-msgstr ""
+msgstr "Nevar inicializēt pakotnes informāciju"
 
 #: ../UpdateManager/UpdateManager.py:829
 msgid ""
@@ -911,6 +1196,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
+"Inicializējot pakotnes informāciju notika neatšķetināma problēma.\n"
+"\n"
+"Lūdzu, ziņojiet par to kā par 'update-manager' pakotnes kļūdu un "
+"pievienojiet sekojošo kļūdas ziņojumu:\n"
 
 #: ../UpdateManager/UpdateManager.py:851
 msgid ""
@@ -919,26 +1208,30 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
 msgstr ""
+"Aprēķinot jauninājumu gadījās neatrisināma kļūme.\n"
+"\n"
+"Lūdzu paziņojiet par to kā par blusu 'update-manater' (atjaunināšanas "
+"pārvaldnieka) pakotnē un iekļaujiet paziņojumā sekojošo ziņu:"
 
 #: ../UpdateManager/UpdateManager.py:876
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr ""
+msgstr "No versijas %(old_version)s uz %(new_version)s"
 
 #: ../UpdateManager/UpdateManager.py:880
 #, python-format
 msgid "Version %s"
-msgstr ""
+msgstr "Versija %s"
 
 #. TRANSLATORS: the b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:882
 #, python-format
 msgid "(Size: %s)"
-msgstr ""
+msgstr "(Izmērs: %s)"
 
 #: ../UpdateManager/UpdateManager.py:893
 msgid "Your distribution is not supported anymore"
-msgstr ""
+msgstr "Jūsu distribūcija vairs netiek atbalstīta"
 
 #: ../UpdateManager/UpdateManager.py:894
 msgid ""
@@ -946,24 +1239,27 @@ msgid ""
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
 "information on upgrading."
 msgstr ""
+"Jūs vairāk nesaņemsiet drošības labojumus vai kritiskos atjauninājumus. "
+"Modernizējiet sistēmu uz pēdējo Ubuntu Linux versiju. Lai iegūtu vairāk "
+"informācijas par atjaunināšanu, ieskatieties http://www.ubuntu.com."
 
 #: ../UpdateManager/UpdateManager.py:909
 msgid "Downloading the upgrade tool"
-msgstr ""
+msgstr "Lejuplādēju atjaunināšanas rīku"
 
 #: ../UpdateManager/UpdateManager.py:911
 msgid "The upgrade tool will guide you through the upgrade process."
-msgstr ""
+msgstr "Atjaunināšanas rīks izvadīs jūs cauri atjaunināšanas procesam."
 
 #: ../UpdateManager/UpdateManager.py:919
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
-msgstr ""
+msgstr "<b>Ir pieejams jauns distribūcijas laidiens '%s'</b>"
 
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:958
 msgid "Software index is broken"
-msgstr ""
+msgstr "Programmatūras indekss ir bojāts"
 
 #: ../UpdateManager/UpdateManager.py:959
 msgid ""
@@ -971,61 +1267,9 @@ msgid ""
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
 msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
-msgid "Could not run the upgrade tool"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
-msgid "Upgrade tool signature"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
-msgid "Upgrade tool"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Failed to fetch"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
-msgid "Failed to extract"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
-msgid "Verfication failed"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
-msgid "Authentication failed"
-msgstr "Autentifikācija neveiksmīga"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr ""
+"Nav iespējams uzstādīt vai novākt programmatūru. Lūdzu, vispirms izmantojiet "
+"\"Synaptic\" pakotņu pārvaldnieku vai terminālī palaidiet komandu \"sudo apt-"
+"get install -f\", lai šo problēmu novērstu."
 
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
@@ -1034,18 +1278,22 @@ msgid ""
 "Your system does not check for updates automatically. You can configure this "
 "behavior in <i>Software Sources</i> on the <i>Internet Updates</i> tab."
 msgstr ""
+"<b><big>Jums pašrocīgi jāpārbauda atjauninājumi</big></b>\n"
+"\n"
+"Jūsu sistēma atjauninājumus automātiski nepārbauda. Jūs varat nokonfigurēt "
+"šo iespēju  <i>Programmu avoti</i> sadaļā <i>Atjauninājumi</i>."
 
 #: ../data/glade/UpdateManager.glade.h:4
 msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr ""
+msgstr "<big><b>Uzturēt sistēmu uz-šo-datumu</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr ""
+msgstr "<big><b>Visus atjauninājumus nebija iespējams Uzstādīt</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
-msgstr ""
+msgstr "<big><b>Sāknēju atjaunināšanas pārvaldnieku</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:7
 msgid "Changes"
@@ -1053,11 +1301,11 @@ msgstr "Izmaiņas"
 
 #: ../data/glade/UpdateManager.glade.h:8
 msgid "Chec_k"
-msgstr ""
+msgstr "Pār_baudīt"
 
 #: ../data/glade/UpdateManager.glade.h:9
 msgid "Check the software channels for new updates"
-msgstr ""
+msgstr "Pārbaudīt, vai programmatūras kanālos nav jaunu atjauninājumu"
 
 #: ../data/glade/UpdateManager.glade.h:10
 msgid "Description"
@@ -1065,11 +1313,11 @@ msgstr "Apraksts"
 
 #: ../data/glade/UpdateManager.glade.h:11
 msgid "Description of update"
-msgstr ""
+msgstr "Atjauninājuma apraksts"
 
 #: ../data/glade/UpdateManager.glade.h:12
 msgid "Release Notes"
-msgstr ""
+msgstr "Laidiena piezīmes"
 
 #: ../data/glade/UpdateManager.glade.h:13
 msgid ""
@@ -1080,71 +1328,82 @@ msgid ""
 " ◦ Unofficial software packages not provided by Ubuntu\n"
 " ◦ Normal changes of a pre-release version of Ubuntu"
 msgstr ""
+"Lieto daļēju atjaunināšanu, lai uzstādītu pēc iespējas vairāk "
+"atjauninājumu. \n"
+"\n"
+"To var izsaukt:\n"
+" ◦ Iepriekšēja atjaunināšana netika pabeigta\n"
+" ◦ Ubuntu neuzturētas neoficiālas pakotnes\n"
+" ◦ Izmaiņas Ubuntu priekšlaidiena versijā"
 
 #: ../data/glade/UpdateManager.glade.h:19
 msgid "Show progress of single files"
-msgstr ""
+msgstr "Rādīt katra faila progresu"
 
 #: ../data/glade/UpdateManager.glade.h:20
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
 msgstr ""
+"Programmas jauninājumi labo kļūdas, samazina drošības ievainojamības un "
+"piegādā jaunas programmas īpašības."
 
 #: ../data/glade/UpdateManager.glade.h:21
 msgid "U_pgrade"
-msgstr ""
+msgstr "Atjaunināšana"
 
 #: ../data/glade/UpdateManager.glade.h:22
 #: ../data/update-manager.desktop.in.h:3
 msgid "Update Manager"
-msgstr ""
+msgstr "Atjaunināšanas pārvaldnieks"
 
 #: ../data/glade/UpdateManager.glade.h:23
 msgid "Upgrade to the latest version of Ubuntu"
-msgstr ""
+msgstr "Atjaunināt uz jaunāko Ubuntu versiju"
 
 #: ../data/glade/UpdateManager.glade.h:24
 msgid "_Check"
-msgstr ""
+msgstr "_Pārbaudīt"
 
 #: ../data/glade/UpdateManager.glade.h:25
 msgid "_Hide this information in the future"
-msgstr ""
+msgstr "Turpmāk nerādīt šo informāciju"
 
 #: ../data/glade/UpdateManager.glade.h:26
 msgid "_Install Updates"
-msgstr ""
+msgstr "_Uzstādīt atjauninājumus"
 
 #: ../data/glade/UpdateManager.glade.h:27
 msgid "_Partial Upgrade"
-msgstr ""
+msgstr "_Daļēja atjaunināšana"
 
 #: ../data/glade/UpdateManager.glade.h:28
 msgid "_Upgrade"
-msgstr ""
+msgstr "Atja_unināt"
 
 #: ../data/glade/UpdateManager.glade.h:29
 msgid "updates"
-msgstr ""
+msgstr "atjauninājumi"
 
 #: ../data/update-manager.desktop.in.h:1
 msgid "Show and install available updates"
-msgstr ""
+msgstr "Parādīt un uzstādīt pieejamos atjauninājumus"
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "System Update Tool"
-msgstr ""
+msgstr "Sistēmas atjaunināšanas rīks"
 
 #: ../data/update-manager.schemas.in.h:1
 msgid ""
 "Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
+"Automātiski pārbaudīt, vai ir pieejama jauna pašreizējās distribūcijas "
+"versija un, ja iespējams, piedāvāt modernizēties."
 
 #: ../data/update-manager.schemas.in.h:2
 msgid "Check for new distribution releases"
-msgstr ""
+msgstr "Pārbaudīt vai nav jaunu distribūcijas laidienu"
 
 #: ../data/update-manager.schemas.in.h:3
 msgid ""
@@ -1152,68 +1411,70 @@ msgid ""
 "channel list manually. This option allows to hide the reminder shown in this "
 "case."
 msgstr ""
+"Ja automātiska jauninājumu pārbaude ir izslēgta, jums manuāli jāpārlādē "
+"kanālu saraksts. Šādā gadījumā šī opcija ļauj nerādīt atgādinājumu."
 
 #: ../data/update-manager.schemas.in.h:4
 msgid "Remind to reload the channel list"
-msgstr ""
+msgstr "Atgādināt par kanālu saraksta pārlādēšanu"
 
 #: ../data/update-manager.schemas.in.h:5
 msgid "Show details of an update"
-msgstr ""
+msgstr "Rādīt atjaunināšanas informāciju"
 
 #: ../data/update-manager.schemas.in.h:6
 msgid "Stores the size of the update-manager dialog"
-msgstr ""
+msgstr "Saglabā update-manager dialoga izmēru"
 
 #: ../data/update-manager.schemas.in.h:7
 msgid ""
 "Stores the state of the expander that contains the list of changes and the "
 "description"
-msgstr ""
+msgstr "Saglabā izvērsēja, kas satur izmaiņu sarakstu un aprakstu, stāvokli."
 
 #: ../data/update-manager.schemas.in.h:8
 msgid "The window size"
-msgstr ""
+msgstr "Loga izmērs"
 
 #: ../update-manager:51
 msgid "Check if a new distribution release is available"
-msgstr ""
+msgstr "Pārbaudīt, vai ir pieejams jauns distribūcijas laidiens"
 
 #: ../update-manager:54 ../do-release-upgrade:19
 msgid "Check if upgrading to the latest devel release is possible"
-msgstr ""
+msgstr "Pārbaudīt, vai ir iespējama modernizēšana uz pēdējo izstrādes laidienu"
 
 #: ../update-manager:58 ../update-manager:61
 msgid "Try to run a dist-upgrade"
-msgstr ""
+msgstr "Mēģiniet lietot dist-upgrade"
 
 #: ../update-manager:74
 msgid "Running partial upgrade"
-msgstr ""
+msgstr "Darbojas daļēja atjaunināšana"
 
 #: ../update-manager:92
 msgid "Upgrade complete"
-msgstr ""
+msgstr "Atjaunināšana pabeigta"
 
 #: ../update-manager:93
 msgid "The upgrade was completed."
-msgstr ""
+msgstr "Atjaunināšana ir pabeigta"
 
 #: ../do-release-upgrade:23
 msgid "Run the specified frontend"
-msgstr ""
+msgstr "Darbināt norādīto saskarni"
 
 #: ../do-release-upgrade:26
 msgid "Run in a special upgrade mode"
-msgstr ""
+msgstr "Darbināt speciālā atjaunināšanas režīmā"
 
 #: ../do-release-upgrade:30
 msgid "Checking for a new ubuntu release"
-msgstr ""
+msgstr "Pārbauda, vai ir pieejams jauns Ubuntu laidiens"
 
 #: ../do-release-upgrade:36
 msgid "No new release found"
-msgstr ""
+msgstr "Jauns laidiens netika atrasts"
 
 #~ msgid "Daily"
 #~ msgstr "Ikdienas"
@@ -1248,16 +1509,6 @@ msgstr ""
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
 
-#~ msgid "Main server"
-#~ msgstr "Galvenais serveris"
-
-#, fuzzy
-#~ msgid "Server for %s"
-#~ msgstr "Serveris: %s"
-
-#~ msgid "Nearest server"
-#~ msgstr "Tuvākais serveris"
-
 #~ msgid "Active"
 #~ msgstr "Aktīvs"
 
@@ -1291,12 +1542,6 @@ msgstr ""
 
 #~ msgid "Please insert a disc in the drive:"
 #~ msgstr "Lūdzu ielieciet disku lasītājā."
-
-#~ msgid "None"
-#~ msgstr "Nekas"
-
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f MB"
 
 #~ msgid "Authentication"
 #~ msgstr "Autentifikācija"

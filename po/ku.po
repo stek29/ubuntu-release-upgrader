@@ -6,16 +6,75 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-19 23:09+0100\n"
-"PO-Revision-Date: 2007-04-08 00:13+0000\n"
+"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
+"POT-Creation-Date: 2007-09-24 11:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Erdal Ronahi <erdal.ronahi@gmail.com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Rosetta-Export-Date: 2007-04-13 08:49:23+0000\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:105 ../UpdateManager/Common/utils.py:105
+msgid "None"
+msgstr "Ne yek jî"
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:108 ../UpdateManager/Common/utils.py:108
+msgid "1 KB"
+msgstr "1 KB"
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:111 ../UpdateManager/Common/utils.py:111
+#, python-format
+msgid "%.0f KB"
+msgstr "%.0f KB"
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:114 ../UpdateManager/Common/utils.py:114
+#, python-format
+msgid "%.1f MB"
+msgstr "%.1f MB"
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, python-format
+msgid "Server for %s"
+msgstr "Pêşkêşkera %s"
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr "Pêşkêşkera Mak"
+
+#: ../DistUpgrade/distro.py:235
+msgid "Custom servers"
+msgstr "Pêşkêşkera taybet"
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid ""
+"Use special upgrade mode. Available:\n"
+"desktop, server"
+msgstr ""
+"Moda bilindkirina taybet bikar bîne. Vebijêrk:\n"
+"sermase, pêşkêşker"
 
 #: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
@@ -27,8 +86,8 @@ msgid ""
 "software. Please fix them first using synaptic or apt-get before proceeding."
 msgstr ""
 "Pergala te tevî vê nivîsbariyê hin pakêtên xerabe yên ku nayên sererastkirin "
-"dihewîne. Berî ku tu berdewam bikî ji kerema xwe van bernameyan bi synaptic "
-"an jî i apt-get sererast bikî."
+"dihewîne. Berî ku tu berdewam bikî ji kerema xwe re van bernameyan bi "
+"synaptic an jî i apt-getê sererast bike."
 
 #: ../DistUpgrade/DistUpgradeCache.py:354
 msgid "Can't upgrade required meta-packages"
@@ -36,13 +95,13 @@ msgstr "Pakêtên agahiyan yên pêwist nayên rojanekirin."
 
 #: ../DistUpgrade/DistUpgradeCache.py:359
 msgid "A essential package would have to be removed"
-msgstr "Dê pêwiste be ku pakêta bingehîn were jêbirin"
+msgstr "Divê pakêteke pêwist jê were rakirin"
 
 #. FIXME: change the text to something more useful
 #: ../DistUpgrade/DistUpgradeCache.py:362
 #: ../UpdateManager/UpdateManager.py:850
 msgid "Could not calculate the upgrade"
-msgstr "Rojanekirin nikaribû were hesabkirin"
+msgstr "Bilindkirin nehat hesabkirin"
 
 #: ../DistUpgrade/DistUpgradeCache.py:363
 msgid ""
@@ -53,8 +112,8 @@ msgid ""
 msgstr ""
 "Dema bilindkirin hesab dikir çewtiyeke ku nayê veçirandin derkete holê.\n"
 "\n"
-"Ji kerema xwe re vê çewtiyê bo 'update-manager' ragihîne, pelgehên ku li /"
-"var/log/dist-upgrade/ de ye jî li rapora çewtiyan zêde bike."
+"Ji kerema xwe re vê çewtiyê ragihîne 'update-manager'ê, pelên ku di /var/log/"
+"dist-upgrade/ de ne jî li rapora çewtiyan zêde bike."
 
 #. FIXME: maybe ask a question here? instead of failing?
 #: ../DistUpgrade/DistUpgradeCache.py:401
@@ -67,13 +126,13 @@ msgid ""
 "network problem. You may want to try again later. See below for a list of "
 "unauthenticated packages."
 msgstr ""
-"Hin pakêt nehatin piştrastkirin. Dibe ku ev pirsgirêkeke derbasdar ya torê "
+"Hin pakêt nehatin piştrastkirin. Dibe ku ev pirsgirêkeke derbasdar a torê "
 "be. Ji bo lîsteya pakêtên ku nehatine piştrastkirin li jêr binihêre."
 
 #: ../DistUpgrade/DistUpgradeCache.py:505
 #, python-format
 msgid "Can't install '%s'"
-msgstr "Nikarî '%s' saz bike"
+msgstr "Nikare '%s' saz bike"
 
 #: ../DistUpgrade/DistUpgradeCache.py:506
 msgid ""
@@ -86,7 +145,7 @@ msgstr ""
 #. FIXME: provide a list
 #: ../DistUpgrade/DistUpgradeCache.py:513
 msgid "Can't guess meta-package"
-msgstr "Pakêta-meta nehate kifşkirin"
+msgstr "Pakêta-meta nehate texmînkirin"
 
 #: ../DistUpgrade/DistUpgradeCache.py:514
 msgid ""
@@ -99,12 +158,12 @@ msgstr ""
 "Pergala te tu pakêtên ubuntu-desktop, kubuntu-desktop, xubuntu-desktop an "
 "edubuntu-desktop nahundirîne û nehate tespîtkirin ku tu kîjan guhertoya "
 "Ubuntuyê bikar tînî.\n"
-" Ji kerema xwe re berî ku tu berdewam bikî, bi synaptic yan jî bi apt-getê "
+" Ji kerema xwe re berî ku tu berdewam bikî, bi synaptic an jî bi apt-getê "
 "yek ji pakêtên ku li jor in saz bike."
 
 #: ../DistUpgrade/DistUpgradeControler.py:92
 msgid "Failed to add the CD"
-msgstr "Dema têxistina CDyê de çewtî"
+msgstr "Di têxistina CD'yê de çewtî"
 
 #: ../DistUpgrade/DistUpgradeControler.py:93
 #, python-format
@@ -115,29 +174,31 @@ msgid ""
 "The error message was:\n"
 "'%s'"
 msgstr ""
-"Dema CD lê dihate zêdekirin, bilindkirin disekine. Heke tu CDyeke rast ya "
-"Ubuntuyê bikar tîne vê çewtiyê ragihîne.\n"
+"Di têxistina CD'yê de çewtî, bilindkirin dê bisekine. Heke CD'ya te CD'yeke "
+"derbasdar a Ubuntuyê be vê çewtiyê ragihîne.\n"
 "\n"
 "Peyama çewtiyê:\n"
 "'%s'"
 
 #: ../DistUpgrade/DistUpgradeControler.py:125
 msgid "Reading cache"
-msgstr "veşartok tê xwendin"
+msgstr "Pêşbîr tê xwendin"
 
 #: ../DistUpgrade/DistUpgradeControler.py:182
 msgid "Unable to get exclusive lock"
-msgstr ""
+msgstr "Kilîtkirina eksklusîv nayê çêkirin"
 
 #: ../DistUpgrade/DistUpgradeControler.py:183
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
+"Wateya vê ew e ku, niha sepana rêveberiya pakêteke din dixebite (apt-get an "
+"jî aptitude). Ji kerema xwe re berê wê sepanê bigire."
 
 #: ../DistUpgrade/DistUpgradeControler.py:201
 msgid "Continue running under SSH?"
-msgstr "Xebitandina bin SSH'yê were domandin?"
+msgstr "Bila xebitandina bin SSH'yê were domandin?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:202
 #, python-format
@@ -149,13 +210,13 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"Wisa dixuye ku ev danişîn di bin banê sshê de dixebite. Ji ber ku paş de "
-"vegerandina wê gelekî dijwar e, nayê pêşniyarkirin ku mirov ji ser sshê "
-"bilindkirinekê pêk bîne\n"
+"Wisa dixuye ku ev danişîn di bin banê sshê de dixebite. Ji ber ku "
+"paşdevegerandina wê gelekî dijwar e, nayê pêşniyarkirin ku ji ser sshê "
+"bilindkirinekê pêk bînî\n"
 "\n"
 "Heke tu berdewam bikî, sepana ku her ku diçe zêde dibe ya pêvek wekî sshê wê "
 "ji xala girêdanê '%s' were destpêkirin.\n"
-"Tu dixwazî berdewam bikî"
+"Tu dixwazî berdewam bikî?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:215
 msgid "Starting additional sshd"
@@ -168,6 +229,9 @@ msgid ""
 "on port '%s'. If anything goes wrong with the running ssh you can still "
 "connect to the additional one.\n"
 msgstr ""
+"Di têkçûnekê de ji bo filitandina hêsan dê ji xala girêdanç ya '%s'yê "
+"sshdyeke zêdek bê destpêkirin. Hedke di sshê de pirsgirêkêk derkeve, tu yê "
+"dikaribî bi ya zêdek bidomînî.\n"
 
 #: ../DistUpgrade/DistUpgradeControler.py:280
 #: ../DistUpgrade/DistUpgradeControler.py:289
@@ -177,12 +241,14 @@ msgstr "Bilinkirin çênabe"
 #: ../DistUpgrade/DistUpgradeControler.py:281
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
-msgstr "Ev amûr desteka bilindkirina ji '%s' ber bi '%s nade."
+msgstr "Ev amûr desteka bilindkirina ji '%s' bo '%s nade."
 
 #: ../DistUpgrade/DistUpgradeControler.py:290
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
+"Di sazkirina te ya Pythonê de çewtî heye. Ji kerema xwe re girêdana '/usr/"
+"bin/python' a sembolîk tamîr bike."
 
 #: ../DistUpgrade/DistUpgradeControler.py:309
 msgid "Include latest updates from the Internet?"
@@ -195,10 +261,14 @@ msgid ""
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"Karên bilindkirinê dikare rojanekirinên herî dawî daxe û di dema "
+"bilindkirinê de bikar jî bîne. Bilindkirin wê zêde bidome lê dema "
+"bilindkirin biqede wê pergala rêkûpêk rojane bibe. Tu dikarî van tiştan "
+"hilnebijêrî lê dema bilindkirin qediya divê tu rojanekirinên dawîn saz bikî."
 
 #: ../DistUpgrade/DistUpgradeControler.py:467
 msgid "No valid mirror found"
-msgstr "Şewqdereke derbasdar nehate dîtin."
+msgstr "Neynikeke derbasdar nehate dîtin."
 
 #: ../DistUpgrade/DistUpgradeControler.py:468
 #, fuzzy, python-format
@@ -211,11 +281,11 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'no' the update will cancel."
 msgstr ""
-"Dema çav li agahiyên we yên depoyê dihate gerîn bo rojanekirinê ketana "
-"şewqderê nehate dîtin. Dibe ku sedema wê ev be; yan te şewqdereke hundurîn "
-"bikar aniye an jî agahiyên şewqderê ne rojane ye.\n"
+"Dema çav li agahiyên te yên depoyê dihate gerîn ji bo rojanekirinê ketana "
+"neynikê nehate dîtin. Dibe ku sedema wê ev be; yan te neynikeke hundirîn "
+"bikar aniye yan jî agahiyên neynikê ne rojane ne.\n"
 "\n"
-"Tu dixwazî dosyeya xwe ya 'sources.list' ji nû ve çêbike?\n"
+"Tu dixwazî pelê 'sources.list' ji nû ve çêbike?\n"
 "Heke tu li vir 'Erê' hilbijêrî hemû ketanên 'ji %s' heta '%s' wê bêne "
 "rojanekirin.\n"
 "Heke tu bibêjî 'Na' wê rojanekirin betal bibe."
@@ -223,7 +293,7 @@ msgstr ""
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeControler.py:485
 msgid "Generate default sources?"
-msgstr "Bile çavkaniyên rawêjî pêk bên?"
+msgstr "Bila depoyên pêşsalixbûyî bên çêkirin?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:486
 #, python-format
@@ -236,7 +306,7 @@ msgstr ""
 "Piştî ku çav li 'sources.list' gerand ji bo '%s' tu têketineke derbasdar "
 "nedît.\n"
 "\n"
-"Ji bo '%s' bila têketinên heyî lê zêde bibe? Heke tu bibêjî 'Na'  dê "
+"Ji bo '%s' bila têketinên heyî lê zêde bibin? Heke tu bibêjî 'Na'  dê "
 "rojanekirin were betalkirin."
 
 #: ../DistUpgrade/DistUpgradeControler.py:520
@@ -248,8 +318,8 @@ msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
 msgstr ""
-"Karê rojanekirina agahiya depoyê, dosyeye nederbasdar çêkir. Ji kerema xwe "
-"re vê çewtiyê ragihîne."
+"Karê rojanekirina agahiya depoyê, pelekî nederbasdar çêkir. Ji kerema xwe re "
+"vê çewtiyê ragihîne."
 
 #: ../DistUpgrade/DistUpgradeControler.py:527
 msgid "Third party sources disabled"
@@ -274,8 +344,8 @@ msgid ""
 "A problem occured during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
-"Di dema rojanekirinê de çewtiyek derket. Ev çewtî piranî pirsgirêka torê ye, "
-"ji kerema xwe re girêdana xwe ya torê kontrol bike û ji nû ve biceribîne."
+"Di rojanekirinê de çewtiyek derket. Ev çewtî piranî pirsgirêkeke torê ye, ji "
+"kerema xwe re girêdana xwe ya torê kontrol bike û ji nû ve biceribîne."
 
 #: ../DistUpgrade/DistUpgradeControler.py:596
 msgid "Not enough free disk space"
@@ -295,7 +365,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeControler.py:709
 msgid "Support for some applications ended"
-msgstr "Ji bo hin sepanan piştrastkirin qediya"
+msgstr "Desteka hin sepanan qediya"
 
 #: ../DistUpgrade/DistUpgradeControler.py:710
 #, fuzzy
@@ -307,9 +377,9 @@ msgid ""
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
 "Canonical Ltd. êdî nema xizmetan ji van pakêtên nivîsbariyê re pêşkêş dike. "
-"Tu hê jî dikarî sûdê ji komeleyê bigire.\n"
+"Tu hê jî dikarî sûdê ji komeleyê bigirî.\n"
 "\n"
-"Heke te nivîsbariya komeleyê (universe) ne çalak kirîbe, di gava pêşîn de ev "
+"Heke te nivîsbariya komeleyê (universe) ne çalak kiribe, di gava pêşîn de ev "
 "pakêt ji bo jêbirinê dê werin pêşniyarkirin."
 
 #. ask the user if he wants to do the changes
@@ -320,7 +390,7 @@ msgstr "Tu dixwazî dest bi bilindkirinê bikî?"
 #: ../DistUpgrade/DistUpgradeControler.py:790
 #: ../DistUpgrade/DistUpgradeControler.py:840
 msgid "Could not download the upgrades"
-msgstr "Daxistina bilindkirinan serneket"
+msgstr "Daxistina bilindkirinan bi ser neket"
 
 #: ../DistUpgrade/DistUpgradeControler.py:791
 #: ../DistUpgrade/DistUpgradeControler.py:841
@@ -328,21 +398,20 @@ msgid ""
 "The upgrade aborts now. Please check your internet connection or "
 "installation media and try again. "
 msgstr ""
-"Rojanekirin niha tê betalkirin. Ji kerema xwe girêdana înternetê an medyaya "
-"sazkirinê kontrol bike û ji nû ve biceribîne. "
+"Rojanekirin niha tê betalkirin. Ji kerema xwe re girêdana înternetê an "
+"medyaya sazkirinê kontrol bike û ji nû ve biceribîne. "
 
 #. invoke the frontend now
 #: ../DistUpgrade/DistUpgradeControler.py:816
-#, fuzzy
 msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"Bêyî bilindkirin niha tê betalkirin. Dibe ku pergala te di rewşeke dudilî de "
-"be. Karekî xelaskirinê pêk hat. (dpkg --configure -a).\n"
-"\n"
-"Ji kerema xwe re bo pakêta 'update-manager' vê çewtiyê ragihîne. Dosyeyên ku "
-"li /var/log/dist-upgrade/ de ye jî li peyama çewtiyê zêde bike."
+"Bilindkirin niha tê betalkirin. Dibe ku pergala te di rewşeke dudilî de be. "
+"Karekî xelaskirinê pêk hat. (dpkg --configure -a).\r\n"
+"\r\n"
+"Ji kerema xwe re bo pakêta 'update-manager' vê çewtiyê ragihîne. Pelên ku "
+"di /var/log/dist-upgrade/ de ne jî li peyama çewtiyê zêde bike."
 
 #: ../DistUpgrade/DistUpgradeControler.py:820
 #, fuzzy, python-format
@@ -361,11 +430,11 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeControler.py:824
 msgid "Could not install the upgrades"
-msgstr "Sazkirina bilindkirinan biserneket"
+msgstr "Sazkirina bilindkirinan bi ser neket"
 
 #: ../DistUpgrade/DistUpgradeControler.py:910
 msgid "Remove obsolete packages?"
-msgstr "Bila pakêtên ku nayên bikaranîn were rakirin?"
+msgstr "Bila pakêtên ku nayên bikaranîn werin rakirin?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:911
 msgid "_Skip This Step"
@@ -396,23 +465,23 @@ msgstr "Vedigere rewşa pergala orjînal"
 #. here
 #: ../DistUpgrade/DistUpgradeControler.py:1075
 msgid "Required depends is not installed"
-msgstr ""
+msgstr "Divêtiyên pêwîst ne barkirî ne"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1076
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr ""
+msgstr "Divêtiya pêwîst '%s' ne barkirî ye "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
 #: ../DistUpgrade/DistUpgradeControler.py:1203
 #: ../DistUpgrade/DistUpgradeControler.py:1260
 msgid "Checking package manager"
-msgstr "Bireveberiya paketan tê kontrol kirin"
+msgstr "Rêvebiriya paketan tê kontrol kirin"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1208
 msgid "Preparing the upgrade failed"
-msgstr "Amadekrinên nûjenkirinê biserneket"
+msgstr "Amadekirinên nûjenkirinê bi ser neketin"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1209
 msgid ""
@@ -420,17 +489,15 @@ msgid ""
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bugreport."
 msgstr ""
-"Amadekirina pergala ji bo bilindkirinê serneket. Ji kerema xwe re bike "
+"Amadekirina pergala ji bo bilindkirinê bi ser neket. Ji kerema xwe re bike "
 "rapora çewtiyê li dijî pakêta rojanekirina gerînende 'update-manager' û "
-"pelê /var/log/dist-upgrade/ bihundirîne rapora xwe."
+"pelê /var/log/dist-upgrade/ têxe rapora xwe."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1224
-#, fuzzy
 msgid "Getting upgrade pre-requists failed"
-msgstr "Amadekrinên nûjenkirinê biserneket"
+msgstr "Amadekrinên nûjenkirinê bi ser neketin"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1225
-#, fuzzy
 msgid ""
 "The system was unable to get the pre-requists for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -438,9 +505,9 @@ msgid ""
 "Please report this as a bug against the 'update-manager' package and include "
 "the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
-"Amadekirina pergala ji bo bilindkirinê serneket. Ji kerema xwe re bike "
+"Amadekirina pergala ji bo bilindkirinê bi ser neket. Ji kerema xwe re bike "
 "rapora çewtiyê li dijî pakêta rojanekirina gerînende 'update-manager' û "
-"pelê /var/log/dist-upgrade/ bihundirîne rapora xwe."
+"pelê /var/log/dist-upgrade/ têxe rapora xwe."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1246
 msgid "Updating repository information"
@@ -459,11 +526,11 @@ msgid ""
 "manager' package and include the files in /var/log/dist-upgrade/ in the "
 "bugreport."
 msgstr ""
-"Piştî ku agahiyê te yên pakêtê hate rojanekirin, yek ji wan pakêtên girîng '%"
-"s' êdî nayê dîtin.\n"
-"Dibe ku ev çewtiyeke girîng e, ji kerema xwe re bo pakêta 'update-manager' "
-"vê çewtiyê ragihîne. Dosyeyên ku li /var/log/dist-upgrade/ de ye jî li "
-"peyama çewtiyê zêde bike."
+"Piştî ku agahiyên te yên pakêtê hatin rojanekirin, yek ji wan pakêtên girîng "
+"'%s' êdî nayê dîtin.\n"
+"Dibe ku ev çewtiyeke girîng be, ji kerema xwe re ji bo pakêta 'update-"
+"manager' vê çewtiyê ragihîne. Dosyeyên ku di /var/log/dist-upgrade/ de ne jî "
+"li peyama çewtiyê zêde bike."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
@@ -473,7 +540,7 @@ msgstr "Pirsa piştrastkirinê"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1289 ../update-manager:83
 msgid "Fetching"
-msgstr ""
+msgstr "Tê daxistin"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1299 ../update-manager:87
 msgid "Upgrading"
@@ -506,7 +573,7 @@ msgid "Fetching file %li of %li at %sb/s"
 msgstr "Pelê %li ji %li di %sb/s de tê daxistin"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:270
 #: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:271
 #, python-format
@@ -566,11 +633,12 @@ msgstr ""
 msgid "The 'diff' command was not found"
 msgstr "Fermana 'diff' nehatiye dîtin"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:403
+#: ../DistUpgrade/DistUpgradeViewGtk.py:407
+#: ../DistUpgrade/DistUpgradeViewText.py:77
 msgid "A fatal error occured"
 msgstr "Çewtiyeke giran derket"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:404
+#: ../DistUpgrade/DistUpgradeViewGtk.py:408
 #, fuzzy
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
@@ -586,31 +654,35 @@ msgstr ""
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:538
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
 #: ../DistUpgrade/DistUpgradeViewKDE.py:576
+#: ../DistUpgrade/DistUpgradeViewText.py:128
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "%d pakêt dê were rakirin."
 msgstr[1] "%d pakêt dê werine rakirin."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:543
+#: ../DistUpgrade/DistUpgradeViewGtk.py:547
 #: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewText.py:133
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "Dê %d pakêtên nû were sazkirin."
 msgstr[1] "Dê %d pakêtên nû werine sazkirin."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:549
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #: ../DistUpgrade/DistUpgradeViewKDE.py:587
+#: ../DistUpgrade/DistUpgradeViewText.py:139
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "Dê %d pakêt were bilindkirin"
 msgstr[1] "Dê %d pakêt werine bilindkirin"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:554
+#: ../DistUpgrade/DistUpgradeViewGtk.py:558
+#: ../DistUpgrade/DistUpgradeViewText.py:144
 #, python-format
 msgid ""
 "\n"
@@ -621,9 +693,10 @@ msgstr ""
 "\n"
 "Pêwîst e tu %s bi tevahî daxî. "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
+#: ../DistUpgrade/DistUpgradeViewGtk.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:607
 #: ../DistUpgrade/DistUpgradeViewKDE.py:615
+#: ../DistUpgrade/DistUpgradeViewText.py:149
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
@@ -631,21 +704,23 @@ msgstr ""
 "Daxistin û sazkirina bilindkirinê dibe ku bi saetan bidome û dû re jî tu "
 "nikare betal bike."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:563
+#: ../DistUpgrade/DistUpgradeViewGtk.py:567
 #: ../DistUpgrade/DistUpgradeViewKDE.py:610
 #: ../DistUpgrade/DistUpgradeViewKDE.py:618
 msgid "To prevent data loss close all open applications and documents."
 msgstr "Ji bo ku dane winda nebin hemû sepan û pelgeyên ku vekirî ne bigire."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewGtk.py:573
 #: ../DistUpgrade/DistUpgradeViewKDE.py:624
+#: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../UpdateManager/UpdateManager.py:658
 msgid "Your system is up-to-date"
 msgstr "Pergala te rojane ye"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:574
 #: ../DistUpgrade/DistUpgradeViewKDE.py:625
+#: ../DistUpgrade/DistUpgradeViewText.py:156
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
@@ -653,18 +728,18 @@ msgstr ""
 "Ji bo pergala te bilindkirin tuneye. Karê bilindkirinê wê a niha were "
 "betalkirin."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:590
 #, python-format
 msgid "<b>Remove %s</b>"
 msgstr "<b>%s rake</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:588
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #: ../DistUpgrade/DistUpgradeViewKDE.py:648
 #, python-format
 msgid "Install %s"
 msgstr "%s saz bike"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:650
 #, python-format
 msgid "Upgrade %s"
@@ -762,28 +837,148 @@ msgid ""
 msgstr ""
 "Bilindkirin bi dawî bû û destpêkirina nû pêwîst e. Tu dixwazî niha bikî?"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:123
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
+msgid "Could not run the upgrade tool"
+msgstr "Amûra bilindkirinê nikaribû bimeşîne"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:124
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
+"Qey ev çewtiyeke amûra bilindkirinê ye. Ji kerema xwe çewtiyê rapor bike"
 
-#: ../DistUpgrade/dist-upgrade.py:24
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:150
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
+msgid "Upgrade tool signature"
+msgstr "Destnîşana amûra bilindkirinê"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:153
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
+msgid "Upgrade tool"
+msgstr "Amûra bilindkirinê"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Failed to fetch"
+msgstr "Anîn biserneket"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:178
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr "Anîna bilindkirinê biserneket. Dibe ku pirsgirêkeke torê hebe. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:182
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
+msgid "Failed to extract"
+msgstr "Derxistin biserneket"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:183
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
 msgid ""
-"Use special upgrade mode. Available:\n"
-"desktop, server"
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
 msgstr ""
-"Moda bilindkirina taybet bikar bîne. Vebijêrk:\n"
-"sermase, pêşkêşker"
+"Derxistina bilindkirinê biserneket. Dibe ku pirsgirekeke tor an pêşkêşkarê "
+"hebe. "
 
-#. testcode to see if the bullets look nice in the dialog
-#. for i in range(4):
-#. view.setStep(i+1)
-#. app.openCache()
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:188
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
+msgid "Verfication failed"
+msgstr "Piştrastkirin biserneket."
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:189
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Di dema erêkirina bilindkirinê de çewtî. Dibe ku yan di torê de yan jî di "
+"pêşkêşkerê de pirsgirêk hebe "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:194
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
+msgid "Authentication failed"
+msgstr "Naskirin lê nehat"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:195
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr ""
+"Naskirina bilindkirnê lê nehat. Dibe ku pirsgirekeke tor an pêşkêşkarê hebe. "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, fuzzy
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+"Ji kerema xwe re vê çewtiyê ragihîne.Dosyeyên ku li /var/log/dist-upgrade/ "
+"de ye jî li peyama xwe ya çewtiyê zêde bike. Bilindkirin niha tê "
+"betalkirin.\n"
+"Dosyeya te ya sources.list ya orjînal wekî /etc/apt/sources.list.distUpgrade "
+"hate tomarkirin."
+
+#: ../DistUpgrade/DistUpgradeViewText.py:101
+msgid "Aborting"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#: ../DistUpgrade/DistUpgradeViewText.py:184
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "_Bidomîne"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#, fuzzy
+msgid "Details [d]"
+msgstr "Hûragahî"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:168
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:171
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:174
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "%s _rake"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:177
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "%s saz bike"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:178
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "%s bilind bike"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#, fuzzy
+msgid "Restart required"
+msgstr "Destpêkirina nû pêwîst e"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+msgid "To fully ugprade, please restart"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
@@ -1082,67 +1277,6 @@ msgstr ""
 "tiştî vê pirsgirêkê bi gerînendeyê pakêtan ya \"Synaptic\" and jî bi fermana "
 "\"sudo apt-get install -f\" re di termînalê de çareser bike."
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
-msgid "Could not run the upgrade tool"
-msgstr "Amûra bilindkirinê nikaribû bimeşîne"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr ""
-"Qey ev çewtiyeke amûra bilindkirinê ye. Ji kerema xwe çewtiyê rapor bike"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
-msgid "Upgrade tool signature"
-msgstr "Destnîşana amûra bilindkirinê"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
-msgid "Upgrade tool"
-msgstr "Amûra bilindkirinê"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Failed to fetch"
-msgstr "Anîn biserneket"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "Anîna bilindkirinê biserneket. Dibe ku pirsgirêkeke torê hebe. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
-msgid "Failed to extract"
-msgstr "Derxistin biserneket"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr ""
-"Derxistina bilindkirinê biserneket. Dibe ku pirsgirekeke tor an pêşkêşkarê "
-"hebe. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
-msgid "Verfication failed"
-msgstr "Piştrastkirin biserneket."
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr ""
-"Di dema erêkirina bilindkirinê de çewtî. Dibe ku yan di torê de yan jî di "
-"pêşkêşkerê de pirsgirêk hebe "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
-msgid "Authentication failed"
-msgstr "Naskirin lê nehat"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr ""
-"Naskirina bilindkirnê lê nehat. Dibe ku pirsgirekeke tor an pêşkêşkarê hebe. "
-
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
 "<b><big>You must check for updates manually</big></b>\n"
@@ -1388,18 +1522,6 @@ msgstr "Weşaneke nû nehat dîtin"
 #~ msgid "changes"
 #~ msgstr "guhertin"
 
-#~ msgid "None"
-#~ msgstr "Ne yek jî"
-
-#~ msgid "1 KB"
-#~ msgstr "1 KB"
-
-#~ msgid "%.0f KB"
-#~ msgstr "%.0f KB"
-
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f MB"
-
 #~ msgid "Daily"
 #~ msgstr "Rojane"
 
@@ -1433,17 +1555,8 @@ msgstr "Weşaneke nû nehat dîtin"
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
 
-#~ msgid "Main server"
-#~ msgstr "Pêşkêşkera Mak"
-
-#~ msgid "Server for %s"
-#~ msgstr "Pêşkêşkera %s"
-
 #~ msgid "Nearest server"
 #~ msgstr "Pêşkêşkera herî nêzîk"
-
-#~ msgid "Custom servers"
-#~ msgstr "Pêşkêşkera taybet"
 
 #~ msgid "Software Channel"
 #~ msgstr "Qanala Nivîsbariyê"

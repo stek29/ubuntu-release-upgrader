@@ -9,17 +9,78 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager.HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-19 23:09+0100\n"
-"PO-Revision-Date: 2007-04-04 18:05+0000\n"
+"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
+"POT-Creation-Date: 2007-09-24 11:00+0200\n"
+"PO-Revision-Date: 2007-09-20 07:32+0000\n"
 "Last-Translator: Yaniv Abir <yanivabir@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.10.2\n"
-"X-Rosetta-Export-Date: 2007-04-13 08:49:11+0000\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:105 ../UpdateManager/Common/utils.py:105
+msgid "None"
+msgstr ""
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:108 ../UpdateManager/Common/utils.py:108
+msgid "1 KB"
+msgstr ""
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:111 ../UpdateManager/Common/utils.py:111
+#, python-format
+msgid "%.0f KB"
+msgstr ""
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:114 ../UpdateManager/Common/utils.py:114
+#, python-format
+msgid "%.1f MB"
+msgstr ""
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, python-format
+msgid "Server for %s"
+msgstr "השרת ב%s"
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr "שרת ראשי"
+
+#: ../DistUpgrade/distro.py:235
+#, fuzzy
+msgid "Custom servers"
+msgstr "השרת הקרוב ביותר"
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr "השתמש בנתיב הנתון כדי לחפש אחר תקליטור עם חבילות ניתנות לשדרוג"
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"השתמש בממשק גרפי. כרגע זמין: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid ""
+"Use special upgrade mode. Available:\n"
+"desktop, server"
+msgstr ""
+"השתמש במצב שדרוג מיוחד. זמינים:\n"
+"desktop, server"
 
 #: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
@@ -69,6 +130,8 @@ msgid ""
 "network problem. You may want to try again later. See below for a list of "
 "unauthenticated packages."
 msgstr ""
+"לא היה אפשרי לאמת מספר חבילות. ייתכן שזו בעיית רשת רגעית. באפשרותך לנסות שוב "
+"מאוחר יותר. למטה נמצאת לעיונך רשימת החבילות שלא אומתו."
 
 #: ../DistUpgrade/DistUpgradeCache.py:505
 #, python-format
@@ -87,7 +150,6 @@ msgid "Can't guess meta-package"
 msgstr "לא ניתן לקבוע חבילת על"
 
 #: ../DistUpgrade/DistUpgradeCache.py:514
-#, fuzzy
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -96,7 +158,7 @@ msgid ""
 "before proceeding."
 msgstr ""
 "אף אחת החבילות ubuntu-desktop, kubuntu-desktop או edubuntu-desktop אינה "
-"מותקנת במערכת שלך, לכן לא ניתן לזהות באיזו גירסה של אובונטו נעשה שימוש.\n"
+"מותקנת במערכת שלך, לכן לא ניתן לזהות באיזו גרסה של אובונטו נעשה שימוש.\n"
 " אנא התקן אחת מהחבילות הנ\"ל בעזרת Synaptic או apt-get לפני שתמשיך."
 
 #: ../DistUpgrade/DistUpgradeControler.py:92
@@ -124,19 +186,19 @@ msgstr "קורא מטמון"
 
 #: ../DistUpgrade/DistUpgradeControler.py:182
 msgid "Unable to get exclusive lock"
-msgstr ""
+msgstr "לא יכול להשיג נעילה בלעדית"
 
 #: ../DistUpgrade/DistUpgradeControler.py:183
-#, fuzzy
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
-"אפשר להריץ רק מנהל חבילות אחד באותו זמן. אנא סגור מנהלי חבילות אחרים קודם."
+"בדרך כלל משמעות הדבר היא כי מנהל חבילות אחר (למשל apt-get או aptitude) כבר "
+"פועל. אנא סגור היישום הנ\"ל תחילה."
 
 #: ../DistUpgrade/DistUpgradeControler.py:201
 msgid "Continue running under SSH?"
-msgstr ""
+msgstr "להמשיך לרוץ תחת SSH?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:202
 #, python-format
@@ -148,10 +210,15 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
+"נראה שתצורת ההפעלה פועלת תחת ssh. מומלץ שלא לבצע שדרוג עם ssh מפני שבמקרה של "
+"תקלה, יכול להיווצר בעיה בהתאוששות ממנה.\n"
+"\n"
+"אם תבחר להמשיך, ssh deamon נוסף יפתח בפורט '%s'.\n"
+"האם ברצונך להמשיך?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:215
 msgid "Starting additional sshd"
-msgstr ""
+msgstr "מתחיל sshd נוסף"
 
 #: ../DistUpgrade/DistUpgradeControler.py:216
 #, python-format
@@ -163,23 +230,22 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeControler.py:280
 #: ../DistUpgrade/DistUpgradeControler.py:289
-#, fuzzy
 msgid "Can not upgrade"
-msgstr "מכין את השדרוג"
+msgstr "לא יכול לשדרג"
 
 #: ../DistUpgrade/DistUpgradeControler.py:281
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
-msgstr ""
+msgstr "שדרוג מ-'%s' ל-'%s' אינו נתמך על ידי כלי זה."
 
 #: ../DistUpgrade/DistUpgradeControler.py:290
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
-msgstr ""
+msgstr "התקנת ה python שלך פגומה. אנא תקן את הקישור '/usr/bin/python'"
 
 #: ../DistUpgrade/DistUpgradeControler.py:309
 msgid "Include latest updates from the Internet?"
-msgstr ""
+msgstr "לכלול עדכונים חדשים מהאינטרנט?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:310
 msgid ""
@@ -188,13 +254,17 @@ msgid ""
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"תהליך השדרוג יכול להוריד ולהתקין את העדכונים החדשים ביותר, בצורה אוטומטית, "
+"במהלך השדרוג. זמן השדרוג יתארך, אבל המערכת שלך תהיה מעודכנת לחלוטין. "
+"באפשרותך לבחור לא לעשות זאת, אך כדאי שתתקין את העדכונים החדשים ביותר מיד "
+"לאחר השדרוג."
 
 #: ../DistUpgrade/DistUpgradeControler.py:467
 msgid "No valid mirror found"
-msgstr "לא נמצא אתר מראה תקני"
+msgstr "לא נמצא אתר מראה תקין"
 
 #: ../DistUpgrade/DistUpgradeControler.py:468
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
 "was found.This can happen if you run a internal mirror or if the mirror "
@@ -204,11 +274,11 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'no' the update will cancel."
 msgstr ""
-"בעת סריקת מידע מאגרי התוכנה שלך לא נמצאה הפנייה לשרת מראה לצורך השדרוג. שרת "
+"בעת סריקת מידע מאגרי התכנה שלך לא נמצאה הפנייה לשרת מראה לצורך השדרוג. שרת "
 "מראה מקומי או הפניה לשרת שפג תוקפה עשויים להיות הסיבה לכך.\n"
 "\n"
 "האם ברצונך לעדכון את רשימת המקורות (sources.list) בכל מקרה? אישור יגרום "
-"לעדכון כל ההפניות \"%s\" ל-\"%s\".\n"
+"לעדכון כל ההפניות '%s' ל-'%s'.\n"
 "\n"
 "בחירה ב\"לא\" תבטל את העדכון."
 
@@ -249,6 +319,8 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
+"כמה מקורות צד שלישי ברשימת ה-sources.list נוטרלו. באפשרותך לאפשר אותם שוב "
+"לאחר השדרוג בעזרת הכלי 'מקורות תוכנה' או בעזרת מנהל החבילות שלך."
 
 #: ../DistUpgrade/DistUpgradeControler.py:586
 msgid "Error during update"
@@ -259,30 +331,30 @@ msgid ""
 "A problem occured during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
-"הייתה בעיה בתהליך העידכון. בדרך כלל זוהי בעיית רשת, אנא בדקו את חיבור הרשת "
+"הייתה בעיה בתהליך העדכון. בדרך כלל זוהי בעיית רשת, אנא בדקו את חיבור הרשת "
 "שלכם ונסו שנית."
 
 #: ../DistUpgrade/DistUpgradeControler.py:596
 msgid "Not enough free disk space"
-msgstr "אין מספיק שטח בדיסק הקשיח"
+msgstr "אין מספיק שטח בכונן הקשיח"
 
 #: ../DistUpgrade/DistUpgradeControler.py:597
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The upgrade aborts now. The upgrade needs a total of %s free space on disk '%"
 "s'. Please free at least an additional %s of disk space on '%s'. Empty your "
 "trash and remove temporary packages of former installations using 'sudo apt-"
 "get clean'."
 msgstr ""
-"השדרגו יתבטל כעת. יש לפנות לפחות %s מהשטח ב-%s. רוקנו את הזבל והסירו חבילות "
-"זמניות מהתקנות קודמות על ידי שימוש בפקודה \"sudo apt-get clean\"."
+"השדרוג יתבטל כעת.השדרוג צריך סך הכל %s מקום פנוי כל הכונן '%s'. יש לפנות "
+"לפחות %s מהשטח ב-'%s'. רוקנו את הזבל והסירו חבילות זמניות מהתקנות קודמות על "
+"ידי שימוש בפקודה \"sudo apt-get clean\"."
 
 #: ../DistUpgrade/DistUpgradeControler.py:709
 msgid "Support for some applications ended"
-msgstr "המיכה בכמה תוכנות הסתיימה"
+msgstr "התמיכה במספר תכנות הסתיימה"
 
 #: ../DistUpgrade/DistUpgradeControler.py:710
-#, fuzzy
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -290,10 +362,10 @@ msgid ""
 "If you have not enabled community maintained software (universe), these "
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
-"Canonical Ltd. לא תומכת יותר בחבילות התוכנה הבאות. עדיין ניתן לקבל תמיכה "
+"Canonical Ltd. לא תומכת יותר בחבילות הוכנה הבאות. עדיין ניתן לקבל תמיכה "
 "מהקהילה.\n"
 "\n"
-"אם אל אפשרת התקנת תוכנות המתחוזקות ע\"י הקהילה (universe), החבילות האלה "
+"אם אל אפשרת התקנת תכנות המתוחזקות על ידי הקהילה (universe), החבילות האלה "
 "יסומנו להסרה בצעד הבא."
 
 #. ask the user if he wants to do the changes
@@ -320,6 +392,8 @@ msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
+"השדרוג מופסק כעת. המערכת שלך יכולה להיות במצב לא יציב. תהליך התאוששות יבוצע "
+"כעת (dpkg --configure -a)."
 
 #: ../DistUpgrade/DistUpgradeControler.py:820
 #, fuzzy, python-format
@@ -356,11 +430,10 @@ msgid "Error during commit"
 msgstr "שגיאה בעת ביצוע"
 
 #: ../DistUpgrade/DistUpgradeControler.py:923
-#, fuzzy
 msgid ""
 "A problem occured during the clean-up. Please see the below message for more "
 "information. "
-msgstr "מספר בעיות נתגלו במהלך הניקוי. אנא הסתכל בהודעות מטה למידע נוסף. "
+msgstr "מספר בעיות נתגלו במהלך הניקוי. אנא הסתכל בהודעות למטה למידע נוסף. "
 
 #. generate a new cache
 #: ../DistUpgrade/DistUpgradeControler.py:1037
@@ -371,12 +444,12 @@ msgstr "מחזיר את המערכת למצבה המקורי"
 #. here
 #: ../DistUpgrade/DistUpgradeControler.py:1075
 msgid "Required depends is not installed"
-msgstr ""
+msgstr "החבילות הדרושות להתקנה אינן מותקנות"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1076
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr ""
+msgstr "החבילה הדרושה להתקנה '%s' אינה מותקנת "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
@@ -387,7 +460,7 @@ msgstr "בודק את מנהל החבילות"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1208
 msgid "Preparing the upgrade failed"
-msgstr ""
+msgstr "תהליך הכנת השדרוג נכשל"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1209
 msgid ""
@@ -395,6 +468,8 @@ msgid ""
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bugreport."
 msgstr ""
+"תהליך הכנת השדרוג נכשל. אנא דווח על כך כשגיאה בחבילת 'מנהל עדכונים' וכלול את "
+"הקבצים הנמצאים ב-/var/log/dist-upgrade/ בדיווח שלך."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1224
 msgid "Getting upgrade pre-requists failed"
@@ -436,12 +511,11 @@ msgstr ""
 #. do the dist-upgrade
 #: ../DistUpgrade/DistUpgradeControler.py:1283
 msgid "Asking for confirmation"
-msgstr ""
+msgstr "מבקש אישור"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1289 ../update-manager:83
-#, fuzzy
 msgid "Fetching"
-msgstr "הגדרות"
+msgstr "מוריד"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1299 ../update-manager:87
 msgid "Upgrading"
@@ -449,7 +523,7 @@ msgstr "משדרג"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1306
 msgid "Searching for obsolete software"
-msgstr ""
+msgstr "מחפש אחר תוכנה שנגרעה"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1311
 msgid "System upgrade is complete."
@@ -469,12 +543,12 @@ msgstr "ההורדה הושלמה"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:138
 #: ../DistUpgrade/DistUpgradeViewKDE.py:141
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching file %li of %li at %sb/s"
 msgstr "מוריד קובץ %li מתוך %li ב-%s לשנייה."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:270
 #: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:271
 #, python-format
@@ -493,7 +567,7 @@ msgstr "מוריד קובץ %li מתוך %li"
 #: ../DistUpgrade/DistUpgradeViewGtk.py:174
 #: ../DistUpgrade/DistUpgradeViewKDE.py:173
 msgid "Applying changes"
-msgstr "מחיל שינויים"
+msgstr "מבצע שינויים"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:199
 #: ../DistUpgrade/DistUpgradeViewKDE.py:184
@@ -517,58 +591,69 @@ msgid ""
 "Replace the customized configuration file\n"
 "'%s'?"
 msgstr ""
+"להחליף את קובץ ההגדרות המותאם אישית\n"
+"%s?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:217
 #: ../DistUpgrade/DistUpgradeViewKDE.py:204
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
-msgstr ""
+msgstr "שינויים שביצעת בקובץ הגדרות זה יאבדו אם תבחר להחליפו בגרסה חדשה יותר"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:230
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 msgid "The 'diff' command was not found"
-msgstr ""
+msgstr "הפקודה 'diff' לא נמצאה"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:403
+#: ../DistUpgrade/DistUpgradeViewGtk.py:407
+#: ../DistUpgrade/DistUpgradeViewText.py:77
 msgid "A fatal error occured"
 msgstr "ארעה שגיאה חמורה"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:404
+#: ../DistUpgrade/DistUpgradeViewGtk.py:408
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
 "var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
+"אנא דווח על כך כשגיאה (אם לא עשית זאת עד כה) וכלול את הקבצים var/log/dist-"
+"upgrade/main.log/ ו- var/log/dist-upgrade/apt.log/ בדיווח שלך.\n"
+"השדרוג מופסק כעת.\n"
+"sources.list המקורי נשמר ב-/etc/apt/sources.list.distUpgrade."
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:538
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
 #: ../DistUpgrade/DistUpgradeViewKDE.py:576
+#: ../DistUpgrade/DistUpgradeViewText.py:128
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "חבילה %d תוסר."
 msgstr[1] "%d חבילות יוסרו."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:543
+#: ../DistUpgrade/DistUpgradeViewGtk.py:547
 #: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewText.py:133
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "חבילה חדשה %d תותקן."
 msgstr[1] "%d חבילות חדשות יותקנו."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:549
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #: ../DistUpgrade/DistUpgradeViewKDE.py:587
+#: ../DistUpgrade/DistUpgradeViewText.py:139
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
-msgstr[0] "%d חבילות חדשות ישודרגו."
+msgstr[0] "%d חבילות ישודרגו."
 msgstr[1] "%d חבילות ישודרגו."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:554
+#: ../DistUpgrade/DistUpgradeViewGtk.py:558
+#: ../DistUpgrade/DistUpgradeViewText.py:144
 #, python-format
 msgid ""
 "\n"
@@ -577,11 +662,12 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"יש להוריד %s בסה\"כ. "
+"יש להוריד %s בסך הכל. "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
+#: ../DistUpgrade/DistUpgradeViewGtk.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:607
 #: ../DistUpgrade/DistUpgradeViewKDE.py:615
+#: ../DistUpgrade/DistUpgradeViewText.py:149
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
@@ -589,38 +675,40 @@ msgstr ""
 "הורדת והתקנת השדרוג עשויה לארוך מספר שעות. לא ניתן לבטל את התהליך בשלב מאוחר "
 "יותר."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:563
+#: ../DistUpgrade/DistUpgradeViewGtk.py:567
 #: ../DistUpgrade/DistUpgradeViewKDE.py:610
 #: ../DistUpgrade/DistUpgradeViewKDE.py:618
 msgid "To prevent data loss close all open applications and documents."
-msgstr "כדי למנוע אובדן מידע אנא סגרו על תוכנית או מסמך פתוחים."
+msgstr "כדי למנוע איבוד מידע אנא סגרו את כל התכניות והמסמכים."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewGtk.py:573
 #: ../DistUpgrade/DistUpgradeViewKDE.py:624
+#: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../UpdateManager/UpdateManager.py:658
 msgid "Your system is up-to-date"
 msgstr "המערכת שלך מעודכנת"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:574
 #: ../DistUpgrade/DistUpgradeViewKDE.py:625
+#: ../DistUpgrade/DistUpgradeViewText.py:156
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
 msgstr "אין שדרוגים זמינים למערכת שלך. השדרוג יתבטל כעת."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:590
 #, python-format
 msgid "<b>Remove %s</b>"
 msgstr "<b>הסר %s </b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:588
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #: ../DistUpgrade/DistUpgradeViewKDE.py:648
 #, python-format
 msgid "Install %s"
 msgstr "התקן %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:650
 #, python-format
 msgid "Upgrade %s"
@@ -632,24 +720,20 @@ msgid "Media Change"
 msgstr "שינויים"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
-#, fuzzy
 msgid "Show Difference >>>"
-msgstr "מסוף"
+msgstr "הצג הבדל >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:234
-#, fuzzy
 msgid "<<< Hide Difference"
-msgstr "מסוף"
+msgstr "הסתר הבדל >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:473
-#, fuzzy
 msgid "Show Terminal >>>"
-msgstr "מסוף"
+msgstr "הצג מסוף >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:476
-#, fuzzy
 msgid "<<< Hide Terminal"
-msgstr "מסוף"
+msgstr "<<< הסתר מסוף"
 
 #. string = _("<p>You have to download a total of %s. ")
 #. msg += string % apt_pkg.SizeToStr(downloadSize)
@@ -660,9 +744,9 @@ msgid "<p>You have to download a total of %s. "
 msgstr "יש להוריד %s בסה\"כ. "
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:646
-#, fuzzy, python-format
+#, python-format
 msgid "Remove %s"
-msgstr "_הסר"
+msgstr "הסר %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:666
 #: ../DistUpgrade/DistUpgrade.glade.h:2
@@ -678,9 +762,8 @@ msgstr ""
 "השדרוג."
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:670
-#, fuzzy
 msgid "Cancel Upgrade?"
-msgstr "_בטל שידרוג"
+msgstr "ביטול שידרוג?"
 
 #: ../DistUpgrade/DistUpgradeView.py:33
 #, python-format
@@ -700,7 +783,7 @@ msgstr "%li דקות"
 #: ../DistUpgrade/DistUpgradeView.py:38
 #, python-format
 msgid "%li seconds"
-msgstr "%liשניות"
+msgstr "%li שניות"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
@@ -709,7 +792,7 @@ msgstr "%liשניות"
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem"
-msgstr ""
+msgstr "הורדה זו תארך כ-%s עם חיבור 1Mbit DSL וכ-%s עם מודם 56k"
 
 #: ../DistUpgrade/DistUpgradeView.py:150
 msgid "Reboot required"
@@ -720,26 +803,141 @@ msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr "השדרוג הסתיים ונדרשת הפעלה מחדש. האם ברצונך לעשות זאת כעת?"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:123
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
+msgid "Could not run the upgrade tool"
+msgstr "לא ניתן להריץ את כלי השדרוג"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:124
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
+msgstr "זהו כנראה באג בכלי השדרוג. אנא דווחו על זה כבאג."
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:150
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
+msgid "Upgrade tool signature"
 msgstr ""
 
-#: ../DistUpgrade/dist-upgrade.py:24
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:153
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
+msgid "Upgrade tool"
+msgstr "כלי שדרוג"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Failed to fetch"
+msgstr "ההורדה נכשלה"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:178
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr "הורדת השדרוג נכשלה. עלולה להיות בעיית רשת. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:182
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
+msgid "Failed to extract"
+msgstr "החילוץ נכשל"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:183
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
 msgid ""
-"Use special upgrade mode. Available:\n"
-"desktop, server"
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
+msgstr "חילוץ השדרוג נכשל. עלולה להיות בעיה עם הרשת או השרת. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:188
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
+msgid "Verfication failed"
+msgstr "האימות נכשל"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:189
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr "אימות השדרוג נכשל. עלולה להיות בעיה עם הרשת או עם השרת. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:194
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
+msgid "Authentication failed"
+msgstr "האימות נכשל"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:195
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr "אימות השדרוג נכשל. עלולה להיות בעיה עם הרשת או עם השרת. "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, fuzzy
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+"אנא דווח על כך כשגיאה (אם לא עשית זאת עד כה) וכלול את הקבצים var/log/dist-"
+"upgrade/main.log/ ו- var/log/dist-upgrade/apt.log/ בדיווח שלך.\n"
+"השדרוג מופסק כעת.\n"
+"sources.list המקורי נשמר ב-/etc/apt/sources.list.distUpgrade."
+
+#: ../DistUpgrade/DistUpgradeViewText.py:101
+msgid "Aborting"
 msgstr ""
 
-#. testcode to see if the bullets look nice in the dialog
-#. for i in range(4):
-#. view.setStep(i+1)
-#. app.openCache()
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#: ../DistUpgrade/DistUpgradeViewText.py:184
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "_המשך"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#, fuzzy
+msgid "Details [d]"
+msgstr "פרטים"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:168
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:171
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:174
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "הסר %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:177
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "התקן %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:178
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "שדרג %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#, fuzzy
+msgid "Restart required"
+msgstr "נדרשת הפעלה מחדש"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+msgid "To fully ugprade, please restart"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
@@ -753,9 +951,8 @@ msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>להתחיל את השדרוג?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-#, fuzzy
 msgid "<b><big>Upgrading Ubuntu to version 7.10</big></b>"
-msgstr "<b><big>משדרג את אובונטו לגרסה 6.10</big></b>"
+msgstr "<b><big>משדרג את אובונטו לגרסה 7.10</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
@@ -767,12 +964,11 @@ msgstr "פרטים"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
-msgstr "ההבדל בין הרבצים"
+msgstr "ההבדל בין הקבצים"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:11
-#, fuzzy
 msgid "Distribution Upgrade"
-msgstr "_המשך בשידרוג"
+msgstr "שדרוג ההפצה"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:12
 #, fuzzy
@@ -780,13 +976,12 @@ msgid "Fetching the upgrades"
 msgstr "מכין את השדרוג"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:13
-#, fuzzy
 msgid "Installing the upgrades"
-msgstr "מוריד ומתקין את השדרוג"
+msgstr "מתקין את השדרוג"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Modifying the software channels"
-msgstr ""
+msgstr "משנה את ערוצי התוכנה"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Preparing the upgrade"
@@ -802,7 +997,7 @@ msgstr "מסוף"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
-msgstr "_בטל שידרוג"
+msgstr "_בטל שדרוג"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
@@ -826,15 +1021,15 @@ msgstr "_אתחל עכשיו"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:24
 msgid "_Resume Upgrade"
-msgstr "_המשך בשידרוג"
+msgstr "_המשך בשדרוג"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
-msgstr "_התחל שידרוג"
+msgstr "_התחל שדרוג"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:79
 msgid "Could not find the release notes"
-msgstr "לא ניתן למצוא הערות שיחרור גירסה"
+msgstr "לא ניתן למצוא הערות שחרור לגרסה"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:80
 msgid "The server may be overloaded. "
@@ -842,7 +1037,7 @@ msgstr "השרת עלול להיות עמוס מדי. "
 
 #: ../UpdateManager/DistUpgradeFetcher.py:90
 msgid "Could not download the release notes"
-msgstr "לא ניתן להוריד הערות שחרור גירסה."
+msgstr "לא ניתן להוריד הערות שחרור גרסה."
 
 #: ../UpdateManager/DistUpgradeFetcher.py:91
 msgid "Please check your internet connection."
@@ -851,12 +1046,12 @@ msgstr "אנא בדקו את החיבור לאינטרנט."
 #: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr ""
+msgstr "מוריד קובץ %(current)li מ %(total)li במהירות %(speed)s/s"
 
 #: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
-msgstr ""
+msgstr "מוריד קובץ %(current)li מתוך %(total)li"
 
 #: ../UpdateManager/UpdateManager.py:235
 msgid "The list of changes is not available"
@@ -867,12 +1062,16 @@ msgid ""
 "The list of changes is not available yet.\n"
 "Please try again later."
 msgstr ""
+"רשימת השינויים אינה זמינה עדיין.\n"
+"אנא נסה שנית מאוחר יותר."
 
 #: ../UpdateManager/UpdateManager.py:246
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
+"הורדת רשימת השינויים נכשלה.\n"
+"אנא בדוק את חיבור האינטרנט שלך."
 
 #: ../UpdateManager/UpdateManager.py:273
 msgid "Important security updates"
@@ -892,7 +1091,7 @@ msgstr ""
 
 #: ../UpdateManager/UpdateManager.py:277
 msgid "Distribution updates"
-msgstr ""
+msgstr "עדכוני הפצה"
 
 #: ../UpdateManager/UpdateManager.py:282
 msgid "Other updates"
@@ -909,11 +1108,11 @@ msgstr "מוריד רשימת שינויים..."
 
 #: ../UpdateManager/UpdateManager.py:596
 msgid "_Uncheck All"
-msgstr ""
+msgstr "_הסר סימון מכולם"
 
 #: ../UpdateManager/UpdateManager.py:602
 msgid "_Check All"
-msgstr ""
+msgstr "_סמן הכל"
 
 #. TRANSLATORS: b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:646 ../UpdateManager/UpdateManager.py:673
@@ -922,9 +1121,8 @@ msgid "Download size: %s"
 msgstr "גודל ההורדה: %s"
 
 #: ../UpdateManager/UpdateManager.py:650
-#, fuzzy
 msgid "Unknown download size"
-msgstr "גודל ההורדה: %s"
+msgstr "גודל ההורדה לא ידוע"
 
 #: ../UpdateManager/UpdateManager.py:669
 #, python-format
@@ -975,7 +1173,7 @@ msgstr ""
 #: ../UpdateManager/UpdateManager.py:876
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr ""
+msgstr "מגרסה %(old_version)s לגרסה %(new_version)s"
 
 #: ../UpdateManager/UpdateManager.py:880
 #, python-format
@@ -998,8 +1196,8 @@ msgid ""
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
 "information on upgrading."
 msgstr ""
-"המערכת שלכם לא תקבל עדכוני אבטחה יותר. אנא שדרגו אותו לגירסה מאוחרת יותר של "
-"אובונטו לינוקס. ראו http://www.ubuntu.com למידע נוסף על שידרוג המערכת."
+"המערכת שלכם לא תקבל עדכוני אבטחה יותר. אנא שדרגו אותו לגרסה מאוחרת יותר של "
+"אובונטו לינוקס. ראו http://www.ubuntu.com למידע נוסף על שדרוג המערכת."
 
 #: ../UpdateManager/UpdateManager.py:909
 msgid "Downloading the upgrade tool"
@@ -1012,7 +1210,7 @@ msgstr "כלי השדרוג ינחה אותך בתהליך השדרוג."
 #: ../UpdateManager/UpdateManager.py:919
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
-msgstr "<b>גירסה חדשה של ההפצה, \"%s\", זמינה</b>"
+msgstr "<b>גרסה חדשה של ההפצה, \"%s\", זמינה</b>"
 
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:958
@@ -1028,61 +1226,6 @@ msgstr ""
 "אי אפשר להתקין או להסיר אף תוכנה. יש להשתמש במנהל החבילות \"Synaptic\" או "
 "להפעיל את הפקודה \"sudo apt-get install -f\" במסוף כדי לתקן בעיה זו."
 
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
-msgid "Could not run the upgrade tool"
-msgstr "לא ניתן להריץ את כלי השדרוג"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr "זהו כנראה באג בכלי השדרוג. אנא דווחו על זה כבאג."
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
-msgid "Upgrade tool signature"
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
-msgid "Upgrade tool"
-msgstr "כלי שדרוג"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Failed to fetch"
-msgstr "ההורדה נכשלה"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "הורדת השדרוג נכשלה. עלולה להיות בעיית רשת. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
-msgid "Failed to extract"
-msgstr "החילוץ נכשל"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr "חילוץ השדרוג נכשל. עלולה להיות בעיה עם הרשת או השרת. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
-msgid "Verfication failed"
-msgstr "האימות נכשל"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr "אימות השדרוג נכשל. עלולה להיות בעיה עם הרשת או עם השרת. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
-msgid "Authentication failed"
-msgstr "האימות נכשל"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr "אימות השדרוג נכשל. עלולה להיות בעיה עם הרשת או עם השרת. "
-
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
 "<b><big>You must check for updates manually</big></b>\n"
@@ -1090,6 +1233,10 @@ msgid ""
 "Your system does not check for updates automatically. You can configure this "
 "behavior in <i>Software Sources</i> on the <i>Internet Updates</i> tab."
 msgstr ""
+"<b><big>תצטרך לבדוק עדכונים באופן עצמאי</big></b>\n"
+"\n"
+"המערכת לא תחפש עדכונים אוטומטית. יש באפשרותך לשנות את התנהגות זו ב <i>מקורות "
+"תוכנה</i> בלשונית <i>עדכוני אינטרנט</i>."
 
 #: ../data/glade/UpdateManager.glade.h:4
 msgid "<big><b>Keep your system up-to-date</b></big>"
@@ -1100,7 +1247,6 @@ msgid "<big><b>Not all updates can be installed</b></big>"
 msgstr "<big><b>לא ניתן להתקין את כל העדכונים</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
-#, fuzzy
 msgid "<big><b>Starting Update Manager</b></big>"
 msgstr "<big><b>פותח את מנהל העדכונים</b></big>"
 
@@ -1114,20 +1260,19 @@ msgstr "_בדוק"
 
 #: ../data/glade/UpdateManager.glade.h:9
 msgid "Check the software channels for new updates"
-msgstr "בדיקת המצאות עדכונים במאגרי התוכנה"
+msgstr "בדיקת ערוצי עדכונים במאגרי התוכנה"
 
 #: ../data/glade/UpdateManager.glade.h:10
 msgid "Description"
 msgstr "תיאור"
 
 #: ../data/glade/UpdateManager.glade.h:11
-#, fuzzy
 msgid "Description of update"
-msgstr "שינויים ותיאור העדכון"
+msgstr "תיאור העדכון"
 
 #: ../data/glade/UpdateManager.glade.h:12
 msgid "Release Notes"
-msgstr "הערות שחרור גירסה"
+msgstr "הערות שחרור גרסה"
 
 #: ../data/glade/UpdateManager.glade.h:13
 msgid ""
@@ -1138,6 +1283,12 @@ msgid ""
 " ◦ Unofficial software packages not provided by Ubuntu\n"
 " ◦ Normal changes of a pre-release version of Ubuntu"
 msgstr ""
+"בצע שדרוג חלקי, כדי להתקין כמה שיותר עדכונים. \n"
+"\n"
+"זה יכול להיגרם בגלל:\n"
+" עדכון קודם שלא הושלם\n"
+" תוכנה לא רשמית שאינה מסופקת על יד אובונטו\n"
+" שינויים רגילים בגרסת טרום-שחרור של אובונטו"
 
 #: ../data/glade/UpdateManager.glade.h:19
 msgid "Show progress of single files"
@@ -1160,7 +1311,7 @@ msgstr "מנהל עדכונים"
 
 #: ../data/glade/UpdateManager.glade.h:23
 msgid "Upgrade to the latest version of Ubuntu"
-msgstr "שדרוג המערכת לגירסה החדשה של אובונטו."
+msgstr "שדרוג המערכת לגרסה החדשה של אובונטו."
 
 #: ../data/glade/UpdateManager.glade.h:24
 msgid "_Check"
@@ -1175,13 +1326,12 @@ msgid "_Install Updates"
 msgstr "_התקן עדכונים"
 
 #: ../data/glade/UpdateManager.glade.h:27
-#, fuzzy
 msgid "_Partial Upgrade"
-msgstr "_התחל שידרוג"
+msgstr "שדרוג _חלקי"
 
 #: ../data/glade/UpdateManager.glade.h:28
 msgid "_Upgrade"
-msgstr ""
+msgstr "_שדרג"
 
 #: ../data/glade/UpdateManager.glade.h:29
 msgid "updates"
@@ -1189,21 +1339,21 @@ msgstr "עדכונים"
 
 #: ../data/update-manager.desktop.in.h:1
 msgid "Show and install available updates"
-msgstr "הצג והתקן העדכונים הזמינים"
+msgstr "הצג והתקן את העדכונים הזמינים"
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "System Update Tool"
-msgstr ""
+msgstr "מנהל עדכוני מערכת"
 
 #: ../data/update-manager.schemas.in.h:1
 msgid ""
 "Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
-msgstr "בדוק אוטומטית אם גירסה חדשה של הפצה זו זמינה, והצע לשדרג (אם ניתן)."
+msgstr "בדוק אוטומטית אם גרסה חדשה של הפצה זו זמינה, והצע לשדרג (אם אפשר)."
 
 #: ../data/update-manager.schemas.in.h:2
 msgid "Check for new distribution releases"
-msgstr "חפש גירסאות חדשות להפצה"
+msgstr "חפש גרסאות חדשות להפצה"
 
 #: ../data/update-manager.schemas.in.h:3
 msgid ""
@@ -1211,10 +1361,12 @@ msgid ""
 "channel list manually. This option allows to hide the reminder shown in this "
 "case."
 msgstr ""
+"אם בדיקה אוטומטית לעדכונים מנוטרלת, תצטרך לטעון מחדש את רשימת הערוצים באופן "
+"עצמאי. אפשרות זו תסתיר את התזכורת המופיעה במקרה הזה."
 
 #: ../data/update-manager.schemas.in.h:4
 msgid "Remind to reload the channel list"
-msgstr ""
+msgstr "הזכר לטעון את רשימת הערוצים"
 
 #: ../data/update-manager.schemas.in.h:5
 msgid "Show details of an update"
@@ -1222,7 +1374,7 @@ msgstr "הצג פרטי עדכונים"
 
 #: ../data/update-manager.schemas.in.h:6
 msgid "Stores the size of the update-manager dialog"
-msgstr ""
+msgstr "מכיל את גודל הדיאלוג של מנהל העדכונים"
 
 #: ../data/update-manager.schemas.in.h:7
 msgid ""
@@ -1235,32 +1387,28 @@ msgid "The window size"
 msgstr "גודל החלון"
 
 #: ../update-manager:51
-#, fuzzy
 msgid "Check if a new distribution release is available"
-msgstr "חפש גירסאות חדשות להפצה"
+msgstr "חפש גרסאות חדשות להפצה"
 
 #: ../update-manager:54 ../do-release-upgrade:19
 msgid "Check if upgrading to the latest devel release is possible"
-msgstr ""
+msgstr "בדוק אם שידרוג לגרסת הפיתוח החדשה ביותר אפשרי"
 
 #: ../update-manager:58 ../update-manager:61
 msgid "Try to run a dist-upgrade"
-msgstr ""
+msgstr "נסה להריץ dist-upgrade"
 
 #: ../update-manager:74
-#, fuzzy
 msgid "Running partial upgrade"
-msgstr "_התחל שידרוג"
+msgstr "מריץ את השידרוג החלקי"
 
 #: ../update-manager:92
-#, fuzzy
 msgid "Upgrade complete"
-msgstr "העדכון הושלם"
+msgstr "השדרוג הושלם"
 
 #: ../update-manager:93
-#, fuzzy
 msgid "The upgrade was completed."
-msgstr "שדרוג המערכת הושלם."
+msgstr "השדרוג הושלם"
 
 #: ../do-release-upgrade:23
 msgid "Run the specified frontend"
@@ -1268,16 +1416,15 @@ msgstr ""
 
 #: ../do-release-upgrade:26
 msgid "Run in a special upgrade mode"
-msgstr ""
+msgstr "הרץ במצב שדרוג מיוחד"
 
 #: ../do-release-upgrade:30
-#, fuzzy
 msgid "Checking for a new ubuntu release"
-msgstr "חפש גירסאות חדשות להפצה"
+msgstr "חפש גרסאות חדשות של אובונטו"
 
 #: ../do-release-upgrade:36
 msgid "No new release found"
-msgstr ""
+msgstr "לא נמצאה גרסה חדשה"
 
 #, fuzzy
 #~ msgid "Fetching file %li of %li at %s/s"
@@ -1325,15 +1472,6 @@ msgstr ""
 
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
-
-#~ msgid "Main server"
-#~ msgstr "שרת ראשי"
-
-#~ msgid "Server for %s"
-#~ msgstr "השרת ב%s"
-
-#~ msgid "Nearest server"
-#~ msgstr "השרת הקרוב ביותר"
 
 #, fuzzy
 #~ msgid "Software Channel"

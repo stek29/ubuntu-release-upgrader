@@ -3,24 +3,84 @@
 # This file is distributed under the same license as the update-manager package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-19 23:09+0100\n"
-"PO-Revision-Date: 2007-04-09 04:33+0000\n"
+"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
+"POT-Creation-Date: 2007-09-24 11:00+0200\n"
+"PO-Revision-Date: 2007-09-10 20:39+0000\n"
 "Last-Translator: Xabi Ezpeleta <xezpeleta@mendikute.com>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Rosetta-Export-Date: 2007-04-13 08:48:32+0000\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:105 ../UpdateManager/Common/utils.py:105
+msgid "None"
+msgstr ""
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:108 ../UpdateManager/Common/utils.py:108
+msgid "1 KB"
+msgstr ""
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:111 ../UpdateManager/Common/utils.py:111
+#, python-format
+msgid "%.0f KB"
+msgstr ""
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:114 ../UpdateManager/Common/utils.py:114
+#, python-format
+msgid "%.1f MB"
+msgstr ""
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, python-format
+msgid "Server for %s"
+msgstr ""
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr ""
+
+#: ../DistUpgrade/distro.py:235
+msgid "Custom servers"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr "Emandako bidea erabili pakete eguneragarriak dituen CDROMa bilatzeko"
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"Erabiltzaile-interfaza erabili. Orain erabilgarriak: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid ""
+"Use special upgrade mode. Available:\n"
+"desktop, server"
+msgstr ""
+"Eguneratze-modu berezia erabili. Erabilgarriak:\n"
+"desktop, server"
 
 #: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
-msgstr "Hautsitako paketeak"
+msgstr "Apurtutako paketeak"
 
 #: ../DistUpgrade/DistUpgradeCache.py:113
 msgid ""
@@ -42,7 +102,7 @@ msgstr "Ezinbesteko pakete bat ezabatu beharko litzate"
 #: ../DistUpgrade/DistUpgradeCache.py:362
 #: ../UpdateManager/UpdateManager.py:850
 msgid "Could not calculate the upgrade"
-msgstr "Ezin da hobekutza kalkulatu"
+msgstr "Ezin izan da eguneraketa kalkulatu"
 
 #: ../DistUpgrade/DistUpgradeCache.py:363
 msgid ""
@@ -59,7 +119,7 @@ msgstr ""
 #. FIXME: maybe ask a question here? instead of failing?
 #: ../DistUpgrade/DistUpgradeCache.py:401
 msgid "Error authenticating some packages"
-msgstr "Akatsa pakete batzuk egiaztatzerakoan"
+msgstr "Errorea pakete batzuk egiaztatzerakoan"
 
 #: ../DistUpgrade/DistUpgradeCache.py:402
 msgid ""
@@ -69,7 +129,7 @@ msgid ""
 msgstr ""
 "Pakete batzuk ezin izan dira egiaztatu. Sareko arazo iragankorra izan "
 "daiteke. Saiatu berriro beranduago. Begiratu azpian egiaztatu ezin izan "
-"diren paketeen zerrenda bila."
+"diren paketeen zerrenda."
 
 #: ../DistUpgrade/DistUpgradeCache.py:505
 #, python-format
@@ -81,8 +141,8 @@ msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
 msgstr ""
-"Ezin izan da beharrezko pakete bat instalatzea. Mesedez akats honen berri "
-"eman. "
+"Ezin izan da beharrezko pakete bat instalatu. Mesedez, errore honen berri "
+"eman ezazu. "
 
 #. FIXME: provide a list
 #: ../DistUpgrade/DistUpgradeCache.py:513
@@ -90,7 +150,6 @@ msgid "Can't guess meta-package"
 msgstr "Ezin izan da meta-paketea determinatu"
 
 #: ../DistUpgrade/DistUpgradeCache.py:514
-#, fuzzy
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -98,12 +157,15 @@ msgid ""
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"Zure sistemak hautsitako paketeak ditu eta ezin izan dira konpondu aplikazio "
-"honekin. Konpon itzazu lehenbait lehen snaptic edo apt-get erabiliz."
+"Zure sisteman ez dago ubuntu-desktop, kubuntu-desktop, xubuntu-desktop edo "
+"edubuntu-desktop paketerik eta ezin izan da detektatu zein Ubuntu bertsio "
+"erabiltzen ari zaren.\n"
+" Mesedez, jarraitu aurretik, aurreko paketeetakoren bat instalatu ezazu "
+"synaptic edo apt-get erabiltzen."
 
 #: ../DistUpgrade/DistUpgradeControler.py:92
 msgid "Failed to add the CD"
-msgstr "Hutsa CD-a gehitzean"
+msgstr "Errorea CD-a gehitzean"
 
 #: ../DistUpgrade/DistUpgradeControler.py:93
 #, python-format
@@ -115,28 +177,30 @@ msgid ""
 "'%s'"
 msgstr ""
 "Errore bat gertatu da CD-a gehitzean; eguneratzea bertan behera utzi da. Hau "
-"Ubuntu CD baliozko bat bada, errore honen berri eman ezazu.\n"
+"baliozko Ubuntu CD bat bada, errore honen berri eman ezazu.\n"
 "\n"
 "Errorearen mezua:\n"
 "'%s'"
 
 #: ../DistUpgrade/DistUpgradeControler.py:125
 msgid "Reading cache"
-msgstr "Katxea irakurtzen"
+msgstr "Cachea irakurtzen"
 
 #: ../DistUpgrade/DistUpgradeControler.py:182
 msgid "Unable to get exclusive lock"
-msgstr ""
+msgstr "Ezin izan da blokeo esklusiboa lortu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:183
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
+"Baliteke paketeak kudeatzeko beste aplikazio bat (apt-get edo aptitude "
+"gisakoa) exekutatzen aritzea. Mesedez, itxi aplikazio hori."
 
 #: ../DistUpgrade/DistUpgradeControler.py:201
 msgid "Continue running under SSH?"
-msgstr ""
+msgstr "SSH erabiliz jarraitu nahi al duzu?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:202
 #, python-format
@@ -148,10 +212,16 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
+"Sesio honetan SSH darabilzula dirudi. Gaur egun ez da gomendagarria "
+"eguneratzeak ssh bidez burutzea, errore bat gertatuz gero zailagoa izango da "
+"eta konponketa.\n"
+"\n"
+"Jarraituz gero, ssh deabru gehigarri bat sortuko da '%s' portuan.\n"
+"Jarraitu nahi al duzu?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:215
 msgid "Starting additional sshd"
-msgstr ""
+msgstr "sshd gehigarria abiarazten"
 
 #: ../DistUpgrade/DistUpgradeControler.py:216
 #, python-format
@@ -160,25 +230,30 @@ msgid ""
 "on port '%s'. If anything goes wrong with the running ssh you can still "
 "connect to the additional one.\n"
 msgstr ""
+"Errore bat gertatuz gero konponketa errazteko, sshd gehigarri bat abiaraziko "
+"da '%s' atakan. Errore bat gertatuz gero ssh-rekin, sshd gehigarriarekin "
+"konektatu ahal izango zara oraindik.\n"
 
 #: ../DistUpgrade/DistUpgradeControler.py:280
 #: ../DistUpgrade/DistUpgradeControler.py:289
 msgid "Can not upgrade"
-msgstr ""
+msgstr "Ezin da eguneratu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:281
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
-msgstr ""
+msgstr "Ezin da '%s'-tik '%s'-ra eguneratu tresna hau erabiliz."
 
 #: ../DistUpgrade/DistUpgradeControler.py:290
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
+"Zure python instalazioa oker dago. Mesedez, zuzendu ezazu '/usr/bin/python' "
+"esteka sinbolikoa."
 
 #: ../DistUpgrade/DistUpgradeControler.py:309
 msgid "Include latest updates from the Internet?"
-msgstr ""
+msgstr "Interneteko azken eguneraketak barne hartu?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:310
 msgid ""
@@ -187,10 +262,15 @@ msgid ""
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"Bertsio-eguneratze prozesuak automatikoki deskargatu eta instalatu ditzake "
+"azken eguneratzeak. Bertsio-eguneratzeak denbora gehiago har dezake, baina "
+"bukatzean zure sistema erabat eguneratua egongo da. Hau ez egitea aukera "
+"dezakezu, baina bertsio-eguneratzearen ondoren ahalik eta azkarren instalatu "
+"beharko zenituzte azken eguneratzeak."
 
 #: ../DistUpgrade/DistUpgradeControler.py:467
 msgid "No valid mirror found"
-msgstr "Ez da ispilu baliagarririk aurkitu"
+msgstr "Ez da baliozko ispilurik aurkitu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:468
 #, python-format
@@ -203,11 +283,18 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'no' the update will cancel."
 msgstr ""
+"Zure errepositorioei buruzko informazioa aztertzean ez da inongo ispilurik "
+"aurkitu eguneratzerako. Barne-ispilu bat badarabilzu edo-eta ispiluei "
+"buruzko informazioa zaharkitua badago gerta daiteke hau.\n"
+"\n"
+"Halaere, zure 'sources.list' fitxategia berridatzi nahi al duzu? 'Bai' "
+"aukeratuz gero, '%s'-tik '%s'-ra sarrera guztiak eguneratuko dira.\n"
+"'Ez' aukeratuz gero, eguneratzea ezeztatuko da."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeControler.py:485
 msgid "Generate default sources?"
-msgstr "Berezko iturriak sortu?"
+msgstr "Lehenetsitako jatorriak sortu?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:486
 #, python-format
@@ -217,17 +304,15 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No' the update will "
 "cancel."
 msgstr ""
-"Zure 'sources.list' ikuskatu ondoren ez da '%s'-rentzako sarrera "
+"Zure 'sources.list' eskaneatu ondoren ez da '%s'-rentzako sarrera "
 "baliagarririk aurkitu.\n"
 "\n"
-"\n"
-"\n"
-"'%s'-rentzako sarrera lehenetsiak erantsi beharko lirateke? 'Ez' hautatzen "
-"baduzu eguneraketa galeraziko da."
+"'%s'-rentzako sarrera lehenetsiak erantsi beharko al lirateke? 'Ez' "
+"hautatzen baduzu, eguneraketa bertan behera utziko da."
 
 #: ../DistUpgrade/DistUpgradeControler.py:520
 msgid "Repository information invalid"
-msgstr "Gordailuaren informazio baliogabea"
+msgstr "Errepositorioaren informazio baliogabea"
 
 #: ../DistUpgrade/DistUpgradeControler.py:521
 msgid ""
@@ -239,7 +324,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeControler.py:527
 msgid "Third party sources disabled"
-msgstr "Third Party iturburuak desaktibatu"
+msgstr "Third Party jatorriak ezgaitu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:528
 msgid ""
@@ -247,10 +332,13 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
+"Zure 'sources.list'-eko third-party sarrera batzuk ezgaitu dira. Berriro "
+"aktiba ditzakezu eguneratzearen ondoren, 'software-properties' tresna edo "
+"zure pakete-kudeatzailea erabiliz."
 
 #: ../DistUpgrade/DistUpgradeControler.py:586
 msgid "Error during update"
-msgstr "Akatsa eguneratzerakoan"
+msgstr "Errorea eguneratzean"
 
 #: ../DistUpgrade/DistUpgradeControler.py:587
 msgid ""
@@ -258,30 +346,31 @@ msgid ""
 "problem, please check your network connection and retry."
 msgstr ""
 "Arazo bat gertatu da eguneratzerakoan. Gehienetan sareko arazoren baten "
-"ondorio izaten da, mesedez egiaztatu zure sare lotura eta saiatu berriro."
+"ondorio izaten da, mesedez egiaztatu ezazu zure sare konexioa eta saiatu "
+"berriro."
 
 #: ../DistUpgrade/DistUpgradeControler.py:596
 msgid "Not enough free disk space"
-msgstr "Ez dago disko leku aske nahikoa"
+msgstr "Ez dago leku libre nahikorik diskoan"
 
 #: ../DistUpgrade/DistUpgradeControler.py:597
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The upgrade aborts now. The upgrade needs a total of %s free space on disk '%"
 "s'. Please free at least an additional %s of disk space on '%s'. Empty your "
 "trash and remove temporary packages of former installations using 'sudo apt-"
 "get clean'."
 msgstr ""
-"Hobekuntza galarazi da. Mesedez hustu gutxienez %s leku %s diskoan. Hustu "
-"zure zaborrontzia eta ezabatu aurreko instalazioen aldiuneko paketeak 'sudo "
-"apt-get clean' erabiliz."
+"Bertan behera utzi da eguneraketa. Eguneraketak %s behar ditu '%s' diskoan. %"
+"s gehiago libratu itzazu '%s' diskoan. Hustu ezazu zure zakarrontzia eta "
+"ezabatu itzazu aurreko instalazioek erabilitako aldiuneko paketeak 'sudo apt-"
+"get clean' erabiliz."
 
 #: ../DistUpgrade/DistUpgradeControler.py:709
 msgid "Support for some applications ended"
-msgstr "Aplikazio batzuentzako euskarria amaitu da"
+msgstr "Aplikazio batzuentzako sostengua amaitu da"
 
 #: ../DistUpgrade/DistUpgradeControler.py:710
-#, fuzzy
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -289,21 +378,21 @@ msgid ""
 "If you have not enabled community maintained software (universe), these "
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
-"Canonical Ltd.-k jadanik ez du software pakete hau jasaten. "
-"Komunitateagandik jaso dezakezu laguntza.\n"
+"Canonical Ltd.-k jadanik ez du software-pakete hau sostengatzen. "
+"Komunitateagandik jaso dezakezu laguntza oraindik ere.\n"
 "\n"
-"Komunitateak mantenduriko softwarea (universe) ez baduzu aktibatu, pakete "
-"hauek kendu nahi dituzun galdetuko zaizu hurrengo pausoan."
+"Komunitateak mantenduriko softwarea (universe) ez baduzu gaitu, pakete hauek "
+"kentzea proposatuko zaizu eguneratzea amaitzean."
 
 #. ask the user if he wants to do the changes
 #: ../DistUpgrade/DistUpgradeControler.py:733
 msgid "Do you want to start the upgrade?"
-msgstr "Hobekuntza abiatu nahi duzu?"
+msgstr "Eguneraketa abiarazi nahi al duzu?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:790
 #: ../DistUpgrade/DistUpgradeControler.py:840
 msgid "Could not download the upgrades"
-msgstr "Ezin dira hobekuntzak jaitsi"
+msgstr "Ezin izan dira eguneratzeak deskargatu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:791
 #: ../DistUpgrade/DistUpgradeControler.py:841
@@ -311,8 +400,8 @@ msgid ""
 "The upgrade aborts now. Please check your internet connection or "
 "installation media and try again. "
 msgstr ""
-"Hobekuntza galarazi da orain. Mesedez egiaztatu zure internet lotura edo "
-"instalazio euskarria eta saiatu berriro. "
+"Eguneratzea bertan behera utziko da orain. Mesedez, egiaztatu ezazu zure "
+"internet konexioa edo instalaziorako euskarria, eta saiatu berriro. "
 
 #. invoke the frontend now
 #: ../DistUpgrade/DistUpgradeControler.py:816
@@ -320,6 +409,9 @@ msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
+"Eguneratzea bertan behera utziko da orain. Zure sistemaren egoera "
+"ezegonkorra izan liteke. Berreskurapen bat exekutatuko da oraintxe (dpkg --"
+"configure -a)."
 
 #: ../DistUpgrade/DistUpgradeControler.py:820
 #, python-format
@@ -330,10 +422,15 @@ msgid ""
 "files in /var/log/dist-upgrade/ in the bugreport.\n"
 "%s"
 msgstr ""
+"\n"
+"\n"
+"Mesedez, 'update-manager' paketearen errore honen berri eman ezazu, /var/log/"
+"dist-upgrade/ direktorioko fitxategiak ere bidaliz errore-txostenarekin.\n"
+"%s"
 
 #: ../DistUpgrade/DistUpgradeControler.py:824
 msgid "Could not install the upgrades"
-msgstr "Ezin dira hobekuntzak instalatu"
+msgstr "Ezin izan dira eguenratzeak instalatu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:910
 msgid "Remove obsolete packages?"
@@ -341,11 +438,11 @@ msgstr "Zaharkitutako paketeak ezabatu?"
 
 #: ../DistUpgrade/DistUpgradeControler.py:911
 msgid "_Skip This Step"
-msgstr "_Saltatu Urrats Hau"
+msgstr "_Urrats Hau Saltatu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:911
 msgid "_Remove"
-msgstr "_Ezabatu"
+msgstr "_Kendu"
 
 #: ../DistUpgrade/DistUpgradeControler.py:922
 msgid "Error during commit"
@@ -356,6 +453,8 @@ msgid ""
 "A problem occured during the clean-up. Please see the below message for more "
 "information. "
 msgstr ""
+"Arazo bat izan da garbiketan. Informazio gehiago eskuratzeko, irakurri ezazu "
+"azpiko mezua. "
 
 #. generate a new cache
 #: ../DistUpgrade/DistUpgradeControler.py:1037
@@ -366,19 +465,19 @@ msgstr "Sistemaren jatorrizko egoera berreskuratzen"
 #. here
 #: ../DistUpgrade/DistUpgradeControler.py:1075
 msgid "Required depends is not installed"
-msgstr ""
+msgstr "Beharrezko menpekotasunen bat ez dago instalatua"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1076
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr ""
+msgstr "Beharrezko '%s' menpekotasuna ez dago instalatua. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
 #: ../DistUpgrade/DistUpgradeControler.py:1203
 #: ../DistUpgrade/DistUpgradeControler.py:1260
 msgid "Checking package manager"
-msgstr "Pakete kudeatzailea egiaztatzen"
+msgstr "Pakete-kudeatzailea egiaztatzen"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1208
 msgid "Preparing the upgrade failed"
@@ -395,12 +494,10 @@ msgstr ""
 "direktorioko fitxategiak ere bidaliz."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1224
-#, fuzzy
 msgid "Getting upgrade pre-requists failed"
-msgstr "Errorea eguneratzea prestatzerakoan"
+msgstr "Errorea eguneratzearen aurrebaldintzak lortzean"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1225
-#, fuzzy
 msgid ""
 "The system was unable to get the pre-requists for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -408,17 +505,20 @@ msgid ""
 "Please report this as a bug against the 'update-manager' package and include "
 "the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
-"Errorea sistema eguneratzeko prestatzean. Mesedez, 'update-manager' "
-"paketearen errore honen berri eman ezazu, /var/log/dist-upgrade/ "
-"direktorioko fitxategiak ere bidaliz."
+"Sistema ez da eguneratzearen aurrebaldintzak lortzeko gai izan. Bertan "
+"behera utziko da eguneratzea eta sistemaren jatorrizko egoera berreskuratuko "
+"da.\n"
+"\n"
+"Mesedez, 'update-manager' paketearen errore honen berri eman ezazu, /var/log/"
+"dist-upgrade/ direktorioko fitxategiak ere bidaliz."
 
 #: ../DistUpgrade/DistUpgradeControler.py:1246
 msgid "Updating repository information"
-msgstr "Gordailuaren informazioa eguneratzen"
+msgstr "Errepositorio-informazioa eguneratzen"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1271
 msgid "Invalid package information"
-msgstr "Pakete informazio baliogabea"
+msgstr "Pakete-informazio baliogabea"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1272
 #, python-format
@@ -443,7 +543,7 @@ msgstr "Baieztapen eske"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1289 ../update-manager:83
 msgid "Fetching"
-msgstr ""
+msgstr "Eskuratzen"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1299 ../update-manager:87
 msgid "Upgrading"
@@ -455,39 +555,39 @@ msgstr "Software zaharkituaren bila"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1311
 msgid "System upgrade is complete."
-msgstr "Sistemaren hobekuntza amaitu da."
+msgstr "Sistemaren eguneratzea amaitu da."
 
 #. print "mediaChange %s %s" % (medium, drive)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:107
 #: ../DistUpgrade/DistUpgradeViewKDE.py:115
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
-msgstr "Mesedez, sartu '%s' '%s' unitatean"
+msgstr "Mesedez, '%s' sartu ezazu '%s' unitatean"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:126
 #: ../DistUpgrade/DistUpgradeViewKDE.py:128
 msgid "Fetching is complete"
-msgstr "Ekarpena amaitu da"
+msgstr "Deskarga amaitu da"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:138
 #: ../DistUpgrade/DistUpgradeViewKDE.py:141
 #, python-format
 msgid "Fetching file %li of %li at %sb/s"
-msgstr ""
+msgstr "%li-garren fitxategia eskuratzen. Guztira: %li - %sb/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:270
 #: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:271
 #, python-format
 msgid "About %s remaining"
-msgstr "%s falta da"
+msgstr "%s inguru faltan"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:141
 #: ../DistUpgrade/DistUpgradeViewKDE.py:144
 #, python-format
 msgid "Fetching file %li of %li"
-msgstr "%li -garren fitxategia deskargatzen %li -ko guztirakotik"
+msgstr "%li-garren fitxategia deskargatzen. Guztira: %li"
 
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
@@ -495,13 +595,13 @@ msgstr "%li -garren fitxategia deskargatzen %li -ko guztirakotik"
 #: ../DistUpgrade/DistUpgradeViewGtk.py:174
 #: ../DistUpgrade/DistUpgradeViewKDE.py:173
 msgid "Applying changes"
-msgstr "Aldaketak ezartzen"
+msgstr "Aldaketak aplikatzen"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:199
 #: ../DistUpgrade/DistUpgradeViewKDE.py:184
 #, python-format
 msgid "Could not install '%s'"
-msgstr "Ezin da '%s' instalatu"
+msgstr "Ezin izan da '%s' instalatu"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:200
 #: ../DistUpgrade/DistUpgradeViewKDE.py:185
@@ -510,6 +610,8 @@ msgid ""
 "The upgrade will continue but the '%s' package may be in a not working "
 "state. Please consider submitting a bugreport about it."
 msgstr ""
+"Eguneratzeak aurrera jarraituko du, baina posible da '%s' paketea funtzional "
+"ez izatea. Mesedez, honi buruzko errore-txosten bat bidal ezazu."
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:216
@@ -519,7 +621,7 @@ msgid ""
 "Replace the customized configuration file\n"
 "'%s'?"
 msgstr ""
-"Aldaketak izan dituen ezarpen fitxategiua hau aldatu nahi al duzu?\n"
+"Konfigurazio-fitxategi pertsonalizatu hau ordezkatu nahi al duzu?\n"
 "'%s'"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:217
@@ -528,53 +630,63 @@ msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
 msgstr ""
-"Konfigurazio fitxategi honi egindako aldaketa guztiak galdu egingo dituzu "
-"bertsio berriago baten bidez aldatzen baduzu"
+"Konfigurazio-fitxategi honi egindako aldaketa guztiak galduko dituzu bertsio "
+"berriago batekin ordezkatzen baduzu."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:230
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 msgid "The 'diff' command was not found"
-msgstr "'diff' komandoa ez da aurkitu"
+msgstr "Ez da 'diff' agindua aurkitu"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:403
+#: ../DistUpgrade/DistUpgradeViewGtk.py:407
+#: ../DistUpgrade/DistUpgradeViewText.py:77
 msgid "A fatal error occured"
-msgstr "Akats guztiz kaltegarria gertatu da"
+msgstr "Errore larria gertatu da"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:404
+#: ../DistUpgrade/DistUpgradeViewGtk.py:408
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
 "var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
+"Mesedez, errore honen berri eman ezazu (oraindik egin ez baduzu), zure "
+"txostenarekin /var/log/dist-upgrade/main.log eta /var/log/dist-upgrade/apt."
+"log fitxategiak bidaliz. Bertsio-eguneratzea bertan behera utziko da orain.\n"
+"Zure sources.list originalaren babes-kopia daukazu /etc/apt/sources.list."
+"distUpgrade fitxategian."
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:538
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
 #: ../DistUpgrade/DistUpgradeViewKDE.py:576
+#: ../DistUpgrade/DistUpgradeViewText.py:128
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
-msgstr[0] "%d paketea ezabatu egingo da"
-msgstr[1] "%d paketeak ezabatu egingo dira"
+msgstr[0] "Pakete %d ezabatuko da."
+msgstr[1] "%d pakete ezabatuko dira."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:543
+#: ../DistUpgrade/DistUpgradeViewGtk.py:547
 #: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewText.py:133
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
-msgstr[0] "%d pakete berria instalatu egingo da"
-msgstr[1] "%d pakete berriak instalatu egingo dira"
+msgstr[0] "Pakete berri %d instalatuko da."
+msgstr[1] "%d pakete berri instalatuko dira."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:549
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #: ../DistUpgrade/DistUpgradeViewKDE.py:587
+#: ../DistUpgrade/DistUpgradeViewText.py:139
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
-msgstr[0] "%d paketea eguneratu egingo da"
-msgstr[1] "%d paketeak eguneratu egingo dira"
+msgstr[0] "Pakete %d eguneratuko da."
+msgstr[1] "%d paketea eguneratuko dira."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:554
+#: ../DistUpgrade/DistUpgradeViewGtk.py:558
+#: ../DistUpgrade/DistUpgradeViewText.py:144
 #, python-format
 msgid ""
 "\n"
@@ -585,9 +697,10 @@ msgstr ""
 "\n"
 "Guztira deskargatzeko: %s "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
+#: ../DistUpgrade/DistUpgradeViewGtk.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:607
 #: ../DistUpgrade/DistUpgradeViewKDE.py:615
+#: ../DistUpgrade/DistUpgradeViewText.py:149
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
@@ -595,64 +708,68 @@ msgstr ""
 "Eguneratzea deskargatu eta instalatzeak orduak iraun ditzake, eta ondoren "
 "ezin izango duzu ezeztatu."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:563
+#: ../DistUpgrade/DistUpgradeViewGtk.py:567
 #: ../DistUpgrade/DistUpgradeViewKDE.py:610
 #: ../DistUpgrade/DistUpgradeViewKDE.py:618
 msgid "To prevent data loss close all open applications and documents."
-msgstr "Datu galera saihesteko itxi irekitako aplikazio eta dokumentu guztiak."
+msgstr ""
+"Datuen galera saihesteko, irekitako aplikazio eta dokumentu guztiak itxi "
+"itzazu."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewGtk.py:573
 #: ../DistUpgrade/DistUpgradeViewKDE.py:624
+#: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../UpdateManager/UpdateManager.py:658
 msgid "Your system is up-to-date"
-msgstr "Zure sistema gaurkotuta dago"
+msgstr "Zure sistema eguneratuta dago"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:574
 #: ../DistUpgrade/DistUpgradeViewKDE.py:625
+#: ../DistUpgrade/DistUpgradeViewText.py:156
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
 msgstr ""
-"Ez dago eguneraketarik zure sistemarako. Eguneraketa orain ezeztatu egingo "
-"da."
+"Ez dago eguneraketarik zure sistemarako. Bertan behera utziko da eguneratze-"
+"prozesua."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:590
 #, python-format
 msgid "<b>Remove %s</b>"
-msgstr "<b>Ezabatu %s</b>"
+msgstr "<b>%s kendu</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:588
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #: ../DistUpgrade/DistUpgradeViewKDE.py:648
 #, python-format
 msgid "Install %s"
-msgstr "Instalatu %s"
+msgstr "%s instalatu"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:650
 #, python-format
 msgid "Upgrade %s"
-msgstr "Berritu %s"
+msgstr "%s eguneratu"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:116
 msgid "Media Change"
-msgstr ""
+msgstr "Euskarri Aldaketa"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Show Difference >>>"
-msgstr ""
+msgstr "Ezberdintasunak erakutsi >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:234
 msgid "<<< Hide Difference"
-msgstr ""
+msgstr "<<< Ezberdintasunak ezkutatu"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:473
 msgid "Show Terminal >>>"
-msgstr ""
+msgstr "Terminala Bistaratu >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:476
 msgid "<<< Hide Terminal"
-msgstr ""
+msgstr "<<< Terminala Ezkutatu"
 
 #. string = _("<p>You have to download a total of %s. ")
 #. msg += string % apt_pkg.SizeToStr(downloadSize)
@@ -660,12 +777,12 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewKDE.py:599
 #, python-format
 msgid "<p>You have to download a total of %s. "
-msgstr ""
+msgstr "<p> %s deskargatu behar duzu guztira. "
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:646
 #, python-format
 msgid "Remove %s"
-msgstr "Ezabatu %s"
+msgstr "%s kendu"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:666
 #: ../DistUpgrade/DistUpgrade.glade.h:2
@@ -682,17 +799,17 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:670
 msgid "Cancel Upgrade?"
-msgstr ""
+msgstr "Eguneratzea Ezeztatu?"
 
 #: ../DistUpgrade/DistUpgradeView.py:33
 #, python-format
 msgid "%li days %li hours %li minutes"
-msgstr "%li egun %li ordu %li minitu"
+msgstr "%li egun %li ordu %li minutu"
 
 #: ../DistUpgrade/DistUpgradeView.py:35
 #, python-format
 msgid "%li hours %li minutes"
-msgstr "%li egun %li minutu"
+msgstr "%li ordu %li minutu"
 
 #: ../DistUpgrade/DistUpgradeView.py:37
 #, python-format
@@ -702,7 +819,7 @@ msgstr "%li minutu"
 #: ../DistUpgrade/DistUpgradeView.py:38
 #, python-format
 msgid "%li seconds"
-msgstr "%li segundu"
+msgstr "%li segundo"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
@@ -717,49 +834,176 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeView.py:150
 msgid "Reboot required"
-msgstr "Berrabiatu beharra dago"
+msgstr "Berrabiaraztea beharrezkoa"
 
 #: ../DistUpgrade/DistUpgradeView.py:151
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
-"Berrikuntza amaitu da eta berrabiatu beharra dago. Orain egin nahi duzu?"
+"Eguneraketa amaitu da eta ordenagailua berrabiarazteko beharra dago. Orain "
+"egin nahi al duzu?"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:123
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
+msgid "Could not run the upgrade tool"
+msgstr "Ezin izan da eguneratze-tresna abiarazi"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:124
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
+"Ziurrenik eguneratze-tresnaren akats bat da hau. Mesedez, bidali iezaguzu "
+"errorearen txosten bat."
 
-#: ../DistUpgrade/dist-upgrade.py:24
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:150
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
+msgid "Upgrade tool signature"
+msgstr "Eguneratze-tresnaren sinadura"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:153
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
+msgid "Upgrade tool"
+msgstr "Eguneratze-tresna"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Failed to fetch"
+msgstr "Errorea eskuratzean"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:178
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr ""
+"Eguneratzearen eskuratzeak huts egin du. Sarearekin arazoren bat egon "
+"daiteke. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:182
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
+msgid "Failed to extract"
+msgstr "Errorea erauztean"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:183
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
 msgid ""
-"Use special upgrade mode. Available:\n"
-"desktop, server"
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Eguneratzea erauzteak huts egin du. Sare edo zerbitzariarekin arazoren bat "
+"egon daiteke. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:188
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
+msgid "Verfication failed"
+msgstr "Egiaztapenak huts egin du"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:189
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"Errorea eguneratzea egiaztatzean. Sarearekin edo zerbitzariarekin arazoren "
+"bat egon liteke. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:194
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
+msgid "Authentication failed"
+msgstr "Autentikazioak huts egin du"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:195
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr ""
+"Eguneratzearen autentikatzeak huts egin du. Sarearekin edo zerbitzariarekin "
+"arazoak egon daitezke. "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, fuzzy
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+"Mesedez, errore honen berri eman ezazu (oraindik egin ez baduzu), zure "
+"txostenarekin /var/log/dist-upgrade/main.log eta /var/log/dist-upgrade/apt."
+"log fitxategiak bidaliz. Bertsio-eguneratzea bertan behera utziko da orain.\n"
+"Zure sources.list originalaren babes-kopia daukazu /etc/apt/sources.list."
+"distUpgrade fitxategian."
+
+#: ../DistUpgrade/DistUpgradeViewText.py:101
+msgid "Aborting"
 msgstr ""
 
-#. testcode to see if the bullets look nice in the dialog
-#. for i in range(4):
-#. view.setStep(i+1)
-#. app.openCache()
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#: ../DistUpgrade/DistUpgradeViewText.py:184
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "_Jarraitu"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#, fuzzy
+msgid "Details [d]"
+msgstr "Xehetasunak"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:168
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:171
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:174
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "%s kendu"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:177
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "%s instalatu"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:178
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "%s eguneratu"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#, fuzzy
+msgid "Restart required"
+msgstr "Berrabiaraztea beharrezkoa"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+msgid "To fully ugprade, please restart"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
 
 #: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr "<b><big>Sistema berrabiatu hobekuntza osatu dadin</big></b>"
+msgstr "<b><big>Sistema berrabiarazi ezazu eguneraketa osatu dadin</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:6
 msgid "<b><big>Start the upgrade?</big></b>"
-msgstr "<b><big>Hobekuntza abiatu?</big></b>"
+msgstr "<b><big>Eguneratzea abiarazi?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
 msgid "<b><big>Upgrading Ubuntu to version 7.10</big></b>"
-msgstr ""
+msgstr "<b><big>Ubuntu eguneratzen 7.10 bertsiora</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
@@ -771,22 +1015,19 @@ msgstr "Xehetasunak"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
-msgstr "Fitxategiaen arteko desberdintasuna"
+msgstr "Fitxategien arteko ezberdintasunak"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:11
-#, fuzzy
 msgid "Distribution Upgrade"
-msgstr "Banaketaren eguneraketak"
+msgstr "Banaketa-Eguneratzea"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:12
-#, fuzzy
 msgid "Fetching the upgrades"
-msgstr "Hobekuntza prestatzen"
+msgstr "Eguneratzeak eskuratzen"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:13
-#, fuzzy
 msgid "Installing the upgrades"
-msgstr "Eguneratzeak deskargatu eta instalatzen"
+msgstr "Eguneratzeak instalatzen"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Modifying the software channels"
@@ -794,7 +1035,7 @@ msgstr "Software kanalak aldatzen"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Preparing the upgrade"
-msgstr "Hobekuntza prestatzen"
+msgstr "Egunertzea prestatzen"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:16
 msgid "Restarting the system"
@@ -822,15 +1063,15 @@ msgstr "_Ordezkatu"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:22
 msgid "_Report Bug"
-msgstr "_Akatsa Jakinarazi"
+msgstr "_Errorearen Berri eman"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
-msgstr "_Berrabiarazi Orain"
+msgstr "Orain _Berrabiarazi"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:24
 msgid "_Resume Upgrade"
-msgstr "_Berrekin Hobekuntza"
+msgstr "Eguneraketa _Jarraitu"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
@@ -850,20 +1091,19 @@ msgstr "Ezin dira ezaugarri-berri oharrak deskargatu"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:91
 msgid "Please check your internet connection."
-msgstr "Egiaztatu zure internet lotura mesedez."
+msgstr "Egiaztatu ezazu zure Internet konexioa, mesedez."
 
 #: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr ""
-"%(current)li -agrren fitxategia deskargatzen %(total)li -ko guztirakotik, %"
-"(speed)s/s -ra"
+"%(current)li-garren fitxategia deskargatzen. Guztira: %(total)li - %(speed)s/"
+"s"
 
 #: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
-msgstr ""
-"%(current)li -agrren fitxategia deskargatzen %(total)li -ko guztirakotik"
+msgstr "%(current)li-garren fitxategia deskargatzen. Guztira: %(total)li"
 
 #: ../UpdateManager/UpdateManager.py:235
 msgid "The list of changes is not available"
@@ -874,7 +1114,7 @@ msgid ""
 "The list of changes is not available yet.\n"
 "Please try again later."
 msgstr ""
-"Aldaketen txostena ez dago eskuragarri oraindik.\n"
+"Aldaketen zerrenda ez dago eskuragarri oraindik.\n"
 "Mesedez, saiatu berriro geroxeago."
 
 #: ../UpdateManager/UpdateManager.py:246
@@ -887,63 +1127,61 @@ msgstr ""
 
 #: ../UpdateManager/UpdateManager.py:273
 msgid "Important security updates"
-msgstr "Segurtasun eguneratze garrantzitsuak"
+msgstr "Segurtasun-eguneratze garrantzitsuak"
 
 #: ../UpdateManager/UpdateManager.py:274
 msgid "Recommended updates"
-msgstr "Gomendatutako eguneraketak"
+msgstr "Gomendatutako eguneratzeak"
 
 #: ../UpdateManager/UpdateManager.py:275
 msgid "Proposed updates"
-msgstr "Proposaturiko eguneraketak"
+msgstr "Proposaturiko eguneratzeak"
 
 #: ../UpdateManager/UpdateManager.py:276
 msgid "Backports"
-msgstr "Atzeko ateak"
+msgstr "Backport-ak"
 
 #: ../UpdateManager/UpdateManager.py:277
 msgid "Distribution updates"
-msgstr "Banaketaren eguneraketak"
+msgstr "Banaketaren eguneratzeak"
 
 #: ../UpdateManager/UpdateManager.py:282
 msgid "Other updates"
-msgstr "Beste eguneraketak"
+msgstr "Beste eguneratzeak"
 
 #: ../UpdateManager/UpdateManager.py:508
 #, python-format
 msgid "Version %s: \n"
-msgstr ""
-"%s bertsioa: \n"
-" \n"
+msgstr "%s bertsioa: \n"
 
 #: ../UpdateManager/UpdateManager.py:569
 msgid "Downloading list of changes..."
-msgstr "Aldaketen zerrenda jaisten..."
+msgstr "Aldaketen zerrenda deskargatzen..."
 
 #: ../UpdateManager/UpdateManager.py:596
 msgid "_Uncheck All"
-msgstr "Guztiak _desmarkatu"
+msgstr "Guztiak _Desmarkatu"
 
 #: ../UpdateManager/UpdateManager.py:602
 msgid "_Check All"
-msgstr "Guztiak _markatu"
+msgstr "Guztiak _Markatu"
 
 #. TRANSLATORS: b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:646 ../UpdateManager/UpdateManager.py:673
 #, python-format
 msgid "Download size: %s"
-msgstr "Jaitsiera neurria: %s"
+msgstr "Deskargaren tamaina: %s"
 
 #: ../UpdateManager/UpdateManager.py:650
 msgid "Unknown download size"
-msgstr ""
+msgstr "Deskaga-tamaina ezezaguna"
 
 #: ../UpdateManager/UpdateManager.py:669
 #, python-format
 msgid "You can install %s update"
 msgid_plural "You can install %s updates"
-msgstr[0] "Eguneraketa %s instalatu dezakezu"
-msgstr[1] "%s eguneraketa instalatu ditzakezu"
+msgstr[0] "Eguneratze %s instalatu dezakezu"
+msgstr[1] "%s eguneratze instalatu ditzakezu"
 
 #: ../UpdateManager/UpdateManager.py:702
 msgid "Please wait, this can take some time."
@@ -951,15 +1189,15 @@ msgstr "Itxoin mesedez, honek denbora behar du."
 
 #: ../UpdateManager/UpdateManager.py:704
 msgid "Update is complete"
-msgstr "Eguneraketa osatu da"
+msgstr "Eguneraketa amaitu da"
 
 #: ../UpdateManager/UpdateManager.py:756
 msgid "Checking for updates"
-msgstr "Eguneraketak egiaztatzen"
+msgstr "Eguneratzeak egiaztatzen"
 
 #: ../UpdateManager/UpdateManager.py:828
 msgid "Could not initialize the package information"
-msgstr ""
+msgstr "Ezin izan da paketeen informazioa hasieratu"
 
 #: ../UpdateManager/UpdateManager.py:829
 msgid ""
@@ -968,6 +1206,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
+"Arazo konponezina gertatu da pakete-informazioa hasieratzean.\n"
+"\n"
+"Mesedez, 'update-manager' paketearen errore honen berri eman ezazu, "
+"ondorengo mezu honekin batera:\n"
 
 #: ../UpdateManager/UpdateManager.py:851
 msgid ""
@@ -976,6 +1218,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
 msgstr ""
+"Arazo konponezina gertatu da eguneratzea kalkulatzean.\n"
+"\n"
+"Mesedez, 'update-manager' paketearen errore honen berri eman ezazu, "
+"ondorengo mezu honekin batera:"
 
 #: ../UpdateManager/UpdateManager.py:876
 #, python-format
@@ -995,7 +1241,7 @@ msgstr "(Tamaina: %s)"
 
 #: ../UpdateManager/UpdateManager.py:893
 msgid "Your distribution is not supported anymore"
-msgstr "Zure distribuzioa jadanik ez da mantendua"
+msgstr "Zure distribuzioa jadanik ez dago sostengatua"
 
 #: ../UpdateManager/UpdateManager.py:894
 msgid ""
@@ -1009,11 +1255,11 @@ msgstr ""
 
 #: ../UpdateManager/UpdateManager.py:909
 msgid "Downloading the upgrade tool"
-msgstr "Hobekuntza tresna jaisten"
+msgstr "Eguneratze-tresna deskargatzen"
 
 #: ../UpdateManager/UpdateManager.py:911
 msgid "The upgrade tool will guide you through the upgrade process."
-msgstr "Hobekuntza tresnak hobekuntza prozesuan barna gidatuko zaitu."
+msgstr "Eguneratze-tresnak eguneraketa-prozesuan zehar gidatuko zaitu."
 
 #: ../UpdateManager/UpdateManager.py:919
 #, python-format
@@ -1023,7 +1269,7 @@ msgstr "<b>'%s' distribuzio bertsio berria duzu eskuragarri</b>"
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:958
 msgid "Software index is broken"
-msgstr "Software indizea hondatuta dago"
+msgstr "Software-indizea hondatuta dago"
 
 #: ../UpdateManager/UpdateManager.py:959
 msgid ""
@@ -1031,73 +1277,9 @@ msgid ""
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
 msgstr ""
-"Ezinezkoa da softwarerik instalatu edo kentzea. Mesedez, \"Synaptic\" pakete "
-"kudeatzailea erabili edo terminale batean \"sudo apt-get install -f\" "
+"Ezinezkoa da softwarerik instalatu edo kentzea. Mesedez, \"Synaptic\" pakete-"
+"kudeatzailea erabili edo terminal batean \"sudo apt-get install -f\" "
 "exekutatu akats hau zuzentzeko."
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
-msgid "Could not run the upgrade tool"
-msgstr "Ezin da hobekuntza tresna ibilarazi"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr ""
-"Eguneraketa tresnaren akats bat da hau. Mesedez, bidali iezaguzu errorearen "
-"txosten bat."
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
-msgid "Upgrade tool signature"
-msgstr "Hobekuntza tresnaren sinadura"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
-msgid "Upgrade tool"
-msgstr "Hobekuntza tresna"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Failed to fetch"
-msgstr "Ekarpenak huts egin du"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr ""
-"Eguneraketen eskuratzeak huts egin du. Sarearekin arazoren bat egon daiteke. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
-msgid "Failed to extract"
-msgstr "Errorea erauztean"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr ""
-"Eguneraketa erauzteak huts egin du. Sare edo zerbitzariarekin arazoren bat "
-"egon daiteke. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
-msgid "Verfication failed"
-msgstr "Egiaztaketak huts egin du"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr ""
-"Errorea eguneratzea egiaztatzean. Sarearekin edo zerbitzariarekin arazoren "
-"bat egon liteke. "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
-msgid "Authentication failed"
-msgstr "Kautotasunak huts egin du"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr ""
-"Kautotasun eguneraketak huts egin du. Sarearekin edo zerbitzariarekin "
-"arazoak egon daitezke. "
 
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
@@ -1109,7 +1291,7 @@ msgstr ""
 "<b><big>Eguneraketak eskuz egiaztatu behar dituzu</big><b/>\n"
 "\n"
 "Zure sistemak ez ditu eguneraketak automatikoki bilatzen. Portaera hau alda "
-"ditzakezu <i>Internet Eguneraketak</i> ataleko <i>Software Iturriak</i> "
+"dezakezu <i>Internet Eguneraketak</i> ataleko <i>Software Iturriak</i> "
 "atalean."
 
 #: ../data/glade/UpdateManager.glade.h:4
@@ -1118,11 +1300,11 @@ msgstr "<big><b>Zure sistema eguneratuta mantendu</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr "<big><b>Eguneraketa guztiak ezin dira instalatu</b></big>"
+msgstr "<big><b>Ezin dira eguneratze guztiak instalatu</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
-msgstr ""
+msgstr "<big><b>Eguneraketa-Kudeatzailea abiarazten</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:7
 msgid "Changes"
@@ -1138,15 +1320,15 @@ msgstr "Software kanalak egiaztatu eguneratze berrien bila"
 
 #: ../data/glade/UpdateManager.glade.h:10
 msgid "Description"
-msgstr "Deskribapena:"
+msgstr "Deskribapena"
 
 #: ../data/glade/UpdateManager.glade.h:11
 msgid "Description of update"
-msgstr ""
+msgstr "Eguneratzearen deskribapena"
 
 #: ../data/glade/UpdateManager.glade.h:12
 msgid "Release Notes"
-msgstr "Ezaugarri-berri oharrak"
+msgstr "Argitaratze-Oharrak"
 
 #: ../data/glade/UpdateManager.glade.h:13
 msgid ""
@@ -1157,6 +1339,13 @@ msgid ""
 " ◦ Unofficial software packages not provided by Ubuntu\n"
 " ◦ Normal changes of a pre-release version of Ubuntu"
 msgstr ""
+"Bertsio-eguneratze partziala exekutatu, ahalik eta eguneratze gehien "
+"instalatzeko. \n"
+"\n"
+"Hau gertatzearen arrazoia izan daiteke:\n"
+" ◦ Aurretik saiatutako eta guztiz osatu gabeko bertsio-eguneratze bat\n"
+" ◦ Ubuntugandik eskuratu ez diren software pakete ez-ofizialak\n"
+" ◦ Ubunturen garapen-bertsio baten aldaketa normalak"
 
 #: ../data/glade/UpdateManager.glade.h:19
 msgid "Show progress of single files"
@@ -1177,7 +1366,7 @@ msgstr "_Eguneratu"
 #: ../data/glade/UpdateManager.glade.h:22
 #: ../data/update-manager.desktop.in.h:3
 msgid "Update Manager"
-msgstr "Eguneraketa Kudeatzailea"
+msgstr "Eguneraketa-Kudeatzailea"
 
 #: ../data/glade/UpdateManager.glade.h:23
 msgid "Upgrade to the latest version of Ubuntu"
@@ -1189,7 +1378,7 @@ msgstr "_Egiaztatu"
 
 #: ../data/glade/UpdateManager.glade.h:25
 msgid "_Hide this information in the future"
-msgstr "_Ezkutatu informazio hau etorkizunean"
+msgstr "Informazio hau _ezkutatu etorkizunean"
 
 #: ../data/glade/UpdateManager.glade.h:26
 msgid "_Install Updates"
@@ -1197,7 +1386,7 @@ msgstr "_Eguneraketak Instalatu"
 
 #: ../data/glade/UpdateManager.glade.h:27
 msgid "_Partial Upgrade"
-msgstr ""
+msgstr "Bertsio-eguneratze _Partziala"
 
 #: ../data/glade/UpdateManager.glade.h:28
 msgid "_Upgrade"
@@ -1209,23 +1398,23 @@ msgstr "eguneraketak"
 
 #: ../data/update-manager.desktop.in.h:1
 msgid "Show and install available updates"
-msgstr "Erakutsi eta instalatu eguneraketa eskuragarriak"
+msgstr "Eguneraketa eskuragarriak erakutsi eta instalatu"
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "System Update Tool"
-msgstr ""
+msgstr "Sistema-Eguneratze Tresna"
 
 #: ../data/update-manager.schemas.in.h:1
 msgid ""
 "Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
-"Automatikoki egiaztatu uneko banaketaren bertsio berria eskuragarri dagoen "
-"eta berau berritzeko aukera eman (ahal bada)."
+"Automatikoki egiaztatu oraingo distribuzioaren bertsio berririk eskuragarri "
+"dagoen, eta berau eguneratzeko aukera eman (ahal bada)."
 
 #: ../data/update-manager.schemas.in.h:2
 msgid "Check for new distribution releases"
-msgstr "Egiaztatu banaketa argitalpena berriak dauden"
+msgstr "Egiaztatu distribuzioaren argitalpen berririk dagoen"
 
 #: ../data/update-manager.schemas.in.h:3
 msgid ""
@@ -1233,21 +1422,21 @@ msgid ""
 "channel list manually. This option allows to hide the reminder shown in this "
 "case."
 msgstr ""
-"Eguneraketen bilatze automatikoa aktibaturik ez badago, eskuz birkargatu "
-"behar duzu kanal-zerrenda. Kasu honetan agertzen den leiho ohartarazlea "
-"ezkuta dezakezu aukera honekin."
+"Eguneraketen bilatze automatikoa ezgaituta badago, eskuz birkargatu beharko "
+"duzu kanal-zerrenda. Kasu honetan agertzen den leiho ohartarazlea "
+"ezkutatzeko balio dizu aukera honek."
 
 #: ../data/update-manager.schemas.in.h:4
 msgid "Remind to reload the channel list"
-msgstr "Kanal-zerrenda birkargatzea gogorarazi"
+msgstr "Kanal-zerrenda berkargatzea gogorarazi"
 
 #: ../data/update-manager.schemas.in.h:5
 msgid "Show details of an update"
-msgstr "Erakutsi eguneraketa baten xehetasunak"
+msgstr "Eguneratze baten xehetasunak erakutsi"
 
 #: ../data/update-manager.schemas.in.h:6
 msgid "Stores the size of the update-manager dialog"
-msgstr "Eguneratze kudeatzailearen leihoaren tamaina gordetzen du"
+msgstr "Eguneratze-kudeatzailearen leihoaren tamaina gordetzen du"
 
 #: ../data/update-manager.schemas.in.h:7
 msgid ""
@@ -1263,43 +1452,43 @@ msgstr "Leihoaren neurria"
 
 #: ../update-manager:51
 msgid "Check if a new distribution release is available"
-msgstr ""
+msgstr "Distribuzio-bertsio berri bat eskuragarri dagoen egiaztatu"
 
 #: ../update-manager:54 ../do-release-upgrade:19
 msgid "Check if upgrading to the latest devel release is possible"
-msgstr ""
+msgstr "Azken garapen-bertsiora eguneratzea posible den egiaztatu"
 
 #: ../update-manager:58 ../update-manager:61
 msgid "Try to run a dist-upgrade"
-msgstr ""
+msgstr "dist-upgrade exekutatzen saiatu"
 
 #: ../update-manager:74
 msgid "Running partial upgrade"
-msgstr ""
+msgstr "Bertsio-eguneratze partziala exekutatzen"
 
 #: ../update-manager:92
 msgid "Upgrade complete"
-msgstr ""
+msgstr "Bertsio-eguneratzea amaituta"
 
 #: ../update-manager:93
 msgid "The upgrade was completed."
-msgstr ""
+msgstr "Eguneratzea burutu da."
 
 #: ../do-release-upgrade:23
 msgid "Run the specified frontend"
-msgstr ""
+msgstr "Zehaztutako erabiltzaile-interfaza exekutatu"
 
 #: ../do-release-upgrade:26
 msgid "Run in a special upgrade mode"
-msgstr ""
+msgstr "Eguneratze-modu berezi batean exekutatu"
 
 #: ../do-release-upgrade:30
 msgid "Checking for a new ubuntu release"
-msgstr ""
+msgstr "Ubuntu bertsio berriak bilatzen"
 
 #: ../do-release-upgrade:36
 msgid "No new release found"
-msgstr ""
+msgstr "Ez da bertsio berririk aurkitu"
 
 #~ msgid "Fetching backport of '%s'"
 #~ msgstr "'%s' backport-a deskargatzen"

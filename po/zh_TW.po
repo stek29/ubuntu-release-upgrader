@@ -1,32 +1,90 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager 0.41.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-19 23:09+0100\n"
-"PO-Revision-Date: 2007-04-13 07:11+0000\n"
+"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
+"POT-Creation-Date: 2007-09-24 11:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Matthew Lien <bluet@bluet.org>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=(0);\n"
-"X-Rosetta-Export-Date: 2007-04-13 08:48:35+0000\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:105 ../UpdateManager/Common/utils.py:105
+#, fuzzy
+msgid "None"
+msgstr "無下載"
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:108 ../UpdateManager/Common/utils.py:108
+msgid "1 KB"
+msgstr "1 KB"
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:111 ../UpdateManager/Common/utils.py:111
+#, python-format
+msgid "%.0f KB"
+msgstr "%.0f KB"
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:114 ../UpdateManager/Common/utils.py:114
+#, python-format
+msgid "%.1f MB"
+msgstr "%.1f MB"
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, python-format
+msgid "Server for %s"
+msgstr "位於%s的伺服器"
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr "主要伺服器"
+
+#: ../DistUpgrade/distro.py:235
+msgid "Custom servers"
+msgstr "個人伺服器"
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid ""
+"Use special upgrade mode. Available:\n"
+"desktop, server"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:112
 msgid "Broken packages"
-msgstr "不完整套件"
+msgstr "已損壞的套件"
 
 #: ../DistUpgrade/DistUpgradeCache.py:113
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
 msgstr ""
-"您的系統有安裝不完整的套件，而本程式無法將它們修正。在進行前請先使用 "
-"synaptic 或 apt-get 來修恢它們。"
+"您的系統有一些損壞了的套件，而本程式無法修正它們。請先使用 synaptic 或 apt-"
+"get 來修正它們才繼續。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:354
 msgid "Can't upgrade required meta-packages"
-msgstr "無法升級須要的元套件 (meta-package)"
+msgstr "無法升級需要的元套件 (meta-package)"
 
 #: ../DistUpgrade/DistUpgradeCache.py:359
 msgid "A essential package would have to be removed"
@@ -45,6 +103,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
+"在計算升級的時候出現未解決的問題\n"
+"\n"
+"請回報這個 ‘update-manager’ 套件臭蟲到 bugreport 並且夾帶以下檔案： /var/log/"
+"dist-upgrade/"
 
 #. FIXME: maybe ask a question here? instead of failing?
 #: ../DistUpgrade/DistUpgradeCache.py:401
@@ -57,8 +119,8 @@ msgid ""
 "network problem. You may want to try again later. See below for a list of "
 "unauthenticated packages."
 msgstr ""
-"一些套件不能認證，這可能是由於短暫的網路問題；您可以稍後再試。以下為沒有認證"
-"的套件。"
+"系統無法認證一些套件，這可能是由於短暫的網路問題；您可以稍後再試。以下為沒有"
+"認證的套件。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:505
 #, python-format
@@ -69,7 +131,7 @@ msgstr "無法安裝‘%s’"
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
-msgstr "無法安裝須要的套件，請匯報問題。 "
+msgstr "無法安裝需要的套件，請匯報問題。 "
 
 #. FIXME: provide a list
 #: ../DistUpgrade/DistUpgradeCache.py:513
@@ -84,9 +146,9 @@ msgid ""
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"您的系統沒有安裝 ubuntu-desktop，kubuntu-desktop 或 edubuntu-desktop 套件，也"
-"無法偵測正在使用那個版本的 ubuntu。\n"
-" 請先使用 synaptic 或 apt-get安裝上述其中一個套件再繼續作業"
+"您的系統沒有安裝 ubuntu-desktop，kubuntu-desktop 或 edubuntu-desktop 套件，因"
+"此無法偵測正在使用那個版本的 Ubuntu。\n"
+" 請先使用 synaptic 或 apt-get 安裝上述其中一個套件再繼續作業"
 
 #: ../DistUpgrade/DistUpgradeControler.py:92
 msgid "Failed to add the CD"
@@ -113,13 +175,15 @@ msgstr "正在讀取快取"
 
 #: ../DistUpgrade/DistUpgradeControler.py:182
 msgid "Unable to get exclusive lock"
-msgstr ""
+msgstr "無法取得(使用)排他鎖定"
 
 #: ../DistUpgrade/DistUpgradeControler.py:183
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
+"這通常表示有其它的套件管理員程式（如 apt-get 或 aptitude）正在執行。請先關閉"
+"這些應用程式。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:201
 msgid "Continue running under SSH?"
@@ -135,15 +199,15 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"這個程序顯示它是在 SSH 中執行的. 現在並不建議你經由 SSH 來進行升級, 因為若發"
-"生錯誤或失敗將會較難回復.\n"
+"此作業階段似乎在 ssh 中執行的。現在並不建議你經由 ssh 來進行升級，因為若發生"
+"錯誤或失敗將會較難修復。\n"
 "\n"
-"若你選擇繼續, 一個額外的 ssh 背景服務將會被啟動於 '%s' port.\n"
+"若你選擇繼續，一個後備的 ssh 背景服務將會在‘%s’ 阜啟動。\n"
 "你希望繼續嗎？"
 
 #: ../DistUpgrade/DistUpgradeControler.py:215
 msgid "Starting additional sshd"
-msgstr "正在啟動額外的 sshd"
+msgstr "啟動後備 sshd 中"
 
 #: ../DistUpgrade/DistUpgradeControler.py:216
 #, python-format
@@ -152,6 +216,8 @@ msgid ""
 "on port '%s'. If anything goes wrong with the running ssh you can still "
 "connect to the additional one.\n"
 msgstr ""
+"為在失敗時更易進行修復，一個後備 sshd 將在‘%s’阜啟動。如果有任何問題，您仍可"
+"以使用 ssh 連接後備 sshd 。\n"
 
 #: ../DistUpgrade/DistUpgradeControler.py:280
 #: ../DistUpgrade/DistUpgradeControler.py:289
@@ -161,16 +227,16 @@ msgstr "無法升級"
 #: ../DistUpgrade/DistUpgradeControler.py:281
 #, python-format
 msgid "A upgrade from '%s' to '%s' is not supoprted with this tool."
-msgstr ""
+msgstr "這個工具不支援從‘%s’到‘%s’的升級"
 
 #: ../DistUpgrade/DistUpgradeControler.py:290
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
-msgstr ""
+msgstr "您的  python 安裝毀損了。請修正 ‘/usr/bin/python’ 的軟連結。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:309
 msgid "Include latest updates from the Internet?"
-msgstr ""
+msgstr "包括網際網路上的最新更新嗎？"
 
 #: ../DistUpgrade/DistUpgradeControler.py:310
 msgid ""
@@ -179,10 +245,13 @@ msgid ""
 "is complete, your system will be fully up to date.  You can choose not to do "
 "this, but you should install the latest updates soon after upgrading."
 msgstr ""
+"升級的程序可自動下載最新的更新並且在升級的時候安裝它們。升級的時間會較久，但"
+"完成後，您的系統就會在完全最新的狀態。您可以選擇不要做這件事，但是您應該要在"
+"升級不久之後就安裝最新的更新。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:467
 msgid "No valid mirror found"
-msgstr "找不到有效的 mirror"
+msgstr "找不到有效的鏡像站"
 
 #: ../DistUpgrade/DistUpgradeControler.py:468
 #, python-format
@@ -195,11 +264,11 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'no' the update will cancel."
 msgstr ""
-"掃描你的套件庫資訊時，找不到任何 mirror 可供升級。這可能在你使用內部 mirror "
-"或 mirror 資訊已經過時的時候發生。\n"
+"掃描你的套件庫資訊時，找不到任何可供升級的鏡像站。這可能在你使用內部鏡像站，"
+"或者鏡像站資訊已經過時。\n"
 "\n"
-"是否無論如何都要重新寫入 'sources.list'？ 如果選擇「是」，將會更新所有 '%s' "
-"到 '%s' 的條例。\n"
+"是否無論如何都要重新寫入‘sources.list’？ 如果選擇「是」，將會更新所有‘%s’到‘%"
+"s’的條例。\n"
 "如果選擇「否」，則更新會被取消。"
 
 #. hm, still nothing useful ...
@@ -215,9 +284,9 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No' the update will "
 "cancel."
 msgstr ""
-"掃描你的 'sources.list' 後，沒有找到任何有效的 '%s' 項目。\n"
+"掃描你的‘sources.list’後，沒有找到任何有效的‘%s’項目。\n"
 "\n"
-"需要加入預設的 '%s' 項目嗎？如果你選擇「否」，更新將會被取消。"
+"需要加入預設的‘%s’項目嗎？如果你選擇「否」，更新將會被取消。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:520
 msgid "Repository information invalid"
@@ -231,7 +300,7 @@ msgstr "升級套件庫時導致無效的檔案。請匯報問題。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:527
 msgid "Third party sources disabled"
-msgstr "停用第三方來源"
+msgstr "已停用第三方來源"
 
 #: ../DistUpgrade/DistUpgradeControler.py:528
 msgid ""
@@ -239,8 +308,8 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
-"你的 sources.list 中，部份第三方的項目已經被停用。在使用 'software-"
-"properties' 工具或 synaptic升級後，你可以重新啟用它。"
+"你的 sources.list 中，部份第三方的項目已經被停用。在使用‘software-"
+"properties’工具或 synaptic升級後，你可以重新啟用它。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:586
 msgid "Error during update"
@@ -257,19 +326,17 @@ msgid "Not enough free disk space"
 msgstr "磁碟空間不足"
 
 #: ../DistUpgrade/DistUpgradeControler.py:597
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The upgrade aborts now. The upgrade needs a total of %s free space on disk '%"
 "s'. Please free at least an additional %s of disk space on '%s'. Empty your "
 "trash and remove temporary packages of former installations using 'sudo apt-"
 "get clean'."
 msgstr ""
-"升級中止。請至少空出 %s 的磁碟空間 (從%s上)。 清空垃圾桶及使用 'sudo apt-get "
-"clean'來移除先前安裝套件時的暫存檔。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:709
 msgid "Support for some applications ended"
-msgstr ""
+msgstr "一些軟體的支援服務已經終止了"
 
 #: ../DistUpgrade/DistUpgradeControler.py:710
 msgid ""
@@ -279,11 +346,15 @@ msgid ""
 "If you have not enabled community maintained software (universe), these "
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
+"Canonical 有限公司已經不再提供下列軟體套件的支援服務。您仍然可以從社群中取得"
+"支援。\n"
+"\n"
+"如果您尚未開啟社群維護軟體 (universe)，這些套件將在升級結束之後建議您刪除。"
 
 #. ask the user if he wants to do the changes
 #: ../DistUpgrade/DistUpgradeControler.py:733
 msgid "Do you want to start the upgrade?"
-msgstr "是否要開始升級？"
+msgstr "您想要開始更新嗎？"
 
 #: ../DistUpgrade/DistUpgradeControler.py:790
 #: ../DistUpgrade/DistUpgradeControler.py:840
@@ -295,7 +366,7 @@ msgstr "無法下載升級套件"
 msgid ""
 "The upgrade aborts now. Please check your internet connection or "
 "installation media and try again. "
-msgstr "升級現正中止。請檢查網路連線是否正常及再試 "
+msgstr "升級中止。請檢查網際網路連線或安裝媒體是否正常並再試 一遍。 "
 
 #. invoke the frontend now
 #: ../DistUpgrade/DistUpgradeControler.py:816
@@ -315,6 +386,11 @@ msgid ""
 "files in /var/log/dist-upgrade/ in the bugreport.\n"
 "%s"
 msgstr ""
+"\n"
+"\n"
+"請匯報‘update-manager’套件發生問題，並附上 /var/log/dist-upgrade/ 的內容於問"
+"題報告內。\n"
+"%s"
 
 #: ../DistUpgrade/DistUpgradeControler.py:824
 msgid "Could not install the upgrades"
@@ -322,7 +398,7 @@ msgstr "無法安裝升級"
 
 #: ../DistUpgrade/DistUpgradeControler.py:910
 msgid "Remove obsolete packages?"
-msgstr "移除不再使用的套件"
+msgstr "刪除不再使用的套件"
 
 #: ../DistUpgrade/DistUpgradeControler.py:911
 msgid "_Skip This Step"
@@ -330,7 +406,7 @@ msgstr "略過這步驟(_S)"
 
 #: ../DistUpgrade/DistUpgradeControler.py:911
 msgid "_Remove"
-msgstr "移除(_R)"
+msgstr "刪除(_R)"
 
 #: ../DistUpgrade/DistUpgradeControler.py:922
 msgid "Error during commit"
@@ -340,34 +416,34 @@ msgstr "提交時發生錯誤"
 msgid ""
 "A problem occured during the clean-up. Please see the below message for more "
 "information. "
-msgstr "在清理時發生一些問題。請參閱以下訊息以取得更多資訊。 "
+msgstr "在清理時發生一些問題。詳情請參閱以下訊息。 "
 
 #. generate a new cache
 #: ../DistUpgrade/DistUpgradeControler.py:1037
 msgid "Restoring original system state"
-msgstr "回覆原有系統狀態"
+msgstr "回復原有系統狀態"
 
 #. FIXME: instead of error out, fetch and install it
 #. here
 #: ../DistUpgrade/DistUpgradeControler.py:1075
 msgid "Required depends is not installed"
-msgstr ""
+msgstr "須要的相依套件未被安裝"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1076
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr ""
+msgstr "須要的相依套件‘%s’未被安裝。 "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
 #: ../DistUpgrade/DistUpgradeControler.py:1203
 #: ../DistUpgrade/DistUpgradeControler.py:1260
 msgid "Checking package manager"
-msgstr "正在檢查套件管理程式"
+msgstr "檢查套件管理程式中"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1208
 msgid "Preparing the upgrade failed"
-msgstr ""
+msgstr "準備升級失敗"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1209
 msgid ""
@@ -375,10 +451,13 @@ msgid ""
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bugreport."
 msgstr ""
+"準備系統升級失敗。請匯報‘update-manager’套件發生問題，並附上 /var/log/dist-"
+"upgrade/ 的內容於問題報告內。"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1224
+#, fuzzy
 msgid "Getting upgrade pre-requists failed"
-msgstr ""
+msgstr "拿取升級需求失敗"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1225
 msgid ""
@@ -406,16 +485,19 @@ msgid ""
 "manager' package and include the files in /var/log/dist-upgrade/ in the "
 "bugreport."
 msgstr ""
+"當您更新了套件資訊後，再找不到核心套件‘%s’。\n"
+"這顯示有一個嚴重錯誤，請匯報‘update-manager’套件發生問題，並附上 /var/log/"
+"dist-upgrade/ 的內容於問題報告內。"
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
 #: ../DistUpgrade/DistUpgradeControler.py:1283
 msgid "Asking for confirmation"
-msgstr "詢問以確認"
+msgstr "要求確認中"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1289 ../update-manager:83
 msgid "Fetching"
-msgstr ""
+msgstr "接收中"
 
 #: ../DistUpgrade/DistUpgradeControler.py:1299 ../update-manager:87
 msgid "Upgrading"
@@ -434,32 +516,32 @@ msgstr "系統升級完成。"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:115
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
-msgstr "請將‘%s’放入光碟機‘%s’中"
+msgstr "請將‘%s’放入光碟機‘%s’"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:126
 #: ../DistUpgrade/DistUpgradeViewKDE.py:128
 msgid "Fetching is complete"
-msgstr ""
+msgstr "接收完成"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:138
 #: ../DistUpgrade/DistUpgradeViewKDE.py:141
 #, fuzzy, python-format
 msgid "Fetching file %li of %li at %sb/s"
-msgstr "正在下載檔案 %li/%li，速度在 %s/秒"
+msgstr "正在下載檔案 %li/%li (速度:  %s位元/秒)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewGtk.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:270
 #: ../DistUpgrade/DistUpgradeViewKDE.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:271
 #, python-format
 msgid "About %s remaining"
-msgstr ""
+msgstr "大約剩下 %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:141
 #: ../DistUpgrade/DistUpgradeViewKDE.py:144
 #, python-format
 msgid "Fetching file %li of %li"
-msgstr ""
+msgstr "接收檔案 %li (%li)"
 
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
@@ -491,6 +573,8 @@ msgid ""
 "Replace the customized configuration file\n"
 "'%s'?"
 msgstr ""
+"是否要覆蓋自訂的設定檔案\n"
+"'%s\"?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:217
 #: ../DistUpgrade/DistUpgradeViewKDE.py:204
@@ -498,51 +582,57 @@ msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
 msgstr ""
+"如果您選擇覆蓋它成為新版的話，那麼您將會失去您曾經儲存的任何改變過的設定。"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:230
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 msgid "The 'diff' command was not found"
 msgstr "找不到‘diff’指令"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:403
+#: ../DistUpgrade/DistUpgradeViewGtk.py:407
+#: ../DistUpgrade/DistUpgradeViewText.py:77
 msgid "A fatal error occured"
 msgstr "發生嚴重錯誤"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:404
+#: ../DistUpgrade/DistUpgradeViewGtk.py:408
 msgid ""
 "Please report this as a bug (if you haven't already) and include thefiles /"
 "var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"請將此視為 bug 來回報，並於報告中包含 /var/log/dist-upgrade.log 及 /var/log/"
-"dist-upgrade-apt.log 這兩個檔案。 現在取消更新。\n"
-"您的原始 sources.list 已被存到 /etc/apt/sources.list.distUpgrade。"
+"請匯報‘update-manager’套件發生問題，並附上 /var/log/dist-upgrade/ 的內容於問"
+"題報告內。升級現在中止。\n"
+"您原本的 sources.list 已被存到 /etc/apt/sources.list.distUpgrade。"
 
 #. FIXME: make those two seperate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeViewGtk.py:538
+#: ../DistUpgrade/DistUpgradeViewGtk.py:542
 #: ../DistUpgrade/DistUpgradeViewKDE.py:576
+#: ../DistUpgrade/DistUpgradeViewText.py:128
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
-msgstr[0] ""
+msgstr[0] "即將刪除 %d 個套件。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:543
+#: ../DistUpgrade/DistUpgradeViewGtk.py:547
 #: ../DistUpgrade/DistUpgradeViewKDE.py:581
+#: ../DistUpgrade/DistUpgradeViewText.py:133
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
-msgstr[0] ""
+msgstr[0] "即將安裝 %d 個新的套件。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:549
+#: ../DistUpgrade/DistUpgradeViewGtk.py:553
 #: ../DistUpgrade/DistUpgradeViewKDE.py:587
+#: ../DistUpgrade/DistUpgradeViewText.py:139
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
-msgstr[0] ""
+msgstr[0] "即將升級 %d 個套件。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:554
+#: ../DistUpgrade/DistUpgradeViewGtk.py:558
+#: ../DistUpgrade/DistUpgradeViewText.py:144
 #, python-format
 msgid ""
 "\n"
@@ -553,46 +643,49 @@ msgstr ""
 "\n"
 "你必須下載全部的%s。 "
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:560
+#: ../DistUpgrade/DistUpgradeViewGtk.py:564
 #: ../DistUpgrade/DistUpgradeViewKDE.py:607
 #: ../DistUpgrade/DistUpgradeViewKDE.py:615
+#: ../DistUpgrade/DistUpgradeViewText.py:149
 msgid ""
 "Fetching and installing the upgrade can take several hours and cannot be "
 "canceled at any time later."
-msgstr ""
+msgstr "下載和安裝升級會花上數小時的時間並且不能被取消。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:563
+#: ../DistUpgrade/DistUpgradeViewGtk.py:567
 #: ../DistUpgrade/DistUpgradeViewKDE.py:610
 #: ../DistUpgrade/DistUpgradeViewKDE.py:618
 msgid "To prevent data loss close all open applications and documents."
 msgstr "避免遺失請關閉所有已開啟的程式及文件。"
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeViewGtk.py:569
+#: ../DistUpgrade/DistUpgradeViewGtk.py:573
 #: ../DistUpgrade/DistUpgradeViewKDE.py:624
+#: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../UpdateManager/UpdateManager.py:658
 msgid "Your system is up-to-date"
 msgstr "系統已經在最新狀態"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:574
 #: ../DistUpgrade/DistUpgradeViewKDE.py:625
+#: ../DistUpgrade/DistUpgradeViewText.py:156
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
-msgstr ""
+msgstr "在您的系統中沒有任何新的升級。現在將取消升級的動作。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewGtk.py:590
 #, python-format
 msgid "<b>Remove %s</b>"
 msgstr "<b>移除 %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:588
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #: ../DistUpgrade/DistUpgradeViewKDE.py:648
 #, python-format
 msgid "Install %s"
 msgstr "安裝 %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:650
 #, python-format
 msgid "Upgrade %s"
@@ -616,12 +709,12 @@ msgstr "終端"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:473
 #, fuzzy
 msgid "Show Terminal >>>"
-msgstr "終端"
+msgstr "顯示終端畫面"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:476
 #, fuzzy
 msgid "<<< Hide Terminal"
-msgstr "終端"
+msgstr "隱藏終端畫面"
 
 #. string = _("<p>You have to download a total of %s. ")
 #. msg += string % apt_pkg.SizeToStr(downloadSize)
@@ -629,12 +722,12 @@ msgstr "終端"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:599
 #, fuzzy, python-format
 msgid "<p>You have to download a total of %s. "
-msgstr "您總共需要下載 %s。 "
+msgstr "<p>您總共需要下載 %s。 "
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:646
 #, python-format
 msgid "Remove %s"
-msgstr ""
+msgstr "移除 %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:666
 #: ../DistUpgrade/DistUpgrade.glade.h:2
@@ -656,31 +749,31 @@ msgstr "升級(_P)"
 #: ../DistUpgrade/DistUpgradeView.py:33
 #, python-format
 msgid "%li days %li hours %li minutes"
-msgstr "%li日%li小時%li分鐘"
+msgstr "%li 日 %li 小時 %li 分鐘"
 
 #: ../DistUpgrade/DistUpgradeView.py:35
 #, python-format
 msgid "%li hours %li minutes"
-msgstr "%li小時%li分鐘"
+msgstr "%li 小時 %li 分鐘"
 
 #: ../DistUpgrade/DistUpgradeView.py:37
 #, python-format
 msgid "%li minutes"
-msgstr "%li分鐘"
+msgstr "%li 分鐘"
 
 #: ../DistUpgrade/DistUpgradeView.py:38
 #, python-format
 msgid "%li seconds"
-msgstr "%li秒"
+msgstr "%li 秒"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
 #: ../DistUpgrade/DistUpgradeView.py:44
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem"
-msgstr ""
+msgstr "此下載在 1Mbit DSL 連線將花 %s ，在 54k 數據機則花 %s 。"
 
 #: ../DistUpgrade/DistUpgradeView.py:150
 msgid "Reboot required"
@@ -691,26 +784,140 @@ msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr "升級已經完成及須要重新啟動。現在要重新啟動嗎？"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:123
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
+msgid "Could not run the upgrade tool"
+msgstr "無法執行升級工具"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:124
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-msgstr ""
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
+msgstr "這可能是升級工具的錯誤，請匯報問題"
 
-#: ../DistUpgrade/dist-upgrade.py:24
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:150
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
+msgid "Upgrade tool signature"
+msgstr "升級工具簽署"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:153
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
+msgid "Upgrade tool"
+msgstr "升級工具"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Failed to fetch"
+msgstr "下載失敗"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:178
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr "下載升級套件失敗。可能是網路問題。 "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:182
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
+msgid "Failed to extract"
+msgstr "解壓失敗"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:183
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
 msgid ""
-"Use special upgrade mode. Available:\n"
-"desktop, server"
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
+msgstr "升級套件解壓失敗。可能是因為跟伺服器的網路連線出現問題。 "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:188
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
+msgid "Verfication failed"
+msgstr "檢驗失敗"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:189
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr "檢驗套件失敗。可能是因為跟伺服器的網路連線出現問題。 "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:194
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
+msgid "Authentication failed"
+msgstr "認證失敗"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:195
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr "認證升級套件失敗。可能是因為跟伺服器的網路連線出現問題。 "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, fuzzy
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+"請匯報‘update-manager’套件發生問題，並附上 /var/log/dist-upgrade/ 的內容於問"
+"題報告內。升級現在中止。\n"
+"您原本的 sources.list 已被存到 /etc/apt/sources.list.distUpgrade。"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:101
+msgid "Aborting"
 msgstr ""
 
-#. testcode to see if the bullets look nice in the dialog
-#. for i in range(4):
-#. view.setStep(i+1)
-#. app.openCache()
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#: ../DistUpgrade/DistUpgradeViewText.py:184
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "繼續(_C)"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:164
+#, fuzzy
+msgid "Details [d]"
+msgstr "細節"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:168
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:171
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:174
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "移除 %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:177
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "安裝 %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:178
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "升級 %s"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#, fuzzy
+msgid "Restart required"
+msgstr "須要重新開機"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+msgid "To fully ugprade, please restart"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
@@ -721,19 +928,19 @@ msgstr "<b><big>重新啟動系統以完成更新</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:6
 msgid "<b><big>Start the upgrade?</big></b>"
-msgstr "<b><big>開始升級？</big></b>"
+msgstr "<b><big>開始升級嗎？</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
 msgid "<b><big>Upgrading Ubuntu to version 7.10</big></b>"
-msgstr ""
+msgstr "<b><big>升級 Ubuntu 到 7.10 版本</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
-msgstr "清理"
+msgstr "清理中"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
-msgstr "詳細資料"
+msgstr "細節"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
@@ -742,25 +949,25 @@ msgstr "檔案間的差別"
 #: ../DistUpgrade/DistUpgrade.glade.h:11
 #, fuzzy
 msgid "Distribution Upgrade"
-msgstr "升級(_P)"
+msgstr "發行版升級"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:12
 #, fuzzy
 msgid "Fetching the upgrades"
-msgstr "正準備升級"
+msgstr "接收升級中"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:13
 #, fuzzy
 msgid "Installing the upgrades"
-msgstr "正準備升級"
+msgstr "安裝升級中"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Modifying the software channels"
-msgstr "更改軟體來源"
+msgstr "更改軟體頻道"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Preparing the upgrade"
-msgstr "正準備升級"
+msgstr "準備升級中"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:16
 msgid "Restarting the system"
@@ -772,11 +979,11 @@ msgstr "終端"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
-msgstr ""
+msgstr "取消升級 (_C)"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
-msgstr ""
+msgstr "繼續(_C)"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
@@ -788,7 +995,7 @@ msgstr "取代(_R)"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:22
 msgid "_Report Bug"
-msgstr "報告錯誤(_R)"
+msgstr "匯報錯誤(_R)"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
@@ -800,7 +1007,7 @@ msgstr "繼續升級(_R)"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
-msgstr ""
+msgstr "開始升級 (_S)"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:79
 msgid "Could not find the release notes"
@@ -816,33 +1023,37 @@ msgstr "無法下載發行說明"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:91
 msgid "Please check your internet connection."
-msgstr "請檢查您的網路連線。"
+msgstr "請檢查您的網際網路連線。"
 
 #: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr ""
+msgstr "共 %(total)li 個檔案，正下載第 %(current)li 個 (速度: %(speed)s/秒)"
 
 #: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
-msgstr ""
+msgstr "共 %(total)li 個檔案，正下載第 %(current)li 個"
 
 #: ../UpdateManager/UpdateManager.py:235
 msgid "The list of changes is not available"
-msgstr ""
+msgstr "無法取得變更列表"
 
 #: ../UpdateManager/UpdateManager.py:241
 msgid ""
 "The list of changes is not available yet.\n"
 "Please try again later."
 msgstr ""
+"無法取得變更列表。\n"
+"請稍候再試。"
 
 #: ../UpdateManager/UpdateManager.py:246
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
+"下載變更列表失敗。\n"
+"請檢查您的網際網路連線。"
 
 #: ../UpdateManager/UpdateManager.py:273
 msgid "Important security updates"
@@ -854,7 +1065,7 @@ msgstr "建議的安全更新"
 
 #: ../UpdateManager/UpdateManager.py:275
 msgid "Proposed updates"
-msgstr ""
+msgstr "建議更新"
 
 #: ../UpdateManager/UpdateManager.py:276
 msgid "Backports"
@@ -862,7 +1073,7 @@ msgstr ""
 
 #: ../UpdateManager/UpdateManager.py:277
 msgid "Distribution updates"
-msgstr ""
+msgstr "發行版更新"
 
 #: ../UpdateManager/UpdateManager.py:282
 msgid "Other updates"
@@ -875,15 +1086,15 @@ msgstr "版本 %s： \n"
 
 #: ../UpdateManager/UpdateManager.py:569
 msgid "Downloading list of changes..."
-msgstr ""
+msgstr "下載變更的列表中..."
 
 #: ../UpdateManager/UpdateManager.py:596
 msgid "_Uncheck All"
-msgstr ""
+msgstr "取消全部 (_U)"
 
 #: ../UpdateManager/UpdateManager.py:602
 msgid "_Check All"
-msgstr ""
+msgstr "勾選全部 (_C)"
 
 #. TRANSLATORS: b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:646 ../UpdateManager/UpdateManager.py:673
@@ -894,7 +1105,7 @@ msgstr "下載大小：%s"
 #: ../UpdateManager/UpdateManager.py:650
 #, fuzzy
 msgid "Unknown download size"
-msgstr "下載大小：%s"
+msgstr "不明下載大小"
 
 #: ../UpdateManager/UpdateManager.py:669
 #, python-format
@@ -912,12 +1123,12 @@ msgstr "更新完成"
 
 #: ../UpdateManager/UpdateManager.py:756
 msgid "Checking for updates"
-msgstr ""
+msgstr "檢查更新中"
 
 #: ../UpdateManager/UpdateManager.py:828
 #, fuzzy
 msgid "Could not initialize the package information"
-msgstr "無效的套件資訊"
+msgstr "初始化套件資訊時時發生無法解決的問題"
 
 #: ../UpdateManager/UpdateManager.py:829
 msgid ""
@@ -925,7 +1136,10 @@ msgid ""
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
-msgstr "初始化套件資訊時時發生無法解決的問題，請匯報問題。\n"
+msgstr ""
+"初始化套件資訊時時發生無法解決的問題。\n"
+"\n"
+"請匯報‘update-manager’套件發生問題，並在問題報告內附上以下訊息：\n"
 
 #: ../UpdateManager/UpdateManager.py:851
 #, fuzzy
@@ -934,12 +1148,15 @@ msgid ""
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
-msgstr "計算升級時發生無法解決的問題，請匯報問題。"
+msgstr ""
+"計算升級時發生無法解決的問題。\n"
+"\n"
+"請匯報‘update-manager’套件發生問題，並在問題報告內附上以下訊息："
 
 #: ../UpdateManager/UpdateManager.py:876
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr ""
+msgstr "由版本 %(old_version)s 更新至 %(new_version)s"
 
 #: ../UpdateManager/UpdateManager.py:880
 #, python-format
@@ -954,7 +1171,7 @@ msgstr "(大小： %s)"
 
 #: ../UpdateManager/UpdateManager.py:893
 msgid "Your distribution is not supported anymore"
-msgstr "您正使用的發行版本已不再支援"
+msgstr "您正使用的發行版已不再受到支援"
 
 #: ../UpdateManager/UpdateManager.py:894
 msgid ""
@@ -963,11 +1180,11 @@ msgid ""
 "information on upgrading."
 msgstr ""
 "您不會再取得任何安全或重大更新，請升級到最新版本的 Ubuntu Linux。請參閱 "
-"http://www.ubuntu.com以取得更多升級資訊。"
+"http://www.ubuntu.com 以取得更多升級資訊。"
 
 #: ../UpdateManager/UpdateManager.py:909
 msgid "Downloading the upgrade tool"
-msgstr "正在下載升級工具"
+msgstr "下載升級工具中"
 
 #: ../UpdateManager/UpdateManager.py:911
 msgid "The upgrade tool will guide you through the upgrade process."
@@ -976,12 +1193,12 @@ msgstr "升級工具會引導您整個升級過程。"
 #: ../UpdateManager/UpdateManager.py:919
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
-msgstr "<b>有新的 distribution 發行版 '%s'</b>"
+msgstr "<b>有新的發行版 ‘%s’</b>"
 
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:958
 msgid "Software index is broken"
-msgstr "軟體索引損壞"
+msgstr "軟體索引已損壞"
 
 #: ../UpdateManager/UpdateManager.py:959
 msgid ""
@@ -991,61 +1208,6 @@ msgid ""
 msgstr ""
 "不能安裝或移除任何套件。請先使用套件管理程式“Synaptic”或在終端機中執行“sudo "
 "apt-get install -f”來修正問題。"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:123
-msgid "Could not run the upgrade tool"
-msgstr "無法執行升級工具"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:124
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr "這可能是升級工具的錯誤，請匯報問題"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:150
-msgid "Upgrade tool signature"
-msgstr "升級工具簽署"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:153
-msgid "Upgrade tool"
-msgstr "升級工具"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Failed to fetch"
-msgstr "下載失敗"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:178
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "下載升級套件失敗。可能是網路問題。 "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:182
-msgid "Failed to extract"
-msgstr "解壓失敗"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:183
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr "升級套件解壓失敗。可能是因為跟伺服器的網路連線出現問題。 "
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:188
-msgid "Verfication failed"
-msgstr "檢驗失敗"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:189
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr ""
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:194
-msgid "Authentication failed"
-msgstr "認證失敗"
-
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:195
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr "認證升級套件失敗。可能是因為跟伺服器的網路連線出現問題。 "
 
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
@@ -1061,16 +1223,17 @@ msgstr "<big><b>將您的系統維持在最新狀態</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr ""
+msgstr "<big><b>並非所有的更新都可以安裝</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
 #, fuzzy
 msgid "<big><b>Starting Update Manager</b></big>"
-msgstr "<b><big>開始升級？</big></b>"
+msgstr "<big><b>啟動升級管理員</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:7
+#, fuzzy
 msgid "Changes"
-msgstr "修改紀錄"
+msgstr "變更"
 
 #: ../data/glade/UpdateManager.glade.h:8
 msgid "Chec_k"
@@ -1156,7 +1319,7 @@ msgstr "顯示及安裝現有的更新套件"
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "System Update Tool"
-msgstr ""
+msgstr "系統更新工具"
 
 #: ../data/update-manager.schemas.in.h:1
 msgid ""
@@ -1177,7 +1340,7 @@ msgstr ""
 
 #: ../data/update-manager.schemas.in.h:4
 msgid "Remind to reload the channel list"
-msgstr "提示重新載入套件來源"
+msgstr "提示重新載入頻道列表"
 
 #: ../data/update-manager.schemas.in.h:5
 msgid "Show details of an update"
@@ -1207,7 +1370,7 @@ msgstr ""
 
 #: ../update-manager:58 ../update-manager:61
 msgid "Try to run a dist-upgrade"
-msgstr ""
+msgstr "試著執行dist-upgrade"
 
 #: ../update-manager:74
 #, fuzzy
@@ -1215,22 +1378,20 @@ msgid "Running partial upgrade"
 msgstr "升級(_P)"
 
 #: ../update-manager:92
-#, fuzzy
 msgid "Upgrade complete"
-msgstr "更新完成"
+msgstr "升級完成"
 
 #: ../update-manager:93
-#, fuzzy
 msgid "The upgrade was completed."
 msgstr "系統升級完成。"
 
 #: ../do-release-upgrade:23
 msgid "Run the specified frontend"
-msgstr ""
+msgstr "執行指定的前端"
 
 #: ../do-release-upgrade:26
 msgid "Run in a special upgrade mode"
-msgstr ""
+msgstr "在特別升級模式下執行"
 
 #: ../do-release-upgrade:30
 msgid "Checking for a new ubuntu release"
@@ -1238,7 +1399,7 @@ msgstr "檢查有沒有新的 ubuntu 發行版"
 
 #: ../do-release-upgrade:36
 msgid "No new release found"
-msgstr ""
+msgstr "沒有新的發行版"
 
 #, fuzzy
 #~ msgid "Fetching file %li of %li at %s/s"
@@ -1249,19 +1410,6 @@ msgstr ""
 
 #~ msgid "changes"
 #~ msgstr "更動"
-
-#, fuzzy
-#~ msgid "None"
-#~ msgstr "無下載"
-
-#~ msgid "1 KB"
-#~ msgstr "1 KB"
-
-#~ msgid "%.0f KB"
-#~ msgstr "%.0f KB"
-
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f MB"
 
 #~ msgid "Daily"
 #~ msgstr "每天"
@@ -1297,17 +1445,8 @@ msgstr ""
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
 
-#~ msgid "Main server"
-#~ msgstr "主要伺服器"
-
-#~ msgid "Server for %s"
-#~ msgstr "位於%s的伺服器"
-
 #~ msgid "Nearest server"
 #~ msgstr "最近的伺服器"
-
-#~ msgid "Custom servers"
-#~ msgstr "個人伺服器"
 
 #~ msgid "Software Channel"
 #~ msgstr "軟體頻道"

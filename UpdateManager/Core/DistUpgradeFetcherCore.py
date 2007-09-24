@@ -158,10 +158,11 @@ class DistUpgradeFetcherCore(object):
 
     def runDistUpgrader(self):
         #print "runing: %s" % script
+        args = [self.script]+self.run_options
         if os.getuid() != 0:
-            os.execv("/usr/bin/sudo",["sudo",self.script])
+            os.execv("/usr/bin/sudo",["sudo"]+args)
         else:
-            os.execv(self.script,[self.script]+self.run_options)
+            os.execv(self.script,args)
 
     def cleanup(self):
       # cleanup

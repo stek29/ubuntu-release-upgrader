@@ -35,6 +35,7 @@ import traceback
 import apt
 import apt_pkg
 import os
+import shutil
 
 import pty
 
@@ -371,7 +372,13 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
-        # Don't use dcop until kdesudo supports it
+        #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
+        copyXauth = "/tmp/dist-upgrade-xauthority"
+        if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
+            shutil.copy(os.environ['XAUTHORITY'], "/tmp/dist-upgrade-xauthority")
+            os.environ["XAUTHORITY"] = "/tmp/dist-upgrade-xauthority"
+
+        # Note that with kdesudo this needs --nonewdcop
         ## create a new DCOP-Client:
         #client = DCOPClient()
         ## connect the client to the local DCOP-server:

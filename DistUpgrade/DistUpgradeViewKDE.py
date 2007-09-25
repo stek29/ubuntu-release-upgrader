@@ -210,6 +210,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.confDialogue = dialog_conffile(self.parent.window_main)
         self.confDialogue.label_conffile.setText(markup)
         self.confDialogue.textview_conffile.hide()
+        #FIXME, below to be tested
+        #self.confDialogue.resize(self.confDialogue.minimumSizeHint())
         self.confDialogue.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
 
         # now get the diff
@@ -227,13 +229,13 @@ class KDEInstallProgressAdapter(InstallProgress):
         else:
             self.parent.konsole.sendInput("n\n")
 
-    def showTerminal(self):
+    def showConffile(self):
         if self.confDialogue.textview_conffile.isVisible():
             self.confDialogue.textview_conffile.hide()
-            self.confDialogue.showTerminalButton.setText(_("Show Difference >>>"))
+            self.confDialogue.show_difference_button.setText(_("Show Difference >>>"))
         else:
             self.confDialogue.textview_conffile.show()
-            self.confDialogue.showTerminalButton.setText(_("<<< Hide Difference"))
+            self.confDialogue.show_difference_button.setText(_("<<< Hide Difference"))
        
 
     def fork(self):

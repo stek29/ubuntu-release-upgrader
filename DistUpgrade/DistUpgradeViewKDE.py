@@ -210,7 +210,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.confDialogue = dialog_conffile(self.parent.window_main)
         self.confDialogue.label_conffile.setText(markup)
         self.confDialogue.textview_conffile.hide()
-        self.app.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
+        self.confDialogue.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
 
         # now get the diff
         if os.path.exists("/usr/bin/diff"):

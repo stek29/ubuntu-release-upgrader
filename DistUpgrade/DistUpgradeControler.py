@@ -1218,9 +1218,9 @@ class DistUpgradeControler(object):
             self.options.havePrerequists == False):
             # get backported packages (if needed)
             if not self.getRequiredBackports():
-                self._view.error(_("Getting upgrade pre-requists failed"),
+                self._view.error(_("Getting upgrade prerequisites failed"),
                                  _("The system was unable to get the "
-                                   "pre-requists for the upgrade. "
+                                   "prerequisites for the upgrade. "
                                    "The upgrade will abort now and restore "
                                    "the original system state.\n"
                                    "\n"

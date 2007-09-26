@@ -42,6 +42,7 @@ class TestMetaReleaseGUI(unittest.TestCase):
     def testnewdist(self):
         meta = MetaRelease()
         meta.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release-unit-testing"
+        meta._buildMetaReleaseFile()
         meta.connect("new_dist_available", self.new_dist_available)
         meta.download()
         self.assert_(meta.downloading == False)

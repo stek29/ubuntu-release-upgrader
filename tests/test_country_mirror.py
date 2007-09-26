@@ -7,7 +7,7 @@ sys.path.insert(0, "../")
 import apt
 import unittest
 
-from DistUpgrade.utils import country_mirror
+from UpdateManager.Core.DistUpgradeFetcherCore import country_mirror
 
 class testCountryMirror(unittest.TestCase):
 

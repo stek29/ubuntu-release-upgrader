@@ -52,6 +52,17 @@ class MetaReleaseCore(object):
         elif useProposed:
             self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
 
+        self._buildMetaReleaseFile()
+        self.metarelease_information = None
+        self.downloading = True
+        # information about the available dists
+        self.new_dist = None
+        self.no_longer_supported = None
+        # we start the download thread here and we have a timeout
+        t=thread.start_new_thread(self.download, ())
+        #t=thread.start_new_thread(self.check, ())
+
+    def _buildMetaReleaseFile(self):
         # build the metarelease_file name
         self.METARELEASE_FILE = os.path.join("/var/lib/update-manager/",
                                             os.path.basename(self.METARELEASE_URI))
@@ -70,14 +81,7 @@ class MetaReleaseCore(object):
                 os.unlink(self.METARELEASE_FILE)
         except Exception, e:
             pass
-        self.metarelease_information = None
-        self.downloading = True
-        # information about the available dists
-        self.new_dist = None
-        self.no_longer_supported = None
-        # we start the download thread here and we have a timeout
-        t=thread.start_new_thread(self.download, ())
-        #t=thread.start_new_thread(self.check, ())
+        return True
 
     def dist_no_longer_supported(self, dist):
         """ virtual function that is called when the distro is no longer

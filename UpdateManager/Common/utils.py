@@ -52,28 +52,6 @@ def allow_sleep(dev, cookie):
     print "could not send the dbus UnInhibit signal: %s" % e
 
 
-def country_mirror():
-  " helper to get the country mirror from the current locale "
-  # special cases go here
-  lang_mirror = { 'C'     : '',
-                }
-  # no lang, no mirror
-  if not os.environ.has_key('LANG'):
-    return ''
-  lang = os.environ['LANG'].lower()
-  # check if it is a special case
-  if lang_mirror.has_key(lang[:5]):
-    return lang_mirror[lang[:5]]
-  # now check for the most comon form (en_US.UTF-8)
-  if "_" in lang:
-    country = lang.split(".")[0].split("_")[1]
-    if "@" in country:
-       country = country.split("@")[0]
-    return country+"."
-  else:
-    return lang[:2]+"."
-  return ''
-
 def str_to_bool(str):
   if str == "0" or str.upper() == "FALSE":
     return False

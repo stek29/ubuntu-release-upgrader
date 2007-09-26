@@ -40,8 +40,7 @@ import DistUpgradeView
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeViewText import DistUpgradeViewText
 from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
-
-from utils import country_mirror
+from DistUpgradeFetcherCore import country_mirror
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro, NoDistroTemplateException

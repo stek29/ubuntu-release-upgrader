@@ -824,6 +824,7 @@ class DistUpgradeControler(object):
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
                 self._rewriteAptPeriodic(self.apt_minAge)
+                self._fixupEnvy()
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -844,15 +845,49 @@ class DistUpgradeControler(object):
         # abort here because we want our sources.list back
         self.abort()
 
+    def _fixupEnvy(self):
+        " fixupEnvy "
+        if (os.path.exists("/var/log/envy-installer.log") and
+            os.path.getsize("/var/log/envy-installer.log") > 0):
+            logging.warning("envy detected, fixing configuration")
+            # fixup /etc/default/linux-restricted-modules-common
+            # and comment DISABLED_MODULES
+            lrm_path = "/etc/default/linux-restricted-modules-common"
+            if os.path.exists(lrm_path):
+                lrm = open(lrm_path).read()
+                f = open(lrm_path,"w")
+                for line in lrm.split("\n"):
+                    if line.startswith("DISABLED_MODULES="):
+                        logging.warning("editing DISABLED_MODULES")
+                        line = line.replace("nvidia_legacy","")
+                        line = line.replace("nvidia_new","")
+                        line = line.replace("nvidia","")
+                        line = line.replace("nv","")
+                        line = line.replace("fglrx","")
+                    f.write(line+"\n")
+            # now uncomment /etc/modprobe.d/lrm-video
+            lrm_video = "/etc/modprobe.d/lrm-video"
+            if os.path.exists(lrm_video):
+                lrm = open(lrm_video).read()
+                f = open(lrm_video,"w")
+                for line in lrm.split("\n"):
+                    if line.startswith("#install"):
+                        line = line[1:]
+                    f.write(line+"\n")
+        return True
+
     def doPostUpgrade(self):
         # reopen cache
         self.openCache()
-
+        
         # now run the quirksHandler 
         quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
         func = getattr(self, quirksFuncName, None)
         if func is not None:
             func()
+
+        # fixup envy
+        self._fixupEnvy()
 
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed

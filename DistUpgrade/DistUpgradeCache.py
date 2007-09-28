@@ -4,6 +4,7 @@ warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import os
+import os.path
 import re
 import logging
 import string
@@ -301,6 +302,41 @@ class MyCache(apt.Cache):
             self.markRemove("nvidia-settings")
             self.markInstall("nvidia-glx")
 
+    def checkThirdPartyQuirks(self):
+        """
+        this function checks for common third party packages and tries
+        to work around issues with them
+        """
+        # envy
+        if (os.path.exists("/var/log/envy-installer.log") and
+            os.path.getsize("/var/log/envy-installer.log") > 0):
+            logging.warning("envy detected, trying to workaround")
+            toDist = self.config.get("Sources","To")
+            pkgs = ["nvidia-glx","nvidia-glx-new","nvidia-glx-legacy"] 
+            # downgrade installed to ubuntu version
+            for name in pkgs:
+                if not self.has_key(name):
+                    continue
+                pkg = self[name]
+                if (pkg.candidateVersion == pkg.installedVersion and
+                    not pkg.candidateDownloadable):
+                    logging.debug("found non-downloadable '%s' " % name)
+                    for ver in pkg._pkg.VersionList:
+                        if ver.FileList:
+                            for (VerFileIter, index) in ver.FileList:
+				indexfile = self._list.FindIndex(VerFileIter)
+                                if (indexfile and 
+                                    indexfile.IsTrusted and
+                                    toDist in indexfile.Describe):
+                                    logging.info("Forcing downgrade of '%s' because of envy" % name)
+                                    self._depcache.SetCandidateVer(pkg._pkg, ver)
+                                    pkg.markInstall()
+                                    break
+        # ...
+        return
+                
+
+
     def checkForKernel(self):
         """ check for the runing kernel and try to ensure that we have
             a updated version
@@ -364,6 +400,9 @@ class MyCache(apt.Cache):
 
             # check if we got a new kernel
             self.checkForKernel()
+
+            # check for third party stuff (envy)
+            self.checkThirdPartyQuirks()
 
             # install missing meta-packages (if not in server upgrade mode)
             if not serverMode:

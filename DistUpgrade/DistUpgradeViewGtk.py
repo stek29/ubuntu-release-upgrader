@@ -531,10 +531,16 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
+        pkgs_downgrade = len(self.toDowngrade)
         pkgs_remove = len(self.toRemove)
         pkgs_inst = len(self.toInstall)
         pkgs_upgrade = len(self.toUpgrade)
         msg = ""
+
+        if pkgs_downgrade > 0:
+            msg += gettext.ngettext("%d package is going to be downgraded.",
+                                    "%d packages are going to be downgraded.",
+                                    pkgs_downgrade) % pkgs_downgrade
 
         if pkgs_remove > 0:
             # FIXME: make those two seperate lines to make it clear
@@ -586,6 +592,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self.label_changes.set_markup(msg)
         # fill in the details
         self.details_list.clear()
+        for dg in self.toDowngrade:
+            self.details_list.append([_("<b>Downgrade %s</b>") % dg])
         for rm in self.toRemove:
             self.details_list.append([_("<b>Remove %s</b>") % rm])
         for inst in self.toInstall:

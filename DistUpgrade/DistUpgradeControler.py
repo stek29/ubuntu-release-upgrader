@@ -156,15 +156,16 @@ class DistUpgradeControler(object):
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
-        # turn on debuging in the cache
-        apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
-        apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
+        # apt log
         logdir = self.config.get("Files","LogDir")
         fd = os.open(os.path.join(logdir,"apt.log"),
                      os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
         # log the complete output if we do not run in text-mode
         if not (isinstance(self._view, DistUpgradeViewText) or
                 isinstance(self._view, DistUpgradeViewNonInteractive) ):
+            # turn on debuging in the cache
+            apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
+            apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
             os.dup2(fd,2)
             os.dup2(fd,1)
         self.logfd = fd

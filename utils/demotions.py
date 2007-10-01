@@ -25,12 +25,33 @@ import shutil
 import urllib
 import logging
 
+ARCHES = ["i386","amd64", "powerpc"]
+#ARCHES = ["i386"]
 
 # pkgs in main for the given dist
 class Dist(object):
   def __init__(self,name):
     self.name = name
     self.pkgs_in_comp = {}
+
+
+def get_replace(cache, pkgname):
+  replaces = set()
+  if not cache.has_key(pkgname):
+    #print "can not find '%s'" % pkgname
+    return replaces
+  pkg = cache[pkgname]
+  ver = cache._depcache.GetCandidateVer(pkg._pkg)
+  depends = ver.DependsList
+  for t in ["Replaces"]:
+    if not depends.has_key(t):
+      continue
+    for depVerList in depends[t]:
+      base_deps = []
+      for depOr in depVerList:
+        replaces.add(depOr.TargetPkg.Name)
+  return replaces
+
 
 if __name__ == "__main__":
 
@@ -55,7 +76,7 @@ if __name__ == "__main__":
       dist.pkgs_in_comp[comp] = set()
 
       # and the archs
-      for arch in ["i386","amd64", "powerpc"]:
+      for arch in ARCHES:
         apt_pkg.Config.Set("APT::Architecture",arch)
         cache = apt.Cache(apt.progress.OpTextProgress())
         prog = apt.progress.TextFetchProgress() 
@@ -77,6 +98,27 @@ if __name__ == "__main__":
   # this stuff was demoted and is no in universe
   demoted = filter(in_universe, no_longer_main)
   demoted.sort()
+
+  # remove items that are now in universe, but are replaced by something
+  # in main (pidgin, gaim) etc
+  print "Looking for replaces"
+  line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (new.name, "main")
+  file("apt/sources.list","w").write(line)
+  dist.pkgs_in_comp[comp] = set()
+  for arch in ARCHES:
+    apt_pkg.Config.Set("APT::Architecture",arch)
+    cache = apt.Cache(apt.progress.OpTextProgress())
+    prog = apt.progress.TextFetchProgress() 
+    cache.update(prog)
+    cache.open(apt.progress.OpTextProgress())
+    # go over the packages in "main" and check if they replaces something
+    # that we think is a demotion
+    for pkgname in new.pkgs_in_comp["main"]:
+      replaces = get_replace(cache, pkgname)
+      for r in replaces:
+        if r in demoted:
+          print "found '%s' that is demoted but replaced by '%s'" % (r, pkgname)
+          demoted.remove(r)
 
   outfile = "demoted.cfg"
   print "writing the demotion info to '%s'" % outfile

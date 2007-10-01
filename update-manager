@@ -77,13 +77,15 @@ if __name__ == "__main__":
     from DistUpgrade.DistUpgradeView import STEP_PREPARE, STEP_MODIFY_SOURCES, STEP_FETCH, STEP_INSTALL, STEP_CLEANUP, STEP_REBOOT
     from DistUpgrade.DistUpgradeViewGtk import DistUpgradeViewGtk
     from DistUpgrade.DistUpgradeControler import DistUpgradeControler
-    # FIXME: we *really* want to different view here
+    # FIXME: Having a "partial upgrade" view here would make it possible
+    #        to get rid of the ugly hideStep() stuff
     view = DistUpgradeViewGtk(data_dir)
     view.label_title.set_markup("<b><big>%s</big></b>" % _("Running partial upgrade"))
     view.setStep(STEP_PREPARE)
     view.hideStep(STEP_MODIFY_SOURCES)
     view.hideStep(STEP_REBOOT)
     controler = DistUpgradeControler(view, datadir=data_dir)
+    controler.partialUpgrade = True
     controler.prepare()
     controler.doPreUpgrade()
     if controler.askDistUpgrade():

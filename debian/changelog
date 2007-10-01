@@ -3,6 +3,9 @@ update-manager (1:0.80) gutsy; urgency=low
   * DistUpgrade/DistUpgradeControler.py:
     - do not log apts debug output to the user in server
       upgrade mode
+    - when running in partial upgrade mode, do not run apport,
+      this is handled by the libapt apport integration now, 
+      (LP:#139394)
   * DistUpgrade/DistUpgradeCache.py,DistUpgradeControler.py:  
     - detect and workaround upgrade issues with envy
   * update-manager:

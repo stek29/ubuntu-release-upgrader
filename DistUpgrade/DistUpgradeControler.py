@@ -112,7 +112,6 @@ class DistUpgradeControler(object):
             localedir = os.path.join(datadir,"mo")
             gladedir = datadir
         self.datadir = datadir
-
         self.options = options
 
         # init gettext
@@ -147,6 +146,9 @@ class DistUpgradeControler(object):
         self.fromDist = self.config.get("Sources","From")
         self.toDist = self.config.get("Sources","To")
         self.origin = self.config.get("Sources","ValidOrigin")
+
+        # we run in full upgrade mode by default
+        self.partialUpgrade = False
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
@@ -815,11 +817,12 @@ class DistUpgradeControler(object):
                 msg = _("The upgrade aborts now. Your system "
                         "could be in an unusable state. A recovery "
                         "will run now (dpkg --configure -a).")
-                if not run_apport():
-                    msg += _("\n\nPlease report this bug against the 'update-manager' "
-                             "package and include the files in /var/log/dist-upgrade/ "
-                             "in the bugreport.\n"
-                             "%s" % e)
+                if not self.partialUpgrade:
+                    if not run_apport():
+                        msg += _("\n\nPlease report this bug against the 'update-manager' "
+                                 "package and include the files in /var/log/dist-upgrade/ "
+                                 "in the bugreport.\n"
+                                 "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])

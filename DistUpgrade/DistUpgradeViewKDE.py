@@ -599,9 +599,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
                                     pkgs_upgrade) % pkgs_upgrade
             msg +=" "
         if downloadSize > 0:
-            print "type: " + str(type(apt_pkg.SizeToStr(downloadSize))) + apt_pkg.SizeToStr(downloadSize)
-            print "type: "+ str(type(_("<p>You have to download a total of %s. "))) + _("<p>You have to download a total of %s. ") 
-            print "type: " + str(type(msg))
+            #print "type: " + str(type(apt_pkg.SizeToStr(downloadSize))) + apt_pkg.SizeToStr(downloadSize)
+            #print "type: "+ str(type(_("<p>You have to download a total of %s. "))) + _("<p>You have to download a total of %s. ") 
+            #print "type: " + str(type(msg))
             msg = unicode(msg, 'UTF-8')
             #string = _("<p>You have to download a total of %s. ")
             #msg += string % apt_pkg.SizeToStr(downloadSize)

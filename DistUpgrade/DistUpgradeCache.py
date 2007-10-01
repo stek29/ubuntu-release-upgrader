@@ -639,6 +639,7 @@ class MyCache(apt.Cache):
                 # official archive
                 foreign=True
                 for origin in pkg.candidateOrigin:
+                    # FIXME: use some better metric here
                     if fromDist in origin.archive and \
                            origin.origin == allowed_origin:
                         foreign = False

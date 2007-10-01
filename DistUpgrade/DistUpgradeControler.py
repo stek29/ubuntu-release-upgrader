@@ -173,8 +173,8 @@ class DistUpgradeControler(object):
         self.logfd = fd
 
     def openCache(self):
-        #if not self.cache is None:
-        #    self.cache.releaseLock()
+        if self.cache is not None:
+            self.cache.releaseLock()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -1358,6 +1358,7 @@ if __name__ == "__main__":
     from DistUpgradeCache import MyCache
     v = DistUpgradeView()
     dc = DistUpgradeControler(v)
+    #dc.openCache()
     #dc.openCache()
     #dc._checkFreeSpace()
     #dc._rewriteFstab()

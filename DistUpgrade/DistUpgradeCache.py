@@ -34,11 +34,12 @@ class MyCache(apt.Cache):
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
         # acquire lock
-        #if lock:
-        #    try:
-        #        apt_pkg.PkgSystemLock()
-        #    except SystemError, e:
-        #        raise CacheExceptionLockingFailed, e
+        if lock:
+            try:
+                apt_pkg.PkgSystemLock()
+                self.lock = True
+            except SystemError, e:
+                raise CacheExceptionLockingFailed, e
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
@@ -61,8 +62,20 @@ class MyCache(apt.Cache):
         return self._depcache.BrokenCount > 0
 
     # methods
+    def commit(self, fprogress, iprogress):
+        logging.info("cache.commit()")
+        if self.lock:
+            self.releaseLock()
+        apt.Cache.commit(self, fprogress, iprogress)
+
     def releaseLock(self):
-        apt_pkg.PkgSystemUnLock()
+        if self.lock:
+            try:
+                apt_pkg.PkgSystemUnLock()
+                self.lock = False
+            except SystemError, e:
+                logging.debug("failed to SystemUnLock() (%s) " % e)
+
     def downloadable(self, pkg, useCandidate=True):
         " check if the given pkg can be downloaded "
         if useCandidate:

@@ -40,7 +40,7 @@ def inhibit_sleep():
     try:
       return _inhibit_sleep_new_interface()
     except Exception, e:
-      print "could not send the dbus Inhibit signal: %s" % e
+      #print "could not send the dbus Inhibit signal: %s" % e
       return (False, False)
 
 def allow_sleep(dev, cookie):

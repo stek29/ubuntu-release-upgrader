@@ -80,7 +80,7 @@ def humanize_size(bytes):
     """
     if bytes == 0:
         # TRANSLATORS: download size is 0
-        return _("None")
+        return _("0 KB")
     elif bytes < 1024:
         # TRANSLATORS: download size of very small updates
         return _("1 KB")

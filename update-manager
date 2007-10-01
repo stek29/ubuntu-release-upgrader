@@ -30,6 +30,7 @@ import gtk.glade
 import sys
 
 from UpdateManager.UpdateManager import UpdateManager
+from DistUpgrade.DistUpgradeVersion import VERSION
 import gettext
 from gettext import gettext as _
 
@@ -46,6 +47,9 @@ if __name__ == "__main__":
 
   # Begin parsing of options
   parser = OptionParser()
+  parser.add_option ("-V", "--version", action="store_true",
+                     dest="show_version", default=False,
+                     help=_("Show version and exit"))
   parser.add_option ("-c", "--check-dist-upgrades", action="store_true",
                      dest="check_dist_upgrades", default=False,
                      help=_("Check if a new distribution release is available"))
@@ -64,6 +68,10 @@ if __name__ == "__main__":
 
   data_dir="/usr/share/update-manager/"
   #data_dir="/tmp/xxx/share/update-manager/"
+
+  if options.show_version:
+    print "%s: version %s" % (os.path.basename(sys.argv[0]), VERSION)
+    sys.exit(0)
 
   if options.dist_upgrade == True:
     from DistUpgrade.DistUpgradeView import STEP_PREPARE, STEP_MODIFY_SOURCES, STEP_FETCH, STEP_INSTALL, STEP_CLEANUP, STEP_REBOOT

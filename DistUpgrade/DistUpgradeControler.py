@@ -401,19 +401,7 @@ class DistUpgradeControler(object):
                 entry.dist == cdist):
                 entry.dist = self.toDist
                 entry.comps = ["partner"]
-                entry.disabled = True
                 logging.debug("transitioned commerical to '%s' " % entry)
-                # FIXME: enable this below if we go with pockets for
-                #        the commercial repository
-                # now add the various pockets
-                #for (enabled, dist) in [(True, "%s-security"),
-                #                        (True, "%s-updates"),
-                #                        (False,"%s-proposed")
-                #                       ]:
-                #    e = copy.copy(entry)
-                #    e.dist = dist % self.toDist
-                #    e.disabled = not enabled
-                #    self.sources.list.insert(self.sources.list.index(entry)+1, e)
                 continue
 
             logging.debug("examining: '%s'" % entry)

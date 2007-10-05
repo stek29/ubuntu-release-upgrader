@@ -34,6 +34,7 @@ import shutil
 import glob
 import time
 import copy
+from stat import *
 from string import Template
 
 import DistUpgradeView
@@ -1215,8 +1216,8 @@ class DistUpgradeControler(object):
             args.append("--with-network")
         else:
             args.append("--without-network")
-        # work around kde being clever
-        if not os.access(sys.argv[0], os.X_OK):
+        # work around kde being clever and removing the x bit
+        if not ((S_IMODE(os.stat(sys.argv[0])[ST_MODE]) & S_IXUSR) == S_IXUSR):
             os.chmod(sys.argv[0], 0755)
         os.execve(sys.argv[0],args, os.environ)
 

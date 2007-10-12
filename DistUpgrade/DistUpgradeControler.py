@@ -927,7 +927,7 @@ class DistUpgradeControler(object):
             if pkgname not in self.foreign_pkgs:
                 self._view.processEvents()
                 if not self.cache._tryMarkObsoleteForRemoval(pkgname, remove_candidates, self.foreign_pkgs):
-                    logging.debug("'%s' scheduled for remove but not in remove_candiates, skipping", pkgname)
+                    logging.debug("'%s' scheduled for remove safe to remove, skipping", pkgname)
         logging.debug("Finish checking for obsolete pkgs")
 
         # get changes
@@ -1037,7 +1037,10 @@ class DistUpgradeControler(object):
             if "evms" in device:
                 logging.debug("found evms device in line '%s', skipping " % line)
                 return False
-        self.forced_obsoletes.extend(["evms","libevms-2.5"])
+        self.forced_obsoletes.extend(["evms","libevms-2.5","libevms-dev",
+                                      "evms-ncurses", "evms-ha",
+                                      "evms-gui", "evms-cli",
+                                      "linux-patch-evms"])
         return True
 
     def gutsyQuirks(self):

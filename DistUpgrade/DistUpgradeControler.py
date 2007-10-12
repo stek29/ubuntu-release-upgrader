@@ -655,8 +655,8 @@ class DistUpgradeControler(object):
                     logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
                     space_in_boot += KERNEL_INITRD_SIZE
                 elif (pkg.markedUpgrade or pkg.isInstalled):
-                    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, 2*KERNEL_INITRD_SIZE))
-                    space_in_boot += 2*KERNEL_INITRD_SIZE # creates .bak
+                    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
+                    space_in_boot += KERNEL_INITRD_SIZE # creates .bak
 
         # we check for various sizes:
         # archivedir is were we download the debs
@@ -1039,6 +1039,7 @@ class DistUpgradeControler(object):
                 return False
         self.forced_obsoletes.extend(["evms","libevms-2.5","libevms-dev",
                                       "evms-ncurses", "evms-ha",
+                                      "evms-bootdebug",
                                       "evms-gui", "evms-cli",
                                       "linux-patch-evms"])
         return True

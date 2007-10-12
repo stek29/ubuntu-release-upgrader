@@ -398,7 +398,7 @@ class DistUpgradeControler(object):
             # be rewritten (for pre-gutsy upgrades)
             cdist = "%s-commercial" % self.fromDist
             if (not entry.disabled and
-                entry.uri.startswith("http://archive.canonical.com/ubuntu") and
+                entry.uri.startswith("http://archive.canonical.com") and
                 entry.dist == cdist):
                 entry.dist = self.toDist
                 entry.comps = ["partner"]

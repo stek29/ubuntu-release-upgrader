@@ -42,7 +42,7 @@ import pty
 
 from DistUpgradeApport import *
 
-from DistUpgradeControler import DistUpgradeControler
+from DistUpgradeController import DistUpgradeController
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
 from window_main import window_main
 from dialog_error import dialog_error

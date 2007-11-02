@@ -1,4 +1,4 @@
-# DistUpgradeControler.py 
+# DistUpgradeController.py 
 #  
 #  Copyright (c) 2004-2006 Canonical
 #  
@@ -102,7 +102,7 @@ class AptCdrom(object):
         """ helper to use this as 'if cdrom:' """
         return self.cdrompath is not None
 
-class DistUpgradeControler(object):
+class DistUpgradeController(object):
     """ this is the controler that does most of the work """
     
     def __init__(self, distUpgradeView, options=None, datadir=None):
@@ -1350,7 +1350,7 @@ if __name__ == "__main__":
     from DistUpgradeView import DistUpgradeView
     from DistUpgradeCache import MyCache
     v = DistUpgradeView()
-    dc = DistUpgradeControler(v)
+    dc = DistUpgradeController(v)
     #dc.openCache()
     #dc.openCache()
     #dc._checkFreeSpace()

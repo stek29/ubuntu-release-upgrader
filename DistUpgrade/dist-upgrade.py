@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from DistUpgradeControler import DistUpgradeControler
+from DistUpgradeController import DistUpgradeController
 from DistUpgradeConfigParser import DistUpgradeConfig
 import logging
 import os
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         print "No view can be imported, aboring"
         sys.exit(1)
     view = view_class(logdir=logdir)
-    app = DistUpgradeControler(view, options)
+    app = DistUpgradeController(view, options)
     app.run()
 
     # testcode to see if the bullets look nice in the dialog

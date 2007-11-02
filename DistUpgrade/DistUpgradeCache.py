@@ -1,4 +1,3 @@
-
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
@@ -449,8 +448,10 @@ class MyCache(apt.Cache):
                     # version is lower than installed one
                     if apt_pkg.VersionCompare(ver.VerStr, pkg.installedVersion) < 0:
                         for (verFileIter,index) in ver.FileList:
-                            if not origin.trusted:
+                            indexfile = pkg._list.FindIndex(verFileIter)
+                            if indexfile and not indexfile.IsTrusted:
                                 untrusted.append(pkg.name)
+                                break
                 continue
             origins = pkg.candidateOrigin
             trusted = False

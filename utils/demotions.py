@@ -64,8 +64,8 @@ if __name__ == "__main__":
   except OSError:
     pass
 
-  old = Dist("feisty")
-  new = Dist("gutsy")
+  old = Dist("gutsy")
+  new = Dist("hardy")
   
   # go over the dists to find main pkgs
   for dist in [old, new]:

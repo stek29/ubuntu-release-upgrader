@@ -572,7 +572,7 @@ class DistUpgradeController(object):
             # no exception, so all was fine, we are done
             return True
 
-        logging.error("doUpdate() failed complettely")
+        logging.error("doUpdate() failed completely")
         if showErrors:
             self._view.error(_("Error during update"),
                              _("A problem occured during the update. "
@@ -956,7 +956,7 @@ class DistUpgradeController(object):
             try:
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
-                logging.error("gor error from PostInstallScript %s (%s)" % (script, e))
+                logging.error("got error from PostInstallScript %s (%s)" % (script, e))
 
     def _rewriteFstab(self):
         " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
@@ -991,7 +991,7 @@ class DistUpgradeController(object):
                 ):
                 logging.debug("replacing '%s' " % line)
                 line = line.replace(device,"/dev/cdrom")
-                logging.debug("replacied line is '%s' " % line)
+                logging.debug("replaced line is '%s' " % line)
                 replaced += 1
             lines.append(line)
         # we have converted a line (otherwise we would have exited already)

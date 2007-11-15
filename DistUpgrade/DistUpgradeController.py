@@ -575,7 +575,7 @@ class DistUpgradeController(object):
         logging.error("doUpdate() failed completely")
         if showErrors:
             self._view.error(_("Error during update"),
-                             _("A problem occured during the update. "
+                             _("A problem occurred during the update. "
                                "This is usually some sort of network "
                                "problem, please check your network "
                                "connection and retry."), "%s" % e)
@@ -946,7 +946,7 @@ class DistUpgradeController(object):
             except (SystemError, IOError), e:
                 logging.error("cache.commit() in doPostUpgrade() failed: %s" % e)
                 self._view.error(_("Error during commit"),
-                                 _("A problem occured during the clean-up. "
+                                 _("A problem occurred during the clean-up. "
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)

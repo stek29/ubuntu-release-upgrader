@@ -173,7 +173,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
-    def __init__(self):
+    def __init__(self, datadir=None, logdir=None):
         self.config = DistUpgradeConfig(".")
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"

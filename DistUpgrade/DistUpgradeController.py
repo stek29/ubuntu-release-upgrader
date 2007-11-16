@@ -160,7 +160,7 @@ class DistUpgradeController(object):
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
         # apt log
-        logdir = self.config.get("Files","LogDir")
+        logdir = self.config.getWithDefault("Files","LogDir","/var/log/dist-upgrade")
         fd = os.open(os.path.join(logdir,"apt.log"),
                      os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
         # log the complete output if we do not run in text-mode

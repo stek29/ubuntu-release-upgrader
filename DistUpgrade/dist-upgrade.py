@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     config = DistUpgradeConfig(".")
 
-    logdir = config.get("Files","LogDir")
+    logdir = config.getWithDefault("Files","LogDir","/var/log/dist-upgrade/")
     if not os.path.exists(logdir):
         os.mkdir(logdir)
     logging.basicConfig(level=logging.DEBUG,

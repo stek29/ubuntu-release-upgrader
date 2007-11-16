@@ -8,6 +8,7 @@ from DistUpgradeConfigParser import DistUpgradeConfig
 import ConfigParser
 import os
 import os.path
+import tempfile
 
 # refactor the code so that we have
 # UpgradeTest - the controler object
@@ -62,6 +63,22 @@ class UpgradeTestBackend(object):
         # run from cron)
         os.environ["PATH"] = "/usr/sbin:/usr/bin:/sbin:/bin"
 
+
+    def getSourcesListFile(self):
+        """
+        creates a temporary sources.list file and returns it to 
+        the caller
+        """
+        # write new sources.list
+        sourceslist = tempfile.NamedTemporaryFile()
+        comps = self.config.getlist("NonInteractive","Components")
+        pockets = self.config.getlist("NonInteractive","Pockets")
+        mirror = self.config.get("NonInteractive","Mirror")
+        sourceslist.write("deb %s %s %s\n" % (mirror, self.fromDist, " ".join(comps)))
+        for pocket in pockets:
+            sourceslist.write("deb %s %s-%s %s\n" % (mirror, self.fromDist,pocket, " ".join(comps)))
+        sourceslist.flush()
+        return sourceslist
     
     def bootstrap(self):
         " bootstaps a pristine install"

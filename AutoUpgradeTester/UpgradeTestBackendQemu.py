@@ -143,20 +143,18 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.start()
 
         # FIXME: make this part of the apt env
+        #        otherwise we get funny debconf promtps for 
+        #        e.g. the xserver
         #export DEBIAN_FRONTEND=noninteractive
         #export APT_LISTCHANGES_FRONTEND=none
-
-        proxy = self.config.getWithDefault("NonInteractive","Proxy","")
-        if proxy:
-            profile.write("export http_proxy=%s\n" % proxy)
-        profile.flush()
-        self._copyToImage(profile.name, "/etc/profile")
+        # 
 
         # generate static network config (NetworkManager likes
         # to reset the dhcp interface and that sucks when
         # going into the VM with ssh)
-        interfaces = self.config.getWithDefault("NonInteractive","WorkaroundNetworkManager","")
-        if interfaces:
+        nm = self.config.getWithDefault("NonInteractive","WorkaroundNetworkManager","")
+        if nm:
+            interfaces = tempfile.NamedTemporaryFile()
             interfaces.write("""
 auto lo
 iface lo inet loopback
@@ -172,6 +170,7 @@ iface eth0 inet static
         
 
         # generate apt.conf
+        proxy = self.config.getWithDefault("NonInteractive","Proxy","")
         if proxy:
             aptconf = tempfile.NamedTemporaryFile()
             aptconf.write('Acquire::http::proxy "%s";' % proxy)
@@ -194,14 +193,14 @@ iface eth0 inet static
         # FIXME: instead of this retrying (for network errors with 
         #        proxies) we should have a self._runAptInImage() 
         for i in range(3):
-            ret = self._runInImage(["apt-get","install", "-y",basepkg])
+            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg])
         assert(ret == 0)
 
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
         while(len(pkgs)) > 0:
             print "installing additonal: %s" % pkgs[:CMAX]
-            ret= self._runInImage(["apt-get","install","-y"]+pkgs[:CMAX])
+            ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","-y"]+pkgs[:CMAX])
             print "apt(2) returned: %s" % ret
             if ret != 0:
                 #self._cacheDebs(tmpdir)
@@ -220,7 +219,7 @@ iface eth0 inet static
                                       "UpgradeFromDistOnBootstrap", False):
             print "running apt-get upgrade in from dist (after bootstrap)"
             for i in range(3):
-                ret = self._runInImage(["apt-get","-y","dist-upgrade"])
+                ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
             assert(ret == 0)
             # stop/start (to ensure we have a new kernel)
             self.stop()

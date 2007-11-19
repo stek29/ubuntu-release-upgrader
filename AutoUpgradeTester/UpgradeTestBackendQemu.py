@@ -129,10 +129,18 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         return ret
 
     def bootstrap(self):
+        print "bootstrap()"
+
         # copy image into place, use baseimage as template
         # we expect to be able to ssh into the baseimage to
         # set it up
         self.image = os.path.join(self.profiledir, "test-image")
+        if (os.path.exists(self.image) and 
+            self.config.getWithDefault("NonInteractive","CacheBaseImage", False)):
+            print "Not bootstraping again, we have a cached BaseImage"
+            return True
+
+        print "Building new image '%s' based on '%s'" % (self.image, self.baseimage)
         shutil.copy(self.baseimage, self.image)
 
         # get common vars
@@ -228,6 +236,7 @@ iface eth0 inet static
         print "Cleaning image"
         ret = self._runInImage(["apt-get","clean"])
         assert(ret == 0)
+
         return True
 
     def start(self):
@@ -259,8 +268,17 @@ iface eth0 inet static
             print "waiting for qemu to shutdown"
             self.qemu_pid.wait()
             self.qemu_pid = None
+            print "qemu stopped"
 
     def upgrade(self):
+        print "upgrade()"
+        # check if we cache the bootstraped image
+        if self.config.getWithDefault("NonInteractive","CacheBaseImage", False):
+            # -snapshot creates a tmpfile with mkstemp() to store the 
+            #           delta in
+            print "Running with CacheBaseImage=true , adding -snapshot to qemu_options"
+            self.qemu_options.append("-snapshot")
+
         # clean from any leftover pyc files
         for f in glob.glob(self.basefilesdir+"/DistUpgrade/*.pyc"):
             os.unlink(f)
@@ -268,6 +286,7 @@ iface eth0 inet static
         # shouldn't be needed if we come from bootstrap()
         # but does not harm and will help in the future if
         # we use fully cached images
+        print "Starting for upgrade"
         self.start()
 
         print "copy upgrader into image"

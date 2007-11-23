@@ -8,6 +8,7 @@ import re
 import logging
 import string
 import time
+import threading
 from subprocess import Popen, PIPE
 
 from gettext import gettext as _
@@ -387,6 +388,11 @@ class MyCache(apt.Cache):
                 pkg.priority in need):
                 self.markInstall(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
 
+    def updateGUI(self, view, lock):
+        while lock.locked():
+            view.processEvents()
+            time.sleep(0.01)
+
     def distUpgrade(self, view, serverMode, logfd):
         def _restore_fds(stdout, stderr):
             os.dup2(stdout, 1)
@@ -399,10 +405,11 @@ class MyCache(apt.Cache):
             os.dup2(logfd, 1)
             os.dup2(logfd, 2)
 
-        # hrm, a python thread to keep the gui alive does not work 
-        # here :/
-        time.sleep(0.5)
-        self.view.processEvents()
+        # keep the GUI alive
+        lock = threading.Lock()
+        lock.acquire()
+        t = threading.Thread(target=self.updateGUI, args=(self.view, lock,))
+        t.start()
         try:
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
@@ -442,6 +449,10 @@ class MyCache(apt.Cache):
             logging.error("Dist-upgrade failed: '%s'", e)
             if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
+        finally:
+            # wait for the gui-update thread to exit
+            lock.release()
+            t.join()
         
         # check the trust of the packages that are going to change
         untrusted = []

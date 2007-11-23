@@ -1231,7 +1231,7 @@ class DistUpgradeController(object):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
         self._view.setStep(DistUpgradeView.STEP_PREPARE)
-        
+
         if not self.prepare():
             logging.error("self.prepared() failed")
             self._view.error(_("Preparing the upgrade failed"),
@@ -1344,6 +1344,7 @@ class DistUpgradeController(object):
             sys.exit(0)
         
     def run(self):
+        self._view.processEvents()
         self.fullUpgrade()
 
 

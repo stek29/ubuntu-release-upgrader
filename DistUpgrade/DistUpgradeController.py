@@ -707,10 +707,10 @@ class DistUpgradeController(object):
                                      "these packages will be suggested for "
                                      "removal at the end of the upgrade."),
                                    "\n".join(self.installed_demotions))
-            # FIXME: integrate this into main upgrade dialog!?!
-
+        # FIXME: integrate this into main upgrade dialog!?!
         if not self.cache.distUpgrade(self._view, self.serverMode, self.logfd):
             return False
+
         if self.serverMode:
             if not self.cache.installTasks(self.tasks):
                 return False
@@ -1309,7 +1309,7 @@ class DistUpgradeController(object):
 
         # calc the dist-upgrade and see if the removals are ok/expected
         # do the dist-upgrade
-        self._view.updateStatus(_("Asking for confirmation"))
+        self._view.updateStatus(_("Calculating the changes"))
         if not self.askDistUpgrade():
             self.abort()
 

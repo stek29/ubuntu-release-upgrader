@@ -7,6 +7,7 @@ import os.path
 import re
 import logging
 import string
+import time
 from subprocess import Popen, PIPE
 
 from gettext import gettext as _
@@ -397,6 +398,11 @@ class MyCache(apt.Cache):
             old_stderr = os.dup(2)
             os.dup2(logfd, 1)
             os.dup2(logfd, 2)
+
+        # hrm, a python thread to keep the gui alive does not work 
+        # here :/
+        time.sleep(0.5)
+        self.view.processEvents()
         try:
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
@@ -436,7 +442,7 @@ class MyCache(apt.Cache):
             logging.error("Dist-upgrade failed: '%s'", e)
             if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
-
+        
         # check the trust of the packages that are going to change
         untrusted = []
         for pkg in self.getChanges():

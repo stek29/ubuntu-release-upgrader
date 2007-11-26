@@ -573,10 +573,10 @@ class DistUpgradeController(object):
             # no exception, so all was fine, we are done
             return True
 
-        logging.error("doUpdate() failed complettely")
+        logging.error("doUpdate() failed completely")
         if showErrors:
             self._view.error(_("Error during update"),
-                             _("A problem occured during the update. "
+                             _("A problem occurred during the update. "
                                "This is usually some sort of network "
                                "problem, please check your network "
                                "connection and retry."), "%s" % e)
@@ -947,7 +947,7 @@ class DistUpgradeController(object):
             except (SystemError, IOError), e:
                 logging.error("cache.commit() in doPostUpgrade() failed: %s" % e)
                 self._view.error(_("Error during commit"),
-                                 _("A problem occured during the clean-up. "
+                                 _("A problem occurred during the clean-up. "
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
@@ -957,7 +957,7 @@ class DistUpgradeController(object):
             try:
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
-                logging.error("gor error from PostInstallScript %s (%s)" % (script, e))
+                logging.error("got error from PostInstallScript %s (%s)" % (script, e))
 
     def _rewriteFstab(self):
         " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
@@ -992,7 +992,7 @@ class DistUpgradeController(object):
                 ):
                 logging.debug("replacing '%s' " % line)
                 line = line.replace(device,"/dev/cdrom")
-                logging.debug("replacied line is '%s' " % line)
+                logging.debug("replaced line is '%s' " % line)
                 replaced += 1
             lines.append(line)
         # we have converted a line (otherwise we would have exited already)

@@ -439,6 +439,10 @@ class MyCache(apt.Cache):
                 if text_mode: _restore_fds(old_stdout, old_stderr)
                 raise SystemError, _("A essential package would have to be removed")
         except SystemError, e:
+            # this should go into a finally: line, see below for the 
+            # rational why it dosn't 
+            lock.release()
+            t.join()
             # FIXME: change the text to something more useful
             view.error(_("Could not calculate the upgrade"),
                        _("A unresolvable problem occurred while "
@@ -449,10 +453,12 @@ class MyCache(apt.Cache):
             logging.error("Dist-upgrade failed: '%s'", e)
             if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
-        finally:
-            # wait for the gui-update thread to exit
-            lock.release()
-            t.join()
+        # would be nice to be able to use finally: here, but we need
+        # to run on python2.4 too 
+        #finally:
+        # wait for the gui-update thread to exit
+        lock.release()
+        t.join()
         
         # check the trust of the packages that are going to change
         untrusted = []

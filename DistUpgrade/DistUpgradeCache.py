@@ -35,9 +35,11 @@ class MyCache(apt.Cache):
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
         # acquire lock
+        self._listsLock = -1
         if lock:
             try:
                 apt_pkg.PkgSystemLock()
+                self.lockListsDir()
                 self.lock = True
             except SystemError, e:
                 raise CacheExceptionLockingFailed, e
@@ -63,13 +65,32 @@ class MyCache(apt.Cache):
         return self._depcache.BrokenCount > 0
 
     # methods
+    def lockListsDir(self):
+        name = apt_pkg.Config.FindDir("Dir::State::Lists") + "lock"
+        self._listsLock = apt_pkg.GetLock(name)
+        if self._listsLock < 0:
+            e = "Can not lock '%s' " % name
+            raise CacheExceptionLockingFailed, e
+    def unlockListsDir(self):
+        if self._listsLock > 0:
+            os.close(self._listsLock)
+            self._listsLock = -1
+    def update(self, fprogress=None):
+        """
+        our own update implementation is required because we keep the lists
+        dir lock
+        """
+        self.unlockListsDir()
+        apt.Cache.update(self, fprogress)
+        self.lockListsDir()
+
     def commit(self, fprogress, iprogress):
         logging.info("cache.commit()")
         if self.lock:
             self.releaseLock()
         apt.Cache.commit(self, fprogress, iprogress)
 
-    def releaseLock(self):
+    def releaseLock(self, pkgSystemOnly=True):
         if self.lock:
             try:
                 apt_pkg.PkgSystemUnLock()

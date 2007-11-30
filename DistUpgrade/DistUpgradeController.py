@@ -159,6 +159,10 @@ class DistUpgradeController(object):
         os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
 
+        # set max retries
+        maxRetries = self.config.getint("Network","MaxRetries")
+        apt_pkg.Config.Set("Acquire::Retries", str(maxRetries))
+
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
@@ -181,6 +185,7 @@ class DistUpgradeController(object):
     def openCache(self):
         if self.cache is not None:
             self.cache.releaseLock()
+            self.cache.unlockListsDir()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -573,8 +578,7 @@ class DistUpgradeController(object):
             return True
         self.cache._list.ReadMainList()
         progress = self._view.getFetchProgress()
-        # FIXME: retry here too? just like the DoDistUpgrade?
-        #        also remove all files from the lists partial dir!
+        # FIXME: also remove all files from the lists partial dir!
         currentRetry = 0
         maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
@@ -782,6 +786,9 @@ class DistUpgradeController(object):
         #  OR 
         #  the fact that we get a pm and fetcher here confuses something
         #  in libapt?
+        # POSSIBLE workaround: keep the list-dir locked so that 
+        #          no apt-get update can run outside from the release
+        #          upgrader 
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.GetPackageManager(self.cache._depcache)

@@ -1,7 +1,17 @@
 Images created with:
 
 $ bzr get http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
-$ ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 20G --no-opt
 
-make sure you copy the ssh-key into the profile dir so that the upgrade
-tester can access it
+[feisty]
+$ ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt
+
+[dapper]
+$ ./ubuntu-jeos-builder --vm kvm --kernel-flavor 386 --suite dapper --ssh-key `pwd`/foo.pub  --components main,restricted  --rootsize 80G --no-opt
+
+(notice the different kernel names for dapper,feisty). The ssh-key is the 
+key that is used by the ugprade tester to log into the virtual machine.
+
+Make sure you copy the "ssh-key" file into the profile dir so that the 
+upgrade tester can access it
+
+

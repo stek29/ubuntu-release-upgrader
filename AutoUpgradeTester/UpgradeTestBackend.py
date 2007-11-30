@@ -21,7 +21,7 @@ class UpgradeTestImage(object):
         pass
     def copyFromImage(self, fromFile, toFile):
         pass
-    def bootstrap(self):
+    def bootstrap(self, force=False):
         pass
     def start(self):
         pass

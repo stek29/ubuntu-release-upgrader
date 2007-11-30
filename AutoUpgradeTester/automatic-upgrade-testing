@@ -88,6 +88,10 @@ if __name__ == "__main__":
     parser.add_option("-a", "--auto", dest="auto", default=False,
                       action="store_true",
                       help="run all tests in profile/ dir")
+    parser.add_option("--bootstrap-only", "--bootstrap-only",dest="bootstrap_only", 
+                      default=False,
+                      action="store_true",
+                      help="only bootstrap the image")
     parser.add_option("-l", "--login", dest="login", default=False,
                       action="store_true",
                       help="log into the a profile")
@@ -114,6 +118,9 @@ if __name__ == "__main__":
         elif options.login:
             backend = createBackend(options.backend, options.profile, basedir)
             login(backend)
+	elif options.bootstrap_only:
+            backend = createBackend(options.backend, options.profile, basedir)	
+	    backend.bootstrap(force=True)
         else:
             res &= testUpgrade(options.backend, options.profile, basedir)
     except Exception, e:

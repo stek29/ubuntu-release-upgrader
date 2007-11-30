@@ -21,29 +21,20 @@ import copy
 # 
 
 
-# - use the script from:
-#   https://code.edge.launchpad.net/~shawarma/ubuntu-jeos/trunk
-#   to generate the base image (bootable, lots of other love too)
-#   (once its packaged?)
+# TODO: 
+# - add support to boot certain images with certain parameters
+#   (dapper-386 needs qemu/kvm with "-no-acpi" to boot reliable)
 # - add option to use pre-done base images
 #   the bootstrap() step is then a matter of installing the right
 #   packages into the image (via _runInImage())
-# - copy that image before using it or use -snapshot
 # 
 # - refactor and move common code to UpgradeTestBackend
 # - convert ChrootNonInteractive 
 # - benchmark qemu/qemu+kqemu/kvm/chroot
 # - write tests (unittest, doctest?)
-# - instead of copy the file in upgrade() use -snapshot
-# - when 0.9.0 is available use "-no-reboot" and make
-#   the scripts reboot, this this will exit qemu
 # - offer "test-upgrade" feature on real system, run it
 #   as "qemu -hda /dev/hda -snapshot foo -append init=/upgrade-test"
 #   (this *should* write the stuff to the snapshot file
-# - add a "kvm" mode to the backend (qemu/kvm should have identical
-#   command line options
-# - setup a ssh daemon in target and use that to run the commands
-# - find a better way to know when a install is finished
 # - add "runInTarget()" that will write a marker file so that we can
 #   re-run a command if it fails the first time (or fails because
 #   a fsck was done and reboot needed in the VM etc)
@@ -128,16 +119,19 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                                ]+command)
         return ret
 
-    def bootstrap(self):
+    def bootstrap(self, force=False):
         print "bootstrap()"
 
         # copy image into place, use baseimage as template
         # we expect to be able to ssh into the baseimage to
         # set it up
         self.image = os.path.join(self.profiledir, "test-image")
-        if (os.path.exists(self.image) and 
-            self.config.getWithDefault("NonInteractive","CacheBaseImage", False)):
+        if (not force and
+            os.path.exists("%s.%s" % (self.image,self.fromDist)) and 
+            self.config.has_option("NonInteractive","CacheBaseImage") and
+            self.config.getboolean("NonInteractive","CacheBaseImage")):
             print "Not bootstraping again, we have a cached BaseImage"
+            shutil.copy("%s.%s" % (self.image,self.fromDist), self.image)
             return True
 
         print "Building new image '%s' based on '%s'" % (self.image, self.baseimage)
@@ -237,6 +231,11 @@ iface eth0 inet static
         ret = self._runInImage(["apt-get","clean"])
         assert(ret == 0)
 
+        # copy cache into place (if needed)
+        if (self.config.has_option("NonInteractive","CacheBaseImage") and
+            self.config.getboolean("NonInteractive","CacheBaseImage")):
+            shutil.copy(self.image, "%s.%s" % (self.image,self.fromDist))
+        
         return True
 
     def start(self):
@@ -272,12 +271,6 @@ iface eth0 inet static
 
     def upgrade(self):
         print "upgrade()"
-        # check if we cache the bootstraped image
-        if self.config.getWithDefault("NonInteractive","CacheBaseImage", False):
-            # -snapshot creates a tmpfile with mkstemp() to store the 
-            #           delta in
-            print "Running with CacheBaseImage=true , adding -snapshot to qemu_options"
-            self.qemu_options.append("-snapshot")
 
         # clean from any leftover pyc files
         for f in glob.glob(self.basefilesdir+"/DistUpgrade/*.pyc"):
@@ -301,6 +294,11 @@ iface eth0 inet static
         if os.path.exists(self.profile):
             print "Copying '%s' to image " % self.profile
             self._copyToImage(self.profile, "/upgrade-tester")
+        prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
+        if prereq is not None:
+            prereq = os.path.join(os.path.dirname(self.profile),prereq)
+            print "Copying '%s' to image" % prereq
+            self._copyToImage(prereq, "/upgrade-tester")
 
         # start the upgrader
         print "running the upgrader now"

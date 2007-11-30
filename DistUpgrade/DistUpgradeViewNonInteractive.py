@@ -49,8 +49,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         self.config = DistUpgradeConfig(".")
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
-        # default to 1200 sec timeout
-        self.timeout = 1200
+        # default to 2400 sec timeout
+        self.timeout = 2400
         try:
             self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
         except Exception, e:

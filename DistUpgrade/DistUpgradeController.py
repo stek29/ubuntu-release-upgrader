@@ -120,6 +120,7 @@ class DistUpgradeController(object):
         gettext.textdomain("update-manager")
 
         # setup the view
+        logging.debug("Using '%s' view" % distUpgradeView.__class__.__name__)
         self._view = distUpgradeView
         self._view.updateStatus(_("Reading cache"))
         self.cache = None
@@ -285,6 +286,16 @@ class DistUpgradeController(object):
                              _("A upgrade from '%s' to '%s' is not "
                                "supoprted with this tool." % (release, self.toDist)))
             sys.exit(1)
+        # setup backports (if we have them)
+        if self.options and self.options.havePrerequists:
+            backportsdir = os.getcwd()+"/backports"
+            logging.info("using backports in '%s' " % backportsdir)
+            logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
+            if os.path.exists(backportsdir+"/usr/bin/dpkg"):
+                apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
+            if os.path.exists(backportsdir+"/usr/lib/apt/methods"):
+                apt_pkg.Config.Set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
+
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
         # check python version
@@ -749,12 +760,6 @@ class DistUpgradeController(object):
                 logging.waring("failed to modify '%s' (%s)" % (name, e))
 
     def doDistUpgradeFetching(self):
-        if self.options and self.options.havePrerequists:
-            backportsdir = os.getcwd()+"/backports"
-            logging.info("using backports in '%s' " % backportsdir)
-            logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
-            if os.path.exists(backportsdir+"/usr/bin/dpkg"):
-                apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
         self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
         self._rewriteAptPeriodic(10, True)
@@ -1173,7 +1178,9 @@ class DistUpgradeController(object):
                 logging.error("No ver.FileList for '%s'" % pkgname)
                 return False
             logging.debug("marking '%s' for install" % pkgname)
-            pkg.markInstall(autoInst=False, autoFix=False)
+            # mvo: autoInst is not availabe on dapper
+            #pkg.markInstall(autoInst=False, autoFix=False)
+            pkg.markInstall(autoFix=False)
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())

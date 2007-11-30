@@ -148,6 +148,7 @@ class DistUpgradeController(object):
         self.fromDist = self.config.get("Sources","From")
         self.toDist = self.config.get("Sources","To")
         self.origin = self.config.get("Sources","ValidOrigin")
+        self.arch = apt_pkg.Config.Find("APT::Architecture")
 
         # we run in full upgrade mode by default
         self.partialUpgrade = False
@@ -1138,12 +1139,17 @@ class DistUpgradeController(object):
             return self.setupRequiredBackports(backportsdir)
 
         # add the backports sources.list fragment and do mirror substitution
+        # we support PreRequists/SourcesList-$arch sections here too
         mirror = country_mirror()
-        sourceslistd = self.config.get("PreRequists","SourcesList")
+        conf_option = "SourcesList"
+        if self.config.has_option("PreRequists",conf_option+"-%s" % self.arch):
+            conf_option = conf_option + "-%s" % self.arch
+        sourceslistd = self.config.get("PreRequists",conf_option)
         if not os.path.exists(sourceslistd):
             logging.error("sourceslist not found '%s'" % sourceslistd)
             return False
         outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), sourceslistd), "w")
+        logging.debug("using prerequists sources.list: '%s'" % outfile)
         for line in open(sourceslistd):
             template = Template(line)
             outfile.write(template.safe_substitute(countrymirror=mirror))

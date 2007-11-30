@@ -772,6 +772,16 @@ class DistUpgradeController(object):
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
         maxRetries = self.config.getint("Network","MaxRetries")
+        # FIXME: we get errors like 
+        #   "I wasn't able to locate file for the %s package" 
+        #  here sometimes. its unclear why and not reproducable, the 
+        #  current theory is that for some reason the file is not
+        #  considered trusted at the moment 
+        #  pkgAcquireArchive::QueueNext() runs debReleaseIndex::IsTrused()
+        #  (the later just checks for the existance of the .gpg file)
+        #  OR 
+        #  the fact that we get a pm and fetcher here confuses something
+        #  in libapt?
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.GetPackageManager(self.cache._depcache)

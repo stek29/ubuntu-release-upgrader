@@ -57,6 +57,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         "-vnc","localhost:0",
         "-redir","tcp:54321::22", # ssh login possible (localhost 54321) available
         "-no-reboot",    # exit on reboot
+        "-no-acpi",      # the dapper kernel does not like qemus acpi
 #        "-no-kvm",      # crashes sometimes with kvm HW
         ]
 

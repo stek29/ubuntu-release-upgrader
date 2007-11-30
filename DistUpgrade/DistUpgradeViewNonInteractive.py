@@ -99,6 +99,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         
     def conffile(self, current, new):
         logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)
+        # looks like we have a race here *sometimes*
+        time.sleep(5)
 	try:
           # don't overwrite
 	  os.write(self.master_fd,"n\n")

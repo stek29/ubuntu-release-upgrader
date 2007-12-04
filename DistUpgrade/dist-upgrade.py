@@ -54,6 +54,7 @@ if __name__ == "__main__":
         logging.error("No view can be imported, aboring")
         print "No view can be imported, aboring"
         sys.exit(1)
+
     view = view_class(logdir=logdir)
     app = DistUpgradeController(view, options)
     app.run()

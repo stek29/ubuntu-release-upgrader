@@ -19,6 +19,18 @@ update-manager (1:0.85.5) UNRELEASED; urgency=low
   * data/release-upgrades:
     - set the default prompting for hardy to "Prompt only for
       a new lts version"
+  * DistUpgrade/DistUpgrade.cfg.dapper,
+    DistUpgrade/prerequists-sources.list.dapper:
+    - add support for dapper->hardy upgrades
+  * DistUpgrade/DistUpgradeConfigParser.py:
+    - add overwrite support for the configuration to support
+      upgrades to multiple target releases with the same
+      upgrader
+  * data/update-manager.schemas.in:
+    - /apps/update-manager/check_dist_upgrades is deprecated
+  * utils/demotions.py:
+    - make it more flexible to support generating both 
+      dapper and gutsy demotions
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Dec 2007 15:56:22 +0100
 

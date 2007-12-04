@@ -27,6 +27,7 @@ import apt_pkg
 import time
 import sys
 import rfc822
+from ConfigParser import ConfigParser
 from subprocess import Popen,PIPE
 
 class Dist(object):
@@ -40,17 +41,36 @@ class Dist(object):
         self.upgradeToolSig = None
 
 class MetaReleaseCore(object):
+    """
+    A MetaReleaseCore object astracts the list of released 
+    distributions. 
+    """
 
     # some constants
+    CONF = "/etc/update-manager/release-upgrades"
     METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
-    METARELEASE_URI_UNSTABLE = "http://changelogs.ubuntu.com/meta-release-development"
-    METARELEASE_URI_PROPOSED = "http://changelogs.ubuntu.com/meta-release-proposed"
+    METARELEASE_URI_LTS = "http://changelogs.ubuntu.com/meta-release-lts"
+    METARELEASE_URI_UNSTABLE_POSTFIX = "-development"
+    METARELEASE_URI_PROPOSED_POSTFIX = "-proposed"
+
     def __init__(self, useDevelopmentRelease=False, useProposed=False):
-        # check what uri to use
+        # check the config file first to figure if we want lts upgrades only
+        parser = ConfigParser()
+        if os.path.exists(self.CONF):
+            parser.read(self.CONF)
+            if parser.has_option("DEFAULT","Prompt"):
+                type = parser.get("DEFAULT","Prompt").lower()
+                if (type == "never" or type == "no"):
+                    # nothing to do for this object
+                    return
+                elif type == "lts":
+                    self.METARELEASE_URI = self.METARELEASE_URI_LTS
+
+        # devel and proposed "just" change the postfix
         if useDevelopmentRelease:
-            self.METARELEASE_URI = self.METARELEASE_URI_UNSTABLE
+            self.METARELEASE_URI += self.METARELEASE_URI_UNSTABLE_POSTFIX
         elif useProposed:
-            self.METARELEASE_URI = self.METARELEASE_URI_PROPOSED
+            self.METARELEASE_URI += self.METARELEASE_URI_PROPOSED_POSTFIX
 
         self._buildMetaReleaseFile()
         self.metarelease_information = None
@@ -197,3 +217,8 @@ class MetaReleaseCore(object):
         if self.metarelease_information != None:
             self.parse()
         self.downloading = False
+
+
+if __name__ == "__main__":
+    meta = MetaReleaseCore(False, False)
+    

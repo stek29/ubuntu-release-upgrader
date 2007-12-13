@@ -49,8 +49,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         self.config = DistUpgradeConfig(".")
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
-        # default to 1200 sec timeout
-        self.timeout = 1200
+        # default to 2400 sec timeout
+        self.timeout = 2400
         try:
             self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
         except Exception, e:
@@ -99,6 +99,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         
     def conffile(self, current, new):
         logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)
+        # looks like we have a race here *sometimes*
+        time.sleep(5)
 	try:
           # don't overwrite
 	  os.write(self.master_fd,"n\n")
@@ -173,7 +175,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
-    def __init__(self):
+    def __init__(self, datadir=None, logdir=None):
         self.config = DistUpgradeConfig(".")
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"

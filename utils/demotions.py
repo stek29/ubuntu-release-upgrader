@@ -12,6 +12,8 @@
 import os
 import tarfile
 import sys
+import warnings
+warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import apt_inst
@@ -64,8 +66,8 @@ if __name__ == "__main__":
   except OSError:
     pass
 
-  old = Dist("gutsy")
-  new = Dist("hardy")
+  old = Dist(sys.argv[1]) # Dist("gutsy")
+  new = Dist(sys.argv[2]) # Dist("hardy")
   
   # go over the dists to find main pkgs
   for dist in [old, new]:
@@ -78,10 +80,10 @@ if __name__ == "__main__":
       # and the archs
       for arch in ARCHES:
         apt_pkg.Config.Set("APT::Architecture",arch)
-        cache = apt.Cache(apt.progress.OpTextProgress())
-        prog = apt.progress.TextFetchProgress() 
+        cache = apt.Cache(apt.progress.OpProgress())
+        prog = apt.progress.FetchProgress() 
         cache.update(prog)
-        cache.open(apt.progress.OpTextProgress())
+        cache.open(apt.progress.OpProgress())
         map(lambda pkg: dist.pkgs_in_comp[comp].add(pkg.name), cache)
 
   # check what is no longer in main
@@ -101,28 +103,30 @@ if __name__ == "__main__":
 
   # remove items that are now in universe, but are replaced by something
   # in main (pidgin, gaim) etc
-  print "Looking for replaces"
+  #print "Looking for replaces"
   line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (new.name, "main")
   file("apt/sources.list","w").write(line)
   dist.pkgs_in_comp[comp] = set()
   for arch in ARCHES:
     apt_pkg.Config.Set("APT::Architecture",arch)
-    cache = apt.Cache(apt.progress.OpTextProgress())
-    prog = apt.progress.TextFetchProgress() 
+    cache = apt.Cache(apt.progress.OpProgress())
+    prog = apt.progress.FetchProgress() 
     cache.update(prog)
-    cache.open(apt.progress.OpTextProgress())
+    cache.open(apt.progress.OpProgress())
     # go over the packages in "main" and check if they replaces something
     # that we think is a demotion
     for pkgname in new.pkgs_in_comp["main"]:
       replaces = get_replace(cache, pkgname)
       for r in replaces:
         if r in demoted:
-          print "found '%s' that is demoted but replaced by '%s'" % (r, pkgname)
+          #print "found '%s' that is demoted but replaced by '%s'" % (r, pkgname)
           demoted.remove(r)
 
-  outfile = "demoted.cfg"
-  print "writing the demotion info to '%s'" % outfile
+  #outfile = "demoted.cfg"
+  #print "writing the demotion info to '%s'" % outfile
   # write it out
-  out = open(outfile,"w")
-  out.write("# demoted packages\n")
-  out.write("\n".join(demoted))
+  #out = open(outfile,"w")
+  #out.write("# demoted packages\n")
+  #out.write("\n".join(demoted))
+  print "# demoted packages from %s to %s" % (sys.argv[1], sys.argv[2])
+  print "\n".join(demoted)

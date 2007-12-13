@@ -79,7 +79,8 @@ binary: binary-indep binary-arch
 
 arch-build: 
 	# update the demotions
-	(cd utils && ./demotions.py)
+	(cd utils && ./demotions.py gutsy hardy > demotions.cfg)
+	(cd utils && ./demotions.py dapper hardy > demotions.cfg.dapper)
 	(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
 	# run the test-suit
 	echo "Runing integrated tests"

@@ -120,6 +120,7 @@ class DistUpgradeController(object):
         gettext.textdomain("update-manager")
 
         # setup the view
+        logging.debug("Using '%s' view" % distUpgradeView.__class__.__name__)
         self._view = distUpgradeView
         self._view.updateStatus(_("Reading cache"))
         self.cache = None
@@ -147,20 +148,28 @@ class DistUpgradeController(object):
         self.fromDist = self.config.get("Sources","From")
         self.toDist = self.config.get("Sources","To")
         self.origin = self.config.get("Sources","ValidOrigin")
+        self.arch = apt_pkg.Config.Find("APT::Architecture")
 
         # we run in full upgrade mode by default
         self.partialUpgrade = False
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
+        os.environ["PYCENTRAL_NO_DPKG_QUERY"] = "1"
         os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
+
+        # set max retries
+        maxRetries = self.config.getint("Network","MaxRetries")
+        apt_pkg.Config.Set("Acquire::Retries", str(maxRetries))
 
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
         # apt log
-        logdir = self.config.get("Files","LogDir")
+        logdir = self.config.getWithDefault("Files","LogDir","/var/log/dist-upgrade")
+        apt_pkg.Config.Set("Dir::Log",logdir)
+        apt_pkg.Config.Set("Dir::Log::Terminal","apt-term.log")
         fd = os.open(os.path.join(logdir,"apt.log"),
                      os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
         # log the complete output if we do not run in text-mode
@@ -176,6 +185,7 @@ class DistUpgradeController(object):
     def openCache(self):
         if self.cache is not None:
             self.cache.releaseLock()
+            self.cache.unlockListsDir()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -284,6 +294,16 @@ class DistUpgradeController(object):
                              _("A upgrade from '%s' to '%s' is not "
                                "supoprted with this tool." % (release, self.toDist)))
             sys.exit(1)
+        # setup backports (if we have them)
+        if self.options and self.options.havePrerequists:
+            backportsdir = os.getcwd()+"/backports"
+            logging.info("using backports in '%s' " % backportsdir)
+            logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
+            if os.path.exists(backportsdir+"/usr/bin/dpkg"):
+                apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
+            if os.path.exists(backportsdir+"/usr/lib/apt/methods"):
+                apt_pkg.Config.Set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
+
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
         # check python version
@@ -558,8 +578,7 @@ class DistUpgradeController(object):
             return True
         self.cache._list.ReadMainList()
         progress = self._view.getFetchProgress()
-        # FIXME: retry here too? just like the DoDistUpgrade?
-        #        also remove all files from the lists partial dir!
+        # FIXME: also remove all files from the lists partial dir!
         currentRetry = 0
         maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
@@ -706,10 +725,10 @@ class DistUpgradeController(object):
                                      "these packages will be suggested for "
                                      "removal at the end of the upgrade."),
                                    "\n".join(self.installed_demotions))
-            # FIXME: integrate this into main upgrade dialog!?!
-
+        # FIXME: integrate this into main upgrade dialog!?!
         if not self.cache.distUpgrade(self._view, self.serverMode, self.logfd):
             return False
+
         if self.serverMode:
             if not self.cache.installTasks(self.tasks):
                 return False
@@ -748,12 +767,6 @@ class DistUpgradeController(object):
                 logging.waring("failed to modify '%s' (%s)" % (name, e))
 
     def doDistUpgradeFetching(self):
-        if self.options and self.options.havePrerequists:
-            backportsdir = os.getcwd()+"/backports"
-            logging.info("using backports in '%s' " % backportsdir)
-            logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
-            if os.path.exists(backportsdir+"/usr/bin/dpkg"):
-                apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
         # rewrite cleanup minAge for a package to 10 days
         self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
         self._rewriteAptPeriodic(10, True)
@@ -763,6 +776,19 @@ class DistUpgradeController(object):
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
         maxRetries = self.config.getint("Network","MaxRetries")
+        # FIXME: we get errors like 
+        #   "I wasn't able to locate file for the %s package" 
+        #  here sometimes. its unclear why and not reproducable, the 
+        #  current theory is that for some reason the file is not
+        #  considered trusted at the moment 
+        #  pkgAcquireArchive::QueueNext() runs debReleaseIndex::IsTrused()
+        #  (the later just checks for the existance of the .gpg file)
+        #  OR 
+        #  the fact that we get a pm and fetcher here confuses something
+        #  in libapt?
+        # POSSIBLE workaround: keep the list-dir locked so that 
+        #          no apt-get update can run outside from the release
+        #          upgrader 
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.GetPackageManager(self.cache._depcache)
@@ -1132,12 +1158,17 @@ class DistUpgradeController(object):
             return self.setupRequiredBackports(backportsdir)
 
         # add the backports sources.list fragment and do mirror substitution
+        # we support PreRequists/SourcesList-$arch sections here too
         mirror = country_mirror()
-        sourceslistd = self.config.get("PreRequists","SourcesList")
+        conf_option = "SourcesList"
+        if self.config.has_option("PreRequists",conf_option+"-%s" % self.arch):
+            conf_option = conf_option + "-%s" % self.arch
+        sourceslistd = self.config.get("PreRequists",conf_option)
         if not os.path.exists(sourceslistd):
             logging.error("sourceslist not found '%s'" % sourceslistd)
             return False
         outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), sourceslistd), "w")
+        logging.debug("using prerequists sources.list: '%s'" % outfile)
         for line in open(sourceslistd):
             template = Template(line)
             outfile.write(template.safe_substitute(countrymirror=mirror))
@@ -1172,7 +1203,9 @@ class DistUpgradeController(object):
                 logging.error("No ver.FileList for '%s'" % pkgname)
                 return False
             logging.debug("marking '%s' for install" % pkgname)
-            pkg.markInstall(autoInst=False, autoFix=False)
+            # mvo: autoInst is not availabe on dapper
+            #pkg.markInstall(autoInst=False, autoFix=False)
+            pkg.markInstall(autoFix=False)
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
@@ -1230,7 +1263,7 @@ class DistUpgradeController(object):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
         self._view.setStep(DistUpgradeView.STEP_PREPARE)
-        
+
         if not self.prepare():
             logging.error("self.prepared() failed")
             self._view.error(_("Preparing the upgrade failed"),
@@ -1308,7 +1341,7 @@ class DistUpgradeController(object):
 
         # calc the dist-upgrade and see if the removals are ok/expected
         # do the dist-upgrade
-        self._view.updateStatus(_("Asking for confirmation"))
+        self._view.updateStatus(_("Calculating the changes"))
         if not self.askDistUpgrade():
             self.abort()
 
@@ -1343,6 +1376,7 @@ class DistUpgradeController(object):
             sys.exit(0)
         
     def run(self):
+        self._view.processEvents()
         self.fullUpgrade()
 
 

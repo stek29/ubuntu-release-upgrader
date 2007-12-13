@@ -1,3 +1,62 @@
+update-manager (1:0.86) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - merged fixes from Brian Murray (thanks!);
+      LP: #162978, LP: #64473
+    - fix getting prerequists for ports.ubuntu.com
+      (thanks to lamont)
+  * DistUpgrade/DistUpgradeCache.py:
+    - keep the lists dir locked all the time to avoid a 
+      possible race
+  * DistUpgrade/DistUpgrade.cfg:
+    - added gobuntu-desktop to the list of supported
+      meta-packages
+  * data/update-manager.desktop.in:
+    - remove deprecated entries (thanks to Kmos)
+  * UpdateManager/Core/MetaRelease.py:
+    - add support to prompt only for specifc release upgrades 
+      (e.g. lts->lts)
+  * data/release-upgrades:
+    - set the default prompting for hardy to "Prompt only for
+      a new lts version"
+  * DistUpgrade/DistUpgrade.cfg.dapper,
+    DistUpgrade/prerequists-sources.list.dapper:
+    - add support for dapper->hardy upgrades
+  * DistUpgrade/DistUpgradeConfigParser.py:
+    - add overwrite support for the configuration to support
+      upgrades to multiple target releases with the same
+      upgrader
+  * data/update-manager.schemas.in:
+    - /apps/update-manager/check_dist_upgrades is deprecated
+  * utils/demotions.py:
+    - make it more flexible to support generating both 
+      dapper and gutsy demotions
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Dec 2007 15:56:22 +0100
+
+update-manager (1:0.85.4) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - do not use python2.5 try:/expect:/finally: - we need to run
+      on 2.4 as well for dapper->hardy (LP: #164947)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 26 Nov 2007 10:47:57 +0100
+
+update-manager (1:0.85.3) hardy; urgency=low
+
+  * DistUpgrade/DistUpgrade.cfg, 
+    DistUpgrade/DistUpgrade.glade,
+    DistUpgrade/ReleaseAnnouncement,
+    DistUpgrade/window_main.ui:
+    - updated for hardy
+  * DistUpgrade/DistUpgradeControler.py,:
+    DistUpgrade/DistUpgradeCache.py:
+    - better description whats happening when calculating the 
+      release-upgrade
+    - keep the GUI responsive while calculating the upgrade
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 23 Nov 2007 18:24:12 +0100
+
 update-manager (1:0.85.2) hardy; urgency=low
 
   * debian/control:

@@ -1,11 +1,18 @@
 from ConfigParser import ConfigParser, NoOptionError, NoSectionError
-
+import subprocess
+import os.path
 
 class DistUpgradeConfig(ConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg"):
         ConfigParser.__init__(self)
+        # we support a config overwrite, if DistUpgrade.cfg.dapper exists
+        # and the user runs dapper, that one will be used
+        from_release = subprocess.Popen(["lsb_release","-c","-s"],
+                                        stdout=subprocess.PIPE).communicate()[0].strip()
         self.datadir=datadir
-        self.read([datadir+"/"+name])
+        if os.path.exists(name+"."+from_release):
+            name = name+"."+from_release
+        self.read(os.path.join(datadir,name))
     def getWithDefault(self, section, option, default):
         try:
             return self.get(section, option)

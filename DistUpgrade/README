@@ -18,6 +18,12 @@ The DistUpgrade.cfg format is based on the python ConfigParser.
 It supports the following sections:
 
 [View] - controls the output 
+Depends:
+  Packages that must be installed to the version specified (just like
+  a regular depends line in a pkg).
+[$view-used]
+Depends: just like the global "view" depend but only evaluated when the
+         specific view is in use
 
 [Distro] - global distribution specfic options
 BaseMetaPkgs: 
@@ -54,9 +60,7 @@ ForcedObsoletes:
 
 [Network] - network specific options
 
-[Backports] - use specific packages for dist-upgrade 
+[PreRequists] - use specific packages for dist-upgrade 
 Packages= List of what packages to look for
-VersionIdent=Version identification. needs to be uniq, dist-upgrader will
-             fetch the version that contains this string
 SourcesList=a sources.list fragment that will be placed into 
             /etc/apt/sources.list.d and that contains the backported pkgs

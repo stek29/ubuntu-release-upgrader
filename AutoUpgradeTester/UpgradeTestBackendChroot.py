@@ -139,15 +139,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         # write new sources.list
         if (self.config.has_option("NonInteractive","Components") and
             self.config.has_option("NonInteractive","Pockets")):
-            comps = self.config.getlist("NonInteractive","Components")
-            pockets = self.config.getlist("NonInteractive","Pockets")
-            mirror = self.config.get("NonInteractive","Mirror")
-            sourceslist = open(tmpdir+"/etc/apt/sources.list","w")
-            sourceslist.write("deb %s %s %s\n" % (mirror, self.fromDist, " ".join(comps)))
-            for pocket in pockets:
-                sourceslist.write("deb %s %s-%s %s\n" % (mirror, self.fromDist,pocket, " ".join(comps)))
-            sourceslist.close()
-            
+            shutil.copy(self.getSourcesListFile(), tmpdir+"/etc/apt/sources.list")
             print open(tmpdir+"/etc/apt/sources.list","r").read()
 
         # move the cache debs

@@ -978,7 +978,7 @@ class DistUpgradeController(object):
                                    "%s" % e)
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
-            logging.debug("Runing PostInstallScript: '%s'" % script)
+            logging.debug("Running PostInstallScript: '%s'" % script)
             try:
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:

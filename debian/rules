@@ -83,7 +83,7 @@ arch-build:
 	(cd utils && ./demotions.py dapper hardy > demotions.cfg.dapper)
 	(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
 	# run the test-suit
-	echo "Runing integrated tests"
+	echo "Running integrated tests"
 	(cd tests && for test in *.py; do python $$test; done)
 	# update version
 	echo "VERSION='$(DEBVER)'" > DistUpgrade/DistUpgradeVersion.py

@@ -110,7 +110,8 @@ if __name__ == "__main__":
     res = True
     try:
         if options.auto:
-            for d in glob.glob("./profile/*/DistUpgrade.cfg"):
+            # we have some profiles that have DistUpgrade.cfg.dapper
+            for d in glob.glob("./profile/*/DistUpgrade.cfg*"):
                 os.dup2(fd1, 1)
                 os.dup2(fd2, 2)
                 print "Testing '%s'" % d

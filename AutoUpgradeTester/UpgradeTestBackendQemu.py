@@ -44,6 +44,10 @@ import copy
 class NoImageFoundException(Exception):
     pass
 
+class PortInUseException(Exception):
+    pass
+
+
 class UpgradeTestBackendQemu(UpgradeTestBackend):
     " very hacky qemu backend - need qemu >= 0.9.0"
 
@@ -73,7 +77,11 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         if self.config.getWithDefault("NonInteractive","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
-        
+        # check if the kvm port is in use
+        if subprocess.call("netstat -t -l -n |grep 0.0.0.0:54321",
+                           shell=True) == 0:
+            raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
+
     def _copyToImage(self, fromF, toF):
         cmd = ["scp",
                "-P","54321",

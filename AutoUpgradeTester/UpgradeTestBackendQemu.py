@@ -232,7 +232,8 @@ iface eth0 inet static
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
             assert(ret == 0)
-            # stop/start (to ensure we have a new kernel)
+            # stop/start (to ensure we have a new kernel and everything 
+            # works)
             self.stop()
             self.start()
 
@@ -243,6 +244,9 @@ iface eth0 inet static
         # copy cache into place (if needed)
         if (self.config.has_option("NonInteractive","CacheBaseImage") and
             self.config.getboolean("NonInteractive","CacheBaseImage")):
+            # stop before copying to avoid copying a image that is 
+            # worked on
+            self.stop()
             shutil.copy(self.image, "%s.%s" % (self.image,self.fromDist))
         
         return True
@@ -285,9 +289,6 @@ iface eth0 inet static
         for f in glob.glob(self.basefilesdir+"/DistUpgrade/*.pyc"):
             os.unlink(f)
 
-        # shouldn't be needed if we come from bootstrap()
-        # but does not harm and will help in the future if
-        # we use fully cached images
         print "Starting for upgrade"
         self.start()
 

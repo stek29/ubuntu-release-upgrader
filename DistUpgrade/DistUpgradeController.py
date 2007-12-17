@@ -39,8 +39,6 @@ from string import Template
 
 import DistUpgradeView
 from DistUpgradeConfigParser import DistUpgradeConfig
-from DistUpgradeViewText import DistUpgradeViewText
-from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 from DistUpgradeFetcherCore import country_mirror
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
@@ -166,21 +164,6 @@ class DistUpgradeController(object):
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
 
-        # apt log
-        logdir = self.config.getWithDefault("Files","LogDir","/var/log/dist-upgrade")
-        apt_pkg.Config.Set("Dir::Log",logdir)
-        apt_pkg.Config.Set("Dir::Log::Terminal","apt-term.log")
-        fd = os.open(os.path.join(logdir,"apt.log"),
-                     os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
-        # log the complete output if we do not run in text-mode
-        if not (isinstance(self._view, DistUpgradeViewText) or
-                isinstance(self._view, DistUpgradeViewNonInteractive) ):
-            # turn on debuging in the cache
-            apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
-            apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
-            os.dup2(fd,2)
-            os.dup2(fd,1)
-        self.logfd = fd
 
     def openCache(self):
         if self.cache is not None:
@@ -726,7 +709,7 @@ class DistUpgradeController(object):
                                      "removal at the end of the upgrade."),
                                    "\n".join(self.installed_demotions))
         # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode, self.logfd):
+        if not self.cache.distUpgrade(self._view, self.serverMode):
             return False
 
         if self.serverMode:
@@ -952,7 +935,7 @@ class DistUpgradeController(object):
         for pkgname in remove_candidates:
             if pkgname not in self.foreign_pkgs:
                 self._view.processEvents()
-                if not self.cache._tryMarkObsoleteForRemoval(pkgname, remove_candidates, self.foreign_pkgs):
+                if not self.cache.tryMarkObsoleteForRemoval(pkgname, remove_candidates, self.foreign_pkgs):
                     logging.debug("'%s' scheduled for remove safe to remove, skipping", pkgname)
         logging.debug("Finish checking for obsolete pkgs")
 
@@ -1382,11 +1365,12 @@ class DistUpgradeController(object):
 
 if __name__ == "__main__":
     from DistUpgradeView import DistUpgradeView
+    from DistUpgradeViewText import DistUpgradeViewText
     from DistUpgradeCache import MyCache
-    v = DistUpgradeView()
+    v = DistUpgradeViewText()
     dc = DistUpgradeController(v)
-    #dc.openCache()
-    #dc.openCache()
+    dc.openCache()
+    dc.askDistUpgrade()
     #dc._checkFreeSpace()
     #dc._rewriteFstab()
     #dc._checkAdminGroup()

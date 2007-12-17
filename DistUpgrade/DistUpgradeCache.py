@@ -8,6 +8,7 @@ import re
 import logging
 import string
 import time
+import datetime
 import threading
 from subprocess import Popen, PIPE
 
@@ -15,10 +16,6 @@ from gettext import gettext as _
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
-# FIXME: we need this only for the later "isinstance()" check
-#        this should probably be solved in some different way
-from DistUpgradeViewText import DistUpgradeViewText
-from DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 
 class CacheException(Exception):
     pass
@@ -46,6 +43,42 @@ class MyCache(apt.Cache):
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self._initAptLog()
+
+    # logging stuff
+    def _initAptLog(self):
+        " init loging, create log file"
+        logdir = self.config.getWithDefault("Files","LogDir",
+                                            "/var/log/dist-upgrade")
+        apt_pkg.Config.Set("Dir::Log",logdir)
+        apt_pkg.Config.Set("Dir::Log::Terminal","apt-term.log")
+        self.logfd = os.open(os.path.join(logdir,"apt.log"),
+                             os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
+        os.write(self.logfd, "Log time: %s\n" % datetime.datetime.now())
+        # turn on debuging in the cache
+        apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
+        apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
+    def _startAptResolverLog(self):
+        self.old_stdout = os.dup(1)
+        self.old_stderr = os.dup(2)
+        os.dup2(self.logfd, 1)
+        os.dup2(self.logfd, 2)
+    def _stopAptResolverLog(self):
+        os.fsync(1)
+        os.fsync(2)
+        os.dup2(self.old_stdout, 1)
+        os.dup2(self.old_stderr, 2)
+    # use this decorator instead of the _start/_stop stuff directly
+    # FIXME: this should probably be a decorator class where all
+    #        logging is moved into?
+    def withResolverLog(f):
+        " decorator to ensure that the apt output is logged "
+        def wrapper(*args, **kwargs):
+            args[0]._startAptResolverLog()
+            res = f(*args, **kwargs)
+            args[0]._stopAptResolverLog()
+            return res
+        return wrapper
 
     # properties
     @property
@@ -409,23 +442,14 @@ class MyCache(apt.Cache):
                 pkg.priority in need):
                 self.markInstall(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
 
+    # FIXME: make this a decorator (just like the withResolverLog())
     def updateGUI(self, view, lock):
         while lock.locked():
             view.processEvents()
             time.sleep(0.01)
 
-    def distUpgrade(self, view, serverMode, logfd):
-        def _restore_fds(stdout, stderr):
-            os.dup2(stdout, 1)
-            os.dup2(stderr, 2)
-        text_mode = (isinstance(view, DistUpgradeViewText) or
-                     isinstance(view, DistUpgradeViewNonInteractive))
-        if text_mode:
-            old_stdout = os.dup(1)
-            old_stderr = os.dup(2)
-            os.dup2(logfd, 1)
-            os.dup2(logfd, 2)
-
+    @withResolverLog
+    def distUpgrade(self, view, serverMode):
         # keep the GUI alive
         lock = threading.Lock()
         lock.acquire()
@@ -472,7 +496,6 @@ class MyCache(apt.Cache):
                          "package and include the files in /var/log/dist-upgrade/ "
                          "in the bugreport."))
             logging.error("Dist-upgrade failed: '%s'", e)
-            if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
         # would be nice to be able to use finally: here, but we need
         # to run on python2.4 too 
@@ -518,9 +541,7 @@ class MyCache(apt.Cache):
                          "You may want to try again later. See below for a "
                          "list of unauthenticated packages."),
                        "\n".join(untrusted))
-            if text_mode: _restore_fds(old_stdout, old_stderr)
             return False
-        if text_mode: _restore_fds(old_stdout, old_stderr)
         return True
 
     def _verifyChanges(self):
@@ -642,7 +663,8 @@ class MyCache(apt.Cache):
                 return True
         return False
 
-    def _tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
+    @withResolverLog
+    def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
         # sanity check, first see if it looks like a runing kernel pkg
         if pkgname.endswith(self.uname):
             logging.debug("skipping runing kernel pkg '%s'" % pkgname)

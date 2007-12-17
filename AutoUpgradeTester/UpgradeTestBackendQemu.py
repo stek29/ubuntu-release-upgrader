@@ -260,7 +260,7 @@ iface eth0 inet static
                                           ]+self.qemu_options)
         
         # spin here until ssh has come up and we can login
-        for i in range(300):
+        for i in range(900):
             time.sleep(1)
             if self._runInImage(["/bin/true"]) == 0:
                 break

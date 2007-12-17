@@ -49,7 +49,7 @@ class PortInUseException(Exception):
 
 
 class UpgradeTestBackendQemu(UpgradeTestBackend):
-    " very hacky qemu backend - need qemu >= 0.9.0"
+    " qemu/kvm backend - need qemu >= 0.9.0"
 
     # FIXME: make this part of the config file
     #qemu_binary = "qemu"
@@ -220,9 +220,12 @@ iface eth0 inet static
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
+            print "have PostBootstrapScript: %s" % script
             if os.path.exists(script):
-                self._copyToImage(script, "/tmp")
-                self._runInImage([os.path.join("/tmp",script)])
+                self._runInImage(["mkdir","/upgrade-tester"])
+                self._copyToImage(script, "/upgrade-tester")
+                print "running script: %s" % os.path.join("/tmp",script)
+                self._runInImage([os.path.join("/upgrade-tester",script)])
             else:
                 print "WARNING: %s not found" % script
 
@@ -232,21 +235,17 @@ iface eth0 inet static
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
             assert(ret == 0)
-            # stop/start (to ensure we have a new kernel and everything 
-            # works)
-            self.stop()
-            self.start()
 
         print "Cleaning image"
         ret = self._runInImage(["apt-get","clean"])
         assert(ret == 0)
 
+        # done with the bootstrap
+        self.stop()
+
         # copy cache into place (if needed)
         if (self.config.has_option("NonInteractive","CacheBaseImage") and
             self.config.getboolean("NonInteractive","CacheBaseImage")):
-            # stop before copying to avoid copying a image that is 
-            # worked on
-            self.stop()
             shutil.copy(self.image, "%s.%s" % (self.image,self.fromDist))
         
         return True

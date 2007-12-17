@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os
 import apt
 import apt_pkg
 
@@ -31,10 +32,21 @@ def reapply(cache, pkgnames):
    for name in pkgnames:
       cache[name].markInstall(False)
 
+# ----------------------------------------------------------------
+
 #apt_pkg.Config.Set("Dir::State::status","./empty")
 
+print "install_all.py"
+os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
+
 cache = apt.Cache()
-group = apt_pkg.GetPkgActionGroup(cache._depcache)
+
+# dapper does not have this yet 
+try:
+   group = apt_pkg.GetPkgActionGroup(cache._depcache)
+except:
+   pass
 #print [pkg.name for pkg in cache if pkg.isInstalled]
 
 # see what gives us problems

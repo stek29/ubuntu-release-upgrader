@@ -71,8 +71,9 @@ class NonInteractiveInstallProgress(InstallProgress):
         # if the new preinst fails, its not yet in /var/lib/dpkg/info
         # so this is inaccurate as well
         prefix = "/var/lib/dpkg/info/"
+        #prefix = "/var/lib/dpkg/tmp.ci/"
         error_map = { "post-installation" : ("postinst","configure"),
-                      "pre-installation"  : ("preinst", "configure"),
+                      "pre-installation"  : ("preinst", "upgrade"),
                       "pre-removal" : ("prerm","remvove"),
                       "post-removal": ("postrm","remove"),
                     }
@@ -80,20 +81,33 @@ class NonInteractiveInstallProgress(InstallProgress):
             if msg in errormsg:
                 environ = copy.copy(os.environ)
                 maintainer_script = "%s/%s.%s" % (prefix, pkg, error_map[msg][0])
+                # find out about the interpreter
                 interp = open(maintainer_script).readline()[2:].strip().split()[0]
                 if ("bash" in interp) or ("/bin/sh" in interp):
-                    debug_opts = "-x"
+                    debug_opts = ["-ex"]
                 elif ("perl" in interp):
-                    debug_opts = "-d"
+                    debug_opts = ["-d"]
                     environ["PERLDB_OPTS"] = "AutoTrace NonStop"
                 else:
                     logging.warning("unknown interpreter: '%s'" % interp)
-                logging.debug("re-runing %s with %s %s (%s)" % (error_map[msg][0], interp, debug_opts, environ))
-                cmd = [interp, debug_opts,
-                       maintainer_script,
-                       error_map[msg][1],
-                      ]
+                # check if debconf is used and fiddle a bit more if it is
+                if ". /usr/share/debconf/confmodule" in open(maintainer_script).read():
+                    environ["DEBCONF_DEBUG"] = "developer"
+                    environ["DEBIAN_HAS_FRONTEND"] = "1"
+                    interp = "/usr/share/debconf/frontend"
+                    debug_opts = ["sh","-ex"]
+                # build command
+                cmd = [interp]+debug_opts+[maintainer_script]+[error_map[msg][1]]
+                if maintainer_script.endswith("postinst"):
+                    version = subprocess.Popen("dpkg-query -s %s|grep ^Config-Version" % pkg,shell=True, stdout=subprocess.PIPE).communicate()[0]
+                    if version:
+                        cmd += [version.split(":",1)[1].strip()]
+                elif maintainer_script.endswith("preinst"):
+                    version = subprocess.Popen("dpkg-query -s %s|grep ^Version" % pkg,shell=True, stdout=subprocess.PIPE).communicate()[0]
+                    if version:
+                        cmd += [version.split(":",1)[1].strip()]
                 print cmd
+                logging.debug("re-runing %s with %s %s: '%s' (%s)" % (error_map[msg][0], interp, debug_opts, cmd, environ))
                 ret = subprocess.call(cmd, env=environ)
                 logging.debug("%s script returned: %s" % (error_map[msg][0],ret))
         
@@ -232,7 +246,8 @@ if __name__ == "__main__":
   fp = NonInteractiveFetchProgress()
   ip = NonInteractiveInstallProgress()
 
-  ip.error("linux-image-2.6.17-10-generic","post-installation script failed")
+  #ip.error("linux-image-2.6.17-10-generic","post-installation script failed")
+  ip.error("xserver-xorg","pre-installation script failed")
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:

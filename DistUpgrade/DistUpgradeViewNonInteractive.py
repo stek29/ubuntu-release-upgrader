@@ -78,25 +78,31 @@ class NonInteractiveInstallProgress(InstallProgress):
             prefix = "/var/lib/dpkg/info/"
             name = "postinst"
             argument = "configure"
+            maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         elif "pre-installation" in errormsg:
-            #prefix = "/var/lib/dpkg/tmp.ci/"
-            prefix = "/var/lib/dpkg/info/"
+            prefix = "/var/lib/dpkg/tmp.ci/"
+            #prefix = "/var/lib/dpkg/info/"
             name = "preinst"
             argument = "install"
+            maintainer_script = "%s/%s" % (prefix, name)
         elif "pre-removal" in errormsg:
             prefix = "/var/lib/dpkg/info/"
             name = "prerm"
             argument = "remove"
+            maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         elif "post-removal" in errormsg:
             prefix = "/var/lib/dpkg/info/"
             name = "postrm"
             argument = "remove"
+            maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         else:
             print "UNKNOWN script failure '%s' " % errormsg
             return
-        maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
 
         # find out about the interpreter
+        if not os.path.exists(maintainer_script):
+            logging.error("can not find failed maitainer script '%s' " % maintainer_script)
+            return
         interp = open(maintainer_script).readline()[2:].strip().split()[0]
         if ("bash" in interp) or ("/bin/sh" in interp):
             debug_opts = ["-ex"]
@@ -125,6 +131,8 @@ class NonInteractiveInstallProgress(InstallProgress):
             if version:
                 cmd.append(version.split(":",1)[1].strip())
         elif name == "preinst":
+            pkg = os.path.basename(pkg)
+            pkg = pkg.split("_")[0]
             version = Popen("dpkg-query -s %s|grep ^Version" % pkg,shell=True, stdout=PIPE).communicate()[0]
             if version:
                 cmd.append(version.split(":",1)[1].strip())

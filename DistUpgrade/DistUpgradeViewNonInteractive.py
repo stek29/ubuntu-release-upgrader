@@ -33,6 +33,7 @@ import fcntl
 import string
 import re
 import subprocess
+from subprocess import call, PIPE, Popen
 import copy
 
 class NonInteractiveFetchProgress(apt.progress.FetchProgress):
@@ -57,59 +58,81 @@ class NonInteractiveInstallProgress(InstallProgress):
             pass
         
     def error(self, pkg, errormsg):
-        logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-        # re-run maintainer script with sh -x to get a better idea
-        # what went wrong
-        #
+        # re-run maintainer script with sh -x/perl debug to get a better 
+        # idea what went wrong
+        # 
         # FIXME: this is just a approximation for now, we also need
         #        to pass:
-        #        - a version after configure
         #        - a version after remove (if upgrade to new version)
         #
-        #        not everything is a shell script
+        #        not everything is a shell or perl script
         #
         # if the new preinst fails, its not yet in /var/lib/dpkg/info
         # so this is inaccurate as well
-        prefix = "/var/lib/dpkg/info/"
-        #prefix = "/var/lib/dpkg/tmp.ci/"
-        error_map = { "post-installation" : ("postinst","configure"),
-                      "pre-installation"  : ("preinst", "upgrade"),
-                      "pre-removal" : ("prerm","remvove"),
-                      "post-removal": ("postrm","remove"),
-                    }
-        for msg in error_map:
-            if msg in errormsg:
-                environ = copy.copy(os.environ)
-                maintainer_script = "%s/%s.%s" % (prefix, pkg, error_map[msg][0])
-                # find out about the interpreter
-                interp = open(maintainer_script).readline()[2:].strip().split()[0]
-                if ("bash" in interp) or ("/bin/sh" in interp):
-                    debug_opts = ["-ex"]
-                elif ("perl" in interp):
-                    debug_opts = ["-d"]
-                    environ["PERLDB_OPTS"] = "AutoTrace NonStop"
-                else:
-                    logging.warning("unknown interpreter: '%s'" % interp)
-                # check if debconf is used and fiddle a bit more if it is
-                if ". /usr/share/debconf/confmodule" in open(maintainer_script).read():
-                    environ["DEBCONF_DEBUG"] = "developer"
-                    environ["DEBIAN_HAS_FRONTEND"] = "1"
-                    interp = "/usr/share/debconf/frontend"
-                    debug_opts = ["sh","-ex"]
-                # build command
-                cmd = [interp]+debug_opts+[maintainer_script]+[error_map[msg][1]]
-                if maintainer_script.endswith("postinst"):
-                    version = subprocess.Popen("dpkg-query -s %s|grep ^Config-Version" % pkg,shell=True, stdout=subprocess.PIPE).communicate()[0]
-                    if version:
-                        cmd += [version.split(":",1)[1].strip()]
-                elif maintainer_script.endswith("preinst"):
-                    version = subprocess.Popen("dpkg-query -s %s|grep ^Version" % pkg,shell=True, stdout=subprocess.PIPE).communicate()[0]
-                    if version:
-                        cmd += [version.split(":",1)[1].strip()]
-                print cmd
-                logging.debug("re-runing %s with %s %s: '%s' (%s)" % (error_map[msg][0], interp, debug_opts, cmd, environ))
-                ret = subprocess.call(cmd, env=environ)
-                logging.debug("%s script returned: %s" % (error_map[msg][0],ret))
+        logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+        environ = copy.copy(os.environ)
+        cmd = []
+
+        # find what maintainer script failed
+        if "post-installation" in errormsg:
+            prefix = "/var/lib/dpkg/info/"
+            name = "postinst"
+            argument = "configure"
+        elif "pre-installation" in errormsg:
+            #prefix = "/var/lib/dpkg/tmp.ci/"
+            prefix = "/var/lib/dpkg/info/"
+            name = "preinst"
+            argument = "install"
+        elif "pre-removal" in errormsg:
+            prefix = "/var/lib/dpkg/info/"
+            name = "prerm"
+            argument = "remove"
+        elif "post-removal" in errormsg:
+            prefix = "/var/lib/dpkg/info/"
+            name = "postrm"
+            argument = "remove"
+        else:
+            print "UNKNOWN script failure '%s' " % errormsg
+            return
+        maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
+
+        # find out about the interpreter
+        interp = open(maintainer_script).readline()[2:].strip().split()[0]
+        if ("bash" in interp) or ("/bin/sh" in interp):
+            debug_opts = ["-ex"]
+        elif ("perl" in interp):
+            debug_opts = ["-d"]
+            environ["PERLDB_OPTS"] = "AutoTrace NonStop"
+        else:
+            logging.warning("unknown interpreter: '%s'" % interp)
+
+        # check if debconf is used and fiddle a bit more if it is
+        if ". /usr/share/debconf/confmodule" in open(maintainer_script).read():
+            environ["DEBCONF_DEBUG"] = "developer"
+            environ["DEBIAN_HAS_FRONTEND"] = "1"
+            interp = "/usr/share/debconf/frontend"
+            debug_opts = ["sh","-ex"]
+
+        # build command
+        cmd.append(interp)
+        cmd.extend(debug_opts)
+        cmd.append(maintainer_script)
+        cmd.append(argument)
+
+        # check if we need to pass a version
+        if name == "postinst":
+            version = Popen("dpkg-query -s %s|grep ^Config-Version" % pkg,shell=True, stdout=PIPE).communicate()[0]
+            if version:
+                cmd.append(version.split(":",1)[1].strip())
+        elif name == "preinst":
+            version = Popen("dpkg-query -s %s|grep ^Version" % pkg,shell=True, stdout=PIPE).communicate()[0]
+            if version:
+                cmd.append(version.split(":",1)[1].strip())
+
+        print cmd
+        logging.debug("re-runing '%s' (%s)" % (cmd, environ))
+        ret = subprocess.call(cmd, env=environ)
+        logging.debug("%s script returned: %s" % (name,ret))
         
     def conffile(self, current, new):
         logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)

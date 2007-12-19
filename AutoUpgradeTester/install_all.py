@@ -54,7 +54,7 @@ troublemaker = set()
 best = set()
 
 # first install all of main, then the rest
-for comp in ["main",None]:
+for comp in ["main","universe"]:
    for pkg in cache:
       if pkg.candidateOrigin:
          for c in pkg.candidateOrigin:
@@ -99,6 +99,14 @@ pm.GetArchives(fetcher, cache._list, cache._records)
 print apt_pkg.SizeToStr(fetcher.FetchNeeded)
 print "Total space: ", apt_pkg.SizeToStr(cache._depcache.UsrSize)
 
+# write out file with all pkgs
+outf = "all_pkgs.cfg"
+print "writing out file with the selected package names to '%s'" % outf
+f = open(outf, "w")
+f.write("\n".join([pkg.name for pkg in cache if pkg.markedInstall]))
+f.close()
+
+# go and install
 res = False
 current = 0
 maxRetries = 5

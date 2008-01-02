@@ -872,16 +872,9 @@ class UpdateManager(SimpleGladeApp):
           name = xml.sax.saxutils.escape(pkg.name)
           summary = xml.sax.saxutils.escape(pkg.summary)
           contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
-          if pkg.installedVersion != None:
-              version =  _("From version %(old_version)s to %(new_version)s") %\
-                         {"old_version" : pkg.installedVersion,
-                          "new_version" : pkg.candidateVersion}
-          else:
-              version = _("Version %s") % pkg.candidateVersion
           #TRANSLATORS: the b stands for Bytes
           size = _("(Size: %s)") % humanize_size(pkg.packageSize)
-          contents = "%s\n<small>%s %s</small>" % (contents, version, size)
-
+          contents = "%s <small>%s</small>" % (contents, size)
           self.store.append([contents, pkg.name, pkg])
     self.update_count()
     self.setBusy(False)

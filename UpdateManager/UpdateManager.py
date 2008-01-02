@@ -698,6 +698,12 @@ class UpdateManager(SimpleGladeApp):
            "--", "/usr/sbin/synaptic", "--hide-main-window",  
            "--non-interactive", "--parent-window-id", "%s" % (id) ]
     if action == INSTALL:
+      # close when update was successful (its ok to use a Synaptic::
+      # option here, it will not get auto-saved, because synaptic does
+      # not save options in non-interactive mode)
+      cmd.append("-o")
+      cmd.append("Synaptic::closeZvt=true")
+      # custom progress strings
       cmd.append("--progress-str")
       cmd.append("%s" % _("Please wait, this can take some time."))
       cmd.append("--finish-str")

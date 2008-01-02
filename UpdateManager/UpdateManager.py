@@ -666,8 +666,8 @@ class UpdateManager(SimpleGladeApp):
           self.textview_descr.get_buffer().set_text("")
       else:
           text_header = "<big><b>%s</b></big>" % \
-                        (gettext.ngettext("You can install %s update",
-                                          "You can install %s updates", 
+                        (gettext.ngettext("You can install %s update.",
+                                          "You can install %s updates.", 
                                           num_updates) % \
                                           num_updates)
           text_download = _("Download size: %s") % humanize_size(self.dl_size)

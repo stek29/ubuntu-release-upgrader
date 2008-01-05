@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import apt
 import sys
@@ -38,8 +39,21 @@ class UpdateManagerText(object):
 	self.openCache()
 	print _("Building Updates List")
 	self.fillstore()
+        if self.list.distUpgradeWouldDelete > 0:
+            print _("""
+A normal upgrade can not be calculated, please run: 
+  sudo apt-get dist-upgrade
+
+
+This can be caused by:
+ ◦ A previous upgrade which didn't complete
+ ◦ Problems with some of the installed software
+ ◦ Unofficial software packages not provided by Ubuntu
+ ◦ Normal changes of a pre-release version of Ubuntu""")
+            sys.exit(1)
 	self.screen.resume()
 
+    
     def openCache(self):
 	# open cache
         progress = apt.progress.OpTextProgress()
@@ -97,7 +111,7 @@ class UpdateManagerText(object):
 	lock.acquire()
 	descr = self.cache.get_changelog (name, lock)
 	while lock.locked():
-            time.sleep(0.1)
+            time.sleep(0.03)
 	return self.cache.all_changes[name][0]
 
     def checkbox_changed(self):

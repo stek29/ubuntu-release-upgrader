@@ -4,6 +4,7 @@
 import apt
 import sys
 import thread
+import atexit
 from gettext import gettext as _
 
 from UpdateManager.Common.UpdateList import UpdateList
@@ -17,6 +18,9 @@ class UpdateManagerText(object):
 
     def __init__(self, datadir):
 	self.screen = SnackScreen()
+        # FIXME: self.screen.finish() clears the screen (and all messages)
+        #        there too
+        #atexit.register(self.restoreScreen)
 	self.button_bar = ButtonBar(self.screen, 
 				    ( (_("Cancel"), "cancel"),
 				      (_("Install"), "ok")), 
@@ -32,10 +36,10 @@ class UpdateManagerText(object):
 	# empty line to make it look less crowded
 	self.layout.add(Textbox(60, 1," ",False, False), 0, 3)
 	self.layout.add(self.button_bar, 0, 4)
-	if not self.DEBUG:
-            apt_pkg.PkgSystemLock()
         # FIXME: better progress than the current suspend/resume screen thing
 	self.screen.suspend()
+	if not self.DEBUG:
+            apt_pkg.PkgSystemLock()
 	self.openCache()
 	print _("Building Updates List")
 	self.fillstore()
@@ -53,6 +57,8 @@ This can be caused by:
             sys.exit(1)
 	self.screen.resume()
 
+#    def restoreScreen(self):
+#        self.screen.finish()
     
     def openCache(self):
 	# open cache

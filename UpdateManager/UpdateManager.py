@@ -44,6 +44,7 @@ import string
 import sys
 import os
 import os.path
+import stat
 import re
 import locale
 import tempfile
@@ -648,7 +649,26 @@ class UpdateManager(SimpleGladeApp):
       except SystemError, e:
           print "requiredDownload could not be calculated: %s" % e
           self.label_downsize.set_markup(_("Unknown download size"))
-      
+
+  def _get_last_apt_get_update_text(self):
+      """
+      return a human readable string with the information when
+      the last apt-get update was run
+      """
+      if not os.path.exists("/var/lib/apt/periodic/update-stamp"):
+          return None
+      # calculate when the last apt-get update (or similar operation)
+      # was performed
+      mtime = os.stat("/var/lib/apt/periodic/update-stamp")[stat.ST_MTIME]
+      ago_days = int( (time.time() - mtime) / (24*60*60))
+      ago_hours = int((time.time() - mtime) / (60*60) )
+      if ago_days > 0:
+          return _("The package information was last updated %s days ago.") % ago_days
+      elif ago_hours > 0:
+          return _("The package information was last updated %s hours ago.") % ago_hours
+      else:
+          return _("The package information was last updated less than one hour ago.")
+
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to
          the number of available updates"""
@@ -664,12 +684,14 @@ class UpdateManager(SimpleGladeApp):
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")
+          self.label_main_details.set_text(self._get_last_apt_get_update_text())
       else:
           text_header = "<big><b>%s</b></big>" % \
                         (gettext.ngettext("You can install %s update.",
                                           "You can install %s updates.", 
                                           num_updates) % \
                                           num_updates)
+          text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
           text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)

@@ -1,6 +1,6 @@
 # UpdateManager.py 
 #  
-#  Copyright (c) 2004-2006 Canonical
+#  Copyright (c) 2004-2008 Canonical
 #                2004 Michiel Sikkes
 #                2005 Martin Willemoes Hansen
 #  
@@ -92,8 +92,11 @@ class MyCache(apt.Cache):
     def __init__(self, progress, rootdir=None):
         apt.Cache.__init__(self, progress, rootdir)
         self._initDepCache()
-        assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
         self.all_changes = {}
+        # on broken packages, try to fix via saveDistUpgrade()
+        if self._depcache.BrokenCount > 0:
+            self.saveDistUpgrade()
+        assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
     def _initDepCache(self):
         #apt_pkg.Config.Set("Debug::pkgPolicy","1")
         #self.depcache = apt_pkg.GetDepCache(self.cache)

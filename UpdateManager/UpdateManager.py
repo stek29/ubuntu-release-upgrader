@@ -787,7 +787,8 @@ class UpdateManager(SimpleGladeApp):
       time.sleep(0.05)
     while gtk.events_pending():
       gtk.main_iteration()
-    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % _("Checking for updates"))
+    s = _("Reading package information")
+    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
     self.fillstore()
 
     # Allow suspend after synaptic is finished

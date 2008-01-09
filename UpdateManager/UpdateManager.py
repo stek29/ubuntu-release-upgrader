@@ -671,12 +671,14 @@ class UpdateManager(SimpleGladeApp):
           return _("The package information was last updated %s hours ago.") % ago_hours
       else:
           return _("The package information was last updated less than one hour ago.")
+      return None
 
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to
          the number of available updates"""
       self.refresh_updates_count()
       num_updates = self.cache.installCount
+      text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
       if num_updates == 0:
           text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
           text_download = ""
@@ -687,14 +689,14 @@ class UpdateManager(SimpleGladeApp):
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")
-          self.label_main_details.set_text(self._get_last_apt_get_update_text())
+          if self._get_last_apt_get_update_text() is not None:
+              text_label_main = self._get_last_apt_get_update_text()
       else:
           text_header = "<big><b>%s</b></big>" % \
                         (gettext.ngettext("You can install %s update.",
                                           "You can install %s updates.", 
                                           num_updates) % \
                                           num_updates)
-          text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
           text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
@@ -702,6 +704,7 @@ class UpdateManager(SimpleGladeApp):
           self.treeview_update.set_cursor(1)
       self.label_header.set_markup(text_header)
       self.label_downsize.set_markup(text_download)
+      self.label_main_details.set_text(text_label_main)
 
   def activate_details(self, expander, data):
     expanded = self.expander_details.get_expanded()

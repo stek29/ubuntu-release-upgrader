@@ -56,7 +56,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     qemu_binary = "kvm"
     
     qemu_options = [
-        "-m","512",      # memory to use
+        "-m","1024",      # memory to use
         "-localtime",
         "-vnc","localhost:0",
         "-redir","tcp:54321::22", # ssh login possible (localhost 54321) available

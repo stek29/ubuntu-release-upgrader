@@ -138,6 +138,7 @@ class MyCache(apt.Cache):
         else:
             ver = pkg._pkg.CurrentVer
         if ver == None:
+            logging.warning("no version information for '%s' (useCandidate=%s)" % (pkg.name, useCandidate))
             return False
         return ver.Downloadable
     
@@ -695,10 +696,21 @@ class MyCache(apt.Cache):
         " get all package names that are not downloadable "
         obsolete_pkgs =set()        
         for pkg in self:
-            if pkg.isInstalled:
-                if not self.downloadable(pkg):
+            if pkg.isInstalled: 
+                # check if any version is downloadable. we need to check
+                # for older ones too, because there might be
+                # cases where e.g. firefox in gutsy-updates is newer
+                # than hardy
+                if not self.anyVersionDownloadable(pkg):
                     obsolete_pkgs.add(pkg.name)
         return obsolete_pkgs
+
+    def anyVersionDownloadable(self, pkg):
+        " helper that checks if any of the version of pkg is downloadable "
+        for ver in pkg._pkg.VersionList:
+            if ver.Downloadable:
+                return True
+        return False
 
     def _getUnusedDependencies(self):
         " get all package names that are not downloadable "

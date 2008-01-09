@@ -50,6 +50,9 @@ class NonInteractiveInstallProgress(InstallProgress):
         self.config = DistUpgradeConfig(".")
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        # more debug
+        #apt_pkg.Config.Set("Debug::pkgOrderList","true")
+        #apt_pkg.Config.Set("Debug::pkgDPkgPM","true")
         # default to 2400 sec timeout
         self.timeout = 2400
         try:

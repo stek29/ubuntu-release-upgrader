@@ -7,6 +7,7 @@ import sys
 
 
 def apport_crash(type, value, tb):
+    logging.debug("running apport_crash()")
     try:
         from apport.python_hook import apport_excepthook
         from apport.report import Report
@@ -25,8 +26,14 @@ def apport_crash(type, value, tb):
     return True
 
 def apport_pkgfailure(pkg, errormsg):
+    logging.debug("running apport_pkgfailure() %s: %s", pkg, errormsg)
     LOGDIR="/var/log/dist-upgrader/"
     s = "/usr/share/apport/package_hook"
+
+    # we do not report followup errors from earlier failures
+    if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
+        return False
+
     if os.path.exists(s):
         try:
             p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)

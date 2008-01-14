@@ -1279,9 +1279,13 @@ class DistUpgradeController(object):
                                    "in the bugreport." ))
                 self.abort()
 
-        # run a "apt-get update" now
-        if not self.doUpdate():
-            sys.exit(1)
+        # run a "apt-get update" now, its ok to ignore errors, 
+        # because 
+        # a) we disable any third party sources later
+        # b) we check if we have valid ubuntu sources later
+        #    after we rewrite the sources.list and do a 
+        #    apt-get update there too
+        self.doUpdate(showErrors=False)
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)
         self.doPreUpgrade()

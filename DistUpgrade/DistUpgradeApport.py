@@ -4,7 +4,7 @@ import os.path
 import logging
 import subprocess
 import sys
-
+import gettext
 
 def apport_crash(type, value, tb):
     logging.debug("running apport_crash()")

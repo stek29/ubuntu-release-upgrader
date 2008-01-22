@@ -55,6 +55,7 @@ class MetaReleaseCore(object):
 
     def __init__(self, useDevelopmentRelease=False, useProposed=False):
         # information about the available dists
+        self.downloading = True
         self.new_dist = None
         self.no_longer_supported = None
         # check the config file first to figure if we want lts upgrades only
@@ -66,6 +67,7 @@ class MetaReleaseCore(object):
                 if (type == "never" or type == "no"):
                     # nothing to do for this object
                     # FIXME: what about no longer supported?
+                    self.downloading = False
                     return
                 elif type == "lts":
                     self.METARELEASE_URI = self.METARELEASE_URI_LTS
@@ -78,7 +80,6 @@ class MetaReleaseCore(object):
 
         self._buildMetaReleaseFile()
         self.metarelease_information = None
-        self.downloading = True
         # we start the download thread here and we have a timeout
         t=thread.start_new_thread(self.download, ())
         #t=thread.start_new_thread(self.check, ())

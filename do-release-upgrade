@@ -18,17 +18,25 @@ if __name__ == "__main__":
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
                           "is possible"))
+  parser.add_option ("-p", "--proposed", action="store_true",
+                     dest="proposed_release", default=False,
+                     help=_("Try upgrading to the latest release using "
+                            "the upgrader from $distro-proposed"))
+  parser.add_option ("-m", "--mode", default="server",
+                     dest="mode", 
+                     help=_("Run in a special upgrade mode.\n"
+                            "Currently 'desktop' for regular upgrades of "
+                            "a desktop system and 'server' for server "
+                            "systems are supported."))
   parser.add_option ("-f", "--frontend", default="DistUpgradeViewText",
                      dest="frontend", 
                      help=_("Run the specified frontend"))
-  parser.add_option ("-m", "--mode", default="server",
-                     dest="mode", 
-                     help=_("Run in a special upgrade mode"))
 
   (options, args) = parser.parse_args()
 
   print _("Checking for a new ubuntu release")
-  m = MetaReleaseCore(useDevelopmentRelease=options.devel_release)
+  m = MetaReleaseCore(useDevelopmentRelease=options.devel_release,
+                      useProposed=options.proposed_release)
   # this will timeout eventually
   while m.downloading:
 	  time.sleep(0.5)

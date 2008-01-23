@@ -21,6 +21,8 @@ class CacheException(Exception):
     pass
 class CacheExceptionLockingFailed(CacheException):
     pass
+class CacheExceptionDpkgInterrupted(CacheException):
+    pass
 
 class MyCache(apt.Cache):
     # init
@@ -39,6 +41,9 @@ class MyCache(apt.Cache):
                 self.lockListsDir()
                 self.lock = True
             except SystemError, e:
+                # checking for this is ok, its not translatable
+                if "dpkg was interrupted" in str(e):
+                    raise CacheExceptionDpkgInterrupted, e
                 raise CacheExceptionLockingFailed, e
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")

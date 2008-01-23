@@ -46,7 +46,7 @@ from distro import Distribution, get_distro, NoDistroTemplateException
 
 from gettext import gettext as _
 import gettext
-from DistUpgradeCache import MyCache, CacheException, CacheExceptionLockingFailed
+from DistUpgradeCache import *
 from DistUpgradeApport import *
 
 # some constant
@@ -170,6 +170,13 @@ class DistUpgradeController(object):
             self.cache.releaseLock()
             self.cache.unlockListsDir()
         try:
+            self.cache = MyCache(self.config,
+                                 self._view,
+                                 self._view.getOpCacheProgress())
+        # if we get a dpkg error that it was interrupted, just
+        # run dpkg --configure -a
+        except CacheExceptionDpkgInterrupted, e:
+            self._view.getTerminal().call(["dpkg","--configure","-a"])
             self.cache = MyCache(self.config,
                                  self._view,
                                  self._view.getOpCacheProgress())

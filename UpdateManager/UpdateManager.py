@@ -120,6 +120,7 @@ class MyCache(apt.Cache):
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
         self._depcache.Upgrade(True)
+        wouldDelete = self._depcache.DelCount
         if self._depcache.DelCount > 0:
             self.clear()
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0

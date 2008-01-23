@@ -120,7 +120,6 @@ class MyCache(apt.Cache):
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
         self._depcache.Upgrade(True)
-        wouldDelete = self._depcache.DelCount
         if self._depcache.DelCount > 0:
             self.clear()
         assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
@@ -981,6 +980,10 @@ class UpdateManager(SimpleGladeApp):
         else:
             self.cache = MyCache(progress)
     except AssertionError:
+        # if the cache could not be opened for some reason,
+        # let the release upgrader handle it, it deals
+        # a lot better with this
+        self.ask_run_partial_upgrade()
         # we assert a clean cache
         msg=("<big><b>%s</b></big>\n\n%s"% \
              (_("Software index is broken"),
@@ -1018,6 +1021,9 @@ class UpdateManager(SimpleGladeApp):
     """ Check if all available updates can be installed and suggest
         to run a distribution upgrade if not """
     if self.list.distUpgradeWouldDelete > 0:
+        self.ask_run_partial_upgrade()
+
+  def ask_run_partial_upgrade(self):
       self.dialog_dist_upgrade.set_transient_for(self.window_main)
       res = self.dialog_dist_upgrade.run()
       self.dialog_dist_upgrade.hide()
@@ -1026,6 +1032,7 @@ class UpdateManager(SimpleGladeApp):
                    "/usr/bin/gksu", "--desktop",
                    "/usr/share/applications/update-manager.desktop",
                    "--", "/usr/bin/update-manager", "--dist-upgrade")
+      return False
 
   def check_metarelease(self):
       " check for new meta-release information "

@@ -1123,6 +1123,20 @@ class DistUpgradeController(object):
                 sys.exit(1)
         return res 
 
+    def allBackportsAuthenticated(self, backportslist):
+        for pkgname in backportslist:
+            if not self.cache.has_key(pkgname):
+                logging.error("Can not find backport '%s'" % pkgname)
+                return False
+            pkg = self.cache[pkgname]                
+            for cand in pkg.candidateOrigin:
+                if cand.trusted:
+                    return True
+                else:
+                    logging.warning("pre-requists item '%s' is not trusted, retrying" % pkgname)
+            return False
+
+
     def getRequiredBackports(self):
         " download the backports specified in DistUpgrade.cfg "
         logging.debug("getRequiredBackports()")
@@ -1168,8 +1182,22 @@ class DistUpgradeController(object):
         # run update (but ignore errors in case the countrymirror
         # substitution goes wrong, real errors will be caught later
         # when the cache is searched for the backport packages)
-        self.doUpdate(showErrors=False)
-        self.openCache()
+        i=0
+        noCache = apt_pkg.Config.Find("Acquire::http::No-Cache","false")
+        maxRetries = self.config.getint("Network","MaxRetries")
+        while i < maxRetries:
+            self.doUpdate(showErrors=False)
+            self.openCache()
+            if self.allBackportsAuthenticated(backportslist):
+                break
+            # FIXME: move this to some more generic place
+            logging.debug("setting a cache control header to turn off caching temporarely")
+            apt_pkg.Config.Set("Acquire::http::No-Cache","true")
+            i += 1
+        if i == maxRetries:
+            logging.warning("pre-requists item is NOT trusted, giving up")
+            return False
+        apt_pkg.Config.Set("Acquire::http::No-Cache",noCache)
         
         # save cachedir and setup new one
         cachedir = apt_pkg.Config.Find("Dir::Cache::archives")
@@ -1181,9 +1209,6 @@ class DistUpgradeController(object):
 
         # FIXME: sanity check the origin (just for savetfy)
         for pkgname in backportslist:
-            if not self.cache.has_key(pkgname):
-                logging.error("Can not find backport '%s'" % pkgname)
-                return False
             pkg = self.cache[pkgname]
             # look for the right version (backport)
             ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
@@ -1201,18 +1226,14 @@ class DistUpgradeController(object):
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
         pm = apt_pkg.GetPackageManager(self.cache._depcache)
+
         # now get it
         try:
             res = True
             self.cache._fetchArchives(fetcher, pm)
         except IOError, e:
             res = False
-        # debug output
-        for item in fetcher.Items:
-            logging.debug("pre-requists item: '%s' " % item)
-            if not item.IsTrusted:
-                logging.error("pre-requists item '%s' is NOT trusted" % item.DescURI)
-                return False
+
         # reset the cache dir
         os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)

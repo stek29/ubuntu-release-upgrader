@@ -37,13 +37,28 @@ def FuzzyTimeToStr(sec):
     return _("%li minutes") % (sec/60)
   return _("%li seconds") % sec
 
-def estimatedDownloadTime(requiredDownload):
+
+class FetchProgress(apt.progress.FetchProgress):
+  def __init__(self):
+    apt.progress.FetchProgress.__init__(self)
+    self.est_speed = 0
+  def pulse(self):
+    apt.progress.FetchProgress.pulse(self)
+    if self.currentCPS > self.est_speed:
+      self.est_speed = (self.est_speed+self.currentCPS)/2.0
+  def estimatedDownloadTime(self, requiredDownload):
     """ get the estimated download time """
-    timeModem = requiredDownload/(56*1024/8)  # 56 kbit 
-    timeDSL = requiredDownload/(1024*1024/8)  # 1Mbit = 1024 kbit
-    s= _("This download will take about %s with a 1Mbit DSL connection "
-         "and about %s with a 56k modem" % (FuzzyTimeToStr(timeDSL),FuzzyTimeToStr(timeModem)))
+    if self.est_speed == 0:
+      timeModem = requiredDownload/(56*1024/8)  # 56 kbit 
+      timeDSL = requiredDownload/(1024*1024/8)  # 1Mbit = 1024 kbit
+      s= _("This download will take about %s with a 1Mbit DSL connection "
+           "and about %s with a 56k modem" % (FuzzyTimeToStr(timeDSL),FuzzyTimeToStr(timeModem)))
+      return s
+    # if we have a estimated speed, use it
+    s = _("This download will take about %s with your connection. " %
+          FuzzyTimeToStr(requiredDownload/self.est_speed))
     return s
+    
 
 
 class InstallProgress(apt.progress.InstallProgress):
@@ -168,3 +183,7 @@ class DistUpgradeView(object):
         """ process gui events (to keep the gui alive during a long
             computation """
         pass
+
+if __name__ == "__main__":
+  fp = FetchProgress()
+  fp.pulse()

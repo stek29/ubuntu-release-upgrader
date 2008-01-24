@@ -28,10 +28,19 @@ import apt
 import apt_pkg
 import os
 
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 
 import gettext
 from gettext import gettext as _
+
+class TextFetchProgress(apt.progress.TextFetchProgress,FetchProgress):
+    def __init__(self):
+        apt.progress.TextFetchProgress.__init__(self)
+        FetchProgress.__init__(self)
+    def pulse(self):
+        apt.progress.TextFetchProgress.pulse(self)
+        FetchProgress.pulse(self)
+        return True
 
 class TextCdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress  """
@@ -64,7 +73,7 @@ class DistUpgradeViewText(DistUpgradeView):
         
         self.last_step = 0 # keep a record of the latest step
         self._opCacheProgress = apt.progress.OpTextProgress()
-        self._fetchProgress = apt.progress.TextFetchProgress()
+        self._fetchProgress = TextFetchProgress()
         self._cdromProgress = TextCdromProgressAdapter()
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
@@ -143,7 +152,7 @@ class DistUpgradeViewText(DistUpgradeView):
       if downloadSize > 0:
         msg += _("\n\nYou have to download a total of %s. ") %\
                apt_pkg.SizeToStr(downloadSize)
-        msg += estimatedDownloadTime(downloadSize)
+        msg += self._fetchProgress.estimatedDownloadTime(downloadSize)
         msg += "."
       if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
         msg += "\n\n%s" % _("Fetching and installing the upgrade can take several hours and "\
@@ -201,7 +210,7 @@ if __name__ == "__main__":
   #view.confirmChanges("xx",[], 100)
   #sys.exit(0)
 
-  fp = apt.progress.TextFetchProgress()
+  fp = TextFetchProgress()
   ip = apt.progress.InstallProgress()
 
   cache = apt.Cache()

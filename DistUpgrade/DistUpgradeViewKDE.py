@@ -43,7 +43,7 @@ import pty
 from DistUpgradeApport import *
 
 from DistUpgradeController import DistUpgradeController
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 from window_main import window_main
 from dialog_error import dialog_error
 from dialog_changes import dialog_changes
@@ -102,12 +102,13 @@ class KDEOpProgress(apt.progress.OpProgress):
   def done(self):
       self.progressbar_label.setText("")
 
-class KDEFetchProgressAdapter(apt.progress.FetchProgress):
+class KDEFetchProgressAdapter(FetchProgress):
     """ methods for updating the progress bar while fetching packages """
     # FIXME: we really should have some sort of "we are at step"
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
+        FetchProgress.__init__(self)
         # if this is set to false the download will cancel
         self.status = parent.window_main.label_status
         self.progress = parent.window_main.progressbar_cache
@@ -133,7 +134,7 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
-        apt.progress.FetchProgress.pulse(self)
+        FetchProgress.pulse(self)
         self.progress.setProgress(self.percent)
         currentItem = self.currentItems + 1
         if currentItem > self.totalItems:
@@ -608,7 +609,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             #msg += _("<p>You have to download a total of %s. ") %\
             msg += _("<p>You have to download a total of %s. ") %\
                      apt_pkg.SizeToStr(downloadSize)
-            msg += unicode(estimatedDownloadTime(downloadSize), 'UTF-8')
+            msg += unicode(self._fetchProgress.estimatedDownloadTime(downloadSize), 'UTF-8')
             msg += "."
 
         #seems to change what's needed between edgy and feisty

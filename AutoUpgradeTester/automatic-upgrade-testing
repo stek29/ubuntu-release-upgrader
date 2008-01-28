@@ -96,8 +96,11 @@ if __name__ == "__main__":
                       action="store_true",
                       help="log into the a profile")
     parser.add_option("-b", "--backend", dest="backend",
-                      default="UpgradeTestBackendChroot",
+                      default="UpgradeTestBackendQemu",
                       help="UpgradeTestBackend to use: UpgradeTestBackendChroot, UpgradeTestBackendQemu")
+    parser.add_option("-d", "--diff", dest="gen_diff",
+                      default=False, action="store_true",
+                      help="generate a diff of the upgraded image versus a fresh installed image")
     
     
     (options, args) = parser.parse_args()
@@ -122,6 +125,9 @@ if __name__ == "__main__":
 	elif options.bootstrap_only:
             backend = createBackend(options.backend, options.profile, basedir)	
 	    backend.bootstrap(force=True)
+        elif options.gen_diff:
+            backend = createBackend(options.backend, options.profile, basedir)
+            backend.genDiff()
         else:
             res &= testUpgrade(options.backend, options.profile, basedir)
     except Exception, e:

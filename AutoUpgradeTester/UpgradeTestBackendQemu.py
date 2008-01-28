@@ -59,7 +59,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         "-m","1024",      # memory to use
         "-localtime",
         "-vnc","localhost:0",
-        "-redir","tcp:54321::22", # ssh login possible (localhost 54321) available
         "-no-reboot",    # exit on reboot
         "-no-acpi",      # the dapper kernel does not like qemus acpi
 #        "-no-kvm",      # crashes sometimes with kvm HW
@@ -69,7 +68,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         UpgradeTestBackend.__init__(self, profile, basedir)
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
-        self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("NonInteractive","BaseImage")
         if not os.path.exists(self.baseimage):
@@ -77,14 +75,20 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         if self.config.getWithDefault("NonInteractive","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
-        # check if the kvm port is in use
-        if subprocess.call("netstat -t -l -n |grep 0.0.0.0:54321",
+        self.image = os.path.join(self.profiledir, "test-image")
+        # make ssh login possible (localhost 54321) available
+        self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
+        self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
+        self.qemu_options.append("-redir")
+        self.qemu_options.append("tcp:%s::22" % self.ssh_port)
+        # check if the ssh port is in use
+        if subprocess.call("netstat -t -l -n |grep 0.0.0.0:%s" % self.ssh_port,
                            shell=True) == 0:
             raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
 
     def _copyToImage(self, fromF, toF):
         cmd = ["scp",
-               "-P","54321",
+               "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
@@ -101,7 +105,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     def _copyFromImage(self, fromF, toF):
         cmd = ["scp",
-               "-P","54321",
+               "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
@@ -119,7 +123,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         #     -o StrictHostKeyChecking=no
         ret = subprocess.call(["ssh",
                                "-l","root",
-                               "-p","54321",
+                               "-p",self.ssh_port,
                                "localhost",
                                "-q","-q", # shut it up
                                "-i",self.ssh_key,
@@ -128,13 +132,25 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                                ]+command)
         return ret
 
+
+    def genDiff(self):
+        self.config.set("Sources","From",
+                        backend.config.get("Sources","To"))
+        diff_image = os.path.join(backend.profiledir, "test-image.diff")
+        self.baseimage = diff_image
+        self.image = diff_image
+        self.bootstrap(force=True)
+
+    def bootstrapBaseImage(self):
+        " bootstrap the base image using the jeos builder "
+        $ ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt
+
     def bootstrap(self, force=False):
         print "bootstrap()"
 
         # copy image into place, use baseimage as template
         # we expect to be able to ssh into the baseimage to
         # set it up
-        self.image = os.path.join(self.profiledir, "test-image")
         if (not force and
             os.path.exists("%s.%s" % (self.image,self.fromDist)) and 
             self.config.has_option("NonInteractive","CacheBaseImage") and
@@ -144,6 +160,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
             return True
 
         print "Building new image '%s' based on '%s'" % (self.image, self.baseimage)
+        if force or not os.path.exists(self.baseimage):
+            self._bootstrapBaseImage()
         shutil.copy(self.baseimage, self.image)
 
         # get common vars

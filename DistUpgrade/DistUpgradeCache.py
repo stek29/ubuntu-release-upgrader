@@ -258,10 +258,17 @@ class MyCache(apt.Cache):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
 
         # get the distro-specific quirks handler and run it
-        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
+        for name in ("%sQuirks", "from_%sQuirks"):
+            quirksFuncName = name % self.config.get("Sources","From")
+            func = getattr(self, quirksFuncName, None)
+            if func is not None:
+                func()
+
+
+    def from_dapperQuirks(self):
+        self.gutsyQuirks()
+        self.feistyQuirks()
+        self.edgyQuirks()
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
@@ -269,7 +276,7 @@ class MyCache(apt.Cache):
         # lowlatency kernel flavour vanished from feisty->gutsy
         try:
             (version, build, flavour) = self.uname.split("-")
-            if flavour == 'lowlatency':
+            if flavour == 'lowlatency' or flavour == '686':
                 kernel = "linux-image-generic"
                 if not (self[kernel].isInstalled or self[kernel].markedInstall):
                     logging.debug("Selecting new kernel '%s'" % kernel)
@@ -487,7 +494,6 @@ class MyCache(apt.Cache):
 
             # see if it all makes sense
             if not self._verifyChanges():
-                if text_mode: _restore_fds(old_stdout, old_stderr)
                 raise SystemError, _("A essential package would have to be removed")
         except SystemError, e:
             # this should go into a finally: line, see below for the 
@@ -678,6 +684,10 @@ class MyCache(apt.Cache):
         if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False
+        # if we don't have the package anyway, we are fine (this can
+        # happen when forced_obsoletes are specified in the config file)
+        if not pkgname in self:
+            return True
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well

@@ -293,6 +293,10 @@ class DistUpgradeController(object):
                 apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
             if os.path.exists(backportsdir+"/usr/lib/apt/methods"):
                 apt_pkg.Config.Set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
+            conf = backportsdir+"/etc/apt/apt.conf.d/01ubuntu"
+            if os.path.exists(conf):
+                logging.debug("adding config '%s'" % conf)
+                apt_pkg.ReadConfigFile(apt_pkg.Config, conf)
 
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
@@ -891,10 +895,11 @@ class DistUpgradeController(object):
         self.openCache()
         
         # now run the quirksHandler 
-        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
+        for name in ("%sQuirks", "from_%sQuirks"):
+            quirksFuncName = name % self.config.get("Sources","From")
+            func = getattr(self, quirksFuncName, None)
+            if func is not None:
+                func()
 
         # fixup envy
         self._fixupEnvy()
@@ -1061,6 +1066,14 @@ class DistUpgradeController(object):
                                       "evms-gui", "evms-cli",
                                       "linux-patch-evms"])
         return True
+
+    def from_dapperQuirks(self):
+        " this works around quirks for dapper->hardy upgrades "
+        logging.debug("running Controler.from_dapperQuirks handler")
+        self._checkAndRemoveEvms()
+        self._rewriteFstab()
+        self._checkAdminGroup()
+        
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """

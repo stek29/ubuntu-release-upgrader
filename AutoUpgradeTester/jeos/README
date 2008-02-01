@@ -2,14 +2,27 @@ Images created with:
 
 $ bzr get http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 
+
+[hardy]
+$ ./ubuntu-jeos-builder --vm kvm --kernel-flavour generic --suite hardy --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt
+
+[gutsy]
+$ ./ubuntu-jeos-builder --vm kvm --kernel-flavour generic --suite gutsy --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt
+
+
 [feisty]
-$ ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt
+$ ./ubuntu-jeos-builder --vm kvm --kernel-flavour generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt
 
 [dapper]
-$ ./ubuntu-jeos-builder --vm kvm --kernel-flavor 386 --suite dapper --ssh-key `pwd`/foo.pub  --components main,restricted  --rootsize 80G --no-opt
+$ ./ubuntu-jeos-builder --vm kvm --kernel-flavour 386 --suite dapper --ssh-key `pwd`/foo.pub  --components main,restricted  --rootsize 80G --no-opt
 
 (notice the different kernel names for dapper,feisty). The ssh-key is the 
 key that is used by the ugprade tester to log into the virtual machine.
+
+The copy it from 
+"jeos/ubuntu-jeos-$dist-i386/root.qcow2"
+to 
+"jeos/$dist-i386.qcow2"
 
 Make sure you copy the "ssh-key" file into the profile dir so that the 
 upgrade tester can access it

@@ -4,6 +4,8 @@ update-manager (1:0.87.4) hardy; urgency=low
     - run the partial upgrader with error correction
       if the dependencies on the system are not ok
       (it will fix most problems)
+    - use /var/lib/apt/periodic/update-success-stamp for the
+      calculation when the last update was performed (LP: #185894)
   * DistUpgrade/DistUpgradeController.py, DistUpgradeCache.py:
     - if dpkg was interrupted, run "dpkg --configure -a" 
       automatically
@@ -11,6 +13,8 @@ update-manager (1:0.87.4) hardy; urgency=low
   * DistUpgradeView/DistUpgradeView.py:
     - when calculating the download time in estimatedDownloadTime, 
       use the average download speed so far (if available)
+  * data/update-manager.8:
+    - man page fixes (LP: #185615)
 
  --
 

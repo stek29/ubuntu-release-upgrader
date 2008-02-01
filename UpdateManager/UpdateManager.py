@@ -658,11 +658,11 @@ class UpdateManager(SimpleGladeApp):
       return a human readable string with the information when
       the last apt-get update was run
       """
-      if not os.path.exists("/var/lib/apt/periodic/update-stamp"):
+      if not os.path.exists("/var/lib/apt/periodic/update-success-stamp"):
           return None
       # calculate when the last apt-get update (or similar operation)
       # was performed
-      mtime = os.stat("/var/lib/apt/periodic/update-stamp")[stat.ST_MTIME]
+      mtime = os.stat("/var/lib/apt/periodic/update-success-stamp")[stat.ST_MTIME]
       ago_days = int( (time.time() - mtime) / (24*60*60))
       ago_hours = int((time.time() - mtime) / (60*60) )
       if ago_days > 0:

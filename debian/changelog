@@ -10,6 +10,8 @@ update-manager (1:0.87.4) hardy; urgency=low
     - if dpkg was interrupted, run "dpkg --configure -a" 
       automatically
     - if the prerequists can not be authenticated, 
+    - if the upgrade can not be calculated in partial upgrade mode,
+      do not recommend reporting a bug (most likely transient anyway)
   * DistUpgradeView/DistUpgradeView.py:
     - when calculating the download time in estimatedDownloadTime, 
       use the average download speed so far (if available)

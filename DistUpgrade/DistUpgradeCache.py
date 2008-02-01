@@ -462,7 +462,7 @@ class MyCache(apt.Cache):
             time.sleep(0.01)
 
     @withResolverLog
-    def distUpgrade(self, view, serverMode):
+    def distUpgrade(self, view, serverMode, partialUpgrade):
         # keep the GUI alive
         lock = threading.Lock()
         lock.acquire()
@@ -501,12 +501,25 @@ class MyCache(apt.Cache):
             lock.release()
             t.join()
             # FIXME: change the text to something more useful
-            view.error(_("Could not calculate the upgrade"),
-                       _("A unresolvable problem occurred while "
-                         "calculating the upgrade.\n\n"
-                         "Please report this bug against the 'update-manager' "
-                         "package and include the files in /var/log/dist-upgrade/ "
-                         "in the bugreport."))
+            details =  _("A unresolvable problem occurred while "
+                         "calculating the upgrade.\n\n "
+                         "This can be caused by:\n"
+                         " * Upgrading to a pre-release version of Ubuntu\n"
+                         " * Running the current pre-release version of Ubuntu\n"
+                         " * Unofficial software packages not provided by Ubuntu\n"
+                         "\n")
+            # we never have partialUpgrades (including removes) on a stable system
+            # with only ubuntu sources so we do not recommend reporting a bug
+            if partialUpgrade:
+                details += _("This is most likely a transient problem, "
+                             "please try again later.")
+            else:
+                details += _("If none of this applies, then please report this bug against "
+                             "the 'update-manager' package and include the files in "
+                             "/var/log/dist-upgrade/ in the bugreport.")
+
+            view.error(_("Could not calculate the upgrade"), details)
+            
             logging.error("Dist-upgrade failed: '%s'", e)
             return False
         # would be nice to be able to use finally: here, but we need

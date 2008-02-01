@@ -720,7 +720,7 @@ class DistUpgradeController(object):
                                      "removal at the end of the upgrade."),
                                    "\n".join(self.installed_demotions))
         # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode):
+        if not self.cache.distUpgrade(self._view, self.serverMode, self.partialUpgrade):
             return False
 
         if self.serverMode:

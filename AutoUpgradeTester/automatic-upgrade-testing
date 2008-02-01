@@ -131,7 +131,9 @@ if __name__ == "__main__":
         else:
             res &= testUpgrade(options.backend, options.profile, basedir)
     except Exception, e:
-        print "ERROR: expection caught '%s' " % e
+        print "ERROR: exception caught '%s' " % e
+        import traceback
+        traceback.print_exc()
         res = False
 
     # return error

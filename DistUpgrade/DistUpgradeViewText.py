@@ -189,11 +189,14 @@ class DistUpgradeViewText(DistUpgradeView):
           if len(self.toUpgrade) > 0:
               print _("Upgrade: %s\n" % " ".join(self.toUpgrade))
 
-    def askYesNoQuestion(self, summary, msg):
+    def askYesNoQuestion(self, summary, msg, prompt=None):
       print
       print summary
       print msg
-      print _("Continue [yN] "),
+      if not prompt:
+          print _("Continue [yN] "),
+      else:
+          print prompt,
       res = sys.stdin.readline()
       if res.strip().lower().startswith(_("y")):
         return True
@@ -201,7 +204,11 @@ class DistUpgradeViewText(DistUpgradeView):
     
     def confirmRestart(self):
       return self.askYesNoQuestion(_("Restart required"),
-                                   _("To fully ugprade, please restart"))
+                                   _("To finish the upgrade, a restart is "
+                                     "required.\n"
+                                     "If you select 'y' the system "
+                                     "will be restarted."),
+                                   _("Restart the system now [yN] "))
 
 
 if __name__ == "__main__":
@@ -209,6 +216,8 @@ if __name__ == "__main__":
   view = DistUpgradeViewText()
   #view.confirmChanges("xx",[], 100)
   #sys.exit(0)
+
+  view.confirmRestart()
 
   fp = TextFetchProgress()
   ip = apt.progress.InstallProgress()

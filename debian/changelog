@@ -15,8 +15,16 @@ update-manager (1:0.87.4) hardy; urgency=low
   * DistUpgradeView/DistUpgradeView.py:
     - when calculating the download time in estimatedDownloadTime, 
       use the average download speed so far (if available)
+  * DistUpgradeView/DistUpgradeViewText.py:
+    - make the restart required question more clear (LP: #155554)
+  * UpdateManager/Core/DistUpgradeFetcherCore.py:
+    - tidy up output when show authentication message
   * data/update-manager.8:
     - man page fixes (LP: #185615)
+  * update-manager:
+    - run gtk.init_check() to catch errors when DISPLAY is not
+      set (pygtk does not do that automatically)
+
 
  --
 

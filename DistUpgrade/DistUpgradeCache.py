@@ -690,6 +690,7 @@ class MyCache(apt.Cache):
 
     @withResolverLog
     def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
+        logging.debug("tryMarkObsoleteForRemoval(): %s" % pkgname)
         # sanity check, first see if it looks like a runing kernel pkg
         if pkgname.endswith(self.uname):
             logging.debug("skipping runing kernel pkg '%s'" % pkgname)
@@ -699,7 +700,8 @@ class MyCache(apt.Cache):
             return False
         # if we don't have the package anyway, we are fine (this can
         # happen when forced_obsoletes are specified in the config file)
-        if not pkgname in self:
+        if not self.has_key(pkgname):
+            #logging.debug("package '%s' not in cache" % pkgname)
             return True
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
@@ -708,10 +710,12 @@ class MyCache(apt.Cache):
         self.create_snapshot()
         try:
             self[pkgname].markDelete()
+            logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 
                       pkg.name in foreign_pkgs or 
                       self._inRemovalBlacklist(pkg.name)):
+                    logging.debug("package '%s' has unwanted removals, skipping" % pkgname)
                     self.restore_snapshot()
                     return False
         except (SystemError,KeyError),e:

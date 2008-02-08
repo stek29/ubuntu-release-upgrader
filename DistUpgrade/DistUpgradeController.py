@@ -943,6 +943,7 @@ class DistUpgradeController(object):
 
         # see if we actually have to do anything here
         if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
+            logging.debug("Skipping RemoveObsoletes as stated in the config")
             remove_candidates = set()
         logging.debug("remove_candidates: '%s'" % remove_candidates)
         logging.debug("Start checking for obsolete pkgs")

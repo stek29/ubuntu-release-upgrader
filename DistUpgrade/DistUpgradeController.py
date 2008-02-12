@@ -46,7 +46,7 @@ from distro import Distribution, get_distro, NoDistroTemplateException
 
 from gettext import gettext as _
 import gettext
-from DistUpgradeCache import MyCache, CacheException, CacheExceptionLockingFailed
+from DistUpgradeCache import *
 from DistUpgradeApport import *
 
 # some constant
@@ -173,6 +173,13 @@ class DistUpgradeController(object):
             self.cache = MyCache(self.config,
                                  self._view,
                                  self._view.getOpCacheProgress())
+        # if we get a dpkg error that it was interrupted, just
+        # run dpkg --configure -a
+        except CacheExceptionDpkgInterrupted, e:
+            self._view.getTerminal().call(["dpkg","--configure","-a"])
+            self.cache = MyCache(self.config,
+                                 self._view,
+                                 self._view.getOpCacheProgress())
         except CacheExceptionLockingFailed, e:
             logging.error("Cache can not be locked (%s)" % e)
             self._view.error(_("Unable to get exclusive lock"),
@@ -286,6 +293,10 @@ class DistUpgradeController(object):
                 apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
             if os.path.exists(backportsdir+"/usr/lib/apt/methods"):
                 apt_pkg.Config.Set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
+            conf = backportsdir+"/etc/apt/apt.conf.d/01ubuntu"
+            if os.path.exists(conf):
+                logging.debug("adding config '%s'" % conf)
+                apt_pkg.ReadConfigFile(apt_pkg.Config, conf)
 
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
@@ -709,7 +720,7 @@ class DistUpgradeController(object):
                                      "removal at the end of the upgrade."),
                                    "\n".join(self.installed_demotions))
         # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode):
+        if not self.cache.distUpgrade(self._view, self.serverMode, self.partialUpgrade):
             return False
 
         if self.serverMode:
@@ -807,7 +818,8 @@ class DistUpgradeController(object):
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
-                # check if the installprogress catched a pkgfailure, if not, generate a fallback here
+                # check if the installprogress catched a pkgfailure, 
+                # if not, generate a fallback here
                 if iprogress.pkg_failures == 0:
                     logging.warning("cache.commit() raised a SystemError but pkg_failures count is 0")
                     errormsg = "SystemError in cache.commit(): %s" % e
@@ -883,10 +895,11 @@ class DistUpgradeController(object):
         self.openCache()
         
         # now run the quirksHandler 
-        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
+        for name in ("%sQuirks", "from_%sQuirks"):
+            quirksFuncName = name % self.config.get("Sources","From")
+            func = getattr(self, quirksFuncName, None)
+            if func is not None:
+                func()
 
         # fixup envy
         self._fixupEnvy()
@@ -930,6 +943,7 @@ class DistUpgradeController(object):
 
         # see if we actually have to do anything here
         if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
+            logging.debug("Skipping RemoveObsoletes as stated in the config")
             remove_candidates = set()
         logging.debug("remove_candidates: '%s'" % remove_candidates)
         logging.debug("Start checking for obsolete pkgs")
@@ -1054,6 +1068,14 @@ class DistUpgradeController(object):
                                       "linux-patch-evms"])
         return True
 
+    def from_dapperQuirks(self):
+        " this works around quirks for dapper->hardy upgrades "
+        logging.debug("running Controler.from_dapperQuirks handler")
+        self._checkAndRemoveEvms()
+        self._rewriteFstab()
+        self._checkAdminGroup()
+        
+
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
         logging.debug("running Controler.gutsyQuirks handler")
@@ -1116,6 +1138,20 @@ class DistUpgradeController(object):
                 sys.exit(1)
         return res 
 
+    def allBackportsAuthenticated(self, backportslist):
+        for pkgname in backportslist:
+            if not self.cache.has_key(pkgname):
+                logging.error("Can not find backport '%s'" % pkgname)
+                return False
+            pkg = self.cache[pkgname]                
+            for cand in pkg.candidateOrigin:
+                if cand.trusted:
+                    return True
+                else:
+                    logging.warning("pre-requists item '%s' is not trusted, retrying" % pkgname)
+            return False
+
+
     def getRequiredBackports(self):
         " download the backports specified in DistUpgrade.cfg "
         logging.debug("getRequiredBackports()")
@@ -1161,8 +1197,22 @@ class DistUpgradeController(object):
         # run update (but ignore errors in case the countrymirror
         # substitution goes wrong, real errors will be caught later
         # when the cache is searched for the backport packages)
-        self.doUpdate(showErrors=False)
-        self.openCache()
+        i=0
+        noCache = apt_pkg.Config.Find("Acquire::http::No-Cache","false")
+        maxRetries = self.config.getint("Network","MaxRetries")
+        while i < maxRetries:
+            self.doUpdate(showErrors=False)
+            self.openCache()
+            if self.allBackportsAuthenticated(backportslist):
+                break
+            # FIXME: move this to some more generic place
+            logging.debug("setting a cache control header to turn off caching temporarely")
+            apt_pkg.Config.Set("Acquire::http::No-Cache","true")
+            i += 1
+        if i == maxRetries:
+            logging.warning("pre-requists item is NOT trusted, giving up")
+            return False
+        apt_pkg.Config.Set("Acquire::http::No-Cache",noCache)
         
         # save cachedir and setup new one
         cachedir = apt_pkg.Config.Find("Dir::Cache::archives")
@@ -1174,9 +1224,6 @@ class DistUpgradeController(object):
 
         # FIXME: sanity check the origin (just for savetfy)
         for pkgname in backportslist:
-            if not self.cache.has_key(pkgname):
-                logging.error("Can not find backport '%s'" % pkgname)
-                return False
             pkg = self.cache[pkgname]
             # look for the right version (backport)
             ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
@@ -1194,18 +1241,14 @@ class DistUpgradeController(object):
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
         pm = apt_pkg.GetPackageManager(self.cache._depcache)
+
         # now get it
         try:
             res = True
             self.cache._fetchArchives(fetcher, pm)
         except IOError, e:
             res = False
-        # debug output
-        for item in fetcher.Items:
-            logging.debug("pre-requists item: '%s' " % item)
-            if not item.IsTrusted:
-                logging.error("pre-requists item '%s' is NOT trusted" % item.DescURI)
-                return False
+
         # reset the cache dir
         os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)

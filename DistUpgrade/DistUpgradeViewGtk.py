@@ -38,7 +38,7 @@ import os
 
 from DistUpgradeApport import *
 
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, estimatedDownloadTime, InstallProgress
+from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
 
 import gettext
@@ -87,11 +87,12 @@ class GtkOpProgress(apt.progress.OpProgress):
       self.progressbar.set_text(" ")
 
 
-class GtkFetchProgressAdapter(apt.progress.FetchProgress):
+class GtkFetchProgressAdapter(FetchProgress):
     # FIXME: we really should have some sort of "we are at step"
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
+        FetchProgress.__init__(self)
         # if this is set to false the download will cancel
         self.status = parent.label_status
         self.progress = parent.progressbar_cache
@@ -128,7 +129,7 @@ class GtkFetchProgressAdapter(apt.progress.FetchProgress):
     def pulse(self):
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
-        apt.progress.FetchProgress.pulse(self)
+        FetchProgress.pulse(self)
         self.progress.set_fraction(self.percent/100.0)
         currentItem = self.currentItems + 1
         if currentItem > self.totalItems:
@@ -563,7 +564,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         if downloadSize > 0:
             msg += _("\n\nYou have to download a total of %s. ") %\
                      apt_pkg.SizeToStr(downloadSize)
-            msg += estimatedDownloadTime(downloadSize)
+            msg += self._fetchProgress.estimatedDownloadTime(downloadSize)
             msg += "."
 
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:

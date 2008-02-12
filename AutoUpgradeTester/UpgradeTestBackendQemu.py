@@ -56,10 +56,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     qemu_binary = "kvm"
     
     qemu_options = [
-        "-m","1024",      # memory to use
+        "-m","768",      # memory to use
         "-localtime",
         "-vnc","localhost:0",
-        "-redir","tcp:54321::22", # ssh login possible (localhost 54321) available
         "-no-reboot",    # exit on reboot
         "-no-acpi",      # the dapper kernel does not like qemus acpi
 #        "-no-kvm",      # crashes sometimes with kvm HW
@@ -69,7 +68,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         UpgradeTestBackend.__init__(self, profile, basedir)
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
-        self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("NonInteractive","BaseImage")
         if not os.path.exists(self.baseimage):
@@ -77,14 +75,20 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         if self.config.getWithDefault("NonInteractive","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
-        # check if the kvm port is in use
-        if subprocess.call("netstat -t -l -n |grep 0.0.0.0:54321",
+        self.image = os.path.join(self.profiledir, "test-image")
+        # make ssh login possible (localhost 54321) available
+        self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
+        self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
+        self.qemu_options.append("-redir")
+        self.qemu_options.append("tcp:%s::22" % self.ssh_port)
+        # check if the ssh port is in use
+        if subprocess.call("netstat -t -l -n |grep 0.0.0.0:%s" % self.ssh_port,
                            shell=True) == 0:
             raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
 
     def _copyToImage(self, fromF, toF):
         cmd = ["scp",
-               "-P","54321",
+               "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
@@ -101,7 +105,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     def _copyFromImage(self, fromF, toF):
         cmd = ["scp",
-               "-P","54321",
+               "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
@@ -114,19 +118,69 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         return ret
 
 
-    def _runInImage(self, command, withProxy=True):
+    def _runInImage(self, command, **kwargs):
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
         #     -o StrictHostKeyChecking=no
         ret = subprocess.call(["ssh",
                                "-l","root",
-                               "-p","54321",
+                               "-p",self.ssh_port,
                                "localhost",
                                "-q","-q", # shut it up
                                "-i",self.ssh_key,
                                "-o", "StrictHostKeyChecking=no",
                                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-                               ]+command)
+                               ]+command, **kwargs)
         return ret
+
+
+    def genDiff(self):
+        """ 
+        generate a diff that compares a fresh install to a upgrade.
+        ideally that should be empty
+        Ensure that we always run this *after* the regular upgrade was
+        run (otherwise it is useless)
+        """
+        # generate ls -R output of test-image (
+        self.start()
+        ret = self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
+                                "/initrd", "/lib", "/root", "/sbin/",
+                                "/srv", "/usr", "/var"],
+                               stdout=open(self.resultdir+"/upgrade_install.files","w"))
+        ret = self._runInImage(["dpkg","--get-selections"],
+                               stdout=open(self.resultdir+"/upgrade_install.pkgs","w"))
+        self._runInImage(["tar","cvf","/tmp/etc-upgrade.tar","/etc"])
+        self._copyFromImage("/tmp/etc-upgrade.tar", self.resultdir)
+        self.stop()
+
+        # HACK: now build fresh toDist image - it would be best if
+        self.fromDist = self.config.get("Sources","To")
+        self.config.set("Sources","From",
+                        self.config.get("Sources","To"))
+        diff_image = os.path.join(self.profiledir, "test-image.diff")
+        # FIXME: we need to regenerate the base image too, but there is no
+        #        way to do this currently without running as root
+        # as a workaround we regenerate manually every now and then
+        # and use UpgradeFromDistOnBootstrap=true here
+        self.config.set("NonInteractive","CacheBaseImage", "false")
+        self.config.set("NonInteractive","UpgradeFromDistOnBootstrap","true")
+        self.baseimage = "jeos/%s-i386.qcow2" % self.config.get("Sources","To")
+        self.image = diff_image
+        print "bootstraping into %s" % diff_image
+        self.bootstrap()
+        print "bootstrap finshsed"
+        self.start()
+        print "generating file diff list"
+        ret = self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
+                                "/initrd", "/lib", "/root", "/sbin/",
+                                "/srv", "/usr", "/var"],
+                               stdout=open(self.resultdir+"/fresh_install","w"))
+        ret = self._runInImage(["dpkg","--get-selections"],
+                               stdout=open(self.resultdir+"/fresh_install.pkgs","w"))
+        self._runInImage(["tar","cvf","/tmp/etc-fresh.tar","/etc"])
+        self._copyFromImage("/tmp/etc-fresh.tar", self.resultdir)
+        self.stop()
+        # now compare the diffs
+        pass
 
     def bootstrap(self, force=False):
         print "bootstrap()"
@@ -134,7 +188,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # copy image into place, use baseimage as template
         # we expect to be able to ssh into the baseimage to
         # set it up
-        self.image = os.path.join(self.profiledir, "test-image")
         if (not force and
             os.path.exists("%s.%s" % (self.image,self.fromDist)) and 
             self.config.has_option("NonInteractive","CacheBaseImage") and
@@ -330,7 +383,9 @@ iface eth0 inet static
         # - new kernel is runing (run uname -r in target)
         # - did it sucessfully rebootet
         # - is X runing
+        # - generate diff of upgrade vs fresh install
         # ...
+        #self.genDiff()
         return True
         
 

@@ -21,6 +21,8 @@ class CacheException(Exception):
     pass
 class CacheExceptionLockingFailed(CacheException):
     pass
+class CacheExceptionDpkgInterrupted(CacheException):
+    pass
 
 class MyCache(apt.Cache):
     # init
@@ -39,6 +41,9 @@ class MyCache(apt.Cache):
                 self.lockListsDir()
                 self.lock = True
             except SystemError, e:
+                # checking for this is ok, its not translatable
+                if "dpkg was interrupted" in str(e):
+                    raise CacheExceptionDpkgInterrupted, e
                 raise CacheExceptionLockingFailed, e
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
@@ -253,10 +258,17 @@ class MyCache(apt.Cache):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
 
         # get the distro-specific quirks handler and run it
-        quirksFuncName = "%sQuirks" % self.config.get("Sources","To")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
+        for name in ("%sQuirks", "from_%sQuirks"):
+            quirksFuncName = name % self.config.get("Sources","From")
+            func = getattr(self, quirksFuncName, None)
+            if func is not None:
+                func()
+
+
+    def from_dapperQuirks(self):
+        self.gutsyQuirks()
+        self.feistyQuirks()
+        self.edgyQuirks()
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
@@ -264,7 +276,7 @@ class MyCache(apt.Cache):
         # lowlatency kernel flavour vanished from feisty->gutsy
         try:
             (version, build, flavour) = self.uname.split("-")
-            if flavour == 'lowlatency':
+            if flavour == 'lowlatency' or flavour == '686':
                 kernel = "linux-image-generic"
                 if not (self[kernel].isInstalled or self[kernel].markedInstall):
                     logging.debug("Selecting new kernel '%s'" % kernel)
@@ -450,7 +462,7 @@ class MyCache(apt.Cache):
             time.sleep(0.01)
 
     @withResolverLog
-    def distUpgrade(self, view, serverMode):
+    def distUpgrade(self, view, serverMode, partialUpgrade):
         # keep the GUI alive
         lock = threading.Lock()
         lock.acquire()
@@ -482,7 +494,6 @@ class MyCache(apt.Cache):
 
             # see if it all makes sense
             if not self._verifyChanges():
-                if text_mode: _restore_fds(old_stdout, old_stderr)
                 raise SystemError, _("A essential package would have to be removed")
         except SystemError, e:
             # this should go into a finally: line, see below for the 
@@ -490,12 +501,25 @@ class MyCache(apt.Cache):
             lock.release()
             t.join()
             # FIXME: change the text to something more useful
-            view.error(_("Could not calculate the upgrade"),
-                       _("A unresolvable problem occurred while "
-                         "calculating the upgrade.\n\n"
-                         "Please report this bug against the 'update-manager' "
-                         "package and include the files in /var/log/dist-upgrade/ "
-                         "in the bugreport."))
+            details =  _("A unresolvable problem occurred while "
+                         "calculating the upgrade.\n\n "
+                         "This can be caused by:\n"
+                         " * Upgrading to a pre-release version of Ubuntu\n"
+                         " * Running the current pre-release version of Ubuntu\n"
+                         " * Unofficial software packages not provided by Ubuntu\n"
+                         "\n")
+            # we never have partialUpgrades (including removes) on a stable system
+            # with only ubuntu sources so we do not recommend reporting a bug
+            if partialUpgrade:
+                details += _("This is most likely a transient problem, "
+                             "please try again later.")
+            else:
+                details += _("If none of this applies, then please report this bug against "
+                             "the 'update-manager' package and include the files in "
+                             "/var/log/dist-upgrade/ in the bugreport.")
+
+            view.error(_("Could not calculate the upgrade"), details)
+            
             logging.error("Dist-upgrade failed: '%s'", e)
             return False
         # would be nice to be able to use finally: here, but we need
@@ -666,6 +690,7 @@ class MyCache(apt.Cache):
 
     @withResolverLog
     def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
+        logging.debug("tryMarkObsoleteForRemoval(): %s" % pkgname)
         # sanity check, first see if it looks like a runing kernel pkg
         if pkgname.endswith(self.uname):
             logging.debug("skipping runing kernel pkg '%s'" % pkgname)
@@ -673,6 +698,11 @@ class MyCache(apt.Cache):
         if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False
+        # if we don't have the package anyway, we are fine (this can
+        # happen when forced_obsoletes are specified in the config file)
+        if not self.has_key(pkgname):
+            #logging.debug("package '%s' not in cache" % pkgname)
+            return True
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well
@@ -680,10 +710,12 @@ class MyCache(apt.Cache):
         self.create_snapshot()
         try:
             self[pkgname].markDelete()
+            logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 
                       pkg.name in foreign_pkgs or 
                       self._inRemovalBlacklist(pkg.name)):
+                    logging.debug("package '%s' has unwanted removals, skipping" % pkgname)
                     self.restore_snapshot()
                     return False
         except (SystemError,KeyError),e:

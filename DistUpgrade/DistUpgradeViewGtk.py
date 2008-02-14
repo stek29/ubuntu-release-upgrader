@@ -387,7 +387,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
 
         # Use italic style in the status labels
         attrlist=pango.AttrList()
-        attr = pango.AttrStyle(pango.STYLE_ITALIC, 0, -1)
+        #attr = pango.AttrStyle(pango.STYLE_ITALIC, 0, -1)
+        attr = pango.AttrScale(pango.SCALE_SMALL)
         attrlist.insert(attr)
         self.label_status.set_property("attributes", attrlist)
         # reasonable fault handler

@@ -177,3 +177,11 @@ class ReleaseNotesViewer(gtk.TextView):
             else:
                 self.get_window(gtk.TEXT_WINDOW_TEXT).\
                         set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+
+if __name__ == "__main__":
+    # some simple test code
+    win = gtk.Window()
+    rv = ReleaseNotesViewer(open("../DistUpgrade/ReleaseAnnouncement").read())
+    win.add(rv)
+    win.show_all()
+    gtk.main()

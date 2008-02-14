@@ -46,6 +46,8 @@ class MetaReleaseCore(object):
     distributions. 
     """
 
+    DEBUG = os.environ.has_key("DEBUG_UPDATE_MANAGER")
+
     # some constants
     CONF = "/etc/update-manager/release-upgrades"
     METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
@@ -54,6 +56,7 @@ class MetaReleaseCore(object):
     METARELEASE_URI_PROPOSED_POSTFIX = "-proposed"
 
     def __init__(self, useDevelopmentRelease=False, useProposed=False):
+        self._debug("MetaRelease.__init__() useDevel=%s useProposed=%s" % (useDevelopmentRelease, useProposed))
         # information about the available dists
         self.downloading = True
         self.new_dist = None
@@ -127,7 +130,7 @@ class MetaReleaseCore(object):
         return dist
     
     def parse(self):
-        #print "parse"
+        self._debug("MetaRelease.parse()")
         current_dist_name = self.get_dist()
         current_dist = None
         dists = []
@@ -168,7 +171,7 @@ class MetaReleaseCore(object):
         for dist in dists:
             if dist.date > current_dist.date and dist.supported == True: 
                 upgradable_to = dist
-                #print "new dist: %s" % upgradable_to
+                self._debug("new dist: %s" % upgradable_to)
                 break
 
         # only warn if unsupported and a new dist is available (because 
@@ -184,7 +187,7 @@ class MetaReleaseCore(object):
     # the network thread that tries to fetch the meta-index file
     # can't touch the gui, runs as a thread
     def download(self):
-        #print "download"
+        self._debug("MetaRelease.download()")
         lastmodified = 0
         req = urllib2.Request(self.METARELEASE_URI)
         # make sure that we always get the latest file (#107716)
@@ -217,8 +220,15 @@ class MetaReleaseCore(object):
                 self.metarelease_information=open(self.METARELEASE_FILE,"r")
         # now check the information we have
         if self.metarelease_information != None:
+            self._debug("have self.metarelease_information")
             self.parse()
+        else:
+            self._debug("NO self.metarelease_information")
         self.downloading = False
+
+    def _debug(self, msg):
+        if self.DEBUG:
+            sys.stderr.write(msg+"\n")
 
 
 if __name__ == "__main__":

@@ -99,9 +99,9 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           self.window_main.set_sensitive(True)
           self.window_main.window.set_cursor(None)
           # user clicked cancel
-          if res == gtk.RESPONSE_CANCEL:
-              return False
-      return True
+          if res == gtk.RESPONSE_OK:
+              return True
+      return False
 
 if __name__ == "__main__":
     error(None, "summary","message")

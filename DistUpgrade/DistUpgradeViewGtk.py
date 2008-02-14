@@ -529,7 +529,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self.dialog_error.hide()
         return False
 
-    def confirmChanges(self, summary, changes, downloadSize, actions=None):
+    def confirmChanges(self, summary, changes, downloadSize, 
+                       actions=None, removal_bold=True):
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
@@ -597,7 +598,10 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         for dg in self.toDowngrade:
             self.details_list.append([_("<b>Downgrade %s</b>") % dg])
         for rm in self.toRemove:
-            self.details_list.append([_("<b>Remove %s</b>") % rm])
+            s = _("Remove %s") % rm
+            if removal_bold:
+              s = "<b>%s</b>" % s
+            self.details_list.append([s])
         for inst in self.toInstall:
             self.details_list.append([_("Install %s") % inst])
         for up in self.toUpgrade:

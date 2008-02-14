@@ -228,19 +228,23 @@ class MyCache(apt.Cache):
                                       self[key].markedInstall):
                 for pkgname in self.config.getlist(key,"KeepInstalledPkgs"):
                     keepInstalled(self, pkgname, "%s KeepInstalledPkgs rule" % key)
-        # now the keepInstalledSection code
-        for section in self.config.getlist("Distro","KeepInstalledSection"):
-            for pkg in self:
-                if pkg.markedDelete and pkg.section == section:
-                    keepInstalled(self, pkg.name, "Distro KeepInstalledSection rule: %s" % section)
-        # the the per-metapkg rules
-        for key in self.metapkgs:
-            if self.has_key(key) and (self[key].isInstalled or
-                                      self[key].markedInstall):
-                for section in self.config.getlist(key,"KeepInstalledSection"):
-                    for pkg in self:
-                        if pkg.markedDelete and pkg.section == section:
-                            keepInstalled(self, pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
+
+        # only enforce section if we have a network. Otherwise we run
+        # into CD upgrade issues for installed language packs etc
+        if bool(self.config.get("Options","withNetwork")):
+            logging.debug("Running KeepInstalledSection rules")
+            # now the keepInstalledSection code
+            for section in self.config.getlist("Distro","KeepInstalledSection"):
+                for pkg in self:
+                    if pkg.markedDelete and pkg.section == section:
+                        keepInstalled(self, pkg.name, "Distro KeepInstalledSection rule: %s" % section)
+            for key in self.metapkgs:
+                if self.has_key(key) and (self[key].isInstalled or
+                                          self[key].markedInstall):
+                    for section in self.config.getlist(key,"KeepInstalledSection"):
+                        for pkg in self:
+                            if pkg.markedDelete and pkg.section == section:
+                                keepInstalled(self, pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
         
 
     def postUpgradeRule(self):

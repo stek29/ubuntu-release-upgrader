@@ -141,6 +141,11 @@ class DistUpgradeController(object):
         # the configuration
         self.config = DistUpgradeConfig(datadir)
         self.sources_backup_ext = "."+self.config.get("Files","BackupExt")
+
+        # move some of the options stuff into the self.config, 
+        # ConfigParser deals only with strings it seems *sigh*
+        self.config.add_section("Options")
+        self.config.set("Options","withNetwork", str(self.useNetwork))
         
         # some constants here
         self.fromDist = self.config.get("Sources","From")

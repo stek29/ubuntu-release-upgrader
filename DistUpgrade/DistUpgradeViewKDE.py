@@ -570,7 +570,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         return False
 
-    def confirmChanges(self, summary, changes, downloadSize, actions=None):
+    def confirmChanges(self, summary, changes, downloadSize, 
+                       actions=None, removal_bold=True):
         """show the changes dialogue"""
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)

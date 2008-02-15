@@ -123,7 +123,8 @@ class DistUpgradeViewText(DistUpgradeView):
       if extended_msg:
         print extended_msg
       return False
-    def confirmChanges(self, summary, changes, downloadSize, actions=None):
+    def confirmChanges(self, summary, changes, downloadSize,
+                       actions=None, removal_bold=True):
       DistUpgradeView.confirmChanges(self, summary, changes, downloadSize, actions)
       pkgs_remove = len(self.toRemove)
       pkgs_inst = len(self.toInstall)

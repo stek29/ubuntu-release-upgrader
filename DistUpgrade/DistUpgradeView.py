@@ -142,7 +142,8 @@ class DistUpgradeView(object):
     def hideStep(self, step):
         " hide a certain step from the GUI "
         pass
-    def confirmChanges(self, summary, changes, downloadSize, actions=None):
+    def confirmChanges(self, summary, changes, downloadSize,
+                       actions=None, removal_bold=True):
         """ display the list of changed packages (apt.Package) and
             return if the user confirms them
         """

@@ -1182,6 +1182,7 @@ class DistUpgradeController(object):
         for line in open(template):
             template = Template(line)
             outfile.write(template.safe_substitute(mirror=mirrorlines))
+        outfile.close()
         return True
 
     def getRequiredBackports(self):
@@ -1232,7 +1233,7 @@ class DistUpgradeController(object):
             logging.error("sourceslist not found '%s'" % prereq_template)
             return False
         outpath = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
-        outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template), "w")
+        outfile = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
         self._addPreRequistsSourcesList(prereq_template, outfile) 
                     
         # run update (but ignore errors in case the countrymirror

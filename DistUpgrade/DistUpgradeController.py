@@ -165,19 +165,20 @@ class DistUpgradeController(object):
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
         apt_pkg.Config.Set("Acquire::Retries", str(maxRetries))
-
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
+        # list of valid mirrors that we can add
+        self.valid_mirrors = self.config.getListFromFile("Sources","ValidMirrors")
 
-
-    def openCache(self):
+    def openCache(self, lock=True):
         if self.cache is not None:
             self.cache.releaseLock()
             self.cache.unlockListsDir()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
-                                 self._view.getOpCacheProgress())
+                                 self._view.getOpCacheProgress(),
+                                 lock)
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
@@ -391,9 +392,6 @@ class DistUpgradeController(object):
                    self.toDist+"-backports"
                    ]
 
-        # list of valid mirrors that we can add
-        valid_mirrors = self.config.getListFromFile("Sources","ValidMirrors")
-
         self.sources_disabled = False
 
         # look over the stuff we have
@@ -426,42 +424,40 @@ class DistUpgradeController(object):
 
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or offical site)
-            validMirror = False
-            for mirror in valid_mirrors:
-                if not mirror_check or is_mirror(mirror,entry.uri):
-                    validMirror = True
-                    # disabled/security/commercial are special cases
-                    validTo = True
-                    if (entry.disabled or
-                        entry.uri.startswith("http://security.ubuntu.com") or
-                        entry.uri.startswith("http://archive.canonical.com")):
-                        validTo = False
-                    if entry.dist in toDists:
-                        # so the self.sources.list is already set to the new
-                        # distro
-                        logging.debug("entry '%s' is already set to new dist" % entry)
-                        foundToDist |= validTo
-                    elif entry.dist in fromDists:
-                        foundToDist |= validTo
-                        entry.dist = toDists[fromDists.index(entry.dist)]
-                        logging.debug("entry '%s' updated to new dist" % entry)
-                    else:
-                        # disable all entries that are official but don't
-                        # point to either "to" or "from" dist
-                        entry.disabled = True
-                        self.sources_disabled = True
-                        logging.debug("entry '%s' was disabled (unknown dist)" % entry)
-                    # check if the arch is powerpc and if so, transition
-                    # to ports.ubuntu.com (got demoted in gutsy)
-                    if (entry.type == "deb" and
-                        apt_pkg.Config.Find("APT::Architecture") == "powerpc"):
-                        
-                        logging.debug("moving powerpc source entry to 'ports.ubuntu.com' ")
-                        entry.uri = "http://ports.ubuntu.com/"
-                    
-                    # we found a valid mirror for this line,
-                    # so we can break here
-                    break
+            validMirror = self.isMirror(entry.uri)
+            if validMirror or not mirror_check:
+                validMirror = True
+                # disabled/security/commercial are special cases
+                # we use validTo/foundToDist to figure out if we have a 
+                # main archive mirror in the sources.list or if we 
+                # need to add one
+                validTo = True
+                if (entry.disabled or
+                    entry.uri.startswith("http://security.ubuntu.com") or
+                    entry.uri.startswith("http://archive.canonical.com")):
+                    validTo = False
+                if entry.dist in toDists:
+                    # so the self.sources.list is already set to the new
+                    # distro
+                    logging.debug("entry '%s' is already set to new dist" % entry)
+                    foundToDist |= validTo
+                elif entry.dist in fromDists:
+                    foundToDist |= validTo
+                    entry.dist = toDists[fromDists.index(entry.dist)]
+                    logging.debug("entry '%s' updated to new dist" % entry)
+                else:
+                    # disable all entries that are official but don't
+                    # point to either "to" or "from" dist
+                    entry.disabled = True
+                    self.sources_disabled = True
+                    logging.debug("entry '%s' was disabled (unknown dist)" % entry)
+                # check if the arch is powerpc and if so, transition
+                # to ports.ubuntu.com (got demoted in gutsy)
+                if (entry.type == "deb" and
+                    apt_pkg.Config.Find("APT::Architecture") == "powerpc"):
+                    logging.debug("moving powerpc source entry to 'ports.ubuntu.com' ")
+                    entry.uri = "http://ports.ubuntu.com/"
+
             # disable anything that is not from a official mirror
             if not validMirror:
                 entry.disabled = True
@@ -1156,6 +1152,37 @@ class DistUpgradeController(object):
                     logging.warning("pre-requists item '%s' is not trusted, retrying" % pkgname)
             return False
 
+    def isMirror(self, uri):
+        " check if uri is a known mirror "
+        for mirror in self.valid_mirrors:
+            if is_mirror(mirror, uri):
+                return True
+        return False
+
+    def _getPreReqMirrorLines(self):
+        " get sources.list snippet lines for the current mirror "
+        lines = ""
+        sources = SourcesList(matcherPath=".")
+        for entry in sources.list:
+            if entry.invalid or entry.disabled:
+                continue
+            if (entry.type == "deb" and 
+                self.isMirror(entry.uri) and
+                not entry.uri.startswith("http://security.ubuntu.com") and
+                not entry.uri.startswith("http://archive.ubuntu.com") ):
+                lines += "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
+        return lines
+
+    def _addPreRequistsSourcesList(self, template, out):
+        " add prerequists based on template into the path outfile "
+        # go over the sources.list and try to find a valid mirror
+        # that we can use to add the backports dir
+        outfile = open(out, "w")
+        mirrorlines = self._getPreReqMirrorLines()
+        for line in open(template):
+            template = Template(line)
+            outfile.write(template.safe_substitute(mirror=mirrorlines))
+        return True
 
     def getRequiredBackports(self):
         " download the backports specified in DistUpgrade.cfg "
@@ -1182,22 +1209,31 @@ class DistUpgradeController(object):
                 return False
             return self.setupRequiredBackports(backportsdir)
 
-        # add the backports sources.list fragment and do mirror substitution
         # we support PreRequists/SourcesList-$arch sections here too
-        mirror = country_mirror()
+        # 
+        # logic for mirror finding works list this:     
+        # - use the mirror template from the config, then: [done]
+        # 
+        #  - try to find known mirror (isMirror) and prepend it [done]
+        #  - archive.ubuntu.com is always a fallback at the end [done]
+        # 
+        # see if we find backports with that
+        # - if not, try guessing based on URI, Trust and Dist
+        #   in existing sources.list (internal mirror with no
+        #   outside connection maybe)
+        # 
+        # make sure to remove file on cancel
+        
         conf_option = "SourcesList"
         if self.config.has_option("PreRequists",conf_option+"-%s" % self.arch):
             conf_option = conf_option + "-%s" % self.arch
-        sourceslistd = self.config.get("PreRequists",conf_option)
-        if not os.path.exists(sourceslistd):
-            logging.error("sourceslist not found '%s'" % sourceslistd)
+        prereq_template = self.config.get("PreRequists",conf_option)
+        if not os.path.exists(prereq_template):
+            logging.error("sourceslist not found '%s'" % prereq_template)
             return False
-        outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), sourceslistd), "w")
-        logging.debug("using prerequists sources.list: '%s'" % outfile)
-        for line in open(sourceslistd):
-            template = Template(line)
-            outfile.write(template.safe_substitute(countrymirror=mirror))
-        outfile.close()
+        outpath = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
+        outfile = open(os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template), "w")
+        self._addPreRequistsSourcesList(prereq_template, outfile) 
                     
         # run update (but ignore errors in case the countrymirror
         # substitution goes wrong, real errors will be caught later
@@ -1234,9 +1270,11 @@ class DistUpgradeController(object):
             ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
             if not ver:
                 logging.error("No candidate for '%s'" % pkgname)
+                os.unlink(outpath)
                 return False
             if ver.FileList == None:
                 logging.error("No ver.FileList for '%s'" % pkgname)
+                os.unlink(outpath)
                 return False
             logging.debug("marking '%s' for install" % pkgname)
             # mvo: autoInst is not availabe on dapper
@@ -1255,7 +1293,7 @@ class DistUpgradeController(object):
             res = False
 
         # reset the cache dir
-        os.unlink(apt_pkg.Config.FindDir("Dir::Etc::sourceparts")+sourceslistd)
+        os.unlink(outpath)
         apt_pkg.Config.Set("Dir::Cache::archives",cachedir)
         os.chdir(cwd)
         return self.setupRequiredBackports(backportsdir)

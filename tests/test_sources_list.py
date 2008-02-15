@@ -9,7 +9,7 @@ import subprocess
 import apt
 import apt_pkg
 import unittest
-from DistUpgrade.DistUpgradeControler import DistUpgradeControler
+from DistUpgrade.DistUpgradeController import DistUpgradeController
 from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 import logging
 
@@ -31,8 +31,8 @@ class testSourcesListUpdate(unittest.TestCase):
                     os.path.join(self.testdir,"sources.list"))
         apt_pkg.Config.Set("Dir::Etc::sourcelist","sources.list")
         v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeControler(v,datadir=self.testdir)
-        d.openCache()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assert_(res == True)
 
@@ -59,8 +59,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
                     os.path.join(self.testdir,"sources.list"))
         apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeControler(v,datadir=self.testdir)
-        d.openCache()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assert_(res == True)
 
@@ -79,8 +79,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
                     os.path.join(self.testdir,"sources.list"))
         apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeControler(v,datadir=self.testdir)
-        d.openCache()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assert_(res == True)
         # now test the result

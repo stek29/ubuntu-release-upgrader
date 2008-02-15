@@ -53,6 +53,8 @@ from DistUpgradeApport import *
 # the inird space required in /boot for each kernel
 KERNEL_INITRD_SIZE = 10*1024*1024
 
+class NoBackportsFoundException(Exception):
+    pass
 
 class AptCdrom(object):
     def __init__(self, view, path):
@@ -579,8 +581,8 @@ class DistUpgradeController(object):
         while currentRetry < maxRetries:
             try:
                 res = self.cache.update(progress)
-            except IOError, e:
-                logging.error("IOError in cache.update(): '%s'. Retrying (currentRetry: %s)" % (e,currentRetry))
+            except (SystemError, IOError), e:
+                logging.error("IOError/SystemError in cache.update(): '%s'. Retrying (currentRetry: %s)" % (e,currentRetry))
                 currentRetry += 1
                 continue
             # no exception, so all was fine, we are done
@@ -1139,18 +1141,42 @@ class DistUpgradeController(object):
                 sys.exit(1)
         return res 
 
-    def allBackportsAuthenticated(self, backportslist):
+    def _verifyBackports(self):
+        # run update (but ignore errors in case the countrymirror
+        # substitution goes wrong, real errors will be caught later
+        # when the cache is searched for the backport packages)
+        backportslist = self.config.getlist("PreRequists","Packages")
+        i=0
+        noCache = apt_pkg.Config.Find("Acquire::http::No-Cache","false")
+        maxRetries = self.config.getint("Network","MaxRetries")
+        while i < maxRetries:
+            self.doUpdate(showErrors=False)
+            self.openCache()
+            for pkgname in backportslist:
+                if not self.cache.has_key(pkgname):
+                    logging.error("Can not find backport '%s'" % pkgname)
+                    raise NoBackportsFoundException, pkgname
+            if self._allBackportsAuthenticated(backportslist):
+                break
+            # FIXME: move this to some more generic place
+            logging.debug("setting a cache control header to turn off caching temporarely")
+            apt_pkg.Config.Set("Acquire::http::No-Cache","true")
+            i += 1
+        if i == maxRetries:
+            logging.error("pre-requists item is NOT trusted, giving up")
+            return False
+        apt_pkg.Config.Set("Acquire::http::No-Cache",noCache)
+        return True
+
+    def _allBackportsAuthenticated(self, backportslist):
         for pkgname in backportslist:
-            if not self.cache.has_key(pkgname):
-                logging.error("Can not find backport '%s'" % pkgname)
-                return False
             pkg = self.cache[pkgname]                
             for cand in pkg.candidateOrigin:
                 if cand.trusted:
-                    return True
-                else:
-                    logging.warning("pre-requists item '%s' is not trusted, retrying" % pkgname)
-            return False
+                    break
+            else:
+                return False
+        return True
 
     def isMirror(self, uri):
         " check if uri is a known mirror "
@@ -1159,7 +1185,7 @@ class DistUpgradeController(object):
                 return True
         return False
 
-    def _getPreReqMirrorLines(self):
+    def _getPreReqMirrorLines(self, dumb=False):
         " get sources.list snippet lines for the current mirror "
         lines = ""
         sources = SourcesList(matcherPath=".")
@@ -1171,17 +1197,23 @@ class DistUpgradeController(object):
                 not entry.uri.startswith("http://security.ubuntu.com") and
                 not entry.uri.startswith("http://archive.ubuntu.com") ):
                 lines += "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
+            if (dumb and entry.type == "deb" and
+                "main" in entry.comps):
+                lines += "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
         return lines
 
-    def _addPreRequistsSourcesList(self, template, out):
+    def _addPreRequistsSourcesList(self, template, out, dumb=False):
         " add prerequists based on template into the path outfile "
         # go over the sources.list and try to find a valid mirror
         # that we can use to add the backports dir
+        logging.debug("writing prereuists sources.list at: '%s' " % out)
         outfile = open(out, "w")
-        mirrorlines = self._getPreReqMirrorLines()
+        mirrorlines = self._getPreReqMirrorLines(dumb)
         for line in open(template):
             template = Template(line)
-            outfile.write(template.safe_substitute(mirror=mirrorlines))
+            outline = template.safe_substitute(mirror=mirrorlines)
+            outfile.write(outline)
+            logging.debug("adding '%s' prerequists" % outline)
         outfile.close()
         return True
 
@@ -1219,7 +1251,7 @@ class DistUpgradeController(object):
         #  - archive.ubuntu.com is always a fallback at the end [done]
         # 
         # see if we find backports with that
-        # - if not, try guessing based on URI, Trust and Dist
+        # - if not, try guessing based on URI, Trust and Dist   [done]
         #   in existing sources.list (internal mirror with no
         #   outside connection maybe)
         # 
@@ -1235,26 +1267,15 @@ class DistUpgradeController(object):
         outpath = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
         outfile = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
         self._addPreRequistsSourcesList(prereq_template, outfile) 
-                    
-        # run update (but ignore errors in case the countrymirror
-        # substitution goes wrong, real errors will be caught later
-        # when the cache is searched for the backport packages)
-        i=0
-        noCache = apt_pkg.Config.Find("Acquire::http::No-Cache","false")
-        maxRetries = self.config.getint("Network","MaxRetries")
-        while i < maxRetries:
-            self.doUpdate(showErrors=False)
-            self.openCache()
-            if self.allBackportsAuthenticated(backportslist):
-                break
-            # FIXME: move this to some more generic place
-            logging.debug("setting a cache control header to turn off caching temporarely")
-            apt_pkg.Config.Set("Acquire::http::No-Cache","true")
-            i += 1
-        if i == maxRetries:
-            logging.warning("pre-requists item is NOT trusted, giving up")
+        try:
+            self._verifyBackports()
+        except NoBackportsFoundException, e:
+            self._addPreRequistsSourcesList(prereq_template, outfile, dumb=True) 
+            try:
+                self._verifyBackports()
+            except NoBackportsFoundException, e:
+                logging.warning("no backport for '%s' found" % e)
             return False
-        apt_pkg.Config.Set("Acquire::http::No-Cache",noCache)
         
         # save cachedir and setup new one
         cachedir = apt_pkg.Config.Find("Dir::Cache::archives")

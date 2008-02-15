@@ -31,6 +31,7 @@ class MyCache(apt.Cache):
         self.to_install = []
         self.to_remove = []
         self.view = view
+        self.lock = False
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
         # acquire lock

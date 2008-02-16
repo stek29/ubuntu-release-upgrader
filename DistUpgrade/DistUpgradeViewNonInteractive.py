@@ -35,11 +35,13 @@ import re
 import subprocess
 from subprocess import call, PIPE, Popen
 import copy
+import apt.progress
 
 class NonInteractiveFetchProgress(apt.progress.FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
-        pass
+        if status == apt.progress.FetchProgress.dlDone:
+            print "fetched %s %s" % uri
 
 class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self):
@@ -248,7 +250,8 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         5. Complete
         """
         pass
-    def confirmChanges(self, summary, changes, downloadSize, actions=None):
+    def confirmChanges(self, summary, changes, downloadSize,
+                       actions=None, removal_bold=True):
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize, actions)
 	logging.debug("toinstall: '%s'" % self.toInstall)
         logging.debug("toupgrade: '%s'" % self.toUpgrade)

@@ -665,7 +665,9 @@ class UpdateManager(SimpleGladeApp):
       the last apt-get update was run
       """
       if not os.path.exists("/var/lib/apt/periodic/update-success-stamp"):
-          return None
+          return _("It is unknown when the package information was "
+                   "updated last. Please try clicking on the 'Check' "
+                   "button to update the information.")
       # calculate when the last apt-get update (or similar operation)
       # was performed
       mtime = os.stat("/var/lib/apt/periodic/update-success-stamp")[stat.ST_MTIME]

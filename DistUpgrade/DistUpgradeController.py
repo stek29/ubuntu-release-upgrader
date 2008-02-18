@@ -188,6 +188,9 @@ class DistUpgradeController(object):
             self.cache = MyCache(self.config,
                                  self._view,
                                  self._view.getOpCacheProgress())
+            self.cache = MyCache(self.config,
+                                 self._view,
+                                 self._view.getOpCacheProgress())
         except CacheExceptionLockingFailed, e:
             logging.error("Cache can not be locked (%s)" % e)
             self._view.error(_("Unable to get exclusive lock"),
@@ -560,6 +563,29 @@ class DistUpgradeController(object):
         
 
     def doPreUpgrade(self):
+        # check if we have packages in ReqReinst state that are not
+        # downloadable
+        if len(self.cache.reqReinstallPkgs) > 0:
+            self.cache.fixReqReinst(self._view)
+            self.openCache()
+        if len(self.cache.reqReinstallPkgs) > 0:
+            reqreinst = self.cache.reqReinstallPkgs
+            header = gettext.ngettext("Package in inconsistent state",
+                                      "Packages in inconsistent state",
+                                      len(reqreinst))
+            summary = gettext.ngettext("The package '%s' is in a inconsistent "
+                                       "state and needs to be reinstalled, but "
+                                       "no archive can be found for it. "
+                                       "Please reinstall the package manually "
+                                       "or remove it from the system.",
+                                       "The packages '%s' is in a inconsistent "
+                                       "state and needs to be reinstalled, but "
+                                       "no archive can be found for it."
+                                       "Please reinstall the packages manually "
+                                       "or remove them from the system.",
+                                       len(reqreinst)) % ", ".join(reqreinst)
+            self._view.error(header, summary)
+            return False
         # FIXME: check out what packages are downloadable etc to
         # compare the list after the update again
         self.obsolete_pkgs = self.cache._getObsoletesPkgs()
@@ -568,6 +594,7 @@ class DistUpgradeController(object):
             self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
+        return True
 
     def doUpdate(self, showErrors=True):
         if not self.useNetwork:
@@ -1396,7 +1423,8 @@ class DistUpgradeController(object):
         self.doUpdate(showErrors=False)
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)
-        self.doPreUpgrade()
+        if not self.doPreUpgrade():
+            self.abort()
 
         # update sources.list
         self._view.setStep(DistUpgradeView.STEP_MODIFY_SOURCES)

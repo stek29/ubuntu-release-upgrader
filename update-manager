@@ -89,7 +89,8 @@ if __name__ == "__main__":
     controler = DistUpgradeController(view, datadir=data_dir)
     controler.partialUpgrade = True
     controler.prepare()
-    controler.doPreUpgrade()
+    if not controler.doPreUpgrade():
+      sys.exit(1)
     if controler.askDistUpgrade():
       view.setStep(STEP_FETCH)
       view.updateStatus(_("Fetching"))

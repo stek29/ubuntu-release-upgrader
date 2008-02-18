@@ -8,6 +8,7 @@ import re
 import logging
 import string
 import time
+import gettext
 import datetime
 import threading
 from subprocess import Popen, PIPE
@@ -25,6 +26,9 @@ class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
 class MyCache(apt.Cache):
+    ReInstReq = 1
+    HoldReInstReq = 3
+
     # init
     def __init__(self, config, view, progress=None, lock=True):
         apt.Cache.__init__(self, progress)
@@ -50,6 +54,43 @@ class MyCache(apt.Cache):
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
         self._initAptLog()
+
+    @property
+    def reqReinstallPkgs(self):
+        " return the packages not downloadable packages in reqreinst state "
+        reqreinst = set()
+        for pkg in self:
+            if (not pkg.candidateDownloadable and 
+                (pkg._pkg.InstState == self.ReInstReq or
+                 pkg._pkg.InstState == self.HoldReInstReq)):
+                reqreinst.add(pkg.name)
+        return reqreinst
+
+    def fixReqReinst(self, view):
+        " check for reqreinst state and offer to fix it "
+        reqreinst = self.reqReinstallPkgs
+        if len(reqreinst) > 0:
+            header = gettext.ngettext("Remove package in bad state",
+                                      "Remove packages in bad state", 
+                                      len(reqreinst))
+            summary = gettext.ngettext("The package '%s' is in a inconsistent "
+                                       "state and needs to be reinstalled, but "
+                                       "no archive can be found for it. "
+                                       "Do you want to remove this package "
+                                       "now to continue?",
+                                       "The packages '%s' is in a inconsistent "
+                                       "state and needs to be reinstalled, but "
+                                       "no archive can be found for it. Do you "
+                                       "want to remove this package now to "
+                                       "continue?",
+                                       len(reqreinst)) % ", ".join(reqreinst)
+            if view.askYesNoQuestion(header, summary):
+                self.releaseLock()
+                cmd = ["dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)
+                view.getTerminal().call(cmd)
+                self.getLock()
+                return True
+        return False
 
     # logging stuff
     def _initAptLog(self):
@@ -136,6 +177,14 @@ class MyCache(apt.Cache):
                 self.lock = False
             except SystemError, e:
                 logging.debug("failed to SystemUnLock() (%s) " % e)
+
+    def getLock(self, pkgSystemOnly=True):
+        if not self.lock:
+            try:
+                apt_pkg.PkgSystemLock()
+                self.lock = True
+            except SystemError, e:
+                logging.debug("failed to SystemLock() (%s) " % e)
 
     def downloadable(self, pkg, useCandidate=True):
         " check if the given pkg can be downloaded "

@@ -91,12 +91,18 @@ CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/chan
 class MyCache(apt.Cache):
     def __init__(self, progress, rootdir=None):
         apt.Cache.__init__(self, progress, rootdir)
+        # raise if we have packages in reqreinst state
+        # and let the caller deal with that (runs partial upgrade)
+        assert len(self.reqReinstallPkgs) == 0
+        # init the regular cache
         self._initDepCache()
         self.all_changes = {}
         # on broken packages, try to fix via saveDistUpgrade()
         if self._depcache.BrokenCount > 0:
             self.saveDistUpgrade()
-        assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
+        assert (self._depcache.BrokenCount == 0 and 
+                self._depcache.DelCount == 0)
+
     def _initDepCache(self):
         #apt_pkg.Config.Set("Debug::pkgPolicy","1")
         #self.depcache = apt_pkg.GetDepCache(self.cache)

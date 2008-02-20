@@ -577,68 +577,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # removed (how to calc this automatically?)
 
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
-        pkgs_remove = len(self.toRemove)
-        pkgs_inst = len(self.toInstall)
-        pkgs_upgrade = len(self.toUpgrade)
-        msg = ""
-
-        if pkgs_remove > 0:
-            # FIXME: make those two seperate lines to make it clear
-            #        that the "%" applies to the result of ngettext
-            msg += gettext.ngettext("%d package is going to be removed.",
-                                    "%d packages are going to be removed.",
-                                    pkgs_remove) % pkgs_remove
-            msg += " "
-        if pkgs_inst > 0:
-            msg += gettext.ngettext("%d new package is going to be "
-                                    "installed.",
-                                    "%d new packages are going to be "
-                                    "installed.",pkgs_inst) % pkgs_inst
-            msg += " "
-        if pkgs_upgrade > 0:
-            msg += gettext.ngettext("%d package is going to be upgraded.",
-                                    "%d packages are going to be upgraded.",
-                                    pkgs_upgrade) % pkgs_upgrade
-            msg +=" "
-        if downloadSize > 0:
-            #print "type: " + str(type(apt_pkg.SizeToStr(downloadSize))) + apt_pkg.SizeToStr(downloadSize)
-            #print "type: "+ str(type(_("<p>You have to download a total of %s. "))) + _("<p>You have to download a total of %s. ") 
-            #print "type: " + str(type(msg))
-            msg = unicode(msg, 'UTF-8')
-            #string = _("<p>You have to download a total of %s. ")
-            #msg += string % apt_pkg.SizeToStr(downloadSize)
-            #msg += _("<p>You have to download a total of %s. ") %\
-            msg += _("<p>You have to download a total of %s. ") %\
-                     apt_pkg.SizeToStr(downloadSize)
-            msg += unicode(self._fetchProgress.estimatedDownloadTime(downloadSize), 'UTF-8')
-            msg += "."
-
-        #seems to change what's needed between edgy and feisty
-        try:
-            if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-                msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
-                                "cannot be canceled at any time later.")
-
-            msg += "<p><b>%s</b>" % _("To prevent data loss close all open "\
-                                   "applications and documents.")
-        except UnicodeDecodeError:
-            msg = unicode(msg, 'utf-8')
-            if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-                msg += "<p>%s" % _("Fetching and installing the upgrade can take several hours and "\
-                                "cannot be canceled at any time later.")
-
-            msg += "<p><b>%s</b>" % _("To prevent data loss close all open "\
-                                   "applications and documents.")
-
-        # Show an error if no actions are planned
-        if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
-            # FIXME: this should go into DistUpgradeController
-            summary = _("Your system is up-to-date")
-            msg = _("There are no upgrades available for your system. "
-                    "The upgrade will now be canceled.")
-            self.error(summary, msg)
-            return False
-
+        msg = unicode(self.confirmChangesMessage, 'UTF-8')
         changesDialogue = dialog_changes(self.window_main)
         self.translate_widget_children(changesDialogue)
 

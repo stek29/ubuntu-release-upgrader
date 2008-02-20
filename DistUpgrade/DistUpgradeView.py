@@ -23,6 +23,7 @@ from gettext import gettext as _
 import subprocess
 import apt
 import os
+import apt_pkg 
 
 from DistUpgradeApport import *
 
@@ -163,6 +164,51 @@ class DistUpgradeView(object):
         self.toDowngrade.sort()
         # no re-installs 
         assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toDowngrade) == len(changes))
+        # now build the message (the same for all frontends)
+        msg = "\n"
+        pkgs_remove = len(self.toRemove)
+        pkgs_inst = len(self.toInstall)
+        pkgs_upgrade = len(self.toUpgrade)
+        # FIXME: show detailed packages
+        if pkgs_remove > 0:
+          # FIXME: make those two seperate lines to make it clear
+          #        that the "%" applies to the result of ngettext
+          msg += gettext.ngettext("%d package is going to be removed.",
+                                  "%d packages are going to be removed.",
+                                  pkgs_remove) % pkgs_remove
+          msg += " "
+        if pkgs_inst > 0:
+          msg += gettext.ngettext("%d new package is going to be "
+                                  "installed.",
+                                  "%d new packages are going to be "
+                                  "installed.",pkgs_inst) % pkgs_inst
+          msg += " "
+        if pkgs_upgrade > 0:
+          msg += gettext.ngettext("%d package is going to be upgraded.",
+                                  "%d packages are going to be upgraded.",
+                                  pkgs_upgrade) % pkgs_upgrade
+          msg +=" "
+        if downloadSize > 0:
+          msg += _("\n\nYou have to download a total of %s. ") %\
+              apt_pkg.SizeToStr(downloadSize)
+          msg += self._fetchProgress.estimatedDownloadTime(downloadSize)
+          msg += "."
+        if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
+          msg += "\n\n%s" % _( "Fetching and installing the upgrade "
+                               "can take several hours. Once the download "
+                               "has finished, the process cannot be cancelled.")
+        # Show an error if no actions are planned
+        if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
+          # FIXME: this should go into DistUpgradeController
+          summary = _("Your system is up-to-date")
+          msg = _("There are no upgrades available for your system. "
+                  "The upgrade will now be canceled.")
+          self.error(summary, msg)
+          return False
+        # set the message
+        self.confirmChangesMessage = msg
+
+
     def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "
         pass

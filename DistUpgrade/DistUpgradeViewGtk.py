@@ -534,56 +534,10 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
-        pkgs_downgrade = len(self.toDowngrade)
-        pkgs_remove = len(self.toRemove)
-        pkgs_inst = len(self.toInstall)
-        pkgs_upgrade = len(self.toUpgrade)
-        msg = ""
-
-        if pkgs_downgrade > 0:
-            msg += gettext.ngettext("%d package is going to be downgraded.",
-                                    "%d packages are going to be downgraded.",
-                                    pkgs_downgrade) % pkgs_downgrade
-
-        if pkgs_remove > 0:
-            # FIXME: make those two seperate lines to make it clear
-            #        that the "%" applies to the result of ngettext
-            msg += gettext.ngettext("%d package is going to be removed.",
-                                    "%d packages are going to be removed.",
-                                    pkgs_remove) % pkgs_remove
-            msg += " "
-        if pkgs_inst > 0:
-            msg += gettext.ngettext("%d new package is going to be "
-                                    "installed.",
-                                    "%d new packages are going to be "
-                                    "installed.",pkgs_inst) % pkgs_inst
-            msg += " "
-        if pkgs_upgrade > 0:
-            msg += gettext.ngettext("%d package is going to be upgraded.",
-                                    "%d packages are going to be upgraded.",
-                                    pkgs_upgrade) % pkgs_upgrade
-            msg +=" "
-        if downloadSize > 0:
-            msg += _("\n\nYou have to download a total of %s. ") %\
-                     apt_pkg.SizeToStr(downloadSize)
-            msg += self._fetchProgress.estimatedDownloadTime(downloadSize)
-            msg += "."
-
-        if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-            msg += "\n\n%s" % _("Fetching and installing the upgrade can take several hours and "\
-                                "cannot be canceled at any time later.")
-
-        msg += "\n\n<b>%s</b>" % _("To prevent data loss close all open "\
-                                   "applications and documents.")
-
-        # Show an error if no actions are planned
-        if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
-            # FIXME: this should go into DistUpgradeController
-            summary = _("Your system is up-to-date")
-            msg = _("There are no upgrades available for your system. "
-                    "The upgrade will now be canceled.")
-            self.error(summary, msg)
-            return False
+        # append warning
+        self.confirmChangesMessage +=  "\n\n<b>%s</b>" %  \
+            _("To prevent data loss close all open "
+              "applications and documents.")
 
         if actions != None:
             self.button_cancel_changes.set_use_stock(False)
@@ -592,7 +546,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
             self.button_confirm_changes.set_label(actions[1])
 
         self.label_summary.set_markup("<big><b>%s</b></big>" % summary)
-        self.label_changes.set_markup(msg)
+        self.label_changes.set_markup(self.confirmChangesMessage)
         # fill in the details
         self.details_list.clear()
         for dg in self.toDowngrade:

@@ -1223,7 +1223,9 @@ class DistUpgradeController(object):
                 self.isMirror(entry.uri) and
                 not entry.uri.startswith("http://security.ubuntu.com") and
                 not entry.uri.startswith("http://archive.ubuntu.com") ):
-                lines += "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
+                new_line = "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
+                if not new_line in lines:
+                    lines += new_line
             if (dumb and entry.type == "deb" and
                 "main" in entry.comps):
                 lines += "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)

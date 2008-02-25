@@ -39,6 +39,26 @@ deb http://archive.ubuntu.com/ubuntu/ feisty-backports main/debian-installer
         """ test adding the prerequists and ensure that archive.ubuntu.com 
             is added as last mirror
         """
+        shutil.copy(os.path.join(self.testdir,"sources.list.in.multiple_mirrors"),
+                    os.path.join(self.testdir,"sources.list"))
+        template = os.path.join(self.testdir,"prerequists-sources.list.in")
+        out = os.path.join(self.testdir,"sources.list.d",
+                           "prerequists-sources.list")
+        self.dc._addPreRequistsSourcesList(template, out)
+        self.assert_(os.path.getsize(out))
+        self._verifySources(out, """
+deb http://ftp.inf.tu-dresden.de/os/linux/dists/ubuntu/ feisty-backports main/debian-installer
+deb http://archive.ubuntu.com/ubuntu/ feisty-backports main/debian-installer
+""")
+        # ensure that the mirror was only added once
+        sources_list = open(out).read()
+        s="http://ftp.inf.tu-dresden.de/os/linux/dists/ubuntu/"
+        self.assert_(sources_list.count(s) == 1)
+
+    def testPreReqSourcesListAddingNoMultipleIdenticalLines(self):
+        """ test adding the prerequists and ensure that no multiple
+            identical lines are added
+        """
         shutil.copy(os.path.join(self.testdir,"sources.list.no_archive_u_c"),
                     os.path.join(self.testdir,"sources.list"))
         template = os.path.join(self.testdir,"prerequists-sources.list.in")

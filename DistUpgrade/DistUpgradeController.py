@@ -1196,6 +1196,9 @@ class DistUpgradeController(object):
         return True
 
     def _allBackportsAuthenticated(self, backportslist):
+        if apt_pkg.Config.FindB("APT::Get::AllowUnauthenticated",False) == True:
+            logging.warning("skip authentication check because of APT::Get::AllowUnauthenticated==true")
+            return True
         for pkgname in backportslist:
             pkg = self.cache[pkgname]                
             for cand in pkg.candidateOrigin:

@@ -47,6 +47,7 @@ class FetchProgress(apt.progress.FetchProgress):
     apt.progress.FetchProgress.pulse(self)
     if self.currentCPS > self.est_speed:
       self.est_speed = (self.est_speed+self.currentCPS)/2.0
+    return True
   def estimatedDownloadTime(self, requiredDownload):
     """ get the estimated download time """
     if self.est_speed == 0:
@@ -191,7 +192,7 @@ class DistUpgradeView(object):
         if downloadSize > 0:
           msg += _("\n\nYou have to download a total of %s. ") %\
               apt_pkg.SizeToStr(downloadSize)
-          msg += self._fetchProgress.estimatedDownloadTime(downloadSize)
+          msg += self.getFetchProgress().estimatedDownloadTime(downloadSize)
           msg += "."
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
           msg += "\n\n%s" % _( "Fetching and installing the upgrade "

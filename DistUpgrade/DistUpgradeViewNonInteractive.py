@@ -23,7 +23,7 @@ import apt
 import logging
 import time
 import sys
-from DistUpgradeView import DistUpgradeView, InstallProgress
+from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
 from DistUpgradeConfigParser import DistUpgradeConfig
 import os
 import pty
@@ -37,11 +37,13 @@ from subprocess import call, PIPE, Popen
 import copy
 import apt.progress
 
-class NonInteractiveFetchProgress(apt.progress.FetchProgress):
+class NonInteractiveFetchProgress(FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
+        FetchProgress.updateStatus(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt.progress.FetchProgress.dlDone:
-            print "fetched %s %s" % uri
+            print "fetched %s" % uri
+        
 
 class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self):
@@ -227,15 +229,18 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
     def __init__(self, datadir=None, logdir=None):
         self.config = DistUpgradeConfig(".")
+        self._fetchProgress = NonInteractiveFetchProgress()
+        self._installProgress = NonInteractiveInstallProgress()
+        self._opProgress = apt.progress.OpProgress()
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
-        return apt.progress.OpProgress()
+        return self._opProgress
     def getFetchProgress(self):
         " return a fetch progress object "
-        return NonInteractiveFetchProgress()
+        return self._fetchProgress
     def getInstallProgress(self, cache=None):
         " return a install progress object "
-        return NonInteractiveInstallProgress()
+        return self._installProgress
     def updateStatus(self, msg):
         """ update the current status of the distUpgrade based
             on the current view

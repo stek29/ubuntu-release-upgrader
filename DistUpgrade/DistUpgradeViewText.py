@@ -33,12 +33,10 @@ from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, Fe
 import gettext
 from gettext import gettext as _
 
-class TextFetchProgress(apt.progress.TextFetchProgress,FetchProgress):
+class TextFetchProgress(FetchProgress):
     def __init__(self):
-        apt.progress.TextFetchProgress.__init__(self)
         FetchProgress.__init__(self)
     def pulse(self):
-        apt.progress.TextFetchProgress.pulse(self)
         FetchProgress.pulse(self)
         return True
 

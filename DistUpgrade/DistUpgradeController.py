@@ -491,7 +491,10 @@ class DistUpgradeController(object):
             if res:
                 # re-init the sources and try again
                 self.sources = SourcesList(matcherPath=".")
-                if not self.rewriteSourcesList(mirror_check=False):
+                # its ok if rewriteSorucesList fails here if
+                # we do not use a network, the sources.list may be empty
+                if (not self.rewriteSourcesList(mirror_check=False)
+                    and self.useNetwork):
                     #hm, still nothing useful ...
                     prim = _("Generate default sources?")
                     secon = _("After scanning your 'sources.list' no "

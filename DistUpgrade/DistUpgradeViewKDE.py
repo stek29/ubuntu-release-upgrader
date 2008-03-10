@@ -22,7 +22,6 @@
 from qt import *
 from kdeui import *
 from kdecore import *
-from kparts import konsolePart
 from kio import KRun
 #from dcopext import DCOPClient, DCOPApp # used to quit adept
 
@@ -50,6 +49,7 @@ from dialog_changes import dialog_changes
 from dialog_conffile import dialog_conffile
 from crashdialog import CrashDialog
 
+import pty
 import select
 import gettext
 from gettext import gettext as gett
@@ -163,6 +163,12 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.progress = parent.window_main.progressbar_cache
         self.progress_text = parent.window_main.progress_text
         self.parent = parent
+        try:
+            self._terminal_log = open("/var/log/dist-upgrade/term.log","w")
+        except Exception, e:
+            # if something goes wrong (permission denied etc), use stdout
+            logging.error("Can not open terminal log: '%s'" % e)
+            self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
         apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         apt_pkg.Config.Set("DPkg::StopOnError","False")
@@ -226,9 +232,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if result == QDialog.Accepted:
-            self.parent.konsole.sendInput("y\n")
+            os.write(self.master_fd, "y\n")
         else:
-            self.parent.konsole.sendInput("n\n")
+            os.write(self.master_fd, "n\n")
 
     def showConffile(self):
         if self.confDialogue.textview_conffile.isVisible():
@@ -241,16 +247,11 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def fork(self):
         """pty voodoo to attach dpkg's pty to konsole"""
-        self.parent.newKonsole()
-        self.child_pid = os.fork()
+        (self.child_pid, self.master_fd)  = pty.fork()
         if self.child_pid == 0:
-            os.setsid()
-            #os.environ["TERM"] = "linux"
+            os.environ["TERM"] = "dumb"
             os.environ["DEBIAN_FRONTEND"] = "kde"
             os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
-            os.dup2(self.parent.slave, 0)
-            os.dup2(self.parent.slave, 1)
-            os.dup2(self.parent.slave, 2)
         logging.debug(" fork pid is: %s" % self.child_pid)
         return self.child_pid
 
@@ -281,17 +282,29 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText("")
 
     def updateInterface(self):
-        """no mainloop in this application, just call processEvents lots here, it's also important to sleep for a minimum amount of time"""
+        """
+        no mainloop in this application, just call processEvents lots here
+        it's also important to sleep for a minimum amount of time
+        """
+        # log the output of dpkg (on the master_fd) to the terminal log
+        while True:
+            try:
+                (rlist, wlist, xlist) = select.select([self.master_fd],[],[], 0)
+                if len(rlist) > 0:
+                    line = os.read(self.master_fd, 255)
+                    self._terminal_log.write(line)
+                else:
+                    break
+            except Exception, e:
+                logging.debug("error reading from self.master_fd '%s'" % e)
+
+        # now update the GUI
         try:
           InstallProgress.updateInterface(self)
         except ValueError, e:
           logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
-        # check if we haven't started yet with packages, pulse then
-        if self.start_time == 0.0:
-          #Gtk frontend does a pulse here to move bar back and forward, we can't do that in qt
-          time.sleep(0.0000001)
         # check about terminal activity
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
@@ -304,15 +317,10 @@ class KDEInstallProgressAdapter(InstallProgress):
             self.activity_timeout_reported = True
           self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()
-        time.sleep(0.0000001)
+        time.sleep(0.02)
 
     def waitChild(self):
         while True:
-            try:
-                select.select([self.statusfd],[],[], self.selectTimeout)
-            except Exception, e:
-                #logging.warning("select interrupted '%s'" % e)
-                pass
             self.updateInterface()
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
             if pid == self.child_pid:
@@ -408,23 +416,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
         QTimer.singleShot(10, self.exitMainLoop)
         self.app.exec_loop()
-
-    def newKonsole(self):
-        if self.konsole is not None:
-            self.konsole.widget().hide()
-        self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
-        self.window_main.konsole_frame.setMinimumSize(500, 400)
-        self.konsole.setAutoStartShell(False)
-        self.konsoleWidget = self.konsole.widget()
-        self.konsole_frame_layout.addWidget(self.konsoleWidget)
-        self.konsoleWidget.show()
-
-        #prepare for dpkg pty being attached to konsole
-        (self.master, self.slave) = pty.openpty()
-        self.konsole.setPtyFd(self.master)
-
-        self.window_main.showTerminalButton.setEnabled(True)
-
+        
     def exitMainLoop(self):
         self.app.exit()
 
@@ -633,7 +625,7 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    if cache[pkg].isInstalled:
+    if cache[pkg].isInstalled and not cache[pkg].isUpgradable: 
       cache[pkg].markDelete(purge=True)
     else:
       cache[pkg].markInstall()

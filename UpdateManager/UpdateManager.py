@@ -730,7 +730,8 @@ class UpdateManager(SimpleGladeApp):
       apt_pkg.PkgSystemUnLock()
     except SystemError:
       pass
-    cmd = ["gksu", "--desktop", "/usr/share/applications/update-manager.desktop", 
+    cmd = ["/usr/bin/gksu", 
+           "--desktop", "/usr/share/applications/update-manager.desktop", 
            "--", "/usr/sbin/synaptic", "--hide-main-window",  
            "--non-interactive", "--parent-window-id", "%s" % (id) ]
     if action == INSTALL:

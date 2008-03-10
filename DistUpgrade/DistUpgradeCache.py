@@ -643,7 +643,9 @@ class MyCache(apt.Cache):
         tasks = {}
         installed_tasks = set()
         for pkg in self:
-            pkg._lookupRecord()
+            if not pkg._lookupRecord():
+                logging.debug("no PkgRecord found for '%s', skipping " % pkg.name)
+                continue
             for line in pkg._records.Record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):

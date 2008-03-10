@@ -62,6 +62,35 @@ def utf8(str):
       return str
   return unicode(str, 'UTF-8')
 
+class DumbTerminal(QTextEdit):
+    " a very dumb terminal "
+    def __init__(self, installProgress, parent_frame):
+        " really dumb terminal with simple editing support "
+        QTextEdit.__init__(self, "","", parent_frame)
+        self.installProgress = installProgress
+        self.setFamily("Monospace")
+        self.setPointSize(8)
+        self.setReadOnly(True)
+        self._block = False
+        self.connect(self, SIGNAL("cursorPositionChanged(int,int)"), 
+                     self.onCursorPositionChanged)
+    def keyPressEvent(self, ev):
+        " send (ascii) key events to the pty "
+        # FIXME: use ev.text() here instead and deal with
+        # that it sends strange stuff
+        os.write(self.installProgress.master_fd, chr(ev.ascii()))
+    def onCursorPositionChanged(self, x, y):
+        " helper that ensures that the cursor is always at the end "
+        if self._block:
+            return
+        # block signals so that we do not run into a recursion
+        self._block = True
+        para = self.paragraphs() - 1
+        pos = self.paragraphLength(para)
+        self.setCursorPosition(para, pos)
+        self._block = False
+        
+
 class KDECdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress """
     def __init__(self, parent):
@@ -186,6 +215,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.start_time = 0.0
         self.time_ui = 0.0
         self.last_activity = 0.0
+        self.parent.window_main.showTerminalButton.setEnabled(True)
 
     def error(self, pkg, errormsg):
         InstallProgress.error(self, pkg, errormsg)
@@ -246,7 +276,7 @@ class KDEInstallProgressAdapter(InstallProgress):
        
 
     def fork(self):
-        """pty voodoo to attach dpkg's pty to konsole"""
+        """pty voodoo"""
         (self.child_pid, self.master_fd)  = pty.fork()
         if self.child_pid == 0:
             os.environ["TERM"] = "dumb"
@@ -293,10 +323,13 @@ class KDEInstallProgressAdapter(InstallProgress):
                 if len(rlist) > 0:
                     line = os.read(self.master_fd, 255)
                     self._terminal_log.write(line)
+                    self.parent.terminal_text.insert(line)
                 else:
                     break
             except Exception, e:
+                print e
                 logging.debug("error reading from self.master_fd '%s'" % e)
+                break
 
         # now update the GUI
         try:
@@ -377,10 +410,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # reasonable fault handler
         sys.excepthook = self._handleException
 
-        self.konsole = None
-        self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
-
-        self.window_main.konsole_frame.hide()
         self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
@@ -412,6 +441,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
         gettext.textdomain("update-manager")
         self.translate_widget_children()
 
+        # setup terminal text in hidden by default spot
+        self.window_main.konsole_frame.hide()
+        self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
+        self.window_main.konsole_frame.setMinimumSize(600, 400)
+        self.terminal_text = DumbTerminal(self._installProgress, 
+                                          self.window_main.konsole_frame)
+        self.konsole_frame_layout.addWidget(self.terminal_text)
+        self.terminal_text.show()
+        
         # for some reason we need to start the main loop to get everything displayed
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
         QTimer.singleShot(10, self.exitMainLoop)
@@ -620,8 +658,6 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
 if __name__ == "__main__":
 
   view = DistUpgradeViewKDE()
-  fp = KDEFetchProgressAdapter(view)
-  ip = KDEInstallProgressAdapter(view)
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
@@ -629,4 +665,8 @@ if __name__ == "__main__":
       cache[pkg].markDelete(purge=True)
     else:
       cache[pkg].markInstall()
-  cache.commit(fp,ip)
+  cache.commit(view._fetchProgress,view._installProgress)
+
+  # keep the window open
+  while True:
+      KApplication.kApplication().processEvents()

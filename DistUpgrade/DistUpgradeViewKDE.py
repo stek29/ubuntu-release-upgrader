@@ -70,10 +70,29 @@ class DumbTerminal(QTextEdit):
         self.installProgress = installProgress
         self.setFamily("Monospace")
         self.setPointSize(8)
-        self.setReadOnly(True)
+        self.setWordWrap(QTextEdit.NoWrap)
+        self.setUndoDepth(0)
+        self.setUndoRedoEnabled(False)
         self._block = False
         self.connect(self, SIGNAL("cursorPositionChanged(int,int)"), 
                      self.onCursorPositionChanged)
+    def insertWithTermCodes(self, text):
+        " support basic terminal codes "
+        display_text = ""
+        for c in text:
+            # \b - backspace
+            if c == chr(8):       
+                self.moveCursor(QTextEdit.MoveBackward, True)
+                self.removeSelectedText()
+            # \r - is filtered out
+            elif c == chr(13):
+                pass
+            # \a - bell - ignore for now
+            elif c == chr(7):
+                pass
+            else:
+                display_text += c
+        self.insert(display_text)
     def keyPressEvent(self, ev):
         " send (ascii) key events to the pty "
         # FIXME: use ev.text() here instead and deal with
@@ -323,7 +342,7 @@ class KDEInstallProgressAdapter(InstallProgress):
                 if len(rlist) > 0:
                     line = os.read(self.master_fd, 255)
                     self._terminal_log.write(line)
-                    self.parent.terminal_text.insert(line)
+                    self.parent.terminal_text.insertWithTermCodes(utf8(line))
                 else:
                     break
             except Exception, e:

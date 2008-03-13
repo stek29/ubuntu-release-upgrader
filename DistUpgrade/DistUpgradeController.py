@@ -207,7 +207,9 @@ class DistUpgradeController(object):
             daemon (to be sure we have a spare one around in case
             of trouble)
         """
+        pidfile = os.path.join(os.getcwd(), "sshd.pid")
         if (self.serverMode and
+            not os.path.exists(pidfile) and
             (os.environ.has_key("SSH_CONNECTION") or
              os.environ.has_key("SSH_TTY"))):
             port = 9004
@@ -223,7 +225,9 @@ class DistUpgradeController(object):
             # abort
             if res == False:
                 sys.exit(1)
-            res = subprocess.call(["/usr/sbin/sshd","-p",str(port)])
+            res = subprocess.call(["/usr/sbin/sshd",
+                                   "-o", "PidFile=%s" % pidfile,
+                                   "-p",str(port)])
             if res == 0:
                 self._view.information(
                     _("Starting additional sshd"),

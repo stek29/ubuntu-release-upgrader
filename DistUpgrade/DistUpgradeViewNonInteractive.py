@@ -78,6 +78,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         # so this is inaccurate as well
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         environ = copy.copy(os.environ)
+        environ["PYCENTEAL"] = "debug"
         cmd = []
 
         # find what maintainer script failed

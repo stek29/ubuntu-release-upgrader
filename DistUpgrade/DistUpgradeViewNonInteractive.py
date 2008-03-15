@@ -220,6 +220,8 @@ class NonInteractiveInstallProgress(InstallProgress):
 
     def fork(self):
         logging.debug("doing a pty.fork()")
+        # some maintainer scripts fail without
+        os.environ["TERM"] = "dumb"
         (self.pid, self.master_fd) = pty.fork()
         if self.pid != 0:
             logging.debug("pid is: %s" % self.pid)

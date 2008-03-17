@@ -55,7 +55,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         # more debug
-        #apt_pkg.Config.Set("Debug::pkgOrderList","true")
+        apt_pkg.Config.Set("Debug::pkgOrderList","true")
         #apt_pkg.Config.Set("Debug::pkgDPkgPM","true")
         # default to 2400 sec timeout
         self.timeout = 2400
@@ -63,7 +63,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
         except Exception, e:
             pass
-        
+    
     def error(self, pkg, errormsg):
         # re-run maintainer script with sh -x/perl debug to get a better 
         # idea what went wrong
@@ -104,7 +104,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             argument = "remove"
             maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         else:
-            print "UNKNOWN script failure '%s' " % errormsg
+            print "UNKNOWN (trigger?) script failure for %s (%s) " % (pkg, errormsg)
             return
 
         # find out about the interpreter
@@ -169,6 +169,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 
         if (self.last_activity + self.timeout) < time.time():
             logging.warning("no activity %s seconds (%s) - sending ctrl-c" % (self.timeout, self.status))
+            # ctrl-c
             os.write(self.master_fd,chr(3))
 
 
@@ -235,6 +236,12 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         self._fetchProgress = NonInteractiveFetchProgress()
         self._installProgress = NonInteractiveInstallProgress()
         self._opProgress = apt.progress.OpProgress()
+        sys.__excepthook__ = self.excepthook
+    def excepthook(self, type, value, traceback):
+        " on uncaught exceptions -> print error and reboot "
+        logging.error("got exception '%s': %s " % (type, value))
+        sys.excepthook(type, value, traceback)
+        self.confirmRestart()
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
         return self._opProgress

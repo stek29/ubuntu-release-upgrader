@@ -376,7 +376,9 @@ class MyCache(apt.Cache):
                 pkg.isInstalled and
                 not pkg.markedUpgrade):
                 basepkg = "python-"+pkg.name[len("python2.4-"):]
-                if (self.has_key(basepkg) and not self[basepkg].markedInstall):
+                if (self.has_key(basepkg) and 
+                    self[basepkg].candidateDownloadable and
+                    not self[basepkg].markedInstall):
                     try:
                         self.markInstall(basepkg,
                                          "python2.4->python upgrade rule")

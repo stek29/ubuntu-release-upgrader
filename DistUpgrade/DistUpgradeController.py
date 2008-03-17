@@ -167,6 +167,11 @@ class DistUpgradeController(object):
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
         apt_pkg.Config.Set("Acquire::Retries", str(maxRetries))
+        # max sizes for dpkgpm for large installs (see linux/limits.h and 
+        #                                          linux/binfmts.h)
+        apt_pkg.Config.Set("Dpkg::MaxArgs", str(64*1024))
+        apt_pkg.Config.Set("Dpkg::MaxArgBytes", str(128*1024))
+
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add

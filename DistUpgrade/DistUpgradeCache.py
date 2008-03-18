@@ -320,9 +320,25 @@ class MyCache(apt.Cache):
 
 
     def from_dapperQuirks(self):
+        self.hardyQuirks()
         self.gutsyQuirks()
         self.feistyQuirks()
         self.edgyQuirks()
+
+    def hardyQuirks(self):
+        """ this function works around quirks in the gutsy->hardy upgrade """
+        logging.debug("running hardyQuirks handler")
+        # deal with gtranslator and help apt with the breaks
+        if (self.has_key("gtranslator") and
+            self.has_key("link-monitor-applet") and
+            self.has_key("nautilus") and
+            (self["gtranslator"].isInstalled or
+             self["link-monitor-applet"]) and
+            self["nautilus"].isInstalled and
+            not self["nautilus"].markedUpgrade):
+            self["gtranslator"].markDelete()
+            self["nautilus"].markInstall()
+        
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """

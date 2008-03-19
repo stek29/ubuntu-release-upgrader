@@ -10,6 +10,7 @@ MetaPkgs=ubuntu-standard
 BaseMetaPkgs=ubuntu-minimal
 Demotions=demotions.cfg
 RemoveEssentialOk=sysvinit
+AllowUnauthenticated=yes
 
 [Files]
 BackupExt=distUpgrade
@@ -47,4 +48,6 @@ Pockets=security,updates
 UpgradeFromDistOnBoostrap=true
 CacheBaseImage=yes
 RealReboot=yes
-;PreRequistsFiles=/media/320/egon/update-manager/main/AutoUpgradeTester/backports/release-upgrader-apt_0.7.9ubuntu1_i386.udeb, /media/320/egon/update-manager/main/AutoUpgradeTester/backports/release-upgrader-dpkg_1.14.5ubuntu11.6_i386.udeb
+; WARNING: if AddRepo is used, remember to set Distro/AllowUnauthenticted too
+;AddRepo=local_testing.list
+;PreRequistsFiles=backports/release-upgrader-apt_0.7.9ubuntu1_i386.udeb, backports/release-upgrader-dpkg_1.14.5ubuntu11.6_i386.udeb

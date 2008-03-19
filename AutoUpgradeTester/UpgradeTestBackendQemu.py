@@ -17,6 +17,8 @@ import crypt
 import tempfile
 import copy
 
+from sourceslist import SourcesList
+
 # images created with http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 #  ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted --rootsize 20G
 # 
@@ -383,6 +385,20 @@ iface eth0 inet static
                 self._runInImage(["(cd /upgrade-tester/backports ; dpkg-deb -x %s . )" % os.path.basename(f)])
             upgrader_args = " --have-prerequists"
             upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
+
+        # copy test repo sources.list (if available)
+        test_repo = self.config.getWithDefault("NonInteractive","AddRepo","")
+        if test_repo:
+            test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
+            self._copyToImage(test_repo, "/etc/apt/sources.list.d")
+            sources = SourcesList(matcherPath=".")
+            sources.load(test_repo)
+            # add the uri to the list of valid mirros in the image
+            for entry in sources.list:
+                if (not (entry.invalid or entry.disabled) and
+                    entry.type == "deb"):
+                    print "adding %s to mirrors" % entry.uri
+                    self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
 
         # start the upgrader
         print "running the upgrader now"

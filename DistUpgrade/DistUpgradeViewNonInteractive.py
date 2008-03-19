@@ -55,7 +55,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         # more debug
-        apt_pkg.Config.Set("Debug::pkgOrderList","true")
+        #apt_pkg.Config.Set("Debug::pkgOrderList","true")
         #apt_pkg.Config.Set("Debug::pkgDPkgPM","true")
         # default to 2400 sec timeout
         self.timeout = 2400
@@ -104,7 +104,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             argument = "remove"
             maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         else:
-            print "UNKNOWN (trigger?) script failure for %s (%s) " % (pkg, errormsg)
+            print "UNKNOWN (trigger?) dpkg/script failure for %s (%s) " % (pkg, errormsg)
             return
 
         # find out about the interpreter

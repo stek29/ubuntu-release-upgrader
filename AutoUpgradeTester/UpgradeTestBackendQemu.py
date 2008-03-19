@@ -356,6 +356,11 @@ iface eth0 inet static
         if os.path.exists(self.profile):
             print "Copying '%s' to image " % self.profile
             self._copyToImage(self.profile, "/upgrade-tester")
+        # and any other cfg files
+        for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
+            if os.path.isfile(f):
+                print "Copying '%s' to image " % f
+                self._copyToImage(f, "/upgrade-tester")
         prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
         if prereq is not None:
             prereq = os.path.join(os.path.dirname(self.profile),prereq)

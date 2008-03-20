@@ -329,7 +329,6 @@ class MyCache(apt.Cache):
         logging.debug("running hardyQuirks handler")
         # deal with gnome-translator and help apt with the breaks
         if (self.has_key("nautilus") and
-            self["gnome-translate"].isInstalled and
             self["nautilus"].isInstalled and
             not self["nautilus"].markedUpgrade):
             self["nautilus"].markInstall()

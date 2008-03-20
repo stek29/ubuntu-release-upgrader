@@ -21,6 +21,7 @@
 
 import sys
 import logging
+import string
 import time
 import subprocess
 
@@ -32,6 +33,16 @@ from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, Fe
 
 import gettext
 from gettext import gettext as _
+from textwrap import fill, wrap
+
+def twrap(s, **kwargs):
+    msg = ""
+    paras = s.split("\n")
+    for par in paras:
+        s = wrap(par, **kwargs)
+        for l in s:
+            msg += l+"\n"
+    return msg
 
 class TextFetchProgress(FetchProgress):
     def __init__(self):
@@ -110,26 +121,27 @@ class DistUpgradeViewText(DistUpgradeView):
     def setStep(self, step):
       self.last_step = step
     def showDemotions(self, summary, msg, demotions):
-        self.information(summary, msg, ", ".join(demotions))
+        self.information(summary, msg, 
+                         _("Demoted:\n")+twrap(", ".join(demotions)))
     def information(self, summary, msg, extended_msg=None):
       print
-      print summary
-      print msg
+      print twrap(summary)
+      print twrap(msg)
       if extended_msg:
-        print extended_msg
+        print twrap(extended_msg)
     def error(self, summary, msg, extended_msg=None):
       print
-      print summary
-      print msg
+      print twrap(summary)
+      print twrap(msg)
       if extended_msg:
-        print extended_msg
+        print twrap(extended_msg)
       return False
     def confirmChanges(self, summary, changes, downloadSize,
                        actions=None, removal_bold=True):
       DistUpgradeView.confirmChanges(self, summary, changes, downloadSize, actions)
       print
-      print summary
-      print self.confirmChangesMessage 
+      print twrap(summary)
+      print twrap(self.confirmChangesMessage)
       print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
       while True:
         res = sys.stdin.readline()
@@ -143,11 +155,11 @@ class DistUpgradeViewText(DistUpgradeView):
         elif res.strip().lower().startswith(_("d")):
           print
           if len(self.toRemove) > 0:
-              print _("Remove: %s\n" % " ".join(self.toRemove))
+              print twrap(_("Remove: %s\n" % " ".join(self.toRemove)), subsequent_indent='  ')
           if len(self.toInstall) > 0:
-              print _("Install: %s\n" % " ".join(self.toInstall))
+              print twrap(_("Install: %s\n" % " ".join(self.toInstall)), subsequent_indent='  ')
           if len(self.toUpgrade) > 0:
-              print _("Upgrade: %s\n" % " ".join(self.toUpgrade))
+              print twrap(_("Upgrade: %s\n" % " ".join(self.toUpgrade)), subsequent_indent='  ')
 
     def askYesNoQuestion(self, summary, msg, prompt=None):
       print
@@ -173,7 +185,11 @@ class DistUpgradeViewText(DistUpgradeView):
 
 if __name__ == "__main__":
   
+  print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.")
+  sys.exit(1)
+
   view = DistUpgradeViewText()
+  #view.confirmChangesMessage = "89 packages are going to be upgraded.\n You have to download a total of 82.7M.\n This download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem."
   #view.confirmChanges("xx",[], 100)
   #sys.exit(0)
 

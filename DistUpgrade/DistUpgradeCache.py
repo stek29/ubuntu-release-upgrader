@@ -328,12 +328,10 @@ class MyCache(apt.Cache):
         """ this function works around quirks in the gutsy->hardy upgrade """
         logging.debug("running hardyQuirks handler")
         # deal with gnome-translator and help apt with the breaks
-        if (self.has_key("gnome-translate") and
-            self.has_key("nautilus") and
+        if (self.has_key("nautilus") and
             self["gnome-translate"].isInstalled and
             self["nautilus"].isInstalled and
             not self["nautilus"].markedUpgrade):
-            self["gnome-translate"].markDelete()
             self["nautilus"].markInstall()
         
 

@@ -2,6 +2,8 @@
 
 import os
 import apt
+import os.path
+import string
 import apt_pkg
 
 def blacklisted(name):
@@ -54,9 +56,30 @@ troublemaker = set()
 best = set()
 
 # first install all of main, then the rest
-for comp in ["main","universe"]:
-   for pkg in cache:
+comps= ["main","universe"]
+i=0
+
+# reapply checkpoints
+if os.path.exists("best.txt"):
+   best = map(string.strip, open("best.txt").readlines())
+   reapply(cache, best)
+
+if os.path.exists("pos.txt"):
+   (comp, i) = open("pos.txt").read().split()
+   i = int(i)
+   if comp == "universe":
+      comps = ["universe"]
+
+sorted_pkgs = cache.keys()[:]
+sorted_pkgs.sort()
+
+
+for comp in comps:
+   for pkgname in sorted_pkgs[i:]:
+      pkg = cache[pkgname]
+      i += 1
       if pkg.candidateOrigin:
+         print "\r%.3f" % (float(i)/(len(cache)*2.0)*100.0),
          for c in pkg.candidateOrigin:
             if comp == None or c.component == comp:
                current = set([p.name for p in cache if p.markedInstall])
@@ -76,6 +99,8 @@ for comp in ["main","universe"]:
                   #        according to criteria like "in main", "priority" etc
                   if len(new) >= len(best):
                      best = new
+                     open("best.txt","w").write("\n".join(best))
+                     open("pos.txt","w").write("%s %s" % (comp, i))
                   else:
                      print "Installing '%s' reduced the set (%s < %s)" % (pkg.name, len(new), len(best))
                      clear(cache)

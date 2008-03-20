@@ -30,6 +30,7 @@ import apt_pkg
 import os
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
+import apt.progress
 
 import gettext
 from gettext import gettext as _
@@ -44,10 +45,12 @@ def twrap(s, **kwargs):
             msg += l+"\n"
     return msg
 
-class TextFetchProgress(FetchProgress):
+class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
     def __init__(self):
+        apt.progress.TextFetchProgress.__init__(self)
         FetchProgress.__init__(self)
     def pulse(self):
+        apt.progress.TextFetchProgress.pulse(self)
         FetchProgress.pulse(self)
         return True
 
@@ -195,15 +198,16 @@ if __name__ == "__main__":
 
   view.confirmRestart()
 
-  fp = TextFetchProgress()
-  ip = apt.progress.InstallProgress()
-
   cache = apt.Cache()
+  fp = view.getFetchProgress()
+  ip = view.getInstallProgress(cache)
+
+
   for pkg in sys.argv[1:]:
     cache[pkg].markInstall()
   cache.commit(fp,ip)
   
-  #sys.exit(0)
+  sys.exit(0)
   view.getTerminal().call(["dpkg","--configure","-a"])
   #view.getTerminal().call(["ls","-R","/usr"])
   view.error("short","long",

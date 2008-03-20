@@ -312,12 +312,11 @@ class MyCache(apt.Cache):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
 
         # get the distro-specific quirks handler and run it
-        for name in ("%sQuirks", "from_%sQuirks"):
-            quirksFuncName = name % self.config.get("Sources","From")
+        for quirksFuncName in ("%sQuirks" % self.config.get("Sources","To"),
+                               "from_%sQuirks" % self.config.get("Sources","From")):
             func = getattr(self, quirksFuncName, None)
             if func is not None:
                 func()
-
 
     def from_dapperQuirks(self):
         self.hardyQuirks()
@@ -328,15 +327,13 @@ class MyCache(apt.Cache):
     def hardyQuirks(self):
         """ this function works around quirks in the gutsy->hardy upgrade """
         logging.debug("running hardyQuirks handler")
-        # deal with gtranslator and help apt with the breaks
-        if (self.has_key("gtranslator") and
-            self.has_key("link-monitor-applet") and
+        # deal with gnome-translator and help apt with the breaks
+        if (self.has_key("gnome-translate") and
             self.has_key("nautilus") and
-            (self["gtranslator"].isInstalled or
-             self["link-monitor-applet"]) and
+            self["gnome-translate"].isInstalled and
             self["nautilus"].isInstalled and
             not self["nautilus"].markedUpgrade):
-            self["gtranslator"].markDelete()
+            self["gnome-translate"].markDelete()
             self["nautilus"].markInstall()
         
 
@@ -592,7 +589,7 @@ class MyCache(apt.Cache):
             # make the text available again
             self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
-            
+            self._startAptResolverLog()            
             logging.error("Dist-upgrade failed: '%s'", e)
             return False
         # would be nice to be able to use finally: here, but we need

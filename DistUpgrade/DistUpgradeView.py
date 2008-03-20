@@ -108,6 +108,13 @@ class DumbTerminal(object):
  STEP_CLEANUP,
  STEP_REBOOT) = range(1,7)
 
+( _("Preparing to upgrade"),
+  _("Getting new software channels"),
+  _("Getting new packages"),
+  _("Installing the upgrades"),
+  _("Cleaning up"),
+)
+
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
     def __init__(self):
@@ -231,6 +238,12 @@ class DistUpgradeView(object):
         """ process gui events (to keep the gui alive during a long
             computation """
         pass
+    def showDemotions(self, summary, msg, demotions):
+      """
+      show demoted packages to the user, default implementation
+      is to just show a information dialog
+      """
+      self.information(summary, msg, "\n".join(demotions))
 
 if __name__ == "__main__":
   fp = FetchProgress()

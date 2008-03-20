@@ -751,7 +751,7 @@ class DistUpgradeController(object):
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
             logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
-            self._view.information(_("Support for some applications ended"),
+            self._view.showDemotions(_("Support for some applications ended"),
                                    _("Canonical Ltd. no longer provides "
                                      "support for the following software "
                                      "packages. You can still get support "
@@ -760,7 +760,7 @@ class DistUpgradeController(object):
                                      "maintained software (universe), "
                                      "these packages will be suggested for "
                                      "removal at the end of the upgrade."),
-                                   "\n".join(self.installed_demotions))
+                                     self.installed_demotions)
         # FIXME: integrate this into main upgrade dialog!?!
         if not self.cache.distUpgrade(self._view, self.serverMode, self.partialUpgrade):
             return False

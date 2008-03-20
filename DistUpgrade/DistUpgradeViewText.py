@@ -103,11 +103,14 @@ class DistUpgradeViewText(DistUpgradeView):
     def updateStatus(self, msg):
       print
       print msg
+      sys.stdout.flush()
     def abort(self):
       print
       print _("Aborting")
     def setStep(self, step):
       self.last_step = step
+    def showDemotions(self, summary, msg, demotions):
+        self.information(summary, msg, ", ".join(demotions))
     def information(self, summary, msg, extended_msg=None):
       print
       print summary

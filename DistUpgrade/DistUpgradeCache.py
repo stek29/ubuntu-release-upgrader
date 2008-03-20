@@ -589,7 +589,8 @@ class MyCache(apt.Cache):
                 details += _("If none of this applies, then please report this bug against "
                              "the 'update-manager' package and include the files in "
                              "/var/log/dist-upgrade/ in the bugreport.")
-
+            # make the text available again
+            self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
             
             logging.error("Dist-upgrade failed: '%s'", e)

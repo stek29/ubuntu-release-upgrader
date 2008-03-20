@@ -331,6 +331,14 @@ class MyCache(apt.Cache):
         if (self.has_key("nautilus") and
             self["nautilus"].isInstalled and
             not self["nautilus"].markedUpgrade):
+            # uninstallable and gutsy apt is unhappy about this
+            # breaks because it wants to upgrade it and gives up
+            # if it can't
+            for broken in ("gnome-translate", 
+                           "mail-notification",
+                           "link-monitor-applet"):
+                if self.has_key(broken) and self[broken].isInstalled:
+                    self[broken].markDelete()
             self["nautilus"].markInstall()
         
 

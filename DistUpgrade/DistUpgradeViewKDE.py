@@ -429,7 +429,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # reasonable fault handler
         sys.excepthook = self._handleException
 
-        self.window_main.showTerminalButton.setEnabled(False)
+        ###self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
@@ -459,6 +459,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         gettext.bindtextdomain("update-manager",localedir)
         gettext.textdomain("update-manager")
         self.translate_widget_children()
+        self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", "Kubuntu"))
 
         # setup terminal text in hidden by default spot
         self.window_main.konsole_frame.hide()
@@ -534,6 +535,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             self.window_main.konsole_frame.show()
             self.window_main.showTerminalButton.setText(_("<<< Hide Terminal"))
+        self.window_main.resize(self.window_main.sizeHint())
 
     def getFetchProgress(self):
         return self._fetchProgress
@@ -627,31 +629,44 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
         msg = unicode(self.confirmChangesMessage, 'UTF-8')
-        changesDialogue = dialog_changes(self.window_main)
-        self.translate_widget_children(changesDialogue)
+        self.changesDialogue = dialog_changes(self.window_main)
+        self.changesDialogue.treeview_details.hide()
+        self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
+        self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        self.translate_widget_children(self.changesDialogue)
+        self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
         if actions != None:
             cancel = actions[0].replace("_", "")
-            changesDialogue.button_cancel_changes.setText(cancel)
+            self.changesDialogue.button_cancel_changes.setText(cancel)
             confirm = actions[1].replace("_", "")
-            changesDialogue.button_confirm_changes.setText(confirm)
+            self.changesDialogue.button_confirm_changes.setText(confirm)
 
         summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
-        changesDialogue.label_summary.setText(summaryText)
-        changesDialogue.label_changes.setText(msg)
+        self.changesDialogue.label_summary.setText(summaryText)
+        self.changesDialogue.label_changes.setText(msg)
         # fill in the details
-        changesDialogue.treeview_details.clear()
-        changesDialogue.treeview_details.setColumnText(0, "Packages")
+        self.changesDialogue.treeview_details.clear()
+        self.changesDialogue.treeview_details.setColumnText(0, "Packages")
         for rm in self.toRemove:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Remove %s") % rm) )
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Remove %s") % rm) )
         for inst in self.toInstall:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Install %s") % inst) )
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Install %s") % inst) )
         for up in self.toUpgrade:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Upgrade %s") % up) )
-        res = changesDialogue.exec_loop()
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Upgrade %s") % up) )
+        res = self.changesDialogue.exec_loop()
         if res == QDialog.Accepted:
             return True
         return False
+
+    def showChangesDialogueDetails(self):
+        if self.changesDialogue.treeview_details.isVisible():
+            self.changesDialogue.treeview_details.hide()
+            self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        else:
+            self.changesDialogue.treeview_details.show()
+            self.changesDialogue.show_details_button.setText("<<< " + _("Details"))
+        self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
     def askYesNoQuestion(self, summary, msg, default='No'):
         restart = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode("<font>") + unicode(msg, 'UTF-8'), QMessageBox.Yes, QMessageBox.No)

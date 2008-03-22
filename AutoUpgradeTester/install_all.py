@@ -79,7 +79,7 @@ for comp in comps:
       pkg = cache[pkgname]
       i += 1
       if pkg.candidateOrigin:
-         print "\r%.3f" % (float(i)/(len(cache)*2.0)*100.0),
+         print "\r%.3f" % (float(i)/(len(cache)*100.0),
          for c in pkg.candidateOrigin:
             if comp == None or c.component == comp:
                current = set([p.name for p in cache if p.markedInstall])
@@ -105,6 +105,7 @@ for comp in comps:
                      print "Installing '%s' reduced the set (%s < %s)" % (pkg.name, len(new), len(best))
                      clear(cache)
                      reapply(cache, best)
+   i=0
 
 print len(troublemaker)
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:

@@ -106,6 +106,9 @@ class MyCache(apt.Cache):
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
     def _startAptResolverLog(self):
+        if hasattr(self, "old_stdout"):
+            os.close(self.old_stdout)
+            os.close(self.old_stderr)
         self.old_stdout = os.dup(1)
         self.old_stderr = os.dup(2)
         os.dup2(self.logfd, 1)

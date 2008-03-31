@@ -1026,6 +1026,9 @@ class DistUpgradeController(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
+        self.runPostInstallScripts()
+
+    def runPostInstallScripts(self):
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             logging.debug("Running PostInstallScript: '%s'" % script)
@@ -1510,6 +1513,8 @@ class DistUpgradeController(object):
         self._view.setStep(DistUpgradeView.STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
+            # run the post install scripts (for stuff like UUID conversion)
+            self.runPostInstallScripts()
             # don't abort here, because it would restore the sources.list
             sys.exit(1) 
             

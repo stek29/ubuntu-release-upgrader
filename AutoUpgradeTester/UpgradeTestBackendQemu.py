@@ -59,7 +59,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     qemu_binary = "kvm"
     
     qemu_options = [
-        "-m","768",      # memory to use
         "-localtime",
         "-vnc","localhost:0",
         "-no-reboot",    # exit on reboot
@@ -84,6 +83,11 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
+        # make the memory configurable
+        mem = self.config.getWithDefault("NonInteractive","VirtualRam","768")
+        self.qemu_options.append("-m")
+        self.qemu_options.append(str(mem))
+
         # check if the ssh port is in use
         if subprocess.call("netstat -t -l -n |grep 0.0.0.0:%s" % self.ssh_port,
                            shell=True) == 0:

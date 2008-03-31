@@ -60,7 +60,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     
     qemu_options = [
         "-localtime",
-        "-vnc","localhost:0",
         "-no-reboot",    # exit on reboot
         "-no-acpi",      # the dapper kernel does not like qemus acpi
 #        "-no-kvm",      # crashes sometimes with kvm HW
@@ -83,6 +82,11 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
+        # vnc port/display
+        vncport = self.config.getWithDefault("NonInteractive","VncNum","0")
+        self.qemu_options.append("-vnc")
+        self.qemu_options.append("localhost:%s" % vncport)
+
         # make the memory configurable
         mem = self.config.getWithDefault("NonInteractive","VirtualRam","768")
         self.qemu_options.append("-m")

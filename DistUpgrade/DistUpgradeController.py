@@ -340,6 +340,16 @@ class DistUpgradeController(object):
             logging.error("checkViewDepends() failed")
             return False
 
+        if os.path.exists("/usr/bin/debsig-verify"):
+            logging.error("debsig-verify is installed")
+            self._view.error(_("Package 'debsig-verify' is installed"),
+                             _("The upgrade can not continue with that "
+                               "package installed.\n"
+                               "Please remove it with synaptic "
+                               "or 'apt-get remove debsig-verify' first "
+                               "and run the upgrade again."))
+            self.abort()
+
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  inteligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:

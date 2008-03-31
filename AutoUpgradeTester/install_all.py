@@ -79,7 +79,7 @@ for comp in comps:
       pkg = cache[pkgname]
       i += 1
       if pkg.candidateOrigin:
-         print "\r%.3f" % (float(i)/(len(cache)*100.0),
+         print "\r%.3f" % (float(i)/(len(cache)*100.0)),
          for c in pkg.candidateOrigin:
             if comp == None or c.component == comp:
                current = set([p.name for p in cache if p.markedInstall])

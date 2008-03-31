@@ -843,8 +843,12 @@ class UpdateManager(SimpleGladeApp):
   def save_state(self):
     """ save the state  (window-size for now) """
     (x,y) = self.window_main.get_size()
-    self.gconfclient.set_pair("/apps/update-manager/window_size",
-                              gconf.VALUE_INT, gconf.VALUE_INT, x, y)
+    try:
+        self.gconfclient.set_pair("/apps/update-manager/window_size",
+                                  gconf.VALUE_INT, gconf.VALUE_INT, x, y)
+    except gobject.GError, e:
+        print "Could not save the configuration to gconf: %s" % e
+        pass
 
   def restore_state(self):
     """ restore the state (window-size for now) """

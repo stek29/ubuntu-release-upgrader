@@ -491,7 +491,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def translate_widget(self, widget):
         if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
             if str(widget.text()) != "":
-                widget.setText(utf8(_(str(widget.text()))))
+                widget.setText(_(str(widget.text())))
 
     def _handleException(self, exctype, excvalue, exctb):
         """Crash handler."""
@@ -633,8 +633,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.changesDialogue = dialog_changes(self.window_main)
         self.changesDialogue.treeview_details.hide()
         self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
-        self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
         self.translate_widget_children(self.changesDialogue)
+        self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
         if actions != None:

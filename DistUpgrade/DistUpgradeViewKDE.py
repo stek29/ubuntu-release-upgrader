@@ -97,7 +97,8 @@ class DumbTerminal(QTextEdit):
         " send (ascii) key events to the pty "
         # FIXME: use ev.text() here instead and deal with
         # that it sends strange stuff
-        os.write(self.installProgress.master_fd, chr(ev.ascii()))
+        if hasattr(self.installProgress,"master_fd"):
+            os.write(self.installProgress.master_fd, chr(ev.ascii()))
     def onCursorPositionChanged(self, x, y):
         " helper that ensures that the cursor is always at the end "
         if self._block:

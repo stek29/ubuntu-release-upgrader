@@ -24,7 +24,6 @@ class InstallProgress(apt.progress.InstallProgress):
       open("install_failures.txt","a").write("%s _:_ %s" % (pkg, errormsg))
       bad = set()
       bad.add(os.path.basename(pkg).split("_")[0])
-      print "failed to install: ", name
       # FIXME: just run apt-cache rdepends $pkg here?
       #        or use apt.Package.candidateDependencies ?
       #        or calculate the set again? <- BEST!
@@ -58,7 +57,7 @@ def do_install(cache):
    failures =  set(map(lambda s: os.path.basename(s.split("_:_")[0]).split("_")[0], open("install_failures.txt").readlines()))
    print "failed: ", failures
    assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
-   assert(os.system("dpkg --configure -a"))
+   assert(os.system("dpkg --configure -a") == 0)
    return res
 
 def blacklisted(name):

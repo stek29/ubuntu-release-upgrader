@@ -5,26 +5,22 @@ import apt
 import os.path
 import string
 import apt_pkg
+import re
+
+# global install blacklist
+pkg_blacklist = None
 
 def blacklisted(name):
-   # we need to blacklist linux-image-* as it does not install
-   # cleanly in the chroot (postinst failes)
-   blacklist = [
-      # file-overwrite problem with libc6-dev
-      "libpthread-dev",
-      # FUBAR (was removed in feisty)
-      "glibc-doc-reference",
-      # has a funny "can not be upgraded automatically" policy
-      # see debian #368226
-      "quagga",
-      # the following packages try to access /lib/modules/`uname -r` and fail
-      "vmware-player-kernel-",
-      # not installable on a regular machine
-      "ltsp-client",
-      ]
-   for b in blacklist:
-	   if name.startswith(b):
-		   return True
+   global pkg_blacklist
+   if pkg_blacklist is None:
+      pkg_blacklist = set()
+      for name in map(string.strip, open("install_blacklist.cfg").readlines()):
+         if name and not name.startswith("#"):
+            pkg_blacklist.add(name)
+      print "blacklist: ", pkg_blacklist
+   for b in pkg_blacklist:
+	   if re.match(b, name):
+              return True
    return False
 
 def clear(cache):

@@ -6,9 +6,60 @@ import os.path
 import string
 import apt_pkg
 import re
+import logging
 
 # global install blacklist
 pkg_blacklist = None
+
+
+class InstallProgress(apt.progress.InstallProgress):
+   " Out install progress that can automatically remove broken pkgs "
+   def error(self, pkg, errormsg):
+      # on failure: 
+      # - add failing package to "install_failures.txt"  [done]
+      # - remove package from best.txt [done]
+      # FIXME: - remove all rdepends from best.txt
+      # - remove the failed install attempts [done]
+      #   * explode if a package can not be removed and let the user cleanup
+      open("install_failures.txt","a").write("%s _:_ %s" % (pkg, errormsg))
+      bad = set()
+      bad.add(os.path.basename(pkg).split("_")[0])
+      print "failed to install: ", name
+      # FIXME: just run apt-cache rdepends $pkg here?
+      #        or use apt.Package.candidateDependencies ?
+      #        or calculate the set again? <- BEST!
+      for name in bad:
+         new_best = open("best.txt").read().replace(name+"\n","")
+         open("best.txt","w").write(new_best)
+      open("install_blacklist.cfg","a").write("# auto added by install_all.py\n%s\n" % name)
+
+def do_install(cache):
+   # go and install
+   res = False
+   current = 0
+   maxRetries = 5
+   while current < maxRetries:
+      print "Retry: ", current
+      try:
+         res = cache.commit(apt.progress.TextFetchProgress(),
+                            InstallProgress())
+         break
+      except IOError, e:
+         # fetch failed, will be retried
+         current += 1
+         print "Retrying to fetch: ", current, e
+         continue
+      except SystemError, e:
+         print "Error installing packages! "
+         print e
+         print "Install result: ",res
+         break
+   # remove all failed packages
+   failures =  set(map(lambda s: os.path.basename(s.split("_:_")[0]).split("_")[0], open("install_failures.txt").readlines()))
+   print "failed: ", failures
+   assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
+   assert(os.system("dpkg --configure -a"))
+   return res
 
 def blacklisted(name):
    global pkg_blacklist
@@ -29,6 +80,7 @@ def clear(cache):
 def reapply(cache, pkgnames):
    for name in pkgnames:
       cache[name].markInstall(False)
+
 
 # ----------------------------------------------------------------
 
@@ -84,6 +136,7 @@ for comp in comps:
                      pkg.markInstall()
                   except SystemError, e:
                      print "Installing '%s' cause problems: %s" % (pkg.name, e)
+                     pkg.markKeep()
                   new = set([p.name for p in cache if p.markedInstall])
                   #if not pkg.markedInstall or len(new) < len(current):
                   if not (pkg.isInstalled or pkg.markedInstall):
@@ -103,6 +156,7 @@ for comp in comps:
                      reapply(cache, best)
    i=0
 
+# make sure that the ubuntu base packages are installed
 print len(troublemaker)
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:
     cache[pkg].markInstall()
@@ -112,6 +166,7 @@ for pkg in cache:
 	if blacklisted(pkg.name):
 		pkg.markKeep()
 
+# install it
 print "We can install:"
 print len([pkg.name for pkg in cache if pkg.markedInstall])
 print "Download: "
@@ -128,21 +183,5 @@ f = open(outf, "w")
 f.write("\n".join([pkg.name for pkg in cache if pkg.markedInstall]))
 f.close()
 
-# go and install
-res = False
-current = 0
-maxRetries = 5
-while current < maxRetries:
-    try:
-        res = cache.commit(apt.progress.TextFetchProgress(),
-                           apt.progress.InstallProgress())    
-    except IOError, e:
-        # fetch failed, will be retried
-        current += 1
-        print "Retrying to fetch: ", current
-        continue
-    except SystemError, e:
-        print "Error installing packages! "
-        print e
-    print "Install result: ",res
-    break
+# now do the real install
+do_install(cache)

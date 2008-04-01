@@ -30,7 +30,7 @@ class InstallProgress(apt.progress.InstallProgress):
       for name in bad:
          new_best = open("best.txt").read().replace(name+"\n","")
          open("best.txt","w").write(new_best)
-      open("install_blacklist.cfg","a").write("# auto added by install_all.py\n%s\n" % name)
+         open("install_blacklist.cfg","a").write("# auto added by install_all.py\n%s\n" % name)
 
 def do_install(cache):
    # go and install
@@ -58,6 +58,9 @@ def do_install(cache):
    print "failed: ", failures
    assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
    assert(os.system("dpkg --configure -a") == 0)
+   # remove pos.txt and best.txt to force recalculation
+   os.unlink("pos.txt")
+   os.unlink("best.txt")
    return res
 
 def blacklisted(name):
@@ -183,4 +186,10 @@ f.write("\n".join([pkg.name for pkg in cache if pkg.markedInstall]))
 f.close()
 
 # now do the real install
-do_install(cache)
+res = do_install(cache)
+
+if not res:
+   # FIXME: re-exec itself
+   sys.exit(1)
+
+sys.exit(0)

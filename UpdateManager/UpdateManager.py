@@ -52,6 +52,7 @@ import pango
 import subprocess
 import pwd
 import urllib2
+import httplib
 import time
 import thread
 import xml.sax.saxutils
@@ -251,7 +252,7 @@ class MyCache(apt.Cache):
                 self.all_changes[name] = [_("The list of changes is not "
                                             "available yet.\nPlease try again "
                                             "later."), srcpkg]
-        except IOError:
+        except IOError, httplib.BadStatusLine:
             if lock.locked():
                 self.all_changes[name] = [_("Failed to download the list "
                                             "of changes. \nPlease "
@@ -586,7 +587,7 @@ class UpdateManager(SimpleGladeApp):
                             lambda w,lock: lock.release(), lock)
         # wait for the dl-thread
         while lock.locked():
-          time.sleep(0.05)
+          time.sleep(0.01)
           while gtk.events_pending():
             gtk.main_iteration()
         # download finished (or canceld, or time-out)

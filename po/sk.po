@@ -10,23 +10,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sk\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2008-04-01 16:23+0200\n"
-"PO-Revision-Date: 2007-09-22 19:55+0000\n"
+"POT-Creation-Date: 2008-04-02 10:42+0200\n"
+"PO-Revision-Date: 2008-03-21 19:30+0000\n"
 "Last-Translator: Jozef Bucha <bucha_jozef@centrum.sk>\n"
 "Language-Team: <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2007-09-24 08:45+0000\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
+"X-Launchpad-Export-Date: 2008-04-02 05:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
 #: ../DistUpgrade/utils.py:83 ../UpdateManager/Common/utils.py:83
-#, fuzzy
 msgid "0 KB"
-msgstr "1 KB"
+msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
 #: ../DistUpgrade/utils.py:86 ../UpdateManager/Common/utils.py:86
@@ -61,11 +59,11 @@ msgstr "Hlavný server"
 
 #: ../DistUpgrade/distro.py:235
 msgid "Custom servers"
-msgstr "Prispôsobené servery"
+msgstr "Vlastné servery"
 
 #: ../DistUpgrade/dist-upgrade.py:15
 msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr "Použiť zadanú cestu na hľadanie CD s aktualizačnými balíčkami,"
+msgstr "Použiť zadanú cestu na hľadanie CD s aktualizačnými balíčkami"
 
 #: ../DistUpgrade/dist-upgrade.py:21
 msgid ""
@@ -86,9 +84,9 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeCache.py:73
 msgid "Remove package in bad state"
 msgid_plural "Remove packages in bad state"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Odstrániť balíkov v zlom stave"
+msgstr[1] "Odstrániť balík v zlom stave"
+msgstr[2] "Odstrániť balíky v zlom stave"
 
 #: ../DistUpgrade/DistUpgradeCache.py:76
 #, python-format
@@ -101,19 +99,28 @@ msgid_plural ""
 "but no archive can be found for it. Do you want to remove this package now "
 "to continue?"
 msgstr[0] ""
+"Balíky '%s' sú v nekonzistentnom stave a je potrebné ich preinštalovať, ale "
+"nebol pre nich nájdený žiadny archív. Chcete pokračovať a odstrániť tak "
+"tieto balíky?"
 msgstr[1] ""
+"Balík '%s' je v nekonzistentnom stave a je potrebné ho preinštalovať, ale "
+"nebol pre neho nájdený žiadny archív. Chcete pokračovať a odstrániť tak "
+"tento balík?"
 msgstr[2] ""
+"Balíky '%s' sú v nekonzistentnom stave a je potrebné ich preinštalovať, ale "
+"nebol pre nich nájdený žiadny archív. Chcete pokračovať a odstrániť tak "
+"tieto balíky?"
 
 #: ../DistUpgrade/DistUpgradeCache.py:241
 msgid "Broken packages"
-msgstr "Poškodené balíčky"
+msgstr "Poškodené balíky"
 
 #: ../DistUpgrade/DistUpgradeCache.py:242
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
 msgstr ""
-"Váš systém obsahuje poškodené balíčky, ktoré nemôžu byť týmto programom "
+"Váš systém obsahuje poškodené balíky, ktoré nemôžu byť týmto programom "
 "opravené. Pred pokračovaním ich opravte programom synaptic alebo apt-get."
 
 #: ../DistUpgrade/DistUpgradeCache.py:570
@@ -122,7 +129,7 @@ msgstr "Nemôžem aktualizovať požadované meta-balíky"
 
 #: ../DistUpgrade/DistUpgradeCache.py:574
 msgid "A essential package would have to be removed"
-msgstr "Musel by byť odstránený dôležitý balíček"
+msgstr "Musel by byť odstránený dôležitý balík"
 
 #. FIXME: change the text to something more useful
 #: ../DistUpgrade/DistUpgradeCache.py:581
@@ -135,24 +142,29 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
+"Nastala nerozlíšiteľná chyba počas výpočtu aktualizácie.\n"
+"\n"
+" Môže to byť spôsobené:\n"
+" * Aktualizáciou na verziu Ubuntu, ktorá je určená na testovanie (pre-"
+"release verzia)\n"
+" * Nainštalovanou verziou Ubuntu, ktorá je určená na testovanie (pre-release "
+"verzia)\n"
+" * Neoficiálnym balíkom programov, ktorý nebol poskytnutý komunitou Ubuntu\n"
+"\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:591
-#, fuzzy
 msgid "This is most likely a transient problem, please try again later."
-msgstr ""
-"Zoznam zmien ešte nie je k dispozícii.\n"
-"Prosím, skúste neskôr."
+msgstr "Toto je pravdepodobne dočasný problém, prosím skúste to neskôr."
 
 #: ../DistUpgrade/DistUpgradeCache.py:594
-#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug against the 'update-"
 "manager' package and include the files in /var/log/dist-upgrade/ in the "
 "bugreport."
 msgstr ""
-"Aktualizácia sa teraz ukončí. Prosím oznámte túto chybu ako chybu balíčka "
-"'update-manager' a priložte súbory s adresára /var/log/dist-upgrade/ do "
-"vašej správy o chybe."
+"Pokiaľ sa nič neudeje, oznámte prosím túto chybu ako chybu balíka 'update-"
+"manager' a priložte súbory z priečinka /var/log/dist-upgrade/ do vašej "
+"chybovej správy."
 
 #: ../DistUpgrade/DistUpgradeCache.py:599
 #: ../UpdateManager/UpdateManager.py:899
@@ -162,7 +174,7 @@ msgstr "Nepodarilo sa vypočítať aktualizáciu"
 #. FIXME: maybe ask a question here? instead of failing?
 #: ../DistUpgrade/DistUpgradeCache.py:641
 msgid "Error authenticating some packages"
-msgstr "Chyba pri overovaní niektorých balíčkov"
+msgstr "Chyba pri overovaní niektorých balíkov"
 
 #: ../DistUpgrade/DistUpgradeCache.py:642
 msgid ""
@@ -170,25 +182,25 @@ msgid ""
 "network problem. You may want to try again later. See below for a list of "
 "unauthenticated packages."
 msgstr ""
-"Nebolo možné overiť niektoré balíčky. Mohlo by to byť spôsobené prechodným "
+"Nebolo možné overiť niektoré balíky. Mohlo by to byť spôsobené prechodným "
 "problémom v sieti. Môžete to opäť skúsiť neskôr. Nižšie je uvedený zoznam "
-"neoverených balíčkov."
+"neoverených balíkov."
 
 #: ../DistUpgrade/DistUpgradeCache.py:745
 #, python-format
 msgid "Can't install '%s'"
-msgstr "Nemôžem inštalovať '%s'"
+msgstr "Nemôžem nainštalovať '%s'"
 
 #: ../DistUpgrade/DistUpgradeCache.py:746
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
-msgstr "Požadovaný balíček nebolo možné nainštalovať. Nahláste to ako chybu. "
+msgstr "Požadovaný balík nebolo možné nainštalovať. Nahláste to ako chybu. "
 
 #. FIXME: provide a list
 #: ../DistUpgrade/DistUpgradeCache.py:753
 msgid "Can't guess meta-package"
-msgstr "Nemôžem odhadnúť meta balíček."
+msgstr "Nemôžem odhadnúť meta-balík"
 
 #: ../DistUpgrade/DistUpgradeCache.py:754
 msgid ""
@@ -198,11 +210,11 @@ msgid ""
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"Váš systém neobsahuje žiaden z balíčkov ubuntu-desktop, kubuntu-desktop, "
+"Váš systém neobsahuje žiaden z balíkov ubuntu-desktop, kubuntu-desktop, "
 "xubuntu-desktop alebo edubuntu-desktop a nebolo možné zistiť, ktorú verziu "
 "Ubuntu používate.\n"
 " Prosím, než budete pokračovať, najprv nainštalujte jeden z vyššie uvedených "
-"balíčkov pomocou Synaptic alebo apt-get."
+"balíkov pomocou Synaptic alebo apt-get."
 
 #: ../DistUpgrade/DistUpgradeController.py:92
 msgid "Failed to add the CD"
@@ -225,13 +237,13 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeController.py:125
 msgid "Reading cache"
-msgstr "Čítam vyrovnávaciu pamäť cache"
+msgstr "Čítam vyrovnávaciu pamäť"
 
-#: ../DistUpgrade/DistUpgradeController.py:201
+#: ../DistUpgrade/DistUpgradeController.py:205
 msgid "Unable to get exclusive lock"
 msgstr "Nepodarilo sa uzamknúť databázu softvéru"
 
-#: ../DistUpgrade/DistUpgradeController.py:202
+#: ../DistUpgrade/DistUpgradeController.py:206
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -239,11 +251,11 @@ msgstr ""
 "Zvyčajne to znamená, že je už spustená iná aplikácia na správu balíkov (ako "
 "apt-get alebo aptitude). Prosím, najskôr ukončite danú aplikáciu."
 
-#: ../DistUpgrade/DistUpgradeController.py:222
+#: ../DistUpgrade/DistUpgradeController.py:226
 msgid "Continue running under SSH?"
 msgstr "Pokračovať v spojení cez SSH?"
 
-#: ../DistUpgrade/DistUpgradeController.py:223
+#: ../DistUpgrade/DistUpgradeController.py:227
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -259,11 +271,11 @@ msgstr ""
 "Ak sa rozhodnete pokračovať, na porte '%s' sa spustí ďalší ssh démon.\n"
 "Želáte si pokračovať?"
 
-#: ../DistUpgrade/DistUpgradeController.py:238
+#: ../DistUpgrade/DistUpgradeController.py:242
 msgid "Starting additional sshd"
-msgstr "Štartujem prídavný sshd"
+msgstr "Štartujem ďalší sshd"
 
-#: ../DistUpgrade/DistUpgradeController.py:239
+#: ../DistUpgrade/DistUpgradeController.py:243
 #, python-format
 msgid ""
 "To make recovery in case of failure easier a additional sshd will be started "
@@ -271,42 +283,42 @@ msgid ""
 "connect to the additional one.\n"
 msgstr ""
 "Aby sa uľahčilo obnovenie v prípade poruchy, bude spustený ďalší sshd na "
-"porte port '%s'. Ak sa niečo zlá stane s bežiacim ssh, môžete sa prihlásiť "
-"na ten druhý.\n"
+"porte'%s'. Ak sa niečo zlé stane s bežiacim ssh, môžete sa prihlásiť na ten "
+"druhý.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:303
-#: ../DistUpgrade/DistUpgradeController.py:326
+#: ../DistUpgrade/DistUpgradeController.py:307
+#: ../DistUpgrade/DistUpgradeController.py:330
 msgid "Can not upgrade"
-msgstr "Nie je možné aktualizovať"
+msgstr "Nie je možné vykonať prechod na novšiu verziu"
 
-#: ../DistUpgrade/DistUpgradeController.py:304
-#, fuzzy, python-format
+#: ../DistUpgrade/DistUpgradeController.py:308
+#, python-format
 msgid "A upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "Tento nástroj nepodporuje aktualizáciu z '%s' na '%s'."
 
-#: ../DistUpgrade/DistUpgradeController.py:327
+#: ../DistUpgrade/DistUpgradeController.py:331
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Vaša inštalácia Pythonu je pokazená. Prosím, opravte symbolický odkaz '/usr/"
-"bin/python'."
+"Vaša inštalácia Pythonu je pokazená. Prosím, opravte symbolický odkaz „/usr/"
+"bin/python“."
 
-#: ../DistUpgrade/DistUpgradeController.py:345
+#: ../DistUpgrade/DistUpgradeController.py:349
 msgid "Package 'debsig-verify' is installed"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:346
+#: ../DistUpgrade/DistUpgradeController.py:350
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
 "run the upgrade again."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:356
+#: ../DistUpgrade/DistUpgradeController.py:360
 msgid "Include latest updates from the Internet?"
 msgstr "Použiť najnovšie aktualizácie z internetu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:357
+#: ../DistUpgrade/DistUpgradeController.py:361
 msgid ""
 "The upgrade process can automatically download the latest updates and "
 "install them during the upgrade.  The upgrade will take longer, but when it "
@@ -319,11 +331,11 @@ msgstr ""
 "túto možnosť, mali by ste po prechode na novšiu verziu čo najskôr "
 "nainštalovať dostupné aktualizácie."
 
-#: ../DistUpgrade/DistUpgradeController.py:497
+#: ../DistUpgrade/DistUpgradeController.py:501
 msgid "No valid mirror found"
 msgstr "Nebol nájdený vhodný server"
 
-#: ../DistUpgrade/DistUpgradeController.py:498
+#: ../DistUpgrade/DistUpgradeController.py:502
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -335,19 +347,20 @@ msgid ""
 "If you select 'no' the update will cancel."
 msgstr ""
 "Počas prehliadania informácií vo vašom úložisku nebolo nájdené žiadne "
-"zrkadlo (mirror) pre prechod na novšiu verziu. Toto sa môže stať, keď "
-"prevádzkujete interné zrkadlo alebo informácie zrkadla nie sú aktuálne.\n"
+"zrkadlo (mirror) pre aktualizáciu. Toto sa môže stať, keď prevádzkujete "
+"interné zrkadlo alebo informácie zrkadla nie sú aktuálne.\n"
 "\n"
 "Chcete aj tak prepísať váš súbor „sources.list“? Ak tu zvolíte „Áno“, "
 "aktualizujú sa všetky záznamy „%s“ až „%s“.\n"
-"Ak zvolíte „Nie“, prechod na novšiu verziu bude zrušený."
+"\n"
+"Ak zvolíte „Nie“, aktualizácia bude zrušená."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:518
+#: ../DistUpgrade/DistUpgradeController.py:522
 msgid "Generate default sources?"
 msgstr "Vytvoriť štandardný zoznam zdrojov softvéru?"
 
-#: ../DistUpgrade/DistUpgradeController.py:519
+#: ../DistUpgrade/DistUpgradeController.py:523
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -355,17 +368,17 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No' the update will "
 "cancel."
 msgstr ""
-"Počas čítania súboru 'sources.list' nebol nájdený žiadny platný záznam pre '%"
-"s'.\n"
+"Počas čítania súboru „sources.list“ nebol nájdený žiadny platný záznam pre „%"
+"s“.\n"
 "\n"
-"Majú byť pridané štandardné záznamy pre '%s'? Pokiaľ zvolíte 'Nie', súbor "
-"nebude zmenený."
+"Majú sa pridať štandardné záznamy pre „%s“? Pokiaľ zvolíte „Nie“, "
+"aktualizácia bude zrušená."
 
-#: ../DistUpgrade/DistUpgradeController.py:553
+#: ../DistUpgrade/DistUpgradeController.py:557
 msgid "Repository information invalid"
 msgstr "Neplatná informácia o zdrojoch softvéru"
 
-#: ../DistUpgrade/DistUpgradeController.py:554
+#: ../DistUpgrade/DistUpgradeController.py:558
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -373,11 +386,11 @@ msgstr ""
 "Aktualizácia informácií o zdrojoch softvéru skončila neplatným súborom. "
 "Nahláste to ako chybu."
 
-#: ../DistUpgrade/DistUpgradeController.py:560
+#: ../DistUpgrade/DistUpgradeController.py:564
 msgid "Third party sources disabled"
 msgstr "Zdroje tretích strán sú zakázané"
 
-#: ../DistUpgrade/DistUpgradeController.py:561
+#: ../DistUpgrade/DistUpgradeController.py:565
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -385,16 +398,16 @@ msgid ""
 msgstr ""
 "Niektoré záznamy tretích strán vo vašom sources.list boli vypnuté. Po "
 "prechode na novšiu verziu ich môžete znova zapnúť nástrojom 'software-"
-"properties' vášho správcu balíčkov."
+"properties' vášho správcu balíkov."
 
-#: ../DistUpgrade/DistUpgradeController.py:595
+#: ../DistUpgrade/DistUpgradeController.py:599
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Balíkov je v nekonzistentnom stave"
+msgstr[1] "Balík je v nekonzistentnom stave"
+msgstr[2] "Balíky sú v nekonzistentnom stave"
 
-#: ../DistUpgrade/DistUpgradeController.py:598
+#: ../DistUpgrade/DistUpgradeController.py:602
 #, python-format
 msgid ""
 "The package '%s' is in a inconsistent state and needs to be reinstalled, but "
@@ -405,27 +418,36 @@ msgid_plural ""
 "but no archive can be found for it.Please reinstall the packages manually or "
 "remove them from the system."
 msgstr[0] ""
+"Balíky '%s' sú v nekonzistentnom stave a je potrebné ich preinštalovať, ale "
+"nebol pre nich nájdený žiadny archív. Preinštalujte prosím balíky manuálne "
+"alebo ich odstránte zo systému."
 msgstr[1] ""
+"Balík '%s' je v nekonzistentnom stave a je potrebné ho preinštalovať, ale "
+"nebol pre neho nájdený žiadny archív. Preinštalujte prosím balík manuálne "
+"alebo ho odstránte zo systému."
 msgstr[2] ""
+"Balíky '%s' sú v nekonzistentnom stave a je potrebné ich preinštalovať, ale "
+"nebol pre nich nájdený žiadny archív. Preinštalujte prosím balíky manuálne "
+"alebo ich odstránte zo systému."
 
-#: ../DistUpgrade/DistUpgradeController.py:642
+#: ../DistUpgrade/DistUpgradeController.py:646
 msgid "Error during update"
 msgstr "Chyba počas aktualizácie"
 
-#: ../DistUpgrade/DistUpgradeController.py:643
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeController.py:647
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
 "Počas aktualizácie sa objavil problém, ktorý je zvyčajne spôsobený chybou "
-"sieťového pripojenia, preto skontrolujte vaše pripojenie a skúste znova."
+"sieťového pripojenia, skontrolujte prosím sieťové pripojenie a skúste to "
+"znova."
 
-#: ../DistUpgrade/DistUpgradeController.py:652
+#: ../DistUpgrade/DistUpgradeController.py:656
 msgid "Not enough free disk space"
 msgstr "Nedostatok voľného miesta na disku"
 
-#: ../DistUpgrade/DistUpgradeController.py:653
+#: ../DistUpgrade/DistUpgradeController.py:657
 #, python-format
 msgid ""
 "The upgrade aborts now. The upgrade needs a total of %s free space on disk '%"
@@ -438,11 +460,11 @@ msgstr ""
 "prípadne odstránením dočasných inštalačných súborov z predchádzajúcich "
 "inštalácií pomocou príkazu 'sudo apt-get clean'."
 
-#: ../DistUpgrade/DistUpgradeController.py:764
+#: ../DistUpgrade/DistUpgradeController.py:768
 msgid "Support for some applications ended"
-msgstr "Podpora niektorých aplikácii skončila"
+msgstr "Podpora niektorých aplikácií skončila"
 
-#: ../DistUpgrade/DistUpgradeController.py:765
+#: ../DistUpgrade/DistUpgradeController.py:769
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -457,26 +479,26 @@ msgstr ""
 "budú v ďalšom kroku navrhnuté na odstránenie."
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:788
+#: ../DistUpgrade/DistUpgradeController.py:792
 msgid "Do you want to start the upgrade?"
 msgstr "Chcete začať s aktualizáciou?"
 
-#: ../DistUpgrade/DistUpgradeController.py:852
-#: ../DistUpgrade/DistUpgradeController.py:906
+#: ../DistUpgrade/DistUpgradeController.py:856
+#: ../DistUpgrade/DistUpgradeController.py:910
 msgid "Could not download the upgrades"
-msgstr "Nebolo možné stiahnuť požadované balíky"
+msgstr "Nebolo možné stiahnuť aktualizácie"
 
-#: ../DistUpgrade/DistUpgradeController.py:853
-#: ../DistUpgrade/DistUpgradeController.py:907
+#: ../DistUpgrade/DistUpgradeController.py:857
+#: ../DistUpgrade/DistUpgradeController.py:911
 msgid ""
 "The upgrade aborts now. Please check your internet connection or "
 "installation media and try again. "
 msgstr ""
-"Aktualizácia bola neočakávane prerušená. Skontrolujte svoje internetové "
-"pripojenie alebo inštalačné médiá a skúste znova. "
+"Aktualizácia bude teraz prerušená. Skontrolujte svoje internetové pripojenie "
+"alebo inštalačné médiá a skúste znova. "
 
 #. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeController.py:880
+#: ../DistUpgrade/DistUpgradeController.py:884
 msgid ""
 "The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
@@ -484,7 +506,7 @@ msgstr ""
 "Prechod na novšiu verziu sa teraz ruší. Váš systém sa môže nachádzať v "
 "nepoužiteľnom stave. Teraz sa spustí obnovenie (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:885
+#: ../DistUpgrade/DistUpgradeController.py:889
 #, python-format
 msgid ""
 "\n"
@@ -495,83 +517,81 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Prosím, ohláste chybu v balíčku 'update-manager' a priložte súbory z /var/"
-"log/dist-upgrade/ k správe o chybe.\n"
+"Prosím, ohláste chybu v balíku 'update-manager' a priložte súbory z /var/log/"
+"dist-upgrade/ k správe o chybe.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:889
+#: ../DistUpgrade/DistUpgradeController.py:893
 msgid "Could not install the upgrades"
 msgstr "Nebolo možné nainštalovať aktualizácie"
 
-#: ../DistUpgrade/DistUpgradeController.py:1012
+#: ../DistUpgrade/DistUpgradeController.py:1016
 msgid "Remove obsolete packages?"
 msgstr "Odstrániť zastarané balíky?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1013
+#: ../DistUpgrade/DistUpgradeController.py:1017
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Ponechať"
 
-#: ../DistUpgrade/DistUpgradeController.py:1013
+#: ../DistUpgrade/DistUpgradeController.py:1017
 msgid "_Remove"
 msgstr "_Odstrániť"
 
-#: ../DistUpgrade/DistUpgradeController.py:1024
+#: ../DistUpgrade/DistUpgradeController.py:1028
 msgid "Error during commit"
 msgstr "Chyba počas potvrdzovania"
 
-#: ../DistUpgrade/DistUpgradeController.py:1025
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeController.py:1029
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
 msgstr ""
-"Počas čistenia nastal problém. Viac informácií nájdete v správe nižšie. "
+"Počas čistenia nastal problém. Viac informácií nájdete v správe uvedenej "
+"nižšie. "
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1152
+#: ../DistUpgrade/DistUpgradeController.py:1156
 msgid "Restoring original system state"
 msgstr "Obnovuje sa pôvodný stav systému"
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1190
+#: ../DistUpgrade/DistUpgradeController.py:1194
 msgid "Required depends is not installed"
 msgstr "Požadované závislosti nie sú nainštalované"
 
-#: ../DistUpgrade/DistUpgradeController.py:1191
+#: ../DistUpgrade/DistUpgradeController.py:1195
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr "Požadovaná závislosť „%s“ nie sú nainštalovaná "
+msgstr "Požadovaná závislosť '%s' nie je nainštalovaná. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1413
-#: ../DistUpgrade/DistUpgradeController.py:1475
+#: ../DistUpgrade/DistUpgradeController.py:1417
+#: ../DistUpgrade/DistUpgradeController.py:1479
 msgid "Checking package manager"
 msgstr "Kontrolujem správcu balíkov"
 
-#: ../DistUpgrade/DistUpgradeController.py:1418
+#: ../DistUpgrade/DistUpgradeController.py:1422
 msgid "Preparing the upgrade failed"
 msgstr "Príprava prechodu na vyššiu verziu zlyhala"
 
-#: ../DistUpgrade/DistUpgradeController.py:1419
+#: ../DistUpgrade/DistUpgradeController.py:1423
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bugreport."
 msgstr ""
 "Príprava systemu na prechod na vyššiu verziu zlyhala. Prosím oznámte túto "
-"chybu ako chybu balíčka 'update-manager' a priložte súbory s adresára /var/"
-"log/dist-upgrade/ do vašej správy o chybe."
+"chybu ako chybu balíčka „update-manager“ a priložte súbory s adresára /var/"
+"log/dist-upgrade/ k vašej správe o chybe."
 
-#: ../DistUpgrade/DistUpgradeController.py:1434
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeController.py:1438
 msgid "Getting upgrade prerequisites failed"
-msgstr "Zisťovanie prerekvizít prechodu na vyššiu verziu zlyhalo"
+msgstr "Zisťovanie predpokladov aktualizácie zlyhalo"
 
-#: ../DistUpgrade/DistUpgradeController.py:1435
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeController.py:1439
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -579,21 +599,21 @@ msgid ""
 "Please report this as a bug against the 'update-manager' package and include "
 "the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
-"Systému sa nepodarilo zistiť prerekvizity prechodu na vyššiu verziu. "
-"Aktualizácia sa teraz preruší a obnoví sa pôvodný stav systému.\n"
+"Systému sa nepodarilo zistiť predpoklady aktualizácie. Aktualizácia sa teraz "
+"preruší a obnoví sa pôvodný stav systému.\n"
 "\n"
-"Prosím oznámte túto chybu ako chybu balíčka „update-manager“ a priložte "
+"Prosím, oznámte túto chybu ako chybu balíčka 'update-manager' a priložte "
 "súbory z adresára /var/log/dist-upgrade/ k vašej správe o chybe."
 
-#: ../DistUpgrade/DistUpgradeController.py:1461
+#: ../DistUpgrade/DistUpgradeController.py:1465
 msgid "Updating repository information"
 msgstr "Aktualizujem informácie o zdrojoch softvéru"
 
-#: ../DistUpgrade/DistUpgradeController.py:1486
+#: ../DistUpgrade/DistUpgradeController.py:1490
 msgid "Invalid package information"
-msgstr "Neplatná informácia o balíčku"
+msgstr "Neplatná informácia o balíku"
 
-#: ../DistUpgrade/DistUpgradeController.py:1487
+#: ../DistUpgrade/DistUpgradeController.py:1491
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -604,30 +624,29 @@ msgid ""
 msgstr ""
 "Po aktualizácií informácií o balíkoch nie je možné nájsť dôležitý balík '%"
 "s'.\n"
-"Toto ukazuje na závažný problém, prosím oznámte túto chybu ako chybu balíčka "
+"Toto ukazuje na závažný problém, prosím oznámte túto chybu ako chybu balíka "
 "'update-manager' a priložte súbory s adresára /var/log/dist-upgrade/ do "
 "vašej správy o chybe."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:1498
-#, fuzzy
+#: ../DistUpgrade/DistUpgradeController.py:1502
 msgid "Calculating the changes"
-msgstr "Aplikujem zmeny"
+msgstr "Spracovávam zmeny"
 
-#: ../DistUpgrade/DistUpgradeController.py:1504 ../update-manager:96
+#: ../DistUpgrade/DistUpgradeController.py:1508 ../update-manager:96
 msgid "Fetching"
 msgstr "Sťahujem"
 
-#: ../DistUpgrade/DistUpgradeController.py:1514 ../update-manager:100
+#: ../DistUpgrade/DistUpgradeController.py:1518 ../update-manager:100
 msgid "Upgrading"
-msgstr "Prebieha aktualizácia"
+msgstr "Prebieha prechod na novšiu verziu"
 
-#: ../DistUpgrade/DistUpgradeController.py:1523
+#: ../DistUpgrade/DistUpgradeController.py:1527
 msgid "Searching for obsolete software"
 msgstr "Vyhľadávanie zastaraného softvéru"
 
-#: ../DistUpgrade/DistUpgradeController.py:1528
+#: ../DistUpgrade/DistUpgradeController.py:1532
 msgid "System upgrade is complete."
 msgstr "Aktualizácia systému je dokončená."
 
@@ -636,7 +655,7 @@ msgstr "Aktualizácia systému je dokončená."
 #: ../DistUpgrade/DistUpgradeViewKDE.py:167
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
-msgstr "Prosím, vložte '%s' do mechaniky '%s'"
+msgstr "Prosím, vložte „%s“ do mechaniky „%s“"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:127
 #: ../DistUpgrade/DistUpgradeViewKDE.py:180
@@ -647,7 +666,7 @@ msgstr "Sťahovanie je dokončené"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:193
 #, python-format
 msgid "Fetching file %li of %li at %sb/s"
-msgstr "Získavam súbor %li z %li na %sb/s"
+msgstr "Sťahujem súbor %li z %li rýchlosťou %sb/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:140
 #: ../DistUpgrade/DistUpgradeViewGtk.py:271
@@ -675,7 +694,7 @@ msgstr "Aplikujem zmeny"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:243
 #, python-format
 msgid "Could not install '%s'"
-msgstr "Nebolo možné nainštalovať '%s'"
+msgstr "Nebolo možné nainštalovať „%s“"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:201
 #: ../DistUpgrade/DistUpgradeViewKDE.py:244
@@ -684,7 +703,7 @@ msgid ""
 "The upgrade will continue but the '%s' package may be in a not working "
 "state. Please consider submitting a bugreport about it."
 msgstr ""
-"Aktualizácia bude pokračovať, ale balík „%s“ môže byť v nefunkčnom stave. "
+"Aktualizácia bude pokračovať, ale balík '%s' môže byť v nefunkčnom stave. "
 "Prosím, zvážte zaslanie hlásenia chybe."
 
 #. self.expander.set_expanded(True)
@@ -696,7 +715,7 @@ msgid ""
 "'%s'?"
 msgstr ""
 "Nahradiť upravený konfiguračný súbor\n"
-"'%s'?"
+"„%s“?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:218
 #: ../DistUpgrade/DistUpgradeViewKDE.py:263
@@ -710,7 +729,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewGtk.py:231
 #: ../DistUpgrade/DistUpgradeViewKDE.py:280
 msgid "The 'diff' command was not found"
-msgstr "Príkaz 'diff' nebol nájdený."
+msgstr "Príkaz „diff“ nebol nájdený."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:409
 #: ../DistUpgrade/DistUpgradeViewText.py:98
@@ -734,12 +753,13 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewGtk.py:539
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
-"Pre zamedzenie straty dát, zavrite všetky otvorené programy a dokumenty."
+"Aby ste zamedzenie strate údajov, zatvorte všetky otvorené aplikácie a "
+"dokumenty."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:553
-#, fuzzy, python-format
+#, python-format
 msgid "<b>Downgrade %s</b>"
-msgstr "<b>Odstrániť %s</b>"
+msgstr "<b>Degradovať %s</b>"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:555
 #: ../DistUpgrade/DistUpgradeViewKDE.py:653
@@ -773,11 +793,11 @@ msgstr "<<< Skryť rozdiel"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:535
 msgid "Show Terminal >>>"
-msgstr "Zobraziť terminál >>>"
+msgstr "Zobraziť Terminál >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:538
 msgid "<<< Hide Terminal"
-msgstr "<<< Skryť terminál"
+msgstr "<<< Skryť Terminál"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:637
 #: ../DistUpgrade/DistUpgradeViewKDE.py:666
@@ -796,8 +816,8 @@ msgid ""
 msgstr ""
 "<b><big>Zrušiť prebiehajúcu aktualizáciu?</big></b>\n"
 "\n"
-"Ak prerušíte aktualizáciu, systém môže zostať v nestabilnom stave. Je "
-"dôrazne odporúčané pokračovať v aktualizácii."
+"Ak prerušíte aktualizáciu, systém môže zostať v nestabilnom stave. Dôrazne "
+"sa odporúča pokračovať v aktualizácii."
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:686
 msgid "Cancel Upgrade?"
@@ -806,12 +826,12 @@ msgstr "Zrušiť prechod na novšiu verziu?"
 #: ../DistUpgrade/DistUpgradeView.py:34
 #, python-format
 msgid "%li days %li hours %li minutes"
-msgstr "Zostáva %li dní %li hodín %li minút"
+msgstr "%li dní %li hodín %li minút"
 
 #: ../DistUpgrade/DistUpgradeView.py:36
 #, python-format
 msgid "%li hours %li minutes"
-msgstr "Zostáva %li hodín %li minút"
+msgstr "%li hodín %li minút"
 
 #: ../DistUpgrade/DistUpgradeView.py:38
 #, python-format
@@ -831,19 +851,16 @@ msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem"
 msgstr ""
-"Sťahovanie s pripojením 1Mbit DSL bude asi trvať %s a s 56k modemom bude asi "
-"trvať %s"
+"Sťahovanie s pripojením 1Mbit DSL bude trvať asi %s a s 56k modemom bude "
+"trvať asi %s"
 
 #. if we have a estimated speed, use it
 #: ../DistUpgrade/DistUpgradeView.py:60
-#, fuzzy, python-format
+#, python-format
 msgid "This download will take about %s with your connection. "
-msgstr ""
-"Sťahovanie s pripojením 1Mbit DSL bude asi trvať %s a s 56k modemom bude asi "
-"trvať %s"
+msgstr "Sťahovanie zaberie s vaším pripojením okolo %s. "
 
 #: ../DistUpgrade/DistUpgradeView.py:111 ../DistUpgrade/DistUpgrade.glade.h:14
-#, fuzzy
 msgid "Preparing to upgrade"
 msgstr "Prebieha príprava aktualizácie"
 
@@ -853,9 +870,8 @@ msgid "Getting new software channels"
 msgstr "Upravujú sa softvérové kanály"
 
 #: ../DistUpgrade/DistUpgradeView.py:113 ../DistUpgrade/DistUpgrade.glade.h:12
-#, fuzzy
 msgid "Getting new packages"
-msgstr "Chyba pri overovaní niektorých balíčkov"
+msgstr "Príjem nových balíčkov"
 
 #: ../DistUpgrade/DistUpgradeView.py:114 ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Installing the upgrades"
@@ -871,25 +887,25 @@ msgstr "Prebieha čistenie"
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
-msgstr[0] "Bude odstránený %d balík."
-msgstr[1] "Budú odstránené %d balíky."
-msgstr[2] "Bude odstránených %d balíkov."
+msgstr[0] "Bude odstránených %d balíkov."
+msgstr[1] "Bude odstránený %d balík."
+msgstr[2] "Budú odstránené %d balíky."
 
 #: ../DistUpgrade/DistUpgradeView.py:189
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
-msgstr[0] "Bude nainštalovaný %d nový balík."
-msgstr[1] "Budú nainštalované %d nové balíky."
-msgstr[2] "Bude nainštalovaných %d nových balíkov."
+msgstr[0] "Bude nainštalovaných %d nových balíkov."
+msgstr[1] "Bude nainštalovaný %d nový balík."
+msgstr[2] "Budú nainštalované %d nové balíky."
 
 #: ../DistUpgrade/DistUpgradeView.py:195
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
-msgstr[0] "Bude aktualizovaný %d balík."
-msgstr[1] "Budú aktualizované %d balíky."
-msgstr[2] "Bude aktualizovaných %d balíkov."
+msgstr[0] "Bude aktualizovaných %d balíkov."
+msgstr[1] "Bude aktualizovaný %d balík."
+msgstr[2] "Budú aktualizované %d balíky."
 
 #: ../DistUpgrade/DistUpgradeView.py:200
 #, python-format
@@ -903,7 +919,6 @@ msgstr ""
 "Musíte stiahnuť celkom %s. "
 
 #: ../DistUpgrade/DistUpgradeView.py:205
-#, fuzzy
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -945,7 +960,7 @@ msgstr "Nebolo možné spustiť aktualizačný program"
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
-"Pravdepodobne je to chyba v aktualizačnom programe. Nahláste to ako chybu."
+"Pravdepodobne je to chyba v aktualizačnom programe. Nahláste to ako chybu"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:170
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:170
@@ -955,23 +970,23 @@ msgstr "Podpis aktualizačného programu"
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:173
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:173
 msgid "Upgrade tool"
-msgstr "Aktualizačný program"
+msgstr "Aktualizačný nástroj"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:198
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:198
 msgid "Failed to fetch"
-msgstr "Zlyhalo získavanie aktualizácie"
+msgstr "Zlyhalo získavanie"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:199
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:199
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr ""
-"Zlyhalo získavanie aktualizácie, čo môže byť spôsobené sieťovým problémom. "
+"Zlyhalo získavanie aktualizácie. Môže to byť spôsobené sieťovým problémom. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:203
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
 msgid "Failed to extract"
-msgstr "Zlyhala extrakcia"
+msgstr "Chyba pri rozbaľovaní"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:204
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:204
@@ -980,12 +995,12 @@ msgid ""
 "with the server. "
 msgstr ""
 "Nebolo možné rozbaliť aktualizáciu. Môže to byť spôsobené sieťovým problémom "
-"alebo nedostupňosťou servera. "
+"alebo nedostupnosťou servera. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:209
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:209
 msgid "Verfication failed"
-msgstr "Zlyhala verifikácia"
+msgstr "Zlyhalo overenie"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:210
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:210
@@ -993,13 +1008,13 @@ msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
 msgstr ""
-"Zlyhala verifikácia aktualizácie. Môže byť problém so sieťou, alebo so "
-"serverom. "
+"Zlyhalo overenie aktualizácie. Mohol to spôsobiť problém siete alebo "
+"servera. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:215
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:215
 msgid "Authentication failed"
-msgstr "Autentifikácia zlyhala"
+msgstr "Overenie zlyhalo"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:216
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:216
@@ -1007,8 +1022,8 @@ msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
 msgstr ""
-"Zlyhalo overenie autenticity aktualizácie. Môže to byť spôsobené sieťovým "
-"problémom alebo nedostupňosťou servera. "
+"Zlyhalo overenie pravost aktualizácie. Môže to byť spôsobené sieťovým "
+"problémom alebo nedostupnosťou servera. "
 
 #: ../DistUpgrade/DistUpgradeViewText.py:99
 msgid ""
@@ -1025,57 +1040,54 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewText.py:123
 msgid "Aborting"
-msgstr ""
+msgstr "Ruší sa"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:128
 #, fuzzy
 msgid "Demoted:\n"
-msgstr "Odstrániť %s"
+msgstr "Odstrániť %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:148
 #: ../DistUpgrade/DistUpgradeViewText.py:172
-#, fuzzy
 msgid "Continue [yN] "
-msgstr "_Pokračovať"
+msgstr "Pokračovať [aN] "
 
 #: ../DistUpgrade/DistUpgradeViewText.py:148
-#, fuzzy
 msgid "Details [d]"
-msgstr "Podrobnosti"
+msgstr "Podrobnosti [p]"
 
 #. TRANSLATORS: the "y" is "yes"
 #: ../DistUpgrade/DistUpgradeViewText.py:152
 #: ../DistUpgrade/DistUpgradeViewText.py:176
 msgid "y"
-msgstr ""
+msgstr "a"
 
 #. TRANSLATORS: the "n" is "no"
 #: ../DistUpgrade/DistUpgradeViewText.py:155
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #. TRANSLATORS: the "d" is "details"
 #: ../DistUpgrade/DistUpgradeViewText.py:158
 msgid "d"
-msgstr ""
+msgstr "p"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:161
-#, fuzzy, python-format
+#, python-format
 msgid "Remove: %s\n"
-msgstr "Odstrániť %s"
+msgstr "Odstrániť: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:163
-#, fuzzy, python-format
+#, python-format
 msgid "Install: %s\n"
-msgstr "Inštalovať %s"
+msgstr "Inštalovať: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:165
-#, fuzzy, python-format
+#, python-format
 msgid "Upgrade: %s\n"
-msgstr "Aktualizovať %s"
+msgstr "Aktualizovať: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:181
-#, fuzzy
 msgid "Restart required"
 msgstr "Je potrebný reštart"
 
@@ -1084,11 +1096,12 @@ msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
 msgstr ""
+"Pre dokončenie aktualizácie je vyžadovaný reštart.\n"
+"Ak zvolíte 'y' systém sa reštartuje."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:186
-#, fuzzy
 msgid "Restart the system now [yN] "
-msgstr "Reštartovanie systému"
+msgstr "Reštartovať systém teraz [yN] "
 
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
@@ -1096,16 +1109,15 @@ msgstr "    "
 
 #: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr "<b><big>Na dokončenie aktualizácie reštartujte počítač</big></b>"
+msgstr "<b><big>Pre dokončenie aktualizácie reštartujte počítač</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:6
 msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Spustiť aktualizáciu?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-#, fuzzy
 msgid "<b><big>Upgrading Ubuntu to version 8.04 LTS</big></b>"
-msgstr "<b><big>Aktualizujem Ubuntu na verziu 7.10</big></b>"
+msgstr "<b><big>Aktualizácia Ubuntu na verziu 8.04 LTS</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
@@ -1113,17 +1125,15 @@ msgstr "Rozdiel medzi súbormi"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:11
 msgid "Distribution Upgrade"
-msgstr "_Prechod na vyššiu verziu distribúcie"
+msgstr "Prechod na vyššiu verziu distribúcie"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:15
-#, fuzzy
 msgid "Restarting the computer"
 msgstr "Reštartovanie systému"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:16
-#, fuzzy
 msgid "Setting new software channels"
-msgstr "Upravujú sa softvérové kanály"
+msgstr "Nastavujú sa softvérové kanály"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:17
 msgid "Terminal"
@@ -1185,7 +1195,7 @@ msgstr "Sťahujem súbor %(current)li z %(total)li"
 
 #: ../UpdateManager/UpdateManager.py:246
 msgid "The list of changes is not available"
-msgstr "Zoznam zmien nie je k dispozícii."
+msgstr "Zoznam zmien nie je k dispozícii"
 
 #: ../UpdateManager/UpdateManager.py:252
 msgid ""
@@ -1200,7 +1210,7 @@ msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
-"Zlyhalo získavanie zoznamu zmien.\n"
+"Nepodarilo sa stiahnuť zoznam zmien.\n"
 " Skontrolujte si svoje internetové pripojenie."
 
 #: ../UpdateManager/UpdateManager.py:284
@@ -1242,13 +1252,13 @@ msgstr "_Odznačiť všetko"
 
 #: ../UpdateManager/UpdateManager.py:613
 msgid "_Check All"
-msgstr "_Označiť všetko"
+msgstr "O_značiť všetko"
 
 #. TRANSLATORS: b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:657 ../UpdateManager/UpdateManager.py:709
 #, python-format
 msgid "Download size: %s"
-msgstr "Veľkosť na stiahnutie: %s"
+msgstr "Veľkosť súbborov na stiahnutie: %s"
 
 #: ../UpdateManager/UpdateManager.py:661
 msgid "Unknown download size"
@@ -1259,20 +1269,22 @@ msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
 msgstr ""
+"Nie je známy čas poslednej aktualizácie informačného balíka. Pokúste sa, "
+"prosím obnoviť informácie kliknutím na tlačidlo 'Skontrolovať'."
 
 #: ../UpdateManager/UpdateManager.py:678
 #, python-format
 msgid "The package information was last updated %s days ago."
-msgstr ""
+msgstr "Informačný balík bol naposledy aktualizovaný pred %s dňami."
 
 #: ../UpdateManager/UpdateManager.py:680
 #, python-format
 msgid "The package information was last updated %s hours ago."
-msgstr ""
+msgstr "Informačný balík bol naposledy aktualizovaný pred %s hodinami."
 
 #: ../UpdateManager/UpdateManager.py:682
 msgid "The package information was last updated less than one hour ago."
-msgstr ""
+msgstr "Informačný balík bol naposledy aktualizovaný pred menej ako hodinou."
 
 #: ../UpdateManager/UpdateManager.py:690
 #: ../data/glade/UpdateManager.glade.h:21
@@ -1284,12 +1296,12 @@ msgstr ""
 "zraniteľnosti alebo poskytujú nové vlastnosti."
 
 #: ../UpdateManager/UpdateManager.py:705
-#, fuzzy, python-format
+#, python-format
 msgid "You can install %s update."
 msgid_plural "You can install %s updates."
-msgstr[0] "Môžete nainštalovať %s aktualizáciu"
-msgstr[1] "Môžete nainštalovať %s aktualizácie"
-msgstr[2] "Môžete nainštalovať %s aktualizácií"
+msgstr[0] "Môžete nainštalovať %s aktualizácií"
+msgstr[1] "Môžete nainštalovať %s aktualizáciu"
+msgstr[2] "Môžete nainštalovať %s aktualizácie"
 
 #: ../UpdateManager/UpdateManager.py:746
 msgid "Please wait, this can take some time."
@@ -1300,13 +1312,12 @@ msgid "Update is complete"
 msgstr "Aktualizácia je dokončená"
 
 #: ../UpdateManager/UpdateManager.py:800
-#, fuzzy
 msgid "Reading package information"
-msgstr "Neplatná informácia o balíčku"
+msgstr "Načítavanie informácií o balíčku"
 
 #: ../UpdateManager/UpdateManager.py:877
 msgid "Could not initialize the package information"
-msgstr "Nebolo možné inicializovať informácie o balíčku"
+msgstr "Nebolo možné inicializovať informácie o balíku"
 
 #: ../UpdateManager/UpdateManager.py:878
 msgid ""
@@ -1315,9 +1326,9 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
-"Počas inicializácie informácií o balíčku sa vyskytol neriešiteľný problém.\n"
+"Počas inicializácie informácií o balíku sa vyskytol neriešiteľný problém.\n"
 "\n"
-"Prosím, oznámte túto chybu pri balíčku 'update-manager' a priložte "
+"Prosím, oznámte túto chybu pri balíku 'update-manager' a priložte "
 "nasledujúcu správu:\n"
 
 #: ../UpdateManager/UpdateManager.py:900
@@ -1329,7 +1340,7 @@ msgid ""
 msgstr ""
 "Pri počítaní aktualizácie sa vyskytol neriešiteľný problém.\n"
 "\n"
-"Prosím, oznámte túto chybu pri balíčku 'update-manager' a priložte "
+"Prosím, oznámte túto chybu pri balíku 'update-manager' a priložte "
 "nasledujúcu správu:"
 
 #. TRANSLATORS: the b stands for Bytes
@@ -1351,7 +1362,7 @@ msgstr ""
 "Nebudete mať k dispozícii žiadne nové bezpečnostné ani kritické "
 "aktualizácie. Prejdite preto na najnovšiu verziu distribúcie Ubuntu Linux. "
 "Pre viac informácií o prechode na novšiu verziu si pozrite http://www.ubuntu."
-"com.\""
+"com."
 
 #: ../UpdateManager/UpdateManager.py:951
 msgid "Downloading the upgrade tool"
@@ -1378,34 +1389,33 @@ msgid ""
 "this issue at first."
 msgstr ""
 "V dôsledku chyby nie je možné nainštalovať alebo odstrániť žiadny program. "
-"Na odstránenie tohto problému použite správcu balíkov 'Synaptic' alebo "
-"spustite 'sudo apt-get install -f' v termáli."
+"Na odstránenie tohto problému použite správcu balíkov „Synaptic“ alebo "
+"spustite „sudo apt-get install -f“ v termináli."
 
 #: ../data/glade/UpdateManager.glade.h:1
-#, fuzzy
 msgid ""
 "<b><big>You must check for updates manually</big></b>\n"
 "\n"
 "Your system does not check for updates automatically. You can configure this "
 "behavior in <i>Software Sources</i> on the <i>Updates</i> tab."
 msgstr ""
-"<b><big>Musíte kontrolovať aktualizácie·manuálne</big></b>\n"
+"<b><big>Musíte kontrolovať aktualizácie manuálne</big></b>\n"
 "\n"
 "Váš systém je nastavený aby nekontroloval aktualizácie automaticky. Toto "
-"správanie môžete nastaviť v ponuke menu 'Systém' -> 'Správa' -> 'Zdroje  "
-"softvéru'."
+"správanie môžete nastaviť v <i>Zdroje  softvéru</i> na karte "
+"<i>Aktualizácie</i>."
 
 #: ../data/glade/UpdateManager.glade.h:4
 msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr "<big><b>Udržujte si systém v aktuálnom stave</b></big>"
+msgstr "<big><b>Udržujte svoj systém v aktuálnom stave</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr "<big><b>Nemôžu byť nainštalované všetky aktualizácie</b></big>"
+msgstr "<big><b>Nie všetky aktualizácie môžu byť nainštalované</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
-msgstr "<big><b>Štartuje Správca aktualizácií</b></big>"
+msgstr "<big><b>Spúšťa sa Správca aktualizácií</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:7
 msgid "Changes"
@@ -1432,7 +1442,6 @@ msgid "Release Notes"
 msgstr "Poznámky k vydaniu"
 
 #: ../data/glade/UpdateManager.glade.h:13
-#, fuzzy
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
@@ -1445,13 +1454,13 @@ msgstr ""
 "Spustiť čiastočný prechod na novšiu verziu, aby sa nainštalovalo čo najviac "
 "aktualizácií.\n"
 "\n"
-"Toto mohlo spôsobiť jedno z nasledovných:\n"
-" ◦ Predchádzajúca aktualizácia, ktorá nebola dokončená\n"
-" ◦ Neoficálny softvérový balík, ktorý neposkytuje Ubuntu\n"
-" ◦ Bežné zmeny v pre-release verzii Ubuntu"
+"Toto mohlo byť spôsobené:\n"
+" ◦ Predchádzajúcou aktualizáciou, ktorá nebola dokončená\n"
+" ◦ Problémom s niektorým z nainštalovaných programov\n"
+" ◦ Neoficálnym softvérovým balíkom, ktorý neposkytla komunita Ubuntu\n"
+" ◦ Bežnými zmenami v pre-release verzii Ubuntu"
 
 #: ../data/glade/UpdateManager.glade.h:20
-#, fuzzy
 msgid "Show progress of individual files"
 msgstr "Zobraziť priebeh jednotlivých súborov"
 
@@ -1501,9 +1510,8 @@ msgid "Software Updates"
 msgstr "Aktualizácie softvéru"
 
 #: ../data/update-manager.schemas.in.h:1
-#, fuzzy
 msgid "*deprecated* Check for new distribution releases"
-msgstr "Kontrolovať dostupnosť novšej verzie distribúcie"
+msgstr "Kontrolovať dostupnosť novej verzie distribúcie"
 
 #: ../data/update-manager.schemas.in.h:2
 msgid ""
@@ -1512,12 +1520,12 @@ msgid ""
 "case."
 msgstr ""
 "Ak je automatická kontrola aktualizácií zakázaná, musíte obnoviť zoznam "
-"zdrojov ručne. Táto voľba umožní ukrytie pripomienky zobrazovanej pre tento "
-"prípad."
+"zdrojov ručne. Táto voľba umožní skrytie pripomienky, ktorá sa v tomto "
+"prípade zobrazuje."
 
 #: ../data/update-manager.schemas.in.h:3
 msgid "Remind to reload the channel list"
-msgstr "Pripomínať znovunačítavanie zoznamu dostupných balíčkov"
+msgstr "Pripomínať znovunačítavanie zoznamu dostupných balíkov"
 
 #: ../data/update-manager.schemas.in.h:4
 msgid "Show details of an update"
@@ -1538,7 +1546,6 @@ msgid "The window size"
 msgstr "Veľkosť okna"
 
 #: ../data/update-manager.schemas.in.h:8
-#, fuzzy
 msgid ""
 "This key is deprecated in favor of the file /etc/update-manager/release-"
 "upgrades Check automatically if a new version of the current distribution is "
@@ -1549,7 +1556,7 @@ msgstr ""
 
 #: ../update-manager:54
 msgid "Show version and exit"
-msgstr ""
+msgstr "Zobraziť verziu a skončiť"
 
 #: ../update-manager:57
 msgid "Check if a new distribution release is available"
@@ -1579,6 +1586,8 @@ msgstr "Aktualizácia bola dokončená."
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
+"Pokúste sa aktualizovať na poslednú verziu použitím aktualizátora z $distro-"
+"proposed"
 
 #: ../do-release-upgrade:27
 msgid ""
@@ -1586,6 +1595,9 @@ msgid ""
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
 "for server systems are supported."
 msgstr ""
+"Beh v špeciálnom móde aktualizácie.\n"
+"Momentálne sú podporované normálne aktualizácie pracovnej stanice a "
+"serverových systémov."
 
 #: ../do-release-upgrade:33
 msgid "Run the specified frontend"
@@ -1599,59 +1611,32 @@ msgstr "Kontrolujem, či existuje novšia verzia distribúcie Ubuntu"
 msgid "No new release found"
 msgstr "Žiadne nové vydanie nebolo nájdené"
 
-#~ msgid ""
-#~ "A unresolvable problem occurred while calculating the upgrade.\n"
-#~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include "
-#~ "the files in /var/log/dist-upgrade/ in the bugreport."
-#~ msgstr ""
-#~ "Pri výpočte aktualizácie nastal neriešiteľný problém.\n"
-#~ "\n"
-#~ "Prosím nahláste túto chybu ako chybu balíčku 'update-manager' a priložte "
-#~ "súbory v adresári /var/log/dist-upgrade k vášmu chybovému hláseniu."
-
-#~ msgid "_Skip This Step"
-#~ msgstr "_Preskočiť tento krok"
-
-#, fuzzy
-#~ msgid "%d package is going to be downgraded."
-#~ msgid_plural "%d packages are going to be downgraded."
-#~ msgstr[0] "Bude aktualizovaný %d balík."
-#~ msgstr[1] "Budú aktualizované %d balíky."
-#~ msgstr[2] "Bude aktualizovaných %d balíkov."
-
-#~ msgid "<b>Remove %s</b>"
-#~ msgstr "<b>Odstrániť %s</b>"
+#~ msgid "System Update Tool"
+#~ msgstr "Nástroj pre aktualizáciu systému"
 
 #~ msgid "<p>You have to download a total of %s. "
 #~ msgstr "<p>Je potrebné stiahnuť celkovo %s. "
 
-#~ msgid "Fetching the upgrades"
-#~ msgstr "Prebieha príprava aktualizácie"
-
-#~ msgid "Checking for updates"
-#~ msgstr "Kontrolujem aktualizácie..."
-
-#~ msgid "System Update Tool"
-#~ msgstr "Nástroj pre aktualizáciu systému"
-
-#~ msgid "Run in a special upgrade mode"
-#~ msgstr "Spustiť v špeciálnom režime pre prechod na novšiu verziu."
-
-#~ msgid "None"
-#~ msgstr "Žiadna"
-
-#~ msgid "Asking for confirmation"
-#~ msgstr "Požaduje sa potvrdenie"
+#~ msgid "Version %s"
+#~ msgstr "Verzia %s"
 
 #~ msgid "From version %(old_version)s to %(new_version)s"
 #~ msgstr "Z verzie %(old_version)s na verziu %(new_version)s"
 
-#~ msgid "Version %s"
-#~ msgstr "Verzia %s"
+#~ msgid "Fetching the upgrades"
+#~ msgstr "Prebieha príprava aktualizácie"
 
-#~ msgid "Fetching backport of '%s'"
-#~ msgstr "Sťahujem backport '%s'"
+#~ msgid "Run in a special upgrade mode"
+#~ msgstr "Spustiť v špeciálnom režime pre prechod na novšiu verziu."
+
+#~ msgid "_Skip This Step"
+#~ msgstr "_Preskočiť tento krok"
+
+#~ msgid "<b>Remove %s</b>"
+#~ msgstr "<b>Odstrániť %s</b>"
+
+#~ msgid "Checking for updates"
+#~ msgstr "Kontrolujem aktualizácie..."
 
 #~ msgid "Daily"
 #~ msgstr "Denne"
@@ -1665,9 +1650,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ msgid "Every two weeks"
 #~ msgstr "Každý druhý týždeň"
 
-#~ msgid "Every %s days"
-#~ msgstr "Každých %s dní"
-
 #~ msgid "After one week"
 #~ msgstr "Po jednom týždni"
 
@@ -1677,39 +1659,11 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ msgid "After one month"
 #~ msgstr "Po mesiaci"
 
-#~ msgid "After %s days"
-#~ msgstr "Po %s dňoch"
-
-#~ msgid "%s updates"
-#~ msgstr "%s aktualizácie"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "Nearest server"
-#~ msgstr "Najbližší server"
-
-#~ msgid "Software Channel"
-#~ msgstr "Softvérový kanál"
-
-#~ msgid "Active"
-#~ msgstr "Aktívny"
-
-#~ msgid "(Source Code)"
-#~ msgstr "(Zdrojový kód)"
-
-#~ msgid "Source Code"
-#~ msgstr "Zdrojový kód"
-
 #~ msgid "Import key"
 #~ msgstr "Importovať kľúč"
 
 #~ msgid "Error importing selected file"
 #~ msgstr "Chyba pri importovaní vybraného súboru"
-
-#~ msgid "The selected file may not be a GPG key file or it might be corrupt."
-#~ msgstr ""
-#~ "Vybraný súbor nie je autentifikačným kľúčom GPG, alebo je poškodený."
 
 #~ msgid "Error removing the key"
 #~ msgstr "Chyba pri odstraňovaní kľúča"
@@ -1717,6 +1671,83 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ msgid ""
 #~ "The key you selected could not be removed. Please report this as a bug."
 #~ msgstr "Vybraný kľúč nebolo možné odstrániť. Nahláste to ako chybu."
+
+#~ msgid "Every %s days"
+#~ msgstr "Každých %s dní"
+
+#~ msgid "After %s days"
+#~ msgstr "Po %s dňoch"
+
+#~ msgid "Please enter a name for the disc"
+#~ msgstr "Prosím, zadajte názov disku"
+
+#~ msgid "Please insert a disc in the drive:"
+#~ msgstr "Prosím, vložte disk do mechaniky:"
+
+#~ msgid "<b>Internet updates</b>"
+#~ msgstr "<b>Internetové aktualizácie</b>"
+
+#~ msgid "Authentication"
+#~ msgstr "Autentifikácia"
+
+#~ msgid "Internet Updates"
+#~ msgstr "Internetové aktualizácie"
+
+#~ msgid "_Check for updates automatically:"
+#~ msgstr "_Automaticky kontrolovať aktualizácie"
+
+#~ msgid "_Import Key File"
+#~ msgstr "Importovať _kľúč"
+
+#~ msgid "<b>Comment:</b>"
+#~ msgstr "<b>Komentár:</b>"
+
+#~ msgid "<b>URI:</b>"
+#~ msgstr "<b>Adresa:</b>"
+
+#~ msgid ""
+#~ "Binary\n"
+#~ "Source"
+#~ msgstr ""
+#~ "Binárny\n"
+#~ "Zdroj"
+
+#~ msgid "Scanning CD-ROM"
+#~ msgstr "Prehľadáva sa CD"
+
+#~ msgid "_Reload"
+#~ msgstr "_Znovu načítať"
+
+#~ msgid "Officially supported"
+#~ msgstr "Oficiálne podporované"
+
+#~ msgid "Restricted copyright"
+#~ msgstr "S obmedzujúcou licenciou"
+
+#~ msgid "Fetch data from the network for the upgrade?"
+#~ msgstr "Stiahnuť údaje potrebné na prechod na vyššiu verziu zo siete?"
+
+#~ msgid "The selected file may not be a GPG key file or it might be corrupt."
+#~ msgstr ""
+#~ "Vybraný súbor nie je autentifikačným kľúčom GPG, alebo je poškodený."
+
+#~ msgid "Fetching backport of '%s'"
+#~ msgstr "Sťahujem backport '%s'"
+
+#~ msgid "Fetching file %li of %li at %s/s"
+#~ msgstr "Sťahujem súbor %li z %li pri %s/s"
+
+#~ msgid "changes"
+#~ msgstr "zmeny"
+
+#~ msgid "Software Channel"
+#~ msgstr "Softvérový kanál"
+
+#~ msgid "(Source Code)"
+#~ msgstr "(Zdrojový kód)"
+
+#~ msgid "Source Code"
+#~ msgstr "Zdrojový kód"
 
 #~ msgid ""
 #~ "<big><b>Error scanning the CD</b></big>\n"
@@ -1727,145 +1758,14 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ "\n"
 #~ "%s"
 
-#~ msgid "Please enter a name for the disc"
-#~ msgstr "Prosím, zadajte názov disku"
-
-#~ msgid "Please insert a disc in the drive:"
-#~ msgstr "Prosím, vložte disk do mechaniky:"
-
-#~ msgid ""
-#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop or "
-#~ "edubuntu-desktop package and it was not possible to detect which version "
-#~ "of ubuntu you are running.\n"
-#~ " Please install one of the packages above first using synaptic or apt-get "
-#~ "before proceeding."
-#~ msgstr ""
-#~ "Váš systém neobsahuje žiadny z balíčkov ubuntu-desktop, kubuntu-desktop, "
-#~ "alebo edubuntu-desktop a nebolo možné zistiť akú verziu Ubuntu "
-#~ "používate.\n"
-#~ "Pred pokračovaním nainštalujte jeden z vyššie uvedených balíčkov pomocou "
-#~ "Synapticu alebo apt-get."
-
-#~ msgid "Fetch data from the network for the upgrade?"
-#~ msgstr "Stiahnuť údaje potrebné na prechod na vyššiu verziu zo siete?"
-
-#~ msgid ""
-#~ "The upgrade can use the network to check the latest updates and to fetch "
-#~ "packages that are not on the current CD.\n"
-#~ "If you have fast or inexpensive network access you should answer 'Yes' "
-#~ "here. If networking is expensive for you choose 'No'."
-#~ msgstr ""
-#~ "Pri prechode na vyššiu verziu možete použiť sieť na skontrolovanie "
-#~ "najnovších aktualizácií a na získanie balíčkov, ktoré sa nenachádzajú na "
-#~ "aktuálnom CD.\n"
-#~ "Ak máte rýchly a lacný prístup na sieť, mali by ste odpovedať 'Áno'. Ak "
-#~ "je váš prístup na sieť drahý, zvoľte 'Nie'."
-
-#~ msgid ""
-#~ "While scanning your repository information no mirror entry for the "
-#~ "upgrade was found.This cam happen if you run a internal mirror or if the "
-#~ "mirror information is out of date.\n"
-#~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
-#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
-#~ "If you select 'no' the update will cancel."
-#~ msgstr ""
-#~ "Počas čítania informácií o zdrojoch softvéru nebol nájdený žiadny vhodný "
-#~ "server. Toto sa môže stať ak prevádzkujete vlastný server poskytujúci "
-#~ "inštalačné balíky, alebo keď zoznam serverov je zastaraný.\n"
-#~ "\n"
-#~ "Chcete aj napriek tomu prepísať súbor 'sources.list'? Ak zvolíte 'Áno' "
-#~ "budú nahradené všetky '%s' záznamy '%s' záznamami.\n"
-#~ "Pokiaľ zvolíte 'Nie', súbor nebude zmenený."
-
-#~ msgid ""
-#~ "Some third party entries in your sources.list were disabled. You can re-"
-#~ "enable them after the upgrade with the 'software-properties' tool or with "
-#~ "synaptic."
-#~ msgstr ""
-#~ "Niektoré záznamy tretích strán vo vašom source.list súbore boli zakázané. "
-#~ "Môžete ich povoliť po prechode na vyššiu pomocou nástroja 'software-"
-#~ "properties, alebo pomocou Synapticu."
-
-#~ msgid ""
-#~ "The upgrade aborts now. Your system could be in an unusable state. A "
-#~ "recovery was run (dpkg --configure -a).\n"
-#~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include "
-#~ "the files in /var/log/dist-upgrade/ in the bugreport."
-#~ msgstr ""
-#~ "Aktualizácia sa teraz ukončí. Váš systém môže byť v nepoužiteľnom stave, "
-#~ "preto bol spustený príkaz na zotavenie sa z tohto stavu (dpkg --configure "
-#~ "-a).\n"
-#~ "\n"
-#~ "Prosím nahláste túto chybu ako chybu balíčku 'update-manager' a do vášho "
-#~ "chybového hlásenia priložte súbory z adresára /var/log/dist-upgrade/."
-
-#~ msgid ""
-#~ "Some problem occured during the clean-up. Please see the below message "
-#~ "for more information. "
-#~ msgstr ""
-#~ "Počas čistenia sa vyskytol problém. Pre viac informácií si pozrite nižšie "
-#~ "uvedenú správu. "
-
-#~ msgid "Fetching file %li of %li at %s/s"
-#~ msgstr "Sťahujem súbor %li z %li pri %s/s"
-
-#~ msgid "<big><b>Starting update manager</b></big>"
-#~ msgstr "<big><b>Spúšťam správcu aktualizácií</b></big>"
-
-#~ msgid "Changes and description of the update"
-#~ msgstr "Zmeny a popis aktualizácie"
-
-#~ msgid ""
-#~ "Run a distribution upgrade, to install as many updates as possible. \n"
-#~ "\n"
-#~ "This can be caused by an uncompleted upgrade, unofficial software "
-#~ "packages or by running a development version."
-#~ msgstr ""
-#~ "Spustite prechod na vyššiu verziu distribúcie, na nainštalovanie "
-#~ "maximálneho možného počtu aktualizácií.\n"
-#~ "\n"
-#~ "Toto môže byť spôsobené neúplnou aktualizáciou, neoficiálnymi "
-#~ "softvérovými balíčkami, alebo používaním vývojovej verzie."
-
-#~ msgid "changes"
-#~ msgstr "zmeny"
-
 #~ msgid "<b>Automatic updates</b>"
 #~ msgstr "<b>Automatické aktualizácie</b>"
-
-#~ msgid "<b>CDROM/DVD</b>"
-#~ msgstr "<b>CDROM/DVD</b>"
-
-#~ msgid "<b>Internet updates</b>"
-#~ msgstr "<b>Internetové aktualizácie</b>"
 
 #~ msgid "<b>Internet</b>"
 #~ msgstr "<b>Internet</b>"
 
-#~ msgid ""
-#~ "<i>To improve the user experience of Ubuntu please take part in the "
-#~ "popularity contest. If you do so the list of installed software and how "
-#~ "often it was used will be collected and sent anonymously to the Ubuntu "
-#~ "project  on a weekly basis.\n"
-#~ "\n"
-#~ "The results are used to improve the support for popular applications and "
-#~ "to rank applications in the search results.</i>"
-#~ msgstr ""
-#~ "<i>Zúčastnite sa ankety o obľúbenosti, ktorej účelom je lepšie poznať "
-#~ "zvyky používateľov Ubuntu. Ak to urobíte, zoznam nainštalovaného softvéru "
-#~ "a jeho frekvencia používania bude každý týždeň anonynme zasielaná "
-#~ "projektu Ubuntu.\n"
-#~ "\n"
-#~ "Výsleky budú použité na zlepšenie podpory pre populárne aplikácie a pre "
-#~ "zoradenie aplikácii vo výsledkoch vyhľadávania.</i>"
-
 #~ msgid "Add Cdrom"
 #~ msgstr "Pridať Cdrom"
-
-#~ msgid "Authentication"
-#~ msgstr "Autentifikácia"
 
 #~ msgid "D_elete downloaded software files:"
 #~ msgstr "_Zmazať stiahnuté súbory programov:"
@@ -1875,9 +1775,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 
 #~ msgid "Import the public key from a trusted software provider"
 #~ msgstr "Importovať verejný kľúč dôveryhodného poskytovateľa softvéru"
-
-#~ msgid "Internet Updates"
-#~ msgstr "Internetové aktualizácie"
 
 #~ msgid ""
 #~ "Only security updates from the official Ubuntu servers will be installed "
@@ -1898,23 +1795,8 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ msgid "Source code"
 #~ msgstr "Zdrojový kód"
 
-#~ msgid "Statistics"
-#~ msgstr "Štatistika"
-
-#~ msgid "Submit statistical information"
-#~ msgstr "Podať štatistické informácie"
-
-#~ msgid "Third Party"
-#~ msgstr "Tretia strana"
-
-#~ msgid "_Check for updates automatically:"
-#~ msgstr "_Automaticky kontrolovať aktualizácie"
-
 #~ msgid "_Download updates automatically, but do not install them"
 #~ msgstr "_Stiahnuť aktualizácie automaticky, ale neinštalovať ich"
-
-#~ msgid "_Import Key File"
-#~ msgstr "Importovať _kľúč"
 
 #~ msgid "_Install security updates without confirmation"
 #~ msgstr "_Bezpečnostné aktualizácie inštalovať automaticky bez potvrdenia"
@@ -1935,9 +1817,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ "\n"
 #~ "Potrebujete na to funkčné internetové pripojenie."
 
-#~ msgid "<b>Comment:</b>"
-#~ msgstr "<b>Komentár:</b>"
-
 #~ msgid "<b>Components:</b>"
 #~ msgstr "<b>Súčasti:</b>"
 
@@ -1946,9 +1825,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Typ:</b>"
-
-#~ msgid "<b>URI:</b>"
-#~ msgstr "<b>Adresa:</b>"
 
 #~ msgid ""
 #~ "<big><b>Enter the complete APT line of the repository that you want to "
@@ -1966,24 +1842,11 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ msgid "APT line:"
 #~ msgstr "APT riadok:"
 
-#~ msgid ""
-#~ "Binary\n"
-#~ "Source"
-#~ msgstr ""
-#~ "Binárny\n"
-#~ "Zdroj"
-
 #~ msgid "Edit Source"
 #~ msgstr "Zdrojový"
 
-#~ msgid "Scanning CD-ROM"
-#~ msgstr "Prehľadáva sa CD"
-
 #~ msgid "_Add Source"
 #~ msgstr "Prid_ať zdroj"
-
-#~ msgid "_Reload"
-#~ msgstr "_Znovu načítať"
 
 #~ msgid "Configure the sources for installable software and updates"
 #~ msgstr "Nastaviť zdroje pre inštalovateľný softvér a aktualizácie"
@@ -1998,9 +1861,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 
 #~ msgid "Community maintained"
 #~ msgstr "Udržiavané komunitou"
-
-#~ msgid "Proprietary drivers for devices"
-#~ msgstr "Patentované ovládače pre zariadenia"
 
 #~ msgid "Restricted software"
 #~ msgstr "Neslobodný softvér"
@@ -2023,21 +1883,11 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 #~ msgid "Non-free drivers"
 #~ msgstr "Neslobodné ovládače"
 
-#~ msgid "Proprietary drivers for devices "
-#~ msgstr "Patentované ovládače na zariadenia "
-
 #~ msgid "Restricted software (Multiverse)"
 #~ msgstr "Obmedzený softvér (Multiverse)"
 
-#~ msgid "Software restricted by copyright or legal issues"
-#~ msgstr ""
-#~ "Softvér obmedzený ochrannou známkou, alebo inými právnymi prostriedkami"
-
 #~ msgid "Cdrom with Ubuntu 6.06 LTS 'Dapper Drake'"
 #~ msgstr "Cdrom s Ubuntu 6.06 LTS 'Dapper Drake'"
-
-#~ msgid "Backported updates"
-#~ msgstr "Aktualizácie prenesené z vyšších verzií distribúcie"
 
 #~ msgid "Ubuntu 5.10 'Breezy Badger'"
 #~ msgstr "Ubuntu 5.10 'Breezy Badger'"
@@ -2059,9 +1909,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 
 #~ msgid "Cdrom with Ubuntu 5.04 'Hoary Hedgehog'"
 #~ msgstr "Cdrom  s Ubuntu 5.04 'Hoary Hedgehog'"
-
-#~ msgid "Officially supported"
-#~ msgstr "Oficiálne podporované"
 
 #~ msgid "Ubuntu 5.04 Security Updates"
 #~ msgstr "Ubuntu 5.04 bezpečtnostné aktualizácie"
@@ -2086,9 +1933,6 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 
 #~ msgid "No longer officially supported"
 #~ msgstr "Nie je už oficiálne podporovaný"
-
-#~ msgid "Restricted copyright"
-#~ msgstr "S obmedzujúcou licenciou"
 
 #~ msgid "Ubuntu 4.10 Security Updates"
 #~ msgstr "Ubuntu 4.10 bezpečnostné aktualizácie"
@@ -2125,3 +1969,150 @@ msgstr "Žiadne nové vydanie nebolo nájdené"
 
 #~ msgid "Non-DFSG-compatible Software"
 #~ msgstr "Softvér nekompatibilný s DFSG"
+
+#~ msgid "None"
+#~ msgstr "Žiadna"
+
+#~ msgid ""
+#~ "While scanning your repository information no mirror entry for the "
+#~ "upgrade was found.This cam happen if you run a internal mirror or if the "
+#~ "mirror information is out of date.\n"
+#~ "\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
+#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
+#~ "If you select 'no' the update will cancel."
+#~ msgstr ""
+#~ "Počas čítania informácií o zdrojoch softvéru nebol nájdený žiadny vhodný "
+#~ "server. Toto sa môže stať ak prevádzkujete vlastný server poskytujúci "
+#~ "inštalačné balíky, alebo keď zoznam serverov je zastaraný.\n"
+#~ "\n"
+#~ "Chcete aj napriek tomu prepísať súbor 'sources.list'? Ak zvolíte 'Áno' "
+#~ "budú nahradené všetky '%s' záznamy '%s' záznamami.\n"
+#~ "Pokiaľ zvolíte 'Nie', súbor nebude zmenený."
+
+#~ msgid "%s updates"
+#~ msgstr "%s aktualizácie"
+
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "Nearest server"
+#~ msgstr "Najbližší server"
+
+#~ msgid "Active"
+#~ msgstr "Aktívny"
+
+#~ msgid ""
+#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop or "
+#~ "edubuntu-desktop package and it was not possible to detect which version "
+#~ "of ubuntu you are running.\n"
+#~ " Please install one of the packages above first using synaptic or apt-get "
+#~ "before proceeding."
+#~ msgstr ""
+#~ "Váš systém neobsahuje žiadny z balíčkov ubuntu-desktop, kubuntu-desktop, "
+#~ "alebo edubuntu-desktop a nebolo možné zistiť akú verziu Ubuntu "
+#~ "používate.\n"
+#~ "Pred pokračovaním nainštalujte jeden z vyššie uvedených balíčkov pomocou "
+#~ "Synapticu alebo apt-get."
+
+#~ msgid ""
+#~ "The upgrade can use the network to check the latest updates and to fetch "
+#~ "packages that are not on the current CD.\n"
+#~ "If you have fast or inexpensive network access you should answer 'Yes' "
+#~ "here. If networking is expensive for you choose 'No'."
+#~ msgstr ""
+#~ "Pri prechode na vyššiu verziu možete použiť sieť na skontrolovanie "
+#~ "najnovších aktualizácií a na získanie balíčkov, ktoré sa nenachádzajú na "
+#~ "aktuálnom CD.\n"
+#~ "Ak máte rýchly a lacný prístup na sieť, mali by ste odpovedať 'Áno'. Ak "
+#~ "je váš prístup na sieť drahý, zvoľte 'Nie'."
+
+#~ msgid ""
+#~ "Some third party entries in your sources.list were disabled. You can re-"
+#~ "enable them after the upgrade with the 'software-properties' tool or with "
+#~ "synaptic."
+#~ msgstr ""
+#~ "Niektoré záznamy tretích strán vo vašom source.list súbore boli zakázané. "
+#~ "Môžete ich povoliť po prechode na vyššiu pomocou nástroja 'software-"
+#~ "properties, alebo pomocou Synapticu."
+
+#~ msgid ""
+#~ "The upgrade aborts now. Your system could be in an unusable state. A "
+#~ "recovery was run (dpkg --configure -a).\n"
+#~ "\n"
+#~ "Please report this bug against the 'update-manager' package and include "
+#~ "the files in /var/log/dist-upgrade/ in the bugreport."
+#~ msgstr ""
+#~ "Aktualizácia sa teraz ukončí. Váš systém môže byť v nepoužiteľnom stave, "
+#~ "preto bol spustený príkaz na zotavenie sa z tohto stavu (dpkg --configure "
+#~ "-a).\n"
+#~ "\n"
+#~ "Prosím nahláste túto chybu ako chybu balíčku 'update-manager' a do vášho "
+#~ "chybového hlásenia priložte súbory z adresára /var/log/dist-upgrade/."
+
+#~ msgid ""
+#~ "Some problem occured during the clean-up. Please see the below message "
+#~ "for more information. "
+#~ msgstr ""
+#~ "Počas čistenia sa vyskytol problém. Pre viac informácií si pozrite nižšie "
+#~ "uvedenú správu. "
+
+#~ msgid "<big><b>Starting update manager</b></big>"
+#~ msgstr "<big><b>Spúšťam správcu aktualizácií</b></big>"
+
+#~ msgid "Changes and description of the update"
+#~ msgstr "Zmeny a popis aktualizácie"
+
+#~ msgid ""
+#~ "Run a distribution upgrade, to install as many updates as possible. \n"
+#~ "\n"
+#~ "This can be caused by an uncompleted upgrade, unofficial software "
+#~ "packages or by running a development version."
+#~ msgstr ""
+#~ "Spustite prechod na vyššiu verziu distribúcie, na nainštalovanie "
+#~ "maximálneho možného počtu aktualizácií.\n"
+#~ "\n"
+#~ "Toto môže byť spôsobené neúplnou aktualizáciou, neoficiálnymi "
+#~ "softvérovými balíčkami, alebo používaním vývojovej verzie."
+
+#~ msgid "<b>CDROM/DVD</b>"
+#~ msgstr "<b>CDROM/DVD</b>"
+
+#~ msgid ""
+#~ "<i>To improve the user experience of Ubuntu please take part in the "
+#~ "popularity contest. If you do so the list of installed software and how "
+#~ "often it was used will be collected and sent anonymously to the Ubuntu "
+#~ "project  on a weekly basis.\n"
+#~ "\n"
+#~ "The results are used to improve the support for popular applications and "
+#~ "to rank applications in the search results.</i>"
+#~ msgstr ""
+#~ "<i>Zúčastnite sa ankety o obľúbenosti, ktorej účelom je lepšie poznať "
+#~ "zvyky používateľov Ubuntu. Ak to urobíte, zoznam nainštalovaného softvéru "
+#~ "a jeho frekvencia používania bude každý týždeň anonynme zasielaná "
+#~ "projektu Ubuntu.\n"
+#~ "\n"
+#~ "Výsleky budú použité na zlepšenie podpory pre populárne aplikácie a pre "
+#~ "zoradenie aplikácii vo výsledkoch vyhľadávania.</i>"
+
+#~ msgid "Statistics"
+#~ msgstr "Štatistika"
+
+#~ msgid "Submit statistical information"
+#~ msgstr "Podať štatistické informácie"
+
+#~ msgid "Third Party"
+#~ msgstr "Tretia strana"
+
+#~ msgid "Proprietary drivers for devices"
+#~ msgstr "Patentované ovládače pre zariadenia"
+
+#~ msgid "Proprietary drivers for devices "
+#~ msgstr "Patentované ovládače na zariadenia "
+
+#~ msgid "Software restricted by copyright or legal issues"
+#~ msgstr ""
+#~ "Softvér obmedzený ochrannou známkou, alebo inými právnymi prostriedkami"
+
+#~ msgid "Backported updates"
+#~ msgstr "Aktualizácie prenesené z vyšších verzií distribúcie"

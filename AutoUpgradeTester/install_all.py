@@ -53,14 +53,16 @@ def do_install(cache):
          print e
          print "Install result: ",res
          break
-   # remove all failed packages
-   failures =  set(map(lambda s: os.path.basename(s.split("_:_")[0]).split("_")[0], open("install_failures.txt").readlines()))
-   print "failed: ", failures
-   assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
-   assert(os.system("dpkg --configure -a") == 0)
-   # remove pos.txt and best.txt to force recalculation
-   os.unlink("pos.txt")
-   os.unlink("best.txt")
+   # check for failed packages and remove them
+   if os.path.exists("install_failures.txt"):
+      failures =  set(map(lambda s: os.path.basename(s.split("_:_")[0]).split("_")[0], 
+                          open("install_failures.txt").readlines()))
+      print "failed: ", failures
+      assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
+      assert(os.system("dpkg --configure -a") == 0)
+      # remove pos.txt and best.txt to force recalculation
+      os.unlink("pos.txt")
+      os.unlink("best.txt")
    return res
 
 def blacklisted(name):

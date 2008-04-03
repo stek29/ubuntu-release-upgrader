@@ -163,6 +163,7 @@ class DistUpgradeViewText(DistUpgradeView):
               print twrap(_("Install: %s\n" % " ".join(self.toInstall)), subsequent_indent='  ')
           if len(self.toUpgrade) > 0:
               print twrap(_("Upgrade: %s\n" % " ".join(self.toUpgrade)), subsequent_indent='  ')
+          print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
 
     def askYesNoQuestion(self, summary, msg, prompt=None):
       print

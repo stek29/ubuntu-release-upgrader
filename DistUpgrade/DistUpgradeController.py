@@ -819,7 +819,7 @@ class DistUpgradeController(object):
     def doDistUpgradeFetching(self):
         # rewrite cleanup minAge for a package to 10 days
         self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
-        self._rewriteAptPeriodic(10, True)
+        self._rewriteAptPeriodic(10)
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()

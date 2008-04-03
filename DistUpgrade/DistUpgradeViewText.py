@@ -139,13 +139,25 @@ class DistUpgradeViewText(DistUpgradeView):
       if extended_msg:
         print twrap(extended_msg)
       return False
+    def showInPager(self, output):
+      " helper to show output in a pager"
+      pager = "/bin/more"
+      if os.path.exists(pager):
+        p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)
+        p.stdin.write(output)
+        p.stdin.close()
+        p.wait()
+      else:
+        print output
+      return
+
     def confirmChanges(self, summary, changes, downloadSize,
                        actions=None, removal_bold=True):
       DistUpgradeView.confirmChanges(self, summary, changes, downloadSize, actions)
       print
       print twrap(summary)
       print twrap(self.confirmChangesMessage)
-      print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
+      print " %s %s" % (_("Continue [yN] "), _("Details [d]")),
       while True:
         res = sys.stdin.readline()
         # TRANSLATORS: the "y" is "yes"
@@ -156,14 +168,18 @@ class DistUpgradeViewText(DistUpgradeView):
           return False
         # TRANSLATORS: the "d" is "details"
         elif res.strip().lower().startswith(_("d")):
-          print
+          output = ""
           if len(self.toRemove) > 0:
-              print twrap(_("Remove: %s\n" % " ".join(self.toRemove)), subsequent_indent='  ')
+              output += "\n"  
+              output += twrap(_("Remove: %s\n" % " ".join(self.toRemove)), subsequent_indent='  ')
           if len(self.toInstall) > 0:
-              print twrap(_("Install: %s\n" % " ".join(self.toInstall)), subsequent_indent='  ')
+              output += "\n"
+              output += twrap(_("Install: %s\n" % " ".join(self.toInstall)), subsequent_indent='  ')
           if len(self.toUpgrade) > 0:
-              print twrap(_("Upgrade: %s\n" % " ".join(self.toUpgrade)), subsequent_indent='  ')
-          print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
+              output += "\n"  
+              output += twrap(_("Upgrade: %s\n" % " ".join(self.toUpgrade)), subsequent_indent='  ')
+          self.showInPager(output)
+        print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
 
     def askYesNoQuestion(self, summary, msg, prompt=None):
       print

@@ -1373,7 +1373,11 @@ class DistUpgradeController(object):
             res = True
             self.cache._fetchArchives(fetcher, pm)
         except IOError, e:
+            logging.error("_fetchArchives returned '%s'" % e)
             res = False
+
+        if res == False:
+            logging.warning("_fetchArchives for backports returned False")
 
         # reset the cache dir
         os.unlink(outpath)
@@ -1384,7 +1388,7 @@ class DistUpgradeController(object):
     def setupRequiredBackports(self, backportsdir):
         " setup the required backports in a evil way "
         if not glob.glob(backportsdir+"/*.udeb"):
-            logging.error("no backports found but setupRequiredBackports() called??!")
+            logging.error("no backports found in setupRequiredBackports()")
             return False
         # unpack the backports first
         for deb in glob.glob(backportsdir+"/*.udeb"):

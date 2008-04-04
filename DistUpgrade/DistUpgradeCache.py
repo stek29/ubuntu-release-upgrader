@@ -327,6 +327,32 @@ class MyCache(apt.Cache):
         self.feistyQuirks()
         self.edgyQuirks()
 
+    def _checkAndRemoveEvms(self):
+        " check if evms is in use and if not, remove it "
+        logging.debug("running _checkAndRemoveEvms")
+        for line in open("/proc/mounts"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                continue
+            if "evms" in device:
+                logging.debug("found evms device in line '%s', skipping " % line)
+                return False
+        # if not in use, nuke it
+        for pkg in ["evms","libevms-2.5","libevms-dev",
+                    "evms-ncurses", "evms-ha",
+                    "evms-bootdebug",
+                    "evms-gui", "evms-cli",
+                    "linux-patch-evms"]:
+            if self.has_key(pkg) and self[pkg].isInstalled:
+                self[pkg].markDelete()
+        return True
+
+
     def hardyQuirks(self):
         """ this function works around quirks in the gutsy->hardy upgrade """
         logging.debug("running hardyQuirks handler")
@@ -343,7 +369,8 @@ class MyCache(apt.Cache):
                 if self.has_key(broken) and self[broken].isInstalled:
                     self[broken].markDelete()
             self["nautilus"].markInstall()
-        
+        # evms gives problems 
+        self._checkAndRemoveEvms()
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """

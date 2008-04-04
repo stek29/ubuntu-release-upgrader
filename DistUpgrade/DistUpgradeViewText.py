@@ -99,6 +99,7 @@ class DistUpgradeViewText(DistUpgradeView):
         self._cdromProgress = TextCdromProgressAdapter()
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
+        #self._process_events_tick = 0
 
     def _handleException(self, type, value, tb):
       import traceback
@@ -203,7 +204,19 @@ class DistUpgradeViewText(DistUpgradeView):
       if res.strip().lower().startswith(_("y")):
         return True
       return False
-    
+
+# FIXME: when we need this most the resolver is writing debug logs
+#        and we redirect stdout/stderr    
+#    def processEvents(self):
+#      #time.sleep(0.2)
+#      anim = [".","o","O","o"]
+#      anim = ["\\","|","/","-","\\","|","/","-"]
+#      self._process_events_tick += 1
+#      if self._process_events_tick >= len(anim):
+#          self._process_events_tick = 0
+#      sys.stdout.write("[%s]" % anim[self._process_events_tick])
+#      sys.stdout.flush()
+
     def confirmRestart(self):
       return self.askYesNoQuestion(_("Restart required"),
                                    _("To finish the upgrade, a restart is "
@@ -214,6 +227,10 @@ class DistUpgradeViewText(DistUpgradeView):
 
 
 if __name__ == "__main__":
+  view = DistUpgradeViewText()
+
+  #while True:
+  #    view.processEvents()
   
   print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.", subsequent_indent=" ")
   sys.exit(1)

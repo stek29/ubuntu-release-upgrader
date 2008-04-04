@@ -774,6 +774,7 @@ class DistUpgradeController(object):
                                      "these packages will be suggested for "
                                      "removal at the end of the upgrade."),
                                      self.installed_demotions)
+            self._view.updateStatus(_("Calculating the changes"))
         # FIXME: integrate this into main upgrade dialog!?!
         if not self.cache.distUpgrade(self._view, self.serverMode, self.partialUpgrade):
             return False

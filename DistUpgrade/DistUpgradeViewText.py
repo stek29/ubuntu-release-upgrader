@@ -193,8 +193,8 @@ class DistUpgradeViewText(DistUpgradeView):
 
     def askYesNoQuestion(self, summary, msg, prompt=None):
       print
-      print summary
-      print msg
+      print twrap(summary)
+      print twrap(msg)
       if not prompt:
           print _("Continue [yN] "),
       else:

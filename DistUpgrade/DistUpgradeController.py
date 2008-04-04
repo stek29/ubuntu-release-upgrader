@@ -216,9 +216,8 @@ class DistUpgradeController(object):
             daemon (to be sure we have a spare one around in case
             of trouble)
         """
-        pidfile = os.path.join(os.getcwd(), "sshd.pid")
-        if (self.serverMode and
-            not os.path.exists(pidfile) and
+        pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
+        if (not os.path.exists(pidfile) and
             (os.environ.has_key("SSH_CONNECTION") or
              os.environ.has_key("SSH_TTY"))):
             port = 9004

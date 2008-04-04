@@ -200,8 +200,6 @@ class DistUpgradeView(object):
           msg += _("\n\nYou have to download a total of %s. ") %\
               apt_pkg.SizeToStr(downloadSize)
           msg += self.getFetchProgress().estimatedDownloadTime(downloadSize)
-
-          msg += "."
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
           msg += "\n\n%s" % _( "Fetching and installing the upgrade "
                                "can take several hours. Once the download "

@@ -34,15 +34,25 @@ import apt.progress
 
 import gettext
 from gettext import gettext as _
-from textwrap import fill, wrap
+#from textwrap import fill, wrap
 
+# helpers inspired after textwrap - unfortunately
+# we can not use textwrap directly because it break
+# packagenames with "-" in them into new lines
+def wrap(t, width=70, subsequent_indent=""):
+    out = ""
+    for s in t.split():
+        if (len(out)-out.rfind("\n")) + len(s) > width:
+            out += "\n" + subsequent_indent
+        out += s + " "
+    return out
+    
 def twrap(s, **kwargs):
     msg = ""
     paras = s.split("\n")
     for par in paras:
         s = wrap(par, **kwargs)
-        for l in s:
-            msg += l+"\n"
+        msg += s+"\n"
     return msg
 
 class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
@@ -205,7 +215,7 @@ class DistUpgradeViewText(DistUpgradeView):
 
 if __name__ == "__main__":
   
-  print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.")
+  print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.", subsequent_indent=" ")
   sys.exit(1)
 
   view = DistUpgradeViewText()

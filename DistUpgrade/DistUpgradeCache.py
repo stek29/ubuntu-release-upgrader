@@ -378,7 +378,9 @@ class MyCache(apt.Cache):
         # lowlatency kernel flavour vanished from feisty->gutsy
         try:
             (version, build, flavour) = self.uname.split("-")
-            if flavour == 'lowlatency' or flavour == '686':
+            if (flavour == 'lowlatency' or 
+                flavour == '686' or
+                flavour == 'k7'):
                 kernel = "linux-image-generic"
                 if not (self[kernel].isInstalled or self[kernel].markedInstall):
                     logging.debug("Selecting new kernel '%s'" % kernel)
@@ -810,13 +812,15 @@ class MyCache(apt.Cache):
         if not self.has_key(pkgname):
             #logging.debug("package '%s' not in cache" % pkgname)
             return True
+        # check if we want to purge 
+        purge = bool(self.config.getWithDefault("Distro","PurgeObsoletes",False))
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well
         actiongroup = apt_pkg.GetPkgActionGroup(self._depcache)
         self.create_snapshot()
         try:
-            self[pkgname].markDelete()
+            self[pkgname].markDelete(purge=purge)
             logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 

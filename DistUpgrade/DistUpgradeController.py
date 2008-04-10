@@ -252,9 +252,13 @@ class DistUpgradeController(object):
         """  
         from MetaRelease import MetaReleaseCore
         from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
-        # FIXME: during testing, we want "useDevelopmentRelease"
-        #        but not after the release
-        m = MetaReleaseCore(useDevelopmentRelease=False)
+        # check if we run from a LTS 
+        forceLTS=False
+        if (self.release == "dapper" or
+            self.release == "hardy"):
+            forceLTS=True
+        m = MetaReleaseCore(useDevelopmentRelease=False,
+                            forceLTS=forceLTS)
         # this will timeout eventually
         while m.downloading:
             self._view.processEvents()
@@ -298,7 +302,7 @@ class DistUpgradeController(object):
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
         # first check if that is a good upgrade
-        release = subprocess.Popen(["lsb_release","-c","-s"],
+        self.release = release = subprocess.Popen(["lsb_release","-c","-s"],
                                    stdout=subprocess.PIPE).communicate()[0].strip()
         logging.debug("lsb-release: '%s'" % release)
         if not (release == self.fromDist or release == self.toDist):

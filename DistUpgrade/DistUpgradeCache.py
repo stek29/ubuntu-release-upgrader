@@ -354,7 +354,10 @@ class MyCache(apt.Cache):
 
 
     def hardyQuirks(self):
-        """ this function works around quirks in the gutsy->hardy upgrade """
+        """ 
+        this function works around quirks in the 
+        {dapper,gutsy}->hardy upgrade 
+        """
         logging.debug("running hardyQuirks handler")
         # deal with gnome-translator and help apt with the breaks
         if (self.has_key("nautilus") and
@@ -369,8 +372,14 @@ class MyCache(apt.Cache):
                 if self.has_key(broken) and self[broken].isInstalled:
                     self[broken].markDelete()
             self["nautilus"].markInstall()
-        # evms gives problems 
+        # evms gives problems, remove it if it is not in use
         self._checkAndRemoveEvms()
+        # give the language-support-* packages a extra kick
+        for pkg in self:
+            if (pkg.name.startswith("language-support-") and
+                pkg.isInstalled and
+                not pkg.isMarkedUpgrade):
+                self.markInstall(pkg.name,"extra language-support- kick")
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """

@@ -21,6 +21,7 @@
 
 from gettext import gettext as _
 import subprocess
+from subprocess import Popen, PIPE
 import apt
 import os
 import apt_pkg 
@@ -82,8 +83,9 @@ class InstallProgress(apt.progress.InstallProgress):
         logging.debug("removing bad script '%s'" % ap)
         os.unlink(ap)
     # fix crash during gutsy->hardy upgrade if any nvidia-glx is installed
+    dist = Popen(["lsb_release","-c","-s"], stdout=PIPE).communicate()[0].strip()
     nv_link = "/usr/lib/libnvidia-tls.so.1"
-    if os.path.exists(nv_link):
+    if dist == "gutsy" and os.path.exists(nv_link):
       (link_path, link_target_name) = os.path.split(os.path.realpath(nv_link))
       if not link_path.startswith("/usr/lib/lts"):
         logging.warning("%s does not points to /usr/lib/tls" % nv_link)

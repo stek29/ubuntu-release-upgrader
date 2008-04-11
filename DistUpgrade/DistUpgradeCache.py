@@ -378,7 +378,7 @@ class MyCache(apt.Cache):
         for pkg in self:
             if (pkg.name.startswith("language-support-") and
                 pkg.isInstalled and
-                not pkg.isMarkedUpgrade):
+                not pkg.markedUpgrade):
                 self.markInstall(pkg.name,"extra language-support- kick")
 
     def gutsyQuirks(self):

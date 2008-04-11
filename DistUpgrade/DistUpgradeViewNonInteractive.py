@@ -161,7 +161,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 	  logging.error("error '%s' when trying to write to the conffile"%e)
 
     def startUpdate(self):
-        InstallProgress.startUpdate()
+        InstallProgress.startUpdate(self)
         self.last_activity = time.time()
           
     def updateInterface(self):

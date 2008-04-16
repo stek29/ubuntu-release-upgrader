@@ -155,6 +155,11 @@ class DistUpgradeController(object):
         self.origin = self.config.get("Sources","ValidOrigin")
         self.arch = apt_pkg.Config.Find("APT::Architecture")
 
+        # we run with --force-overwrite by default
+        if not os.environ.has_key("RELEASE_UPGRADE_NO_FORCE_OVERWRITE"):
+            logging.debug("enable dpkg --force-overwrite")
+            apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+
         # we run in full upgrade mode by default
         self.partialUpgrade = False
 

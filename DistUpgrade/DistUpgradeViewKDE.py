@@ -219,7 +219,6 @@ class KDEInstallProgressAdapter(InstallProgress):
             logging.error("Can not open terminal log: '%s'" % e)
             self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         apt_pkg.Config.Set("DPkg::StopOnError","False")
 
     def startUpdate(self):

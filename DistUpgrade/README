@@ -10,6 +10,21 @@ CDROM_ROOT/dists/stable/dist-upgrader/binary-all/) that can be put
 onto the CD and it will support upgrades directly from the CD.
 
 
+Environment
+-----------
+The following environment variable will be honored:
+
+RELEASE_UPGRADE_NO_FORCE_OVERWRITE:
+- if that is set, no --force-overwrite is used
+
+The following environment variable will be set by the upgrader:
+RELEASE_UPGRADE_IN_PROGRESS:
+- set to "1" if a release-upgrade is running (and not a normal
+  package/security upgrade)
+RELEASE_UPGRADE_MODE:
+- either "desktop" or "server" 
+
+
 Configuration
 -------------
 

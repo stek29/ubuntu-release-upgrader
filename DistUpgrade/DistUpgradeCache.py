@@ -453,7 +453,7 @@ class MyCache(apt.Cache):
         # deal with held-backs that are unneeded
         for pkgname in ["hpijs", "bzr", "tomboy"]:
             if (self.has_key(pkgname) and self[pkgname].isInstalled and
-                not self[pkgname].markedUpgrade):
+                self[pkgname].isUpgradable and not self[pkgname].markedUpgrade):
                 try:
                     self.markInstall(pkgname,"%s quirk upgrade rule" % pkgname)
                 except SystemError, e:

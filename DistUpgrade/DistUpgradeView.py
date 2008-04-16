@@ -58,8 +58,7 @@ class FetchProgress(apt.progress.FetchProgress):
            "and about %s with a 56k modem" % (FuzzyTimeToStr(timeDSL),FuzzyTimeToStr(timeModem)))
       return s
     # if we have a estimated speed, use it
-    s = _("This download will take about %s with your connection. " %
-          FuzzyTimeToStr(requiredDownload/self.est_speed))
+    s = _("This download will take about %s with your connection. ") % FuzzyTimeToStr(requiredDownload/self.est_speed)
     return s
     
 

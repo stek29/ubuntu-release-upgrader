@@ -181,6 +181,10 @@ class DistUpgradeController(object):
         apt_pkg.Config.Set("Dpkg::MaxArgs", str(64*1024))
         apt_pkg.Config.Set("Dpkg::MaxArgBytes", str(128*1024))
 
+        # smaller to avoid hangs
+        apt_pkg.Config.Set("Acquire::http::Timeout","20")
+        apt_pkg.Config.Set("Acquire::ftp::Timeout","20")
+
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add
@@ -637,7 +641,7 @@ class DistUpgradeController(object):
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
         return True
 
-    def doUpdate(self, showErrors=True):
+    def doUpdate(self, showErrors=True, forceRetries=None):
         logging.debug("running doUpdate() (showErrors=%s)" % showErrors)
         if not self.useNetwork:
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
@@ -646,7 +650,10 @@ class DistUpgradeController(object):
         progress = self._view.getFetchProgress()
         # FIXME: also remove all files from the lists partial dir!
         currentRetry = 0
-        maxRetries = self.config.getint("Network","MaxRetries")
+        if forceRetries is not None:
+            maxRetries=forceRetries
+        else:
+            maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.update(progress)
@@ -1453,7 +1460,10 @@ class DistUpgradeController(object):
         # b) we check if we have valid ubuntu sources later
         #    after we rewrite the sources.list and do a 
         #    apt-get update there too
-        self.doUpdate(showErrors=False)
+        # because the (unmodified) sources.list of the user
+        # may contain bad/unreachable entries we run only
+        # with a single retry
+        self.doUpdate(showErrors=False, forceRetries=1)
         self.openCache()
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)

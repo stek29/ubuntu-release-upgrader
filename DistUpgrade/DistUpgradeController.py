@@ -198,10 +198,8 @@ class DistUpgradeController(object):
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
+            logging.warning("dpkg interrupted, calling dpkg --configure -a")
             self._view.getTerminal().call(["dpkg","--configure","-a"])
-            self.cache = MyCache(self.config,
-                                 self._view,
-                                 self._view.getOpCacheProgress())
             self.cache = MyCache(self.config,
                                  self._view,
                                  self._view.getOpCacheProgress())
@@ -606,7 +604,9 @@ class DistUpgradeController(object):
     def doPreUpgrade(self):
         # check if we have packages in ReqReinst state that are not
         # downloadable
+        logging.debug("doPreUpgrade")
         if len(self.cache.reqReinstallPkgs) > 0:
+            logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
             self.openCache()
         if len(self.cache.reqReinstallPkgs) > 0:
@@ -638,6 +638,7 @@ class DistUpgradeController(object):
         return True
 
     def doUpdate(self, showErrors=True):
+        logging.debug("running doUpdate() (showErrors=%s)" % showErrors)
         if not self.useNetwork:
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
             return True
@@ -1430,6 +1431,7 @@ class DistUpgradeController(object):
         if (self.config.has_section("PreRequists") and
             self.options and
             self.options.havePrerequists == False):
+            logging.debug("need backports")
             # get backported packages (if needed)
             if not self.getRequiredBackports():
                 self._view.error(_("Getting upgrade prerequisites failed"),
@@ -1452,6 +1454,7 @@ class DistUpgradeController(object):
         #    after we rewrite the sources.list and do a 
         #    apt-get update there too
         self.doUpdate(showErrors=False)
+        self.openCache()
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)
         if not self.doPreUpgrade():

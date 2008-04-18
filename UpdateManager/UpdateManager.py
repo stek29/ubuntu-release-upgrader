@@ -432,12 +432,13 @@ class UpdateManager(SimpleGladeApp):
           host = self.gconfclient.get_string("/system/http_proxy/host")
           port = self.gconfclient.get_int("/system/http_proxy/port")
           use_auth = self.gconfclient.get_bool("/system/http_proxy/use_authentication")
-          if use_auth:
-              auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
-              auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
-              proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
-          else:
-              proxy = "http://%s:%s/" % (host, port)
+          if host and port:
+              if use_auth:
+                  auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
+                  auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
+                  proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
+              else:
+                  proxy = "http://%s:%s/" % (host, port)
       if proxy:
           proxy_support = urllib2.ProxyHandler({"http":proxy})
           opener = urllib2.build_opener(proxy_support)

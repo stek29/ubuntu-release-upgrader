@@ -6,6 +6,7 @@ from DistUpgradeConfigParser import DistUpgradeConfig
 import ConfigParser
 import subprocess
 import os
+import sys
 import os.path
 import shutil
 import glob
@@ -15,6 +16,8 @@ import signal
 import crypt
 import tempfile
 import copy
+
+from sourceslist import SourcesList
 
 # images created with http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 #  ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted --rootsize 20G
@@ -56,9 +59,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     qemu_binary = "kvm"
     
     qemu_options = [
-        "-m","768",      # memory to use
         "-localtime",
-        "-vnc","localhost:0",
         "-no-reboot",    # exit on reboot
         "-no-acpi",      # the dapper kernel does not like qemus acpi
 #        "-no-kvm",      # crashes sometimes with kvm HW
@@ -81,6 +82,16 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
+        # vnc port/display
+        vncport = self.config.getWithDefault("NonInteractive","VncNum","0")
+        self.qemu_options.append("-vnc")
+        self.qemu_options.append("localhost:%s" % vncport)
+
+        # make the memory configurable
+        mem = self.config.getWithDefault("NonInteractive","VirtualRam","768")
+        self.qemu_options.append("-m")
+        self.qemu_options.append(str(mem))
+
         # check if the ssh port is in use
         if subprocess.call("netstat -t -l -n |grep 0.0.0.0:%s" % self.ssh_port,
                            shell=True) == 0:
@@ -336,6 +347,8 @@ iface eth0 inet static
 
     def upgrade(self):
         print "upgrade()"
+        upgrader_args = ""
+        upgrader_env = ""
 
         # clean from any leftover pyc files
         for f in glob.glob(self.basefilesdir+"/DistUpgrade/*.pyc"):
@@ -356,15 +369,49 @@ iface eth0 inet static
         if os.path.exists(self.profile):
             print "Copying '%s' to image " % self.profile
             self._copyToImage(self.profile, "/upgrade-tester")
+        # and any other cfg files
+        for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
+            if os.path.isfile(f):
+                print "Copying '%s' to image " % f
+                self._copyToImage(f, "/upgrade-tester")
+        # and prereq lists
         prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
         if prereq is not None:
             prereq = os.path.join(os.path.dirname(self.profile),prereq)
             print "Copying '%s' to image" % prereq
             self._copyToImage(prereq, "/upgrade-tester")
 
+        # this is to support direct copying of backport udebs into the 
+        # qemu image - useful for testing backports without having to
+        # push them into the archive
+        backports = self.config.getlist("NonInteractive", "PreRequistsFiles")
+        if backports:
+            self._runInImage(["mkdir -p /upgrade-tester/backports"])
+            for f in backports:
+                print "Copying %s" % os.path.basename(f)
+                self._copyToImage(f, "/upgrade-tester/backports/")
+                self._runInImage(["(cd /upgrade-tester/backports ; dpkg-deb -x %s . )" % os.path.basename(f)])
+            upgrader_args = " --have-prerequists"
+            upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
+
+        # copy test repo sources.list (if available)
+        test_repo = self.config.getWithDefault("NonInteractive","AddRepo","")
+        if test_repo:
+            test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
+            self._copyToImage(test_repo, "/etc/apt/sources.list.d")
+            sources = SourcesList(matcherPath=".")
+            sources.load(test_repo)
+            # add the uri to the list of valid mirros in the image
+            for entry in sources.list:
+                if (not (entry.invalid or entry.disabled) and
+                    entry.type == "deb"):
+                    print "adding %s to mirrors" % entry.uri
+                    self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
+
         # start the upgrader
         print "running the upgrader now"
-        ret = self._runInImage(["(cd /upgrade-tester/ ; ./dist-upgrade.py)"])
+        ret = self._runInImage(["(cd /upgrade-tester/ ; "
+                                "%s./dist-upgrade.py %s)" % (upgrader_env, upgrader_args)])
         print "dist-upgrade.py returned: %i" % ret
 
         # copy the result

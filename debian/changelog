@@ -1,3 +1,207 @@
+update-manager (1:0.87.23) hardy; urgency=low
+
+  * DistUpgrade/DistUpgrade.cfg.dapper:
+    - Add 'bash' to BaseMetaPkgs. This is needed because ubuntu-meta
+      was uploaded into dapper-updates and that means that we the
+      detection of a missing main archive in sources.list will not
+      work correctly (LP: #220078)
+  * DistUpgrade/ReleaseAnnouncement:
+    - updated in preparation for the final release
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 21 Apr 2008 18:07:31 +0200
+
+update-manager (1:0.87.22) hardy; urgency=low
+
+  * UpdateManager/UpdateManager.py:
+    - only set http proxy if hostname/port is valid (LP: #219227)
+  * DistUpgrade/DistUpgradeController.py: 
+    - some more debug logging 
+    - fix missing cache open
+    - smaller default network time out
+    - run the initial cache.update() on the unmodified sources.list
+      with only a single retry because it may contain sources that 
+      do not respond
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 19 Apr 2008 00:18:25 +0200
+
+update-manager (1:0.87.21) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - transition sparc users to ports.ubuntu.com on upgrade
+  * DistUpgrade/DistUpgrade.cfg.dapper:
+    - point to ports.ubuntu.com when fetching 
+      release-upgrader-{apt,dpkg} on dapper->hardy upgrades
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 17 Apr 2008 20:24:19 +0200
+
+update-manager (1:0.87.20) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeView.py:
+    - fix incorrect _() call (thanks to Timo Jyrinki)
+  * DistUpgrade/mirrors.cfg:
+    - fix ports.ubuntu.com mirror URI (LP: #215346)
+  * run dpkg with --force-overwrite by default on the server
+    too to make the upgrade more robust. this can be overwriten
+    with the RELEASE_UPGRADE_NO_FORCE_OVERWRITE environment
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 16 Apr 2008 21:37:49 +0200
+
+update-manager (1:0.87.19) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - only try to upgrade held-back packages in the 
+      edgyQuirks handler if they are actually upgradable 
+      (thanks to Lamont Jones and James Troup)
+  * po/fi.po
+    - unfuzzy string (thanks to Timo Jyrinki)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 16 Apr 2008 20:51:05 +0200
+
+update-manager (1:0.87.18) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - remove mail-notificaton, gnome-translate from hardy 
+      quirks list (LP: #215690)
+  * UpdateManager/DistUpgradeFetcher.py:
+    - use sensible gksu prompt when asking for release
+      upgrade (LP: #161888)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 14 Apr 2008 21:44:43 +0200
+
+update-manager (1:0.87.17) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - when run from a CDROM upgrade on dapper, ensure to
+      fetch the right files on tryUpdateSelf() (#215673)
+    - ensure that language-support-$lang packages get
+      upgraded if they are installed
+  * UpdateManager/Core/MetaRelease.py:
+    - support forceLTS option (#215673)
+  * DistUpgrade/DistUpgradeView.py:
+    - work around gutsy->hardy nvidia-glx uprade problem
+      when libqt-perl is used (#205079)
+  * DistUpgrade/ReleaseAnnouncement:
+    - updated for RC
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 11 Apr 2008 22:34:06 +0200
+
+update-manager (1:0.87.16) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeViewText.py:
+    - show prompt again after showing details 
+    - use pager for long change entries
+    (thanks to James Troup)
+    - fix text wrap to not break lines on "-" (e.g. in package 
+      names)
+  * DistUpgradeController.py:
+    - do not leave 20archive.save files around
+    - make the code that asks about starting a new ssh daemon
+      (if run under ssh) more robust
+    - set status to "Calculating changes" again after displaying
+      demoted packages
+    - improve logging if prerequisites download fails
+  * DistUpgrade/DistUpgradeCache.py:
+    - improve the evms detection/removal (thanks to Lamont Jones)
+  * DistUpgrade/DistUpgrade.cfg.dapper:
+    - add "lvm2" to the KeepInstalledPkgs (LP: #211488)
+    - sync RemoveObsoletes, ForcedObsoletes, KeepInstalledSections
+      with DistUpgrade.cfg
+    - text wrap questions too
+  * po/*.po:
+    - updated translations (LP: #210699)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 04 Apr 2008 18:54:13 +0200
+
+update-manager (1:0.87.15) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - fix fd leak 
+  * DistUpgrade/DistUpgradeController.py:
+    - abort when debsig-verify is installed, it makes any
+      upgrade fail (LP: #208957)
+    - run migrate-fstab-to-uuid.sh as PostInstallScript (LP: #209347)
+    - set RELEASE_UPGRADE_MODE={server,desktop} environment
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - fix crash/race in terminal key press handler (LP: #205445)
+    - fix encoding issue (LP: #208390)
+    - call it 8.04 LTS (LP: #204659)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - fix incorrect pango attribute assignment (LP: #207742)
+    - call it 8.04 LTS (LP: #204659)
+  * UpdateManager/UpdateManager.py:
+    - do not crash if gconf database is not writable (LP: #208687)
+    - do not crash on BadStatusLine exceptions (LP: #204075)
+  * po/*.po:
+    - make update-po
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 01 Apr 2008 22:30:42 +0200
+
+update-manager (1:0.87.14) hardy; urgency=low
+
+  * DistUpgrade/ReleaseAnnouncement:
+    - Fix typo
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - Add show/hide to upgrade package list
+  * DistUpgrade/window_main.ui:
+    - Sync strings with GTK frontend to pick up translations
+    - Update icon to Oxygen
+	
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 21 Mar 2008 12:04:51 +0000
+
+update-manager (1:0.87.13) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - only ask once about the sshd (LP: #156625)
+  * DistUpgrade/DistUpgradeCache.py:
+    - add hardyQuirks handler to deal with a
+      gnome-translate upgrade issues (thanks to Daniel Holbach)
+    - fix naming of the quirksHandlers
+  * DistUpgrade/DistUpgrade.cfg:
+    - add "ksplash-engine-moodin" to ForcedObsoletes
+  * DistUpgrade/removal_blacklist.cfg:
+    - add "^postgresql-.*"to the removal blacklist
+  * DistUpgrade/DistUpgradeViewText.py:
+    - flush() output in updateStatus()
+    - show the demoted packages in a more readable
+      manner
+    - use textwrap when displaying text
+  * DistUpgrade/DistUpgradeCache.py:
+    - fix bug that prevented proper error message on 
+      upgrade calculation error in the text frontend
+    - fix text download progress
+  * DistUpgrade/ReleaseAnnouncement
+    - updated for BETA
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 20 Mar 2008 16:06:56 +0100
+
+update-manager (1:0.87.12) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - fix display of non-ascii chars
+    - improve editing capabilities of the terminal (should be 
+      fine with the readline fontend now)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 11 Mar 2008 22:01:36 +0100
+
+update-manager (1:0.87.11) hardy; urgency=low
+
+  * DistUpgrade/DistUpgradeControler.py:
+    - when upgrading without network and with a empty sources.list,
+      do not ask to add network sources
+  * DistUpgrade/DistUpgradeCache.py:
+    - do not crash if lookupRecords() failed (LP: #199482)
+  * UpdateManager/UpdateManager.py:
+    - use absolute path when calling gksu (LP: #194166),
+      Thanks to Mihai Varzaru and James Westby
+  * data/update-manager.desktop.in:
+    - improve consistency with the rest of gnome (LP: #150205)
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - do no longer use konsole during upgrades but use a dumb
+      terminal instead that only supports basic editing
+    - log terminal activity to /var/log/dist-upgrade/term.log
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 11 Mar 2008 09:40:49 +0100
+
 update-manager (1:0.87.10) hardy; urgency=low
 
   * remove code duplication in the confirmChanges() code and make the
@@ -9,13 +213,11 @@ update-manager (1:0.87.10) hardy; urgency=low
       Barmen)
   * DistUpgrade/cdromupgrade:
     - updated to hardy
+    - fix bug in path handling (LP: #155833)
   * DistUpgrade/prerequists-sources.list:
     - remove cruft
 
-  [ Brian Murray ]
-  * string fix (LP: #196229)
-
- -- 
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 29 Feb 2008 23:23:38 +0100
 
 update-manager (1:0.87.9) hardy; urgency=low
 

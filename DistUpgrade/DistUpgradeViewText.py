@@ -21,6 +21,7 @@
 
 import sys
 import logging
+import string
 import time
 import subprocess
 
@@ -29,11 +30,32 @@ import apt_pkg
 import os
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
+import apt.progress
 
 import gettext
 from gettext import gettext as _
+#from textwrap import fill, wrap
 
-class TextFetchProgress(apt.progress.TextFetchProgress,FetchProgress):
+# helpers inspired after textwrap - unfortunately
+# we can not use textwrap directly because it break
+# packagenames with "-" in them into new lines
+def wrap(t, width=70, subsequent_indent=""):
+    out = ""
+    for s in t.split():
+        if (len(out)-out.rfind("\n")) + len(s) > width:
+            out += "\n" + subsequent_indent
+        out += s + " "
+    return out
+    
+def twrap(s, **kwargs):
+    msg = ""
+    paras = s.split("\n")
+    for par in paras:
+        s = wrap(par, **kwargs)
+        msg += s+"\n"
+    return msg
+
+class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
     def __init__(self):
         apt.progress.TextFetchProgress.__init__(self)
         FetchProgress.__init__(self)
@@ -77,6 +99,7 @@ class DistUpgradeViewText(DistUpgradeView):
         self._cdromProgress = TextCdromProgressAdapter()
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
+        #self._process_events_tick = 0
 
     def _handleException(self, type, value, tb):
       import traceback
@@ -105,31 +128,47 @@ class DistUpgradeViewText(DistUpgradeView):
     def updateStatus(self, msg):
       print
       print msg
+      sys.stdout.flush()
     def abort(self):
       print
       print _("Aborting")
     def setStep(self, step):
       self.last_step = step
+    def showDemotions(self, summary, msg, demotions):
+        self.information(summary, msg, 
+                         _("Demoted:\n")+twrap(", ".join(demotions)))
     def information(self, summary, msg, extended_msg=None):
       print
-      print summary
-      print msg
+      print twrap(summary)
+      print twrap(msg)
       if extended_msg:
-        print extended_msg
+        print twrap(extended_msg)
     def error(self, summary, msg, extended_msg=None):
       print
-      print summary
-      print msg
+      print twrap(summary)
+      print twrap(msg)
       if extended_msg:
-        print extended_msg
+        print twrap(extended_msg)
       return False
+    def showInPager(self, output):
+      " helper to show output in a pager"
+      pager = "/bin/more"
+      if os.path.exists(pager):
+        p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)
+        p.stdin.write(output)
+        p.stdin.close()
+        p.wait()
+      else:
+        print output
+      return
+
     def confirmChanges(self, summary, changes, downloadSize,
                        actions=None, removal_bold=True):
       DistUpgradeView.confirmChanges(self, summary, changes, downloadSize, actions)
       print
-      print summary
-      print self.confirmChangesMessage 
-      print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
+      print twrap(summary)
+      print twrap(self.confirmChangesMessage)
+      print " %s %s" % (_("Continue [yN] "), _("Details [d]")),
       while True:
         res = sys.stdin.readline()
         # TRANSLATORS: the "y" is "yes"
@@ -140,18 +179,23 @@ class DistUpgradeViewText(DistUpgradeView):
           return False
         # TRANSLATORS: the "d" is "details"
         elif res.strip().lower().startswith(_("d")):
-          print
+          output = ""
           if len(self.toRemove) > 0:
-              print _("Remove: %s\n" % " ".join(self.toRemove))
+              output += "\n"  
+              output += twrap(_("Remove: %s\n" % " ".join(self.toRemove)), subsequent_indent='  ')
           if len(self.toInstall) > 0:
-              print _("Install: %s\n" % " ".join(self.toInstall))
+              output += "\n"
+              output += twrap(_("Install: %s\n" % " ".join(self.toInstall)), subsequent_indent='  ')
           if len(self.toUpgrade) > 0:
-              print _("Upgrade: %s\n" % " ".join(self.toUpgrade))
+              output += "\n"  
+              output += twrap(_("Upgrade: %s\n" % " ".join(self.toUpgrade)), subsequent_indent='  ')
+          self.showInPager(output)
+        print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
 
     def askYesNoQuestion(self, summary, msg, prompt=None):
       print
-      print summary
-      print msg
+      print twrap(summary)
+      print twrap(msg)
       if not prompt:
           print _("Continue [yN] "),
       else:
@@ -160,7 +204,19 @@ class DistUpgradeViewText(DistUpgradeView):
       if res.strip().lower().startswith(_("y")):
         return True
       return False
-    
+
+# FIXME: when we need this most the resolver is writing debug logs
+#        and we redirect stdout/stderr    
+#    def processEvents(self):
+#      #time.sleep(0.2)
+#      anim = [".","o","O","o"]
+#      anim = ["\\","|","/","-","\\","|","/","-"]
+#      self._process_events_tick += 1
+#      if self._process_events_tick >= len(anim):
+#          self._process_events_tick = 0
+#      sys.stdout.write("[%s]" % anim[self._process_events_tick])
+#      sys.stdout.flush()
+
     def confirmRestart(self):
       return self.askYesNoQuestion(_("Restart required"),
                                    _("To finish the upgrade, a restart is "
@@ -171,22 +227,31 @@ class DistUpgradeViewText(DistUpgradeView):
 
 
 if __name__ == "__main__":
-  
   view = DistUpgradeViewText()
+
+  #while True:
+  #    view.processEvents()
+  
+  print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.", subsequent_indent=" ")
+  sys.exit(1)
+
+  view = DistUpgradeViewText()
+  #view.confirmChangesMessage = "89 packages are going to be upgraded.\n You have to download a total of 82.7M.\n This download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem."
   #view.confirmChanges("xx",[], 100)
   #sys.exit(0)
 
   view.confirmRestart()
 
-  fp = TextFetchProgress()
-  ip = apt.progress.InstallProgress()
-
   cache = apt.Cache()
+  fp = view.getFetchProgress()
+  ip = view.getInstallProgress(cache)
+
+
   for pkg in sys.argv[1:]:
     cache[pkg].markInstall()
   cache.commit(fp,ip)
   
-  #sys.exit(0)
+  sys.exit(0)
   view.getTerminal().call(["dpkg","--configure","-a"])
   #view.getTerminal().call(["ls","-R","/usr"])
   view.error("short","long",

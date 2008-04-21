@@ -22,7 +22,6 @@
 from qt import *
 from kdeui import *
 from kdecore import *
-from kparts import konsolePart
 from kio import KRun
 #from dcopext import DCOPClient, DCOPApp # used to quit adept
 
@@ -50,6 +49,7 @@ from dialog_changes import dialog_changes
 from dialog_conffile import dialog_conffile
 from crashdialog import CrashDialog
 
+import pty
 import select
 import gettext
 from gettext import gettext as gett
@@ -61,6 +61,55 @@ def utf8(str):
   if isinstance(str, unicode):
       return str
   return unicode(str, 'UTF-8')
+
+class DumbTerminal(QTextEdit):
+    " a very dumb terminal "
+    def __init__(self, installProgress, parent_frame):
+        " really dumb terminal with simple editing support "
+        QTextEdit.__init__(self, "","", parent_frame)
+        self.installProgress = installProgress
+        self.setFamily("Monospace")
+        self.setPointSize(8)
+        self.setWordWrap(QTextEdit.NoWrap)
+        self.setUndoDepth(0)
+        self.setUndoRedoEnabled(False)
+        self._block = False
+        self.connect(self, SIGNAL("cursorPositionChanged(int,int)"), 
+                     self.onCursorPositionChanged)
+    def insertWithTermCodes(self, text):
+        " support basic terminal codes "
+        display_text = ""
+        for c in text:
+            # \b - backspace
+            if c == chr(8):       
+                self.moveCursor(QTextEdit.MoveBackward, True)
+                self.removeSelectedText()
+            # \r - is filtered out
+            elif c == chr(13):
+                pass
+            # \a - bell - ignore for now
+            elif c == chr(7):
+                pass
+            else:
+                display_text += c
+        self.insert(display_text)
+    def keyPressEvent(self, ev):
+        " send (ascii) key events to the pty "
+        # FIXME: use ev.text() here instead and deal with
+        # that it sends strange stuff
+        if hasattr(self.installProgress,"master_fd"):
+            os.write(self.installProgress.master_fd, chr(ev.ascii()))
+    def onCursorPositionChanged(self, x, y):
+        " helper that ensures that the cursor is always at the end "
+        if self._block:
+            return
+        # block signals so that we do not run into a recursion
+        self._block = True
+        para = self.paragraphs() - 1
+        pos = self.paragraphLength(para)
+        self.setCursorPosition(para, pos)
+        self._block = False
+        
 
 class KDECdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress """
@@ -163,8 +212,13 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.progress = parent.window_main.progressbar_cache
         self.progress_text = parent.window_main.progress_text
         self.parent = parent
+        try:
+            self._terminal_log = open("/var/log/dist-upgrade/term.log","w")
+        except Exception, e:
+            # if something goes wrong (permission denied etc), use stdout
+            logging.error("Can not open terminal log: '%s'" % e)
+            self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         apt_pkg.Config.Set("DPkg::StopOnError","False")
 
     def startUpdate(self):
@@ -180,6 +234,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.start_time = 0.0
         self.time_ui = 0.0
         self.last_activity = 0.0
+        self.parent.window_main.showTerminalButton.setEnabled(True)
 
     def error(self, pkg, errormsg):
         InstallProgress.error(self, pkg, errormsg)
@@ -226,9 +281,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if result == QDialog.Accepted:
-            self.parent.konsole.sendInput("y\n")
+            os.write(self.master_fd, "y\n")
         else:
-            self.parent.konsole.sendInput("n\n")
+            os.write(self.master_fd, "n\n")
 
     def showConffile(self):
         if self.confDialogue.textview_conffile.isVisible():
@@ -240,17 +295,12 @@ class KDEInstallProgressAdapter(InstallProgress):
        
 
     def fork(self):
-        """pty voodoo to attach dpkg's pty to konsole"""
-        self.parent.newKonsole()
-        self.child_pid = os.fork()
+        """pty voodoo"""
+        (self.child_pid, self.master_fd)  = pty.fork()
         if self.child_pid == 0:
-            os.setsid()
-            #os.environ["TERM"] = "linux"
+            os.environ["TERM"] = "dumb"
             os.environ["DEBIAN_FRONTEND"] = "kde"
             os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
-            os.dup2(self.parent.slave, 0)
-            os.dup2(self.parent.slave, 1)
-            os.dup2(self.parent.slave, 2)
         logging.debug(" fork pid is: %s" % self.child_pid)
         return self.child_pid
 
@@ -281,17 +331,32 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText("")
 
     def updateInterface(self):
-        """no mainloop in this application, just call processEvents lots here, it's also important to sleep for a minimum amount of time"""
+        """
+        no mainloop in this application, just call processEvents lots here
+        it's also important to sleep for a minimum amount of time
+        """
+        # log the output of dpkg (on the master_fd) to the terminal log
+        while True:
+            try:
+                (rlist, wlist, xlist) = select.select([self.master_fd],[],[], 0)
+                if len(rlist) > 0:
+                    line = os.read(self.master_fd, 255)
+                    self._terminal_log.write(line)
+                    self.parent.terminal_text.insertWithTermCodes(utf8(line))
+                else:
+                    break
+            except Exception, e:
+                print e
+                logging.debug("error reading from self.master_fd '%s'" % e)
+                break
+
+        # now update the GUI
         try:
           InstallProgress.updateInterface(self)
         except ValueError, e:
           logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
-        # check if we haven't started yet with packages, pulse then
-        if self.start_time == 0.0:
-          #Gtk frontend does a pulse here to move bar back and forward, we can't do that in qt
-          time.sleep(0.0000001)
         # check about terminal activity
         if self.last_activity > 0 and \
            (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
@@ -304,15 +369,10 @@ class KDEInstallProgressAdapter(InstallProgress):
             self.activity_timeout_reported = True
           self.parent.window_main.konsole_frame.show()
         KApplication.kApplication().processEvents()
-        time.sleep(0.0000001)
+        time.sleep(0.02)
 
     def waitChild(self):
         while True:
-            try:
-                select.select([self.statusfd],[],[], self.selectTimeout)
-            except Exception, e:
-                #logging.warning("select interrupted '%s'" % e)
-                pass
             self.updateInterface()
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
             if pid == self.child_pid:
@@ -369,11 +429,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # reasonable fault handler
         sys.excepthook = self._handleException
 
-        self.konsole = None
-        self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
-
-        self.window_main.konsole_frame.hide()
-        self.window_main.showTerminalButton.setEnabled(False)
+        ###self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
@@ -403,28 +459,22 @@ class DistUpgradeViewKDE(DistUpgradeView):
         gettext.bindtextdomain("update-manager",localedir)
         gettext.textdomain("update-manager")
         self.translate_widget_children()
+        self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", "Kubuntu"))
 
+        # setup terminal text in hidden by default spot
+        self.window_main.konsole_frame.hide()
+        self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
+        self.window_main.konsole_frame.setMinimumSize(600, 400)
+        self.terminal_text = DumbTerminal(self._installProgress, 
+                                          self.window_main.konsole_frame)
+        self.konsole_frame_layout.addWidget(self.terminal_text)
+        self.terminal_text.show()
+        
         # for some reason we need to start the main loop to get everything displayed
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
         QTimer.singleShot(10, self.exitMainLoop)
         self.app.exec_loop()
-
-    def newKonsole(self):
-        if self.konsole is not None:
-            self.konsole.widget().hide()
-        self.konsole = konsolePart(self.window_main.konsole_frame, "konsole", self.window_main.konsole_frame, "konsole")
-        self.window_main.konsole_frame.setMinimumSize(500, 400)
-        self.konsole.setAutoStartShell(False)
-        self.konsoleWidget = self.konsole.widget()
-        self.konsole_frame_layout.addWidget(self.konsoleWidget)
-        self.konsoleWidget.show()
-
-        #prepare for dpkg pty being attached to konsole
-        (self.master, self.slave) = pty.openpty()
-        self.konsole.setPtyFd(self.master)
-
-        self.window_main.showTerminalButton.setEnabled(True)
-
+        
     def exitMainLoop(self):
         self.app.exit()
 
@@ -485,6 +535,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             self.window_main.konsole_frame.show()
             self.window_main.showTerminalButton.setText(_("<<< Hide Terminal"))
+        self.window_main.resize(self.window_main.sizeHint())
 
     def getFetchProgress(self):
         return self._fetchProgress
@@ -578,31 +629,44 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
         msg = unicode(self.confirmChangesMessage, 'UTF-8')
-        changesDialogue = dialog_changes(self.window_main)
-        self.translate_widget_children(changesDialogue)
+        self.changesDialogue = dialog_changes(self.window_main)
+        self.changesDialogue.treeview_details.hide()
+        self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
+        self.translate_widget_children(self.changesDialogue)
+        self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
         if actions != None:
             cancel = actions[0].replace("_", "")
-            changesDialogue.button_cancel_changes.setText(cancel)
+            self.changesDialogue.button_cancel_changes.setText(cancel)
             confirm = actions[1].replace("_", "")
-            changesDialogue.button_confirm_changes.setText(confirm)
+            self.changesDialogue.button_confirm_changes.setText(confirm)
 
         summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
-        changesDialogue.label_summary.setText(summaryText)
-        changesDialogue.label_changes.setText(msg)
+        self.changesDialogue.label_summary.setText(summaryText)
+        self.changesDialogue.label_changes.setText(msg)
         # fill in the details
-        changesDialogue.treeview_details.clear()
-        changesDialogue.treeview_details.setColumnText(0, "Packages")
+        self.changesDialogue.treeview_details.clear()
+        self.changesDialogue.treeview_details.setColumnText(0, "Packages")
         for rm in self.toRemove:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Remove %s") % rm) )
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Remove %s") % rm) )
         for inst in self.toInstall:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Install %s") % inst) )
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Install %s") % inst) )
         for up in self.toUpgrade:
-            changesDialogue.treeview_details.insertItem( QListViewItem(changesDialogue.treeview_details, _("Upgrade %s") % up) )
-        res = changesDialogue.exec_loop()
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Upgrade %s") % up) )
+        res = self.changesDialogue.exec_loop()
         if res == QDialog.Accepted:
             return True
         return False
+
+    def showChangesDialogueDetails(self):
+        if self.changesDialogue.treeview_details.isVisible():
+            self.changesDialogue.treeview_details.hide()
+            self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        else:
+            self.changesDialogue.treeview_details.show()
+            self.changesDialogue.show_details_button.setText("<<< " + _("Details"))
+        self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
     def askYesNoQuestion(self, summary, msg, default='No'):
         restart = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode("<font>") + unicode(msg, 'UTF-8'), QMessageBox.Yes, QMessageBox.No)
@@ -628,13 +692,15 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
 if __name__ == "__main__":
 
   view = DistUpgradeViewKDE()
-  fp = KDEFetchProgressAdapter(view)
-  ip = KDEInstallProgressAdapter(view)
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    if cache[pkg].isInstalled:
+    if cache[pkg].isInstalled and not cache[pkg].isUpgradable: 
       cache[pkg].markDelete(purge=True)
     else:
       cache[pkg].markInstall()
-  cache.commit(fp,ip)
+  cache.commit(view._fetchProgress,view._installProgress)
+
+  # keep the window open
+  while True:
+      KApplication.kApplication().processEvents()

@@ -163,7 +163,6 @@ class GtkInstallProgressAdapter(InstallProgress):
         reaper = vte.reaper_get()
         reaper.connect("child-exited", self.child_exited)
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         apt_pkg.Config.Set("DPkg::StopOnError","False")
 
     def startUpdate(self):
@@ -388,7 +387,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         # Use italic style in the status labels
         attrlist=pango.AttrList()
         #attr = pango.AttrStyle(pango.STYLE_ITALIC, 0, -1)
-        attr = pango.AttrScale(pango.SCALE_SMALL)
+        attr = pango.AttrScale(pango.SCALE_SMALL, 0, -1)
         attrlist.insert(attr)
         self.label_status.set_property("attributes", attrlist)
         # reasonable fault handler

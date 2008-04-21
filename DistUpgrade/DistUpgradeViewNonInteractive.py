@@ -23,7 +23,7 @@ import apt
 import logging
 import time
 import sys
-from DistUpgradeView import DistUpgradeView, InstallProgress
+from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
 from DistUpgradeConfigParser import DistUpgradeConfig
 import os
 import pty
@@ -37,11 +37,13 @@ from subprocess import call, PIPE, Popen
 import copy
 import apt.progress
 
-class NonInteractiveFetchProgress(apt.progress.FetchProgress):
+class NonInteractiveFetchProgress(FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
+        FetchProgress.updateStatus(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt.progress.FetchProgress.dlDone:
-            print "fetched %s %s" % uri
+            print "fetched %s" % uri
+        
 
 class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self):
@@ -61,7 +63,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
         except Exception, e:
             pass
-        
+    
     def error(self, pkg, errormsg):
         # re-run maintainer script with sh -x/perl debug to get a better 
         # idea what went wrong
@@ -76,6 +78,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         # so this is inaccurate as well
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         environ = copy.copy(os.environ)
+        environ["PYCENTEAL"] = "debug"
         cmd = []
 
         # find what maintainer script failed
@@ -101,7 +104,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             argument = "remove"
             maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         else:
-            print "UNKNOWN script failure '%s' " % errormsg
+            print "UNKNOWN (trigger?) dpkg/script failure for %s (%s) " % (pkg, errormsg)
             return
 
         # find out about the interpreter
@@ -158,6 +161,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 	  logging.error("error '%s' when trying to write to the conffile"%e)
 
     def startUpdate(self):
+        InstallProgress.startUpdate(self)
         self.last_activity = time.time()
           
     def updateInterface(self):
@@ -166,6 +170,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 
         if (self.last_activity + self.timeout) < time.time():
             logging.warning("no activity %s seconds (%s) - sending ctrl-c" % (self.timeout, self.status))
+            # ctrl-c
             os.write(self.master_fd,chr(3))
 
 
@@ -217,6 +222,8 @@ class NonInteractiveInstallProgress(InstallProgress):
 
     def fork(self):
         logging.debug("doing a pty.fork()")
+        # some maintainer scripts fail without
+        os.environ["TERM"] = "dumb"
         (self.pid, self.master_fd) = pty.fork()
         if self.pid != 0:
             logging.debug("pid is: %s" % self.pid)
@@ -227,15 +234,24 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
     def __init__(self, datadir=None, logdir=None):
         self.config = DistUpgradeConfig(".")
+        self._fetchProgress = NonInteractiveFetchProgress()
+        self._installProgress = NonInteractiveInstallProgress()
+        self._opProgress = apt.progress.OpProgress()
+        sys.__excepthook__ = self.excepthook
+    def excepthook(self, type, value, traceback):
+        " on uncaught exceptions -> print error and reboot "
+        logging.error("got exception '%s': %s " % (type, value))
+        sys.excepthook(type, value, traceback)
+        self.confirmRestart()
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
-        return apt.progress.OpProgress()
+        return self._opProgress
     def getFetchProgress(self):
         " return a fetch progress object "
-        return NonInteractiveFetchProgress()
+        return self._fetchProgress
     def getInstallProgress(self, cache=None):
         " return a install progress object "
-        return NonInteractiveInstallProgress()
+        return self._installProgress
     def updateStatus(self, msg):
         """ update the current status of the distUpgrade based
             on the current view

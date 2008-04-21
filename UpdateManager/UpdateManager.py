@@ -52,6 +52,7 @@ import pango
 import subprocess
 import pwd
 import urllib2
+import httplib
 import time
 import thread
 import xml.sax.saxutils
@@ -251,7 +252,7 @@ class MyCache(apt.Cache):
                 self.all_changes[name] = [_("The list of changes is not "
                                             "available yet.\nPlease try again "
                                             "later."), srcpkg]
-        except IOError:
+        except IOError, httplib.BadStatusLine:
             if lock.locked():
                 self.all_changes[name] = [_("Failed to download the list "
                                             "of changes. \nPlease "
@@ -431,12 +432,13 @@ class UpdateManager(SimpleGladeApp):
           host = self.gconfclient.get_string("/system/http_proxy/host")
           port = self.gconfclient.get_int("/system/http_proxy/port")
           use_auth = self.gconfclient.get_bool("/system/http_proxy/use_authentication")
-          if use_auth:
-              auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
-              auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
-              proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
-          else:
-              proxy = "http://%s:%s/" % (host, port)
+          if host and port:
+              if use_auth:
+                  auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
+                  auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
+                  proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
+              else:
+                  proxy = "http://%s:%s/" % (host, port)
       if proxy:
           proxy_support = urllib2.ProxyHandler({"http":proxy})
           opener = urllib2.build_opener(proxy_support)
@@ -586,7 +588,7 @@ class UpdateManager(SimpleGladeApp):
                             lambda w,lock: lock.release(), lock)
         # wait for the dl-thread
         while lock.locked():
-          time.sleep(0.05)
+          time.sleep(0.01)
           while gtk.events_pending():
             gtk.main_iteration()
         # download finished (or canceld, or time-out)
@@ -730,7 +732,8 @@ class UpdateManager(SimpleGladeApp):
       apt_pkg.PkgSystemUnLock()
     except SystemError:
       pass
-    cmd = ["gksu", "--desktop", "/usr/share/applications/update-manager.desktop", 
+    cmd = ["/usr/bin/gksu", 
+           "--desktop", "/usr/share/applications/update-manager.desktop", 
            "--", "/usr/sbin/synaptic", "--hide-main-window",  
            "--non-interactive", "--parent-window-id", "%s" % (id) ]
     if action == INSTALL:
@@ -842,8 +845,12 @@ class UpdateManager(SimpleGladeApp):
   def save_state(self):
     """ save the state  (window-size for now) """
     (x,y) = self.window_main.get_size()
-    self.gconfclient.set_pair("/apps/update-manager/window_size",
-                              gconf.VALUE_INT, gconf.VALUE_INT, x, y)
+    try:
+        self.gconfclient.set_pair("/apps/update-manager/window_size",
+                                  gconf.VALUE_INT, gconf.VALUE_INT, x, y)
+    except gobject.GError, e:
+        print "Could not save the configuration to gconf: %s" % e
+        pass
 
   def restore_state(self):
     """ restore the state (window-size for now) """

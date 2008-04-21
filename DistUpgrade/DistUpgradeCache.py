@@ -106,6 +106,9 @@ class MyCache(apt.Cache):
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
     def _startAptResolverLog(self):
+        if hasattr(self, "old_stdout"):
+            os.close(self.old_stdout)
+            os.close(self.old_stderr)
         self.old_stdout = os.dup(1)
         self.old_stderr = os.dup(2)
         os.dup2(self.logfd, 1)
@@ -312,17 +315,69 @@ class MyCache(apt.Cache):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
 
         # get the distro-specific quirks handler and run it
-        for name in ("%sQuirks", "from_%sQuirks"):
-            quirksFuncName = name % self.config.get("Sources","From")
+        for quirksFuncName in ("%sQuirks" % self.config.get("Sources","To"),
+                               "from_%sQuirks" % self.config.get("Sources","From")):
             func = getattr(self, quirksFuncName, None)
             if func is not None:
                 func()
 
-
     def from_dapperQuirks(self):
+        self.hardyQuirks()
         self.gutsyQuirks()
         self.feistyQuirks()
         self.edgyQuirks()
+
+    def _checkAndRemoveEvms(self):
+        " check if evms is in use and if not, remove it "
+        logging.debug("running _checkAndRemoveEvms")
+        for line in open("/proc/mounts"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                continue
+            if "evms" in device:
+                logging.debug("found evms device in line '%s', skipping " % line)
+                return False
+        # if not in use, nuke it
+        for pkg in ["evms","libevms-2.5","libevms-dev",
+                    "evms-ncurses", "evms-ha",
+                    "evms-bootdebug",
+                    "evms-gui", "evms-cli",
+                    "linux-patch-evms"]:
+            if self.has_key(pkg) and self[pkg].isInstalled:
+                self[pkg].markDelete()
+        return True
+
+
+    def hardyQuirks(self):
+        """ 
+        this function works around quirks in the 
+        {dapper,gutsy}->hardy upgrade 
+        """
+        logging.debug("running hardyQuirks handler")
+        # deal with gnome-translator and help apt with the breaks
+        if (self.has_key("nautilus") and
+            self["nautilus"].isInstalled and
+            not self["nautilus"].markedUpgrade):
+            # uninstallable and gutsy apt is unhappy about this
+            # breaks because it wants to upgrade it and gives up
+            # if it can't
+            for broken in ("link-monitor-applet"):
+                if self.has_key(broken) and self[broken].isInstalled:
+                    self[broken].markDelete()
+            self["nautilus"].markInstall()
+        # evms gives problems, remove it if it is not in use
+        self._checkAndRemoveEvms()
+        # give the language-support-* packages a extra kick
+        for pkg in self:
+            if (pkg.name.startswith("language-support-") and
+                pkg.isInstalled and
+                not pkg.markedUpgrade):
+                self.markInstall(pkg.name,"extra language-support- kick")
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
@@ -330,7 +385,9 @@ class MyCache(apt.Cache):
         # lowlatency kernel flavour vanished from feisty->gutsy
         try:
             (version, build, flavour) = self.uname.split("-")
-            if flavour == 'lowlatency' or flavour == '686':
+            if (flavour == 'lowlatency' or 
+                flavour == '686' or
+                flavour == 'k7'):
                 kernel = "linux-image-generic"
                 if not (self[kernel].isInstalled or self[kernel].markedInstall):
                     logging.debug("Selecting new kernel '%s'" % kernel)
@@ -376,7 +433,9 @@ class MyCache(apt.Cache):
                 pkg.isInstalled and
                 not pkg.markedUpgrade):
                 basepkg = "python-"+pkg.name[len("python2.4-"):]
-                if (self.has_key(basepkg) and not self[basepkg].markedInstall):
+                if (self.has_key(basepkg) and 
+                    self[basepkg].candidateDownloadable and
+                    not self[basepkg].markedInstall):
                     try:
                         self.markInstall(basepkg,
                                          "python2.4->python upgrade rule")
@@ -394,7 +453,7 @@ class MyCache(apt.Cache):
         # deal with held-backs that are unneeded
         for pkgname in ["hpijs", "bzr", "tomboy"]:
             if (self.has_key(pkgname) and self[pkgname].isInstalled and
-                not self[pkgname].markedUpgrade):
+                self[pkgname].isUpgradable and not self[pkgname].markedUpgrade):
                 try:
                     self.markInstall(pkgname,"%s quirk upgrade rule" % pkgname)
                 except SystemError, e:
@@ -571,9 +630,10 @@ class MyCache(apt.Cache):
                 details += _("If none of this applies, then please report this bug against "
                              "the 'update-manager' package and include the files in "
                              "/var/log/dist-upgrade/ in the bugreport.")
-
+            # make the text available again
+            self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
-            
+            self._startAptResolverLog()            
             logging.error("Dist-upgrade failed: '%s'", e)
             return False
         # would be nice to be able to use finally: here, but we need
@@ -643,7 +703,9 @@ class MyCache(apt.Cache):
         tasks = {}
         installed_tasks = set()
         for pkg in self:
-            pkg._lookupRecord()
+            if not pkg._lookupRecord():
+                logging.debug("no PkgRecord found for '%s', skipping " % pkg.name)
+                continue
             for line in pkg._records.Record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):
@@ -757,13 +819,15 @@ class MyCache(apt.Cache):
         if not self.has_key(pkgname):
             #logging.debug("package '%s' not in cache" % pkgname)
             return True
+        # check if we want to purge 
+        purge = bool(self.config.getWithDefault("Distro","PurgeObsoletes",False))
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well
         actiongroup = apt_pkg.GetPkgActionGroup(self._depcache)
         self.create_snapshot()
         try:
-            self[pkgname].markDelete()
+            self[pkgname].markDelete(purge=purge)
             logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 

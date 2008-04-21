@@ -55,7 +55,10 @@ class MetaReleaseCore(object):
     METARELEASE_URI_UNSTABLE_POSTFIX = "-development"
     METARELEASE_URI_PROPOSED_POSTFIX = "-proposed"
 
-    def __init__(self, useDevelopmentRelease=False, useProposed=False):
+    def __init__(self, 
+                 useDevelopmentRelease=False, 
+                 useProposed=False,
+                 forceLTS=False):
         self._debug("MetaRelease.__init__() useDevel=%s useProposed=%s" % (useDevelopmentRelease, useProposed))
         # information about the available dists
         self.downloading = True
@@ -74,7 +77,9 @@ class MetaReleaseCore(object):
                     return
                 elif type == "lts":
                     self.METARELEASE_URI = self.METARELEASE_URI_LTS
-
+        # needed for the _tryUpgradeSelf() code in DistUpgradeController
+        if forceLTS:
+            self.METARELEASE_URI = self.METARELEASE_URI_LTS
         # devel and proposed "just" change the postfix
         if useDevelopmentRelease:
             self.METARELEASE_URI += self.METARELEASE_URI_UNSTABLE_POSTFIX

@@ -85,10 +85,35 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         self.assert_(res == True)
         # now test the result
         self._verifySources("""
-deb http://ports.ubuntu.com/ gutsy main restricted multiverse universe
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
 
-deb http://ports.ubuntu.com/ gutsy-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted
+""")
+        apt_pkg.Config.Set("APT::Architecture",arch)
+
+    def test_sparc_transition(self):
+        """ 
+        test transition of sparc to ports.ubuntu.com
+        """
+        arch = apt_pkg.Config.Find("APT::Architecture")
+        apt_pkg.Config.Set("APT::Architecture","sparc")
+        shutil.copy(os.path.join(self.testdir,"sources.list.sparc"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "gutsy"
+        d.toDist = "hardy"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        # now test the result
+        self._verifySources("""
+deb http://ports.ubuntu.com/ubuntu-ports/ hardy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
 """)
         apt_pkg.Config.Set("APT::Architecture",arch)
         

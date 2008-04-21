@@ -155,11 +155,20 @@ class DistUpgradeController(object):
         self.origin = self.config.get("Sources","ValidOrigin")
         self.arch = apt_pkg.Config.Find("APT::Architecture")
 
+        # we run with --force-overwrite by default
+        if not os.environ.has_key("RELEASE_UPGRADE_NO_FORCE_OVERWRITE"):
+            logging.debug("enable dpkg --force-overwrite")
+            apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+
         # we run in full upgrade mode by default
         self.partialUpgrade = False
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
+        if self.serverMode:
+            os.environ["RELEASE_UPGRADE_MODE"] = "server"
+        else:
+            os.environ["RELEASE_UPGRADE_MODE"] = "desktop"
         os.environ["PYCENTRAL_NO_DPKG_QUERY"] = "1"
         os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
@@ -167,6 +176,15 @@ class DistUpgradeController(object):
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
         apt_pkg.Config.Set("Acquire::Retries", str(maxRetries))
+        # max sizes for dpkgpm for large installs (see linux/limits.h and 
+        #                                          linux/binfmts.h)
+        apt_pkg.Config.Set("Dpkg::MaxArgs", str(64*1024))
+        apt_pkg.Config.Set("Dpkg::MaxArgBytes", str(128*1024))
+
+        # smaller to avoid hangs
+        apt_pkg.Config.Set("Acquire::http::Timeout","20")
+        apt_pkg.Config.Set("Acquire::ftp::Timeout","20")
+
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add
@@ -184,10 +202,8 @@ class DistUpgradeController(object):
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
+            logging.warning("dpkg interrupted, calling dpkg --configure -a")
             self._view.getTerminal().call(["dpkg","--configure","-a"])
-            self.cache = MyCache(self.config,
-                                 self._view,
-                                 self._view.getOpCacheProgress())
             self.cache = MyCache(self.config,
                                  self._view,
                                  self._view.getOpCacheProgress())
@@ -207,7 +223,8 @@ class DistUpgradeController(object):
             daemon (to be sure we have a spare one around in case
             of trouble)
         """
-        if (self.serverMode and
+        pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
+        if (not os.path.exists(pidfile) and
             (os.environ.has_key("SSH_CONNECTION") or
              os.environ.has_key("SSH_TTY"))):
             port = 9004
@@ -223,7 +240,9 @@ class DistUpgradeController(object):
             # abort
             if res == False:
                 sys.exit(1)
-            res = subprocess.call(["/usr/sbin/sshd","-p",str(port)])
+            res = subprocess.call(["/usr/sbin/sshd",
+                                   "-o", "PidFile=%s" % pidfile,
+                                   "-p",str(port)])
             if res == 0:
                 self._view.information(
                     _("Starting additional sshd"),
@@ -240,9 +259,13 @@ class DistUpgradeController(object):
         """  
         from MetaRelease import MetaReleaseCore
         from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
-        # FIXME: during testing, we want "useDevelopmentRelease"
-        #        but not after the release
-        m = MetaReleaseCore(useDevelopmentRelease=False)
+        # check if we run from a LTS 
+        forceLTS=False
+        if (self.release == "dapper" or
+            self.release == "hardy"):
+            forceLTS=True
+        m = MetaReleaseCore(useDevelopmentRelease=False,
+                            forceLTS=forceLTS)
         # this will timeout eventually
         while m.downloading:
             self._view.processEvents()
@@ -286,7 +309,7 @@ class DistUpgradeController(object):
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
         # first check if that is a good upgrade
-        release = subprocess.Popen(["lsb_release","-c","-s"],
+        self.release = release = subprocess.Popen(["lsb_release","-c","-s"],
                                    stdout=subprocess.PIPE).communicate()[0].strip()
         logging.debug("lsb-release: '%s'" % release)
         if not (release == self.fromDist or release == self.toDist):
@@ -330,6 +353,16 @@ class DistUpgradeController(object):
         if not self.checkViewDepends():
             logging.error("checkViewDepends() failed")
             return False
+
+        if os.path.exists("/usr/bin/debsig-verify"):
+            logging.error("debsig-verify is installed")
+            self._view.error(_("Package 'debsig-verify' is installed"),
+                             _("The upgrade can not continue with that "
+                               "package installed.\n"
+                               "Please remove it with synaptic "
+                               "or 'apt-get remove debsig-verify' first "
+                               "and run the upgrade again."))
+            self.abort()
 
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  inteligent questions
@@ -456,12 +489,19 @@ class DistUpgradeController(object):
                     entry.disabled = True
                     self.sources_disabled = True
                     logging.debug("entry '%s' was disabled (unknown dist)" % entry)
-                # check if the arch is powerpc and if so, transition
-                # to ports.ubuntu.com (got demoted in gutsy)
+                
+                # if we make it to this point, we have a official mirror
+                # 
+                # check if the arch is powerpc or sparc and if so, transition
+                # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
+                # in hardy)
+                    
                 if (entry.type == "deb" and
-                    apt_pkg.Config.Find("APT::Architecture") == "powerpc"):
-                    logging.debug("moving powerpc source entry to 'ports.ubuntu.com' ")
-                    entry.uri = "http://ports.ubuntu.com/"
+                    not "ports.ubuntu.com" in entry.uri and
+                    (self.arch == "powerpc" or self.arch == "sparc")):
+                    logging.debug("moving %s source entry to 'ports.ubuntu.com' " % self.arch)
+                    entry.uri = "http://ports.ubuntu.com/ubuntu-ports/"
+                    
 
             # disable anything that is not from a official mirror
             if not validMirror:
@@ -491,7 +531,10 @@ class DistUpgradeController(object):
             if res:
                 # re-init the sources and try again
                 self.sources = SourcesList(matcherPath=".")
-                if not self.rewriteSourcesList(mirror_check=False):
+                # its ok if rewriteSorucesList fails here if
+                # we do not use a network, the sources.list may be empty
+                if (not self.rewriteSourcesList(mirror_check=False)
+                    and self.useNetwork):
                     #hm, still nothing useful ...
                     prim = _("Generate default sources?")
                     secon = _("After scanning your 'sources.list' no "
@@ -565,7 +608,9 @@ class DistUpgradeController(object):
     def doPreUpgrade(self):
         # check if we have packages in ReqReinst state that are not
         # downloadable
+        logging.debug("doPreUpgrade")
         if len(self.cache.reqReinstallPkgs) > 0:
+            logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
             self.openCache()
         if len(self.cache.reqReinstallPkgs) > 0:
@@ -596,7 +641,8 @@ class DistUpgradeController(object):
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
         return True
 
-    def doUpdate(self, showErrors=True):
+    def doUpdate(self, showErrors=True, forceRetries=None):
+        logging.debug("running doUpdate() (showErrors=%s)" % showErrors)
         if not self.useNetwork:
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
             return True
@@ -604,7 +650,10 @@ class DistUpgradeController(object):
         progress = self._view.getFetchProgress()
         # FIXME: also remove all files from the lists partial dir!
         currentRetry = 0
-        maxRetries = self.config.getint("Network","MaxRetries")
+        if forceRetries is not None:
+            maxRetries=forceRetries
+        else:
+            maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.update(progress)
@@ -739,7 +788,7 @@ class DistUpgradeController(object):
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
             logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
-            self._view.information(_("Support for some applications ended"),
+            self._view.showDemotions(_("Support for some applications ended"),
                                    _("Canonical Ltd. no longer provides "
                                      "support for the following software "
                                      "packages. You can still get support "
@@ -748,7 +797,8 @@ class DistUpgradeController(object):
                                      "maintained software (universe), "
                                      "these packages will be suggested for "
                                      "removal at the end of the upgrade."),
-                                   "\n".join(self.installed_demotions))
+                                     self.installed_demotions)
+            self._view.updateStatus(_("Calculating the changes"))
         # FIXME: integrate this into main upgrade dialog!?!
         if not self.cache.distUpgrade(self._view, self.serverMode, self.partialUpgrade):
             return False
@@ -793,7 +843,7 @@ class DistUpgradeController(object):
     def doDistUpgradeFetching(self):
         # rewrite cleanup minAge for a package to 10 days
         self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
-        self._rewriteAptPeriodic(10, True)
+        self._rewriteAptPeriodic(10)
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -1004,6 +1054,9 @@ class DistUpgradeController(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
+        self.runPostInstallScripts()
+
+    def runPostInstallScripts(self):
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             logging.debug("Running PostInstallScript: '%s'" % script)
@@ -1077,31 +1130,9 @@ class DistUpgradeController(object):
             res = subprocess.call(cmd)
             logging.debug("cmd: %s returned %i" % (cmd, res))
         
-    def _checkAndRemoveEvms(self):
-        " check if evms is in use and if not, remove it "
-        for line in open("/proc/mounts"):
-            line = line.strip()
-            if line == '' or line.startswith("#"):
-                continue
-            try:
-                (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
-                logging.error("can't parse line '%s'" % line)
-                continue
-            if "evms" in device:
-                logging.debug("found evms device in line '%s', skipping " % line)
-                return False
-        self.forced_obsoletes.extend(["evms","libevms-2.5","libevms-dev",
-                                      "evms-ncurses", "evms-ha",
-                                      "evms-bootdebug",
-                                      "evms-gui", "evms-cli",
-                                      "linux-patch-evms"])
-        return True
-
     def from_dapperQuirks(self):
         " this works around quirks for dapper->hardy upgrades "
         logging.debug("running Controler.from_dapperQuirks handler")
-        self._checkAndRemoveEvms()
         self._rewriteFstab()
         self._checkAdminGroup()
         
@@ -1109,7 +1140,6 @@ class DistUpgradeController(object):
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
         logging.debug("running Controler.gutsyQuirks handler")
-        self._checkAndRemoveEvms()
 
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """
@@ -1344,7 +1374,11 @@ class DistUpgradeController(object):
             res = True
             self.cache._fetchArchives(fetcher, pm)
         except IOError, e:
+            logging.error("_fetchArchives returned '%s'" % e)
             res = False
+
+        if res == False:
+            logging.warning("_fetchArchives for backports returned False")
 
         # reset the cache dir
         os.unlink(outpath)
@@ -1355,7 +1389,7 @@ class DistUpgradeController(object):
     def setupRequiredBackports(self, backportsdir):
         " setup the required backports in a evil way "
         if not glob.glob(backportsdir+"/*.udeb"):
-            logging.error("no backports found but setupRequiredBackports() called??!")
+            logging.error("no backports found in setupRequiredBackports()")
             return False
         # unpack the backports first
         for deb in glob.glob(backportsdir+"/*.udeb"):
@@ -1404,6 +1438,7 @@ class DistUpgradeController(object):
         if (self.config.has_section("PreRequists") and
             self.options and
             self.options.havePrerequists == False):
+            logging.debug("need backports")
             # get backported packages (if needed)
             if not self.getRequiredBackports():
                 self._view.error(_("Getting upgrade prerequisites failed"),
@@ -1425,7 +1460,11 @@ class DistUpgradeController(object):
         # b) we check if we have valid ubuntu sources later
         #    after we rewrite the sources.list and do a 
         #    apt-get update there too
-        self.doUpdate(showErrors=False)
+        # because the (unmodified) sources.list of the user
+        # may contain bad/unreachable entries we run only
+        # with a single retry
+        self.doUpdate(showErrors=False, forceRetries=1)
+        self.openCache()
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)
         if not self.doPreUpgrade():
@@ -1488,6 +1527,8 @@ class DistUpgradeController(object):
         self._view.setStep(DistUpgradeView.STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
+            # run the post install scripts (for stuff like UUID conversion)
+            self.runPostInstallScripts()
             # don't abort here, because it would restore the sources.list
             sys.exit(1) 
             

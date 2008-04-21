@@ -1,4 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
+# "-u": Force stdin, stdout and stderr to be  totally  unbuffered.
+#       To get more accurate log files
+# 
+# see also 
+# http://www.faqts.com/knowledge_base/entry/versions/index.phtml?aid=4419
 
 from optparse import OptionParser
 import os
@@ -10,11 +15,6 @@ import shutil
 import datetime
 
 from UpgradeTestBackend import UpgradeTestBackend
-
-# TODO:
-# - show held-back packages 
-# - if no terminal activity for a extended time, send a '\n' on the
-#   terminal (assuming its a stupid maintainer script asking questions)
 
 # FIXME: move this into the generic backend code
 def login(backend):

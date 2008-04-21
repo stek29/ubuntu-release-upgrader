@@ -46,7 +46,9 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         inhibit_sleep()
         # now run it with sudo
         if os.getuid() != 0:
-            os.execv("/usr/bin/gksu",["gksu",self.script])
+            os.execv("/usr/bin/gksu",["gksu",
+                                      "--desktop","/usr/share/applications/update-manager.desktop",
+                                      self.script])
         else:
             os.execv(self.script,[self.script]+self.run_options)
         # we shouldn't come to this point, but if we do, undo our

@@ -27,7 +27,7 @@ def apport_crash(type, value, tb):
 
 def apport_pkgfailure(pkg, errormsg):
     logging.debug("running apport_pkgfailure() %s: %s", pkg, errormsg)
-    LOGDIR="/var/log/dist-upgrader/"
+    LOGDIR="/var/log/dist-upgrade/"
     s = "/usr/share/apport/package_hook"
 
     # we do not report followup errors from earlier failures

@@ -406,7 +406,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
       apport_crash(type, value, tb)
       if not run_apport():
         self.error(_("A fatal error occured"),
-                   _("Please report this as a bug (if you haven't already) and include the"
+                   _("Please report this as a bug (if you haven't already) and include the "
                      "files /var/log/dist-upgrade/main.log and "
                      "/var/log/dist-upgrade/apt.log "
                      "in your report. The upgrade aborts now.\n"

@@ -194,7 +194,7 @@ class DistUpgradeView(object):
         pkgs_upgrade = len(self.toUpgrade)
         # FIXME: show detailed packages
         if pkgs_remove > 0:
-          # FIXME: make those two seperate lines to make it clear
+          # FIXME: make those two separate lines to make it clear
           #        that the "%" applies to the result of ngettext
           msg += gettext.ngettext("%d package is going to be removed.",
                                   "%d packages are going to be removed.",
@@ -235,7 +235,7 @@ class DistUpgradeView(object):
         " ask a Yes/No question and return True on 'Yes' "
         pass
     def confirmRestart(self):
-        " generic ask about the restart, can be overriden "
+        " generic ask about the restart, can be overridden "
         summary = _("Reboot required")
         msg =  _("The upgrade is finished and "
                  "a reboot is required. "

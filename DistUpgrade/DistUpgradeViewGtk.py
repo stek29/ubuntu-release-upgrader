@@ -287,7 +287,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         try:
           InstallProgress.updateInterface(self)
         except ValueError, e:
-          logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
+          logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
 	  self.read = ""
         # check if we haven't started yet with packages, pulse then
@@ -353,7 +353,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         SimpleGladeApp.__init__(self, gladedir+"/DistUpgrade.glade",
                                 None, domain="update-manager")
         self.prev_step = 0 # keep a record of the latest step
-        # we dont use this currently
+        # we don't use this currently
         #self.window_main.set_keep_above(True)
         self.icontheme = gtk.icon_theme_get_default()
         # we keep a reference pngloader around so that its in memory

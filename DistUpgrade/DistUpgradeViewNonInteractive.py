@@ -48,7 +48,7 @@ class NonInteractiveFetchProgress(FetchProgress):
 class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self):
         InstallProgress.__init__(self)
-        logging.debug("seting up environ for non-interactive use")
+        logging.debug("setting up environ for non-interactive use")
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         self.config = DistUpgradeConfig(".")
@@ -78,7 +78,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         # so this is inaccurate as well
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         environ = copy.copy(os.environ)
-        environ["PYCENTEAL"] = "debug"
+        environ["PYCENTRAL"] = "debug"
         cmd = []
 
         # find what maintainer script failed
@@ -109,7 +109,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 
         # find out about the interpreter
         if not os.path.exists(maintainer_script):
-            logging.error("can not find failed maitainer script '%s' " % maintainer_script)
+            logging.error("can not find failed maintainer script '%s' " % maintainer_script)
             return
         interp = open(maintainer_script).readline()[2:].strip().split()[0]
         if ("bash" in interp) or ("/bin/sh" in interp):
@@ -146,7 +146,7 @@ class NonInteractiveInstallProgress(InstallProgress):
                 cmd.append(version.split(":",1)[1].strip())
 
         print cmd
-        logging.debug("re-runing '%s' (%s)" % (cmd, environ))
+        logging.debug("re-running '%s' (%s)" % (cmd, environ))
         ret = subprocess.call(cmd, env=environ)
         logging.debug("%s script returned: %s" % (name,ret))
         
@@ -277,7 +277,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         " ask a Yes/No question and return True on 'Yes' "
         return True
     def confirmRestart(self):
-        " generic ask about the restart, can be overriden "
+        " generic ask about the restart, can be overridden "
 	logging.debug("confirmRestart() called")
         # ignore if we don't have this option
         try:

@@ -51,8 +51,8 @@ if __name__ == "__main__":
             logging.warning("can't import view '%s' (%s)" % (requested_view,e))
             print "can't load %s (%s)" % (requested_view, e)
     else:
-        logging.error("No view can be imported, aboring")
-        print "No view can be imported, aboring"
+        logging.error("No view can be imported, aborting")
+        print "No view can be imported, aborting"
         sys.exit(1)
 
     view = view_class(logdir=logdir)

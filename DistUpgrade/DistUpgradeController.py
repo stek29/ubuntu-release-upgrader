@@ -50,7 +50,7 @@ from DistUpgradeCache import *
 from DistUpgradeApport import *
 
 # some constant
-# the inird space required in /boot for each kernel
+# the initrd space required in /boot for each kernel
 KERNEL_INITRD_SIZE = 10*1024*1024
 
 class NoBackportsFoundException(Exception):
@@ -71,7 +71,7 @@ class AptCdrom(object):
         #      aptsources will do this for us anyway
         
     def add(self, backup_ext=None):
-        " add a cdrom to apts database "
+        " add a cdrom to apt's database "
         logging.debug("AptCdrom.add() called with '%s'", self.cdrompath)
         # do backup (if needed) of the cdroms.list file
         if backup_ext:
@@ -103,10 +103,10 @@ class AptCdrom(object):
         return self.cdrompath is not None
 
 class DistUpgradeController(object):
-    """ this is the controler that does most of the work """
+    """ this is the controller that does most of the work """
     
     def __init__(self, distUpgradeView, options=None, datadir=None):
-        # setup the pathes
+        # setup the paths
         localedir = "/usr/share/locale/update-manager/"
         if datadir == None:
             datadir = os.getcwd()
@@ -246,7 +246,7 @@ class DistUpgradeController(object):
             if res == 0:
                 self._view.information(
                     _("Starting additional sshd"),
-                    _("To make recovery in case of failure easier a "
+                    _("To make recovery in case of failure easier, an "
                       "additional sshd will be started on port '%s'. "
                       "If anything goes wrong with the running ssh "
                       "you can still connect to the additional one.\n"
@@ -282,9 +282,9 @@ class DistUpgradeController(object):
         fetcher.run()
 
     def _pythonSymlinkCheck(self):
-        """ check if sanity check, that /usr/bin/python points to the default
-            python version. Users tend to modify this symlink, which then
-            breaks stuff in obscure ways (Ubuntu #75557)
+        """ sanity check that /usr/bin/python points to the default
+            python version. Users tend to modify this symlink, which
+            breaks stuff in obscure ways (Ubuntu #75557).
         """
         logging.debug("_pythonSymlinkCheck run")
         from ConfigParser import SafeConfigParser, NoOptionError
@@ -365,7 +365,7 @@ class DistUpgradeController(object):
             self.abort()
 
         # FIXME: we may try to find out a bit more about the network
-        # connection here and ask more  inteligent questions
+        # connection here and ask more  intelligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:
             res = self._view.askYesNoQuestion(_("Include latest updates from the Internet?"),
                                               _("The upgrade process can automatically download "
@@ -457,11 +457,11 @@ class DistUpgradeController(object):
                 entry.dist == cdist):
                 entry.dist = self.toDist
                 entry.comps = ["partner"]
-                logging.debug("transitioned commerical to '%s' " % entry)
+                logging.debug("transitioned commercial to '%s' " % entry)
                 continue
 
             logging.debug("examining: '%s'" % entry)
-            # check if it's a mirror (or offical site)
+            # check if it's a mirror (or official site)
             validMirror = self.isMirror(entry.uri)
             if validMirror or not mirror_check:
                 validMirror = True
@@ -531,7 +531,7 @@ class DistUpgradeController(object):
             if res:
                 # re-init the sources and try again
                 self.sources = SourcesList(matcherPath=".")
-                # its ok if rewriteSorucesList fails here if
+                # its ok if rewriteSourcesList fails here if
                 # we do not use a network, the sources.list may be empty
                 if (not self.rewriteSourcesList(mirror_check=False)
                     and self.useNetwork):
@@ -540,7 +540,7 @@ class DistUpgradeController(object):
                     secon = _("After scanning your 'sources.list' no "
                               "valid entry for '%s' was found.\n\n"
                               "Should default entries for '%s' be "
-                              "added? If you select 'No' the update "
+                              "added? If you select 'No', the update "
                               "will cancel.") % (self.fromDist, self.toDist)
                     if not self._view.askYesNoQuestion(prim, secon):
                         self.abort()
@@ -564,7 +564,7 @@ class DistUpgradeController(object):
         # re-check if the written self.sources are valid, if not revert and
         # bail out
         # TODO: check if some main packages are still available or if we
-        #       accidently shot them, if not, maybe offer to write a standard
+        #       accidentally shot them, if not, maybe offer to write a standard
         #       sources.list?
         try:
             sourceslist = apt_pkg.GetPkgSourceList()
@@ -588,7 +588,7 @@ class DistUpgradeController(object):
         return True
 
     def _logChanges(self):
-        # debuging output
+        # debugging output
         logging.debug("About to apply the following changes")
         inst = []
         up = []
@@ -702,7 +702,7 @@ class DistUpgradeController(object):
 
         # this is all a bit complicated
         # 1) check what is mounted (in mounted)
-        # 2) create FreeSpace objects for the dirs we are interessted in
+        # 2) create FreeSpace objects for the dirs we are interested in
         #    (mnt_map)
         # 3) use the  mnt_map to check if we have enough free space and
         #    if not tell the user how much is missing
@@ -753,13 +753,13 @@ class DistUpgradeController(object):
         # we check for various sizes:
         # archivedir is were we download the debs
         # /usr is assumed to get *all* of the install space (incorrect,
-        #      but as good as we can do currently + savety buffer
-        # /     has a small savety buffer as well
+        #      but as good as we can do currently + safety buffer
+        # /     has a small safety buffer as well
         for (dir, size) in [(archivedir, self.cache.requiredDownload),
                             ("/usr", self.cache.additionalRequiredSpace),
-                            ("/usr", 50*1024*1024),  # savetfy buffer /usr
+                            ("/usr", 50*1024*1024),  # safety buffer /usr
                             ("/boot", space_in_boot), 
-                            ("/", 10*1024*1024),     # small savetfy buffer /
+                            ("/", 10*1024*1024),     # small safety buffer /
                            ]:
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
@@ -807,7 +807,7 @@ class DistUpgradeController(object):
             if not self.cache.installTasks(self.tasks):
                 return False
         changes = self.cache.getChanges()
-        # log the changes for debuging
+        # log the changes for debugging
         self._logChanges()
         # check if we have enough free space 
         if not self._checkFreeSpace():
@@ -852,11 +852,11 @@ class DistUpgradeController(object):
         maxRetries = self.config.getint("Network","MaxRetries")
         # FIXME: we get errors like 
         #   "I wasn't able to locate file for the %s package" 
-        #  here sometimes. its unclear why and not reproducable, the 
+        #  here sometimes. its unclear why and not reproducible, the 
         #  current theory is that for some reason the file is not
         #  considered trusted at the moment 
         #  pkgAcquireArchive::QueueNext() runs debReleaseIndex::IsTrused()
-        #  (the later just checks for the existance of the .gpg file)
+        #  (the later just checks for the existence of the .gpg file)
         #  OR 
         #  the fact that we get a pm and fetcher here confuses something
         #  in libapt?
@@ -879,7 +879,7 @@ class DistUpgradeController(object):
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
                          _("The upgrade aborts now. Please check your "\
-                           "internet connection or "\
+                           "Internet connection or "\
                            "installation media and try again. "),
                            "%s" % e)
         # abort here because we want our sources.list back
@@ -933,7 +933,7 @@ class DistUpgradeController(object):
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
                          _("The upgrade aborts now. Please check your "\
-                           "internet connection or "\
+                           "Internet connection or "\
                            "installation media and try again. "),
                            "%s" % e)
         # abort here because we want our sources.list back
@@ -1039,7 +1039,7 @@ class DistUpgradeController(object):
         logging.debug("The following packages are remove candidates: %s" % " ".join([pkg.name for pkg in changes]))
         summary = _("Remove obsolete packages?")
         actions = [_("_Keep"), _("_Remove")]
-        # FIXME Add an explanation about what obsolete pacages are
+        # FIXME Add an explanation about what obsolete packages are
         #explanation = _("")
         if len(changes) > 0 and \
                self._view.confirmChanges(summary, changes, 0, actions, False):
@@ -1132,18 +1132,18 @@ class DistUpgradeController(object):
         
     def from_dapperQuirks(self):
         " this works around quirks for dapper->hardy upgrades "
-        logging.debug("running Controler.from_dapperQuirks handler")
+        logging.debug("running Controller.from_dapperQuirks handler")
         self._rewriteFstab()
         self._checkAdminGroup()
         
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
-        logging.debug("running Controler.gutsyQuirks handler")
+        logging.debug("running Controller.gutsyQuirks handler")
 
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """
-        logging.debug("running Controler.feistyQuirks handler")
+        logging.debug("running Controller.feistyQuirks handler")
         self._rewriteFstab()
         self._checkAdminGroup()
             
@@ -1216,7 +1216,7 @@ class DistUpgradeController(object):
             if self._allBackportsAuthenticated(backportslist):
                 break
             # FIXME: move this to some more generic place
-            logging.debug("setting a cache control header to turn off caching temporarely")
+            logging.debug("setting a cache control header to turn off caching temporarily")
             apt_pkg.Config.Set("Acquire::http::No-Cache","true")
             i += 1
         if i == maxRetries:
@@ -1268,7 +1268,7 @@ class DistUpgradeController(object):
         " add prerequists based on template into the path outfile "
         # go over the sources.list and try to find a valid mirror
         # that we can use to add the backports dir
-        logging.debug("writing prereuists sources.list at: '%s' " % out)
+        logging.debug("writing prerequists sources.list at: '%s' " % out)
         outfile = open(out, "w")
         mirrorlines = self._getPreReqMirrorLines(dumb)
         for line in open(template):
@@ -1347,7 +1347,7 @@ class DistUpgradeController(object):
         os.chdir(backportsdir)
         apt_pkg.Config.Set("Dir::Cache::archives",backportsdir)
 
-        # FIXME: sanity check the origin (just for savetfy)
+        # FIXME: sanity check the origin (just for safety)
         for pkgname in backportslist:
             pkg = self.cache[pkgname]
             # look for the right version (backport)
@@ -1361,7 +1361,7 @@ class DistUpgradeController(object):
                 os.unlink(outpath)
                 return False
             logging.debug("marking '%s' for install" % pkgname)
-            # mvo: autoInst is not availabe on dapper
+            # mvo: autoInst is not available on dapper
             #pkg.markInstall(autoInst=False, autoFix=False)
             pkg.markInstall(autoFix=False)
 
@@ -1396,12 +1396,12 @@ class DistUpgradeController(object):
             logging.debug("extracting udeb '%s' " % deb)
             if os.system("dpkg-deb -x %s %s" % (deb, backportsdir)) != 0:
                 return False
-        # setup some pathes to make sure the new stuff is used
+        # setup some paths to make sure the new stuff is used
         os.environ["LD_LIBRARY_PATH"] = backportsdir+"/usr/lib"
         os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info[1])
         os.environ["PATH"] = "%s:%s" % (backportsdir+"/usr/bin",
                                         os.environ["PATH"])
-        # copy logigng so that it gets not overwritten
+        # copy log so that it gets not overwritten
         logging.shutdown()
         shutil.copy("/var/log/dist-upgrade/main.log",
                     "/var/log/dist-upgrade/main_pre_req.log")
@@ -1495,7 +1495,7 @@ class DistUpgradeController(object):
                 # FIXME: we could offer to add default source entries here,
                 #        but we need to be careful to not duplicate them
                 #        (i.e. the error here could be something else than
-                #        missing sources entires but network errors etc)
+                #        missing sources entries but network errors etc)
                 logging.error("No '%s' after sources.list rewrite+update")
                 self._view.error(_("Invalid package information"),
                                  _("After your package information was "
@@ -1521,7 +1521,7 @@ class DistUpgradeController(object):
 
         # now do the upgrade
         # 
-        # kill update-notifier now to supress reboot required
+        # kill update-notifier now to suppress reboot required
         if os.path.exists("/usr/bin/killall"):
             subprocess.call(["killall","-q","update-notifier"])
         self._view.setStep(DistUpgradeView.STEP_INSTALL)

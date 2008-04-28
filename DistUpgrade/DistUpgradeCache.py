@@ -94,7 +94,7 @@ class MyCache(apt.Cache):
 
     # logging stuff
     def _initAptLog(self):
-        " init loging, create log file"
+        " init logging, create log file"
         logdir = self.config.getWithDefault("Files","LogDir",
                                             "/var/log/dist-upgrade")
         apt_pkg.Config.Set("Dir::Log",logdir)
@@ -102,7 +102,7 @@ class MyCache(apt.Cache):
         self.logfd = os.open(os.path.join(logdir,"apt.log"),
                              os.O_RDWR|os.O_CREAT|os.O_APPEND|os.O_SYNC, 0644)
         os.write(self.logfd, "Log time: %s\n" % datetime.datetime.now())
-        # turn on debuging in the cache
+        # turn on debugging in the cache
         apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
         apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
     def _startAptResolverLog(self):
@@ -140,7 +140,7 @@ class MyCache(apt.Cache):
         return fetcher.FetchNeeded
     @property
     def additionalRequiredSpace(self):
-        """ get the size of the additonal required space on the fs """
+        """ get the size of the additional required space on the fs """
         return self._depcache.UsrSize
     @property
     def isBroken(self):
@@ -286,7 +286,7 @@ class MyCache(apt.Cache):
         # into CD upgrade issues for installed language packs etc
         if bool(self.config.get("Options","withNetwork")):
             logging.debug("Running KeepInstalledSection rules")
-            # now the keepInstalledSection code
+            # now the KeepInstalledSection code
             for section in self.config.getlist("Distro","KeepInstalledSection"):
                 for pkg in self:
                     if pkg.markedDelete and pkg.section == section:
@@ -414,7 +414,7 @@ class MyCache(apt.Cache):
     def feistyQuirks(self):
         """ this function works around quirks in the edgy->feisty upgrade """
         logging.debug("running feistyQuirks handler")
-        # ndisrwapper changed again *sigh*
+        # ndiswrapper changed again *sigh*
         for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
             if self.has_key(fr) and self.has_key(to):
                 if self[fr].isInstalled and not self[to].markedInstall:
@@ -466,7 +466,7 @@ class MyCache(apt.Cache):
             if (pkg.candidateVersion == pkg.installedVersion and
                 "+cvs2006" in pkg.candidateVersion):
                 for ver in pkg._pkg.VersionList:
-                    # the "officual" edgy version has "6.5.1~20060817-0ubuntu3"
+                    # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
                     if "~2006" in ver.VerStr:
 			# ensure that it is from a trusted repo
 			for (VerFileIter, index) in ver.FileList:
@@ -532,8 +532,8 @@ class MyCache(apt.Cache):
 
 
     def checkForKernel(self):
-        """ check for the runing kernel and try to ensure that we have
-            a updated version
+        """ check for the running kernel and try to ensure that we have
+            an updated version
         """
         logging.debug("Kernel uname: '%s' " % self.uname)
         try:
@@ -556,7 +556,7 @@ class MyCache(apt.Cache):
         return True
 
     def checkPriority(self):
-        # tuple of priorites we require to be installed 
+        # tuple of priorities we require to be installed 
         need = ('required', )
         # stuff that its ok not to have
         removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
@@ -585,7 +585,7 @@ class MyCache(apt.Cache):
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
 
-            # check that everythink in priority required is installed
+            # check that everything in priority required is installed
             self.checkPriority()
 
             # see if our KeepInstalled rules are honored
@@ -610,7 +610,7 @@ class MyCache(apt.Cache):
                 raise SystemError, _("A essential package would have to be removed")
         except SystemError, e:
             # this should go into a finally: line, see below for the 
-            # rational why it dosn't 
+            # rationale why it doesn't 
             lock.release()
             t.join()
             # FIXME: change the text to something more useful
@@ -807,9 +807,9 @@ class MyCache(apt.Cache):
     @withResolverLog
     def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
         logging.debug("tryMarkObsoleteForRemoval(): %s" % pkgname)
-        # sanity check, first see if it looks like a runing kernel pkg
+        # sanity check, first see if it looks like a running kernel pkg
         if pkgname.endswith(self.uname):
-            logging.debug("skipping runing kernel pkg '%s'" % pkgname)
+            logging.debug("skipping running kernel pkg '%s'" % pkgname)
             return False
         if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)

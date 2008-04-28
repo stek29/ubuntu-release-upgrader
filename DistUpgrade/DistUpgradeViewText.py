@@ -105,8 +105,8 @@ class DistUpgradeViewText(DistUpgradeView):
       import traceback
       print
       lines = traceback.format_exception(type, value, tb)
-      logging.error("not handled expection:\n%s" % "\n".join(lines))
-      self.error(_("A fatal error occured"),
+      logging.error("not handled exception:\n%s" % "\n".join(lines))
+      self.error(_("A fatal error occurred"),
                  _("Please report this as a bug and include the "
                    "files /var/log/dist-upgrade/main.log and "
                    "/var/log/dist-upgrade/apt.log "

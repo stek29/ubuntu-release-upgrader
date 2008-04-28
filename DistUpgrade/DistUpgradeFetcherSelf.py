@@ -7,7 +7,7 @@ class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
     def __init__(self, new_dist, progress, options, view):
         DistUpgradeFetcherCore.__init__(self,new_dist,progress)
         self.view = view
-        # user seleced to use the network, otherwise it would not be
+        # user chose to use the network, otherwise it would not be
         # possible to download self
         self.run_options += ["--with-network"]
         # make sure to run self with proper options
@@ -21,7 +21,7 @@ class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
 
     def runDistUpgrader(self):
         " overwrite to ensure that the log is copied "
-        # copy logigng so that it gets not overwritten
+        # copy log so it isn't overwritten
         logging.info("runDistUpgrader() called, re-exec self")
         logging.shutdown()
         shutil.copy("/var/log/dist-upgrade/main.log",

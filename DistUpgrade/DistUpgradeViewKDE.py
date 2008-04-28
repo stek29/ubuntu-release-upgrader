@@ -255,7 +255,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         dialogue.exec_loop()
 
     def conffile(self, current, new):
-        """ask question incase conffile has been changed by user"""
+        """ask question in case conffile has been changed by user"""
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
         start = time.time()
         prim = _("Replace the customized configuration file\n'%s'?") % current
@@ -354,7 +354,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         try:
           InstallProgress.updateInterface(self)
         except ValueError, e:
-          logging.error("got ValueError from InstallPrgoress.updateInterface. Line was '%s' (%s)" % (self.read, e))
+          logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
         # check about terminal activity
@@ -501,10 +501,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         # we handle the exception here, hand it to apport and run the
         # apport gui manually after it because we kill u-m during the upgrade
-        # to prevent it from poping up for reboot notifications or FF restart
+        # to prevent it from popping up for reboot notifications or FF restart
         # notifications or somesuch
         lines = traceback.format_exception(exctype, excvalue, exctb)
-        logging.error("not handled expection in KDE frontend:\n%s" % "\n".join(lines))
+        logging.error("not handled exception in KDE frontend:\n%s" % "\n".join(lines))
         # we can't be sure that apport will run in the middle of a upgrade
         # so we still show a error message here
         apport_crash(exctype, excvalue, exctb)
@@ -680,7 +680,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def on_window_main_delete_event(self):
         text = _("""<b><big>Cancel the running upgrade?</big></b>
 
-The system could be in an unusable state if you cancel the upgrade. You are strongly adviced to resume the upgrade.""")
+The system could be in an unusable state if you cancel the upgrade. You are strongly advised to resume the upgrade.""")
         text = text.replace("\n", "<br />")
         cancel = QMessageBox.warning(self.window_main, _("Cancel Upgrade?"), text, QMessageBox.Yes, QMessageBox.No)
         if cancel == QMessageBox.Yes:

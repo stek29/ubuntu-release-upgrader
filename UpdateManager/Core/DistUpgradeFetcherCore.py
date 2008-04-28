@@ -126,10 +126,14 @@ class DistUpgradeFetcherCore(object):
           print "extracting '%s'" % os.path.basename(fname)
           if not os.path.exists(fname):
               return False
-          tar = tarfile.open(self.tmpdir+"/"+os.path.basename(self.uri),"r")
-          for tarinfo in tar:
-              tar.extract(tarinfo)
-          tar.close()
+          try:
+              tar = tarfile.open(self.tmpdir+"/"+os.path.basename(self.uri),"r")
+              for tarinfo in tar:
+                  tar.extract(tarinfo)
+              tar.close()
+          except tarfile.ReadError, e:
+              logging.error("failed to open tarfile (%s)" % e)
+              return False
           return True
 
     def verifyDistUprader(self):

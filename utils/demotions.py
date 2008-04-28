@@ -27,7 +27,7 @@ import shutil
 import urllib
 import logging
 
-ARCHES = ["i386","amd64", "powerpc"]
+ARCHES = ["i386","amd64"]
 #ARCHES = ["i386"]
 
 # pkgs in main for the given dist

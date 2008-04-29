@@ -1416,6 +1416,23 @@ class DistUpgradeController(object):
             os.chmod(sys.argv[0], 0755)
         os.execve(sys.argv[0],args, os.environ)
 
+    def preDoDistUpgrade(self):
+        " this runs right before apt calls out to dpkg "
+        # kill update-notifier now to suppress reboot required
+        if os.path.exists("/usr/bin/killall"):
+            subprocess.call(["killall","-q","update-notifier"])
+        # check theme, crux is known to fail badly when upgraded 
+        # from dapper
+        if (self.fromDist == "dapper" and 
+            "DISPLAY" in os.environ and "SUDO_USER" in os.environ):
+            out = subprocess.Popen(["sudo","-u", os.environ["SUDO_USER"],
+                                    "./theme-switch-helper.py", "-g"],
+                                    stdout=subprocess.PIPE).communicate()[0]
+            if "Crux" in out:
+                subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
+                                    "./theme-switch-helper.py", "--defaults"])
+        return True
+
     # this is the core
     def fullUpgrade(self):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
@@ -1520,10 +1537,7 @@ class DistUpgradeController(object):
             self.abort()
 
         # now do the upgrade
-        # 
-        # kill update-notifier now to suppress reboot required
-        if os.path.exists("/usr/bin/killall"):
-            subprocess.call(["killall","-q","update-notifier"])
+        self.preDoDistUpgrade()
         self._view.setStep(DistUpgradeView.STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():

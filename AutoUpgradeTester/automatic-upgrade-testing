@@ -40,7 +40,7 @@ def createBackend(backend_name, profile, basedir):
         return None
     return backend_class(profile, basedir)
     
-def testUpgrade(backend_name, profile, basedir):
+def testUpgrade(backend_name, profile, basedir, add_pkgs):
     backend = createBackend(backend_name, profile, basedir)
     assert(backend != None)
     os.chdir(basedir)
@@ -65,6 +65,10 @@ def testUpgrade(backend_name, profile, basedir):
             print "FAILED: bootstrap for '%s'" % profile
             flushBuffer(fd)
             return False
+        if add_pkgs:
+            if not backend.installPackages(add_pkgs):
+                print "FAILED: installPacakges '%s'" % add_pkgs
+                return False
         if not backend.upgrade():
             print "FAILED: upgrade for '%s'" % profile
             flushBuffer(fd)
@@ -72,6 +76,7 @@ def testUpgrade(backend_name, profile, basedir):
         if not backend.test():
             print "FAILED: test for '%s'" % profile
             return False
+        print "profile: %s worked" % profile
     except Exception, e:
         import traceback
         traceback.print_exc()
@@ -83,8 +88,12 @@ def testUpgrade(backend_name, profile, basedir):
 if __name__ == "__main__":
 
     parser = OptionParser()
-    parser.add_option("-p", "--profile", dest="profile", default="profile/ubuntu/DistUpgrade.cfg",
+    parser.add_option("-p", "--profile", dest="profile", 
+                      default="profile/ubuntu/DistUpgrade.cfg",
                       help="write report to FILE")
+    parser.add_option("--additinoal", "--additional-pkgs", dest="add_pkgs", 
+                      default="",
+                      help="add additional pkgs before running the upgrade")
     parser.add_option("-a", "--auto", dest="auto", default=False,
                       action="store_true",
                       help="run all tests in profile/ dir")
@@ -129,7 +138,7 @@ if __name__ == "__main__":
             backend = createBackend(options.backend, options.profile, basedir)
             backend.genDiff()
         else:
-            res &= testUpgrade(options.backend, options.profile, basedir)
+            res &= testUpgrade(options.backend, options.profile, basedir, options.add_pkgs.split(","))
     except Exception, e:
         print "ERROR: exception caught '%s' " % e
         import traceback

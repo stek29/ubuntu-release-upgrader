@@ -59,6 +59,10 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
             self._umount(chrootdir)
             return exitstatus
 
+    def installPackages(self, pkgs):
+        #self._runApt(tmpdir, "install", pkgs)
+        raise NotImplementedException
+
     def _runApt(self, tmpdir, command, cmd_options=[]):
         ret = self._runInChroot(tmpdir,
                                 ["/usr/bin/apt-get", command]+self.apt_options+cmd_options)

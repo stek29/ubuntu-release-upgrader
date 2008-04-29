@@ -64,6 +64,12 @@ class UpgradeTestBackend(object):
         os.environ["PATH"] = "/usr/sbin:/usr/bin:/sbin:/bin"
 
 
+    def installPackages(self, pkgs):
+        """
+        install packages in the image
+        """
+        pass
+
     def getSourcesListFile(self):
         """
         creates a temporary sources.list file and returns it to 

@@ -144,6 +144,13 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         return ret
 
 
+    def installPackages(self, pkgs):
+        " install additional pkgs (list) into the vm before the ugprade "
+        self.start()
+        ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y"]+pkgs)
+        self.stop()
+        return (ret == 0)
+
     def genDiff(self):
         """ 
         generate a diff that compares a fresh install to a upgrade.

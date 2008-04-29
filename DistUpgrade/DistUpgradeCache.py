@@ -724,10 +724,14 @@ class MyCache(apt.Cache):
         return installed_tasks
             
     def installTasks(self, tasks):
+        logging.debug("running installTasks")
         for pkg in self:
             if pkg.markedInstall or pkg.isInstalled:
                 continue
             pkg._lookupRecord()
+            if not (hasattr(pkg._records,"Record") and pkg._records.Record):
+                logging.warning("can not find Record for '%s'" % pkg.name)
+                continue
             for line in pkg._records.Record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):

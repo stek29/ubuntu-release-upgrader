@@ -139,6 +139,12 @@ class DistUpgradeController(object):
         self.serverMode = False
         if self.options and self.options.mode == "server":
             self.serverMode = True
+        # if we upgrade from a server CD we run in server mode
+        if cdrompath:
+            p = os.path.join(cdrompath, ".disk","info")
+            if (os.path.exists(p) and 
+                open(p).readline().startswith("Ubuntu-Server ")):
+                self.serverMode = True
         
         # the configuration
         self.config = DistUpgradeConfig(datadir)

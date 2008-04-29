@@ -147,6 +147,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     def installPackages(self, pkgs):
         " install additional pkgs (list) into the vm before the ugprade "
         self.start()
+        self._runInImage(["apt-get","update"])
         ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y"]+pkgs)
         self.stop()
         return (ret == 0)

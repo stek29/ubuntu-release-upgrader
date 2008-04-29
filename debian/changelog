@@ -9,7 +9,7 @@ update-manager (1:0.90.0) intrepid; urgency=low
 
  --
 
-update-manager (1:0.87.26) hardy-proposed; urgency=low
+update-manager (1:0.87.25) hardy-proposed; urgency=low
 
   * DistUpgrade/DistUpgradeApport.py:
     - fix typo in log dir (LP: #223743)
@@ -17,11 +17,12 @@ update-manager (1:0.87.26) hardy-proposed; urgency=low
     - if the "Crux" theme is used on dapper during the upgrade, 
       switch to "Human" because Crux is known to crash 
       (LP: #69124)
-
- -- 
-
-update-manager (1:0.87.25) hardy-proposed; urgency=low
-
+  * DistUpgrade/DistUpgradeCache.py:
+    - do not crash if a meta package is not available in 
+      the cache (e.g. xubuntu-desktop that moved from main 
+      to universe)
+  * DistUpgrade/DistUpgrade.cfg.dapper:
+    - fix incorrect xubuntu-desktop detection
   * DistUpgrade/DistUpgradeView.py:
     - make sure that self.confirmChangesMessage is always 
       initialized (LP: #221023)
@@ -31,8 +32,14 @@ update-manager (1:0.87.25) hardy-proposed; urgency=low
   * DistUpgrade/DistUpgrade.cfg:
     - better detection to missing dependencies to fix
       ubuntustudio-desktop upgrade problem (LP: #219659)
+  * util/demotions.py:
+    - do not consider powerpc anymore, its not available on
+      archive.ubuntu.com anymore
+  * debian/rules:
+    - do not run tests in arch-build target (only useful
+      when there is a development release available to upgrade to)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 28 Apr 2008 17:03:57 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 29 Apr 2008 12:49:16 +0200
 
 update-manager (1:0.87.24) hardy; urgency=low
 

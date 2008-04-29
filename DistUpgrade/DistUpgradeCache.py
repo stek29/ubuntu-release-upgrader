@@ -776,7 +776,7 @@ class MyCache(apt.Cache):
                     logging.debug("guessing '%s' as missing meta-pkg" % key)
                     try:
                         self[key].markInstall()
-                    except SystemError, e:
+                    except (SystemError, KeyError), e:
                         logging.error("failed to mark '%s' for install (%s)" % (key,e))
                         view.error(_("Can't install '%s'" % key),
                                    _("It was impossible to install a "

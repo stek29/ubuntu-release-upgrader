@@ -139,6 +139,12 @@ class DistUpgradeController(object):
         self.serverMode = False
         if self.options and self.options.mode == "server":
             self.serverMode = True
+        # if we upgrade from a server CD we run in server mode
+        if cdrompath:
+            p = os.path.join(cdrompath, ".disk","info")
+            if (os.path.exists(p) and 
+                open(p).readline().startswith("Ubuntu-Server ")):
+                self.serverMode = True
         
         # the configuration
         self.config = DistUpgradeConfig(datadir)
@@ -459,6 +465,15 @@ class DistUpgradeController(object):
                 entry.comps = ["partner"]
                 logging.debug("transitioned commercial to '%s' " % entry)
                 continue
+
+            # special case for landscape.canonical.com because they
+            # don't use a standard archive layout
+            if (not entry.disabled and
+                entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
+                entry.uri = "http://landscape.canonical.com/packages/%s" % self.toDist
+                logging.debug("transitioning landscape.canonical.com to '%s' " % entry)
+                continue
+                
 
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or official site)

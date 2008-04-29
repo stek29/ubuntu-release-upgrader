@@ -466,6 +466,15 @@ class DistUpgradeController(object):
                 logging.debug("transitioned commerical to '%s' " % entry)
                 continue
 
+            # special case for landscape.canonical.com because they
+            # don't use a standard archive layout
+            if (not entry.disabled and
+                entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
+                entry.uri = "http://landscape.canonical.com/packages/%s" % self.toDist
+                logging.debug("transitioning landscape.canonical.com to '%s' " % entry)
+                continue
+                
+
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or offical site)
             validMirror = self.isMirror(entry.uri)

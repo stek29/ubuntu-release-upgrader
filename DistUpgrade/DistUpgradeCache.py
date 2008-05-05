@@ -78,10 +78,10 @@ class MyCache(apt.Cache):
                                        "no archive can be found for it. "
                                        "Do you want to remove this package "
                                        "now to continue?",
-                                       "The packages '%s' is in a inconsistent "
+                                       "The packages '%s' are in a inconsistent "
                                        "state and needs to be reinstalled, but "
-                                       "no archive can be found for it. Do you "
-                                       "want to remove this package now to "
+                                       "no archives can be found for them. Do you "
+                                       "want to remove these packages now to "
                                        "continue?",
                                        len(reqreinst)) % ", ".join(reqreinst)
             if view.askYesNoQuestion(header, summary):

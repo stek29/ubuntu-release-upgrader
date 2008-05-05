@@ -1,6 +1,7 @@
 from ConfigParser import ConfigParser, NoOptionError, NoSectionError
 import subprocess
 import os.path
+import logging
 
 class DistUpgradeConfig(ConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg"):
@@ -30,7 +31,10 @@ class DistUpgradeConfig(ConfigParser):
             filename = self.get(section, option)
         except NoOptionError:
             return []
-        items = [x.strip() for x in open(self.datadir+"/"+filename)]
+        p = os.path.join(self.datadir,filename)
+        if not os.path.exists(p):
+            logging.error("getListFromFile: no '%s' found" % p)
+        items = [x.strip() for x in open(p)]
         return filter(lambda s: not s.startswith("#") and not s == "", items)
 
 

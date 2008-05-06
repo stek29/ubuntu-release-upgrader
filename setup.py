@@ -13,10 +13,11 @@ setup(name='update-manager',
                 'UpdateManager',
                 'UpdateManager.Common',
                 'UpdateManager.Core',
+                'UpdateManagerHildon',
                 'DistUpgrade'
                 ],
       scripts=[
-               'update-manager', "do-release-upgrade"
+               'update-manager', "do-release-upgrade", "update-manager-hildon"
                ],
       data_files=[
                   ('share/update-manager/glade',

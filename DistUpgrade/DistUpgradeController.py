@@ -384,6 +384,7 @@ class DistUpgradeController(object):
                                               'Yes'
                                               )
             self.useNetwork = res
+            self.config.set("Options","withNetwork", str(self.useNetwork))
             logging.debug("useNetwork: '%s' (selected by user)" % res)
             if res:
                 self._tryUpdateSelf()

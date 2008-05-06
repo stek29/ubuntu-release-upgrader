@@ -284,7 +284,8 @@ class MyCache(apt.Cache):
 
         # only enforce section if we have a network. Otherwise we run
         # into CD upgrade issues for installed language packs etc
-        if bool(self.config.get("Options","withNetwork")):
+        network = self.config.get("Options","withNetwork")
+        if network == "True":
             logging.debug("Running KeepInstalledSection rules")
             # now the KeepInstalledSection code
             for section in self.config.getlist("Distro","KeepInstalledSection"):

@@ -167,7 +167,7 @@ class DistUpgradeController(object):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
 
         # we run in full upgrade mode by default
-        self.partialUpgrade = False
+        self._partialUpgrade = False
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
@@ -815,7 +815,7 @@ class DistUpgradeController(object):
                                      self.installed_demotions)
             self._view.updateStatus(_("Calculating the changes"))
         # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode, self.partialUpgrade):
+        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
             return False
 
         if self.serverMode:
@@ -923,7 +923,7 @@ class DistUpgradeController(object):
                 msg = _("The upgrade aborts now. Your system "
                         "could be in an unusable state. A recovery "
                         "will run now (dpkg --configure -a).")
-                if not self.partialUpgrade:
+                if not self._partialUpgrade:
                     if not run_apport():
                         msg += _("\n\nPlease report this bug against the 'update-manager' "
                                  "package and include the files in /var/log/dist-upgrade/ "
@@ -1577,7 +1577,33 @@ class DistUpgradeController(object):
     def run(self):
         self._view.processEvents()
         self.fullUpgrade()
-
+    
+    def doPartialUpgrade(self):
+        " partial upgrade mode, useful for repairing "
+        from DistUpgrade.DistUpgradeView import STEP_PREPARE, STEP_MODIFY_SOURCES, STEP_FETCH, STEP_INSTALL, STEP_CLEANUP, STEP_REBOOT
+        self._view.setStep(STEP_PREPARE)
+        self._view.hideStep(STEP_MODIFY_SOURCES)
+        self._view.hideStep(STEP_REBOOT)
+        self._partialUpgrade = True
+        self.prepare()
+        if not self.doPreUpgrade():
+            return False
+        if not self.askDistUpgrade():
+            return False
+        self._view.setStep(STEP_FETCH)
+        self._view.updateStatus(_("Fetching"))
+        if not self.doDistUpgradeFetching():
+            return False
+        self._view.setStep(STEP_INSTALL)
+        self._view.updateStatus(_("Upgrading"))
+        if not self.doDistUpgrade():
+            return False
+        self._view.setStep(STEP_CLEANUP)
+        if not self.doPostUpgrade():
+            return False
+        self._view.information(_("Upgrade complete"),
+                               _("The partial upgrade was completed."))
+        return True
 
 if __name__ == "__main__":
     from DistUpgradeView import DistUpgradeView

@@ -1,4 +1,4 @@
-update-manager (1:0.90.0) intrepid; urgency=low
+update-manager (1:0.90.0) UNRELEASED; urgency=low
 
   * merged branches:
     - ~alefteris/update-manager/alefteris (thanks!)
@@ -15,8 +15,13 @@ update-manager (1:0.90.0) intrepid; urgency=low
       found
   * DistUpgrade/DistUpgradeCache.py:
     - fix plural form text (LP: #226695)
+  * update-manager-core.install, update-manager.install:
+    - move the DistUpgrade part into update-manager-core
+  * DistUpgrade/DistUpgradeController.py, update-manager, dist-upgrade.py:
+    - move partialUpgrade() functionality into the controller and
+      expose it with --partial in dist-upgrade.py
   
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 06 May 2008 10:02:16 +0200
 
 update-manager (1:0.87.26) hardy-proposed; urgency=low
 
@@ -35,7 +40,7 @@ update-manager (1:0.87.26) hardy-proposed; urgency=low
     - fix translation so that it gets the expected 
       number of arguments (LP: #224294)
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 30 Apr 2008 22:15:44 +0200
 
 update-manager (1:0.87.25) hardy-proposed; urgency=low
 

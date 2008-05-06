@@ -23,6 +23,11 @@ if __name__ == "__main__":
     parser.add_option("--mode", dest="mode",default="desktop",
                       help=_("Use special upgrade mode. Available:\n"\
                              "desktop, server"))
+    parser.add_option("--partial", dest="partial", default=False,
+                      action="store_true", 
+                      help=_("Perform a partial upgrade only (no sources.list rewriting)"))
+    parser.add_option("--datadir", dest="datadir", default=None,
+                      help=_("Set datadir"))
     (options, args) = parser.parse_args()
 
     config = DistUpgradeConfig(".")
@@ -30,14 +35,17 @@ if __name__ == "__main__":
     logdir = config.getWithDefault("Files","LogDir","/var/log/dist-upgrade/")
     if not os.path.exists(logdir):
         os.mkdir(logdir)
+    fname = os.path.join(logdir,"main.log")
+    # do not overwrite the default main.log
+    if options.partial:
+        fname += ".partial"
     logging.basicConfig(level=logging.DEBUG,
-                        filename=os.path.join(logdir,"main.log"),
+                        filename=fname,
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode='w')
 
     from DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)
-
     
     # the commandline overwrites the configfile
     for requested_view in [options.frontend]+config.getlist("View","View"):
@@ -55,11 +63,16 @@ if __name__ == "__main__":
         print "No view can be imported, aborting"
         sys.exit(1)
 
+    # get a view
     view = view_class(logdir=logdir)
-    app = DistUpgradeController(view, options)
+    app = DistUpgradeController(view, options, datadir=options.datadir)
+
+    # partial upgrade only
+    if options.partial:
+        if not app.doPartialUpgrade():
+            sys.exit(1)
+        sys.exit(0)
+
+    # full upgrade
     app.run()
 
-    # testcode to see if the bullets look nice in the dialog
-    #for i in range(4):
-    #    view.setStep(i+1)
-    #    app.openCache()

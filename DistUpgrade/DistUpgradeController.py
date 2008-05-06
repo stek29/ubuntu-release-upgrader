@@ -486,6 +486,7 @@ class DistUpgradeController(object):
                 # need to add one
                 validTo = True
                 if (entry.disabled or
+                    entry.type == "deb-src" or
                     entry.uri.startswith("http://security.ubuntu.com") or
                     entry.uri.startswith("http://archive.canonical.com")):
                     validTo = False

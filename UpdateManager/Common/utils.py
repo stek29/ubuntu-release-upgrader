@@ -23,7 +23,7 @@ def _inhibit_sleep_new_interface():
   import dbus
   bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
   devobj = bus.get_object('org.freedesktop.PowerManagement', 
-                          '/org/freedesktop/PowerManagement')
+                          '/org/freedesktop/PowerManagement/Inhibit')
   dev = dbus.Interface(devobj, "org.freedesktop.PowerManagement.Inhibit")
   cookie = dev.Inhibit('UpdateManager', 'Updating system')
   return (dev, cookie)

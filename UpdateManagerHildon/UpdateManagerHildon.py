@@ -99,6 +99,30 @@ class UpdateManagerHildon(UpdateManager):
           self.glade.get_widget(widget).reparent(self.window)
       self.view = None
 
+  # FIXME: below is still too much duplicated code m'kay
+  def invoke_manager(self, action):
+    # don't display apt-listchanges, we already showed the changelog
+    os.environ["APT_LISTCHANGES_FRONTEND"]="none"
+    os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+    # Do not suspend during the update process
+    (dev, cookie) = inhibit_sleep()
+    # set window to insensitive
+    self.window_main.set_sensitive(False)
+    self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+
+    self.run_synaptic(None, action, None)
+
+    s = _("Reading package information")
+    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
+    self.fillstore()
+
+    # Allow suspend after synaptic is finished
+    if cookie != False:
+        allow_sleep(dev, cookie)
+    self.window_main.set_sensitive(True)
+    self.window_main.window.set_cursor(None)
+    
+
   def run_synaptic(self, id, action, lock):
     try:
       apt_pkg.PkgSystemUnLock()
@@ -128,5 +152,5 @@ class UpdateManagerHildon(UpdateManager):
       print _("run_synaptic called with unknown action")
       sys.exit(1)
     self.view.window_main.hide()
-    lock.release()
+    #lock.release()
 

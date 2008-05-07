@@ -21,7 +21,6 @@
 #  USA
 
 from UpdateManager.UpdateManager import UpdateManager
-from UpdateManager.GtkProgress import GtkFetchProgress
 import hildon
 
 import pygtk
@@ -42,68 +41,46 @@ import os
 # DistUpgrade.DistUpgradeViewGtk.GtkInstallProgressAdapter is better,
 # but requires more effort, and vte.  This is a simpler implementation.
 
-class GtkInstallProgress(apt.progress.InstallProgress):
+from DistUpgrade.DistUpgradeViewGtk import DistUpgradeViewGtk, GtkFetchProgressAdapter, GtkInstallProgressAdapter
+from DistUpgrade.DistUpgradeView import (STEP_PREPARE, 
+                                         STEP_MODIFY_SOURCES, 
+                                         STEP_FETCH, 
+                                         STEP_INSTALL, 
+                                         STEP_CLEANUP, 
+                                         STEP_REBOOT,
+                                         STEP_N)
 
-  def __init__(self,parent, summary="", descr=""):
-    apt.progress.InstallProgress.__init__(self)
-    self.progress = parent.progressbar_cache
-    self.summary = parent.label_fetch_summary
-    self.status = parent.label_fetch_status
-    self.progress = parent.progressbar_fetch
-    self.window_fetch = parent.window_fetch
-    self.window_fetch.set_transient_for(parent.window_main)
-    self.window_fetch.realize()
-    self.window_fetch.window.set_functions(gtk.gdk.FUNC_MOVE)
-    if self.summary != "":
-      self.summary.set_markup("<big><b>%s</b></big> \n\n%s" %
-                              (summary, descr))
+class HildonFetchProgress(GtkFetchProgressAdapter):
+  def __init__(self, parent, header, msg):
+    GtkFetchProgressAdapter.__init__(self, parent)
+    # hide all steps
+    for i in range(1,STEP_N):
+      parent.hideStep(i)
+    parent.label_title.set_markup("<b><big>%s</big></b>" % header)
+  def start(self):
+    GtkFetchProgressAdapter.start(self)
+    # this is only needed when a InstallProgressAdapter is used
+    # in addition to the FetchProgress one - they share the 
+    # same parent
+    self.parent.setStep(STEP_FETCH)
 
+class HildonInstallProgressAdapter(GtkInstallProgressAdapter):
+  def __init__(self, parent, header, msg):
+    GtkInstallProgressAdapter.__init__(self, parent)
+    # hide step not relevant
+    for i in (STEP_PREPARE, 
+              STEP_MODIFY_SOURCES, 
+              STEP_CLEANUP, 
+              STEP_REBOOT):
+      parent.hideStep(i)
+    # and show only those two
+    for i in (STEP_FETCH, 
+                STEP_INSTALL):
+        parent.showStep(i)
+    parent.label_title.set_markup("<b><big>%s</big></b>" % header)
   def startUpdate(self):
-    self.progress.set_fraction(0.0)
-    self.status
-    self.progress.set_text(" ")
-    self.env = ["DEBIAN_FRONTEND=noninteractive", 
-                "APT_LISTCHANGES_FRONTEND=none"]
-    self.start_time = 0.0
-    self.time_ui = 0.0
-    self.last_activity = 0.0
-    self.window_fetch.show()
-
-  def statusChange(self, pkg, percent, status):
-    if self.start_time == 0.0:
-      self.start_time = time.time()
-    self.progress.set_fraction(float(percent)/100.0)
-    if percent > 1.0:
-      self.last_activity = time.time()
-      self.activity_timeout_reported = False
-      delta = self.last_activity - self.start_time
-      time_per_percent = (float(delta)/percent)
-      eta = (100.0 - percent) * time_per_percent
-      if eta > 61.0 and eta < (60*60*24*2):
-        self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(eta))
-      else:
-        self.progress.set_text(" ")
-
-  def updateInterface(self):
-    try:
-      apt.progress.InstallProgress.updateInterface(self)
-    except ValueError, e:
-      logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
-      self.read = ""
-      if self.start_time == 0.0:
-        self.progress.pulse()
-        time.sleep(0.2)
-      if self.last_activity > 0 and \
-          (self.last_activity + self.TIMEOUT_TERMINAL_ACTIVITY) < time.time():
-        if not self.activity_timeout_reported:
-          logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
-          self.activity_timeout_reported = True
-      while gtk.events_pending():
-        gtk.main_iteration()
-      time.sleep(0.02)
-
-  def finishUpdate(self):
-    self.window_fetch.hide()
+    GtkInstallProgressAdapter.startUpdate(self)
+    self.parent.setStep(STEP_INSTALL)
 
 class UpdateManagerHildon(UpdateManager):
 
@@ -111,35 +88,45 @@ class UpdateManagerHildon(UpdateManager):
       UpdateManager.__init__(self, datadir)
       self.program = hildon.Program()
       self.program.__init__()
-        
+
       self.window = hildon.Window()
       self.window.set_title("PyGlade")
       self.program.add_window(self.window)
       print dir(self.glade)
-      for widget in [ "window_main", "dialog_release_notes", "window_fetch", \
-                          "dialog_manual_update", "dialog_cacheprogress", \
-                          "dialog_dist_upgrade" ]:
+      for widget in [ "window_main", "dialog_release_notes", "window_fetch", 
+                      "dialog_manual_update", "dialog_cacheprogress", 
+                      "dialog_dist_upgrade" ]:
           self.glade.get_widget(widget).reparent(self.window)
-
+      self.view = None
 
   def run_synaptic(self, id, action, lock):
     try:
       apt_pkg.PkgSystemUnLock()
     except SystemError:
       pass
+    
+    if self.view == None:
+      self.view = DistUpgradeViewGtk("/usr/share/update-manager")
+      self.view.window_main.set_transient_for(self.window_main)
 
-    fprogress = GtkFetchProgress(self, _("Downloading Package Information"),
+    fprogress = HildonFetchProgress(self.view, 
+                _("Downloading Package Information"),
                 _("The repositories will be checked for new, removed, or "
                   "updated software packages"))
-    iprogress = GtkInstallProgress(self, _("Downloading Package Updates"),
-                _("The selected package updates are being downloaded and "
-                  "installed on the system"))
+    self.view.window_main.show()
+
     if action == INSTALL:
+      iprogress = HildonInstallProgressAdapter(self.view, 
+                    _("Downloading Package Updates"),
+                    _("The selected package updates are being downloaded and "
+                      "installed on the system"))
+
       self.cache.commit(fprogress, iprogress)
     elif action == UPDATE:
       self.cache.update(fprogress)
     else:
       print _("run_synaptic called with unknown action")
       sys.exit(1)
+    self.view.window_main.hide()
     lock.release()
 

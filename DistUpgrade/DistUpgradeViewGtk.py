@@ -461,6 +461,11 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         label = getattr(self,"label_step%i" % step)
         image.hide()
         label.hide()
+    def showStep(self, step):
+        image = getattr(self,"image_step%i" % step)
+        label = getattr(self,"label_step%i" % step)
+        image.show()
+        label.show()
     def abort(self):
         size = gtk.ICON_SIZE_MENU
         step = self.prev_step

@@ -362,8 +362,9 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self.pngloader = gtk.gdk.PixbufLoader("png")
         try:
           self.svgloader = gtk.gdk.PixbufLoader("svg")
+          self.svgloader.close()
         except gobject.GError, e:
-          logging.warning("svg pixbuf loader failed (%s)" % e)
+          logging.debug("svg pixbuf loader failed (%s)" % e)
           pass
         
         self.window_main.realize()

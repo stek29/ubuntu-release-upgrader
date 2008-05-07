@@ -30,6 +30,7 @@ import gtk
 import apt
 import apt_pkg
 from gettext import gettext as _
+from UpdateManager.Common.utils import *
 
 import logging
 import time
@@ -92,7 +93,7 @@ class UpdateManagerHildon(UpdateManager):
       self.window = hildon.Window()
       self.window.set_title("PyGlade")
       self.program.add_window(self.window)
-      print dir(self.glade)
+      #print dir(self.glade)
       for widget in [ "window_main", "dialog_release_notes", "window_fetch", 
                       "dialog_manual_update", "dialog_cacheprogress", 
                       "dialog_dist_upgrade" ]:
@@ -139,18 +140,19 @@ class UpdateManagerHildon(UpdateManager):
                   "updated software packages"))
     self.view.window_main.show()
 
+    # FIXME: add error handling (commit() and update() both can
+    #        throw SystemErrors 
     if action == INSTALL:
       iprogress = HildonInstallProgressAdapter(self.view, 
                     _("Downloading Package Updates"),
                     _("The selected package updates are being downloaded and "
                       "installed on the system"))
-
       self.cache.commit(fprogress, iprogress)
     elif action == UPDATE:
       self.cache.update(fprogress)
     else:
       print _("run_synaptic called with unknown action")
-      sys.exit(1)
+      return False
     self.view.window_main.hide()
     #lock.release()
 

@@ -177,8 +177,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.expander.set_sensitive(True)
         self.term.show()
         # if no libgnome2-perl is installed show the terminal
-        frontend="gnome"
-        if self._cache:
+        frontend= os.environ.get("DEBIAN_FRONTEND") or "gnome"
+        if frontend == "gnome" and self._cache:
           if (not self._cache.has_key("libgnome2-perl") or 
               not self._cache["libgnome2-perl"].isInstalled):
             frontend = "dialog"
@@ -496,7 +496,6 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         label = getattr(self,"label_step%i" % step)
         arrow = getattr(self,"arrow_step%i" % step)
         # check if that step was not hidden with hideStep()
-        print  label.get_property("visible")
         if not label.get_property("visible"):
           return
         arrow.show()

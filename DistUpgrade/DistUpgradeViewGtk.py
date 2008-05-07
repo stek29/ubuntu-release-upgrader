@@ -459,6 +459,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
     def hideStep(self, step):
         image = getattr(self,"image_step%i" % step)
         label = getattr(self,"label_step%i" % step)
+        arrow = getattr(self,"arrow_step%i" % step)
         image.hide()
         label.hide()
     def showStep(self, step):
@@ -494,6 +495,10 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         image = getattr(self,"image_step%i" % step)
         label = getattr(self,"label_step%i" % step)
         arrow = getattr(self,"arrow_step%i" % step)
+        # check if that step was not hidden with hideStep()
+        print  label.get_property("visible")
+        if not label.get_property("visible"):
+          return
         arrow.show()
         image.hide()
         attr = pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1)

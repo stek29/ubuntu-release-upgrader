@@ -152,15 +152,15 @@ class DistUpgradeViewText(DistUpgradeView):
       return False
     def showInPager(self, output):
       " helper to show output in a pager"
-      pager = "/bin/more"
-      if os.path.exists(pager):
-        p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)
-        p.stdin.write(output)
-        p.stdin.close()
-        p.wait()
-      else:
-        print output
-      return
+      for pager in ["/usr/bin/sensible-pager", "/bin/more"]:
+          if os.path.exists(pager):
+              p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)
+              p.stdin.write(output)
+              p.stdin.close()
+              p.wait()
+              return
+      # if we don't have a pager, just print
+      print output
 
     def confirmChanges(self, summary, changes, downloadSize,
                        actions=None, removal_bold=True):

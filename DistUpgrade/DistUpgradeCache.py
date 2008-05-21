@@ -284,8 +284,7 @@ class MyCache(apt.Cache):
 
         # only enforce section if we have a network. Otherwise we run
         # into CD upgrade issues for installed language packs etc
-        network = self.config.get("Options","withNetwork")
-        if network == "True":
+        if self.config.get("Options","withNetwork") == "True":
             logging.debug("Running KeepInstalledSection rules")
             # now the KeepInstalledSection code
             for section in self.config.getlist("Distro","KeepInstalledSection"):
@@ -374,11 +373,13 @@ class MyCache(apt.Cache):
         # evms gives problems, remove it if it is not in use
         self._checkAndRemoveEvms()
         # give the language-support-* packages a extra kick
-        for pkg in self:
-            if (pkg.name.startswith("language-support-") and
-                pkg.isInstalled and
-                not pkg.markedUpgrade):
-                self.markInstall(pkg.name,"extra language-support- kick")
+        # (if we have network, otherwise this will not work)
+        if self.config.get("Options","withNetwork") == "True":
+            for pkg in self:
+                if (pkg.name.startswith("language-support-") and
+                    pkg.isInstalled and
+                    not pkg.markedUpgrade):
+                    self.markInstall(pkg.name,"extra language-support- kick")
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """

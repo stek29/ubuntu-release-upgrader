@@ -177,8 +177,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.expander.set_sensitive(True)
         self.term.show()
         # if no libgnome2-perl is installed show the terminal
-        frontend="gnome"
-        if self._cache:
+        frontend= os.environ.get("DEBIAN_FRONTEND") or "gnome"
+        if frontend == "gnome" and self._cache:
           if (not self._cache.has_key("libgnome2-perl") or 
               not self._cache["libgnome2-perl"].isInstalled):
             frontend = "dialog"
@@ -363,8 +363,9 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         self.pngloader = gtk.gdk.PixbufLoader("png")
         try:
           self.svgloader = gtk.gdk.PixbufLoader("svg")
+          self.svgloader.close()
         except gobject.GError, e:
-          logging.warning("svg pixbuf loader failed (%s)" % e)
+          logging.debug("svg pixbuf loader failed (%s)" % e)
           pass
         
         self.window_main.realize()
@@ -459,8 +460,14 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
     def hideStep(self, step):
         image = getattr(self,"image_step%i" % step)
         label = getattr(self,"label_step%i" % step)
+        arrow = getattr(self,"arrow_step%i" % step)
         image.hide()
         label.hide()
+    def showStep(self, step):
+        image = getattr(self,"image_step%i" % step)
+        label = getattr(self,"label_step%i" % step)
+        image.show()
+        label.show()
     def abort(self):
         size = gtk.ICON_SIZE_MENU
         step = self.prev_step
@@ -489,6 +496,9 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         image = getattr(self,"image_step%i" % step)
         label = getattr(self,"label_step%i" % step)
         arrow = getattr(self,"arrow_step%i" % step)
+        # check if that step was not hidden with hideStep()
+        if not label.get_property("visible"):
+          return
         arrow.show()
         image.hide()
         attr = pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1)

@@ -1,4 +1,4 @@
-update-manager (1:0.90.1) intrepid; urgency=low
+update-manager (1:0.91) intrepid; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
     - fix bug in withNetwork value propergation (LP: #227197)
@@ -15,8 +15,11 @@ update-manager (1:0.90.1) intrepid; urgency=low
   * DistUpgradeView{Gtk,KDE,Text}.py:
     - only overwrite the DEBIAN_FRONTEND if it is not set
       already (thanks to Guy Sheffer)
+  * UpdateManagerHildon/UpdateManagerHildon.py:
+    - add hildon support (thanks to Tollef Fog Heen and
+      Emmet Hikory)
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 21 May 2008 18:01:07 +0200
 
 update-manager (1:0.90.0) intrepid; urgency=low
 
@@ -48,10 +51,12 @@ update-manager (1:0.90.0) intrepid; urgency=low
 update-manager (1:0.87.27) hardy-proposed; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
-    - fix bug in withNetwork value propergation (LP: #227197)
+    - make networkless upgrades more robust (LP: #227197)
   * po/ko.po:
     - fix translation for y/n prompt so that korean users
       can actually continue (LP: #223419)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - work around hang in svg loader (LP: #186465)
 
  --
 

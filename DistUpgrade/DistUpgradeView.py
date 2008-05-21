@@ -120,7 +120,8 @@ class DumbTerminal(object):
  STEP_FETCH,
  STEP_INSTALL,
  STEP_CLEANUP,
- STEP_REBOOT) = range(1,7)
+ STEP_REBOOT,
+ STEP_N) = range(1,8)
 
 ( _("Preparing to upgrade"),
   _("Getting new software channels"),
@@ -164,6 +165,9 @@ class DistUpgradeView(object):
         pass
     def hideStep(self, step):
         " hide a certain step from the GUI "
+        pass
+    def showStep(self, step):
+        " show a certain step from the GUI "
         pass
     def confirmChanges(self, summary, changes, downloadSize,
                        actions=None, removal_bold=True):

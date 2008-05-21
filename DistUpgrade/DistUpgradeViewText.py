@@ -81,7 +81,8 @@ class DistUpgradeViewText(DistUpgradeView):
     def __init__(self, datadir=None, logdir=None):
         # its important to have a debconf frontend for
         # packages like "quagga"
-        os.environ["DEBIAN_FRONTEND"] = "dialog"
+        if not os.environ.has_key("DEBIAN_FRONTEND"):
+            os.environ["DEBIAN_FRONTEND"] = "dialog"
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:

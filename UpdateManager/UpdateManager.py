@@ -876,7 +876,7 @@ class UpdateManager(SimpleGladeApp):
     except SystemError, e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not initialize the package information"),
-                _("A unresolvable problem occurred while "
+                _("An unresolvable problem occurred while "
                   "initializing the package information.\n\n"
                   "Please report this bug against the 'update-manager' "
                   "package and include the following error message:\n"),
@@ -898,7 +898,7 @@ class UpdateManager(SimpleGladeApp):
     except SystemError, e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not calculate the upgrade"),
-                _("A unresolvable problem occurred while "
+                _("An unresolvable problem occurred while "
                   "calculating the upgrade.\n\n"
                   "Please report this bug against the 'update-manager' "
                   "package and include the following error message:"),

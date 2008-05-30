@@ -321,7 +321,7 @@ class DistUpgradeController(object):
         if not (release == self.fromDist or release == self.toDist):
             logging.error("Bad upgrade: '%s' != '%s' " % (release, self.fromDist))
             self._view.error(_("Can not upgrade"),
-                             _("A upgrade from '%s' to '%s' is not "
+                             _("An upgrade from '%s' to '%s' is not "
                                "supported with this tool." % (release, self.toDist)))
             sys.exit(1)
         # setup backports (if we have them)
@@ -635,13 +635,13 @@ class DistUpgradeController(object):
             header = gettext.ngettext("Package in inconsistent state",
                                       "Packages in inconsistent state",
                                       len(reqreinst))
-            summary = gettext.ngettext("The package '%s' is in a inconsistent "
+            summary = gettext.ngettext("The package '%s' is in an inconsistent "
                                        "state and needs to be reinstalled, but "
                                        "no archive can be found for it. "
                                        "Please reinstall the package manually "
                                        "or remove it from the system.",
-                                       "The packages '%s' is in a inconsistent "
-                                       "state and needs to be reinstalled, but "
+                                       "The packages '%s' are in an inconsistent "
+                                       "state and need to be reinstalled, but "
                                        "no archive can be found for it."
                                        "Please reinstall the packages manually "
                                        "or remove them from the system.",

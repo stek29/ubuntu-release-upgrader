@@ -73,12 +73,12 @@ class MyCache(apt.Cache):
             header = gettext.ngettext("Remove package in bad state",
                                       "Remove packages in bad state", 
                                       len(reqreinst))
-            summary = gettext.ngettext("The package '%s' is in a inconsistent "
+            summary = gettext.ngettext("The package '%s' is in an inconsistent "
                                        "state and needs to be reinstalled, but "
                                        "no archive can be found for it. "
                                        "Do you want to remove this package "
                                        "now to continue?",
-                                       "The packages '%s' are in a inconsistent "
+                                       "The packages '%s' are in an inconsistent "
                                        "state and needs to be reinstalled, but "
                                        "no archives can be found for them. Do you "
                                        "want to remove these packages now to "
@@ -616,7 +616,7 @@ class MyCache(apt.Cache):
             lock.release()
             t.join()
             # FIXME: change the text to something more useful
-            details =  _("A unresolvable problem occurred while "
+            details =  _("An unresolvable problem occurred while "
                          "calculating the upgrade.\n\n "
                          "This can be caused by:\n"
                          " * Upgrading to a pre-release version of Ubuntu\n"

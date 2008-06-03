@@ -740,8 +740,9 @@ class UpdateManager(SimpleGladeApp):
       # close when update was successful (its ok to use a Synaptic::
       # option here, it will not get auto-saved, because synaptic does
       # not save options in non-interactive mode)
-      cmd.append("-o")
-      cmd.append("Synaptic::closeZvt=true")
+      if self.gconfclient.get_bool("/apps/update-manager/autoclose_install_window"):
+          cmd.append("-o")
+          cmd.append("Synaptic::closeZvt=true")
       # custom progress strings
       cmd.append("--progress-str")
       cmd.append("%s" % _("Please wait, this can take some time."))

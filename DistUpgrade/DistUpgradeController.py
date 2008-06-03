@@ -321,7 +321,7 @@ class DistUpgradeController(object):
         if not (release == self.fromDist or release == self.toDist):
             logging.error("Bad upgrade: '%s' != '%s' " % (release, self.fromDist))
             self._view.error(_("Can not upgrade"),
-                             _("A upgrade from '%s' to '%s' is not "
+                             _("An upgrade from '%s' to '%s' is not "
                                "supported with this tool." % (release, self.toDist)))
             sys.exit(1)
         # setup backports (if we have them)

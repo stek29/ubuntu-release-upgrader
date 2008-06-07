@@ -79,7 +79,7 @@ from MetaReleaseGObject import MetaRelease
 # - kill "all_changes" and move the changes into the "Update" class
 
 # list constants
-(LIST_CONTENTS, LIST_NAME, LIST_PKG) = range(3)
+(LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN) = range(4)
 
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
@@ -364,7 +364,8 @@ class UpdateManager(SimpleGladeApp):
     self.button_close.connect("clicked", lambda w: self.exit())
 
     # the treeview (move into it's own code!)
-    self.store = gtk.ListStore(str, str, gobject.TYPE_PYOBJECT)
+    self.store = gtk.ListStore(str, str, gobject.TYPE_PYOBJECT, 
+                               gobject.TYPE_PYOBJECT)
     self.treeview_update.set_model(self.store)
     self.treeview_update.set_headers_clickable(True);
 
@@ -379,7 +380,6 @@ class UpdateManager(SimpleGladeApp):
     column_install = gtk.TreeViewColumn("Install", cr)
     column_install.set_cell_data_func (cr, self.install_column_view_func)
     column = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
-    column.set_cell_data_func (tr, self.package_column_view_func)
     column.set_resizable(True)
     major,minor,patch = gtk.pygtk_version
     if (major >= 2) and (minor >= 5):
@@ -387,13 +387,14 @@ class UpdateManager(SimpleGladeApp):
       column_install.set_fixed_width(30)
       column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
       column.set_fixed_width(100)
-      #self.treeview_update.set_fixed_height_mode(True)
+      self.treeview_update.set_fixed_height_mode(True)
 
     self.treeview_update.append_column(column_install)
     column_install.set_visible(True)
     self.treeview_update.append_column(column)
     self.treeview_update.set_search_column(LIST_NAME)
     self.treeview_update.connect("button-press-event", self.show_context_menu)
+    self.treeview_update.connect("row-activated", self.row_activated)
 
 
 
@@ -445,15 +446,7 @@ class UpdateManager(SimpleGladeApp):
           urllib2.install_opener(opener)
           os.putenv("http_proxy",proxy)
 
-  def header_column_func(self, cell_layout, renderer, model, iter):
-    pkg = model.get_value(iter, LIST_PKG)
-    if pkg == None:
-      renderer.set_property("sensitive", False)
-    else:
-      renderer.set_property("sensitive", True)
-
   def install_column_view_func(self, cell_layout, renderer, model, iter):
-    self.header_column_func(cell_layout, renderer, model, iter)
     pkg = model.get_value(iter, LIST_PKG)
     # hide it if we are only a header line
     renderer.set_property("visible", pkg != None)
@@ -466,9 +459,6 @@ class UpdateManager(SimpleGladeApp):
     else: 
         renderer.set_property("activatable", True)
 
-  def package_column_view_func(self, cell_layout, renderer, model, iter):
-    self.header_column_func(cell_layout, renderer, model, iter)
-      
   def setupDbus(self):
     """ this sets up a dbus listener if none is installed alread """
     # check if there is another g-a-i already and if not setup one
@@ -809,6 +799,32 @@ class UpdateManager(SimpleGladeApp):
     self.window_main.set_sensitive(True)
     self.window_main.window.set_cursor(None)
 
+  def row_activated(self, treeview, path, column):
+      print self.list.held_back
+      iter = self.store.get_iter(path)
+      pkg = self.store.get_value(iter, LIST_PKG)
+      origin = self.store.get_value(iter, LIST_ORIGIN)
+      if pkg is not None:
+          return
+      self.setBusy(True)
+      actiongroup = apt_pkg.GetPkgActionGroup(self.cache._depcache)
+      for pkg in self.list.pkgs[origin]:
+          if pkg.markedInstall or pkg.markedUpgrade:
+              #print "marking keep: ", pkg.name
+              pkg.markKeep()
+          elif not (pkg.name in self.list.held_back):
+              #print "marking install: ", pkg.name
+              pkg.markInstall(autoFix=False,autoInst=False)
+      # check if we left breakage
+      if self.cache._depcache.BrokenCount:
+          Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
+          Fix.ResolveByKeep()
+      self.refresh_updates_count()
+      self.treeview_update.queue_draw()
+      del actiongroup
+      self.setBusy(False)
+
+
   def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """
     iter = self.store.get_iter(path)
@@ -918,7 +934,7 @@ class UpdateManager(SimpleGladeApp):
       origin_list.reverse()
       for origin in origin_list:
         self.store.append(['<b><big>%s</big></b>' % origin.description,
-                           origin.description, None])
+                           origin.description, None, origin])
         for pkg in self.list.pkgs[origin]:
           name = xml.sax.saxutils.escape(pkg.name)
           summary = xml.sax.saxutils.escape(pkg.summary)
@@ -926,7 +942,7 @@ class UpdateManager(SimpleGladeApp):
           #TRANSLATORS: the b stands for Bytes
           size = _("(Size: %s)") % humanize_size(pkg.packageSize)
           contents = "%s <small>%s</small>" % (contents, size)
-          self.store.append([contents, pkg.name, pkg])
+          self.store.append([contents, pkg.name, pkg, None])
     self.update_count()
     self.setBusy(False)
     self.check_all_updates_installable()

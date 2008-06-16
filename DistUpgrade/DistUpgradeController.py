@@ -474,7 +474,16 @@ class DistUpgradeController(object):
                 entry.uri = "http://landscape.canonical.com/packages/%s" % self.toDist
                 logging.debug("transitioning landscape.canonical.com to '%s' " % entry)
                 continue
-                
+
+            # special case for old-releases.ubuntu.com, auto transition
+            # them back to archive.ubuntu.com - now this is a problem
+            # of course for people upgrading from EOL release to a 
+            # EOL release
+            if (not entry.disabled and
+                entry.uri.startswith("http://old-releases.ubuntu.com/ubuntu")):
+                entry.uri = "http://archive.ubuntu.com/ubuntu"
+                logging.debug("transitioning old-releases.ubuntu.com to '%s' " % entry)
+                continue
 
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or official site)

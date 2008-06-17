@@ -121,7 +121,9 @@ class ReleaseNotesViewer(gtk.TextView):
     def open_url(self, url):
         """Open the specified URL in a browser"""
         # Find an appropiate browser
-        if os.path.exists('usr/bin/gnome-open'):
+        if os.path.exists("/usr/bin/exo-open"):
+            command = ["exo-open", url]
+        elif os.path.exists('usr/bin/gnome-open'):
             command = ['gnome-open', url]
         else:
             command = ['x-www-browser', url]

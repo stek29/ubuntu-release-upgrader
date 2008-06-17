@@ -171,7 +171,7 @@ class ChangelogViewer(gtk.TextView):
         """Open the specified URL in a browser"""
         # Find an appropiate browser
         if os.path.exists("/usr/bin/exo-open"):
-            command = ["exo-open", uri]
+            command = ["exo-open", url]
         elif os.path.exists('/usr/bin/gnome-open'):
             command = ['gnome-open', url]
         else:

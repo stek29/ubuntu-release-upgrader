@@ -157,3 +157,4 @@ class UpdateManagerHildon(UpdateManager):
     self.view.window_main.hide()
     #lock.release()
 
+  def check_auto_update(self): pass

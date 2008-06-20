@@ -1143,7 +1143,12 @@ class DistUpgradeController(object):
         except KeyError, e:
             logging.warning("System has no admin group (%s)" % e)
             subprocess.call(["addgroup","--system","admin"])
-        admin_group = grp.getgrnam("admin").gr_mem
+        # double paranoia
+        try:
+            admin_group = grp.getgrnam("admin").gr_mem
+        except KeyError, e:
+            logging.warning("adding the admin group failed (%s)" % e)
+            return
         # if the current SUDO_USER is not in the admin group
         # we add him - this is no security issue because
         # the user is already root so adding him to the admin group

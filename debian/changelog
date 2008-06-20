@@ -8,8 +8,19 @@ update-manager (1:0.91.5) intrepid; urgency=low
       (thanks to LaMont Jones) LP: #241723
   * UpdateManager/ChangelogViewer.py:
     - support "exo-open" (xfce) too (LP: #240473)
+  * DistUpgrade/mirrors.cfg:
+    - remove ftp.caliu.info (LP: #231966)
+  * DistUpgrade/DistUpgradeController.py:
+    - fix typo and unfuzzy translations (LP: #220505)
+  * UpdateManager/UpdateManager.py, data/update-manager.schemas.in:
+    - provide a gconf key /apps/update-manager/autoclose_install_window
+      to make it possible to prevent automatic closing of the installation
+      window (LP: #183209)
+  * DistUpgrade/DistUpgrade.cfg.dapper:
+    - remove ports.ubuntu.com from powerpc, it is not available on
+      ports.ubuntu.com but on archive.ubuntu.com (LP: #241729)
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 20 Jun 2008 20:02:50 +0200
 
 update-manager (1:0.91.4) intrepid; urgency=low
 

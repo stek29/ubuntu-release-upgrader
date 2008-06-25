@@ -245,7 +245,7 @@ class MyCache(apt.Cache):
         metapkgs = self.config.getlist("Distro","MetaPkgs")
         for key in metapkgs:
             # if it is installed we are done
-            if self[key].isInstalled:
+            if self.has_key(key) and self[key].isInstalled:
                 logging.debug("needServerMode(): run in 'desktop' mode, (because of pkg '%s')" % key)
                 return False
             # if it is not installed, but its key depends are installed 
@@ -256,7 +256,7 @@ class MyCache(apt.Cache):
             if deps_found:
                 logging.debug("needServerMode(): run in 'desktop' mode, (because of key deps for '%s')" % key)
                 return False
-        logging.debug("needServerMode(): can not find a desktop meta package or key deps, run in dserver mode")
+        logging.debug("needServerMode(): can not find a desktop meta package or key deps, running in server mode")
         return True
 
     def sanityCheck(self, view):

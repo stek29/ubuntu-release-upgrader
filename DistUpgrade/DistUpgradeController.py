@@ -135,17 +135,6 @@ class DistUpgradeController(object):
             cdrompath = None
         self.aptcdrom = AptCdrom(distUpgradeView, cdrompath)
 
-        # we act differently in server mode
-        self.serverMode = False
-        if self.options and self.options.mode == "server":
-            self.serverMode = True
-        # if we upgrade from a server CD we run in server mode
-        if cdrompath:
-            p = os.path.join(cdrompath, ".disk","info")
-            if (os.path.exists(p) and 
-                open(p).readline().startswith("Ubuntu-Server ")):
-                self.serverMode = True
-        
         # the configuration
         self.config = DistUpgradeConfig(datadir)
         self.sources_backup_ext = "."+self.config.get("Files","BackupExt")
@@ -171,10 +160,6 @@ class DistUpgradeController(object):
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"
-        if self.serverMode:
-            os.environ["RELEASE_UPGRADE_MODE"] = "server"
-        else:
-            os.environ["RELEASE_UPGRADE_MODE"] = "desktop"
         os.environ["PYCENTRAL_NO_DPKG_QUERY"] = "1"
         os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
@@ -355,6 +340,14 @@ class DistUpgradeController(object):
             return False
         if not self.cache.sanityCheck(self._view):
             return False
+
+        # now figure out if we need to go into desktop or 
+        # server mode - we use a heuristic for this
+        self.serverMode = self.cache.needServerMode()
+        if self.serverMode:
+            os.environ["RELEASE_UPGRADE_MODE"] = "server"
+        else:
+            os.environ["RELEASE_UPGRADE_MODE"] = "desktop"
 
         if not self.checkViewDepends():
             logging.error("checkViewDepends() failed")

@@ -21,8 +21,7 @@ if __name__ == "__main__":
                       help=_("Use frontend. Currently available: \n"\
                              "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"))
     parser.add_option("--mode", dest="mode",default="desktop",
-                      help=_("Use special upgrade mode. Available:\n"\
-                             "desktop, server"))
+                      help=_("*DEPRECATED* this option will be ignore"))
     parser.add_option("--partial", dest="partial", default=False,
                       action="store_true", 
                       help=_("Perform a partial upgrade only (no sources.list rewriting)"))

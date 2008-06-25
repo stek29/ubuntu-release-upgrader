@@ -229,6 +229,36 @@ class MyCache(apt.Cache):
             pkg = self[name]
             pkg.markInstall(autoFix=False, autoInst=False)
 
+    def needServerMode(self):
+        """ 
+        This checks if we run on a desktop or a server install.
+        
+        A server install has more freedoms, for a desktop install
+        we force a desktop meta package to be install on the upgrade.
+
+        We look for a installed desktop meta pkg and for key 
+        dependencies, if none of those are installed we assume
+        server mode
+        """
+        #logging.debug("needServerMode() run")
+        # check for the MetaPkgs (e.g. ubuntu-desktop)
+        metapkgs = self.config.getlist("Distro","MetaPkgs")
+        for key in metapkgs:
+            # if it is installed we are done
+            if self[key].isInstalled:
+                logging.debug("needServerMode(): run in 'desktop' mode, (because of pkg '%s')" % key)
+                return False
+            # if it is not installed, but its key depends are installed 
+            # we are done too (we auto-select the package later)
+            deps_found = True
+            for pkg in self.config.getlist(key,"KeyDependencies"):
+                deps_found &= self.has_key(pkg) and self[pkg].isInstalled
+            if deps_found:
+                logging.debug("needServerMode(): run in 'desktop' mode, (because of key deps for '%s')" % key)
+                return False
+        logging.debug("needServerMode(): can not find a desktop meta package or key deps, run in dserver mode")
+        return True
+
     def sanityCheck(self, view):
         """ check if the cache is ok and if the required metapkgs
             are installed
@@ -745,14 +775,13 @@ class MyCache(apt.Cache):
     def _installMetaPkgs(self, view):
         # helper for this func
         def metaPkgInstalled():
-            metapkg_found = False
             for key in metapkgs:
                 if self.has_key(key):
                     pkg = self[key]
-                    if (pkg.isInstalled and not pkg.markedDelete) \
-                           or self[key].markedInstall:
-                        metapkg_found=True
-            return metapkg_found
+                    if ((pkg.isInstalled and not pkg.markedDelete) 
+                        or self[key].markedInstall):
+                        return True
+            return False
 
         # now check for ubuntu-desktop, kubuntu-desktop, edubuntu-desktop
         metapkgs = self.config.getlist("Distro","MetaPkgs")
@@ -789,6 +818,7 @@ class MyCache(apt.Cache):
                                      "required package. Please report "
                                      "this as a bug. "))
                         return False
+                    logging.debug("markedInstall: '%s' -> '%s'" % (key, self[key].markedInstall))
         # check if we actually found one
         if not metaPkgInstalled():
             # FIXME: provide a list

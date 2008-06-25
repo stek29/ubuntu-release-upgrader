@@ -1,7 +1,14 @@
 Images created with:
 
-$ bzr get http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 
+[intrepid]
+
+Can use the official ubuntu-vm-builder pacakges]
+
+$ sudo ubuntu-vm-builder kvm intrepid --kernel-flavour generic  --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80000 --arch i386
+
+
+$ bzr get http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 
 [hardy]
 $ ./ubuntu-jeos-builder --vm kvm --kernel-flavour generic --suite hardy --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80G --no-opt

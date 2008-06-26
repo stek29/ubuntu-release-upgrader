@@ -58,15 +58,12 @@ if __name__ == "__main__":
     for pkg in cache:
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",pkg.name])
         if ret != 0:
-            open(os.path.join(basedir,"failures.txt","a").write("%s install" % pkg.name)
+            open(os.path.join(basedir,"failures.txt","a")).write("%s install" % pkg.name)
             backend.saveVMSnapshot("failed-install-%s" % pkg.name)
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","autoremove", "-y",pkg.name])
         if ret != 0:
-            open(os.path.join(basedir,"failures.txt","a").write("%s remove" % pkg.name)
+            open(os.path.join(basedir,"failures.txt","a")).write("%s remove" % pkg.name)
             backend.saveVMSnapshot("failed-autoremove-%s" % pkg.name)
-        t = time.time()
-        backend.restoreVMSnapshot("clean-base")
-        print "restore took: %s" % (time.time()-t)
     
     # all done, stop the backend
     backend.stop()

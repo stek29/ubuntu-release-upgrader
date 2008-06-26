@@ -329,15 +329,21 @@ iface eth0 inet static
         self.qemu_pid.stdin.write("stop\n")
         self.qemu_pid.stdin.write("savevm %s\n" % name)
         self.qemu_pid.stdin.write("cont\n")
+        line = self.qemu_pid.stdout.readline()
+        print line
     def delVMSnapshot(self,name):
         print "delvm"
         self.qemu_pid.stdin.write("delvm %s\n" % name)
+        line = self.qemu_pid.stdout.readline()
+        print line
     def restoreVMSnapshot(self,name):
         print "restorevm"
         # loadvm
         self.qemu_pid.stdin.write("stop\n")
         self.qemu_pid.stdin.write("loadvm %s\n" % name)
         self.qemu_pid.stdin.write("cont\n")
+        line = self.qemu_pid.stdout.readline()
+        print line
 
     def start(self):
         print "Starting qemu"

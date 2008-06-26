@@ -186,7 +186,9 @@ class MyCache(apt.Cache):
             srcrec = srcrecords.Lookup(srcpkg)
             if srcrec:
                 srcver = srcrecords.Version
-                if apt_pkg.VersionCompare(binver, srcver) > 0:
+                #if apt_pkg.VersionCompare(binver, srcver) > 0:
+                #    srcver = binver
+                if not srcver:
                     srcver = binver
                 #print "srcver: %s" % srcver
                 section = srcrecords.Section
@@ -244,14 +246,18 @@ class MyCache(apt.Cache):
             # Print an error if we failed to extract a changelog
             if len(alllines) == 0:
                 alllines = _("The list of changes is not available")
+
             # only write if we where not canceld
             if lock.locked():
                 self.all_changes[name] = [alllines, srcpkg]
-        except urllib2.HTTPError:
+        except urllib2.HTTPError,e:
             if lock.locked():
-                self.all_changes[name] = [_("The list of changes is not "
-                                            "available yet.\nPlease try again "
-                                            "later."), srcpkg]
+                self.all_changes[name] = [
+                    _("The list of changes is not available yet.\n\n"
+                      "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+                      "until the changes become availabble or try again"
+                      "later.") % (srcpkg, srcver),
+                    srcpkg]
         except IOError, httplib.BadStatusLine:
             if lock.locked():
                 self.all_changes[name] = [_("Failed to download the list "

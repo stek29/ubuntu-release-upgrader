@@ -56,15 +56,24 @@ if __name__ == "__main__":
 
     # now see if we can install and remove it again
     for pkg in cache:
+        # try to install it
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",pkg.name])
         if ret != 0:
-            open(os.path.join(basedir,"failures.txt","a")).write("%s install" % pkg.name)
-            backend.saveVMSnapshot("failed-install-%s" % pkg.name)
+            open(os.path.join(basedir,"failures.txt"),"a").write("%s install" % pkg.name)
+            # FIXME: bugger, that does not seem to work, I'm unable
+            # to load the state later again when a new instance of
+            # kvm is loaded :(
+            #backend.saveVMSnapshot("failed-install-%s" % pkg.name)
+            backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
+            continue
+        # now remove it again
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","autoremove", "-y",pkg.name])
         if ret != 0:
-            open(os.path.join(basedir,"failures.txt","a")).write("%s remove" % pkg.name)
-            backend.saveVMSnapshot("failed-autoremove-%s" % pkg.name)
-    
+                open(os.path.join(basedir,"failures.txt"),"a").write("%s remove" % pkg.name)
+                #backend.saveVMSnapshot("failed-autoremove-%s" % pkg.name)
+                backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
+        backend.restoreVMSnapshot("clean-base")
+
     # all done, stop the backend
     backend.stop()
 

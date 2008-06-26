@@ -59,6 +59,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     qemu_binary = "kvm"
     
     qemu_options = [
+        "-monitor","stdio",
         "-localtime",
         "-no-reboot",    # exit on reboot
         "-no-acpi",      # the dapper kernel does not like qemus acpi
@@ -322,6 +323,22 @@ iface eth0 inet static
         
         return True
 
+    def saveVMSnapshot(self,name):
+        # savevm
+        print "savevm"
+        self.qemu_pid.stdin.write("stop\n")
+        self.qemu_pid.stdin.write("savevm %s\n" % name)
+        self.qemu_pid.stdin.write("cont\n")
+    def delVMSnapshot(self,name):
+        print "delvm"
+        self.qemu_pid.stdin.write("delvm %s\n" % name)
+    def restoreVMSnapshot(self,name):
+        print "restorevm"
+        # loadvm
+        self.qemu_pid.stdin.write("stop\n")
+        self.qemu_pid.stdin.write("loadvm %s\n" % name)
+        self.qemu_pid.stdin.write("cont\n")
+
     def start(self):
         print "Starting qemu"
         if self.qemu_pid != None:
@@ -329,7 +346,10 @@ iface eth0 inet static
             return True
         self.qemu_pid = subprocess.Popen([self.qemu_binary,
                                           "-hda", self.image,
-                                          ]+self.qemu_options)
+                                          ]+self.qemu_options,
+                                         stdin=subprocess.PIPE,
+                                         stdout=subprocess.PIPE)
+        self.qemu_pid.stdout.readline()
         
         # spin here until ssh has come up and we can login
         for i in range(900):

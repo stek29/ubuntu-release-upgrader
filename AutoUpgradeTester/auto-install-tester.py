@@ -11,10 +11,12 @@ from UpgradeTestBackend import UpgradeTestBackend
 from UpgradeTestBackendQemu import *
 
 import apt
+import apt_pkg
 
 if __name__ == "__main__":
 
     # create backend
+    apt_pkg.Config.Set("APT::Architecture","i386")
 
     # FIXME: hardcoding pathes sucks
     basedir = "./profile/intrepid-auto-install"
@@ -30,10 +32,15 @@ if __name__ == "__main__":
               "var/cache/apt/archives/partial"]:
         if not os.path.exists(os.path.join(aptbasedir,d)):
             os.makedirs(os.path.join(aptbasedir,d))
-    # write empty status file
-    open(os.path.join(aptbasedir,"var/lib/dpkg/","status"),"w")
 
-    # build apt stuff
+    # copy status file
+    backend.start()
+    print "copy status file"
+    backend._copyFromImage("/var/lib/dpkg/status",
+                           os.path.join(aptbasedir,"var/lib/dpkg/","status"))
+    backend.stop()
+
+    # build apt stuff (outside of the kvm)
     mirror = backend.config.get("NonInteractive","Mirror")
     dist = backend.config.get("Sources","From")
     components = backend.config.getlist("NonInteractive","Components")
@@ -45,8 +52,8 @@ if __name__ == "__main__":
     f.close()
     
     # get a cache
-    cache = apt.Cache(rootdir=aptbasedir) 
-    cache.update()
+    cache = apt.Cache(rootdir=os.path.abspath(aptbasedir))
+    cache.update(apt.progress.TextFetchProgress())
     cache.open(apt.progress.OpProgress())
 
     # now test if we can install stuff
@@ -54,26 +61,55 @@ if __name__ == "__main__":
     backend._runInImage(["apt-get","update"])
     backend.saveVMSnapshot("clean-base")
 
+    # sqlite browser
+    
+    resultdir = os.path.join(basedir,"result")
+    statusfile = open(os.path.join(resultdir,"pkgs_done.txt"),"w")
+    failures = open(os.path.join(resultdir,"failures.txt"),"w")
     # now see if we can install and remove it again
+    i=1
     for pkg in cache:
+        print "\n\nPackage %i of %i (%s)" % (i, len(cache), float(i)/float(len(cache))*100)
+
+        # skip stuff in the ubuntu-minimal that we can't install or upgrade
+        if pkg.isInstalled and not pkg.isUpgradable:
+            continue
+        # see if we can install/upgrade the pkg
+        try:
+            pkg.markInstall()
+        except SystemError, e:
+            pkg.markKeep()
+        if not (pkg.markedInstall or pkg.markedUpgrade):
+            print "pkg: %s not installable" % pkg.name
+            failures.write("%s markInstall()\n " % pkg.name)
+            continue
+        cache._depcache.Init()
+
+        statusfile.write("%s\n" % pkg.name)
         # try to install it
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",pkg.name])
+        print "apt returned: ", ret
         if ret != 0:
-            open(os.path.join(basedir,"failures.txt"),"a").write("%s install" % pkg.name)
+            print "apt returned a error"
+            failures.write("%s install (%s)\n" % (pkg.name,ret))
             # FIXME: bugger, that does not seem to work, I'm unable
             # to load the state later again when a new instance of
             # kvm is loaded :(
             #backend.saveVMSnapshot("failed-install-%s" % pkg.name)
+            time.sleep(5)
             backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
-            continue
         # now remove it again
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","autoremove", "-y",pkg.name])
+        print "apt returned: ", ret
         if ret != 0:
-                open(os.path.join(basedir,"failures.txt"),"a").write("%s remove" % pkg.name)
-                #backend.saveVMSnapshot("failed-autoremove-%s" % pkg.name)
-                backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
+            failures.write("%s remove (%s)\n" % (pkg.name,ret))
+            #backend.saveVMSnapshot("failed-autoremove-%s" % pkg.name)
+            time.sleep(5)
+            backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
         backend.restoreVMSnapshot("clean-base")
-
+        statusfile.flush()
+        failures.flush()
+        i+=1
     # all done, stop the backend
     backend.stop()
 

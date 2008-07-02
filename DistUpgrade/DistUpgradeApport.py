@@ -46,11 +46,15 @@ def apport_pkgfailure(pkg, errormsg):
     return False
 
 def run_apport():
-    for p in ["/usr/share/apport/apport-gtk", "/usr/share/apport/apport-qt"]:
-        if os.path.exists(p):
-            ret = subprocess.call(p)
-            return (ret == 0)
-    logging.debug("can't find apport gui")
+    " run apport, check if we have a display "
+    if "DISPLAY" in os.environ:
+        for p in ["/usr/share/apport/apport-gtk", "/usr/share/apport/apport-qt"]:
+            if os.path.exists(p):
+                ret = subprocess.call(p)
+                return (ret == 0)
+    elif os.path.exists("/usr/bin/apport-cli"):
+        return (subprocess.call("/usr/bin/apport-cli") == 0)
+    logging.debug("can't find apport")
     return False
 
 

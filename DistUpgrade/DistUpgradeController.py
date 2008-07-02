@@ -367,15 +367,19 @@ class DistUpgradeController(object):
         # connection here and ask more  intelligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:
             res = self._view.askYesNoQuestion(_("Include latest updates from the Internet?"),
-                                              _("The upgrade process can automatically download "
+                                              _("The upgrade process can use the internet to "
+                                                "automatically download "
                                                 "the latest updates and install them during the "
-                                                "upgrade.  The upgrade will take longer, but when "
+                                                "upgrade.  If you have a network connection this is "
+                                                "highly recommended.\n\n"
+                                                "The upgrade will take longer, but when "
                                                 "it is complete, your system will be fully up to "
                                                 "date.  You can choose not to do this, but you "
                                                 "should install the latest updates soon after "
-                                                "upgrading."),
-                                              'Yes'
-                                              )
+                                                "upgrading.\n"
+                                                "If you answer 'no' here, the network is not "
+                                                "used at all."),
+                                              'Yes')
             self.useNetwork = res
             self.config.set("Options","withNetwork", str(self.useNetwork))
             logging.debug("useNetwork: '%s' (selected by user)" % res)
@@ -613,12 +617,15 @@ class DistUpgradeController(object):
         up = []
         rm = []
         held = []
+        keep = []
         for pkg in self.cache:
             if pkg.markedInstall: inst.append(pkg.name)
             elif pkg.markedUpgrade: up.append(pkg.name)
             elif pkg.markedDelete: rm.append(pkg.name)
             elif (pkg.isInstalled and pkg.isUpgradable): held.append(pkg.name)
-        logging.debug("Held-back: %s" % " ".join(held))
+            elif pkg.markedKeep: keep.append(pkg.name)
+        logging.debug("Keep at same version: %s" % " ".join(keep))
+        logging.debug("Upgradable, but held- back: %s" % " ".join(held))
         logging.debug("Remove: %s" % " ".join(rm))
         logging.debug("Install: %s" % " ".join(inst))
         logging.debug("Upgrade: %s" % " ".join(up))

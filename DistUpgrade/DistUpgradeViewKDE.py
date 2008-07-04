@@ -239,6 +239,9 @@ class KDEInstallProgressAdapter(InstallProgress):
     def error(self, pkg, errormsg):
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+	# we do not report followup errors from earlier failures
+        if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
+	  return False
         summary = _("Could not install '%s'") % pkg
         msg = _("The upgrade will continue but the '%s' package may be "
                 "in a not working state. Please consider submitting a "

@@ -367,7 +367,7 @@ class DistUpgradeController(object):
         # connection here and ask more  intelligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:
             res = self._view.askYesNoQuestion(_("Include latest updates from the Internet?"),
-                                              _("The upgrade process can use the internet to "
+                                              _("The upgrade system can use the internet to "
                                                 "automatically download "
                                                 "the latest updates and install them during the "
                                                 "upgrade.  If you have a network connection this is "

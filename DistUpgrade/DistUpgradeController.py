@@ -1575,6 +1575,10 @@ class DistUpgradeController(object):
             # run the post install scripts (for stuff like UUID conversion)
             self.runPostInstallScripts()
             # don't abort here, because it would restore the sources.list
+            self._view.information(_("Upgrade complete"),
+                                   _("The upgrade is completed but there "
+                                     "were errors during the ugprade "
+                                     "process."))
             sys.exit(1) 
             
         # do post-upgrade stuff

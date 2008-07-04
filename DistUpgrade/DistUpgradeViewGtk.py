@@ -308,7 +308,7 @@ class GtkInstallProgressAdapter(InstallProgress):
           self.parent.expander_terminal.set_expanded(True)
         while gtk.events_pending():
             gtk.main_iteration()
-	time.sleep(0.02)
+	time.sleep(0.005)
 
 class DistUpgradeVteTerminal(object):
   def __init__(self, parent, term):

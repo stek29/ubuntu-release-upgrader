@@ -50,10 +50,7 @@ class MetaReleaseCore(object):
 
     # some constants
     CONF = "/etc/update-manager/release-upgrades"
-    METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
-    METARELEASE_URI_LTS = "http://changelogs.ubuntu.com/meta-release-lts"
-    METARELEASE_URI_UNSTABLE_POSTFIX = "-development"
-    METARELEASE_URI_PROPOSED_POSTFIX = "-proposed"
+    CONF_METARELEASE = "/etc/update-manager/meta-release"
 
     def __init__(self, 
                  useDevelopmentRelease=False, 
@@ -64,10 +61,29 @@ class MetaReleaseCore(object):
         self.downloading = True
         self.new_dist = None
         self.no_longer_supported = None
+
+        # check the meta-release config first
+        parser = ConfigParser()
+        if os.path.exists(self.CONF_METARELEASE):
+            parser.read(self.CONF_METARELEASE)
+            # make changing the metarelease file and the location
+            # for the files easy
+            if parser.has_section("METARELEASE"):
+                sec = "METARELEASE"
+                for k in ["URI",
+                          "URI_LTS",
+                          "URI_UNSTABLE_POSTFIX",
+                          "URI_PROPOSED_POSTFIX"]:
+                    if parser.has_option(sec, k):
+                        self._debug("%s: %s " % (self.CONF_METARELEASE,
+                                                 parser.get(sec,k)))
+                        setattr(self, "%s_%s" % (sec, k), parser.get(sec, k))
+
         # check the config file first to figure if we want lts upgrades only
         parser = ConfigParser()
         if os.path.exists(self.CONF):
             parser.read(self.CONF)
+            # now check which specific url to use
             if parser.has_option("DEFAULT","Prompt"):
                 type = parser.get("DEFAULT","Prompt").lower()
                 if (type == "never" or type == "no"):
@@ -86,6 +102,7 @@ class MetaReleaseCore(object):
         elif useProposed:
             self.METARELEASE_URI += self.METARELEASE_URI_PROPOSED_POSTFIX
 
+        self._debug("metarelease-uri: %s" % self.METARELEASE_URI)
         self._buildMetaReleaseFile()
         self.metarelease_information = None
         # we start the download thread here and we have a timeout

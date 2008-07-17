@@ -221,8 +221,19 @@ class DistUpgradeFetcherCore(object):
                     "with the network or with the server. "))
             self.cleanup()
             return
-        self.runDistUpgrader()
-
+        try:
+          self.runDistUpgrader()
+        except OSError, e:
+          if e.errno == 13:
+            self.error(_("Can not run the upgrade"),
+                       _("This usually is caused by a system were /tmp "
+                         "is mounted noexec. Please remount without "
+                         "noexec and run the upgrade again."))
+            return False
+          else:
+            self.error(_("Can not run the upgrade"),
+                       _("The error message is '%s'." % e.strerror))
+        return True
 
 if __name__ == "__main__":
     self.error("summary","message")

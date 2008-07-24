@@ -42,7 +42,9 @@ class NonInteractiveFetchProgress(FetchProgress):
         FetchProgress.updateStatus(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt.progress.FetchProgress.dlDone:
-            print "fetched %s" % uri
+            print "fetched %s (%.2f)" % (uri, self.percent)
+            if sys.stdout.isatty():
+                sys.stdout.flush()
         
 
 class NonInteractiveInstallProgress(InstallProgress):

@@ -383,6 +383,14 @@ class MyCache(apt.Cache):
         return True
 
 
+    def intrepidQuirks(self):
+        """ 
+        this function works around quirks in the 
+        hardy->intrepid upgrade 
+        """
+        # empty currently
+        pass
+
     def hardyQuirks(self):
         """ 
         this function works around quirks in the 
@@ -528,40 +536,41 @@ class MyCache(apt.Cache):
             self.markRemove("nvidia-settings")
             self.markInstall("nvidia-glx")
 
-    def checkThirdPartyQuirks(self):
-        """
-        this function checks for common third party packages and tries
-        to work around issues with them
-        """
-        # envy
-        if (os.path.exists("/var/log/envy-installer.log") and
-            os.path.getsize("/var/log/envy-installer.log") > 0):
-            logging.warning("envy detected, trying to workaround")
-            toDist = self.config.get("Sources","To")
-            pkgs = ["nvidia-glx","nvidia-glx-new","nvidia-glx-legacy"] 
-            # downgrade installed to ubuntu version
-            for name in pkgs:
-                if not self.has_key(name):
-                    continue
-                pkg = self[name]
-                if (pkg.candidateVersion == pkg.installedVersion and
-                    not pkg.candidateDownloadable):
-                    logging.debug("found non-downloadable '%s' " % name)
-                    for ver in pkg._pkg.VersionList:
-                        if ver.FileList:
-                            for (VerFileIter, index) in ver.FileList:
-				indexfile = self._list.FindIndex(VerFileIter)
-                                if (indexfile and 
-                                    indexfile.IsTrusted and
-                                    toDist in indexfile.Describe):
-                                    logging.info("Forcing downgrade of '%s' because of envy" % name)
-                                    self._depcache.SetCandidateVer(pkg._pkg, ver)
-                                    pkg.markInstall()
-                                    break
-        # ...
-        return
-                
 
+    def checkForNvidia(self):
+        """ 
+        this checks for nvidia hardware and checks what driver is needed
+        """
+        logging.debug("nvidiaUpdate()")
+        # if the free drivers would give us a equally hard time, we would
+        # never be able to release
+        try:
+            from NvidiaDetector.nvidiadetector import NvidiaDetection
+        except ImportError, e:
+            logging.error("NvidiaDetector can not be imported %s" % e)
+            return False
+        try:
+            # get new detection module and use the modalises files
+            # from within the release-upgrader
+            nv = NvidiaDetection(datadir="modaliases/")
+            #nv = NvidiaDetection()
+            # check if a binary driver is installed now
+            for oldDriver in nv.oldPackages:
+                if self.has_key(oldDriver) and self[oldDriver].isInstalled:
+                    break
+            else:
+                logging.info("no nvidia driver installed before, installing none")
+                return False
+            # check which one to use
+            driver = nv.selectDriver()
+            if (self.has_key(driver) and not
+                (self[driver].markedInstall or self[driver].markedUpgrade)):
+                self[driver].markInstall()
+                logging.info("installing %s as suggested by NvidiaDetector" % driver)
+                return True
+        except Exception, e:
+            logging.error("NvidiaDetection returned a error: %s" % e)
+        return False
 
     def checkForKernel(self):
         """ check for the running kernel and try to ensure that we have
@@ -629,8 +638,8 @@ class MyCache(apt.Cache):
             # check if we got a new kernel
             self.checkForKernel()
 
-            # check for third party stuff (envy)
-            self.checkThirdPartyQuirks()
+            # check for nvidia stuff
+            self.checkForNvidia()
 
             # install missing meta-packages (if not in server upgrade mode)
             if not serverMode:
@@ -931,8 +940,11 @@ class MyCache(apt.Cache):
 if __name__ == "__main__":
 	import DistUpgradeConfigParser
         import DistUpgradeView
+        print "foo"
 	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
                     DistUpgradeView.DistUpgradeView())
+        c.checkForNvidia()
+        sys.exit()
 	c.clear()
         c.create_snapshot()
         c.installedTasks

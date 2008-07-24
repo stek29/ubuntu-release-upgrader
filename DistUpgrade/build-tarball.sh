@@ -32,6 +32,10 @@ if [ ! -h $DIST ]; then
 	ln -s dist-upgrade.py $DIST
 fi
 
+# copy the nvidia-modaliases files
+mkdir modaliases
+cp /usr/share/jockey/modaliases/nvidia-* modaliases
+
 # create the tarball, copy links in place 
 tar -c -h -z -v --exclude=$DIST.tar.gz --exclude=$0 -X build-exclude.txt -f $DIST.tar.gz  .
 

@@ -41,7 +41,6 @@ from DistUpgradeApport import *
 
 from DistUpgradeController import DistUpgradeController
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
-#FIXME import bits here
 
 import select
 import gettext
@@ -310,7 +309,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         return self.child_pid
 
     def statusChange(self, pkg, percent, status):
-        #FIXME TODO
         """update progress bar and label"""
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
@@ -400,7 +398,7 @@ class UpgraderMainWindow(QWidget):
     def closeEvent(self, event):
         close = self.parent.on_window_main_delete_event()
         if close:
-            event.accept()#FIXME needs ignore?
+            event.accept()
         else:
             event.ignore()
 
@@ -614,7 +612,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         self.changesDialogue.label_changes.setText(msg)
         # fill in the details
         self.changesDialogue.treeview_details.clear()
-        self.changesDialogue.treeview_details.setHeaderLabels(["Packages"]) #FIXME l10n (hide header)
+        self.changesDialogue.treeview_details.setHeaderLabels(["Packages"])
         self.changesDialogue.treeview_details.setHeaderHidden(True)
         for rm in self.toRemove:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )

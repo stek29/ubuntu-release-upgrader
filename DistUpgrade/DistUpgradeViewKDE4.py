@@ -723,6 +723,15 @@ class DistUpgradeViewKDE4(DistUpgradeView):
             self.changesDialogue.show_details_button.setText("<<< " + _("Details"))
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
+    def askYesNoQuestion(self, summary, msg, default='No'):
+        answer = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode("<font>") + unicode(msg, 'UTF-8'), QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
+        if answer == QMessageBox.Yes:
+            return True
+        return False
+
+    def processEvents(self):
+        QApplication.processEvents()
+
     def on_window_main_delete_event(self):
         #FIXME make this user friendly
         text = _("""<b><big>Cancel the running upgrade?</big></b>

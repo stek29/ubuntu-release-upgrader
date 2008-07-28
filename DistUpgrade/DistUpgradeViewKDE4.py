@@ -149,7 +149,6 @@ class KDEFetchProgressAdapter(FetchProgress):
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
-        print "KDEFetchProgressAdapter"
         FetchProgress.__init__(self)
         # if this is set to false the download will cancel
         self.status = parent.window_main.label_status
@@ -164,18 +163,15 @@ class KDEFetchProgressAdapter(FetchProgress):
       return False
 
     def start(self):
-        print "KDEFetchProgressAdapter start"
         #self.progress.show()
         self.progress.setValue(0)
         self.status.show()
 
     def stop(self):
-        print "KDEFetchProgressAdapter stop"
         self.parent.window_main.progress_text.setText("  ")
         self.status.setText(_("Fetching is complete"))
 
     def pulse(self):
-        print "KDEFetchProgressAdapter pulse"
         """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
@@ -341,16 +337,13 @@ class KDEInstallProgressAdapter(InstallProgress):
         it's also important to sleep for a minimum amount of time
         """
         # log the output of dpkg (on the master_fd) to the terminal log
-        print "updateInterface top"
         while True:
             try:
                 (rlist, wlist, xlist) = select.select([self.master_fd],[],[], 0)
                 if len(rlist) > 0:
                     line = os.read(self.master_fd, 255)
                     self._terminal_log.write(line)
-                    print "updateInterface"
                     self.parent.terminal_text.insertWithTermCodes(utf8(line))
-                    print "updateInterface, inserted"
                 else:
                     break
             except Exception, e:
@@ -552,7 +545,6 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         if self.prev_step:
             image = getattr(self.window_main,"image_step%i" % self.prev_step)
             label = getattr(self.window_main,"label_step%i" % self.prev_step)
-            print "image: " + str(type(image))
             image.setPixmap(okIcon)
             image.show()
             ##arrow.hide()

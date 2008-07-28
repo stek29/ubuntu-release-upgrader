@@ -132,7 +132,7 @@ class KDEFetchProgressAdapter(FetchProgress):
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
         FetchProgress.pulse(self)
-        self.progress.setProgress(self.percent)
+        self.progress.setValue(self.percent)
         currentItem = self.currentItems + 1
         if currentItem > self.totalItems:
             currentItem = self.totalItems

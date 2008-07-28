@@ -534,16 +534,15 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         """start konqueror"""
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
-        QDesktopServices.openUrl(url)
+        QDesktopServices.openUrl(QUrl(url))
 
     def reportBug(self):
         """start konqueror"""
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
-        QDesktopServices.openUrl("https://launchpad.net/ubuntu/+source/update-manager/+filebug")
+        QDesktopServices.openUrl(QUrl("https://launchpad.net/ubuntu/+source/update-manager/+filebug"))
 
     def showTerminal(self):
-        error("foo", "moo", "waa")
         if self.window_main.konsole_frame.isVisible():
             self.window_main.konsole_frame.hide()
             self.window_main.showTerminalButton.setText(_("Show Terminal >>>"))

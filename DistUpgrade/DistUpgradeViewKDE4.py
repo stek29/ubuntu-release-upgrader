@@ -518,12 +518,13 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         ##FIXMEuic.loadUi("%s/window_main.ui" % UIDIR, self)
         uic.loadUi("dialog_changes.ui", self.changesDialogue)
 
-        """
         self.changesDialogue.treeview_details.hide()
         self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
         self.translate_widget_children(self.changesDialogue)
         self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
+
+        self.changesDialogue.question_pixmap.setPixmap(QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-warning.png"))
 
         if actions != None:
             cancel = actions[0].replace("_", "")
@@ -536,18 +537,28 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         self.changesDialogue.label_changes.setText(msg)
         # fill in the details
         self.changesDialogue.treeview_details.clear()
-        self.changesDialogue.treeview_details.setColumnText(0, "Packages")
+        self.changesDialogue.treeview_details.setHeaderLabels(["Packages"]) #FIXME l10n (hide header)
         for rm in self.toRemove:
-            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Remove %s") % rm) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )
         for inst in self.toInstall:
-            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Install %s") % inst) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Install %s") % inst]) )
         for up in self.toUpgrade:
-            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Upgrade %s") % up) )
-        """
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Upgrade %s") % up]) )
+
+        #FIXME resize label, stop it being shrinkable
         res = self.changesDialogue.exec_()
         if res == QDialog.Accepted:
             return True
         return False
+
+    def showChangesDialogueDetails(self):
+        if self.changesDialogue.treeview_details.isVisible():
+            self.changesDialogue.treeview_details.hide()
+            self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        else:
+            self.changesDialogue.treeview_details.show()
+            self.changesDialogue.show_details_button.setText("<<< " + _("Details"))
+        self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
     def on_window_main_delete_event(self):
         #FIXME make this user friendly

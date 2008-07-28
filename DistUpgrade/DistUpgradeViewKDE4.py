@@ -543,6 +543,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         QDesktopServices.openUrl("https://launchpad.net/ubuntu/+source/update-manager/+filebug")
 
     def showTerminal(self):
+        error("foo", "moo", "waa")
         if self.window_main.konsole_frame.isVisible():
             self.window_main.konsole_frame.hide()
             self.window_main.showTerminalButton.setText(_("Show Terminal >>>"))

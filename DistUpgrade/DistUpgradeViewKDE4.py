@@ -56,7 +56,6 @@ def utf8(str):
 
 def loadUi(file, parent):
     if os.path.exists(file):
-        print "loading file: " + file
         uic.loadUi(file, parent)
     else:
         #FIXME find file
@@ -530,6 +529,18 @@ class DistUpgradeViewKDE4(DistUpgradeView):
             dialog.crash_detail.setText(tbtext)
             dialog.exec_()
         sys.exit(1)
+
+    def openURL(self, url):
+        """start konqueror"""
+        #need to run this else kdesu can't run Konqueror
+        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
+        QDesktopServices.openUrl(url)
+
+    def reportBug(self):
+        """start konqueror"""
+        #need to run this else kdesu can't run Konqueror
+        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
+        QDesktopServices.openUrl("https://launchpad.net/ubuntu/+source/update-manager/+filebug")
 
     def showTerminal(self):
         if self.window_main.konsole_frame.isVisible():

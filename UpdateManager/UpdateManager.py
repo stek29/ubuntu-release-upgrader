@@ -255,7 +255,7 @@ class MyCache(apt.Cache):
                 self.all_changes[name] = [
                     _("The list of changes is not available yet.\n\n"
                       "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-                      "until the changes become availabble or try again "
+                      "until the changes become available or try again "
                       "later.") % (srcpkg, srcver),
                     srcpkg]
         except IOError, httplib.BadStatusLine:

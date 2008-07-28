@@ -444,7 +444,6 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         ###self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
-        """
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
         copyXauth = tempfile.mktemp("", "adept")
         if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
@@ -468,7 +467,6 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         subprocess.call(["killall", "adept_manager"])
         subprocess.call(["killall", "adept_updater"])
 
-        """
         # init gettext
         gettext.bindtextdomain("update-manager",localedir)
         gettext.textdomain("update-manager")
@@ -553,6 +551,28 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
     def getCdromProgress(self):
         return self._cdromProgress
+
+    def updateStatus(self, msg):
+        self.window_main.label_status.setText(utf8(msg))
+
+    def hideStep(self, step):
+        image = getattr(self.window_main,"image_step%i" % step)
+        label = getattr(self.window_main,"label_step%i" % step)
+        image.hide()
+        label.hide()
+
+    def abort(self):
+        step = self.prev_step
+        if step > 0:
+            image = getattr(self.window_main,"image_step%i" % step)
+            if os.path.exists("/usr/share/icons/oxygen/16x16/action/dialog-cancel.png"):
+                cancalIcon = QPixmap("/usr/share/icons/oxygen/16x16/action/dialog-cancel.png")
+            elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/action/dialog-cancel.png"):
+                cancelIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/action/dialog-cancel.png")
+            else:
+                cancelIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/cancel.png")
+            image.setPixmap(cancelIcon)
+            image.show()
 
     def setStep(self, step):
         if os.path.exists("/usr/share/icons/oxygen/16x16/status/task-complete.png"):

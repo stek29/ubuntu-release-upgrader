@@ -47,6 +47,34 @@ import select
 import gettext
 from gettext import gettext as gett
 
+def _(str):
+    return unicode(gett(str), 'UTF-8')
+
+def utf8(str):
+  if isinstance(str, unicode):
+      return str
+  return unicode(str, 'UTF-8')
+
+class KDEOpProgress(apt.progress.OpProgress):
+  """ methods on the progress bar """
+  def __init__(self, progressbar, progressbar_label):
+      self.progressbar = progressbar
+      self.progressbar_label = progressbar_label
+      #self.progressbar.set_pulse_step(0.01)
+      #self.progressbar.pulse()
+
+  def update(self, percent):
+      #if percent > 99:
+      #    self.progressbar.set_fraction(1)
+      #else:
+      #    self.progressbar.pulse()
+      #self.progressbar.set_fraction(percent/100.0)
+      self.progressbar.setValue(percent)
+      QApplication.processEvents()
+
+  def done(self):
+      self.progressbar_label.setText("")
+
 # inherit from the class created in window_main.ui
 # to add the handler for closing the window
 class UpgraderMainWindow(QWidget):
@@ -62,7 +90,9 @@ class UpgraderMainWindow(QWidget):
     def closeEvent(self, event):
         close = self.parent.on_window_main_delete_event()
         if close:
-          event.accept()#FIXME needs ignore?
+            event.accept()#FIXME needs ignore?
+        else:
+            event.ignore()
 
 class DistUpgradeViewKDE4(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
@@ -92,10 +122,10 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         self.window_main.setParent(self)
         self.window_main.show()
 
-        """
         self.prev_step = 0 # keep a record of the latest step
 
         self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache, self.window_main.progress_text)
+        """
         self._fetchProgress = KDEFetchProgressAdapter(self)
         self._cdromProgress = KDECdromProgressAdapter(self)
 
@@ -150,3 +180,14 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         QTimer.singleShot(10, self.exitMainLoop)
         """
         self.app.exec_()
+
+    def on_window_main_delete_event(self):
+        #FIXME make this user friendly
+        text = _("""<b><big>Cancel the running upgrade?</big></b>
+
+The system could be in an unusable state if you cancel the upgrade. You are strongly advised to resume the upgrade.""")
+        text = text.replace("\n", "<br />")
+        cancel = QMessageBox.warning(self.window_main, _("Cancel Upgrade?"), text, QMessageBox.Yes, QMessageBox.No)
+        if cancel == QMessageBox.Yes:
+            return True
+        return False

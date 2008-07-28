@@ -55,6 +55,54 @@ def utf8(str):
       return str
   return unicode(str, 'UTF-8')
 
+class DumbTerminal(QTextEdit):
+    """ A very dumb terminal """
+    def __init__(self, installProgress, parent_frame):
+        " really dumb terminal with simple editing support "
+        QTextEdit.__init__(self, "", parent_frame)
+        self.installProgress = installProgress
+        self.setFontFamily("Monospace")
+        self.setFontPointSize(8)
+        self.setWordWrapMode(QTextOption.NoWrap)
+        self.setUndoRedoEnabled(False)
+        self._block = False
+        self.connect(self, SIGNAL("cursorPositionChanged()"), 
+                     self.onCursorPositionChanged)
+
+    def insertWithTermCodes(self, text):
+        """ support basic terminal codes """
+        display_text = ""
+        for c in text:
+            # \b - backspace
+            if c == chr(8):
+                self.moveCursor(QTextEdit.MoveBackward, QTextCursor.KeepAnchor)
+                self.cut() #self.removeSelectedText()  FIXME
+            # \r - is filtered out
+            elif c == chr(13):
+                pass
+            # \a - bell - ignore for now
+            elif c == chr(7):
+                pass
+            else:
+                display_text += c
+        self.insertPlainText(display_text)
+
+    def keyPressEvent(self, ev):
+        """ send (ascii) key events to the pty """
+        # FIXME: use ev.text() here instead and deal with
+        # that it sends strange stuff
+        if hasattr(self.installProgress, "master_fd"):
+            os.write(self.installProgress.master_fd, chr(ev.ascii()))
+
+    def onCursorPositionChanged(self):
+        """ helper that ensures that the cursor is always at the end """
+        if self._block:
+            return
+        # block signals so that we do not run into a recursion
+        self._block = True
+        self.moveCursor(QTextCursor.End)
+        self._block = False
+
 class KDECdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress """
     def __init__(self, parent):
@@ -293,13 +341,16 @@ class KDEInstallProgressAdapter(InstallProgress):
         it's also important to sleep for a minimum amount of time
         """
         # log the output of dpkg (on the master_fd) to the terminal log
+        print "updateInterface top"
         while True:
             try:
                 (rlist, wlist, xlist) = select.select([self.master_fd],[],[], 0)
                 if len(rlist) > 0:
                     line = os.read(self.master_fd, 255)
                     self._terminal_log.write(line)
+                    print "updateInterface"
                     self.parent.terminal_text.insertWithTermCodes(utf8(line))
+                    print "updateInterface, inserted"
                 else:
                     break
             except Exception, e:
@@ -394,10 +445,12 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
         # reasonable fault handler
         sys.excepthook = self._handleException
+        """
 
         ###self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
+        """
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
         copyXauth = tempfile.mktemp("", "adept")
         if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
@@ -427,18 +480,15 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         gettext.textdomain("update-manager")
         self.translate_widget_children()
         self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", "Kubuntu"))
-        """
 
         # setup terminal text in hidden by default spot
         self.window_main.konsole_frame.hide()
         self.konsole_frame_layout = QHBoxLayout(self.window_main.konsole_frame)
         self.window_main.konsole_frame.setMinimumSize(600, 400)
-        self.terminal_text = DumbTerminal(self._installProgress, 
-                                          self.window_main.konsole_frame)
+        self.terminal_text = DumbTerminal(self._installProgress, self.window_main.konsole_frame)
         self.konsole_frame_layout.addWidget(self.terminal_text)
         self.terminal_text.show()
 
-        """
         # for some reason we need to start the main loop to get everything displayed
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
         QTimer.singleShot(10, self.exitMainLoop)
@@ -461,6 +511,15 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
             if str(widget.text()) != "":
                 widget.setText(_(str(widget.text())))
+
+    def showTerminal(self):
+        if self.window_main.konsole_frame.isVisible():
+            self.window_main.konsole_frame.hide()
+            self.window_main.showTerminalButton.setText(_("Show Terminal >>>"))
+        else:
+            self.window_main.konsole_frame.show()
+            self.window_main.showTerminalButton.setText(_("<<< Hide Terminal"))
+        self.window_main.resize(self.window_main.sizeHint())
 
     def getFetchProgress(self):
         return self._fetchProgress

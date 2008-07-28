@@ -506,6 +506,49 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         image.show()
         label.setText("<b>" + label.text() + "</b>")
 
+    def confirmChanges(self, summary, changes, downloadSize, 
+                       actions=None, removal_bold=True):
+        """show the changes dialogue"""
+        # FIXME: add a whitelist here for packages that we expect to be
+        # removed (how to calc this automatically?)
+        print "confirmChanges"
+        DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
+        msg = unicode(self.confirmChangesMessage, 'UTF-8')
+        self.changesDialogue = QDialog(self.window_main)
+        ##FIXMEuic.loadUi("%s/window_main.ui" % UIDIR, self)
+        uic.loadUi("dialog_changes.ui", self.changesDialogue)
+
+        """
+        self.changesDialogue.treeview_details.hide()
+        self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
+        self.translate_widget_children(self.changesDialogue)
+        self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        self.changesDialogue.resize(self.changesDialogue.sizeHint())
+
+        if actions != None:
+            cancel = actions[0].replace("_", "")
+            self.changesDialogue.button_cancel_changes.setText(cancel)
+            confirm = actions[1].replace("_", "")
+            self.changesDialogue.button_confirm_changes.setText(confirm)
+
+        summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
+        self.changesDialogue.label_summary.setText(summaryText)
+        self.changesDialogue.label_changes.setText(msg)
+        # fill in the details
+        self.changesDialogue.treeview_details.clear()
+        self.changesDialogue.treeview_details.setColumnText(0, "Packages")
+        for rm in self.toRemove:
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Remove %s") % rm) )
+        for inst in self.toInstall:
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Install %s") % inst) )
+        for up in self.toUpgrade:
+            self.changesDialogue.treeview_details.insertItem( QListViewItem(self.changesDialogue.treeview_details, _("Upgrade %s") % up) )
+        """
+        res = self.changesDialogue.exec_()
+        if res == QDialog.Accepted:
+            return True
+        return False
+
     def on_window_main_delete_event(self):
         #FIXME make this user friendly
         text = _("""<b><big>Cancel the running upgrade?</big></b>

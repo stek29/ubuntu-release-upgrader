@@ -56,6 +56,7 @@ def utf8(str):
 
 def loadUi(file, parent):
     if os.path.exists(file):
+        print "loading file: " + file
         uic.loadUi(file, parent)
     else:
         #FIXME find file
@@ -565,10 +566,10 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         step = self.prev_step
         if step > 0:
             image = getattr(self.window_main,"image_step%i" % step)
-            if os.path.exists("/usr/share/icons/oxygen/16x16/action/dialog-cancel.png"):
-                cancalIcon = QPixmap("/usr/share/icons/oxygen/16x16/action/dialog-cancel.png")
-            elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/action/dialog-cancel.png"):
-                cancelIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/action/dialog-cancel.png")
+            if os.path.exists("/usr/share/icons/oxygen/16x16/actions/dialog-cancel.png"):
+                cancelIcon = QPixmap("/usr/share/icons/oxygen/16x16/actions/dialog-cancel.png")
+            elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-cancel.png"):
+                cancelIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-cancel.png")
             else:
                 cancelIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/cancel.png")
             image.setPixmap(cancelIcon)
@@ -603,6 +604,54 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         image.show()
         label.setText("<b>" + label.text() + "</b>")
 
+    def information(self, summary, msg, extended_msg=None):
+        msg = "<big><b>%s</b></big><br />%s" % (summary,msg)
+
+        dialogue = QDialog(self.window_main)
+        loadUi("dialog_error.ui", dialogue)
+        dialogue.label_error.setText(utf8(msg))
+        if extended_msg != None:
+            dialogue.textview_error.setText(utf8(extended_msg))
+            dialogue.textview_error.show()
+        else:
+            dialogue.textview_error.hide()
+        dialogue.button_bugreport.hide()
+        dialogue.setWindowTitle(_("Information"))
+
+        if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-information.png"):
+            messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-information.png")
+        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-information.png"):
+            messageIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-information.png")
+        else:
+            messageIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_info.png")
+        dialogue.image.setPixmap(messageIcon)
+        dialogue.exec_()
+
+    def error(self, summary, msg, extended_msg=None):
+        msg="<big><b>%s</b></big><br />%s" % (summary, msg)
+
+        dialogue = QDialog(self.window_main)
+        loadUi("dialog_error.ui", dialogue)
+        dialogue.label_error.setText(utf8(msg))
+        if extended_msg != None:
+            dialogue.textview_error.setText(utf8(extended_msg))
+            dialogue.textview_error.show()
+        else:
+            dialogue.textview_error.hide()
+        dialogue.button_close.show()
+        self.app.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
+
+        if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-error.png"):
+            messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-error.png")
+        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-error.png"):
+            messageIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-error.png")
+        else:
+            messageIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_critical.png")
+        dialogue.image.setPixmap(messageIcon)
+        dialogue.exec_()
+
+        return False
+
     def confirmChanges(self, summary, changes, downloadSize, 
                        actions=None, removal_bold=True):
         """show the changes dialogue"""
@@ -619,7 +668,14 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
-        self.changesDialogue.question_pixmap.setPixmap(QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-warning.png"))
+        if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-warning.png"):
+            warningIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-warning.png")
+        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-warning.png"):
+            warningIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-warning.png")
+        else:
+            warningIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_warning.png")
+
+        self.changesDialogue.question_pixmap.setPixmap(warningIcon)
 
         if actions != None:
             cancel = actions[0].replace("_", "")

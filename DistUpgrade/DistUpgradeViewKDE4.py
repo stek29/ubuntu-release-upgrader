@@ -476,6 +476,36 @@ class DistUpgradeViewKDE4(DistUpgradeView):
     def getCdromProgress(self):
         return self._cdromProgress
 
+    def setStep(self, step):
+        if os.path.exists("/usr/share/icons/oxygen/16x16/status/task-complete.png"):
+            okIcon = QPixmap("/usr/share/icons/oxygen/16x16/status/task-complete.png")
+        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/status/task-complete.png"):
+            okIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/status/task-complete.png")
+        else:
+            okIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/ok.png")
+
+        if os.path.exists("/usr/share/icons/oxygen/16x16/actions/arrow-right.png"):
+            arrowIcon = QPixmap("/usr/share/icons/oxygen/16x16/actions/arrow-right.png")
+        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/actions/arrow-right.png"):
+            arrowIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/actions/arrow-right.png")
+        else:
+            arrowIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png")
+
+        if self.prev_step:
+            image = getattr(self.window_main,"image_step%i" % self.prev_step)
+            label = getattr(self.window_main,"label_step%i" % self.prev_step)
+            print "image: " + str(type(image))
+            image.setPixmap(okIcon)
+            image.show()
+            ##arrow.hide()
+        self.prev_step = step
+        # show the an arrow for the current step and make the label bold
+        image = getattr(self.window_main,"image_step%i" % step)
+        label = getattr(self.window_main,"label_step%i" % step)
+        image.setPixmap(arrowIcon)
+        image.show()
+        label.setText("<b>" + label.text() + "</b>")
+
     def on_window_main_delete_event(self):
         #FIXME make this user friendly
         text = _("""<b><big>Cancel the running upgrade?</big></b>

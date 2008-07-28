@@ -55,6 +55,13 @@ def utf8(str):
       return str
   return unicode(str, 'UTF-8')
 
+def loadUi(file, parent):
+    if os.path.exists(file):
+        uic.loadUi(file, parent)
+    else:
+        #FIXME find file
+        print "error, can't find file: " + file
+
 class DumbTerminal(QTextEdit):
     """ A very dumb terminal """
     def __init__(self, installProgress, parent_frame):
@@ -229,7 +236,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.parent.window_main.showTerminalButton.setEnabled(True)
 
     def error(self, pkg, errormsg):
-        #FIXME TODO
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         # we do not report followup errors from earlier failures
@@ -240,7 +246,9 @@ class KDEInstallProgressAdapter(InstallProgress):
                 "in a not working state. Please consider submitting a "
                 "bugreport about it.") % pkg
         msg = "<big><b>%s</b></big><br />%s" % (summary, msg)
-        dialogue = dialog_error(self.parent.window_main)
+
+        dialogue = QDialog(self.parent.window_main)
+        loadUi("dialog_error.ui", dialogue)
         dialogue.label_error.setText(utf8(msg))
         if errormsg != None:
             dialogue.textview_error.setText(utf8(errormsg))
@@ -248,11 +256,10 @@ class KDEInstallProgressAdapter(InstallProgress):
         else:
             dialogue.textview_error.hide()
         dialogue.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
-        dialogue.exec_loop()
+        dialogue.exec_()
 
     def conffile(self, current, new):
         """ask question in case conffile has been changed by user"""
-        #FIXME TODO
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
         start = time.time()
         prim = _("Replace the customized configuration file\n'%s'?") % current
@@ -260,7 +267,8 @@ class KDEInstallProgressAdapter(InstallProgress):
                 "configuration file if you choose to replace it with "
                 "a newer version.")
         markup = "<span weight=\"bold\" size=\"larger\">%s </span> \n\n%s" % (prim, sec)
-        self.confDialogue = dialog_conffile(self.parent.window_main)
+        self.confDialogue = QDialog(self.parent.window_main)
+        loadUi("dialog_conffile.ui", self.confDialogue)
         self.confDialogue.label_conffile.setText(markup)
         self.confDialogue.textview_conffile.hide()
         #FIXME, below to be tested
@@ -274,7 +282,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           self.confDialogue.textview_conffile.setText(diff)
         else:
           self.confDialogue.textview_conffile.setText(_("The 'diff' command was not found"))
-        result = self.confDialogue.exec_loop()
+        result = self.confDialogue.exec_()
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if result == QDialog.Accepted:
@@ -283,7 +291,6 @@ class KDEInstallProgressAdapter(InstallProgress):
             os.write(self.master_fd, "n\n")
 
     def showConffile(self):
-        #FIXME TODO
         if self.confDialogue.textview_conffile.isVisible():
             self.confDialogue.textview_conffile.hide()
             self.confDialogue.show_difference_button.setText(_("Show Difference >>>"))
@@ -293,12 +300,11 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def fork(self):
         """pty voodoo"""
-        #FIXME TODO
         (self.child_pid, self.master_fd) = pty.fork()
         if self.child_pid == 0:
             os.environ["TERM"] = "dumb"
             if not os.environ.has_key("DEBIAN_FRONTEND"):
-                os.environ["DEBIAN_FRONTEND"] = "kde"
+                os.environ["DEBIAN_FRONTEND"] = "noninteractive"
             os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         logging.debug(" fork pid is: %s" % self.child_pid)
         return self.child_pid
@@ -331,7 +337,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText("")
 
     def updateInterface(self):
-        #FIXME TODO
         """
         no mainloop in this application, just call processEvents lots here
         it's also important to sleep for a minimum amount of time
@@ -386,8 +391,8 @@ class UpgraderMainWindow(QWidget):
 
     def __init__(self):
         QWidget.__init__(self)
-        ##FIXMEuic.loadUi("%s/window_main.ui" % UIDIR, self)
-        uic.loadUi("window_main.ui", self)
+        #uic.loadUi("window_main.ui", self)
+        loadUi("window_main.ui", self)
 
     def setParent(self, parentRef):
         self.parent = parentRef
@@ -434,11 +439,9 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         self._cdromProgress = KDECdromProgressAdapter(self)
 
         self._installProgress = KDEInstallProgressAdapter(self)
-        """
 
         # reasonable fault handler
         sys.excepthook = self._handleException
-        """
 
         ###self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
@@ -505,6 +508,32 @@ class DistUpgradeViewKDE4(DistUpgradeView):
             if str(widget.text()) != "":
                 widget.setText(_(str(widget.text())))
 
+    def _handleException(self, exctype, excvalue, exctb):
+        """Crash handler."""
+
+        if (issubclass(exctype, KeyboardInterrupt) or
+            issubclass(exctype, SystemExit)):
+            return
+
+        # we handle the exception here, hand it to apport and run the
+        # apport gui manually after it because we kill u-m during the upgrade
+        # to prevent it from popping up for reboot notifications or FF restart
+        # notifications or somesuch
+        lines = traceback.format_exception(exctype, excvalue, exctb)
+        logging.error("not handled exception in KDE frontend:\n%s" % "\n".join(lines))
+        # we can't be sure that apport will run in the middle of a upgrade
+        # so we still show a error message here
+        apport_crash(exctype, excvalue, exctb)
+        if not run_apport():
+            tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
+            dialog = QDialog(self.window_main)
+            loadUi("dialog_error.ui", dialog)
+            #FIXME make URL work
+            #dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
+            dialog.crash_detail.setText(tbtext)
+            dialog.exec_()
+        sys.exit(1)
+
     def showTerminal(self):
         if self.window_main.konsole_frame.isVisible():
             self.window_main.konsole_frame.hide()
@@ -564,8 +593,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
         msg = unicode(self.confirmChangesMessage, 'UTF-8')
         self.changesDialogue = QDialog(self.window_main)
-        ##FIXMEuic.loadUi("%s/window_main.ui" % UIDIR, self)
-        uic.loadUi("dialog_changes.ui", self.changesDialogue)
+        loadUi("dialog_changes.ui", self.changesDialogue)
 
         self.changesDialogue.treeview_details.hide()
         self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
@@ -587,6 +615,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         # fill in the details
         self.changesDialogue.treeview_details.clear()
         self.changesDialogue.treeview_details.setHeaderLabels(["Packages"]) #FIXME l10n (hide header)
+        self.changesDialogue.treeview_details.setHeaderHidden(True)
         for rm in self.toRemove:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )
         for inst in self.toInstall:

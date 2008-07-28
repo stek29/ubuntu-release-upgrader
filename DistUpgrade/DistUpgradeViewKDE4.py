@@ -185,6 +185,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.parent.window_main.showTerminalButton.setEnabled(True)
 
     def error(self, pkg, errormsg):
+        #FIXME TODO
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         # we do not report followup errors from earlier failures
@@ -207,6 +208,7 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def conffile(self, current, new):
         """ask question in case conffile has been changed by user"""
+        #FIXME TODO
         logging.debug("got a conffile-prompt from dpkg for file: '%s'" % current)
         start = time.time()
         prim = _("Replace the customized configuration file\n'%s'?") % current
@@ -237,16 +239,17 @@ class KDEInstallProgressAdapter(InstallProgress):
             os.write(self.master_fd, "n\n")
 
     def showConffile(self):
+        #FIXME TODO
         if self.confDialogue.textview_conffile.isVisible():
             self.confDialogue.textview_conffile.hide()
             self.confDialogue.show_difference_button.setText(_("Show Difference >>>"))
         else:
             self.confDialogue.textview_conffile.show()
             self.confDialogue.show_difference_button.setText(_("<<< Hide Difference"))
-       
 
     def fork(self):
         """pty voodoo"""
+        #FIXME TODO
         (self.child_pid, self.master_fd)  = pty.fork()
         if self.child_pid == 0:
             os.environ["TERM"] = "dumb"
@@ -257,7 +260,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         return self.child_pid
 
     def statusChange(self, pkg, percent, status):
+        #FIXME TODO
         """update progress bar and label"""
+        #FIXME TODO
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
@@ -283,6 +288,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.label_status.setText("")
 
     def updateInterface(self):
+        #FIXME TODO
         """
         no mainloop in this application, just call processEvents lots here
         it's also important to sleep for a minimum amount of time
@@ -416,11 +422,13 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         subprocess.call(["killall", "adept_manager"])
         subprocess.call(["killall", "adept_updater"])
 
+        """
         # init gettext
         gettext.bindtextdomain("update-manager",localedir)
         gettext.textdomain("update-manager")
         self.translate_widget_children()
         self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", "Kubuntu"))
+        """
 
         # setup terminal text in hidden by default spot
         self.window_main.konsole_frame.hide()
@@ -440,6 +448,20 @@ class DistUpgradeViewKDE4(DistUpgradeView):
     def exitMainLoop(self):
         print "exitMainLoop"
         self.app.exit()
+
+    def translate_widget_children(self, parentWidget=None):
+        if parentWidget == None:
+            parentWidget = self.window_main
+
+        if parentWidget.children() != None:
+            for widget in parentWidget.children():
+                self.translate_widget(widget)
+                self.translate_widget_children(widget)
+
+    def translate_widget(self, widget):
+        if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
+            if str(widget.text()) != "":
+                widget.setText(_(str(widget.text())))
 
     def getFetchProgress(self):
         return self._fetchProgress

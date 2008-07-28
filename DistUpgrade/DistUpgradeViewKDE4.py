@@ -250,7 +250,7 @@ class KDEInstallProgressAdapter(InstallProgress):
     def fork(self):
         """pty voodoo"""
         #FIXME TODO
-        (self.child_pid, self.master_fd)  = pty.fork()
+        (self.child_pid, self.master_fd) = pty.fork()
         if self.child_pid == 0:
             os.environ["TERM"] = "dumb"
             if not os.environ.has_key("DEBIAN_FRONTEND"):
@@ -262,12 +262,11 @@ class KDEInstallProgressAdapter(InstallProgress):
     def statusChange(self, pkg, percent, status):
         #FIXME TODO
         """update progress bar and label"""
-        #FIXME TODO
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
-        self.progress.setProgress(self.percent)
+        self.progress.setValue(self.percent)
         self.label_status.setText(unicode(status.strip(), 'UTF-8'))
         # start showing when we gathered some data
         if percent > 1.0:
@@ -326,7 +325,7 @@ class KDEInstallProgressAdapter(InstallProgress):
                 logging.warning("no activity on terminal for %s seconds" % (self.TIMEOUT_TERMINAL_ACTIVITY))
             self.activity_timeout_reported = True
           self.parent.window_main.konsole_frame.show()
-        KApplication.kApplication().processEvents()
+        QApplication.processEvents()
         time.sleep(0.02)
 
     def waitChild(self):
@@ -511,7 +510,6 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         """show the changes dialogue"""
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
-        print "confirmChanges"
         DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
         msg = unicode(self.confirmChangesMessage, 'UTF-8')
         self.changesDialogue = QDialog(self.window_main)

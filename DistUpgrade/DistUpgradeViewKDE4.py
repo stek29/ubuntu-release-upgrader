@@ -96,10 +96,12 @@ class DumbTerminal(QTextEdit):
 
     def keyPressEvent(self, ev):
         """ send (ascii) key events to the pty """
-        # FIXME: use ev.text() here instead and deal with
-        # that it sends strange stuff
+        # filter out stuff like shift-key etc
+        if not ev.text():
+            return
+        # now sent the key event to the termianl as utf-8
         if hasattr(self.installProgress, "master_fd"):
-            os.write(self.installProgress.master_fd, chr(ev.ascii()))
+            os.write(self.installProgress.master_fd, ev.text().toUtf8())
 
     def onCursorPositionChanged(self):
         """ helper that ensures that the cursor is always at the end """

@@ -71,6 +71,7 @@ class DumbTerminal(QTextEdit):
         self.setFontPointSize(8)
         self.setWordWrapMode(QTextOption.NoWrap)
         self.setUndoRedoEnabled(False)
+        self.setOverwriteMode(True)
         self._block = False
         self.connect(self, SIGNAL("cursorPositionChanged()"), 
                      self.onCursorPositionChanged)
@@ -121,7 +122,7 @@ class KDECdromProgressAdapter(apt.progress.CdromProgress):
         if text:
           self.status.setText(text)
         self.progressbar.setValue(step/float(self.totalSteps))
-        KApplication.processEvents()
+        QApplication.processEvents()
 
     def askCdromName(self):
         return (False, "")
@@ -742,3 +743,28 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
         if cancel == QMessageBox.Yes:
             return True
         return False
+
+if __name__ == "__main__":
+
+  if sys.argv[1] == "--test-term":
+      view = DistUpgradeViewKDE4()
+      for c in open(sys.argv[2]).read():
+          view.terminal_text.insertWithTermCodes( c )
+          #print c, ord(c)
+          QApplication.processEvents()
+          time.sleep(0.05)
+      while True:
+          QApplication.processEvents()
+
+  view = DistUpgradeViewKDE4()
+  cache = apt.Cache()
+  for pkg in sys.argv[1:]:
+    if cache[pkg].isInstalled and not cache[pkg].isUpgradable: 
+      cache[pkg].markDelete(purge=True)
+    else:
+      cache[pkg].markInstall()
+  cache.commit(view._fetchProgress,view._installProgress)
+
+  # keep the window open
+  while True:
+      QApplication.processEvents()

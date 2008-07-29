@@ -782,11 +782,17 @@ class MyCache(apt.Cache):
         return True
     
     def _installMetaPkgs(self, view):
-        # helper for this func
+
         def metaPkgInstalled():
+            """ 
+            internal helper that checks if at least one meta-pkg is 
+            installed or marked install
+            """
             for key in metapkgs:
                 if self.has_key(key):
                     pkg = self[key]
+                    if pkg.isInstalled and pkg.markedDelete:
+                        logging.debug("metapkg '%s' installed but markedDelete" % pkg.name)
                     if ((pkg.isInstalled and not pkg.markedDelete) 
                         or self[key].markedInstall):
                         return True

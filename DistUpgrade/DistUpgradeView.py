@@ -42,6 +42,7 @@ def FuzzyTimeToStr(sec):
 
 class FetchProgress(apt.progress.FetchProgress):
   def __init__(self):
+    #print "init FetchProgress in DistUpgradeView"
     apt.progress.FetchProgress.__init__(self)
     self.est_speed = 0
   def pulse(self):

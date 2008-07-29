@@ -73,17 +73,32 @@ class DumbTerminal(QTextEdit):
         self.setUndoRedoEnabled(False)
         self.setOverwriteMode(True)
         self._block = False
-        self.connect(self, SIGNAL("cursorPositionChanged()"), 
-                     self.onCursorPositionChanged)
+        #self.connect(self, SIGNAL("cursorPositionChanged()"), 
+        #             self.onCursorPositionChanged)
+
+    def fork(self):
+        """pty voodoo"""
+        (self.child_pid, self.installProgress.master_fd) = pty.fork()
+        if self.child_pid == 0:
+            os.environ["TERM"] = "dumb"
+        return self.child_pid
+
+    def updateInterface(self):
+        (rlist, wlist, xlist) = select.select([self.installProgress.master_fd],[],[], 0)
+        if len(rlist) > 0:
+            line = os.read(self.installProgress.master_fd, 255)
+            self.insertWithTermCodes(utf8(line))
+        QApplication.processEvents()
 
     def insertWithTermCodes(self, text):
         """ support basic terminal codes """
         display_text = ""
         for c in text:
-            # \b - backspace
-            if c == chr(8):
-                self.moveCursor(QTextEdit.MoveBackward, QTextCursor.KeepAnchor)
-                self.cut() #self.removeSelectedText()  FIXME
+            # \b - backspace - this seems to comes as "^H" now ??!
+            if ord(c) == 8:
+                self.insertPlainText(display_text)
+                self.textCursor().deletePreviousChar()
+                display_text=""
             # \r - is filtered out
             elif c == chr(13):
                 pass
@@ -96,12 +111,19 @@ class DumbTerminal(QTextEdit):
 
     def keyPressEvent(self, ev):
         """ send (ascii) key events to the pty """
-        # filter out stuff like shift-key etc
+        # no master_fd yet
+        if not hasattr(self.installProgress, "master_fd"):
+            return
+        # special handling for backspace
+        if ev.key() == Qt.Key_Backspace:
+            #print "sent backspace"
+            os.write(self.installProgress.master_fd, chr(8))
+            return
+        # do nothing for events like "shift" 
         if not ev.text():
             return
         # now sent the key event to the termianl as utf-8
-        if hasattr(self.installProgress, "master_fd"):
-            os.write(self.installProgress.master_fd, ev.text().toUtf8())
+        os.write(self.installProgress.master_fd, ev.text().toUtf8())
 
     def onCursorPositionChanged(self):
         """ helper that ensures that the cursor is always at the end """
@@ -750,6 +772,16 @@ if __name__ == "__main__":
 
   if sys.argv[1] == "--test-term":
       view = DistUpgradeViewKDE4()
+      pid = view.terminal_text.fork()
+      if pid == 0:
+          subprocess.call(["bash"])
+          sys.exit()
+      while True:
+          view.terminal_text.updateInterface()
+          QApplication.processEvents()
+          time.sleep(0.01)
+
+  if sys.argv[1] == "--show-in-terminal":
       for c in open(sys.argv[2]).read():
           view.terminal_text.insertWithTermCodes( c )
           #print c, ord(c)

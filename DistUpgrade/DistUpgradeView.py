@@ -71,6 +71,7 @@ class InstallProgress(apt.progress.InstallProgress):
   def __init__(self):
     apt.progress.InstallProgress.__init__(self)
     self.pkg_failures = 0
+    self.master_fd = None
 
   def startUpdate(self):
     # apache: workaround #95325 (edgy->feisty)

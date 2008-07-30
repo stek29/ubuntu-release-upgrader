@@ -411,55 +411,11 @@ class UpdateManager(SimpleGladeApp):
         self.button_help.set_sensitive(False)
 
     self.gconfclient = gconf.client_get_default()
-    self.init_proxy()
+    init_proxy(self.gconfclient)
 
     # restore state
     self.restore_state()
     self.window_main.show()
-
-  def init_proxy(self):
-      """ init proxy settings
-
-      * first check for http_proxy environment (always wins),
-      * then check the apt.conf http proxy, 
-      * then look into synaptics conffile
-      * then into gconf 
-      """
-      SYNAPTIC_CONF_FILE = "%s/.synaptic/synaptic.conf" % pwd.getpwuid(0)[5]
-      proxy = None
-      # environment wins
-      if os.getenv("http_proxy"):
-          return
-      # generic apt config wins too
-      if apt_pkg.Config.Find("Acquire::http::Proxy") != '':
-          proxy = apt_pkg.Config.Find("Acquire::http::Proxy")
-      elif os.path.exists(SYNAPTIC_CONF_FILE):
-          cnf = apt_pkg.newConfiguration()
-          apt_pkg.ReadConfigFile(cnf, SYNAPTIC_CONF_FILE)
-          use_proxy = cnf.FindB("Synaptic::useProxy", False)
-          if use_proxy:
-              proxy_host = cnf.Find("Synaptic::httpProxy")
-              proxy_port = str(cnf.FindI("Synaptic::httpProxyPort"))
-              if proxy_host and proxy_port:
-                  # FIXME: set the proxy for libapt here as well (e.g. for the
-                  #        DistUpgradeFetcher
-                  proxy = "http://%s:%s/" % (proxy_host, proxy_port)
-      elif self.gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
-          host = self.gconfclient.get_string("/system/http_proxy/host")
-          port = self.gconfclient.get_int("/system/http_proxy/port")
-          use_auth = self.gconfclient.get_bool("/system/http_proxy/use_authentication")
-          if host and port:
-              if use_auth:
-                  auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
-                  auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
-                  proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
-              else:
-                  proxy = "http://%s:%s/" % (host, port)
-      if proxy:
-          proxy_support = urllib2.ProxyHandler({"http":proxy})
-          opener = urllib2.build_opener(proxy_support)
-          urllib2.install_opener(opener)
-          os.putenv("http_proxy",proxy)
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
     pkg = model.get_value(iter, LIST_PKG)

@@ -1,6 +1,54 @@
 from gettext import gettext as _
 import locale
 import os
+import apt_pkg
+import urllib2
+
+def init_proxy(gconfclient=None):
+  """ init proxy settings 
+
+  * first check for http_proxy environment (always wins),
+  * then check the apt.conf http proxy, 
+  * then look into synaptics conffile
+  * then into gconf  (if gconfclient was supplied)
+  """
+  SYNAPTIC_CONF_FILE = "/root/.synaptic/synaptic.conf"
+  proxy = None
+  # environment wins
+  if os.getenv("http_proxy"):
+    return
+  # generic apt config wins next
+  apt_pkg.InitConfig()
+  if apt_pkg.Config.Find("Acquire::http::Proxy") != '':
+    proxy = apt_pkg.Config.Find("Acquire::http::Proxy")
+  # then synaptic
+  elif os.path.exists(SYNAPTIC_CONF_FILE):
+    cnf = apt_pkg.newConfiguration()
+    apt_pkg.ReadConfigFile(cnf, SYNAPTIC_CONF_FILE)
+    use_proxy = cnf.FindB("Synaptic::useProxy", False)
+    if use_proxy:
+      proxy_host = cnf.Find("Synaptic::httpProxy")
+      proxy_port = str(cnf.FindI("Synaptic::httpProxyPort"))
+      if proxy_host and proxy_port:
+        proxy = "http://%s:%s/" % (proxy_host, proxy_port)
+  # then gconf
+  elif gconfclient and gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
+    host = gconfclient.get_string("/system/http_proxy/host")
+    port = gconfclient.get_int("/system/http_proxy/port")
+    use_auth = gconfclient.get_bool("/system/http_proxy/use_authentication")
+    if host and port:
+      if use_auth:
+        auth_user = gconfclient.get_string("/system/http_proxy/authentication_user")
+        auth_pw = gconfclient.get_string("/system/http_proxy/authentication_password")
+        proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
+      else:
+        proxy = "http://%s:%s/" % (host, port)
+  # if we have a proxy, set it
+  if proxy:
+    proxy_support = urllib2.ProxyHandler({"http":proxy})
+    opener = urllib2.build_opener(proxy_support)
+    urllib2.install_opener(opener)
+    os.putenv("http_proxy",proxy)
 
 def _inhibit_sleep_old_interface():
   """

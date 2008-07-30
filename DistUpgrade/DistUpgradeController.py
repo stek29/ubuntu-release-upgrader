@@ -944,7 +944,6 @@ class DistUpgradeController(object):
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
                 self._rewriteAptPeriodic(self.apt_minAge)
-                self._fixupEnvy()
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -975,9 +974,6 @@ class DistUpgradeController(object):
             func = getattr(self, quirksFuncName, None)
             if func is not None:
                 func()
-
-        # fixup envy
-        self._fixupEnvy()
 
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed

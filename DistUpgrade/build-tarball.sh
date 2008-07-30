@@ -19,11 +19,6 @@ sed -i s/^CODENAME=.*/CODENAME=$DIST/ cdromupgrade
 # update demotions
 #(cd ../utils/ ; ./demotions.py )
 
-# make the kde-gui
-for file in *.ui; do 
-    kdepyuic $file 
-done
-
 # copy the mo files
 cp -r ../po/mo .
 

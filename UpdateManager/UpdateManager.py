@@ -418,13 +418,22 @@ class UpdateManager(SimpleGladeApp):
     self.window_main.show()
 
   def init_proxy(self):
-      # proxy settings, first check for http_proxy environment (always wins),
-      # then look into synaptics conffile, then into gconf 
-      if os.getenv("http_proxy"):
-          return
+      """ init proxy settings
+
+      * first check for http_proxy environment (always wins),
+      * then check the apt.conf http proxy, 
+      * then look into synaptics conffile
+      * then into gconf 
+      """
       SYNAPTIC_CONF_FILE = "%s/.synaptic/synaptic.conf" % pwd.getpwuid(0)[5]
       proxy = None
-      if os.path.exists(SYNAPTIC_CONF_FILE):
+      # environment wins
+      if os.getenv("http_proxy"):
+          return
+      # generic apt config wins too
+      if apt_pkg.Config.Find("Acquire::http::Proxy") != '':
+          proxy = apt_pkg.Config.Find("Acquire::http::Proxy")
+      elif os.path.exists(SYNAPTIC_CONF_FILE):
           cnf = apt_pkg.newConfiguration()
           apt_pkg.ReadConfigFile(cnf, SYNAPTIC_CONF_FILE)
           use_proxy = cnf.FindB("Synaptic::useProxy", False)

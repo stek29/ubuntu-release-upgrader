@@ -424,9 +424,22 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
     def getTerminal(self):
         return DistUpgradeVteTerminal(self, self._term)
 
+    def _key_press_handler(self, widget, keyev):
+      # user pressed ctrl-c
+      if len(keyev.string) == 1 and ord(keyev.string) == 3:
+        summary = _("Ctrl-c pressed")
+        msg = _("This will abort the upgrade and may leave the system "
+                "in a broken state. Are you sure you want to do that?")
+        res = self.askYesNoQuestion(summary, msg)
+        logging.warning("ctrl-c press detected, user decided to pass it "
+                        "on: %s", res)        
+        return not res
+      return False
+
     def create_terminal(self, arg1,arg2,arg3,arg4):
         " helper to create a vte terminal "
         self._term = vte.Terminal()
+        self._term.connect("key-press-event", self._key_press_handler)
         self._term.set_font_from_string("monospace 10")
         self._term.connect("contents-changed", self._term_content_changed)
         self._terminal_lines = []

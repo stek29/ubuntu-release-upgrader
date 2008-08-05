@@ -1,4 +1,4 @@
-update-manager (1:0.93.2) unstable; urgency=low
+update-manager (1:0.93.2) intrepid; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
     - work around problem with packages with no priority
@@ -7,13 +7,14 @@ update-manager (1:0.93.2) unstable; urgency=low
     - detect ctrl-c presses in the terminal and warn the 
       user that it will kill the upgrade (LP: #90866)
   * DistUpgrade/DistUpgrade.cfg:
-    - try the kde3 frontend if the kde4 one fails to import
+    - when being run by the sandbox-upgrader, do not 
+      reboot automatically after the upgrade finished
   * DistUpgrade/DistUpgradeController.py:
     - when a upgrade is cancelt due to network errors, 
       inform that the downloaded files will be kept 
       (LP: #242111)
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 05 Aug 2008 20:37:52 +0200
 
 update-manager (1:0.93.1) intrepid; urgency=low
 

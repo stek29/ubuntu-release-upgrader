@@ -904,9 +904,10 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade aborts now. Please check your "\
-                           "Internet connection or "\
-                           "installation media and try again. "),
+                         _("The upgrade aborts now. Please check your "
+                           "Internet connection or "
+                           "installation media and try again. All files "
+                           "downloaded so far are kept."),
                            "%s" % e)
         # abort here because we want our sources.list back
         self.abort()

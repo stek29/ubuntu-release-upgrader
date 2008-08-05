@@ -428,7 +428,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
       # user pressed ctrl-c
       if len(keyev.string) == 1 and ord(keyev.string) == 3:
         summary = _("Ctrl-c pressed")
-        msg = _("This will abort the upgrade and may leave the system "
+        msg = _("This will abort the operation and may leave the system "
                 "in a broken state. Are you sure you want to do that?")
         res = self.askYesNoQuestion(summary, msg)
         logging.warning("ctrl-c press detected, user decided to pass it "

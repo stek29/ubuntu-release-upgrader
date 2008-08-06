@@ -28,7 +28,9 @@ if [ ! -h $DIST ]; then
 fi
 
 # copy the nvidia-modaliases files
-mkdir modaliases
+if [ ! -d modaliases ]; then
+    mkdir modaliases 
+fi
 cp /usr/share/jockey/modaliases/nvidia-* modaliases
 
 # create the tarball, copy links in place 

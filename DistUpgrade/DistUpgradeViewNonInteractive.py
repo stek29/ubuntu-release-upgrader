@@ -42,7 +42,8 @@ class NonInteractiveFetchProgress(FetchProgress):
         FetchProgress.updateStatus(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt.progress.FetchProgress.dlDone:
-            print "fetched %s (%.2f)" % (uri, self.percent)
+            print "fetched %s (%.2f/100) at %sb/s" % (uri, self.percent, 
+                                                      apt_pkg.SizeToStr(int(self.currentCPS)))
             if sys.stdout.isatty():
                 sys.stdout.flush()
         

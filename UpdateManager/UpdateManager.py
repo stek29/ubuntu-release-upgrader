@@ -274,11 +274,18 @@ class UpdateList:
       self.importance = importance
       self.description = desc
 
-  def __init__(self):
+  def __init__(self, parent):
     # a map of packages under their origin
-    pipe = os.popen("lsb_release -c -s")
-    dist = pipe.read().strip()
-    del pipe
+    try:
+        pipe = os.popen("lsb_release -c -s")
+        dist = pipe.read().strip()
+        del pipe
+    except Exception, e:
+        print "Error in lsb_release: %s" % e
+        parent.error(_("Failed to detect distribution"),
+                     _("A error '%s' occurred while checking what system "
+                       "you are using.") % e)
+        sys.exit(1)
     self.distUpgradeWouldDelete = 0
     self.pkgs = {}
     self.num_updates = 0
@@ -879,7 +886,7 @@ class UpdateManager(SimpleGladeApp):
         dialog.destroy()
         sys.exit(1)
     self.store.clear()
-    self.list = UpdateList()
+    self.list = UpdateList(self)
     # fill them again
     try:
         self.list.update(self.cache)
@@ -933,6 +940,17 @@ class UpdateManager(SimpleGladeApp):
     dialog.set_markup(msg)
     dialog.run()
     dialog.destroy()
+
+  def error(self, summary, details):
+      " helper function to display a error message "
+      msg = ("<big><b>%s</b></big>\n\n%s\n" % (summary, details) )
+      dialog = gtk.MessageDialog(self.window_main,
+                                 0, gtk.MESSAGE_ERROR,
+                                 gtk.BUTTONS_CLOSE,"")
+      dialog.set_markup(msg)
+      dialog.vbox.set_spacing(6)
+      dialog.run()
+      dialog.destroy()
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"

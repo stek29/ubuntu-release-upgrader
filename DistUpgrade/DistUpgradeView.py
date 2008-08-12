@@ -102,13 +102,13 @@ class InstallProgress(apt.progress.InstallProgress):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)
     logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-    self.pkg_failures += 1
     if "/" in pkg:
       pkg = os.path.basename(pkg)
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    apport_pkgfailure(pkg, errormsg)
+    if apport_pkgfailure(pkg, errormsg):
+      self.pkg_failures += 1
 
 class DumbTerminal(object):
     def call(self, cmd, hidden=False):

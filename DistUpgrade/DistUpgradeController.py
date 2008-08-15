@@ -51,7 +51,7 @@ from DistUpgradeApport import *
 
 # some constant
 # the initrd space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 10*1024*1024
+KERNEL_INITRD_SIZE = 12*1024*1024
 
 class NoBackportsFoundException(Exception):
     pass

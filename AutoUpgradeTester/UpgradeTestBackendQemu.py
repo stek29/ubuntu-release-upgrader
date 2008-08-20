@@ -134,6 +134,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
         #     -o StrictHostKeyChecking=no
         ret = subprocess.call(["ssh",
+                               "-tt",
                                "-l","root",
                                "-p",self.ssh_port,
                                "localhost",

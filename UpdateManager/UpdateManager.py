@@ -63,6 +63,7 @@ import dbus.service
 import dbus.glib
 
 from gettext import gettext as _
+from gettext import ngettext
 
 from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
@@ -644,9 +645,13 @@ class UpdateManager(SimpleGladeApp):
       ago_days = int( (time.time() - mtime) / (24*60*60))
       ago_hours = int((time.time() - mtime) / (60*60) )
       if ago_days > 0:
-          return _("The package information was last updated %s days ago.") % ago_days
+          return ngettext("The package information was last updated %s day ago.",
+                          "The package information was last updated %s days ago.",
+                          ago_days) % ago_days
       elif ago_hours > 0:
-          return _("The package information was last updated %s hours ago.") % ago_hours
+          return ngettext("The package information was last updated %s hour ago.",
+                          "The package information was last updated %s hours ago.",
+                          ago_days) % ago_hours
       else:
           return _("The package information was last updated less than one hour ago.")
       return None
@@ -671,10 +676,10 @@ class UpdateManager(SimpleGladeApp):
               text_label_main = self._get_last_apt_get_update_text()
       else:
           text_header = "<big><b>%s</b></big>" % \
-                        (gettext.ngettext("You can install %s update.",
-                                          "You can install %s updates.", 
-                                          num_updates) % \
-                                          num_updates)
+                        (ngettext("You can install %s update.",
+                                  "You can install %s updates.", 
+                                  num_updates) % \
+                                  num_updates)
           text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)

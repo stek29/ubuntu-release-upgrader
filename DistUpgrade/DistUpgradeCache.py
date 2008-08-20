@@ -393,7 +393,15 @@ class MyCache(apt.Cache):
         this function works around quirks in the 
         hardy->intrepid upgrade 
         """
-        # empty currently
+        # FIXME:
+        # we have a funny policy that we remove security updates
+        # for the kernel from the archive again when a new ABI
+        # version hits the archive. this means that we have
+        # e.g. 
+        # linux-image-2.6.24-15-generic 
+        # is obsolete when 
+        # linux-image-2.6.24-19-generic
+        # is available
         pass
 
     def hardyQuirks(self):

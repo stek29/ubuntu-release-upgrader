@@ -56,8 +56,8 @@ class MyCache(apt.Cache):
         self._initAptLog()
         # from hardy on we use recommends by default, so for the 
         # transition to the new dist we need to enable them now
-        if (self.config.fromDist == "hardy" and not 
-            "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
+        if (config.get("Sources","From") == "hardy" and 
+            not "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
             apt_pkg.Config.Set("APT::Install-Recommends","true")
 
     @property

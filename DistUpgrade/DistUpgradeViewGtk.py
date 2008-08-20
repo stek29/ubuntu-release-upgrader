@@ -136,7 +136,7 @@ class GtkFetchProgressAdapter(FetchProgress):
             currentItem = self.totalItems
 
         if self.currentCPS > 0:
-            self.status.set_text(_("Fetching file %li of %li at %sb/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(self.eta))
         else:
             self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.totalItems))

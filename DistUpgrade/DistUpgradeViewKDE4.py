@@ -213,7 +213,7 @@ class KDEFetchProgressAdapter(FetchProgress):
             currentItem = self.totalItems
 
         if self.currentCPS > 0:
-            self.status.setText(_("Fetching file %li of %li at %sb/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+            self.status.setText(_("Fetching file %li of %li at %sB/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
             self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % unicode(FuzzyTimeToStr(self.eta), 'utf-8') + "</i>")
         else:
             self.status.setText(_("Fetching file %li of %li") % (currentItem, self.totalItems))

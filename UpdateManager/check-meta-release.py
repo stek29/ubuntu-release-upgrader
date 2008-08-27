@@ -1,4 +1,4 @@
-#  Copyright (c) 2008 Canonical
+#  Copyright (c) 2008 Canonical Ltd
 #
 #  Author: Jonathan Riddell <jriddell@ubuntu.com>
 #

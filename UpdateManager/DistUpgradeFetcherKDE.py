@@ -1,6 +1,6 @@
 # DistUpgradeFetcherKDE.py 
 #
-#  Copyright (c) 2008 Canonical
+#  Copyright (c) 2008 Canonical Ltd
 #
 #  Author: Jonathan Riddell <jriddell@ubuntu.com>
 #
@@ -19,6 +19,7 @@
 
 from PyKDE4.kdecore import *
 from PyKDE4.kdeui import *
+from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4 import uic
 
@@ -45,14 +46,19 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         while metaRelease.downloading:
             time.sleep(1)
         if metaRelease.new_dist is None:
-            KApplication.kApplication().exit()
+            sys.exit()
 
         self.progressDialogue = QDialog()
-        uic.loadUi("fetch-progress.ui", self.progressDialogue)
+        if os.path.exists("fetch-progress.ui"):
+            self.APPDIR = QDir.currentPath()
+        else:
+            file = KStandardDirs.locate("appdata", "fetch-progress.ui")
+            self.APPDIR = file.left(file.lastIndexOf("/"))
+
+        uic.loadUi(self.APPDIR + "/fetch-progress.ui", self.progressDialogue)
         self.progress = KDEFetchProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)
         DistUpgradeFetcherCore.__init__(self,metaRelease.new_dist,self.progress)
-        self.progressDialogue.show()
-        self.run()
+        QTimer.singleShot(10, self.run)
 
     def error(self, summary, message):
         KMessageBox.sorry(None, message, summary)
@@ -71,7 +77,13 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
     def showReleaseNotes(self):
       # FIXME: care about i18n! (append -$lang or something)
       self.dialogue = QDialog()
-      uic.loadUi("dialog_release_notes.ui", self.dialogue)
+      uic.loadUi(self.APPDIR + "/dialog_release_notes.ui", self.dialogue)
+      upgradeButton = self.dialogue.buttonBox.button(QDialogButtonBox.Ok)
+      upgradeButton.setText(_("Upgrade"))
+      upgradeButton.setIcon(KIcon("dialog-ok"))
+      cancelButton = self.dialogue.buttonBox.button(QDialogButtonBox.Cancel)
+      cancelButton.setIcon(KIcon("dialog-cancel"))
+      self.dialogue.setWindowTitle(_("Release Notes"))
       self.dialogue.show()
       if self.new_dist.releaseNotesURI != None:
           uri = self._expandUri(self.new_dist.releaseNotesURI)
@@ -95,7 +107,9 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
               KMessageBox.sorry(None, primary + "<br />" + secondary, "")
           # user clicked cancel
           if result == QDialog.Accepted:
+              self.progressDialogue.show()
               return True
+      KApplication.kApplication().exit(1)
       return False
 
 class KDEFetchProgressAdapter(apt.progress.FetchProgress):

@@ -52,8 +52,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         if os.path.exists("fetch-progress.ui"):
             self.APPDIR = QDir.currentPath()
         else:
-            file = KStandardDirs.locate("appdata", "fetch-progress.ui")
-            self.APPDIR = file.left(file.lastIndexOf("/"))
+            self.APPDIR = "/usr/share/update-manager"
 
         uic.loadUi(self.APPDIR + "/fetch-progress.ui", self.progressDialogue)
         self.progress = KDEFetchProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)

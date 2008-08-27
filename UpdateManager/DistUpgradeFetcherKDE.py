@@ -1,9 +1,9 @@
-# DistUpgradeFetcher.py 
-#  
-#  Copyright (c) 2006 Canonical
-#  
-#  Author: Michael Vogt <michael.vogt@ubuntu.com>
-# 
+# DistUpgradeFetcherKDE.py 
+#
+#  Copyright (c) 2008 Canonical
+#
+#  Author: Jonathan Riddell <jriddell@ubuntu.com>
+#
 #  This program is free software; you can redistribute it and/or 
 #  modify it under the terms of the GNU General Public License as 
 #  published by the Free Software Foundation; either version 2 of the
@@ -13,11 +13,9 @@
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-# 
+#
 #  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-#  USA
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyKDE4.kdecore import *
 from PyKDE4.kdeui import *
@@ -38,8 +36,9 @@ from Core.MetaRelease import MetaReleaseCore
 import time
 import apt
 
-
 class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
+    """A small application run by Adept to download, verify 
+    and run the dist-upgrade tool"""
 
     def __init__(self):
         metaRelease = MetaReleaseCore(False, False)
@@ -49,7 +48,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
             KApplication.kApplication().exit()
 
         self.progressDialogue = QDialog()
-        uic.loadUi("install-package.ui", self.progressDialogue)
+        uic.loadUi("fetch-progress.ui", self.progressDialogue)
         self.progress = KDEFetchProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)
         DistUpgradeFetcherCore.__init__(self,metaRelease.new_dist,self.progress)
         self.progressDialogue.show()
@@ -135,29 +134,27 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
 
 if __name__ == "__main__":
 
-    appName     = "language-selector"
+    appName     = "dist-upgrade-fetcher"
     catalog     = ""
-    programName = ki18n ("Language Selector")
+    programName = ki18n ("Dist Upgrade Fetcher")
     version     = "0.3.4"
-    description = ki18n ("Language Selector")
+    description = ki18n ("Dist Upgrade Fetcher")
     license     = KAboutData.License_GPL
     copyright   = ki18n ("(c) 2008 Canonical Ltd")
     text        = ki18n ("none")
-    homePage    = "https://launchpad.net/language-selector"
+    homePage    = "https://launchpad.net/update-manager"
     bugEmail    = ""
 
     aboutData   = KAboutData (appName, catalog, programName, version, description, license, copyright, text, homePage, bugEmail)
 
-    aboutData.addAuthor(ki18n("Rob Bean"), ki18n("PyQt4 to PyKDE4 port"))
+    aboutData.addAuthor(ki18n("Jonathan Riddell"), ki18n("Author"))
 
     options = KCmdLineOptions()
-    options.add("!+new dist", ki18n("Distribution version to upgrade to"))
 
     KCmdLineArgs.init (sys.argv, aboutData)
     KCmdLineArgs.addCmdLineOptions(options)
 
     app = KApplication()
-
     fetcher = DistUpgradeFetcherKDE()
 
     app.exec_()

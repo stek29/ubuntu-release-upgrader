@@ -45,8 +45,10 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         metaRelease = MetaReleaseCore(False, False)
         while metaRelease.downloading:
             time.sleep(1)
-        if metaRelease.new_dist is None:
+        if metaRelease.new_dist is None and __name__ == "__main__":
             sys.exit()
+        elif metaRelease.new_dist is None:
+            return
 
         self.progressDialogue = QDialog()
         if os.path.exists("fetch-progress.ui"):
@@ -108,7 +110,8 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
           if result == QDialog.Accepted:
               self.progressDialogue.show()
               return True
-      KApplication.kApplication().exit(1)
+      if __name__ == "__main__":
+          KApplication.kApplication().exit(1)
       return False
 
 class KDEFetchProgressAdapter(apt.progress.FetchProgress):

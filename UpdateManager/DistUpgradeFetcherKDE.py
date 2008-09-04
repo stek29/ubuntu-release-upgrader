@@ -25,7 +25,6 @@ from PyQt4 import uic
 
 import sys
 
-from ReleaseNotesViewer import ReleaseNotesViewer
 from Common.utils import *
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _

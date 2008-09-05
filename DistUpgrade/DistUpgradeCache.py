@@ -402,7 +402,18 @@ class MyCache(apt.Cache):
         # is obsolete when 
         # linux-image-2.6.24-19-generic
         # is available
+        # ...
         pass
+        # for kde we need to switch from 
+        # kubuntu-desktop-kde4 
+        # to
+        # kubuntu-desktop
+        frompkg = "kubuntu-desktop-kde4"
+        topkg = "kubuntu-desktop"
+        if (self.has_key(frompkg) and
+            self[frompkg].isInstalled):
+            logging.debug("transitioning %s to %s" % (frompkg, topkg))
+            self[topkg].markInstall()
 
     def hardyQuirks(self):
         """ 

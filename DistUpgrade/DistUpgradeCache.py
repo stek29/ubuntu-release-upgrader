@@ -11,6 +11,7 @@ import time
 import gettext
 import datetime
 import threading
+import ConfigParser
 from subprocess import Popen, PIPE
 
 from gettext import gettext as _
@@ -736,10 +737,15 @@ class MyCache(apt.Cache):
                 trusted |= origin.trusted
             if not trusted:
                 untrusted.append(pkg.name)
-        b = self.config.getWithDefault("Distro","AllowUnauthenticated", False)
-        if b:
-            logging.warning("AllowUnauthenticated set!")
-        if (len(untrusted) > 0 and not b):
+        # check if the user overwrote the unauthenticated warning
+        try:
+            b = self.config.getboolean("Distro","AllowUnauthenticated")
+            if b:
+                logging.warning("AllowUnauthenticated set!")
+                return True
+        except ConfigParser.NoOptionError, e:
+            pass
+        if len(untrusted) > 0:
             untrusted.sort()
             logging.error("Unauthenticated packages found: '%s'" % \
                           " ".join(untrusted))
@@ -900,7 +906,11 @@ class MyCache(apt.Cache):
             #logging.debug("package '%s' not in cache" % pkgname)
             return True
         # check if we want to purge 
-        purge = bool(self.config.getWithDefault("Distro","PurgeObsoletes",False))
+        try:
+            purge = self.config.getboolean("Distro","PurgeObsoletes")
+        except ConfigParser.NoOptionError, e:
+            purge = False
+
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well

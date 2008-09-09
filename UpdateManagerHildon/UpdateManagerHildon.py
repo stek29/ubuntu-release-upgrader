@@ -40,9 +40,6 @@ import os
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
 
-# DistUpgrade.DistUpgradeViewGtk.GtkInstallProgressAdapter is better,
-# but requires more effort, and vte.  This is a simpler implementation.
-
 from DistUpgrade.DistUpgradeViewGtk import DistUpgradeViewGtk, GtkFetchProgressAdapter, GtkInstallProgressAdapter
 from DistUpgrade.DistUpgradeView import (STEP_PREPARE, 
                                          STEP_MODIFY_SOURCES, 
@@ -157,3 +154,5 @@ class UpdateManagerHildon(UpdateManager):
     self.view.window_main.hide()
     #lock.release()
 
+  def check_auto_update(self): 
+    pass

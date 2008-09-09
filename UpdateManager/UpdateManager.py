@@ -313,11 +313,13 @@ class UpdateList:
     # do the upgrade
     self.distUpgradeWouldDelete = cache.saveDistUpgrade()
 
+    dselect_upgrade_origin = self.UpdateOrigin(_("Previous selected"), 1)
+
     # sort by origin
     for pkg in cache:
       if pkg.isUpgradable or pkg.markedInstall:
         if pkg.candidateOrigin == None:
-            # can happen for e.g. loged packages
+            # can happen for e.g. locked packages
             # FIXME: do something more sensible here (but what?)
             print "WARNING: upgradable but no canidateOrigin?!?: ", pkg.name
             continue

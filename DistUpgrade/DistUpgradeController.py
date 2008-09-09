@@ -34,6 +34,7 @@ import shutil
 import glob
 import time
 import copy
+import ConfigParser
 from stat import *
 from string import Template
 
@@ -1224,9 +1225,16 @@ class DistUpgradeController(object):
         return True
 
     def _allBackportsAuthenticated(self, backportslist):
+        # check if the user overwrote the check
         if apt_pkg.Config.FindB("APT::Get::AllowUnauthenticated",False) == True:
             logging.warning("skip authentication check because of APT::Get::AllowUnauthenticated==true")
             return True
+        try:
+            b = self.config.getboolean("Distro","AllowUnauthenticated")
+            if b:
+                return True
+        except ConfigParser.NoOptionError, e:
+            pass
         for pkgname in backportslist:
             pkg = self.cache[pkgname]                
             for cand in pkg.candidateOrigin:

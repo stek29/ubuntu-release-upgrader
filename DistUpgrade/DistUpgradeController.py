@@ -469,8 +469,8 @@ class DistUpgradeController(object):
             # don't use a standard archive layout
             if (not entry.disabled and
                 entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
-                entry.uri = "http://landscape.canonical.com/packages/%s" % self.toDist
-                logging.debug("transitioning landscape.canonical.com to '%s' " % entry)
+                logging.debug("commenting landscape.canonical.com out")
+                entry.disabled = True
                 continue
 
             # special case for old-releases.ubuntu.com, auto transition

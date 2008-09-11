@@ -466,7 +466,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         # reasonable fault handler
         sys.excepthook = self._handleException
 
-        ###self.window_main.showTerminalButton.setEnabled(False)
+        self.window_main.showTerminalButton.setEnabled(False)
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
@@ -725,7 +725,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
         # fill in the details
         self.changesDialogue.treeview_details.clear()
         self.changesDialogue.treeview_details.setHeaderLabels(["Packages"])
-        self.changesDialogue.treeview_details.setHeaderHidden(True)
+        self.changesDialogue.treeview_details.header().hide()
         for rm in self.toRemove:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )
         for inst in self.toInstall:

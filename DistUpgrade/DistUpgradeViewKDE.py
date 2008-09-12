@@ -273,6 +273,7 @@ class KDEInstallProgressAdapter(InstallProgress):
 
         dialogue = QDialog(self.parent.window_main)
         loadUi("dialog_error.ui", dialogue)
+        self.translate_widget_children(dialogue)
         dialogue.label_error.setText(utf8(msg))
         if errormsg != None:
             dialogue.textview_error.setText(utf8(errormsg))
@@ -427,7 +428,7 @@ class UpgraderMainWindow(QWidget):
         else:
             event.ignore()
 
-class DistUpgradeViewKDE4(DistUpgradeView):
+class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None, logdir=None):
         if not datadir:
@@ -450,6 +451,12 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
         #self.app = KApplication()
         self.app = QApplication(["update-manager"])
+
+        if os.path.exists("/usr/share/icons/oxygen/48x48/apps/system-software-update.png"):
+            messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/apps/system-software-update.png")
+        else:
+            messageIcon = QPixmap("/usr/share/icons/hicolor/48x48/apps/adept_manager.png")
+        self.app.setWindowIcon(QIcon(messageIcon))
 
         self.window_main = UpgraderMainWindow()
         self.window_main.setParent(self)
@@ -518,6 +525,11 @@ class DistUpgradeViewKDE4(DistUpgradeView):
     def translate_widget_children(self, parentWidget=None):
         if parentWidget == None:
             parentWidget = self.window_main
+        if isinstance(parentWidget, QDialog) or isinstance(parentWidget, QWidget):
+            if str(parentWidget.windowTitle()) == "Error":
+                parentWidget.setWindowTitle( gettext.dgettext("kdelibs", "Error"))
+            else:
+                parentWidget.setWindowTitle(_( str(parentWidget.windowTitle()) ))
 
         if parentWidget.children() != None:
             for widget in parentWidget.children():
@@ -526,8 +538,12 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
     def translate_widget(self, widget):
         if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
-            if str(widget.text()) != "":
-                widget.setText(_(str(widget.text())))
+            if str(widget.text()) == "&Cancel":
+                widget.setText(gettext.dgettext("kdelibs", "&Cancel"))
+            if str(widget.text()) == "&Close":
+                widget.setText(gettext.dgettext("kdelibs", "&Close"))
+            elif str(widget.text()) != "":
+                widget.setText( _(str(widget.text())).replace("_", "&") )
 
     def _handleException(self, exctype, excvalue, exctb):
         """Crash handler."""
@@ -549,6 +565,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
             tbtext = ''.join(traceback.format_exception(exctype, excvalue, exctb))
             dialog = QDialog(self.window_main)
             loadUi("dialog_error.ui", dialog)
+            self.translate_widget_children(self.dialog)
             #FIXME make URL work
             #dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
             dialog.crash_detail.setText(tbtext)
@@ -645,6 +662,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
         dialogue = QDialog(self.window_main)
         loadUi("dialog_error.ui", dialogue)
+        self.translate_widget_children(dialogue)
         dialogue.label_error.setText(utf8(msg))
         if extended_msg != None:
             dialogue.textview_error.setText(utf8(extended_msg))
@@ -668,6 +686,7 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
         dialogue = QDialog(self.window_main)
         loadUi("dialog_error.ui", dialogue)
+        self.translate_widget_children(dialogue)
         dialogue.label_error.setText(utf8(msg))
         if extended_msg != None:
             dialogue.textview_error.setText(utf8(extended_msg))
@@ -750,6 +769,17 @@ class DistUpgradeViewKDE4(DistUpgradeView):
 
     def askYesNoQuestion(self, summary, msg, default='No'):
         answer = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode("<font>") + unicode(msg, 'UTF-8'), QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
+        if answer == QMessageBox.Yes:
+            return True
+        return False
+
+    def confirmRestart(self):
+        messageBox = QMessageBox(QMessageBox.Question, _("Restart required"), _("<b><big>Restart the system to complete the upgrade</big></b>"), QMessageBox.NoButton, self.window_main)
+        yesButton = messageBox.addButton(QMessageBox.Yes)
+        noButton = messageBox.addButton(QMessageBox.No)
+        yesButton.setText(_("_Restart Now").replace("_", "&"))
+        noButton.setText(gettext.dgettext("kdelibs", "&Close"))
+        answer = messageBox.exec_()
         if answer == QMessageBox.Yes:
             return True
         return False

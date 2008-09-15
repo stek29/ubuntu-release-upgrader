@@ -44,7 +44,7 @@ from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, Fe
 
 import select
 import gettext
-from gettext import gettext as gett
+from DistUpgradeGettext import gettext as gett
 
 def _(str):
     return unicode(gett(str), 'UTF-8')

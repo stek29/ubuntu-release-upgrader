@@ -14,7 +14,8 @@ import threading
 import ConfigParser
 from subprocess import Popen, PIPE
 
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
@@ -76,10 +77,10 @@ class MyCache(apt.Cache):
         " check for reqreinst state and offer to fix it "
         reqreinst = self.reqReinstallPkgs
         if len(reqreinst) > 0:
-            header = gettext.ngettext("Remove package in bad state",
+            header = ngettext("Remove package in bad state",
                                       "Remove packages in bad state", 
                                       len(reqreinst))
-            summary = gettext.ngettext("The package '%s' is in an inconsistent "
+            summary = ngettext("The package '%s' is in an inconsistent "
                                        "state and needs to be reinstalled, but "
                                        "no archive can be found for it. "
                                        "Do you want to remove this package "

@@ -32,7 +32,7 @@ import tempfile
 import shutil
 import sys
 import GnuPGInterface
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
 
 def country_mirror():
   " helper to get the country mirror from the current locale "

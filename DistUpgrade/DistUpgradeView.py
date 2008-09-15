@@ -19,7 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
 import subprocess
 from subprocess import Popen, PIPE
 import apt
@@ -202,20 +203,20 @@ class DistUpgradeView(object):
         if pkgs_remove > 0:
           # FIXME: make those two separate lines to make it clear
           #        that the "%" applies to the result of ngettext
-          msg += gettext.ngettext("%d package is going to be removed.",
-                                  "%d packages are going to be removed.",
-                                  pkgs_remove) % pkgs_remove
+          msg += ngettext("%d package is going to be removed.",
+                          "%d packages are going to be removed.",
+                          pkgs_remove) % pkgs_remove
           msg += " "
         if pkgs_inst > 0:
-          msg += gettext.ngettext("%d new package is going to be "
-                                  "installed.",
-                                  "%d new packages are going to be "
-                                  "installed.",pkgs_inst) % pkgs_inst
+          msg += ngettext("%d new package is going to be "
+                          "installed.",
+                          "%d new packages are going to be "
+                          "installed.",pkgs_inst) % pkgs_inst
           msg += " "
         if pkgs_upgrade > 0:
-          msg += gettext.ngettext("%d package is going to be upgraded.",
-                                  "%d packages are going to be upgraded.",
-                                  pkgs_upgrade) % pkgs_upgrade
+          msg += ngettext("%d package is going to be upgraded.",
+                          "%d packages are going to be upgraded.",
+                          pkgs_upgrade) % pkgs_upgrade
           msg +=" "
         if downloadSize > 0:
           msg += _("\n\nYou have to download a total of %s. ") %\

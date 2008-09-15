@@ -45,8 +45,10 @@ from DistUpgradeFetcherCore import country_mirror
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro, NoDistroTemplateException
 
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
 import gettext
+
 from DistUpgradeCache import *
 from DistUpgradeApport import *
 
@@ -642,10 +644,10 @@ class DistUpgradeController(object):
             self.openCache()
         if len(self.cache.reqReinstallPkgs) > 0:
             reqreinst = self.cache.reqReinstallPkgs
-            header = gettext.ngettext("Package in inconsistent state",
+            header = ngettext("Package in inconsistent state",
                                       "Packages in inconsistent state",
                                       len(reqreinst))
-            summary = gettext.ngettext("The package '%s' is in an inconsistent "
+            summary = ngettext("The package '%s' is in an inconsistent "
                                        "state and needs to be reinstalled, but "
                                        "no archive can be found for it. "
                                        "Please reinstall the package manually "

@@ -42,7 +42,7 @@ from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, Fe
 from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
 
 import gettext
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
 
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')

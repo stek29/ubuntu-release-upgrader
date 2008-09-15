@@ -33,7 +33,7 @@ from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, Fe
 import apt.progress
 
 import gettext
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
 #from textwrap import fill, wrap
 
 # helpers inspired after textwrap - unfortunately

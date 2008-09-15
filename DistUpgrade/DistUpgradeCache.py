@@ -410,7 +410,8 @@ class MyCache(apt.Cache):
                 basename = "%s-%s-" % (base,version)
                 for type in types:
                     if (pkg.name.startswith(basename) and 
-                        pkg.name.endswith(type)):
+                        pkg.name.endswith(type) and
+                        pkg.isInstalled):
                         if (pkg.name == "%s-%s" % (base,self.uname)):
                             logging.debug("skipping running kernel %s" % pkg.name)
                             continue

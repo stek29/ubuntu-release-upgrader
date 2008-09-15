@@ -19,30 +19,39 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-
+import logging
 import gettext as mygettext
+
+def _verify(message, translated):
+    """ 
+    helper that verifies that the message and the translated 
+    message have the same number (and type) of % args
+    """
+    arguments_in_message = message.count("%") - message.count("\%")
+    arguments_in_translation = translated.count("%") - translated.count("\%")
+    return arguments_in_message == arguments_in_translation
 
 def gettext(message):
     """
     version of gettext that logs errors but does not crash on incorrect
     number of arguments
     """
-    try:
-        return mygettext.gettext(message)
-    except TypeError, e:
-        logging.error("got exception '%s' from incorrect translation for message '%s'" % (e, msg))
+    translated_msg = mygettext.gettext(message)
+    if not _verify(message, translated_msg):
+        logging.error("incorrect translation for message '%s' to '%s' (wrong number of arguments)" % (message, translated_msg))
         return message
+    return translated_msg
 
 def ngettext(msgid1, msgid2, n):
     """
     version of ngettext that logs errors but does not crash on incorrect
     number of arguments
     """
-    try:
-        return mygettext.ngettext(msgid1, msgid2, n)
-    except TypeError, e:
-        logging.error("got exception '%s' from incorrect ngettext translation for message '%s' '%s' %i" % (e, msgid1, msgid2, n))
+    translated_msg = mygettext.ngettext(msgid1, msgid2, n)
+    if not _verify(msgid1, translated_msg):
+        logging.error("incorrect translation for ngettext message '%s' plural: '%s' to '%s' (wrong number of arguments)" % (msgid1, msgid2, translated_msg))
         # dumb fallback to not crash
         if n == 1:
             return msgid1
         return msgid2
+    return translated_msg

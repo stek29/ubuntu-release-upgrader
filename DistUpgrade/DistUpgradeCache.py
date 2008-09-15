@@ -389,13 +389,7 @@ class MyCache(apt.Cache):
                 self[pkg].markDelete()
         return True
 
-
-    def intrepidQuirks(self):
-        """ 
-        this function works around quirks in the 
-        hardy->intrepid upgrade 
-        """
-        # FIXME:
+    def identifyObsoleteKernels(self):
         # we have a funny policy that we remove security updates
         # for the kernel from the archive again when a new ABI
         # version hits the archive. this means that we have
@@ -405,7 +399,33 @@ class MyCache(apt.Cache):
         # linux-image-2.6.24-19-generic
         # is available
         # ...
-        pass
+        # This code tries to identify the kernels that can be removed
+        logging.debug("identifyObsoleteKernels()")
+        obsolete_kernels = set()
+        version = self.config.get("KernelRemoval","Version")
+        basenames = self.config.getlist("KernelRemoval","BaseNames")
+        types = self.config.getlist("KernelRemoval","Types")
+        for pkg in self:
+            for base in basenames:
+                basename = "%s-%s-" % (base,version)
+                logging.debug("basename: %s" % basename)
+                for type in types:
+                    if (pkg.name.startswith(basename) and 
+                        pkg.name.endswith(type))):
+                        if (pkg.name == "%s-%s" % (base,self.uname)):
+                            logging.debug("skipping running kernel %s" % pkg.name)
+                            continue
+                        logging.debug("removing obsolete kernel '%s'" % pkg.name)
+                        obsolete_kernels.add(pkg.name)
+        logging.debug("identifyObsoleteKernels found '%s'" % obsolete_kernels)
+        return obsolete_kernels
+
+    def intrepidQuirks(self):
+        """ 
+        this function works around quirks in the 
+        hardy->intrepid upgrade 
+        """
+        logging.debug("intrepidQuirks")
         # for kde we need to switch from 
         # kubuntu-desktop-kde4 
         # to
@@ -989,7 +1009,8 @@ if __name__ == "__main__":
         print "foo"
 	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
                     DistUpgradeView.DistUpgradeView())
-        c.checkForNvidia()
+        #c.checkForNvidia()
+        print c._identifyObsoleteKernels()
         sys.exit()
 	c.clear()
         c.create_snapshot()

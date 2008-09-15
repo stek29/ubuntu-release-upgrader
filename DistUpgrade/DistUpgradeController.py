@@ -645,19 +645,19 @@ class DistUpgradeController(object):
         if len(self.cache.reqReinstallPkgs) > 0:
             reqreinst = self.cache.reqReinstallPkgs
             header = ngettext("Package in inconsistent state",
-                                      "Packages in inconsistent state",
-                                      len(reqreinst))
+                              "Packages in inconsistent state",
+                              len(reqreinst))
             summary = ngettext("The package '%s' is in an inconsistent "
-                                       "state and needs to be reinstalled, but "
-                                       "no archive can be found for it. "
-                                       "Please reinstall the package manually "
-                                       "or remove it from the system.",
-                                       "The packages '%s' are in an inconsistent "
-                                       "state and need to be reinstalled, but "
-                                       "no archive can be found for it."
-                                       "Please reinstall the packages manually "
-                                       "or remove them from the system.",
-                                       len(reqreinst)) % ", ".join(reqreinst)
+                               "state and needs to be reinstalled, but "
+                               "no archive can be found for it. "
+                               "Please reinstall the package manually "
+                               "or remove it from the system.",
+                               "The packages '%s' are in an inconsistent "
+                               "state and need to be reinstalled, but "
+                               "no archive can be found for it."
+                               "Please reinstall the packages manually "
+                               "or remove them from the system.",
+                               len(reqreinst)) % ", ".join(reqreinst)
             self._view.error(header, summary)
             return False
         # FIXME: check out what packages are downloadable etc to

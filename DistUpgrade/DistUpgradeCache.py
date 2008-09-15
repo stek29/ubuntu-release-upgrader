@@ -78,19 +78,19 @@ class MyCache(apt.Cache):
         reqreinst = self.reqReinstallPkgs
         if len(reqreinst) > 0:
             header = ngettext("Remove package in bad state",
-                                      "Remove packages in bad state", 
-                                      len(reqreinst))
+                              "Remove packages in bad state", 
+                              len(reqreinst))
             summary = ngettext("The package '%s' is in an inconsistent "
-                                       "state and needs to be reinstalled, but "
-                                       "no archive can be found for it. "
-                                       "Do you want to remove this package "
-                                       "now to continue?",
-                                       "The packages '%s' are in an inconsistent "
-                                       "state and needs to be reinstalled, but "
-                                       "no archives can be found for them. Do you "
-                                       "want to remove these packages now to "
-                                       "continue?",
-                                       len(reqreinst)) % ", ".join(reqreinst)
+                               "state and needs to be reinstalled, but "
+                               "no archive can be found for it. "
+                               "Do you want to remove this package "
+                               "now to continue?",
+                               "The packages '%s' are in an inconsistent "
+                               "state and needs to be reinstalled, but "
+                               "no archives can be found for them. Do you "
+                               "want to remove these packages now to "
+                               "continue?",
+                               len(reqreinst)) % ", ".join(reqreinst)
             if view.askYesNoQuestion(header, summary):
                 self.releaseLock()
                 cmd = ["dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)

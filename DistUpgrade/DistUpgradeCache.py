@@ -411,7 +411,7 @@ class MyCache(apt.Cache):
                 logging.debug("basename: %s" % basename)
                 for type in types:
                     if (pkg.name.startswith(basename) and 
-                        pkg.name.endswith(type))):
+                        pkg.name.endswith(type)):
                         if (pkg.name == "%s-%s" % (base,self.uname)):
                             logging.debug("skipping running kernel %s" % pkg.name)
                             continue

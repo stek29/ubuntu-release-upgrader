@@ -1061,6 +1061,39 @@ class DistUpgradeController(object):
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
 
+    def _addRelatimeToFstab(self):
+        " add the relatime option to ext2/ext3 filesystems on upgrade "
+        logging.debug("_addRelatime")
+        replaced = False
+        lines = []
+        # we have one cdrom to convert
+        for line in open("/etc/fstab"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                lines.append(line)
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                lines.append(line)
+                continue
+            if (("ext2" in fstype or
+                "ext3" in fstype) and 
+                not "relatime" in options):
+                logging.debug("adding 'relatime' to line '%s' " % line)
+                line = line.replace(options,"%s,relatime" % options)
+                logging.debug("replaced line is '%s' " % line)
+                replaced=True
+            lines.append(line)
+        # we have converted a line (otherwise we would have exited already)
+        if replaced > 0:
+            logging.debug("writing new /etc/fstab")
+            open("/etc/fstab.intrepid","w").write("\n".join(lines))
+            shutil.rename("/etc/fstab.intrepid","/etc/fstab")
+        return True
+        
+
     def _rewriteFstab(self):
         " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
         logging.debug("_rewriteFstab()")
@@ -1137,6 +1170,9 @@ class DistUpgradeController(object):
         self._rewriteFstab()
         self._checkAdminGroup()
         
+    def intrepidQuirks(self):
+        " this applies rules for the hardy->intrepid upgrade "
+        self._addRelatimeToFstab()
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
@@ -1608,8 +1644,10 @@ if __name__ == "__main__":
     from DistUpgradeCache import MyCache
     v = DistUpgradeViewText()
     dc = DistUpgradeController(v)
-    dc.openCache()
-    dc.askDistUpgrade()
+    #dc.openCache()
+    dc._addRelatimeToFstab()
+    #dc.prepare()
+    #dc.askDistUpgrade()
     #dc._checkFreeSpace()
     #dc._rewriteFstab()
     #dc._checkAdminGroup()

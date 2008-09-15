@@ -408,7 +408,6 @@ class MyCache(apt.Cache):
         for pkg in self:
             for base in basenames:
                 basename = "%s-%s-" % (base,version)
-                logging.debug("basename: %s" % basename)
                 for type in types:
                     if (pkg.name.startswith(basename) and 
                         pkg.name.endswith(type)):

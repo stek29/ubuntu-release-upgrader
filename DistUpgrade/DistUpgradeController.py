@@ -1089,7 +1089,7 @@ class DistUpgradeController(object):
                 replaced=True
             lines.append(line)
         # we have converted a line (otherwise we would have exited already)
-        if replaced > 0:
+        if replaced:
             logging.debug("writing new /etc/fstab")
             open("/etc/fstab.intrepid","w").write("\n".join(lines))
             shutil.rename("/etc/fstab.intrepid","/etc/fstab")

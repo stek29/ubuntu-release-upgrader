@@ -53,6 +53,7 @@ import subprocess
 import pwd
 import urllib2
 import httplib
+import socket
 import time
 import thread
 import xml.sax.saxutils
@@ -261,7 +262,8 @@ class MyCache(apt.Cache):
                       "until the changes become available or try again "
                       "later.") % (srcpkg, srcver_epoch),
                     srcpkg]
-        except (IOError, httplib.BadStatusLine), e:
+        except (IOError, httplib.BadStatusLine, socket.error), e:
+            print "caught exception: ", e
             if lock.locked():
                 self.all_changes[name] = [_("Failed to download the list "
                                             "of changes. \nPlease "

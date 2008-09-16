@@ -32,13 +32,65 @@ from DistUpgradeApport import *
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
-  if sec > 60*60*24:
-    return _("%li days %li hours %li minutes") % (sec/60/60/24, (sec/60/60) % 24, (sec/60) % 60)
-  if sec > 60*60:
-    return _("%li hours %li minutes") % (sec/60/60, (sec/60) % 60)
-  if sec > 60:
-    return _("%li minutes") % (sec/60)
-  return _("%li seconds") % sec
+  days = sec/(60*60*24)
+  hours = sec/(60*60) % 24
+  minutes = (sec/60) % 60
+  seconds = sec % 60
+
+  # string map to make the re-ordering possible
+  map = { "str_days" : "",
+          "str_hours" : "",
+          "str_minutes" : "",
+          "str_seconds" : ""
+        }
+  
+  # get the fragments, this is not ideal i18n wise, but its
+  # difficult to do it differently
+  if days > 0:
+    map["str_days"] = ngettext("%li day","%li days", days) % days
+  if hours > 0:
+    map["str_hours"] = ngettext("%li hour","%li hours", hours) % hours
+  if minutes > 0:
+    map["str_minutes"] = ngettext("%li minute","%li minutes", minutes) % minutes
+  if seconds > 0:
+    map["str_seconds"] = ngettext("%li second","%li seconds", seconds) % seconds
+
+  # now assemble the string
+  if days > 0:
+    # TRANSLATORS: you can alter the ordering of the remaining time
+    # information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
+    # around. Make sure to keep all '$(str_*)s' in the translated string
+    # and do NOT change anything appart from the ordering.
+    #
+    # %(str_hours)s will be either "1 hour" or "2 hours" depending on the
+    # plural form
+    # 
+    # Note: most western languages will not need to change this
+    return _("%(str_days)s %(str_hours)s %(str_minutes)s") % map
+  elif hours > 0:
+    # TRANSLATORS: you can alter the ordering of the remaining time
+    # information here if you shuffle %(str_hours)s %(str_minutes)s
+    # around. Make sure to keep all '$(str_*)s' in the translated string
+    # and do NOT change anything appart from the ordering.
+    #
+    # %(str_hours)s will be either "1 hour" or "2 hours" depending on the
+    # plural form
+    # 
+    # Note: most western languages will not need to change this
+    return _("%(str_hours)s %(str_minutes)s") % map
+  elif minutes > 0:
+    # TRANSLATORS: you can alter the ordering of the remaining time
+    # information here if you shuffle %(str_minutes)s %(str_seconds)
+    # around. Make sure to keep all '$(str_*)s' in the translated string
+    # and do NOT change anything appart from the ordering.
+    #
+    # %(str_hours)s will be either "1 hour" or "2 hours" depending on the
+    # plural form
+    # 
+    # Note: most western languages will not need to change this
+    return _("%(str_minutes)s %(str_seconds)s") % map
+  else:
+    return map["str_seconds"]
 
 
 class FetchProgress(apt.progress.FetchProgress):

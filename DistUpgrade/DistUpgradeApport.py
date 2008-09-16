@@ -5,6 +5,7 @@ import logging
 import subprocess
 import sys
 import gettext
+import errno
 
 def apport_crash(type, value, tb):
     logging.debug("running apport_crash()")
@@ -32,6 +33,10 @@ def apport_pkgfailure(pkg, errormsg):
 
     # we do not report followup errors from earlier failures
     if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
+        return False
+    # we do not run apport_pkgfailure for full disk errors
+    if os.strerror(errno.ENOSPC) in errormsg:
+        logging.debug("dpkg error because of full disk, not reporting against %s " % pkg)
         return False
 
     if os.path.exists(s):

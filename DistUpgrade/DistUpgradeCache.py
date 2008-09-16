@@ -11,9 +11,11 @@ import time
 import gettext
 import datetime
 import threading
+import ConfigParser
 from subprocess import Popen, PIPE
 
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
@@ -54,6 +56,11 @@ class MyCache(apt.Cache):
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
         self._initAptLog()
+        # from hardy on we use recommends by default, so for the 
+        # transition to the new dist we need to enable them now
+        if (config.get("Sources","From") == "hardy" and 
+            not "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
+            apt_pkg.Config.Set("APT::Install-Recommends","true")
 
     @property
     def reqReinstallPkgs(self):
@@ -70,20 +77,20 @@ class MyCache(apt.Cache):
         " check for reqreinst state and offer to fix it "
         reqreinst = self.reqReinstallPkgs
         if len(reqreinst) > 0:
-            header = gettext.ngettext("Remove package in bad state",
-                                      "Remove packages in bad state", 
-                                      len(reqreinst))
-            summary = gettext.ngettext("The package '%s' is in an inconsistent "
-                                       "state and needs to be reinstalled, but "
-                                       "no archive can be found for it. "
-                                       "Do you want to remove this package "
-                                       "now to continue?",
-                                       "The packages '%s' are in an inconsistent "
-                                       "state and needs to be reinstalled, but "
-                                       "no archives can be found for them. Do you "
-                                       "want to remove these packages now to "
-                                       "continue?",
-                                       len(reqreinst)) % ", ".join(reqreinst)
+            header = ngettext("Remove package in bad state",
+                              "Remove packages in bad state", 
+                              len(reqreinst))
+            summary = ngettext("The package '%s' is in an inconsistent "
+                               "state and needs to be reinstalled, but "
+                               "no archive can be found for it. "
+                               "Do you want to remove this package "
+                               "now to continue?",
+                               "The packages '%s' are in an inconsistent "
+                               "state and needs to be reinstalled, but "
+                               "no archives can be found for them. Do you "
+                               "want to remove these packages now to "
+                               "continue?",
+                               len(reqreinst)) % ", ".join(reqreinst)
             if view.askYesNoQuestion(header, summary):
                 self.releaseLock()
                 cmd = ["dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)
@@ -382,6 +389,53 @@ class MyCache(apt.Cache):
                 self[pkg].markDelete()
         return True
 
+    def identifyObsoleteKernels(self):
+        # we have a funny policy that we remove security updates
+        # for the kernel from the archive again when a new ABI
+        # version hits the archive. this means that we have
+        # e.g. 
+        # linux-image-2.6.24-15-generic 
+        # is obsolete when 
+        # linux-image-2.6.24-19-generic
+        # is available
+        # ...
+        # This code tries to identify the kernels that can be removed
+        logging.debug("identifyObsoleteKernels()")
+        obsolete_kernels = set()
+        version = self.config.get("KernelRemoval","Version")
+        basenames = self.config.getlist("KernelRemoval","BaseNames")
+        types = self.config.getlist("KernelRemoval","Types")
+        for pkg in self:
+            for base in basenames:
+                basename = "%s-%s-" % (base,version)
+                for type in types:
+                    if (pkg.name.startswith(basename) and 
+                        pkg.name.endswith(type) and
+                        pkg.isInstalled):
+                        if (pkg.name == "%s-%s" % (base,self.uname)):
+                            logging.debug("skipping running kernel %s" % pkg.name)
+                            continue
+                        logging.debug("removing obsolete kernel '%s'" % pkg.name)
+                        obsolete_kernels.add(pkg.name)
+        logging.debug("identifyObsoleteKernels found '%s'" % obsolete_kernels)
+        return obsolete_kernels
+
+    def intrepidQuirks(self):
+        """ 
+        this function works around quirks in the 
+        hardy->intrepid upgrade 
+        """
+        logging.debug("intrepidQuirks")
+        # for kde we need to switch from 
+        # kubuntu-desktop-kde4 
+        # to
+        # kubuntu-desktop
+        frompkg = "kubuntu-desktop-kde4"
+        topkg = "kubuntu-desktop"
+        if (self.has_key(frompkg) and
+            self[frompkg].isInstalled):
+            logging.debug("transitioning %s to %s" % (frompkg, topkg))
+            self[topkg].markInstall()
 
     def hardyQuirks(self):
         """ 
@@ -528,40 +582,41 @@ class MyCache(apt.Cache):
             self.markRemove("nvidia-settings")
             self.markInstall("nvidia-glx")
 
-    def checkThirdPartyQuirks(self):
-        """
-        this function checks for common third party packages and tries
-        to work around issues with them
-        """
-        # envy
-        if (os.path.exists("/var/log/envy-installer.log") and
-            os.path.getsize("/var/log/envy-installer.log") > 0):
-            logging.warning("envy detected, trying to workaround")
-            toDist = self.config.get("Sources","To")
-            pkgs = ["nvidia-glx","nvidia-glx-new","nvidia-glx-legacy"] 
-            # downgrade installed to ubuntu version
-            for name in pkgs:
-                if not self.has_key(name):
-                    continue
-                pkg = self[name]
-                if (pkg.candidateVersion == pkg.installedVersion and
-                    not pkg.candidateDownloadable):
-                    logging.debug("found non-downloadable '%s' " % name)
-                    for ver in pkg._pkg.VersionList:
-                        if ver.FileList:
-                            for (VerFileIter, index) in ver.FileList:
-				indexfile = self._list.FindIndex(VerFileIter)
-                                if (indexfile and 
-                                    indexfile.IsTrusted and
-                                    toDist in indexfile.Describe):
-                                    logging.info("Forcing downgrade of '%s' because of envy" % name)
-                                    self._depcache.SetCandidateVer(pkg._pkg, ver)
-                                    pkg.markInstall()
-                                    break
-        # ...
-        return
-                
 
+    def checkForNvidia(self):
+        """ 
+        this checks for nvidia hardware and checks what driver is needed
+        """
+        logging.debug("nvidiaUpdate()")
+        # if the free drivers would give us a equally hard time, we would
+        # never be able to release
+        try:
+            from NvidiaDetector.nvidiadetector import NvidiaDetection
+        except ImportError, e:
+            logging.error("NvidiaDetector can not be imported %s" % e)
+            return False
+        try:
+            # get new detection module and use the modalises files
+            # from within the release-upgrader
+            nv = NvidiaDetection(datadir="modaliases/")
+            #nv = NvidiaDetection()
+            # check if a binary driver is installed now
+            for oldDriver in nv.oldPackages:
+                if self.has_key(oldDriver) and self[oldDriver].isInstalled:
+                    break
+            else:
+                logging.info("no nvidia driver installed before, installing none")
+                return False
+            # check which one to use
+            driver = nv.selectDriver()
+            if (self.has_key(driver) and not
+                (self[driver].markedInstall or self[driver].markedUpgrade)):
+                self[driver].markInstall()
+                logging.info("installing %s as suggested by NvidiaDetector" % driver)
+                return True
+        except Exception, e:
+            logging.error("NvidiaDetection returned a error: %s" % e)
+        return False
 
     def checkForKernel(self):
         """ check for the running kernel and try to ensure that we have
@@ -594,6 +649,11 @@ class MyCache(apt.Cache):
         removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
         # check now
         for pkg in self:
+            # WORKADOUND bug on the CD/python-apt #253255
+            ver = pkg._depcache.GetCandidateVer(pkg._pkg)
+            if ver and ver.Priority == 0:
+                logging.error("Package %s has no priority set" % pkg.name)
+                continue
             if (pkg.candidateDownloadable and
                 not (pkg.isInstalled or pkg.markedInstall) and
                 not pkg.name in removeEssentialOk and
@@ -629,8 +689,8 @@ class MyCache(apt.Cache):
             # check if we got a new kernel
             self.checkForKernel()
 
-            # check for third party stuff (envy)
-            self.checkThirdPartyQuirks()
+            # check for nvidia stuff
+            self.checkForNvidia()
 
             # install missing meta-packages (if not in server upgrade mode)
             if not serverMode:
@@ -698,10 +758,15 @@ class MyCache(apt.Cache):
                 trusted |= origin.trusted
             if not trusted:
                 untrusted.append(pkg.name)
-        b = self.config.getWithDefault("Distro","AllowUnauthenticated", False)
-        if b:
-            logging.warning("AllowUnauthenticated set!")
-        if (len(untrusted) > 0 and not b):
+        # check if the user overwrote the unauthenticated warning
+        try:
+            b = self.config.getboolean("Distro","AllowUnauthenticated")
+            if b:
+                logging.warning("AllowUnauthenticated set!")
+                return True
+        except ConfigParser.NoOptionError, e:
+            pass
+        if len(untrusted) > 0:
             untrusted.sort()
             logging.error("Unauthenticated packages found: '%s'" % \
                           " ".join(untrusted))
@@ -773,11 +838,17 @@ class MyCache(apt.Cache):
         return True
     
     def _installMetaPkgs(self, view):
-        # helper for this func
+
         def metaPkgInstalled():
+            """ 
+            internal helper that checks if at least one meta-pkg is 
+            installed or marked install
+            """
             for key in metapkgs:
                 if self.has_key(key):
                     pkg = self[key]
+                    if pkg.isInstalled and pkg.markedDelete:
+                        logging.debug("metapkg '%s' installed but markedDelete" % pkg.name)
                     if ((pkg.isInstalled and not pkg.markedDelete) 
                         or self[key].markedInstall):
                         return True
@@ -856,7 +927,11 @@ class MyCache(apt.Cache):
             #logging.debug("package '%s' not in cache" % pkgname)
             return True
         # check if we want to purge 
-        purge = bool(self.config.getWithDefault("Distro","PurgeObsoletes",False))
+        try:
+            purge = self.config.getboolean("Distro","PurgeObsoletes")
+        except ConfigParser.NoOptionError, e:
+            purge = False
+
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well
@@ -931,8 +1006,12 @@ class MyCache(apt.Cache):
 if __name__ == "__main__":
 	import DistUpgradeConfigParser
         import DistUpgradeView
+        print "foo"
 	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
                     DistUpgradeView.DistUpgradeView())
+        #c.checkForNvidia()
+        print c._identifyObsoleteKernels()
+        sys.exit()
 	c.clear()
         c.create_snapshot()
         c.installedTasks

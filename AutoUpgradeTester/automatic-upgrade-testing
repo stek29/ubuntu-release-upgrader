@@ -40,7 +40,7 @@ def createBackend(backend_name, profile, basedir):
         return None
     return backend_class(profile, basedir)
     
-def testUpgrade(backend_name, profile, basedir, add_pkgs):
+def testUpgrade(backend_name, profile, basedir, add_pkgs, to_stdout=False):
     backend = createBackend(backend_name, profile, basedir)
     assert(backend != None)
     os.chdir(basedir)
@@ -110,6 +110,9 @@ if __name__ == "__main__":
     parser.add_option("-d", "--diff", dest="gen_diff",
                       default=False, action="store_true",
                       help="generate a diff of the upgraded image versus a fresh installed image")
+    parser.add_option("--stdout", "--stdout", dest="to_stdout",
+                      default=False, action="store_true",
+                      help="all output goes to stdout")
     
     
     (options, args) = parser.parse_args()
@@ -138,7 +141,7 @@ if __name__ == "__main__":
             backend = createBackend(options.backend, options.profile, basedir)
             backend.genDiff()
         else:
-            res &= testUpgrade(options.backend, options.profile, basedir, options.add_pkgs.split(","))
+            res &= testUpgrade(options.backend, options.profile, basedir, options.add_pkgs.split(","), options.to_stdout)
     except Exception, e:
         print "ERROR: exception caught '%s' " % e
         import traceback

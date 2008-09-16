@@ -19,7 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
 import subprocess
 from subprocess import Popen, PIPE
 import apt
@@ -42,6 +43,7 @@ def FuzzyTimeToStr(sec):
 
 class FetchProgress(apt.progress.FetchProgress):
   def __init__(self):
+    #print "init FetchProgress in DistUpgradeView"
     apt.progress.FetchProgress.__init__(self)
     self.est_speed = 0
   def pulse(self):
@@ -70,6 +72,7 @@ class InstallProgress(apt.progress.InstallProgress):
   def __init__(self):
     apt.progress.InstallProgress.__init__(self)
     self.pkg_failures = 0
+    self.master_fd = None
 
   def startUpdate(self):
     # apache: workaround #95325 (edgy->feisty)
@@ -100,13 +103,13 @@ class InstallProgress(apt.progress.InstallProgress):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)
     logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-    self.pkg_failures += 1
     if "/" in pkg:
       pkg = os.path.basename(pkg)
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    apport_pkgfailure(pkg, errormsg)
+    if apport_pkgfailure(pkg, errormsg):
+      self.pkg_failures += 1
 
 class DumbTerminal(object):
     def call(self, cmd, hidden=False):
@@ -200,20 +203,20 @@ class DistUpgradeView(object):
         if pkgs_remove > 0:
           # FIXME: make those two separate lines to make it clear
           #        that the "%" applies to the result of ngettext
-          msg += gettext.ngettext("%d package is going to be removed.",
-                                  "%d packages are going to be removed.",
-                                  pkgs_remove) % pkgs_remove
+          msg += ngettext("%d package is going to be removed.",
+                          "%d packages are going to be removed.",
+                          pkgs_remove) % pkgs_remove
           msg += " "
         if pkgs_inst > 0:
-          msg += gettext.ngettext("%d new package is going to be "
-                                  "installed.",
-                                  "%d new packages are going to be "
-                                  "installed.",pkgs_inst) % pkgs_inst
+          msg += ngettext("%d new package is going to be "
+                          "installed.",
+                          "%d new packages are going to be "
+                          "installed.",pkgs_inst) % pkgs_inst
           msg += " "
         if pkgs_upgrade > 0:
-          msg += gettext.ngettext("%d package is going to be upgraded.",
-                                  "%d packages are going to be upgraded.",
-                                  pkgs_upgrade) % pkgs_upgrade
+          msg += ngettext("%d package is going to be upgraded.",
+                          "%d packages are going to be upgraded.",
+                          pkgs_upgrade) % pkgs_upgrade
           msg +=" "
         if downloadSize > 0:
           msg += _("\n\nYou have to download a total of %s. ") %\

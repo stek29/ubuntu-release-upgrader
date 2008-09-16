@@ -1,10 +1,221 @@
+update-manager (1:0.93.16) intrepid; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - automatically add "relatime" to the mount options
+      of ext2/ext3
+  * DistUpgrade/DistUpgradeCache.py:
+    - fix the removal of obsolete kernel packages when the 
+      old kernel abi package gets removed from -update and/or
+      -security
+
+ --
+
+update-manager (1:0.93.15) intrepid; urgency=low
+
+  * UpdateManager/Core/DistUpgradeFetcherCore.py:
+    - fix incorrect import
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 15 Sep 2008 14:41:41 +0200
+
+update-manager (1:0.93.14) intrepid; urgency=low
+
+  * po/*.po:
+    - updated to the latest launchpad translations
+  * DistUpgrade/DistUpgradeGettext.py:
+    - add more robust version of gettext() that does not
+      crash if incorrect number arguments is passed (LP: #269379)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 15 Sep 2008 13:07:54 +0200
+
+update-manager (1:0.93.13) intrepid; urgency=low
+
+  * DistUpgrade/DistUpgrade.cfg:
+    - better KeyDependencies for ubuntu-desktop to make the 
+      detection more robust
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 12 Sep 2008 21:56:11 +0200
+
+update-manager (1:0.93.12) intrepid; urgency=low
+
+  * DistUpgrade: load DistUpgradeViewKDE not KDE4
+  * DistUpgradeViewKDE: Fix various translations
+  * DistUpgradeViewKDE: Add window icon
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 12 Sep 2008 13:17:52 +0100
+
+update-manager (1:0.93.11) intrepid; urgency=low
+
+  [ Jonathan Riddell ]
+  * DistUpgradeViewKDE: don't use setHeaderHidden, doesn't exist in Qt 4.3
+  * DistUpgradeViewKDE: Disable terminal button until terminal exists
+	
+  [ Michael Vogt ]
+  * rename DistUpgradeViewKDE4.py to DistUpgradeViewKDE.py
+    because adept runs this frontend explicitely (instead
+    of letting dist-upgrade.py decide)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 11 Sep 2008 12:42:10 +0200
+
+update-manager (1:0.93.10) intrepid; urgency=low
+
+  [ Jonathan Riddell ]
+  * Add missing debian/update-manager-kde.install
+  
+  [ Michael Vogt ]
+  * transition landscape.canonical.com to the main repository
+    (LP: #268551)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 10 Sep 2008 15:55:47 +0200
+
+update-manager (1:0.93.9) intrepid; urgency=low
+
+  * do not build depend on nvidia-common for lpia
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 09 Sep 2008 13:56:20 +0200
+
+update-manager (1:0.93.8) intrepid; urgency=low
+
+  [ Michael Vogt ]
+  * DistUpgrade/DistUpgradeCache.py:
+    - transition "kubuntu-desktop-kde4" to "kubuntu-desktop"
+      (thanks to Jonathan Riddell)
+  * DistUpgrade/DistUpgradeCache.py,
+    DistUpgrade/DistUpgradeController.py:
+    - fixes in the "AllowUnauthenticated" code (thanks to Adam
+      Conrad)
+  * debian/update-manager-hildon.install:
+    - install only selected bits from Comon/
+  
+  [ Emmet Hikory ]
+  * Removed check to set automatic notifications in update-manager-hildon
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 05 Sep 2008 19:41:04 +0200
+
+update-manager (1:0.93.7) intrepid; urgency=low
+
+  * Move Common/utils.py to update-manager-core
+  * Fix build when rebuilding with -nc
+  * UpdateManager/DistUpgradeFetcherKDE.py shouldn't import ReleaseNotesViewer
+  * DistUpgrade/cdromupgrade should be intrepid
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 04 Sep 2008 23:04:42 +0100
+
+update-manager (1:0.93.6) intrepid; urgency=low
+
+  * Make DistUpgradeFetcherKDE.py work as a module not just a standalone script
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 28 Aug 2008 13:32:25 +0100
+
+update-manager (1:0.93.5) intrepid; urgency=low
+
+  [ Michael Vogt ]
+  * DistUpgrade/DistUpgradeCache.py:
+    - install new recommends on the hardy->intrepid upgrade
+      (unless overwriten with the RELEASE_UPGRADE_NO_RECOMMENDS
+       environment)
+  * AutoUpgradeTester/UpgradeTestBackendQemu.py:
+    - run ssh in the auto tester with "-t"
+  * UpdateManager/UpdateManager.py:
+    - fix plural forms (thanks to Bruce Cowan, LP: #189921)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - show kB/sec (LP: #257778)
+
+  [ Jonathan Riddell ]
+  * Add KDE upgrade checking tools for use by Adept
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 27 Aug 2008 15:19:01 +0100
+
+update-manager (1:0.93.4) intrepid; urgency=low
+
+  * DistUpgrade/removal_blacklist.cfg:
+    - add openssh-blacklist-extra and openssh-extra
+  * UpdateManager/UpdateManager.py:
+    - do not crash if lsb_release can not be run (LP: #255319)
+  * DistUpgrade/DistUpgradeApport.py:
+    - do not generate apport reports against a package if
+      the error indicates that its a full disk, this is a bug
+      in update-manager than (failed to do the full disk checking)
+  * DistUpgrade/DistUpgrade.cfg:
+    - force obsoletion of cups-pdf on ubuntu-desktop, kubuntu-desktop
+      and xubuntu-desktop
+  * DistUpgrade/DistUpgradeController.py:
+    - increase KERNEL_INITRD_SIZE a bit
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 15 Aug 2008 19:40:46 +0200
+
+update-manager (1:0.93.3) intrepid; urgency=low
+
+  * fix ftbfs on powerpc
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 05 Aug 2008 21:20:59 +0200
+
+update-manager (1:0.93.2) intrepid; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - work around problem with packages with no priority
+      (LP: #253255)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - detect ctrl-c presses in the terminal and warn the 
+      user that it will kill the upgrade (LP: #90866)
+  * DistUpgrade/DistUpgrade.cfg:
+    - when being run by the sandbox-upgrader, do not 
+      reboot automatically after the upgrade finished
+  * DistUpgrade/DistUpgradeController.py:
+    - when a upgrade is cancelt due to network errors, 
+      inform that the downloaded files will be kept 
+      (LP: #242111)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 05 Aug 2008 20:37:52 +0200
+
+update-manager (1:0.93.1) intrepid; urgency=low
+
+  * UpdateManager/UpdateManager.py:
+    - make the init_proxy stuff look for the apt.conf proxy 
+      as well (thanks to vega--)
+  * do-release-upgrade:
+    - unify proxy configuration between gtk and cli UI
+  * fix FBTFS by removing the kdepyuic calls during build
+    (no longer needed in qt4)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 30 Jul 2008 11:29:00 +0200
+
+update-manager (1:0.93) intrepid; urgency=low
+
+  [ Michael Vogt ]
+  * UpdateManager/UpdateManager.py:
+    - fix typo (LP: #252195)
+  * DistUpgrade/DistUpgradeController.py:
+    - fix crash in cleanup code
+  
+  [ Jonathan Riddell ]
+  * port the kde frontend to qt4
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 30 Jul 2008 09:01:45 +0200
+
+update-manager (1:0.92) intrepid; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - use nvidia-common to detect what driver package is needed
+      and install it if the user had a previous nvidia driver 
+    (thanks to Alberto Milone)
+  * improvements to the NonInteractive frontend
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 25 Jul 2008 09:26:47 +0200
+
 update-manager (1:0.91.10) intrepid; urgency=low
 
   * UpdateManager/Core/DistUpgradeFetcherCore.py:
     - improved error handling for people who run
       /tmp with noexec (LP: #219518)
+  * DistUpgrade/ReleaseAnnouncement:
+    - fixes in the announcement text (thanks to 
+      Brian Murray, LP: #250693)
+  * DistUpgrade/removal_blacklist.cfg:
+    - remove nvidia-glx from the removal blacklist,
+      the naming schema changed in intrepid and the
+      old packages need to go way (LP: #249329)
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 22 Jul 2008 12:04:34 +0200
 
 update-manager (1:0.91.9) intrepid; urgency=low
 

@@ -63,6 +63,7 @@ import dbus.service
 import dbus.glib
 
 from gettext import gettext as _
+from gettext import ngettext
 
 from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
@@ -255,7 +256,7 @@ class MyCache(apt.Cache):
                 self.all_changes[name] = [
                     _("The list of changes is not available yet.\n\n"
                       "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-                      "until the changes become availabble or try again "
+                      "until the changes become available or try again "
                       "later.") % (srcpkg, srcver),
                     srcpkg]
         except IOError, httplib.BadStatusLine:
@@ -274,11 +275,18 @@ class UpdateList:
       self.importance = importance
       self.description = desc
 
-  def __init__(self):
+  def __init__(self, parent):
     # a map of packages under their origin
-    pipe = os.popen("lsb_release -c -s")
-    dist = pipe.read().strip()
-    del pipe
+    try:
+        pipe = os.popen("lsb_release -c -s")
+        dist = pipe.read().strip()
+        del pipe
+    except Exception, e:
+        print "Error in lsb_release: %s" % e
+        parent.error(_("Failed to detect distribution"),
+                     _("A error '%s' occurred while checking what system "
+                       "you are using.") % e)
+        sys.exit(1)
     self.distUpgradeWouldDelete = 0
     self.pkgs = {}
     self.num_updates = 0
@@ -305,11 +313,13 @@ class UpdateList:
     # do the upgrade
     self.distUpgradeWouldDelete = cache.saveDistUpgrade()
 
+    dselect_upgrade_origin = self.UpdateOrigin(_("Previous selected"), 1)
+
     # sort by origin
     for pkg in cache:
       if pkg.isUpgradable or pkg.markedInstall:
         if pkg.candidateOrigin == None:
-            # can happen for e.g. loged packages
+            # can happen for e.g. locked packages
             # FIXME: do something more sensible here (but what?)
             print "WARNING: upgradable but no canidateOrigin?!?: ", pkg.name
             continue
@@ -411,46 +421,11 @@ class UpdateManager(SimpleGladeApp):
         self.button_help.set_sensitive(False)
 
     self.gconfclient = gconf.client_get_default()
-    self.init_proxy()
+    init_proxy(self.gconfclient)
 
     # restore state
     self.restore_state()
     self.window_main.show()
-
-  def init_proxy(self):
-      # proxy settings, first check for http_proxy environment (always wins),
-      # then look into synaptics conffile, then into gconf 
-      if os.getenv("http_proxy"):
-          return
-      SYNAPTIC_CONF_FILE = "%s/.synaptic/synaptic.conf" % pwd.getpwuid(0)[5]
-      proxy = None
-      if os.path.exists(SYNAPTIC_CONF_FILE):
-          cnf = apt_pkg.newConfiguration()
-          apt_pkg.ReadConfigFile(cnf, SYNAPTIC_CONF_FILE)
-          use_proxy = cnf.FindB("Synaptic::useProxy", False)
-          if use_proxy:
-              proxy_host = cnf.Find("Synaptic::httpProxy")
-              proxy_port = str(cnf.FindI("Synaptic::httpProxyPort"))
-              if proxy_host and proxy_port:
-                  # FIXME: set the proxy for libapt here as well (e.g. for the
-                  #        DistUpgradeFetcher
-                  proxy = "http://%s:%s/" % (proxy_host, proxy_port)
-      elif self.gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
-          host = self.gconfclient.get_string("/system/http_proxy/host")
-          port = self.gconfclient.get_int("/system/http_proxy/port")
-          use_auth = self.gconfclient.get_bool("/system/http_proxy/use_authentication")
-          if host and port:
-              if use_auth:
-                  auth_user = self.gconfclient.get_string("/system/http_proxy/authentication_user")
-                  auth_pw = self.gconfclient.get_string("/system/http_proxy/authentication_password")
-                  proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
-              else:
-                  proxy = "http://%s:%s/" % (host, port)
-      if proxy:
-          proxy_support = urllib2.ProxyHandler({"http":proxy})
-          opener = urllib2.build_opener(proxy_support)
-          urllib2.install_opener(opener)
-          os.putenv("http_proxy",proxy)
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
     pkg = model.get_value(iter, LIST_PKG)
@@ -672,9 +647,13 @@ class UpdateManager(SimpleGladeApp):
       ago_days = int( (time.time() - mtime) / (24*60*60))
       ago_hours = int((time.time() - mtime) / (60*60) )
       if ago_days > 0:
-          return _("The package information was last updated %s days ago.") % ago_days
+          return ngettext("The package information was last updated %s day ago.",
+                          "The package information was last updated %s days ago.",
+                          ago_days) % ago_days
       elif ago_hours > 0:
-          return _("The package information was last updated %s hours ago.") % ago_hours
+          return ngettext("The package information was last updated %s hour ago.",
+                          "The package information was last updated %s hours ago.",
+                          ago_days) % ago_hours
       else:
           return _("The package information was last updated less than one hour ago.")
       return None
@@ -699,10 +678,10 @@ class UpdateManager(SimpleGladeApp):
               text_label_main = self._get_last_apt_get_update_text()
       else:
           text_header = "<big><b>%s</b></big>" % \
-                        (gettext.ngettext("You can install %s update.",
-                                          "You can install %s updates.", 
-                                          num_updates) % \
-                                          num_updates)
+                        (ngettext("You can install %s update.",
+                                  "You can install %s updates.", 
+                                  num_updates) % \
+                                  num_updates)
           text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
@@ -914,7 +893,7 @@ class UpdateManager(SimpleGladeApp):
         dialog.destroy()
         sys.exit(1)
     self.store.clear()
-    self.list = UpdateList()
+    self.list = UpdateList(self)
     # fill them again
     try:
         self.list.update(self.cache)
@@ -968,6 +947,17 @@ class UpdateManager(SimpleGladeApp):
     dialog.set_markup(msg)
     dialog.run()
     dialog.destroy()
+
+  def error(self, summary, details):
+      " helper function to display a error message "
+      msg = ("<big><b>%s</b></big>\n\n%s\n" % (summary, details) )
+      dialog = gtk.MessageDialog(self.window_main,
+                                 0, gtk.MESSAGE_ERROR,
+                                 gtk.BUTTONS_CLOSE,"")
+      dialog.set_markup(msg)
+      dialog.vbox.set_spacing(6)
+      dialog.run()
+      dialog.destroy()
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"

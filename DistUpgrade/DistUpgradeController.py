@@ -34,6 +34,7 @@ import shutil
 import glob
 import time
 import copy
+import ConfigParser
 from stat import *
 from string import Template
 
@@ -44,14 +45,16 @@ from DistUpgradeFetcherCore import country_mirror
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro, NoDistroTemplateException
 
-from gettext import gettext as _
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
 import gettext
+
 from DistUpgradeCache import *
 from DistUpgradeApport import *
 
 # some constant
 # the initrd space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 10*1024*1024
+KERNEL_INITRD_SIZE = 12*1024*1024
 
 class NoBackportsFoundException(Exception):
     pass
@@ -468,8 +471,8 @@ class DistUpgradeController(object):
             # don't use a standard archive layout
             if (not entry.disabled and
                 entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
-                entry.uri = "http://landscape.canonical.com/packages/%s" % self.toDist
-                logging.debug("transitioning landscape.canonical.com to '%s' " % entry)
+                logging.debug("commenting landscape.canonical.com out")
+                entry.disabled = True
                 continue
 
             # special case for old-releases.ubuntu.com, auto transition
@@ -641,20 +644,20 @@ class DistUpgradeController(object):
             self.openCache()
         if len(self.cache.reqReinstallPkgs) > 0:
             reqreinst = self.cache.reqReinstallPkgs
-            header = gettext.ngettext("Package in inconsistent state",
-                                      "Packages in inconsistent state",
-                                      len(reqreinst))
-            summary = gettext.ngettext("The package '%s' is in an inconsistent "
-                                       "state and needs to be reinstalled, but "
-                                       "no archive can be found for it. "
-                                       "Please reinstall the package manually "
-                                       "or remove it from the system.",
-                                       "The packages '%s' are in an inconsistent "
-                                       "state and need to be reinstalled, but "
-                                       "no archive can be found for it."
-                                       "Please reinstall the packages manually "
-                                       "or remove them from the system.",
-                                       len(reqreinst)) % ", ".join(reqreinst)
+            header = ngettext("Package in inconsistent state",
+                              "Packages in inconsistent state",
+                              len(reqreinst))
+            summary = ngettext("The package '%s' is in an inconsistent "
+                               "state and needs to be reinstalled, but "
+                               "no archive can be found for it. "
+                               "Please reinstall the package manually "
+                               "or remove it from the system.",
+                               "The packages '%s' are in an inconsistent "
+                               "state and need to be reinstalled, but "
+                               "no archive can be found for it."
+                               "Please reinstall the packages manually "
+                               "or remove them from the system.",
+                               len(reqreinst)) % ", ".join(reqreinst)
             self._view.error(header, summary)
             return False
         # FIXME: check out what packages are downloadable etc to
@@ -904,9 +907,10 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade aborts now. Please check your "\
-                           "Internet connection or "\
-                           "installation media and try again. "),
+                         _("The upgrade aborts now. Please check your "
+                           "Internet connection or "
+                           "installation media and try again. All files "
+                           "downloaded so far are kept."),
                            "%s" % e)
         # abort here because we want our sources.list back
         self.abort()
@@ -924,10 +928,11 @@ class DistUpgradeController(object):
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
-                # check if the installprogress catched a pkgfailure, 
-                # if not, generate a fallback here
+                # check if the installprogress catched a pkg_failures, 
+                # if not, generate a fallback here (pkg_failures can be
+                # zero because of e.g. disk-full problems)
                 if iprogress.pkg_failures == 0:
-                    logging.warning("cache.commit() raised a SystemError but pkg_failures count is 0")
+                    logging.warning("cache.commit() error and pkg_failures == 0, generate a report against update-manager to investigate")
                     errormsg = "SystemError in cache.commit(): %s" % e
                     apport_pkgfailure("update-manager", errormsg)
                 # invoke the frontend now
@@ -944,7 +949,6 @@ class DistUpgradeController(object):
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
                 self._rewriteAptPeriodic(self.apt_minAge)
-                self._fixupEnvy()
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -965,37 +969,6 @@ class DistUpgradeController(object):
         # abort here because we want our sources.list back
         self.abort()
 
-    def _fixupEnvy(self):
-        " fixupEnvy "
-        if (os.path.exists("/var/log/envy-installer.log") and
-            os.path.getsize("/var/log/envy-installer.log") > 0):
-            logging.warning("envy detected, fixing configuration")
-            # fixup /etc/default/linux-restricted-modules-common
-            # and comment DISABLED_MODULES
-            lrm_path = "/etc/default/linux-restricted-modules-common"
-            if os.path.exists(lrm_path):
-                lrm = open(lrm_path).read()
-                f = open(lrm_path,"w")
-                for line in lrm.split("\n"):
-                    if line.startswith("DISABLED_MODULES="):
-                        logging.warning("editing DISABLED_MODULES")
-                        line = line.replace("nvidia_legacy","")
-                        line = line.replace("nvidia_new","")
-                        line = line.replace("nvidia","")
-                        line = line.replace("nv","")
-                        line = line.replace("fglrx","")
-                    f.write(line+"\n")
-            # now uncomment /etc/modprobe.d/lrm-video
-            lrm_video = "/etc/modprobe.d/lrm-video"
-            if os.path.exists(lrm_video):
-                lrm = open(lrm_video).read()
-                f = open(lrm_video,"w")
-                for line in lrm.split("\n"):
-                    if line.startswith("#install"):
-                        line = line[1:]
-                    f.write(line+"\n")
-        return True
-
     def doPostUpgrade(self):
         # reopen cache
         self.openCache()
@@ -1006,9 +979,6 @@ class DistUpgradeController(object):
             func = getattr(self, quirksFuncName, None)
             if func is not None:
                 func()
-
-        # fixup envy
-        self._fixupEnvy()
 
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
@@ -1025,6 +995,8 @@ class DistUpgradeController(object):
         for pkg in self.config.getlist("Distro","MetaPkgs"):
             if self.cache.has_key(pkg) and self.cache[pkg].isInstalled:
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
+        # now add the obsolete kernels to the forced obsoletes
+        self.forced_obsoletes.extend(self.cache.identifyObsoleteKernels())
         logging.debug("forced_obsoletes: %s", self.forced_obsoletes)
 
         # mark packages that are now obsolete (and where not obsolete
@@ -1090,6 +1062,39 @@ class DistUpgradeController(object):
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
+
+    def _addRelatimeToFstab(self):
+        " add the relatime option to ext2/ext3 filesystems on upgrade "
+        logging.debug("_addRelatime")
+        replaced = False
+        lines = []
+        # we have one cdrom to convert
+        for line in open("/etc/fstab"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                lines.append(line)
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                lines.append(line)
+                continue
+            if (("ext2" in fstype or
+                "ext3" in fstype) and 
+                not "relatime" in options):
+                logging.debug("adding 'relatime' to line '%s' " % line)
+                line = line.replace(options,"%s,relatime" % options)
+                logging.debug("replaced line is '%s' " % line)
+                replaced=True
+            lines.append(line)
+        # we have converted a line (otherwise we would have exited already)
+        if replaced > 0:
+            logging.debug("writing new /etc/fstab")
+            open("/etc/fstab.intrepid","w").write("\n".join(lines))
+            shutil.rename("/etc/fstab.intrepid","/etc/fstab")
+        return True
+        
 
     def _rewriteFstab(self):
         " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
@@ -1167,6 +1172,9 @@ class DistUpgradeController(object):
         self._rewriteFstab()
         self._checkAdminGroup()
         
+    def intrepidQuirks(self):
+        " this applies rules for the hardy->intrepid upgrade "
+        self._addRelatimeToFstab()
 
     def gutsyQuirks(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
@@ -1257,9 +1265,16 @@ class DistUpgradeController(object):
         return True
 
     def _allBackportsAuthenticated(self, backportslist):
+        # check if the user overwrote the check
         if apt_pkg.Config.FindB("APT::Get::AllowUnauthenticated",False) == True:
             logging.warning("skip authentication check because of APT::Get::AllowUnauthenticated==true")
             return True
+        try:
+            b = self.config.getboolean("Distro","AllowUnauthenticated")
+            if b:
+                return True
+        except ConfigParser.NoOptionError, e:
+            pass
         for pkgname in backportslist:
             pkg = self.cache[pkgname]                
             for cand in pkg.candidateOrigin:
@@ -1631,8 +1646,10 @@ if __name__ == "__main__":
     from DistUpgradeCache import MyCache
     v = DistUpgradeViewText()
     dc = DistUpgradeController(v)
-    dc.openCache()
-    dc.askDistUpgrade()
+    #dc.openCache()
+    dc._addRelatimeToFstab()
+    #dc.prepare()
+    #dc.askDistUpgrade()
     #dc._checkFreeSpace()
     #dc._rewriteFstab()
     #dc._checkAdminGroup()

@@ -19,11 +19,6 @@ sed -i s/^CODENAME=.*/CODENAME=$DIST/ cdromupgrade
 # update demotions
 #(cd ../utils/ ; ./demotions.py )
 
-# make the kde-gui
-for file in *.ui; do 
-    kdepyuic $file 
-done
-
 # copy the mo files
 cp -r ../po/mo .
 
@@ -31,6 +26,12 @@ cp -r ../po/mo .
 if [ ! -h $DIST ]; then
 	ln -s dist-upgrade.py $DIST
 fi
+
+# copy the nvidia-modaliases files
+if [ ! -d modaliases ]; then
+    mkdir modaliases 
+fi
+cp /usr/share/jockey/modaliases/nvidia-* modaliases
 
 # create the tarball, copy links in place 
 tar -c -h -z -v --exclude=$DIST.tar.gz --exclude=$0 -X build-exclude.txt -f $DIST.tar.gz  .

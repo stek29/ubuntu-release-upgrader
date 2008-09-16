@@ -212,6 +212,7 @@ class MyCache(apt.Cache):
         # stip epoch
         l = string.split(srcver,":")
         if len(l) > 1:
+            srcver_epoch = srcver
             srcver = "".join(l[1:])
 
         try:
@@ -252,6 +253,8 @@ class MyCache(apt.Cache):
             if lock.locked():
                 self.all_changes[name] = [alllines, srcpkg]
         except urllib2.HTTPError,e:
+            if srcver_epoch:
+                srcver = srcver_epoch
             if lock.locked():
                 self.all_changes[name] = [
                     _("The list of changes is not available yet.\n\n"

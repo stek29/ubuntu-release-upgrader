@@ -209,7 +209,9 @@ class MyCache(apt.Cache):
         if srcpkg.startswith("lib"):
             prefix = "lib" + srcpkg[3]
 
-        # stip epoch
+        # stip epoch, but save epoch for later when displaying the
+        # launchpad changelog
+        srcver_epoch = srcver
         l = string.split(srcver,":")
         if len(l) > 1:
             srcver = "".join(l[1:])
@@ -251,15 +253,15 @@ class MyCache(apt.Cache):
             # only write if we where not canceld
             if lock.locked():
                 self.all_changes[name] = [alllines, srcpkg]
-        except urllib2.HTTPError,e:
+        except urllib2.HTTPError, e:
             if lock.locked():
                 self.all_changes[name] = [
                     _("The list of changes is not available yet.\n\n"
                       "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                       "until the changes become available or try again "
-                      "later.") % (srcpkg, srcver),
+                      "later.") % (srcpkg, srcver_epoch),
                     srcpkg]
-        except IOError, httplib.BadStatusLine:
+        except (IOError, httplib.BadStatusLine), e:
             if lock.locked():
                 self.all_changes[name] = [_("Failed to download the list "
                                             "of changes. \nPlease "

@@ -183,8 +183,12 @@ class DistUpgradeController(object):
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add
         self.valid_mirrors = self.config.getListFromFile("Sources","ValidMirrors")
+        # debugging
+        #apt_pkg.Config.Set("DPkg::Options::","--debug=0077")
+
 
     def openCache(self, lock=True):
+        logging.debug("openCache()")
         if self.cache is not None:
             self.cache.releaseLock()
             self.cache.unlockListsDir()
@@ -210,6 +214,7 @@ class DistUpgradeController(object):
                                "already running. Please close that "
                                "application first."));
             sys.exit(1)
+        logging.debug("/openCache()")
 
     def _sshMagic(self):
         """ this will check for server mode and if we run over ssh.
@@ -973,12 +978,16 @@ class DistUpgradeController(object):
         # reopen cache
         self.openCache()
         
-        # now run the quirksHandler 
-        for name in ("%sQuirks", "from_%sQuirks"):
-            quirksFuncName = name % self.config.get("Sources","From")
-            func = getattr(self, quirksFuncName, None)
-            if func is not None:
-                func()
+        # now run the quirksHandler from_${FROM-DIST}Quirks
+        quirksFuncName = "from_%sQuirks" % self.config.get("Sources","From")
+        func = getattr(self, quirksFuncName, None)
+        if func is not None:
+            func()
+        # and now ${TO-DIST}Quirks
+        quirksFuncName = "%sQuirks" % self.config.get("Sources","to")
+        func = getattr(self, quirksFuncName, None)
+        if func is not None:
+            func()
 
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
@@ -1092,7 +1101,7 @@ class DistUpgradeController(object):
         if replaced:
             logging.debug("writing new /etc/fstab")
             open("/etc/fstab.intrepid","w").write("\n".join(lines))
-            shutil.rename("/etc/fstab.intrepid","/etc/fstab")
+            os.rename("/etc/fstab.intrepid","/etc/fstab")
         return True
         
 
@@ -1174,6 +1183,7 @@ class DistUpgradeController(object):
         
     def intrepidQuirks(self):
         " this applies rules for the hardy->intrepid upgrade "
+	logging.debug("running Controller.intrepidQuirks handler")
         self._addRelatimeToFstab()
 
     def gutsyQuirks(self):

@@ -657,7 +657,7 @@ class UpdateManager(SimpleGladeApp):
       elif ago_hours > 0:
           return ngettext("The package information was last updated %s hour ago.",
                           "The package information was last updated %s hours ago.",
-                          ago_days) % ago_hours
+                          ago_hours) % ago_hours
       else:
           return _("The package information was last updated less than one hour ago.")
       return None

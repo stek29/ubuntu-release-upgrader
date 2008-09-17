@@ -45,6 +45,9 @@ def init_proxy(gconfclient=None):
         proxy = "http://%s:%s/" % (host, port)
   # if we have a proxy, set it
   if proxy:
+    # basic verification
+    if not proxy.startswith("http://"):
+      return
     proxy_support = urllib2.ProxyHandler({"http":proxy})
     opener = urllib2.build_opener(proxy_support)
     urllib2.install_opener(opener)

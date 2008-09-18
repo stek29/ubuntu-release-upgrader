@@ -273,7 +273,7 @@ class KDEInstallProgressAdapter(InstallProgress):
 
         dialogue = QDialog(self.parent.window_main)
         loadUi("dialog_error.ui", dialogue)
-        self.translate_widget_children(dialogue)
+        self.parent.translate_widget_children(dialogue)
         dialogue.label_error.setText(utf8(msg))
         if errormsg != None:
             dialogue.textview_error.setText(utf8(errormsg))

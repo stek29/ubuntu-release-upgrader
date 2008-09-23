@@ -436,17 +436,6 @@ class MyCache(apt.Cache):
             self[frompkg].isInstalled):
             logging.debug("transitioning %s to %s" % (frompkg, topkg))
             self[topkg].markInstall()
-        # landscape-client (in desktop mode) goes away (was a stub
-        # anyway)
-        name = "landscape-client"
-        ver = "0.1"
-        if not self.serverMode:
-            if (self.has_key(name) and
-                self[name].installedVersion == ver):
-                self.markRemove(name, 
-                                "custom landscape stub removal rule")
-                self.markRemove("landscape-common", 
-                                "custom landscape stub removal rule")
 
     def hardyQuirks(self):
         """ 
@@ -679,7 +668,6 @@ class MyCache(apt.Cache):
 
     @withResolverLog
     def distUpgrade(self, view, serverMode, partialUpgrade):
-        self.serverMode = serverMode
         # keep the GUI alive
         lock = threading.Lock()
         lock.acquire()

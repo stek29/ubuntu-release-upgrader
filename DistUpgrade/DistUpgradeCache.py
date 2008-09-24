@@ -913,7 +913,7 @@ class MyCache(apt.Cache):
 
     @withResolverLog
     def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
-        logging.debug("tryMarkObsoleteForRemoval(): %s" % pkgname)
+        #logging.debug("tryMarkObsoleteForRemoval(): %s" % pkgname)
         # sanity check, first see if it looks like a running kernel pkg
         if pkgname.endswith(self.uname):
             logging.debug("skipping running kernel pkg '%s'" % pkgname)
@@ -939,7 +939,7 @@ class MyCache(apt.Cache):
         self.create_snapshot()
         try:
             self[pkgname].markDelete(purge=purge)
-            logging.debug("marking '%s' for removal" % pkgname)
+            #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 
                       pkg.name in foreign_pkgs or 

@@ -631,7 +631,7 @@ class DistUpgradeController(object):
             elif pkg.markedUpgrade: up.append(pkg.name)
             elif pkg.markedDelete: rm.append(pkg.name)
             elif (pkg.isInstalled and pkg.isUpgradable): held.append(pkg.name)
-            elif pkg.markedKeep: keep.append(pkg.name)
+            elif pkg.isInstalled and pkg.markedKeep: keep.append(pkg.name)
         logging.debug("Keep at same version: %s" % " ".join(keep))
         logging.debug("Upgradable, but held- back: %s" % " ".join(held))
         logging.debug("Remove: %s" % " ".join(rm))

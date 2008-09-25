@@ -930,7 +930,16 @@ class UpdateManager(SimpleGladeApp):
           contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           #TRANSLATORS: the b stands for Bytes
           size = _("(Size: %s)") % humanize_size(pkg.packageSize)
-          contents = "%s <small>%s</small>" % (contents, size)
+          if pkg.installedVersion != None:
+              version = _("From version %(old_version)s to %(new_version)s") %\
+                  {"old_version" : pkg.installedVersion,
+                   "new_version" : pkg.candidateVersion}
+          else:
+              version = _("Version %s") % pkg.candidateVersion
+          if self.gconfclient.get_bool("/apps/update-manager/show_versions"):
+              contents = "%s\n<small>%s %s</small>" % (contents, version, size)
+          else:
+              contents = "%s <small>%s</small>" % (contents, size)
           self.store.append([contents, pkg.name, pkg, None])
     self.update_count()
     self.setBusy(False)

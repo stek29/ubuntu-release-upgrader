@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2008-09-04 23:40+0000\n"
+"POT-Creation-Date: 2008-09-25 21:49+0200\n"
 "PO-Revision-Date: 2008-09-05 00:58+0000\n"
 "Last-Translator: Khandakar Mujahidul Islam <suzan@bengalinux.org>\n"
 "Language-Team: Bengali <bn@li.org>\n"
@@ -17,6 +17,1656 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2008-09-15 09:05+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#. TRANSLATORS: download size is 0
+#: ../DistUpgrade/utils.py:134 ../UpdateManager/Common/utils.py:134
+msgid "0 KB"
+msgstr ""
+
+#. TRANSLATORS: download size of very small updates
+#: ../DistUpgrade/utils.py:137 ../UpdateManager/Common/utils.py:137
+msgid "1 KB"
+msgstr ""
+
+#. TRANSLATORS: download size of small updates, e.g. "250 KB"
+#: ../DistUpgrade/utils.py:140 ../UpdateManager/Common/utils.py:140
+#, python-format
+msgid "%.0f KB"
+msgstr ""
+
+#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
+#: ../DistUpgrade/utils.py:143 ../UpdateManager/Common/utils.py:143
+#, python-format
+msgid "%.1f MB"
+msgstr ""
+
+#. TRANSLATORS: %s is a country
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#, python-format
+msgid "Server for %s"
+msgstr ""
+
+#. More than one server is used. Since we don't handle this case
+#. in the user interface we set "custom servers" to true and
+#. append a list of all used servers
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
+msgid "Main server"
+msgstr ""
+
+#: ../DistUpgrade/distro.py:235
+msgid "Custom servers"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid "*DEPRECATED* this option will be ignore"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:27
+msgid "Perform a partial upgrade only (no sources.list rewriting)"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:29
+msgid "Set datadir"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:80
+msgid "Remove package in bad state"
+msgid_plural "Remove packages in bad state"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:83
+#, python-format
+msgid ""
+"The package '%s' is in an inconsistent state and needs to be reinstalled, "
+"but no archive can be found for it. Do you want to remove this package now "
+"to continue?"
+msgid_plural ""
+"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
+"but no archives can be found for them. Do you want to remove these packages "
+"now to continue?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:278
+msgid "Broken packages"
+msgstr "ভাঙা প্যাকেজসমূহ"
+
+#: ../DistUpgrade/DistUpgradeCache.py:279
+msgid ""
+"Your system contains broken packages that couldn't be fixed with this "
+"software. Please fix them first using synaptic or apt-get before proceeding."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:698
+msgid "Can't upgrade required meta-packages"
+msgstr "দরকারী meta-packages আপগ্রেড করতে পারে নি"
+
+#: ../DistUpgrade/DistUpgradeCache.py:702
+msgid "A essential package would have to be removed"
+msgstr "একটি প্রয়োজনীয় প্যকেজ অপসারণ করা হতে পারে"
+
+#. FIXME: change the text to something more useful
+#: ../DistUpgrade/DistUpgradeCache.py:709
+msgid ""
+"An unresolvable problem occurred while calculating the upgrade.\n"
+"\n"
+" This can be caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+" * Running the current pre-release version of Ubuntu\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+"\n"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:719
+#, fuzzy
+msgid "This is most likely a transient problem, please try again later."
+msgstr "পরিবর্তনের তালিকা এখনে উপস্হিত নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
+
+#: ../DistUpgrade/DistUpgradeCache.py:722
+msgid ""
+"If none of this applies, then please report this bug against the 'update-"
+"manager' package and include the files in /var/log/dist-upgrade/ in the "
+"bugreport."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:727
+#: ../UpdateManager/UpdateManager.py:906
+msgid "Could not calculate the upgrade"
+msgstr "আপগ্রেড গণনা করতে পারছে না"
+
+#. FIXME: maybe ask a question here? instead of failing?
+#: ../DistUpgrade/DistUpgradeCache.py:774
+msgid "Error authenticating some packages"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:775
+msgid ""
+"It was not possible to authenticate some packages. This may be a transient "
+"network problem. You may want to try again later. See below for a list of "
+"unauthenticated packages."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:887
+#, python-format
+msgid "Can't install '%s'"
+msgstr "'%s' ইন্সটল করা যাচ্ছে না"
+
+#: ../DistUpgrade/DistUpgradeCache.py:888
+msgid ""
+"It was impossible to install a required package. Please report this as a "
+"bug. "
+msgstr ""
+"একটি প্রয়োজনীয় প্যাকেজ ইন্সটল করা অসম্ভব ছিল। অনুগ্রহ করে একে একটি বাগ হিসাবে "
+"রিপোর্ট করুন। "
+
+#. FIXME: provide a list
+#: ../DistUpgrade/DistUpgradeCache.py:896
+msgid "Can't guess meta-package"
+msgstr "meta-package অনুমান করা যাচ্ছ না"
+
+#: ../DistUpgrade/DistUpgradeCache.py:897
+msgid ""
+"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop or edubuntu-desktop package and it was not possible to detect which "
+"version of Ubuntu you are running.\n"
+" Please install one of the packages above first using synaptic or apt-get "
+"before proceeding."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:95
+#, fuzzy
+msgid "Failed to add the CD"
+msgstr "আনতে ব্যর্থ"
+
+#: ../DistUpgrade/DistUpgradeController.py:96
+#, python-format
+msgid ""
+"There was a error adding the CD, the upgrade will abort. Please report this "
+"as a bug if this is a valid Ubuntu CD.\n"
+"\n"
+"The error message was:\n"
+"'%s'"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:128
+msgid "Reading cache"
+msgstr "ক্যাশ পড়া হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeController.py:210
+msgid "Unable to get exclusive lock"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:211
+msgid ""
+"This usually means that another package management application (like apt-get "
+"or aptitude) already running. Please close that application first."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:231
+msgid "Continue running under SSH?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:232
+#, python-format
+msgid ""
+"This session appears to be running under ssh. It is not recommended to "
+"perform a upgrade over ssh currently because in case of failure it is harder "
+"to recover.\n"
+"\n"
+"If you continue, a additional ssh daemon will be started at port '%s'.\n"
+"Do you want to continue?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:247
+msgid "Starting additional sshd"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:248
+#, python-format
+msgid ""
+"To make recovery in case of failure easier, an additional sshd will be "
+"started on port '%s'. If anything goes wrong with the running ssh you can "
+"still connect to the additional one.\n"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:316
+#: ../DistUpgrade/DistUpgradeController.py:339
+#, fuzzy
+msgid "Can not upgrade"
+msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeController.py:317
+#, python-format
+msgid "An upgrade from '%s' to '%s' is not supported with this tool."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:340
+msgid ""
+"Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:366
+msgid "Package 'debsig-verify' is installed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:367
+msgid ""
+"The upgrade can not continue with that package installed.\n"
+"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+"run the upgrade again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:377
+msgid "Include latest updates from the Internet?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:378
+msgid ""
+"The upgrade system can use the internet to automatically download the latest "
+"updates and install them during the upgrade.  If you have a network "
+"connection this is highly recommended.\n"
+"\n"
+"The upgrade will take longer, but when it is complete, your system will be "
+"fully up to date.  You can choose not to do this, but you should install the "
+"latest updates soon after upgrading.\n"
+"If you answer 'no' here, the network is not used at all."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:549
+msgid "No valid mirror found"
+msgstr "কোন সঠিক মিরর পাওয়া যায় নি"
+
+#: ../DistUpgrade/DistUpgradeController.py:550
+#, python-format
+msgid ""
+"While scanning your repository information no mirror entry for the upgrade "
+"was found.This can happen if you run a internal mirror or if the mirror "
+"information is out of date.\n"
+"\n"
+"Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+"here it will update all '%s' to '%s' entries.\n"
+"If you select 'no' the update will cancel."
+msgstr ""
+
+#. hm, still nothing useful ...
+#: ../DistUpgrade/DistUpgradeController.py:570
+msgid "Generate default sources?"
+msgstr "ডিফল্ট sources তৈরি করে?"
+
+#: ../DistUpgrade/DistUpgradeController.py:571
+#, fuzzy, python-format
+msgid ""
+"After scanning your 'sources.list' no valid entry for '%s' was found.\n"
+"\n"
+"Should default entries for '%s' be added? If you select 'No', the update "
+"will cancel."
+msgstr ""
+"আপনার 'sources.list' স্ক্যান করার পর '%s' এর জন্য কোন সঠিক এন্ট্রি খুজে পাওয়া যায় "
+"নি।\n"
+"\n"
+"'%s' জন্য ডিফল্ট যুক্ত করার উচিত? আপনি যদি 'না' নির্বাচন করেন তাহলে আপডেট বাতিল "
+"হবে।"
+
+#: ../DistUpgrade/DistUpgradeController.py:605
+msgid "Repository information invalid"
+msgstr "রিপোজিটরির তথ্য সঠিক নয়"
+
+#: ../DistUpgrade/DistUpgradeController.py:606
+msgid ""
+"Upgrading the repository information resulted in a invalid file. Please "
+"report this as a bug."
+msgstr ""
+"রিপোজিটোরি তথ্য আপগ্রেড করার সময় একটি ভুল ফাইল তৈরী হয়েছে। অনুগ্রহ করে এটিকে বাগ "
+"হিসাবে রিপোর্ট করুন।"
+
+#: ../DistUpgrade/DistUpgradeController.py:612
+msgid "Third party sources disabled"
+msgstr "তৃতীয় পার্টির উত্স নিষ্ক্রিয়"
+
+#: ../DistUpgrade/DistUpgradeController.py:613
+msgid ""
+"Some third party entries in your sources.list were disabled. You can re-"
+"enable them after the upgrade with the 'software-properties' tool or your "
+"package manager."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:652
+msgid "Package in inconsistent state"
+msgid_plural "Packages in inconsistent state"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeController.py:655
+#, python-format
+msgid ""
+"The package '%s' is in an inconsistent state and needs to be reinstalled, "
+"but no archive can be found for it. Please reinstall the package manually or "
+"remove it from the system."
+msgid_plural ""
+"The packages '%s' are in an inconsistent state and need to be reinstalled, "
+"but no archive can be found for it.Please reinstall the packages manually or "
+"remove them from the system."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeController.py:708
+msgid "Error during update"
+msgstr "আপগ্রেড করার সময় সমস্যা"
+
+#: ../DistUpgrade/DistUpgradeController.py:709
+#, fuzzy
+msgid ""
+"A problem occurred during the update. This is usually some sort of network "
+"problem, please check your network connection and retry."
+msgstr ""
+"আপগ্রেড করার সময় একটি সমস্যা হয়েছে। এটি সাধারনত নেটওয়ার্কের সমস্যা, অনুগ্রহ করে "
+"আপনার নেটওয়ার্ক সংযোগ পরীক্ষা করুন এবং পুনরায় চেষ্টা করুন।"
+
+#: ../DistUpgrade/DistUpgradeController.py:718
+msgid "Not enough free disk space"
+msgstr "ডিস্কে যথেস্ট ফাঁকা জায়গা নেই"
+
+#: ../DistUpgrade/DistUpgradeController.py:719
+#, python-format
+msgid ""
+"The upgrade aborts now. The upgrade needs a total of %s free space on disk '%"
+"s'. Please free at least an additional %s of disk space on '%s'. Empty your "
+"trash and remove temporary packages of former installations using 'sudo apt-"
+"get clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:830
+msgid "Support for some applications ended"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:831
+msgid ""
+"Canonical Ltd. no longer provides support for the following software "
+"packages. You can still get support from the community.\n"
+"\n"
+"If you have not enabled community maintained software (universe), these "
+"packages will be suggested for removal at the end of the upgrade."
+msgstr ""
+
+#. calc the dist-upgrade and see if the removals are ok/expected
+#. do the dist-upgrade
+#: ../DistUpgrade/DistUpgradeController.py:840
+#: ../DistUpgrade/DistUpgradeController.py:1595
+#, fuzzy
+msgid "Calculating the changes"
+msgstr "পরিবর্তনগুলো প্রয়োগ করছি"
+
+#. ask the user if he wants to do the changes
+#: ../DistUpgrade/DistUpgradeController.py:855
+msgid "Do you want to start the upgrade?"
+msgstr "আপনি কি আপগ্রেড শুরু করতে চান?"
+
+#: ../DistUpgrade/DistUpgradeController.py:919
+#: ../DistUpgrade/DistUpgradeController.py:974
+msgid "Could not download the upgrades"
+msgstr "আপগ্রেড ডাউনলোড করা যায় নি"
+
+#: ../DistUpgrade/DistUpgradeController.py:920
+#, fuzzy
+msgid ""
+"The upgrade aborts now. Please check your Internet connection or "
+"installation media and try again. All files downloaded so far are kept."
+msgstr ""
+"আপগ্রেড এখন বন্ধ হবে। দয়া করে আপনার ইন্টারনেট সংযুক্তি বা ইনস্টলেশন মিডিয়া পরীক্ষা "
+"করুন এবং আবার চেষ্টা করুন।"
+
+#. invoke the frontend now
+#: ../DistUpgrade/DistUpgradeController.py:949
+msgid ""
+"The upgrade aborts now. Your system could be in an unusable state. A "
+"recovery will run now (dpkg --configure -a)."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:954
+#, python-format
+msgid ""
+"\n"
+"\n"
+"Please report this bug against the 'update-manager' package and include the "
+"files in /var/log/dist-upgrade/ in the bugreport.\n"
+"%s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:958
+msgid "Could not install the upgrades"
+msgstr "আপগ্রেড ইন্সটল করা যায় নি"
+
+#: ../DistUpgrade/DistUpgradeController.py:975
+#, fuzzy
+msgid ""
+"The upgrade aborts now. Please check your Internet connection or "
+"installation media and try again. "
+msgstr ""
+"আপগ্রেড এখন বন্ধ হবে। দয়া করে আপনার ইন্টারনেট সংযুক্তি বা ইনস্টলেশন মিডিয়া পরীক্ষা "
+"করুন এবং আবার চেষ্টা করুন। "
+
+#: ../DistUpgrade/DistUpgradeController.py:1052
+msgid "Remove obsolete packages?"
+msgstr "অপ্রচলিত প্যাকেজগুলো মুছে ফেলা হবে?"
+
+#: ../DistUpgrade/DistUpgradeController.py:1053
+#: ../DistUpgrade/DistUpgrade.glade.h:20
+msgid "_Keep"
+msgstr "রাখো (_K)"
+
+#: ../DistUpgrade/DistUpgradeController.py:1053
+msgid "_Remove"
+msgstr "সরাও (_স)"
+
+#: ../DistUpgrade/DistUpgradeController.py:1064
+msgid "Error during commit"
+msgstr "প্রেরণ করার সময় সমস্যা"
+
+#: ../DistUpgrade/DistUpgradeController.py:1065
+msgid ""
+"A problem occurred during the clean-up. Please see the below message for "
+"more information. "
+msgstr ""
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:1216
+msgid "Restoring original system state"
+msgstr "সিস্টেমটি রিস্টার্ট করছি"
+
+#. FIXME: instead of error out, fetch and install it
+#. here
+#: ../DistUpgrade/DistUpgradeController.py:1254
+msgid "Required depends is not installed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1255
+#, python-format
+msgid "The required dependency '%s' is not installed. "
+msgstr ""
+
+#. sanity check (check for ubuntu-desktop, brokenCache etc)
+#. then open the cache (again)
+#: ../DistUpgrade/DistUpgradeController.py:1505
+#: ../DistUpgrade/DistUpgradeController.py:1572
+msgid "Checking package manager"
+msgstr "প্যাকেজ ম্যানেজার পরীক্ষা করা হচ্ছ"
+
+#: ../DistUpgrade/DistUpgradeController.py:1510
+#, fuzzy
+msgid "Preparing the upgrade failed"
+msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeController.py:1511
+msgid ""
+"Preparing the system for the upgrade failed. Please report this as a bug "
+"against the 'update-manager' package and include the files in /var/log/dist-"
+"upgrade/ in the bugreport."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1527
+#, fuzzy
+msgid "Getting upgrade prerequisites failed"
+msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeController.py:1528
+msgid ""
+"The system was unable to get the prerequisites for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"Please report this as a bug against the 'update-manager' package and include "
+"the files in /var/log/dist-upgrade/ in the bugreport."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1558
+msgid "Updating repository information"
+msgstr "রিপজিটরির তথ্য আপডেট করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeController.py:1583
+msgid "Invalid package information"
+msgstr "ভুল প্যাকেজ তথ্য"
+
+#: ../DistUpgrade/DistUpgradeController.py:1584
+#, python-format
+msgid ""
+"After your package information was updated the essential package '%s' can "
+"not be found anymore.\n"
+"This indicates a serious error, please report this bug against the 'update-"
+"manager' package and include the files in /var/log/dist-upgrade/ in the "
+"bugreport."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1601
+#: ../DistUpgrade/DistUpgradeController.py:1649
+msgid "Fetching"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1608
+#: ../DistUpgrade/DistUpgradeController.py:1653
+msgid "Upgrading"
+msgstr "আপগ্রেড করা হচ্ছে"
+
+#. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:1613
+#: ../DistUpgrade/DistUpgradeController.py:1659
+#, fuzzy
+msgid "Upgrade complete"
+msgstr "আপডেট সম্পন্ন"
+
+#: ../DistUpgrade/DistUpgradeController.py:1614
+#, fuzzy
+msgid ""
+"The upgrade is completed but there were errors during the ugprade process."
+msgstr "আপগ্রেড টুলটি আপনাকে আপগ্রেড প্রক্রিয়ায় সাহায্য করবে।"
+
+#: ../DistUpgrade/DistUpgradeController.py:1621
+msgid "Searching for obsolete software"
+msgstr "অপ্রচলিত সফ্টওয়্যার অনুসন্ধান করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeController.py:1626
+msgid "System upgrade is complete."
+msgstr "সিস্টেম আপগ্রেড সম্পন্ন।"
+
+#: ../DistUpgrade/DistUpgradeController.py:1660
+#, fuzzy
+msgid "The partial upgrade was completed."
+msgstr "সিস্টেম আপগ্রেড সম্পন্ন।"
+
+#: ../DistUpgrade/DistUpgradeController.py:1681
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1685
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with Ubuntu 8.10.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+
+#. print "mediaChange %s %s" % (medium, drive)
+#: ../DistUpgrade/DistUpgradeViewGtk.py:108
+#: ../DistUpgrade/DistUpgradeViewKDE.py:190
+#, python-format
+msgid "Please insert '%s' into the drive '%s'"
+msgstr "দয়া করে '%s' ড্রাইভে '%s' প্রবেশ করান"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:127
+#: ../DistUpgrade/DistUpgradeViewKDE.py:203
+#, fuzzy
+msgid "Fetching is complete"
+msgstr "আপডেট সম্পন্ন"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:139
+#: ../DistUpgrade/DistUpgradeViewKDE.py:216
+#, python-format
+msgid "Fetching file %li of %li at %sB/s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:140
+#: ../DistUpgrade/DistUpgradeViewGtk.py:275
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
+#: ../DistUpgrade/DistUpgradeViewKDE.py:356
+#, fuzzy, python-format
+msgid "About %s remaining"
+msgstr "%li মিিনিট বাকি আছে"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:142
+#: ../DistUpgrade/DistUpgradeViewKDE.py:219
+#, fuzzy, python-format
+msgid "Fetching file %li of %li"
+msgstr "%li of %li ফাইল ডাউনলোড করছে"
+
+#. FIXME: add support for the timeout
+#. of the terminal (to display something useful then)
+#. -> longer term, move this code into python-apt
+#: ../DistUpgrade/DistUpgradeViewGtk.py:174
+#: ../DistUpgrade/DistUpgradeViewKDE.py:253
+msgid "Applying changes"
+msgstr "পরিবর্তনগুলো প্রয়োগ করছি"
+
+#. we do not report followup errors from earlier failures
+#: ../DistUpgrade/DistUpgradeViewGtk.py:199
+#: ../DistUpgrade/DistUpgradeViewKDE.py:266
+msgid "dependency problems - leaving unconfigured"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:204
+#: ../DistUpgrade/DistUpgradeViewKDE.py:268
+#, python-format
+msgid "Could not install '%s'"
+msgstr "'%s' ইন্সটল করা যায় নি"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:205
+#: ../DistUpgrade/DistUpgradeViewKDE.py:269
+#, python-format
+msgid ""
+"The upgrade will continue but the '%s' package may be in a not working "
+"state. Please consider submitting a bugreport about it."
+msgstr ""
+
+#. self.expander.set_expanded(True)
+#: ../DistUpgrade/DistUpgradeViewGtk.py:221
+#: ../DistUpgrade/DistUpgradeViewKDE.py:290
+#, fuzzy, python-format
+msgid ""
+"Replace the customized configuration file\n"
+"'%s'?"
+msgstr ""
+"কনফিগারেশন ফাইল '%s'\n"
+"কি সরানো হবে?"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:222
+#: ../DistUpgrade/DistUpgradeViewKDE.py:291
+msgid ""
+"You will lose any changes you have made to this configuration file if you "
+"choose to replace it with a newer version."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:235
+#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+msgid "The 'diff' command was not found"
+msgstr "'diff' কমান্ডটি পাওয়া যায় নি"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:414
+#: ../DistUpgrade/DistUpgradeViewText.py:110
+msgid "A fatal error occurred"
+msgstr "একটি মারাত্মক সমস্যা সংঘটিত হয়েছে"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:415
+msgid ""
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"report. The upgrade aborts now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:430
+msgid "Ctrl-c pressed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:431
+msgid ""
+"This will abort the operation and may leave the system in a broken state. "
+"Are you sure you want to do that?"
+msgstr ""
+
+#. append warning
+#: ../DistUpgrade/DistUpgradeViewGtk.py:566
+msgid "To prevent data loss close all open applications and documents."
+msgstr "তথ্য হারাতে না চাইলে সকল অ্যাপলিকেশন এবং ডকুমেন্ট বন্ধ রাখুন।"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:580
+#, fuzzy, python-format
+msgid "<b>Downgrade %s</b>"
+msgstr "<b>%s মুছো</b>"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:582
+#: ../DistUpgrade/DistUpgradeViewKDE.py:749
+#, fuzzy, python-format
+msgid "Remove %s"
+msgstr "সরাও (_স)"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:587
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#, python-format
+msgid "Install %s"
+msgstr "%s ইন্সটল"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:589
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#, python-format
+msgid "Upgrade %s"
+msgstr "%s আপগ্রেড"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:191
+#, fuzzy
+msgid "Media Change"
+msgstr "চ্যানেন সম্পাদন"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:321
+#, fuzzy
+msgid "Show Difference >>>"
+msgstr "টার্মিন্যাল"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:324
+#, fuzzy
+msgid "<<< Hide Difference"
+msgstr "টার্মিন্যাল"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:530
+msgid "Error"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:542
+msgid "&Cancel"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:544
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
+msgid "&Close"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:590
+#, fuzzy
+msgid "Show Terminal >>>"
+msgstr "টার্মিন্যাল"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:593
+#, fuzzy
+msgid "<<< Hide Terminal"
+msgstr "টার্মিন্যাল"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:673
+msgid "Information"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:723
+#: ../DistUpgrade/DistUpgradeViewKDE.py:764
+#: ../DistUpgrade/DistUpgradeViewKDE.py:767
+#: ../DistUpgrade/DistUpgrade.glade.h:9
+msgid "Details"
+msgstr "বিস্তারিত"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:777
+#: ../DistUpgrade/DistUpgradeViewText.py:222
+#, fuzzy
+msgid "Restart required"
+msgstr "রিবুট করা প্রয়োজন"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:777
+#: ../DistUpgrade/DistUpgrade.glade.h:5
+msgid "<b><big>Restart the system to complete the upgrade</big></b>"
+msgstr "<b><big>আপগ্রেড সম্পন্ন করতে সিস্টেমটি রিস্টার্ট করুন</big></b>"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:780
+#: ../DistUpgrade/DistUpgrade.glade.h:23
+msgid "_Restart Now"
+msgstr "এক্ষুনি রিস্টার্ট (_R)"
+
+#. FIXME make this user friendly
+#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+msgid ""
+"<b><big>Cancel the running upgrade?</big></b>\n"
+"\n"
+"The system could be in an unusable state if you cancel the upgrade. You are "
+"strongly advised to resume the upgrade."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#, fuzzy
+msgid "Cancel Upgrade?"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../DistUpgrade/DistUpgradeView.py:56
+#, python-format
+msgid "%li day"
+msgid_plural "%li days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeView.py:58
+#, python-format
+msgid "%li hour"
+msgid_plural "%li hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeView.py:60
+#, fuzzy, python-format
+msgid "%li minute"
+msgid_plural "%li minutes"
+msgstr[0] "%li মিনিট"
+msgstr[1] "%li মিনিট"
+
+#: ../DistUpgrade/DistUpgradeView.py:61
+#, fuzzy, python-format
+msgid "%li second"
+msgid_plural "%li seconds"
+msgstr[0] "%li সেকেন্ড"
+msgstr[1] "%li সেকেন্ড"
+
+#. TRANSLATORS: you can alter the ordering of the remaining time
+#. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
+#. around. Make sure to keep all '$(str_*)s' in the translated string
+#. and do NOT change anything appart from the ordering.
+#.
+#. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
+#. plural form
+#.
+#. Note: most western languages will not need to change this
+#: ../DistUpgrade/DistUpgradeView.py:74
+#, python-format
+msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
+msgstr ""
+
+#. TRANSLATORS: you can alter the ordering of the remaining time
+#. information here if you shuffle %(str_hours)s %(str_minutes)s
+#. around. Make sure to keep all '$(str_*)s' in the translated string
+#. and do NOT change anything appart from the ordering.
+#.
+#. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
+#. plural form
+#.
+#. Note: most western languages will not need to change this
+#: ../DistUpgrade/DistUpgradeView.py:85
+#, fuzzy, python-format
+msgid "%(str_hours)s %(str_minutes)s"
+msgstr "%li ঘন্টা %li মিিনিট বাকি আছে"
+
+#. 56 kbit
+#. 1Mbit = 1024 kbit
+#: ../DistUpgrade/DistUpgradeView.py:106
+#, python-format
+msgid ""
+"This download will take about %s with a 1Mbit DSL connection and about %s "
+"with a 56k modem"
+msgstr ""
+
+#. if we have a estimated speed, use it
+#: ../DistUpgrade/DistUpgradeView.py:110
+#, python-format
+msgid "This download will take about %s with your connection. "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeView.py:176 ../DistUpgrade/DistUpgrade.glade.h:14
+#, fuzzy
+msgid "Preparing to upgrade"
+msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeView.py:177
+#, fuzzy
+msgid "Getting new software channels"
+msgstr "সফ্টওয়্যার চ্যানেল পরিবর্তন করা হচ্ছ"
+
+#: ../DistUpgrade/DistUpgradeView.py:178 ../DistUpgrade/DistUpgrade.glade.h:12
+#, fuzzy
+msgid "Getting new packages"
+msgstr "ভাঙা প্যাকেজসমূহ"
+
+#: ../DistUpgrade/DistUpgradeView.py:179 ../DistUpgrade/DistUpgrade.glade.h:13
+#, fuzzy
+msgid "Installing the upgrades"
+msgstr "আপগ্রেড ডাউনলোড এবং ইন্সটল করা হচ্ছে"
+
+#: ../DistUpgrade/DistUpgradeView.py:180 ../DistUpgrade/DistUpgrade.glade.h:8
+msgid "Cleaning up"
+msgstr "পরিস্কার করছি"
+
+#. FIXME: make those two separate lines to make it clear
+#. that the "%" applies to the result of ngettext
+#: ../DistUpgrade/DistUpgradeView.py:253
+#, fuzzy, python-format
+msgid "%d package is going to be removed."
+msgid_plural "%d packages are going to be removed."
+msgstr[0] "%s টি প্যাকেজ মোছা হবে।"
+msgstr[1] "%s টি প্যাকেজ মোছা হবে।"
+
+#: ../DistUpgrade/DistUpgradeView.py:258
+#, fuzzy, python-format
+msgid "%d new package is going to be installed."
+msgid_plural "%d new packages are going to be installed."
+msgstr[0] "%s টি নতুন প্যাকেজ ইনস্টল হতে যাচ্ছে।"
+msgstr[1] "%s টি নতুন প্যাকেজ ইনস্টল হতে যাচ্ছে।"
+
+#: ../DistUpgrade/DistUpgradeView.py:264
+#, fuzzy, python-format
+msgid "%d package is going to be upgraded."
+msgid_plural "%d packages are going to be upgraded."
+msgstr[0] "%s টি নতুন প্যাকেজ আপগ্রেড হতে যাচ্ছে।"
+msgstr[1] "%s টি নতুন প্যাকেজ আপগ্রেড হতে যাচ্ছে।"
+
+#: ../DistUpgrade/DistUpgradeView.py:269
+#, fuzzy, python-format
+msgid ""
+"\n"
+"\n"
+"You have to download a total of %s. "
+msgstr ""
+"\n"
+"\n"
+"আপনাকে সর্বমোট %s ডাউনলোড করতে হবে। "
+
+#: ../DistUpgrade/DistUpgradeView.py:273
+#, fuzzy
+msgid ""
+"Fetching and installing the upgrade can take several hours. Once the "
+"download has finished, the process cannot be cancelled."
+msgstr "আপগ্রেড করতে কয়েক ঘন্টা লেগে যেতে পারে এবং পরে এটি বাতিল করা যাবে না।"
+
+#. FIXME: this should go into DistUpgradeController
+#: ../DistUpgrade/DistUpgradeView.py:279 ../UpdateManager/UpdateManager.py:672
+msgid "Your system is up-to-date"
+msgstr "আপনার সিস্টেম আপ-টু-ডেট"
+
+#: ../DistUpgrade/DistUpgradeView.py:280
+msgid ""
+"There are no upgrades available for your system. The upgrade will now be "
+"canceled."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeView.py:293
+msgid "Reboot required"
+msgstr "রিবুট করা প্রয়োজন"
+
+#: ../DistUpgrade/DistUpgradeView.py:294
+msgid ""
+"The upgrade is finished and a reboot is required. Do you want to do this now?"
+msgstr "আপগ্রেডটি সম্পন্ন এবং রিবুট করা প্রয়োজন। আপনি কি এক্ষুনি তা করতে চান?"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
+msgid "Could not run the upgrade tool"
+msgstr "আপগ্রেড টুলটি চালানো যায় নি"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+msgid ""
+"This is most likely a bug in the upgrade tool. Please report it as a bug"
+msgstr "এটি মনে হচ্ছে আপগ্রেড টুলের একটি বাগ। অনুগ্রহ করে বাগটি রিপোর্ট করুন"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
+msgid "Upgrade tool signature"
+msgstr "আপগ্রেড টুল স্বাক্ষর"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+msgid "Upgrade tool"
+msgstr "আপগ্রেড টুল"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
+msgid "Failed to fetch"
+msgstr "আনতে ব্যর্থ"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
+msgid "Fetching the upgrade failed. There may be a network problem. "
+msgstr "আপগ্রেডটি আনতে ব্যর্থ। নেটওয়ার্কে কোন সমস্যা থাকতে পারে। "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
+msgid "Failed to extract"
+msgstr "এক্সট্রাক্ট করতে ব্যর্থ"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
+msgid ""
+"Extracting the upgrade failed. There may be a problem with the network or "
+"with the server. "
+msgstr "আপগ্রেডটি এক্সট্রাক্ট করতে ব্যর্থ। নেটওয়ার্ক অথবা সার্ভারে সমস্যা থাকতে পারে। "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
+msgid "Verfication failed"
+msgstr "যথার্থ্যতা পরীক্ষা করতে ব্যর্থ"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
+#, fuzzy
+msgid ""
+"Verifying the upgrade failed.  There may be a problem with the network or "
+"with the server. "
+msgstr ""
+"আপগ্রেড যথার্থ্য হয়েছে কিনা তা পরীক্ষা করতে ব্যর্থ। নেটওয়ার্ক অথবা সার্ভারে সমস্যা "
+"থাকতে পারে। "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
+msgid "Authentication failed"
+msgstr "অনমোদন প্রক্রিয়া ব্যর্থ"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
+msgid ""
+"Authenticating the upgrade failed. There may be a problem with the network "
+"or with the server. "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
+#, fuzzy
+msgid "Can not run the upgrade"
+msgstr "আপগ্রেড টুলটি চালানো যায় নি"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
+msgid ""
+"This usually is caused by a system were /tmp is mounted noexec. Please "
+"remount without noexec and run the upgrade again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
+#, python-format
+msgid "The error message is '%s'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:111
+msgid ""
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade aborts "
+"now.\n"
+"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:135
+msgid "Aborting"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:140
+#, fuzzy
+msgid "Demoted:\n"
+msgstr "সরাও (_স)\n"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:172
+#: ../DistUpgrade/DistUpgradeViewText.py:194
+#: ../DistUpgrade/DistUpgradeViewText.py:201
+#, fuzzy
+msgid "Continue [yN] "
+msgstr "এগিয়ে যাও (_C) "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:172
+#: ../DistUpgrade/DistUpgradeViewText.py:194
+#, fuzzy
+msgid "Details [d]"
+msgstr "বিস্তারিত"
+
+#. TRANSLATORS: the "y" is "yes"
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#: ../DistUpgrade/DistUpgradeViewText.py:205
+msgid "y"
+msgstr ""
+
+#. TRANSLATORS: the "n" is "no"
+#: ../DistUpgrade/DistUpgradeViewText.py:179
+msgid "n"
+msgstr ""
+
+#. TRANSLATORS: the "d" is "details"
+#: ../DistUpgrade/DistUpgradeViewText.py:182
+msgid "d"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+#, fuzzy, python-format
+msgid "Remove: %s\n"
+msgstr "সরাও (_স)\n"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:189
+#, fuzzy, python-format
+msgid "Install: %s\n"
+msgstr "%s ইন্সটল\n"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:192
+#, fuzzy, python-format
+msgid "Upgrade: %s\n"
+msgstr "%s আপগ্রেড\n"
+
+#: ../DistUpgrade/DistUpgradeViewText.py:223
+msgid ""
+"To finish the upgrade, a restart is required.\n"
+"If you select 'y' the system will be restarted."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:227
+#, fuzzy
+msgid "Restart the system now [yN] "
+msgstr "সিস্টেমটি রিস্টার্ট করছি "
+
+#: ../DistUpgrade/DistUpgrade.glade.h:1
+msgid "    "
+msgstr "    "
+
+#: ../DistUpgrade/DistUpgrade.glade.h:2
+msgid ""
+"<b><big>Cancel the running upgrade?</big></b>\n"
+"\n"
+"The system could be in an unusable state if you cancel the upgrade. You are "
+"strongly adviced to resume the upgrade."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgrade.glade.h:6
+msgid "<b><big>Start the upgrade?</big></b>"
+msgstr "<b><big>আপগ্রেড শুরু করবো?</big></b>"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:7
+msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgrade.glade.h:10
+msgid "Difference between the files"
+msgstr "ফাইলগুলোর মধ্যে পার্থক্য"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:11
+#, fuzzy
+msgid "Distribution Upgrade"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:15
+#, fuzzy
+msgid "Restarting the computer"
+msgstr "সিস্টেমটি রিস্টার্ট করছি"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:16
+#, fuzzy
+msgid "Setting new software channels"
+msgstr "সফ্টওয়্যার চ্যানেল পরিবর্তন করা হচ্ছ"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:17
+msgid "Terminal"
+msgstr "টার্মিন্যাল"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:18
+#, fuzzy
+msgid "_Cancel Upgrade"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:19
+msgid "_Continue"
+msgstr "এগিয়ে যাও (_C)"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:21
+msgid "_Replace"
+msgstr "প্রতিস্হাপন (_R)"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:22
+msgid "_Report Bug"
+msgstr "বাগ রিপোর্ট (_R)"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:24
+msgid "_Resume Upgrade"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../DistUpgrade/DistUpgrade.glade.h:25
+#, fuzzy
+msgid "_Start Upgrade"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../UpdateManager/DistUpgradeFetcher.py:81
+msgid "Could not find the release notes"
+msgstr "রিলিজ নোট পাওয়া যায় নি"
+
+#: ../UpdateManager/DistUpgradeFetcher.py:82
+msgid "The server may be overloaded. "
+msgstr "সার্ভারটি মনে হয় ব্যস্ত। "
+
+#: ../UpdateManager/DistUpgradeFetcher.py:92
+msgid "Could not download the release notes"
+msgstr "রিলিজ নোট ডাউনলোড করা যায় নি"
+
+#: ../UpdateManager/DistUpgradeFetcher.py:93
+msgid "Please check your internet connection."
+msgstr "অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।"
+
+#: ../UpdateManager/GtkProgress.py:108
+#, python-format
+msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
+msgstr ""
+
+#: ../UpdateManager/GtkProgress.py:113
+#, python-format
+msgid "Downloading file %(current)li of %(total)li"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:252
+#, fuzzy
+msgid "The list of changes is not available"
+msgstr "পরিবর্তনের তালিকা এখনে উপস্হিত নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
+
+#: ../UpdateManager/UpdateManager.py:260
+#, python-format
+msgid ""
+"The list of changes is not available yet.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:268
+#, fuzzy
+msgid ""
+"Failed to download the list of changes. \n"
+"Please check your Internet connection."
+msgstr ""
+"পরিবর্তন তালিকা ডাউনলোড করতে ব্যর্থ। অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।"
+
+#: ../UpdateManager/UpdateManager.py:290
+#, fuzzy
+msgid "Failed to detect distribution"
+msgstr "এক্সট্রাক্ট করতে ব্যর্থ"
+
+#: ../UpdateManager/UpdateManager.py:291
+#, python-format
+msgid "A error '%s' occurred while checking what system you are using."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:302
+#, fuzzy
+msgid "Important security updates"
+msgstr "উবুন্টু ৫.১০ নিরাপত্তামুলক আপডেট"
+
+#: ../UpdateManager/UpdateManager.py:303
+msgid "Recommended updates"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:304
+#, fuzzy
+msgid "Proposed updates"
+msgstr "আপডেট ইন্সটল করো (_I)"
+
+#: ../UpdateManager/UpdateManager.py:305
+#, fuzzy
+msgid "Backports"
+msgstr "উবুন্টু ৫.১০ ব্যাকপোর্ট"
+
+#: ../UpdateManager/UpdateManager.py:306
+#, fuzzy
+msgid "Distribution updates"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../UpdateManager/UpdateManager.py:311
+#, fuzzy
+msgid "Other updates"
+msgstr "আপডেট ইন্সটল করো (_I)"
+
+#: ../UpdateManager/UpdateManager.py:320
+msgid "Previous selected"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:495
+#, python-format
+msgid "Version %s: \n"
+msgstr "ভার্সন %s: \n"
+
+#: ../UpdateManager/UpdateManager.py:556
+#, fuzzy
+msgid "Downloading list of changes..."
+msgstr "পরিবর্তনের তালিকা ডাউনলোড করা হচ্ছ..."
+
+#: ../UpdateManager/UpdateManager.py:583
+msgid "_Uncheck All"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:589
+#, fuzzy
+msgid "_Check All"
+msgstr "পরীক্ষা করো (_C)"
+
+#. TRANSLATORS: b stands for Bytes
+#: ../UpdateManager/UpdateManager.py:633 ../UpdateManager/UpdateManager.py:689
+#, python-format
+msgid "Download size: %s"
+msgstr "ডাউনলোড এর আকার: %s"
+
+#: ../UpdateManager/UpdateManager.py:637
+#, fuzzy
+msgid "Unknown download size"
+msgstr "ডাউনলোড এর আকার: %s"
+
+#: ../UpdateManager/UpdateManager.py:645
+msgid ""
+"It is unknown when the package information was updated last. Please try "
+"clicking on the 'Check' button to update the information."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:654
+#, python-format
+msgid "The package information was last updated %s day ago."
+msgid_plural "The package information was last updated %s days ago."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../UpdateManager/UpdateManager.py:658
+#, python-format
+msgid "The package information was last updated %s hour ago."
+msgid_plural "The package information was last updated %s hours ago."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../UpdateManager/UpdateManager.py:662
+msgid "The package information was last updated less than one hour ago."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:670
+#: ../data/glade/UpdateManager.glade.h:21
+msgid ""
+"Software updates correct errors, eliminate security vulnerabilities and "
+"provide new features."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:685
+#, fuzzy, python-format
+msgid "You can install %s update."
+msgid_plural "You can install %s updates."
+msgstr[0] "আপনি %s আপডেট ইনস্টল করতে পারেন"
+msgstr[1] "আপনি %s আপডেট ইনস্টল করতে পারেন"
+
+#: ../UpdateManager/UpdateManager.py:727
+msgid "Please wait, this can take some time."
+msgstr "অনুগ্রহ করে অপেক্ষা করুন, এটি কিছুটা সময় নিতে পারে।"
+
+#: ../UpdateManager/UpdateManager.py:729
+msgid "Update is complete"
+msgstr "আপডেট সম্পন্ন"
+
+#: ../UpdateManager/UpdateManager.py:781
+#, fuzzy
+msgid "Reading package information"
+msgstr "ভুল প্যাকেজ তথ্য"
+
+#: ../UpdateManager/UpdateManager.py:884
+#, fuzzy
+msgid "Could not initialize the package information"
+msgstr "ভুল প্যাকেজ তথ্য"
+
+#: ../UpdateManager/UpdateManager.py:885
+msgid ""
+"An unresolvable problem occurred while initializing the package "
+"information.\n"
+"\n"
+"Please report this bug against the 'update-manager' package and include the "
+"following error message:\n"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:907
+msgid ""
+"An unresolvable problem occurred while calculating the upgrade.\n"
+"\n"
+"Please report this bug against the 'update-manager' package and include the "
+"following error message:"
+msgstr ""
+
+#. TRANSLATORS: the b stands for Bytes
+#: ../UpdateManager/UpdateManager.py:932
+#, python-format
+msgid "(Size: %s)"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:934
+#, fuzzy, python-format
+msgid "From version %(old_version)s to %(new_version)s"
+msgstr "নতুন ভার্সন: %s (আকার: %s)"
+
+#: ../UpdateManager/UpdateManager.py:938
+#, fuzzy, python-format
+msgid "Version %s"
+msgstr "ভার্সন %s:"
+
+#: ../UpdateManager/UpdateManager.py:951
+msgid "Your distribution is not supported anymore"
+msgstr "আপনার ডিস্ট্রিবিউশনটি আর সমর্থিত নয়"
+
+#: ../UpdateManager/UpdateManager.py:952
+msgid ""
+"You will not get any further security fixes or critical updates. Upgrade to "
+"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
+"information on upgrading."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:978
+msgid "Downloading the upgrade tool"
+msgstr "আপগ্রেড টুল ডাউনলোড করছি"
+
+#: ../UpdateManager/UpdateManager.py:980
+msgid "The upgrade tool will guide you through the upgrade process."
+msgstr "আপগ্রেড টুলটি আপনাকে আপগ্রেড প্রক্রিয়ায় সাহায্য করবে।"
+
+#: ../UpdateManager/UpdateManager.py:988
+#, python-format
+msgid "<b>New distribution release '%s' is available</b>"
+msgstr ""
+
+#. we assert a clean cache
+#: ../UpdateManager/UpdateManager.py:1031
+msgid "Software index is broken"
+msgstr "সফ্টওয়্যার ইন্ডেক্সটি নস্ট"
+
+#: ../UpdateManager/UpdateManager.py:1032
+msgid ""
+"It is impossible to install or remove any software. Please use the package "
+"manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
+"this issue at first."
+msgstr ""
+
+#: ../data/glade/UpdateManager.glade.h:1
+msgid ""
+"<b><big>You must check for updates manually</big></b>\n"
+"\n"
+"Your system does not check for updates automatically. You can configure this "
+"behavior in <i>Software Sources</i> on the <i>Updates</i> tab."
+msgstr ""
+
+#: ../data/glade/UpdateManager.glade.h:4
+msgid "<big><b>Keep your system up-to-date</b></big>"
+msgstr "<big><b>আপনার সিস্টেম আপ-টু-ডেট রাখুন</b></big>"
+
+#: ../data/glade/UpdateManager.glade.h:5
+#, fuzzy
+msgid "<big><b>Not all updates can be installed</b></big>"
+msgstr ""
+"<big><b>সিডি স্ক্যানিং এ ত্রুটি</b></big>\n"
+"\n"
+"%s"
+
+#: ../data/glade/UpdateManager.glade.h:6
+#, fuzzy
+msgid "<big><b>Starting Update Manager</b></big>"
+msgstr "<b><big>আপগ্রেড শুরু করবো?</big></b>"
+
+#: ../data/glade/UpdateManager.glade.h:7
+msgid "Changes"
+msgstr "পরিবর্তন"
+
+#: ../data/glade/UpdateManager.glade.h:8
+msgid "Chec_k"
+msgstr "পরীক্ষা করো (_k)"
+
+#: ../data/glade/UpdateManager.glade.h:9
+msgid "Check the software channels for new updates"
+msgstr "নতুন আপডেট এর জন্য সফ্টওয়্যার চ্যানেল পরীক্ষা করো"
+
+#: ../data/glade/UpdateManager.glade.h:10
+msgid "Description"
+msgstr "বর্ননা"
+
+#: ../data/glade/UpdateManager.glade.h:11
+#, fuzzy
+msgid "Description of update"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../data/glade/UpdateManager.glade.h:12
+msgid "Release Notes"
+msgstr "রিলিজ নোট"
+
+#: ../data/glade/UpdateManager.glade.h:13
+msgid ""
+"Run a partial upgrade, to install as many updates as possible. \n"
+"\n"
+"This can be caused by:\n"
+" ◦ A previous upgrade which didn't complete\n"
+" ◦ Problems with some of the installed software\n"
+" ◦ Unofficial software packages not provided by Ubuntu\n"
+" ◦ Normal changes of a pre-release version of Ubuntu"
+msgstr ""
+
+#: ../data/glade/UpdateManager.glade.h:20
+#, fuzzy
+msgid "Show progress of individual files"
+msgstr "একটি ফাইলের অগ্রগতি দেখাও"
+
+#: ../data/glade/UpdateManager.glade.h:22
+msgid "U_pgrade"
+msgstr "আপগ্রেড (_p)"
+
+#: ../data/glade/UpdateManager.glade.h:23
+#: ../data/update-manager.desktop.in.h:3
+msgid "Update Manager"
+msgstr "আপডেট ম্যানেজার"
+
+#: ../data/glade/UpdateManager.glade.h:24
+msgid "Upgrade to the latest version of Ubuntu"
+msgstr "উবুন্টু এর সর্বশেষ ভার্সনে আপগ্রেড করো"
+
+#: ../data/glade/UpdateManager.glade.h:25
+msgid "_Hide this information in the future"
+msgstr "ভবিষ্যতে এই তথ্য আড়াল রাখো (_H)"
+
+#: ../data/glade/UpdateManager.glade.h:26
+msgid "_Install Updates"
+msgstr "আপডেট ইন্সটল করো (_I)"
+
+#: ../data/glade/UpdateManager.glade.h:27
+#, fuzzy
+msgid "_Partial Upgrade"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../data/glade/UpdateManager.glade.h:28
+#, fuzzy
+msgid "_Upgrade"
+msgstr "আপগ্রেড (_p)"
+
+#: ../data/glade/UpdateManager.glade.h:29
+msgid "updates"
+msgstr "আপডেটসমূহ"
+
+#: ../data/update-manager.desktop.in.h:1
+msgid "Show and install available updates"
+msgstr "উপস্হিত আপডেট গুলো প্রদর্শন এবং ইন্সটল করো"
+
+#: ../data/update-manager.desktop.in.h:2
+msgid "Software Updates"
+msgstr "সফ্টওয়্যার আপডেট"
+
+#: ../data/update-manager.schemas.in.h:1
+#, fuzzy
+msgid "*deprecated* Check for new distribution releases"
+msgstr "নতুন ডিস্ট্রিবিউশন রিলিজের জন্য পরীক্ষা করো"
+
+#: ../data/update-manager.schemas.in.h:2
+msgid "Auto close the install window after successful install"
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:3
+msgid ""
+"If automatic checking for updates is disabled, you have to reload the "
+"channel list manually. This option allows to hide the reminder shown in this "
+"case."
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:4
+msgid ""
+"If this key is set the install window will be automatically closed on "
+"successful installation."
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:5
+msgid ""
+"If this key is set the main update list window will show version information "
+"(from version to version)."
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:6
+msgid "Remind to reload the channel list"
+msgstr "চ্যানেল তালিকা পুনরায় পড়ার কথা মনে করো"
+
+#: ../data/update-manager.schemas.in.h:7
+msgid "Show details of an update"
+msgstr "একটি আপডেটের বিস্তারিত প্রদর্শন করো"
+
+#: ../data/update-manager.schemas.in.h:8
+#, fuzzy
+msgid "Show version in update list"
+msgstr "একটি আপডেটের বিস্তারিত প্রদর্শন করো"
+
+#: ../data/update-manager.schemas.in.h:9
+msgid "Stores the size of the update-manager dialog"
+msgstr "update-manager ডায়ালগের আকার সংরক্ষন"
+
+#: ../data/update-manager.schemas.in.h:10
+msgid ""
+"Stores the state of the expander that contains the list of changes and the "
+"description"
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:11
+msgid "The window size"
+msgstr "উইনডোর আকার"
+
+#: ../data/update-manager.schemas.in.h:12
+msgid ""
+"This key is deprecated in favor of the file /etc/update-manager/release-"
+"upgrades Check automatically if a new version of the current distribution is "
+"available and offer to upgrade (if possible)."
+msgstr ""
+
+#: ../update-manager:55
+msgid "Show version and exit"
+msgstr ""
+
+#: ../update-manager:58
+#, fuzzy
+msgid "Check if a new distribution release is available"
+msgstr "নতুন ডিস্ট্রিবিউশন রিলিজের জন্য পরীক্ষা করো"
+
+#: ../update-manager:61 ../do-release-upgrade:23
+msgid "Check if upgrading to the latest devel release is possible"
+msgstr ""
+
+#: ../update-manager:65
+#, fuzzy
+msgid "Upgrade using the latest proposed version of the release upgrader"
+msgstr "উবুন্টু এর সর্বশেষ ভার্সনে আপগ্রেড করো"
+
+#: ../update-manager:68
+msgid "Try to run a dist-upgrade"
+msgstr ""
+
+#: ../update-manager:87
+#, fuzzy
+msgid "Running partial upgrade"
+msgstr "পুনরায় আপগ্রেড শুরু (_R)"
+
+#: ../do-release-upgrade:27
+msgid ""
+"Try upgrading to the latest release using the upgrader from $distro-proposed"
+msgstr ""
+
+#: ../do-release-upgrade:31
+msgid ""
+"Run in a special upgrade mode.\n"
+"Currently 'desktop' for regular upgrades of a desktop system and 'server' "
+"for server systems are supported."
+msgstr ""
+
+#: ../do-release-upgrade:37
+msgid "Run the specified frontend"
+msgstr ""
+
+#: ../do-release-upgrade:41
+#, fuzzy
+msgid "Checking for a new ubuntu release"
+msgstr "নতুন ডিস্ট্রিবিউশন রিলিজের জন্য পরীক্ষা করো"
+
+#: ../do-release-upgrade:48
+msgid "No new release found"
+msgstr "নতুন কোন সংস্করণ পাওয়া যায় নি"
 
 #, fuzzy
 #~ msgid ""
@@ -119,10 +1769,6 @@ msgstr ""
 #~ msgid "System Update Tool"
 #~ msgstr "সিস্টেম আপডেট টুল"
 
-#, fuzzy
-#~ msgid "Version %s"
-#~ msgstr "ভার্সন %s:"
-
 #~ msgid "Asking for confirmation"
 #~ msgstr "তথ্যের জন্য জিজ্ঞাসা"
 
@@ -145,10 +1791,6 @@ msgstr ""
 
 #~ msgid "The selected file may not be a GPG key file or it might be corrupt."
 #~ msgstr "বেছে নেয়া ফাইলটি মনে হয় কোন GPG কী ফাইল নয় অথবা এটি নষ্ট।"
-
-#, fuzzy
-#~ msgid "From version %(old_version)s to %(new_version)s"
-#~ msgstr "নতুন ভার্সন: %s (আকার: %s)"
 
 #, fuzzy
 #~ msgid "changes"
@@ -227,7 +1869,8 @@ msgstr ""
 #~ msgid "Software Sources Editor"
 #~ msgstr "সফ্টওয়্যার বৈশিষ্ট্য"
 
-#~ msgid "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+#~ msgid ""
+#~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
 #~ msgstr ""
 #~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
 
@@ -381,8 +2024,7 @@ msgstr ""
 #~ msgstr "ডাউনলোড সম্পন্ন"
 
 #~ msgid "The upgrade aborts now. Please report this bug."
-#~ msgstr ""
-#~ "আপগ্রেডটি নিস্ফল ভাবে বের হয়ে যাচ্ছ। অনুগ্রহ করে এই বাগটি রিপোর্ট করুন।"
+#~ msgstr "আপগ্রেডটি নিস্ফল ভাবে বের হয়ে যাচ্ছ। অনুগ্রহ করে এই বাগটি রিপোর্ট করুন।"
 
 #~ msgid "Upgrading Ubuntu"
 #~ msgstr "উবুন্টু আপগ্রেড করছি"
@@ -399,8 +2041,8 @@ msgstr ""
 #~ msgid ""
 #~ "Please close the other application e.g. 'aptitude' or 'Synaptic' first."
 #~ msgstr ""
-#~ "অনুগ্রহ করে অন্যান্য অ্যাপলিকেশন যেমন, 'aptitude' অথবা 'Synaptic' প্রথমে "
-#~ "বন্ধ করুন।"
+#~ "অনুগ্রহ করে অন্যান্য অ্যাপলিকেশন যেমন, 'aptitude' অথবা 'Synaptic' প্রথমে বন্ধ "
+#~ "করুন।"
 
 #~ msgid "<b>Channels</b>"
 #~ msgstr "<b>চ্যানেল</b>"
@@ -449,1569 +2091,10 @@ msgstr ""
 #~ msgid "About %li seconds remaining"
 #~ msgstr "%li সেকেন্ড বাকি আছে"
 
-#. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:131 ../UpdateManager/Common/utils.py:131
-msgid "0 KB"
-msgstr ""
-
-#. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:134 ../UpdateManager/Common/utils.py:134
-msgid "1 KB"
-msgstr ""
-
-#. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:137 ../UpdateManager/Common/utils.py:137
-#, python-format
-msgid "%.0f KB"
-msgstr ""
-
-#. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:140 ../UpdateManager/Common/utils.py:140
-#, python-format
-msgid "%.1f MB"
-msgstr ""
-
-#. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
-#, python-format
-msgid "Server for %s"
-msgstr ""
-
-#. More than one server is used. Since we don't handle this case
-#. in the user interface we set "custom servers" to true and
-#. append a list of all used servers
-#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
-#: ../DistUpgrade/distro.py:232
-msgid "Main server"
-msgstr ""
-
-#: ../DistUpgrade/distro.py:235
-msgid "Custom servers"
-msgstr ""
-
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
-
-#: ../DistUpgrade/dist-upgrade.py:21
-msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-msgstr ""
-
-#: ../DistUpgrade/dist-upgrade.py:24
-msgid "*DEPRECATED* this option will be ignore"
-msgstr ""
-
-#: ../DistUpgrade/dist-upgrade.py:27
-msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr ""
-
-#: ../DistUpgrade/dist-upgrade.py:29
-msgid "Set datadir"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:78
-msgid "Remove package in bad state"
-msgid_plural "Remove packages in bad state"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:81
-#, python-format
-msgid ""
-"The package '%s' is in an inconsistent state and needs to be reinstalled, "
-"but no archive can be found for it. Do you want to remove this package now "
-"to continue?"
-msgid_plural ""
-"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
-"but no archives can be found for them. Do you want to remove these packages "
-"now to continue?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:276
-msgid "Broken packages"
-msgstr "ভাঙা প্যাকেজসমূহ"
-
-#: ../DistUpgrade/DistUpgradeCache.py:277
-msgid ""
-"Your system contains broken packages that couldn't be fixed with this "
-"software. Please fix them first using synaptic or apt-get before proceeding."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:665
-msgid "Can't upgrade required meta-packages"
-msgstr "দরকারী meta-packages আপগ্রেড করতে পারে নি"
-
-#: ../DistUpgrade/DistUpgradeCache.py:669
-msgid "A essential package would have to be removed"
-msgstr "একটি প্রয়োজনীয় প্যকেজ অপসারণ করা হতে পারে"
-
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:676
-msgid ""
-"An unresolvable problem occurred while calculating the upgrade.\n"
-"\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
-" * Unofficial software packages not provided by Ubuntu\n"
-"\n"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:686
 #, fuzzy
-msgid "This is most likely a transient problem, please try again later."
-msgstr "পরিবর্তনের তালিকা এখনে উপস্হিত নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
+#~ msgid "Fetching file %li of %li at %sb/s"
+#~ msgstr "%li of %li ফাইল ডাউনলোড করছে"
 
-#: ../DistUpgrade/DistUpgradeCache.py:689
-msgid ""
-"If none of this applies, then please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:694
-#: ../UpdateManager/UpdateManager.py:900
-msgid "Could not calculate the upgrade"
-msgstr "আপগ্রেড গণনা করতে পারছে না"
-
-#. FIXME: maybe ask a question here? instead of failing?
-#: ../DistUpgrade/DistUpgradeCache.py:736
-msgid "Error authenticating some packages"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:737
-msgid ""
-"It was not possible to authenticate some packages. This may be a transient "
-"network problem. You may want to try again later. See below for a list of "
-"unauthenticated packages."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:849
-#, python-format
-msgid "Can't install '%s'"
-msgstr "'%s' ইন্সটল করা যাচ্ছে না"
-
-#: ../DistUpgrade/DistUpgradeCache.py:850
-msgid ""
-"It was impossible to install a required package. Please report this as a "
-"bug. "
-msgstr ""
-"একটি প্রয়োজনীয় প্যাকেজ ইন্সটল করা অসম্ভব ছিল। অনুগ্রহ করে একে একটি বাগ "
-"হিসাবে রিপোর্ট করুন। "
-
-#. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:858
-msgid "Can't guess meta-package"
-msgstr "meta-package অনুমান করা যাচ্ছ না"
-
-#: ../DistUpgrade/DistUpgradeCache.py:859
-msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
-" Please install one of the packages above first using synaptic or apt-get "
-"before proceeding."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:92
 #, fuzzy
-msgid "Failed to add the CD"
-msgstr "আনতে ব্যর্থ"
-
-#: ../DistUpgrade/DistUpgradeController.py:93
-#, python-format
-msgid ""
-"There was a error adding the CD, the upgrade will abort. Please report this "
-"as a bug if this is a valid Ubuntu CD.\n"
-"\n"
-"The error message was:\n"
-"'%s'"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:125
-msgid "Reading cache"
-msgstr "ক্যাশ পড়া হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeController.py:203
-msgid "Unable to get exclusive lock"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:204
-msgid ""
-"This usually means that another package management application (like apt-get "
-"or aptitude) already running. Please close that application first."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:223
-msgid "Continue running under SSH?"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:224
-#, python-format
-msgid ""
-"This session appears to be running under ssh. It is not recommended to "
-"perform a upgrade over ssh currently because in case of failure it is harder "
-"to recover.\n"
-"\n"
-"If you continue, a additional ssh daemon will be started at port '%s'.\n"
-"Do you want to continue?"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:239
-msgid "Starting additional sshd"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:240
-#, python-format
-msgid ""
-"To make recovery in case of failure easier, an additional sshd will be "
-"started on port '%s'. If anything goes wrong with the running ssh you can "
-"still connect to the additional one.\n"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:308
-#: ../DistUpgrade/DistUpgradeController.py:331
-#, fuzzy
-msgid "Can not upgrade"
-msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeController.py:309
-#, python-format
-msgid "An upgrade from '%s' to '%s' is not supported with this tool."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:332
-msgid ""
-"Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:358
-msgid "Package 'debsig-verify' is installed"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:359
-msgid ""
-"The upgrade can not continue with that package installed.\n"
-"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-"run the upgrade again."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:369
-msgid "Include latest updates from the Internet?"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:370
-msgid ""
-"The upgrade system can use the internet to automatically download the latest "
-"updates and install them during the upgrade.  If you have a network "
-"connection this is highly recommended.\n"
-"\n"
-"The upgrade will take longer, but when it is complete, your system will be "
-"fully up to date.  You can choose not to do this, but you should install the "
-"latest updates soon after upgrading.\n"
-"If you answer 'no' here, the network is not used at all."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:541
-msgid "No valid mirror found"
-msgstr "কোন সঠিক মিরর পাওয়া যায় নি"
-
-#: ../DistUpgrade/DistUpgradeController.py:542
-#, python-format
-msgid ""
-"While scanning your repository information no mirror entry for the upgrade "
-"was found.This can happen if you run a internal mirror or if the mirror "
-"information is out of date.\n"
-"\n"
-"Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
-"here it will update all '%s' to '%s' entries.\n"
-"If you select 'no' the update will cancel."
-msgstr ""
-
-#. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:562
-msgid "Generate default sources?"
-msgstr "ডিফল্ট sources তৈরি করে?"
-
-#: ../DistUpgrade/DistUpgradeController.py:563
-#, fuzzy, python-format
-msgid ""
-"After scanning your 'sources.list' no valid entry for '%s' was found.\n"
-"\n"
-"Should default entries for '%s' be added? If you select 'No', the update "
-"will cancel."
-msgstr ""
-"আপনার 'sources.list' স্ক্যান করার পর '%s' এর জন্য কোন সঠিক এন্ট্রি খুজে "
-"পাওয়া যায় নি।\n"
-"\n"
-"'%s' জন্য ডিফল্ট যুক্ত করার উচিত? আপনি যদি 'না' নির্বাচন করেন তাহলে আপডেট "
-"বাতিল হবে।"
-
-#: ../DistUpgrade/DistUpgradeController.py:597
-msgid "Repository information invalid"
-msgstr "রিপোজিটরির তথ্য সঠিক নয়"
-
-#: ../DistUpgrade/DistUpgradeController.py:598
-msgid ""
-"Upgrading the repository information resulted in a invalid file. Please "
-"report this as a bug."
-msgstr ""
-"রিপোজিটোরি তথ্য আপগ্রেড করার সময় একটি ভুল ফাইল তৈরী হয়েছে। অনুগ্রহ করে এটিকে "
-"বাগ হিসাবে রিপোর্ট করুন।"
-
-#: ../DistUpgrade/DistUpgradeController.py:604
-msgid "Third party sources disabled"
-msgstr "তৃতীয় পার্টির উত্স নিষ্ক্রিয়"
-
-#: ../DistUpgrade/DistUpgradeController.py:605
-msgid ""
-"Some third party entries in your sources.list were disabled. You can re-"
-"enable them after the upgrade with the 'software-properties' tool or your "
-"package manager."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:644
-msgid "Package in inconsistent state"
-msgid_plural "Packages in inconsistent state"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../DistUpgrade/DistUpgradeController.py:647
-#, python-format
-msgid ""
-"The package '%s' is in an inconsistent state and needs to be reinstalled, "
-"but no archive can be found for it. Please reinstall the package manually or "
-"remove it from the system."
-msgid_plural ""
-"The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archive can be found for it.Please reinstall the packages manually or "
-"remove them from the system."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../DistUpgrade/DistUpgradeController.py:695
-msgid "Error during update"
-msgstr "আপগ্রেড করার সময় সমস্যা"
-
-#: ../DistUpgrade/DistUpgradeController.py:696
-#, fuzzy
-msgid ""
-"A problem occurred during the update. This is usually some sort of network "
-"problem, please check your network connection and retry."
-msgstr ""
-"আপগ্রেড করার সময় একটি সমস্যা হয়েছে। এটি সাধারনত নেটওয়ার্কের সমস্যা, অনুগ্রহ "
-"করে আপনার নেটওয়ার্ক সংযোগ পরীক্ষা করুন এবং পুনরায় চেষ্টা করুন।"
-
-#: ../DistUpgrade/DistUpgradeController.py:705
-msgid "Not enough free disk space"
-msgstr "ডিস্কে যথেস্ট ফাঁকা জায়গা নেই"
-
-#: ../DistUpgrade/DistUpgradeController.py:706
-#, python-format
-msgid ""
-"The upgrade aborts now. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:817
-msgid "Support for some applications ended"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:818
-msgid ""
-"Canonical Ltd. no longer provides support for the following software "
-"packages. You can still get support from the community.\n"
-"\n"
-"If you have not enabled community maintained software (universe), these "
-"packages will be suggested for removal at the end of the upgrade."
-msgstr ""
-
-#. calc the dist-upgrade and see if the removals are ok/expected
-#. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:827
-#: ../DistUpgrade/DistUpgradeController.py:1527
-#, fuzzy
-msgid "Calculating the changes"
-msgstr "পরিবর্তনগুলো প্রয়োগ করছি"
-
-#. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:842
-msgid "Do you want to start the upgrade?"
-msgstr "আপনি কি আপগ্রেড শুরু করতে চান?"
-
-#: ../DistUpgrade/DistUpgradeController.py:906
-#: ../DistUpgrade/DistUpgradeController.py:961
-msgid "Could not download the upgrades"
-msgstr "আপগ্রেড ডাউনলোড করা যায় নি"
-
-#: ../DistUpgrade/DistUpgradeController.py:907
-#, fuzzy
-msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
-"installation media and try again. All files downloaded so far are kept."
-msgstr ""
-"আপগ্রেড এখন বন্ধ হবে। দয়া করে আপনার ইন্টারনেট সংযুক্তি বা ইনস্টলেশন মিডিয়া "
-"পরীক্ষা করুন এবং আবার চেষ্টা করুন।"
-
-#. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeController.py:936
-msgid ""
-"The upgrade aborts now. Your system could be in an unusable state. A "
-"recovery will run now (dpkg --configure -a)."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:941
-#, python-format
-msgid ""
-"\n"
-"\n"
-"Please report this bug against the 'update-manager' package and include the "
-"files in /var/log/dist-upgrade/ in the bugreport.\n"
-"%s"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:945
-msgid "Could not install the upgrades"
-msgstr "আপগ্রেড ইন্সটল করা যায় নি"
-
-#: ../DistUpgrade/DistUpgradeController.py:962
-#, fuzzy
-msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
-"installation media and try again. "
-msgstr ""
-"আপগ্রেড এখন বন্ধ হবে। দয়া করে আপনার ইন্টারনেট সংযুক্তি বা ইনস্টলেশন মিডিয়া "
-"পরীক্ষা করুন এবং আবার চেষ্টা করুন। "
-
-#: ../DistUpgrade/DistUpgradeController.py:1033
-msgid "Remove obsolete packages?"
-msgstr "অপ্রচলিত প্যাকেজগুলো মুছে ফেলা হবে?"
-
-#: ../DistUpgrade/DistUpgradeController.py:1034
-#: ../DistUpgrade/DistUpgrade.glade.h:20
-msgid "_Keep"
-msgstr "রাখো (_K)"
-
-#: ../DistUpgrade/DistUpgradeController.py:1034
-msgid "_Remove"
-msgstr "সরাও (_স)"
-
-#: ../DistUpgrade/DistUpgradeController.py:1045
-msgid "Error during commit"
-msgstr "প্রেরণ করার সময় সমস্যা"
-
-#: ../DistUpgrade/DistUpgradeController.py:1046
-msgid ""
-"A problem occurred during the clean-up. Please see the below message for "
-"more information. "
-msgstr ""
-
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1155
-msgid "Restoring original system state"
-msgstr "সিস্টেমটি রিস্টার্ট করছি"
-
-#. FIXME: instead of error out, fetch and install it
-#. here
-#: ../DistUpgrade/DistUpgradeController.py:1193
-msgid "Required depends is not installed"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:1194
-#, python-format
-msgid "The required dependency '%s' is not installed. "
-msgstr ""
-
-#. sanity check (check for ubuntu-desktop, brokenCache etc)
-#. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1437
-#: ../DistUpgrade/DistUpgradeController.py:1504
-msgid "Checking package manager"
-msgstr "প্যাকেজ ম্যানেজার পরীক্ষা করা হচ্ছ"
-
-#: ../DistUpgrade/DistUpgradeController.py:1442
-#, fuzzy
-msgid "Preparing the upgrade failed"
-msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeController.py:1443
-msgid ""
-"Preparing the system for the upgrade failed. Please report this as a bug "
-"against the 'update-manager' package and include the files in /var/log/dist-"
-"upgrade/ in the bugreport."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:1459
-#, fuzzy
-msgid "Getting upgrade prerequisites failed"
-msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeController.py:1460
-msgid ""
-"The system was unable to get the prerequisites for the upgrade. The upgrade "
-"will abort now and restore the original system state.\n"
-"\n"
-"Please report this as a bug against the 'update-manager' package and include "
-"the files in /var/log/dist-upgrade/ in the bugreport."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:1490
-msgid "Updating repository information"
-msgstr "রিপজিটরির তথ্য আপডেট করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeController.py:1515
-msgid "Invalid package information"
-msgstr "ভুল প্যাকেজ তথ্য"
-
-#: ../DistUpgrade/DistUpgradeController.py:1516
-#, python-format
-msgid ""
-"After your package information was updated the essential package '%s' can "
-"not be found anymore.\n"
-"This indicates a serious error, please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:1533
-#: ../DistUpgrade/DistUpgradeController.py:1581
-msgid "Fetching"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:1540
-#: ../DistUpgrade/DistUpgradeController.py:1585
-msgid "Upgrading"
-msgstr "আপগ্রেড করা হচ্ছে"
-
-#. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1545
-#: ../DistUpgrade/DistUpgradeController.py:1591
-#, fuzzy
-msgid "Upgrade complete"
-msgstr "আপডেট সম্পন্ন"
-
-#: ../DistUpgrade/DistUpgradeController.py:1546
-#, fuzzy
-msgid ""
-"The upgrade is completed but there were errors during the ugprade process."
-msgstr "আপগ্রেড টুলটি আপনাকে আপগ্রেড প্রক্রিয়ায় সাহায্য করবে।"
-
-#: ../DistUpgrade/DistUpgradeController.py:1553
-msgid "Searching for obsolete software"
-msgstr "অপ্রচলিত সফ্টওয়্যার অনুসন্ধান করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeController.py:1558
-msgid "System upgrade is complete."
-msgstr "সিস্টেম আপগ্রেড সম্পন্ন।"
-
-#: ../DistUpgrade/DistUpgradeController.py:1592
-#, fuzzy
-msgid "The partial upgrade was completed."
-msgstr "সিস্টেম আপগ্রেড সম্পন্ন।"
-
-#. print "mediaChange %s %s" % (medium, drive)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:108
-#: ../DistUpgrade/DistUpgradeViewKDE.py:170
-#, python-format
-msgid "Please insert '%s' into the drive '%s'"
-msgstr "দয়া করে '%s' ড্রাইভে '%s' প্রবেশ করান"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:127
-#: ../DistUpgrade/DistUpgradeViewKDE.py:183
-#, fuzzy
-msgid "Fetching is complete"
-msgstr "আপডেট সম্পন্ন"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#, python-format
-msgid "Fetching file %li of %li at %sB/s"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:140
-#: ../DistUpgrade/DistUpgradeViewGtk.py:275
-#: ../DistUpgrade/DistUpgradeViewKDE.py:197
-#: ../DistUpgrade/DistUpgradeViewKDE.py:333
-#, fuzzy, python-format
-msgid "About %s remaining"
-msgstr "%li মিিনিট বাকি আছে"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:142
-#: ../DistUpgrade/DistUpgradeViewKDE.py:199
-#, fuzzy, python-format
-msgid "Fetching file %li of %li"
-msgstr "%li of %li ফাইল ডাউনলোড করছে"
-
-#. FIXME: add support for the timeout
-#. of the terminal (to display something useful then)
-#. -> longer term, move this code into python-apt
-#: ../DistUpgrade/DistUpgradeViewGtk.py:174
-#: ../DistUpgrade/DistUpgradeViewKDE.py:233
-msgid "Applying changes"
-msgstr "পরিবর্তনগুলো প্রয়োগ করছি"
-
-#. we do not report followup errors from earlier failures
-#: ../DistUpgrade/DistUpgradeViewGtk.py:199
-#: ../DistUpgrade/DistUpgradeViewKDE.py:246
-msgid "dependency problems - leaving unconfigured"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:204
-#: ../DistUpgrade/DistUpgradeViewKDE.py:248
-#, python-format
-msgid "Could not install '%s'"
-msgstr "'%s' ইন্সটল করা যায় নি"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:205
-#: ../DistUpgrade/DistUpgradeViewKDE.py:249
-#, python-format
-msgid ""
-"The upgrade will continue but the '%s' package may be in a not working "
-"state. Please consider submitting a bugreport about it."
-msgstr ""
-
-#. self.expander.set_expanded(True)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:221
-#: ../DistUpgrade/DistUpgradeViewKDE.py:267
-#, fuzzy, python-format
-msgid ""
-"Replace the customized configuration file\n"
-"'%s'?"
-msgstr ""
-"কনফিগারেশন ফাইল '%s'\n"
-"কি সরানো হবে?"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:268
-msgid ""
-"You will lose any changes you have made to this configuration file if you "
-"choose to replace it with a newer version."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:235
-#: ../DistUpgrade/DistUpgradeViewKDE.py:285
-msgid "The 'diff' command was not found"
-msgstr "'diff' কমান্ডটি পাওয়া যায় নি"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:414
-msgid "A fatal error occurred"
-msgstr "একটি মারাত্মক সমস্যা সংঘটিত হয়েছে"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:415
-msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-"report. The upgrade aborts now.\n"
-"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:430
-msgid "Ctrl-c pressed"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:431
-msgid ""
-"This will abort the operation and may leave the system in a broken state. "
-"Are you sure you want to do that?"
-msgstr ""
-
-#. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk.py:566
-msgid "To prevent data loss close all open applications and documents."
-msgstr "তথ্য হারাতে না চাইলে সকল অ্যাপলিকেশন এবং ডকুমেন্ট বন্ধ রাখুন।"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:580
-#, fuzzy, python-format
-msgid "<b>Downgrade %s</b>"
-msgstr "<b>%s মুছো</b>"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:582
-#: ../DistUpgrade/DistUpgradeViewKDE.py:659
-#, fuzzy, python-format
-msgid "Remove %s"
-msgstr "সরাও (_স)"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:587
-#: ../DistUpgrade/DistUpgradeViewKDE.py:661
-#, python-format
-msgid "Install %s"
-msgstr "%s ইন্সটল"
-
-#: ../DistUpgrade/DistUpgradeViewGtk.py:589
-#: ../DistUpgrade/DistUpgradeViewKDE.py:663
-#, python-format
-msgid "Upgrade %s"
-msgstr "%s আপগ্রেড"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:171
-#, fuzzy
-msgid "Media Change"
-msgstr "চ্যানেন সম্পাদন"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:196
-#, fuzzy, python-format
-msgid "Fetching file %li of %li at %sb/s"
-msgstr "%li of %li ফাইল ডাউনলোড করছে"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:297
-#, fuzzy
-msgid "Show Difference >>>"
-msgstr "টার্মিন্যাল"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:300
-#, fuzzy
-msgid "<<< Hide Difference"
-msgstr "টার্মিন্যাল"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:541
-#, fuzzy
-msgid "Show Terminal >>>"
-msgstr "টার্মিন্যাল"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:544
-#, fuzzy
-msgid "<<< Hide Terminal"
-msgstr "টার্মিন্যাল"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:643
-#: ../DistUpgrade/DistUpgradeViewKDE.py:672
-#: ../DistUpgrade/DistUpgradeViewKDE.py:675
-#: ../DistUpgrade/DistUpgrade.glade.h:9
-msgid "Details"
-msgstr "বিস্তারিত"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:688
-msgid ""
-"<b><big>Cancel the running upgrade?</big></b>\n"
-"\n"
-"The system could be in an unusable state if you cancel the upgrade. You are "
-"strongly advised to resume the upgrade."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:692
-#, fuzzy
-msgid "Cancel Upgrade?"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../DistUpgrade/DistUpgradeView.py:35
-#, fuzzy, python-format
-msgid "%li days %li hours %li minutes"
-msgstr "%li দিন %li ঘন্টা %li মিিনিট বাকি আছে"
-
-#: ../DistUpgrade/DistUpgradeView.py:37
-#, fuzzy, python-format
-msgid "%li hours %li minutes"
-msgstr "%li ঘন্টা %li মিিনিট বাকি আছে"
-
-#: ../DistUpgrade/DistUpgradeView.py:39
-#, python-format
-msgid "%li minutes"
-msgstr "%li মিনিট"
-
-#: ../DistUpgrade/DistUpgradeView.py:40
-#, python-format
-msgid "%li seconds"
-msgstr "%li সেকেন্ড"
-
-#. 56 kbit
-#. 1Mbit = 1024 kbit
-#: ../DistUpgrade/DistUpgradeView.py:58
-#, python-format
-msgid ""
-"This download will take about %s with a 1Mbit DSL connection and about %s "
-"with a 56k modem"
-msgstr ""
-
-#. if we have a estimated speed, use it
-#: ../DistUpgrade/DistUpgradeView.py:62
-#, python-format
-msgid "This download will take about %s with your connection. "
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeView.py:128 ../DistUpgrade/DistUpgrade.glade.h:14
-#, fuzzy
-msgid "Preparing to upgrade"
-msgstr "আপগ্রেড প্রস্তুত করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeView.py:129
-#, fuzzy
-msgid "Getting new software channels"
-msgstr "সফ্টওয়্যার চ্যানেল পরিবর্তন করা হচ্ছ"
-
-#: ../DistUpgrade/DistUpgradeView.py:130 ../DistUpgrade/DistUpgrade.glade.h:12
-#, fuzzy
-msgid "Getting new packages"
-msgstr "ভাঙা প্যাকেজসমূহ"
-
-#: ../DistUpgrade/DistUpgradeView.py:131 ../DistUpgrade/DistUpgrade.glade.h:13
-#, fuzzy
-msgid "Installing the upgrades"
-msgstr "আপগ্রেড ডাউনলোড এবং ইন্সটল করা হচ্ছে"
-
-#: ../DistUpgrade/DistUpgradeView.py:132 ../DistUpgrade/DistUpgrade.glade.h:8
-msgid "Cleaning up"
-msgstr "পরিস্কার করছি"
-
-#. FIXME: make those two separate lines to make it clear
-#. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:205
-#, fuzzy, python-format
-msgid "%d package is going to be removed."
-msgid_plural "%d packages are going to be removed."
-msgstr[0] "%s টি প্যাকেজ মোছা হবে।"
-msgstr[1] "%s টি প্যাকেজ মোছা হবে।"
-
-#: ../DistUpgrade/DistUpgradeView.py:210
-#, fuzzy, python-format
-msgid "%d new package is going to be installed."
-msgid_plural "%d new packages are going to be installed."
-msgstr[0] "%s টি নতুন প্যাকেজ ইনস্টল হতে যাচ্ছে।"
-msgstr[1] "%s টি নতুন প্যাকেজ ইনস্টল হতে যাচ্ছে।"
-
-#: ../DistUpgrade/DistUpgradeView.py:216
-#, fuzzy, python-format
-msgid "%d package is going to be upgraded."
-msgid_plural "%d packages are going to be upgraded."
-msgstr[0] "%s টি নতুন প্যাকেজ আপগ্রেড হতে যাচ্ছে।"
-msgstr[1] "%s টি নতুন প্যাকেজ আপগ্রেড হতে যাচ্ছে।"
-
-#: ../DistUpgrade/DistUpgradeView.py:221
-#, fuzzy, python-format
-msgid ""
-"\n"
-"\n"
-"You have to download a total of %s. "
-msgstr ""
-"\n"
-"\n"
-"আপনাকে সর্বমোট %s ডাউনলোড করতে হবে। "
-
-#: ../DistUpgrade/DistUpgradeView.py:225
-#, fuzzy
-msgid ""
-"Fetching and installing the upgrade can take several hours. Once the "
-"download has finished, the process cannot be cancelled."
-msgstr ""
-"আপগ্রেড করতে কয়েক ঘন্টা লেগে যেতে পারে এবং পরে এটি বাতিল করা যাবে না।"
-
-#. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:231 ../UpdateManager/UpdateManager.py:666
-msgid "Your system is up-to-date"
-msgstr "আপনার সিস্টেম আপ-টু-ডেট"
-
-#: ../DistUpgrade/DistUpgradeView.py:232
-msgid ""
-"There are no upgrades available for your system. The upgrade will now be "
-"canceled."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeView.py:245
-msgid "Reboot required"
-msgstr "রিবুট করা প্রয়োজন"
-
-#: ../DistUpgrade/DistUpgradeView.py:246
-msgid ""
-"The upgrade is finished and a reboot is required. Do you want to do this now?"
-msgstr ""
-"আপগ্রেডটি সম্পন্ন এবং রিবুট করা প্রয়োজন। আপনি কি এক্ষুনি তা করতে চান?"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
-msgid "Could not run the upgrade tool"
-msgstr "আপগ্রেড টুলটি চালানো যায় নি"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
-msgid ""
-"This is most likely a bug in the upgrade tool. Please report it as a bug"
-msgstr "এটি মনে হচ্ছে আপগ্রেড টুলের একটি বাগ। অনুগ্রহ করে বাগটি রিপোর্ট করুন"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
-msgid "Upgrade tool signature"
-msgstr "আপগ্রেড টুল স্বাক্ষর"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
-msgid "Upgrade tool"
-msgstr "আপগ্রেড টুল"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
-msgid "Failed to fetch"
-msgstr "আনতে ব্যর্থ"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
-msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "আপগ্রেডটি আনতে ব্যর্থ। নেটওয়ার্কে কোন সমস্যা থাকতে পারে। "
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
-msgid "Failed to extract"
-msgstr "এক্সট্রাক্ট করতে ব্যর্থ"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
-msgid ""
-"Extracting the upgrade failed. There may be a problem with the network or "
-"with the server. "
-msgstr ""
-"আপগ্রেডটি এক্সট্রাক্ট করতে ব্যর্থ। নেটওয়ার্ক অথবা সার্ভারে সমস্যা থাকতে "
-"পারে। "
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
-msgid "Verfication failed"
-msgstr "যথার্থ্যতা পরীক্ষা করতে ব্যর্থ"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
-#, fuzzy
-msgid ""
-"Verifying the upgrade failed.  There may be a problem with the network or "
-"with the server. "
-msgstr ""
-"আপগ্রেড যথার্থ্য হয়েছে কিনা তা পরীক্ষা করতে ব্যর্থ। নেটওয়ার্ক অথবা সার্ভারে "
-"সমস্যা থাকতে পারে। "
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
-msgid "Authentication failed"
-msgstr "অনমোদন প্রক্রিয়া ব্যর্থ"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
-msgid ""
-"Authenticating the upgrade failed. There may be a problem with the network "
-"or with the server. "
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
-#, fuzzy
-msgid "Can not run the upgrade"
-msgstr "আপগ্রেড টুলটি চালানো যায় নি"
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
-msgid ""
-"This usually is caused by a system were /tmp is mounted noexec. Please "
-"remount without noexec and run the upgrade again."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
-#, python-format
-msgid "The error message is '%s'."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewText.py:110
-#, fuzzy
-msgid "A fatal error occurred"
-msgstr "একটি মারাত্মক সমস্যা সংঘটিত হয়েছে"
-
-#: ../DistUpgrade/DistUpgradeViewText.py:111
-msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade aborts now.\n"
-"Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewText.py:135
-msgid "Aborting"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewText.py:140
-#, fuzzy
-msgid "Demoted:\n"
-msgstr "সরাও (_স)\n"
-
-#: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
-#: ../DistUpgrade/DistUpgradeViewText.py:201
-#, fuzzy
-msgid "Continue [yN] "
-msgstr "এগিয়ে যাও (_C) "
-
-#: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
-#, fuzzy
-msgid "Details [d]"
-msgstr "বিস্তারিত"
-
-#. TRANSLATORS: the "y" is "yes"
-#: ../DistUpgrade/DistUpgradeViewText.py:176
-#: ../DistUpgrade/DistUpgradeViewText.py:205
-msgid "y"
-msgstr ""
-
-#. TRANSLATORS: the "n" is "no"
-#: ../DistUpgrade/DistUpgradeViewText.py:179
-msgid "n"
-msgstr ""
-
-#. TRANSLATORS: the "d" is "details"
-#: ../DistUpgrade/DistUpgradeViewText.py:182
-msgid "d"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewText.py:186
-#, fuzzy, python-format
-msgid "Remove: %s\n"
-msgstr "সরাও (_স)\n"
-
-#: ../DistUpgrade/DistUpgradeViewText.py:189
-#, fuzzy, python-format
-msgid "Install: %s\n"
-msgstr "%s ইন্সটল\n"
-
-#: ../DistUpgrade/DistUpgradeViewText.py:192
-#, fuzzy, python-format
-msgid "Upgrade: %s\n"
-msgstr "%s আপগ্রেড\n"
-
-#: ../DistUpgrade/DistUpgradeViewText.py:222
-#, fuzzy
-msgid "Restart required"
-msgstr "রিবুট করা প্রয়োজন"
-
-#: ../DistUpgrade/DistUpgradeViewText.py:223
-msgid ""
-"To finish the upgrade, a restart is required.\n"
-"If you select 'y' the system will be restarted."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewText.py:227
-#, fuzzy
-msgid "Restart the system now [yN] "
-msgstr "সিস্টেমটি রিস্টার্ট করছি "
-
-#: ../DistUpgrade/DistUpgrade.glade.h:1
-msgid "    "
-msgstr "    "
-
-#: ../DistUpgrade/DistUpgrade.glade.h:2
-msgid ""
-"<b><big>Cancel the running upgrade?</big></b>\n"
-"\n"
-"The system could be in an unusable state if you cancel the upgrade. You are "
-"strongly adviced to resume the upgrade."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgrade.glade.h:5
-msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr "<b><big>আপগ্রেড সম্পন্ন করতে সিস্টেমটি রিস্টার্ট করুন</big></b>"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:6
-msgid "<b><big>Start the upgrade?</big></b>"
-msgstr "<b><big>আপগ্রেড শুরু করবো?</big></b>"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:7
-msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgrade.glade.h:10
-msgid "Difference between the files"
-msgstr "ফাইলগুলোর মধ্যে পার্থক্য"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:11
-#, fuzzy
-msgid "Distribution Upgrade"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:15
-#, fuzzy
-msgid "Restarting the computer"
-msgstr "সিস্টেমটি রিস্টার্ট করছি"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:16
-#, fuzzy
-msgid "Setting new software channels"
-msgstr "সফ্টওয়্যার চ্যানেল পরিবর্তন করা হচ্ছ"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:17
-msgid "Terminal"
-msgstr "টার্মিন্যাল"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:18
-#, fuzzy
-msgid "_Cancel Upgrade"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:19
-msgid "_Continue"
-msgstr "এগিয়ে যাও (_C)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:21
-msgid "_Replace"
-msgstr "প্রতিস্হাপন (_R)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:22
-msgid "_Report Bug"
-msgstr "বাগ রিপোর্ট (_R)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:23
-msgid "_Restart Now"
-msgstr "এক্ষুনি রিস্টার্ট (_R)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:24
-msgid "_Resume Upgrade"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../DistUpgrade/DistUpgrade.glade.h:25
-#, fuzzy
-msgid "_Start Upgrade"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../UpdateManager/DistUpgradeFetcher.py:81
-msgid "Could not find the release notes"
-msgstr "রিলিজ নোট পাওয়া যায় নি"
-
-#: ../UpdateManager/DistUpgradeFetcher.py:82
-msgid "The server may be overloaded. "
-msgstr "সার্ভারটি মনে হয় ব্যস্ত। "
-
-#: ../UpdateManager/DistUpgradeFetcher.py:92
-msgid "Could not download the release notes"
-msgstr "রিলিজ নোট ডাউনলোড করা যায় নি"
-
-#: ../UpdateManager/DistUpgradeFetcher.py:93
-msgid "Please check your internet connection."
-msgstr "অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।"
-
-#: ../UpdateManager/GtkProgress.py:108
-#, python-format
-msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr ""
-
-#: ../UpdateManager/GtkProgress.py:113
-#, python-format
-msgid "Downloading file %(current)li of %(total)li"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:249
-#, fuzzy
-msgid "The list of changes is not available"
-msgstr "পরিবর্তনের তালিকা এখনে উপস্হিত নয়। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
-
-#: ../UpdateManager/UpdateManager.py:257
-#, python-format
-msgid ""
-"The list of changes is not available yet.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:264
-#, fuzzy
-msgid ""
-"Failed to download the list of changes. \n"
-"Please check your Internet connection."
-msgstr ""
-"পরিবর্তন তালিকা ডাউনলোড করতে ব্যর্থ। অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ "
-"পরীক্ষা করুন।"
-
-#: ../UpdateManager/UpdateManager.py:286
-#, fuzzy
-msgid "Failed to detect distribution"
-msgstr "এক্সট্রাক্ট করতে ব্যর্থ"
-
-#: ../UpdateManager/UpdateManager.py:287
-#, python-format
-msgid "A error '%s' occurred while checking what system you are using."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:298
-#, fuzzy
-msgid "Important security updates"
-msgstr "উবুন্টু ৫.১০ নিরাপত্তামুলক আপডেট"
-
-#: ../UpdateManager/UpdateManager.py:299
-msgid "Recommended updates"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:300
-#, fuzzy
-msgid "Proposed updates"
-msgstr "আপডেট ইন্সটল করো (_I)"
-
-#: ../UpdateManager/UpdateManager.py:301
-#, fuzzy
-msgid "Backports"
-msgstr "উবুন্টু ৫.১০ ব্যাকপোর্ট"
-
-#: ../UpdateManager/UpdateManager.py:302
-#, fuzzy
-msgid "Distribution updates"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../UpdateManager/UpdateManager.py:307
-#, fuzzy
-msgid "Other updates"
-msgstr "আপডেট ইন্সটল করো (_I)"
-
-#: ../UpdateManager/UpdateManager.py:489
-#, python-format
-msgid "Version %s: \n"
-msgstr "ভার্সন %s: \n"
-
-#: ../UpdateManager/UpdateManager.py:550
-#, fuzzy
-msgid "Downloading list of changes..."
-msgstr "পরিবর্তনের তালিকা ডাউনলোড করা হচ্ছ..."
-
-#: ../UpdateManager/UpdateManager.py:577
-msgid "_Uncheck All"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:583
-#, fuzzy
-msgid "_Check All"
-msgstr "পরীক্ষা করো (_C)"
-
-#. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:627 ../UpdateManager/UpdateManager.py:683
-#, python-format
-msgid "Download size: %s"
-msgstr "ডাউনলোড এর আকার: %s"
-
-#: ../UpdateManager/UpdateManager.py:631
-#, fuzzy
-msgid "Unknown download size"
-msgstr "ডাউনলোড এর আকার: %s"
-
-#: ../UpdateManager/UpdateManager.py:639
-msgid ""
-"It is unknown when the package information was updated last. Please try "
-"clicking on the 'Check' button to update the information."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:648
-#, python-format
-msgid "The package information was last updated %s day ago."
-msgid_plural "The package information was last updated %s days ago."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../UpdateManager/UpdateManager.py:652
-#, python-format
-msgid "The package information was last updated %s hour ago."
-msgid_plural "The package information was last updated %s hours ago."
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../UpdateManager/UpdateManager.py:656
-msgid "The package information was last updated less than one hour ago."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:664
-#: ../data/glade/UpdateManager.glade.h:21
-msgid ""
-"Software updates correct errors, eliminate security vulnerabilities and "
-"provide new features."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:679
-#, fuzzy, python-format
-msgid "You can install %s update."
-msgid_plural "You can install %s updates."
-msgstr[0] "আপনি %s আপডেট ইনস্টল করতে পারেন"
-msgstr[1] "আপনি %s আপডেট ইনস্টল করতে পারেন"
-
-#: ../UpdateManager/UpdateManager.py:721
-msgid "Please wait, this can take some time."
-msgstr "অনুগ্রহ করে অপেক্ষা করুন, এটি কিছুটা সময় নিতে পারে।"
-
-#: ../UpdateManager/UpdateManager.py:723
-msgid "Update is complete"
-msgstr "আপডেট সম্পন্ন"
-
-#: ../UpdateManager/UpdateManager.py:775
-#, fuzzy
-msgid "Reading package information"
-msgstr "ভুল প্যাকেজ তথ্য"
-
-#: ../UpdateManager/UpdateManager.py:878
-#, fuzzy
-msgid "Could not initialize the package information"
-msgstr "ভুল প্যাকেজ তথ্য"
-
-#: ../UpdateManager/UpdateManager.py:879
-msgid ""
-"An unresolvable problem occurred while initializing the package "
-"information.\n"
-"\n"
-"Please report this bug against the 'update-manager' package and include the "
-"following error message:\n"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:901
-msgid ""
-"An unresolvable problem occurred while calculating the upgrade.\n"
-"\n"
-"Please report this bug against the 'update-manager' package and include the "
-"following error message:"
-msgstr ""
-
-#. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:926
-#, python-format
-msgid "(Size: %s)"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:936
-msgid "Your distribution is not supported anymore"
-msgstr "আপনার ডিস্ট্রিবিউশনটি আর সমর্থিত নয়"
-
-#: ../UpdateManager/UpdateManager.py:937
-msgid ""
-"You will not get any further security fixes or critical updates. Upgrade to "
-"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
-"information on upgrading."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:963
-msgid "Downloading the upgrade tool"
-msgstr "আপগ্রেড টুল ডাউনলোড করছি"
-
-#: ../UpdateManager/UpdateManager.py:965
-msgid "The upgrade tool will guide you through the upgrade process."
-msgstr "আপগ্রেড টুলটি আপনাকে আপগ্রেড প্রক্রিয়ায় সাহায্য করবে।"
-
-#: ../UpdateManager/UpdateManager.py:973
-#, python-format
-msgid "<b>New distribution release '%s' is available</b>"
-msgstr ""
-
-#. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:1016
-msgid "Software index is broken"
-msgstr "সফ্টওয়্যার ইন্ডেক্সটি নস্ট"
-
-#: ../UpdateManager/UpdateManager.py:1017
-msgid ""
-"It is impossible to install or remove any software. Please use the package "
-"manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
-"this issue at first."
-msgstr ""
-
-#: ../data/glade/UpdateManager.glade.h:1
-msgid ""
-"<b><big>You must check for updates manually</big></b>\n"
-"\n"
-"Your system does not check for updates automatically. You can configure this "
-"behavior in <i>Software Sources</i> on the <i>Updates</i> tab."
-msgstr ""
-
-#: ../data/glade/UpdateManager.glade.h:4
-msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr "<big><b>আপনার সিস্টেম আপ-টু-ডেট রাখুন</b></big>"
-
-#: ../data/glade/UpdateManager.glade.h:5
-#, fuzzy
-msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr ""
-"<big><b>সিডি স্ক্যানিং এ ত্রুটি</b></big>\n"
-"\n"
-"%s"
-
-#: ../data/glade/UpdateManager.glade.h:6
-#, fuzzy
-msgid "<big><b>Starting Update Manager</b></big>"
-msgstr "<b><big>আপগ্রেড শুরু করবো?</big></b>"
-
-#: ../data/glade/UpdateManager.glade.h:7
-msgid "Changes"
-msgstr "পরিবর্তন"
-
-#: ../data/glade/UpdateManager.glade.h:8
-msgid "Chec_k"
-msgstr "পরীক্ষা করো (_k)"
-
-#: ../data/glade/UpdateManager.glade.h:9
-msgid "Check the software channels for new updates"
-msgstr "নতুন আপডেট এর জন্য সফ্টওয়্যার চ্যানেল পরীক্ষা করো"
-
-#: ../data/glade/UpdateManager.glade.h:10
-msgid "Description"
-msgstr "বর্ননা"
-
-#: ../data/glade/UpdateManager.glade.h:11
-#, fuzzy
-msgid "Description of update"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../data/glade/UpdateManager.glade.h:12
-msgid "Release Notes"
-msgstr "রিলিজ নোট"
-
-#: ../data/glade/UpdateManager.glade.h:13
-msgid ""
-"Run a partial upgrade, to install as many updates as possible. \n"
-"\n"
-"This can be caused by:\n"
-" ◦ A previous upgrade which didn't complete\n"
-" ◦ Problems with some of the installed software\n"
-" ◦ Unofficial software packages not provided by Ubuntu\n"
-" ◦ Normal changes of a pre-release version of Ubuntu"
-msgstr ""
-
-#: ../data/glade/UpdateManager.glade.h:20
-#, fuzzy
-msgid "Show progress of individual files"
-msgstr "একটি ফাইলের অগ্রগতি দেখাও"
-
-#: ../data/glade/UpdateManager.glade.h:22
-msgid "U_pgrade"
-msgstr "আপগ্রেড (_p)"
-
-#: ../data/glade/UpdateManager.glade.h:23
-#: ../data/update-manager.desktop.in.h:3
-msgid "Update Manager"
-msgstr "আপডেট ম্যানেজার"
-
-#: ../data/glade/UpdateManager.glade.h:24
-msgid "Upgrade to the latest version of Ubuntu"
-msgstr "উবুন্টু এর সর্বশেষ ভার্সনে আপগ্রেড করো"
-
-#: ../data/glade/UpdateManager.glade.h:25
-msgid "_Hide this information in the future"
-msgstr "ভবিষ্যতে এই তথ্য আড়াল রাখো (_H)"
-
-#: ../data/glade/UpdateManager.glade.h:26
-msgid "_Install Updates"
-msgstr "আপডেট ইন্সটল করো (_I)"
-
-#: ../data/glade/UpdateManager.glade.h:27
-#, fuzzy
-msgid "_Partial Upgrade"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../data/glade/UpdateManager.glade.h:28
-#, fuzzy
-msgid "_Upgrade"
-msgstr "আপগ্রেড (_p)"
-
-#: ../data/glade/UpdateManager.glade.h:29
-msgid "updates"
-msgstr "আপডেটসমূহ"
-
-#: ../data/update-manager.desktop.in.h:1
-msgid "Show and install available updates"
-msgstr "উপস্হিত আপডেট গুলো প্রদর্শন এবং ইন্সটল করো"
-
-#: ../data/update-manager.desktop.in.h:2
-msgid "Software Updates"
-msgstr "সফ্টওয়্যার আপডেট"
-
-#: ../data/update-manager.schemas.in.h:1
-#, fuzzy
-msgid "*deprecated* Check for new distribution releases"
-msgstr "নতুন ডিস্ট্রিবিউশন রিলিজের জন্য পরীক্ষা করো"
-
-#: ../data/update-manager.schemas.in.h:2
-msgid "Auto close the install window after successful install"
-msgstr ""
-
-#: ../data/update-manager.schemas.in.h:3
-msgid ""
-"If automatic checking for updates is disabled, you have to reload the "
-"channel list manually. This option allows to hide the reminder shown in this "
-"case."
-msgstr ""
-
-#: ../data/update-manager.schemas.in.h:4
-msgid ""
-"If this key is set the install window will be automatically closed on "
-"successful installation."
-msgstr ""
-
-#: ../data/update-manager.schemas.in.h:5
-msgid "Remind to reload the channel list"
-msgstr "চ্যানেল তালিকা পুনরায় পড়ার কথা মনে করো"
-
-#: ../data/update-manager.schemas.in.h:6
-msgid "Show details of an update"
-msgstr "একটি আপডেটের বিস্তারিত প্রদর্শন করো"
-
-#: ../data/update-manager.schemas.in.h:7
-msgid "Stores the size of the update-manager dialog"
-msgstr "update-manager ডায়ালগের আকার সংরক্ষন"
-
-#: ../data/update-manager.schemas.in.h:8
-msgid ""
-"Stores the state of the expander that contains the list of changes and the "
-"description"
-msgstr ""
-
-#: ../data/update-manager.schemas.in.h:9
-msgid "The window size"
-msgstr "উইনডোর আকার"
-
-#: ../data/update-manager.schemas.in.h:10
-msgid ""
-"This key is deprecated in favor of the file /etc/update-manager/release-"
-"upgrades Check automatically if a new version of the current distribution is "
-"available and offer to upgrade (if possible)."
-msgstr ""
-
-#: ../update-manager:55
-msgid "Show version and exit"
-msgstr ""
-
-#: ../update-manager:58
-#, fuzzy
-msgid "Check if a new distribution release is available"
-msgstr "নতুন ডিস্ট্রিবিউশন রিলিজের জন্য পরীক্ষা করো"
-
-#: ../update-manager:61 ../do-release-upgrade:23
-msgid "Check if upgrading to the latest devel release is possible"
-msgstr ""
-
-#: ../update-manager:65
-#, fuzzy
-msgid "Upgrade using the latest proposed version of the release upgrader"
-msgstr "উবুন্টু এর সর্বশেষ ভার্সনে আপগ্রেড করো"
-
-#: ../update-manager:68
-msgid "Try to run a dist-upgrade"
-msgstr ""
-
-#: ../update-manager:85
-#, fuzzy
-msgid "Running partial upgrade"
-msgstr "পুনরায় আপগ্রেড শুরু (_R)"
-
-#: ../do-release-upgrade:27
-msgid ""
-"Try upgrading to the latest release using the upgrader from $distro-proposed"
-msgstr ""
-
-#: ../do-release-upgrade:31
-msgid ""
-"Run in a special upgrade mode.\n"
-"Currently 'desktop' for regular upgrades of a desktop system and 'server' "
-"for server systems are supported."
-msgstr ""
-
-#: ../do-release-upgrade:37
-msgid "Run the specified frontend"
-msgstr ""
-
-#: ../do-release-upgrade:41
-#, fuzzy
-msgid "Checking for a new ubuntu release"
-msgstr "নতুন ডিস্ট্রিবিউশন রিলিজের জন্য পরীক্ষা করো"
-
-#: ../do-release-upgrade:48
-msgid "No new release found"
-msgstr "নতুন কোন সংস্করণ পাওয়া যায় নি"
+#~ msgid "%li days %li hours %li minutes"
+#~ msgstr "%li দিন %li ঘন্টা %li মিিনিট বাকি আছে"

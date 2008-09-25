@@ -673,6 +673,11 @@ class DistUpgradeController(object):
             self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))
         logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
+        # now run the PreUpgradeHooks
+        quirkname = "%sPreUpgradeQuirks" % self.config.get("Sources","To")
+        func = getattr(self, quirkname, None)
+        if func is not None:
+            func()
         return True
 
     def doUpdate(self, showErrors=True, forceRetries=None):
@@ -1654,6 +1659,37 @@ class DistUpgradeController(object):
         self._view.information(_("Upgrade complete"),
                                _("The partial upgrade was completed."))
         return True
+
+    def _checkForFglrx(self):
+        " check if the fglrx driver is in use "
+        XORG="/etc/X11/xorg.conf"
+        if not os.path.exists(XORG):
+            return False
+        for line in open(XORG):
+            s=line.split("#")[0].strip()
+            # check for fglrx driver entry
+            if (s.startswith("Driver") and
+                s.endswith('"fglrx"')):
+                return True
+        return False
+
+    # fglrx is broken in intrepid (no support for xserver 1.5)
+    def intrepidPreUpgradeQuirks(self):
+        " quirks that are run before the upgrade to intrepid "
+        logging.debug("running intrepiPreUpgradeQuirks()")
+        if self._checkForFglrx():
+            res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                          "effects, and performance in games "
+                                          "and other graphically intensive "
+                                          "programs."),
+                                        _("This computer is currently using "
+                                          "the AMD 'fglrx' graphics driver. "
+                                          "No version of this driver is "
+                                          "available that works with Ubuntu "
+                                          "8.10.\n\nDo you want to continue?")
+                                        )
+            if res == False:
+                self.abort()
 
 if __name__ == "__main__":
     from DistUpgradeView import DistUpgradeView

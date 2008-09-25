@@ -1064,6 +1064,10 @@ class DistUpgradeController(object):
         self.runPostInstallScripts()
 
     def runPostInstallScripts(self):
+        """ 
+        scripts that are run in any case after the distupgrade finished 
+        whether or not it was successfull
+        """
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             logging.debug("Running PostInstallScript: '%s'" % script)
@@ -1071,6 +1075,7 @@ class DistUpgradeController(object):
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
+        
 
     def _addRelatimeToFstab(self):
         " add the relatime option to ext2/ext3 filesystems on upgrade "

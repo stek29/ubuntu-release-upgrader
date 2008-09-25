@@ -8,7 +8,9 @@ import apt
 import sys
 import os.path
 
-def remove_fglrx_from_xorg(xorg="/etc/xorg/xorg.conf"):
+XORG_CONF="/etc/xorg/xorg.conf"
+
+def remove_fglrx_from_xorg(xorg=XORG_CONF):
     """
     this removes the fglrx driver from the xorg.conf and subsitutes
     it with the ati one
@@ -26,11 +28,14 @@ def remove_fglrx_from_xorg(xorg="/etc/xorg/xorg.conf"):
         content.append(line)
     # write out the new version
     if open(xorg).readlines() != content:
+        print "rewriting %s" % xorg
         open(xorg,"w").write("".join(content))
 
 if __name__ == "__main__":
     print "%s running" % sys.argv[0]
 
-    if not os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so"):
+    if not (os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so") and
+            "fglrx" in open(XORG_CONF).read()):
+        print "Removing fglrx from %s" % XORG_CONF
         remove_fglrx_from_xorg()
 

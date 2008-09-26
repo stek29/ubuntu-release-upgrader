@@ -629,10 +629,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
             image.show()
 
     def setStep(self, step):
-        if os.path.exists("/usr/share/icons/oxygen/16x16/status/task-complete.png"):
-            okIcon = QPixmap("/usr/share/icons/oxygen/16x16/status/task-complete.png")
-        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/status/task-complete.png"):
-            okIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/status/task-complete.png")
+        if os.path.exists("/usr/share/icons/oxygen/16x16/actions/dialog-ok.png"):
+            okIcon = QPixmap("/usr/share/icons/oxygen/16x16/actions/dialog-ok.png")
+        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-ok.png"):
+            okIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-ok.png")
         else:
             okIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/ok.png")
 

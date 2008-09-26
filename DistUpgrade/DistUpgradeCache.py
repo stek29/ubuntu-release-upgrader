@@ -425,7 +425,7 @@ class MyCache(apt.Cache):
             # check if a binary driver is installed now
             for oldDriver in nv.oldPackages:
                 if self.has_key(oldDriver) and self[oldDriver].isInstalled:
-                    self.markPurge(oldDriver, "old nvidia driver")
+                    self.markRemove(oldDriver, "old nvidia driver")
                     break
             else:
                 logging.info("no old nvidia driver installed, installing no new")

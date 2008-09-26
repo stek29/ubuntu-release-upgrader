@@ -643,11 +643,11 @@ class DistUpgradeController(object):
         logging.debug("Upgrade: %s" % " ".join(up))
         
 
-    def doPreUpgrade(self):
+    def doPostInitialUpdate(self):
         # check if we have packages in ReqReinst state that are not
         # downloadable
-        logging.debug("doPreUpgrade")
-        self.quirks.run("PreUpgrade")
+        logging.debug("doPostInitialUpdate")
+        self.quirks.run("PostInitialUpdate")
         if len(self.cache.reqReinstallPkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
@@ -982,17 +982,8 @@ class DistUpgradeController(object):
     def doPostUpgrade(self):
         # reopen cache
         self.openCache()
-        
-        # now run the quirksHandler from_${FROM-DIST}Quirks
-        quirksFuncName = "from_%sQuirks" % self.config.get("Sources","From")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
-        # and now ${TO-DIST}Quirks
-        quirksFuncName = "%sQuirks" % self.config.get("Sources","to")
-        func = getattr(self, quirksFuncName, None)
-        if func is not None:
-            func()
+        # run the quirks handler
+        self.quirks.run("PostUpgrade")
 
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
@@ -1081,131 +1072,6 @@ class DistUpgradeController(object):
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
         
-
-    def _addRelatimeToFstab(self):
-        " add the relatime option to ext2/ext3 filesystems on upgrade "
-        logging.debug("_addRelatime")
-        replaced = False
-        lines = []
-        # we have one cdrom to convert
-        for line in open("/etc/fstab"):
-            line = line.strip()
-            if line == '' or line.startswith("#"):
-                lines.append(line)
-                continue
-            try:
-                (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
-                logging.error("can't parse line '%s'" % line)
-                lines.append(line)
-                continue
-            if (("ext2" in fstype or
-                "ext3" in fstype) and 
-                not "relatime" in options):
-                logging.debug("adding 'relatime' to line '%s' " % line)
-                line = line.replace(options,"%s,relatime" % options)
-                logging.debug("replaced line is '%s' " % line)
-                replaced=True
-            lines.append(line)
-        # we have converted a line (otherwise we would have exited already)
-        if replaced:
-            logging.debug("writing new /etc/fstab")
-            open("/etc/fstab.intrepid","w").write("\n".join(lines))
-            os.rename("/etc/fstab.intrepid","/etc/fstab")
-        return True
-        
-
-    def _rewriteFstab(self):
-        " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
-        logging.debug("_rewriteFstab()")
-        replaced = 0
-        lines = []
-        # we have one cdrom to convert
-        for line in open("/etc/fstab"):
-            line = line.strip()
-            if line == '' or line.startswith("#"):
-                lines.append(line)
-                continue
-            try:
-                (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
-                logging.error("can't parse line '%s'" % line)
-                lines.append(line)
-                continue
-            # edgy kernel has /dev/cdrom -> /dev/hd?
-            # feisty kernel (for a lot of chipsets) /dev/cdrom -> /dev/scd0
-            # this breaks static mounting (LP#86424)
-            #
-            # we convert here to /dev/cdrom only if current /dev/cdrom
-            # points to the device in /etc/fstab already. this ensures
-            # that we don't break anything or that we get it wrong
-            # for systems with two (or more) cdroms. this is ok, because
-            # we convert under the old kernel
-            if ("iso9660" in fstype and
-                device != "/dev/cdrom" and
-                os.path.exists("/dev/cdrom") and
-                os.path.realpath("/dev/cdrom") == device
-                ):
-                logging.debug("replacing '%s' " % line)
-                line = line.replace(device,"/dev/cdrom")
-                logging.debug("replaced line is '%s' " % line)
-                replaced += 1
-            lines.append(line)
-        # we have converted a line (otherwise we would have exited already)
-        if replaced > 0:
-            logging.debug("writing new /etc/fstab")
-            shutil.copy("/etc/fstab","/etc/fstab.edgy")
-            open("/etc/fstab","w").write("\n".join(lines))
-        return True
-
-    def _checkAdminGroup(self):
-        " check if the current sudo user is in the admin group "
-        logging.debug("_checkAdminGroup")
-        import grp
-        try:
-            admin_group = grp.getgrnam("admin").gr_mem
-        except KeyError, e:
-            logging.warning("System has no admin group (%s)" % e)
-            subprocess.call(["addgroup","--system","admin"])
-        # double paranoia
-        try:
-            admin_group = grp.getgrnam("admin").gr_mem
-        except KeyError, e:
-            logging.warning("adding the admin group failed (%s)" % e)
-            return
-        # if the current SUDO_USER is not in the admin group
-        # we add him - this is no security issue because
-        # the user is already root so adding him to the admin group
-        # does not change anything
-        if (os.environ.has_key("SUDO_USER") and
-            not os.environ["SUDO_USER"] in admin_group):
-            admin_user = os.environ["SUDO_USER"]
-            logging.info("SUDO_USER=%s is not in admin group" % admin_user)
-            cmd = ["usermod","-a","-G","admin",admin_user]
-            res = subprocess.call(cmd)
-            logging.debug("cmd: %s returned %i" % (cmd, res))
-        
-    def from_dapperQuirks(self):
-        " this works around quirks for dapper->hardy upgrades "
-        logging.debug("running Controller.from_dapperQuirks handler")
-        self._rewriteFstab()
-        self._checkAdminGroup()
-        
-    def intrepidQuirks(self):
-        " this applies rules for the hardy->intrepid upgrade "
-	logging.debug("running Controller.intrepidQuirks handler")
-        self._addRelatimeToFstab()
-
-    def gutsyQuirks(self):
-        """ this function works around quirks in the feisty->gutsy upgrade """
-        logging.debug("running Controller.gutsyQuirks handler")
-
-    def feistyQuirks(self):
-        """ this function works around quirks in the edgy->feisty upgrade """
-        logging.debug("running Controller.feistyQuirks handler")
-        self._rewriteFstab()
-        self._checkAdminGroup()
-            
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
         if hasattr(self, "sources"):
@@ -1550,7 +1416,7 @@ class DistUpgradeController(object):
         self.openCache()
 
         # do pre-upgrade stuff (calc list of obsolete pkgs etc)
-        if not self.doPreUpgrade():
+        if not self.doPostInitialUpdate():
             self.abort()
 
         # update sources.list
@@ -1641,7 +1507,7 @@ class DistUpgradeController(object):
         self._view.hideStep(STEP_REBOOT)
         self._partialUpgrade = True
         self.prepare()
-        if not self.doPreUpgrade():
+        if not self.doPostInitialUpdate():
             return False
         if not self.askDistUpgrade():
             return False

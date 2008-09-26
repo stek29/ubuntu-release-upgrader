@@ -94,7 +94,7 @@ class DistUpgradeQuirks(object):
         " quirks that are run before the upgrade to intrepid "
         logging.debug("running %s" %  sys._getframe().f_code.co_name
 )
-        if self._checkForFglrx():
+        if self._checkVideoDriver("fglrx"):
             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
                                         "effects, and performance in games "
                                         "and other graphically intensive "
@@ -131,6 +131,30 @@ class DistUpgradeQuirks(object):
             self.controller.cache[frompkg].isInstalled):
             logging.debug("transitioning %s to %s" % (frompkg, topkg))
             self.controller.cache[topkg].markInstall()
+        # now check for nvidia and show a warning if needed
+        cache = self.controller.cache
+        for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
+            if (cache.has_key(pkgname) and 
+                cache[pkgname].markedInstall and
+                self._checkVideoDriver("nvidia")):
+                logging.debug("found %s video driver" % pkgname)
+                res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                        "effects, and performance in games "
+                                        "and other graphically intensive "
+                                        "programs."),
+                                      _("This computer is currently using "
+                                        "the NVIDIA 'nvidia' "
+                                        "graphics driver. "
+                                        "No version of this driver is "
+                                        "available that works with your "
+                                        "video card in Ubuntu "
+                                        "8.10.\n\nDo you want to continue?"))
+                if res == False:
+                    self.controller.abort()
+                # if the user continue, do not install the broken driver
+                # so that we can transiton him to the free "nv" one after
+                # the upgrade
+                self.cache[pkgname].markKeep()
 
     def hardyPostDistUpgradeCache(self):
         """ 
@@ -406,8 +430,8 @@ class DistUpgradeQuirks(object):
             res = subprocess.call(cmd)
             logging.debug("cmd: %s returned %i" % (cmd, res))
 
-    def _checkForFglrx(self):
-        " check if the fglrx driver is in use "
+    def _checkVideoDriver(self, name):
+        " check if the given driver is in use in xorg.conf "
         XORG="/etc/X11/xorg.conf"
         if not os.path.exists(XORG):
             return False
@@ -415,7 +439,7 @@ class DistUpgradeQuirks(object):
             s=line.split("#")[0].strip()
             # check for fglrx driver entry
             if (s.startswith("Driver") and
-                s.endswith('"fglrx"')):
+                s.endswith('"%s"' % name)):
                 return True
         return False
         

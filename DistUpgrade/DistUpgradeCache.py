@@ -427,7 +427,7 @@ class MyCache(apt.Cache):
                 if self.has_key(oldDriver) and self[oldDriver].isInstalled:
                     break
             else:
-                logging.info("no nvidia driver installed before, installing none")
+                logging.info("no old nvidia driver installed, installing no new")
                 return False
             # check which one to use
             driver = nv.selectDriver()
@@ -505,14 +505,14 @@ class MyCache(apt.Cache):
             # see if our KeepInstalled rules are honored
             self.keepInstalledRule()
 
-            # and if we have some special rules
-            self.postUpgradeRule()
-
             # check if we got a new kernel
             self.checkForKernel()
 
             # check for nvidia stuff
             self.checkForNvidia()
+
+            # and if we have some special rules
+            self.postUpgradeRule()
 
             # install missing meta-packages (if not in server upgrade mode)
             if not serverMode:

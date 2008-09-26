@@ -6,7 +6,9 @@
 
 import apt
 import sys
+import os
 import os.path
+import logging
 
 XORG_CONF="/etc/X11/xorg.conf"
 
@@ -16,6 +18,7 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     it with the ati one
     """
     if not os.path.exists(xorg):
+        logging.warning("file %s not found" % xorg)
         return
     content=[]
     for line in open(xorg):
@@ -24,27 +27,37 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
         # check for fglrx driver entry
         if (s.startswith("Driver") and
             s.endswith('"%s"' % old_driver)):
+            logging.debug("line '%s' found" % line)
             line='\tDriver\t"%s"\n' % new_driver
+            logging.debug("replacing with '%s'" % line)
         content.append(line)
     # write out the new version
     if open(xorg).readlines() != content:
-        print "rewriting %s (%s -> %s)" % (xorg, old_driver, new_driver)
+        logging.info("saveing new %s (%s -> %s)" % (xorg, old_driver, new_driver))
         open(xorg,"w").write("".join(content))
 
 if __name__ == "__main__":
-    print "%s running" % sys.argv[0]
+    if not os.getuid() == 0:
+        print "Need to run as root"
+        sys.exit(1)
+
+    logging.basicConfig(level=logging.DEBUG,
+                        filename="/var/log/dist-upgrade/xorg_fix_intrepid.log",
+                        filemode='w')
+    
+    logging.info("%s running" % sys.argv[0])
 
     if not os.path.exists(XORG_CONF):
-        print "No xorg.conf" 
+        logging.info("No xorg.conf, exiting")
         sys.exit(0)
 
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so") and
         "fglrx" in open(XORG_CONF).read()):
-        print "Removing fglrx from %s" % XORG_CONF
+        logging.info("Removing fglrx from %s" % XORG_CONF)
         replace_driver_from_xorg("fglrx","ati")
 
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/nvidia_drv.so") and
         "nvidia" in open(XORG_CONF).read()):
-        print "Removing nvidia from %s" % XORG_CONF
+        logging.info("Removing nvidia from %s" % XORG_CONF)
         replace_driver_from_xorg("nvidia","nv")
 

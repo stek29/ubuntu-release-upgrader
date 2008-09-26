@@ -34,7 +34,8 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     # write out the new version
     if open(xorg).readlines() != content:
         logging.info("saveing new %s (%s -> %s)" % (xorg, old_driver, new_driver))
-        open(xorg,"w").write("".join(content))
+        open(xorg+".xorg_fix","w").write("".join(content))
+        os.rename(xorg+".xorg_fix", xorg)
 
 if __name__ == "__main__":
     if not os.getuid() == 0:

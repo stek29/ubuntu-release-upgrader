@@ -10,7 +10,7 @@ import os.path
 
 XORG_CONF="/etc/X11/xorg.conf"
 
-def remove_fglrx_from_xorg(xorg=XORG_CONF):
+def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     """
     this removes the fglrx driver from the xorg.conf and subsitutes
     it with the ati one
@@ -23,20 +23,28 @@ def remove_fglrx_from_xorg(xorg=XORG_CONF):
         s=line.split("#")[0].strip()
         # check for fglrx driver entry
         if (s.startswith("Driver") and
-            s.endswith('"fglrx"')):
-            line='\tDriver\t"ati"\n'
+            s.endswith('"%s"' % old_driver)):
+            line='\tDriver\t"%s"\n' % new_driver
         content.append(line)
     # write out the new version
     if open(xorg).readlines() != content:
-        print "rewriting %s" % xorg
+        print "rewriting %s (%s -> %s)" % (xorg, old_driver, new_driver)
         open(xorg,"w").write("".join(content))
 
 if __name__ == "__main__":
     print "%s running" % sys.argv[0]
 
+    if not os.path.exists(XORG_CONF):
+        print "No xorg.conf" 
+        sys.exit(0)
+
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so") and
-	os.path.exists(XORG_CONF) and 
         "fglrx" in open(XORG_CONF).read()):
         print "Removing fglrx from %s" % XORG_CONF
-        remove_fglrx_from_xorg()
+        replace_driver_from_xorg("fglrx","ati")
+
+    if (not os.path.exists("/usr/lib/xorg/modules/drivers/nvidia_drv.so") and
+        "nvidia" in open(XORG_CONF).read()):
+        print "Removing nvidia from %s" % XORG_CONF
+        replace_driver_from_xorg("nvidia","nv")
 

@@ -11,9 +11,6 @@ update-manager (1:0.93.18) intrepid; urgency=low
     - fix log for kept packages
     - make the log of the obsolete removal less verbose
     - fix kubuntu-kde4-desktop upgrades (LP: #274706)
-  * DistUpgrade/DistUpgradeController.py:
-    - add intrepidPreUpgradeQuirks() handler that detects
-      fglrx in xorg.conf and warns about it before the upgrade
   * DistUpgrade/ReleaseAnnouncement:
     - udpated for BETA
   * DistUpgrade/DistUpgradeViewGtk.py:
@@ -22,6 +19,9 @@ update-manager (1:0.93.18) intrepid; urgency=low
   * UpdateManager/UpdateManager.py:
     - add gconf key /apps/update-manager/show_versions to show
       version information (disabled by default, LP: #189406)
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - add intrepidPreUpgrade() handler that detects
+      fglrx in xorg.conf and warns about it before the upgrade
   
  --
 

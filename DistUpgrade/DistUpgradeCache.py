@@ -430,7 +430,7 @@ class MyCache(apt.Cache):
         # kubuntu-desktop-kde4 
         # to
         # kubuntu-desktop
-        frompkg = "kubuntu-desktop-kde4"
+        frompkg = "kubuntu-kde4-desktop"
         topkg = "kubuntu-desktop"
         if (self.has_key(frompkg) and
             self[frompkg].isInstalled):

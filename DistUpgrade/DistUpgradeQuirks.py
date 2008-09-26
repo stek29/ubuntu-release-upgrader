@@ -24,7 +24,8 @@ import os
 import os.path
 import shutil
 import sys
-
+import subprocess
+from subprocess import PIPE, Popen
 
 class DistUpgradeQuirks(object):
     """
@@ -37,6 +38,7 @@ class DistUpgradeQuirks(object):
         self.controller = controller
         self._view = controller._view
         self.config = config
+        self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
         
     # the quirk function have the name:
     #  $todist$Name (e.g. intrepidPostUpgrade)
@@ -46,6 +48,8 @@ class DistUpgradeQuirks(object):
         Run the specific quirks handler, the follow handlers are supported:
         - PostInitialUpdate: run *before* the sources.list is rewritten but
                              after a initial apt-get update
+        - PostDistUpgradeCache: run *after* the dist-upgrade was calculated
+                                in the cache
         - PostUpgrade: run *after* the upgrade is finished successfully and 
                        packages got installed
         """
@@ -104,7 +108,201 @@ class DistUpgradeQuirks(object):
                 self.controller.abort()
 
 
+    # the post upgrade cache handlers
+    def from_dapperPostDistUpgradeCache(self):
+        self.hardyPostDistUpgradeCache()
+        self.gutsyPostDistUpgradeCache()
+        self.feistyPostDistUpgradeCache()
+        self.edgyPostDistUpgradeCache()
+
+    def intrepidPostDistUpgradeCache(self):
+        """ 
+        this function works around quirks in the 
+        hardy->intrepid upgrade 
+        """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # for kde we need to switch from 
+        # kubuntu-desktop-kde4 
+        # to
+        # kubuntu-desktop
+        frompkg = "kubuntu-kde4-desktop"
+        topkg = "kubuntu-desktop"
+        if (self.controller.cache.has_key(frompkg) and
+            self.controller.cache[frompkg].isInstalled):
+            logging.debug("transitioning %s to %s" % (frompkg, topkg))
+            self.controller.cache[topkg].markInstall()
+
+    def hardyPostDistUpgradeCache(self):
+        """ 
+        this function works around quirks in the 
+        {dapper,gutsy}->hardy upgrade 
+        """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # deal with gnome-translator and help apt with the breaks
+        if (self.controller.cache.has_key("nautilus") and
+            self.controller.cache["nautilus"].isInstalled and
+            not self.controller.cache["nautilus"].markedUpgrade):
+            # uninstallable and gutsy apt is unhappy about this
+            # breaks because it wants to upgrade it and gives up
+            # if it can't
+            for broken in ("link-monitor-applet"):
+                if self.controller.cache.has_key(broken) and self.controller.cache[broken].isInstalled:
+                    self.controller.cache[broken].markDelete()
+            self.controller.cache["nautilus"].markInstall()
+        # evms gives problems, remove it if it is not in use
+        self._checkAndRemoveEvms()
+        # give the language-support-* packages a extra kick
+        # (if we have network, otherwise this will not work)
+        if self.config.get("Options","withNetwork") == "True":
+            for pkg in self.controller.cache:
+                if (pkg.name.startswith("language-support-") and
+                    pkg.isInstalled and
+                    not pkg.markedUpgrade):
+                    self.controller.cache.markInstall(pkg.name,"extra language-support- kick")
+
+    def gutsyPostDistUpgradeCache(self):
+        """ this function works around quirks in the feisty->gutsy upgrade """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # lowlatency kernel flavour vanished from feisty->gutsy
+        try:
+            (version, build, flavour) = self.uname.split("-")
+            if (flavour == 'lowlatency' or 
+                flavour == '686' or
+                flavour == 'k7'):
+                kernel = "linux-image-generic"
+                if not (self.controller.cache[kernel].isInstalled or self.controller.cache[kernel].markedInstall):
+                    logging.debug("Selecting new kernel '%s'" % kernel)
+                    self.controller.cache[kernel].markInstall()
+        except Exception, e:
+            logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
+        # fix feisty->gutsy utils-linux -> nfs-common transition (LP: #141559)
+        try:
+            for line in map(string.strip, open("/proc/mounts")):
+                if line == '' or line.startswith("#"):
+                    continue
+                try:
+                    (device, mount_point, fstype, options, a, b) = line.split()
+                except Exception, e:
+                    logging.error("can't parse line '%s'" % line)
+                    continue
+                if "nfs" in fstype:
+                    logging.debug("found nfs mount in line '%s', marking nfs-common for install " % line)
+                    self.controller.cache["nfs-common"].markInstall()
+                    break
+        except Exception, e:
+            logging.warning("problem while transitioning util-linux -> nfs-common (%s)" % e)
+
+    def feistyPostDistUpgradeCache(self):
+        """ this function works around quirks in the edgy->feisty upgrade """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # ndiswrapper changed again *sigh*
+        for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
+            if self.controller.cache.has_key(fr) and self.controller.cache.has_key(to):
+                if self.controller.cache[fr].isInstalled and not self.controller.cache[to].markedInstall:
+                    try:
+                        self.controller.cache.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
+                    except SystemError, e:
+                        logging.warning("Failed to apply %s->%s install (%s)" % (fr, to, e))
+            
+
+    def edgyPostDistUpgradeCache(self):
+        """ this function works around quirks in the dapper->edgy upgrade """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        for pkg in self.controller.cache:
+            # deal with the python2.4-$foo -> python-$foo transition
+            if (pkg.name.startswith("python2.4-") and
+                pkg.isInstalled and
+                not pkg.markedUpgrade):
+                basepkg = "python-"+pkg.name[len("python2.4-"):]
+                if (self.controller.cache.has_key(basepkg) and 
+                    self.controller.cache[basepkg].candidateDownloadable and
+                    not self.controller.cache[basepkg].markedInstall):
+                    try:
+                        self.controller.cache.markInstall(basepkg,
+                                         "python2.4->python upgrade rule")
+                    except SystemError, e:
+                        logging.debug("Failed to apply python2.4->python install: %s (%s)" % (basepkg, e))
+            # xserver-xorg-input-$foo gives us trouble during the upgrade too
+            if (pkg.name.startswith("xserver-xorg-input-") and
+                pkg.isInstalled and
+                not pkg.markedUpgrade):
+                try:
+                    self.controller.cache.markInstall(pkg.name, "xserver-xorg-input fixup rule")
+                except SystemError, e:
+                    logging.debug("Failed to apply fixup: %s (%s)" % (pkg.name, e))
+            
+        # deal with held-backs that are unneeded
+        for pkgname in ["hpijs", "bzr", "tomboy"]:
+            if (self.controller.cache.has_key(pkgname) and self.controller.cache[pkgname].isInstalled and
+                self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].markedUpgrade):
+                try:
+                    self.controller.cache.markInstall(pkgname,"%s quirk upgrade rule" % pkgname)
+                except SystemError, e:
+                    logging.debug("Failed to apply %s install (%s)" % (pkgname,e))
+        # libgl1-mesa-dri from xgl.compiz.info (and friends) breaks the
+	# upgrade, work around this here by downgrading the package
+        if self.controller.cache.has_key("libgl1-mesa-dri"):
+            pkg = self.controller.cache["libgl1-mesa-dri"]
+            # the version from the compiz repo has a "6.5.1+cvs20060824" ver
+            if (pkg.candidateVersion == pkg.installedVersion and
+                "+cvs2006" in pkg.candidateVersion):
+                for ver in pkg._pkg.VersionList:
+                    # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
+                    if "~2006" in ver.VerStr:
+			# ensure that it is from a trusted repo
+			for (VerFileIter, index) in ver.FileList:
+				indexfile = self.controller.cache._list.FindIndex(VerFileIter)
+				if indexfile and indexfile.IsTrusted:
+					logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
+		                        self.controller.cache._depcache.SetCandidateVer(pkg._pkg, ver)
+					break
+                                    
+        # deal with general if $foo is installed, install $bar
+        for (fr, to) in [("xserver-xorg-driver-all","xserver-xorg-video-all")]:
+            if self.controller.cache.has_key(fr) and self.controller.cache.has_key(to):
+                if self.controller.cache[fr].isInstalled and not self.controller.cache[to].markedInstall:
+                    try:
+                        self.controller.cache.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
+                    except SystemError, e:
+                        logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
+                    
+                    
+                                  
+    def dapperPostDistUpgradeCache(self):
+        """ this function works around quirks in the breezy->dapper upgrade """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        if (self.controller.cache.has_key("nvidia-glx") and self.controller.cache["nvidia-glx"].isInstalled and
+            self.controller.cache.has_key("nvidia-settings") and self.controller.cache["nvidia-settings"].isInstalled):
+            logging.debug("nvidia-settings and nvidia-glx is installed")
+            self.controller.cache.markRemove("nvidia-settings")
+            self.controller.cache.markInstall("nvidia-glx")
+
     # helpers
+    def _checkAndRemoveEvms(self):
+        " check if evms is in use and if not, remove it "
+        logging.debug("running _checkAndRemoveEvms")
+        for line in open("/proc/mounts"):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                continue
+            try:
+                (device, mount_point, fstype, options, a, b) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                continue
+            if "evms" in device:
+                logging.debug("found evms device in line '%s', skipping " % line)
+                return False
+        # if not in use, nuke it
+        for pkg in ["evms","libevms-2.5","libevms-dev",
+                    "evms-ncurses", "evms-ha",
+                    "evms-bootdebug",
+                    "evms-gui", "evms-cli",
+                    "linux-patch-evms"]:
+            if self.controller.cache.has_key(pkg) and self.controller.cache[pkg].isInstalled:
+                self.controller.cache[pkg].markDelete()
+        return True
+
     def _addRelatimeToFstab(self):
         " add the relatime option to ext2/ext3 filesystems on upgrade "
         logging.debug("_addRelatime")

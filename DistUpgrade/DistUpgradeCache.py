@@ -40,7 +40,6 @@ from DistUpgradeGettext import ngettext
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
-
 class CacheException(Exception):
     pass
 class CacheExceptionLockingFailed(CacheException):
@@ -53,11 +52,12 @@ class MyCache(apt.Cache):
     HoldReInstReq = 3
 
     # init
-    def __init__(self, config, view, progress=None, lock=True):
+    def __init__(self, config, view, quirks, progress=None, lock=True):
         apt.Cache.__init__(self, progress)
         self.to_install = []
         self.to_remove = []
         self.view = view
+        self.quirks = quirks
         self.lock = False
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
@@ -371,44 +371,8 @@ class MyCache(apt.Cache):
                                           self[key].markedInstall):
                     for pkg in self.config.getlist(key,"PostUpgrade%s" % rule):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
-
-        # get the distro-specific quirks handler and run it
-        for quirksFuncName in ("%sQuirks" % self.config.get("Sources","To"),
-                               "from_%sQuirks" % self.config.get("Sources","From")):
-            func = getattr(self, quirksFuncName, None)
-            if func is not None:
-                func()
-
-    def from_dapperQuirks(self):
-        self.hardyQuirks()
-        self.gutsyQuirks()
-        self.feistyQuirks()
-        self.edgyQuirks()
-
-    def _checkAndRemoveEvms(self):
-        " check if evms is in use and if not, remove it "
-        logging.debug("running _checkAndRemoveEvms")
-        for line in open("/proc/mounts"):
-            line = line.strip()
-            if line == '' or line.startswith("#"):
-                continue
-            try:
-                (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
-                logging.error("can't parse line '%s'" % line)
-                continue
-            if "evms" in device:
-                logging.debug("found evms device in line '%s', skipping " % line)
-                return False
-        # if not in use, nuke it
-        for pkg in ["evms","libevms-2.5","libevms-dev",
-                    "evms-ncurses", "evms-ha",
-                    "evms-bootdebug",
-                    "evms-gui", "evms-cli",
-                    "linux-patch-evms"]:
-            if self.has_key(pkg) and self[pkg].isInstalled:
-                self[pkg].markDelete()
-        return True
+        # run the quirks handlers
+        self.quirks.run("PostDistUpgradeCache")
 
     def identifyObsoleteKernels(self):
         # we have a funny policy that we remove security updates
@@ -440,169 +404,6 @@ class MyCache(apt.Cache):
                         obsolete_kernels.add(pkg.name)
         logging.debug("identifyObsoleteKernels found '%s'" % obsolete_kernels)
         return obsolete_kernels
-
-    def intrepidQuirks(self):
-        """ 
-        this function works around quirks in the 
-        hardy->intrepid upgrade 
-        """
-        logging.debug("intrepidQuirks")
-        # for kde we need to switch from 
-        # kubuntu-desktop-kde4 
-        # to
-        # kubuntu-desktop
-        frompkg = "kubuntu-kde4-desktop"
-        topkg = "kubuntu-desktop"
-        if (self.has_key(frompkg) and
-            self[frompkg].isInstalled):
-            logging.debug("transitioning %s to %s" % (frompkg, topkg))
-            self[topkg].markInstall()
-
-    def hardyQuirks(self):
-        """ 
-        this function works around quirks in the 
-        {dapper,gutsy}->hardy upgrade 
-        """
-        logging.debug("running hardyQuirks handler")
-        # deal with gnome-translator and help apt with the breaks
-        if (self.has_key("nautilus") and
-            self["nautilus"].isInstalled and
-            not self["nautilus"].markedUpgrade):
-            # uninstallable and gutsy apt is unhappy about this
-            # breaks because it wants to upgrade it and gives up
-            # if it can't
-            for broken in ("link-monitor-applet"):
-                if self.has_key(broken) and self[broken].isInstalled:
-                    self[broken].markDelete()
-            self["nautilus"].markInstall()
-        # evms gives problems, remove it if it is not in use
-        self._checkAndRemoveEvms()
-        # give the language-support-* packages a extra kick
-        # (if we have network, otherwise this will not work)
-        if self.config.get("Options","withNetwork") == "True":
-            for pkg in self:
-                if (pkg.name.startswith("language-support-") and
-                    pkg.isInstalled and
-                    not pkg.markedUpgrade):
-                    self.markInstall(pkg.name,"extra language-support- kick")
-
-    def gutsyQuirks(self):
-        """ this function works around quirks in the feisty->gutsy upgrade """
-        logging.debug("running gutsyQuirks handler")
-        # lowlatency kernel flavour vanished from feisty->gutsy
-        try:
-            (version, build, flavour) = self.uname.split("-")
-            if (flavour == 'lowlatency' or 
-                flavour == '686' or
-                flavour == 'k7'):
-                kernel = "linux-image-generic"
-                if not (self[kernel].isInstalled or self[kernel].markedInstall):
-                    logging.debug("Selecting new kernel '%s'" % kernel)
-                    self[kernel].markInstall()
-        except Exception, e:
-            logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
-        # fix feisty->gutsy utils-linux -> nfs-common transition (LP: #141559)
-        try:
-            for line in map(string.strip, open("/proc/mounts")):
-                if line == '' or line.startswith("#"):
-                    continue
-                try:
-                    (device, mount_point, fstype, options, a, b) = line.split()
-                except Exception, e:
-                    logging.error("can't parse line '%s'" % line)
-                    continue
-                if "nfs" in fstype:
-                    logging.debug("found nfs mount in line '%s', marking nfs-common for install " % line)
-                    self["nfs-common"].markInstall()
-                    break
-        except Exception, e:
-            logging.warning("problem while transitioning util-linux -> nfs-common (%s)" % e)
-
-    def feistyQuirks(self):
-        """ this function works around quirks in the edgy->feisty upgrade """
-        logging.debug("running feistyQuirks handler")
-        # ndiswrapper changed again *sigh*
-        for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
-            if self.has_key(fr) and self.has_key(to):
-                if self[fr].isInstalled and not self[to].markedInstall:
-                    try:
-                        self.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
-                    except SystemError, e:
-                        logging.warning("Failed to apply %s->%s install (%s)" % (fr, to, e))
-            
-
-    def edgyQuirks(self):
-        """ this function works around quirks in the dapper->edgy upgrade """
-        logging.debug("running edgyQuirks handler")
-        for pkg in self:
-            # deal with the python2.4-$foo -> python-$foo transition
-            if (pkg.name.startswith("python2.4-") and
-                pkg.isInstalled and
-                not pkg.markedUpgrade):
-                basepkg = "python-"+pkg.name[len("python2.4-"):]
-                if (self.has_key(basepkg) and 
-                    self[basepkg].candidateDownloadable and
-                    not self[basepkg].markedInstall):
-                    try:
-                        self.markInstall(basepkg,
-                                         "python2.4->python upgrade rule")
-                    except SystemError, e:
-                        logging.debug("Failed to apply python2.4->python install: %s (%s)" % (basepkg, e))
-            # xserver-xorg-input-$foo gives us trouble during the upgrade too
-            if (pkg.name.startswith("xserver-xorg-input-") and
-                pkg.isInstalled and
-                not pkg.markedUpgrade):
-                try:
-                    self.markInstall(pkg.name, "xserver-xorg-input fixup rule")
-                except SystemError, e:
-                    logging.debug("Failed to apply fixup: %s (%s)" % (pkg.name, e))
-            
-        # deal with held-backs that are unneeded
-        for pkgname in ["hpijs", "bzr", "tomboy"]:
-            if (self.has_key(pkgname) and self[pkgname].isInstalled and
-                self[pkgname].isUpgradable and not self[pkgname].markedUpgrade):
-                try:
-                    self.markInstall(pkgname,"%s quirk upgrade rule" % pkgname)
-                except SystemError, e:
-                    logging.debug("Failed to apply %s install (%s)" % (pkgname,e))
-        # libgl1-mesa-dri from xgl.compiz.info (and friends) breaks the
-	# upgrade, work around this here by downgrading the package
-        if self.has_key("libgl1-mesa-dri"):
-            pkg = self["libgl1-mesa-dri"]
-            # the version from the compiz repo has a "6.5.1+cvs20060824" ver
-            if (pkg.candidateVersion == pkg.installedVersion and
-                "+cvs2006" in pkg.candidateVersion):
-                for ver in pkg._pkg.VersionList:
-                    # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
-                    if "~2006" in ver.VerStr:
-			# ensure that it is from a trusted repo
-			for (VerFileIter, index) in ver.FileList:
-				indexfile = self._list.FindIndex(VerFileIter)
-				if indexfile and indexfile.IsTrusted:
-					logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
-		                        self._depcache.SetCandidateVer(pkg._pkg, ver)
-					break
-                                    
-        # deal with general if $foo is installed, install $bar
-        for (fr, to) in [("xserver-xorg-driver-all","xserver-xorg-video-all")]:
-            if self.has_key(fr) and self.has_key(to):
-                if self[fr].isInstalled and not self[to].markedInstall:
-                    try:
-                        self.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
-                    except SystemError, e:
-                        logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
-                    
-                    
-                                  
-    def dapperQuirks(self):
-        """ this function works around quirks in the breezy->dapper upgrade """
-        logging.debug("running dapperQuirks handler")
-        if (self.has_key("nvidia-glx") and self["nvidia-glx"].isInstalled and
-            self.has_key("nvidia-settings") and self["nvidia-settings"].isInstalled):
-            logging.debug("nvidia-settings and nvidia-glx is installed")
-            self.markRemove("nvidia-settings")
-            self.markInstall("nvidia-glx")
-
 
     def checkForNvidia(self):
         """ 

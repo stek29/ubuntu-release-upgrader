@@ -199,6 +199,7 @@ class DistUpgradeController(object):
         try:
             self.cache = MyCache(self.config,
                                  self._view,
+                                 self.quirks,
                                  self._view.getOpCacheProgress(),
                                  lock)
         # if we get a dpkg error that it was interrupted, just
@@ -208,6 +209,7 @@ class DistUpgradeController(object):
             self._view.getTerminal().call(["dpkg","--configure","-a"])
             self.cache = MyCache(self.config,
                                  self._view,
+                                 self.quirks,
                                  self._view.getOpCacheProgress())
         except CacheExceptionLockingFailed, e:
             logging.error("Cache can not be locked (%s)" % e)

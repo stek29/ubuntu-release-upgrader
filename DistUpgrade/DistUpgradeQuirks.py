@@ -131,6 +131,15 @@ class DistUpgradeQuirks(object):
             self.controller.cache[frompkg].isInstalled):
             logging.debug("transitioning %s to %s" % (frompkg, topkg))
             self.controller.cache[topkg].markInstall()
+        # landscape-client (in desktop mode) goes away (was a stub
+        # anyway)
+        name = "landscape-client"
+        ver = "0.1"
+        if not self.controller.serverMode:
+            if (self.controller.cache.has_key(name) and
+                self.controller.cache[name].installedVersion == ver):
+                self.controller.cache.markRemove(name, 
+                                "custom landscape stub removal rule")
         # now check for nvidia and show a warning if needed
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:

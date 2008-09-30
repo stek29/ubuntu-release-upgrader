@@ -62,6 +62,12 @@ class MetaReleaseCore(object):
         self.new_dist = None
         self.no_longer_supported = None
 
+        # default (if the conf file is missing)
+        self.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
+        self.METARELEASE_URI_LTS = "http://changelogs.ubuntu.com/meta-release-lts"
+        self.METARELEASE_URI_UNSTABLE_POSTFIX = "-development"
+        self.METARELEASE_URI_PROPOSED_POSTFIX = "-development"
+
         # check the meta-release config first
         parser = ConfigParser()
         if os.path.exists(self.CONF_METARELEASE):

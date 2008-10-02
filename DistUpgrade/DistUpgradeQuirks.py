@@ -163,7 +163,7 @@ class DistUpgradeQuirks(object):
                 # if the user continue, do not install the broken driver
                 # so that we can transiton him to the free "nv" one after
                 # the upgrade
-                self.cache[pkgname].markKeep()
+                self.controller.cache[pkgname].markKeep()
 
     def hardyPostDistUpgradeCache(self):
         """ 

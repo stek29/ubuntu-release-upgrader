@@ -341,7 +341,6 @@ class DistUpgradeQuirks(object):
         logging.debug("_addRelatime")
         replaced = False
         lines = []
-        # we have one cdrom to convert
         for line in open("/etc/fstab"):
             line = line.strip()
             if line == '' or line.startswith("#"):
@@ -361,10 +360,14 @@ class DistUpgradeQuirks(object):
                 logging.debug("replaced line is '%s' " % line)
                 replaced=True
             lines.append(line)
-        # we have converted a line (otherwise we would have exited already)
+        # we have converted a line
         if replaced:
             logging.debug("writing new /etc/fstab")
-            open("/etc/fstab.intrepid","w").write("\n".join(lines))
+            f=open("/etc/fstab.intrepid","w")
+            f.write("\n".join(lines))
+            # add final newline (see LP: #279093)
+            f.write("\n")
+            f.close()
             os.rename("/etc/fstab.intrepid","/etc/fstab")
         return True
         

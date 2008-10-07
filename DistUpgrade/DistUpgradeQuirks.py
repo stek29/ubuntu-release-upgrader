@@ -412,7 +412,11 @@ class DistUpgradeQuirks(object):
         if replaced > 0:
             logging.debug("writing new /etc/fstab")
             shutil.copy("/etc/fstab","/etc/fstab.edgy")
-            open("/etc/fstab","w").write("\n".join(lines))
+            f=open("/etc/fstab","w")
+            f.write("\n".join(lines))
+            # add final newline (see LP: #279093)
+            f.write("\n")
+            f.close()
         return True
 
     def _checkAdminGroup(self):

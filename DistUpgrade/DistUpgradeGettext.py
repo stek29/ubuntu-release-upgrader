@@ -36,6 +36,8 @@ def gettext(message):
     version of gettext that logs errors but does not crash on incorrect
     number of arguments
     """
+    if message == "":
+        return ""
     translated_msg = mygettext.gettext(message)
     if not _verify(message, translated_msg):
         logging.error("incorrect translation for message '%s' to '%s' (wrong number of arguments)" % (message, translated_msg))

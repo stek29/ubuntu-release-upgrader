@@ -42,6 +42,7 @@ import DistUpgradeView
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeFetcherCore import country_mirror
 from DistUpgradeQuirks import DistUpgradeQuirks
+from DistUpgradeAptCdrom import AptCdrom
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro, NoDistroTemplateException
@@ -60,51 +61,6 @@ KERNEL_INITRD_SIZE = 12*1024*1024
 class NoBackportsFoundException(Exception):
     pass
 
-class AptCdrom(object):
-    def __init__(self, view, path):
-        self.view = view
-        self.cdrompath = path
-        
-    def restoreBackup(self, backup_ext):
-        " restore the backup copy of the cdroms.list file (*not* sources.list)! "
-        cdromstate = os.path.join(apt_pkg.Config.FindDir("Dir::State"),
-                                  apt_pkg.Config.Find("Dir::State::cdroms"))
-        if os.path.exists(cdromstate+backup_ext):
-            shutil.copy(cdromstate+backup_ext, cdromstate)
-        # mvo: we don't have to care about restoring the sources.list here because
-        #      aptsources will do this for us anyway
-        
-    def add(self, backup_ext=None):
-        " add a cdrom to apt's database "
-        logging.debug("AptCdrom.add() called with '%s'", self.cdrompath)
-        # do backup (if needed) of the cdroms.list file
-        if backup_ext:
-            cdromstate = os.path.join(apt_pkg.Config.FindDir("Dir::State"),
-                                      apt_pkg.Config.Find("Dir::State::cdroms"))
-            if os.path.exists(cdromstate):
-                shutil.copy(cdromstate, cdromstate+backup_ext)
-        # do the actual work
-        apt_pkg.Config.Set("Acquire::cdrom::mount",self.cdrompath)
-        apt_pkg.Config.Set("APT::CDROM::NoMount","true")
-        cdrom = apt_pkg.GetCdrom()
-        # FIXME: add cdrom progress here for the view
-        progress = self.view.getCdromProgress()
-        try:
-            res = cdrom.Add(progress)
-        except SystemError, e:
-            logging.error("can't add cdrom: %s" % e)
-            self.view.error(_("Failed to add the CD"),
-                             _("There was a error adding the CD, the "
-                               "upgrade will abort. Please report this as "
-                               "a bug if this is a valid Ubuntu CD.\n\n"
-                               "The error message was:\n'%s'") % e)
-            return False
-        logging.debug("AptCdrom.add() returned: %s" % res)
-        return res
-
-    def __nonzero__(self):
-        """ helper to use this as 'if cdrom:' """
-        return self.cdrompath is not None
 
 class DistUpgradeController(object):
     """ this is the controller that does most of the work """

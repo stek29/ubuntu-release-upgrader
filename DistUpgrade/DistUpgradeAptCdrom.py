@@ -197,7 +197,7 @@ class AptCdrom(object):
         # killing the links
         (self.packages, self.signatures, self.i18n) = self._scanCD()
         self.packages = self._dropArch(self.packages)
-        if len(packagesdir) == 0:
+        if len(self.packages) == 0:
             logging.error("no useable indexes found on CD, wrong ARCH?")
             raise AptCdromError, _("Unable to locate any package files, perhaps this is not a Ubuntu Disc or the wrong architecture?")
 
@@ -208,13 +208,22 @@ class AptCdrom(object):
         # copy the packages
         self._copyPackages(self.packages)
         
+        # FIXME: copy the translations
+
         # add CD to cdroms.list "database"
         # update sources.list
         diskname = self._readDiskName()
         if not diskname:
             logging.error("no .disk/ directory found")
             return False
-        debline = self._generateSourcesListLine()
+        debline = self._generateSourcesListLine(diskname, self.packages)
+        
+        # prepend to the sources.list
+        sourceslist=apt_pkg.Config.FindFile("Dir::Etc::sourcelist")
+        content=open(sourceslist).read()
+        open(sourceslist,"w").write("# added by the release upgrader\n%s\n%s" % (debline,content))
+
+        # FIXME: add to /var/lib/apt/cdrom.list ?
 
         return True
 
@@ -234,7 +243,7 @@ class AptCdrom(object):
         # FIXME: add cdrom progress here for the view
         progress = self.view.getCdromProgress()
         try:
-            res = self._doAdd(progress)
+            res = self._doAdd()
         except (SystemError, AptCdromError), e:
             logging.error("can't add cdrom: %s" % e)
             self.view.error(_("Failed to add the CD"),

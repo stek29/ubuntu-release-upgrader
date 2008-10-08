@@ -77,6 +77,14 @@ class testAptCdrom(unittest.TestCase):
                      "no outfile in '%s' (%s)" % (d, os.listdir(d)))
         
 
+    def testSourcesList(self):
+        cdrom = AptCdrom(None, "./test-data-cdrom")
+        (p,s,i18n) = cdrom._scanCD()
+        p=cdrom._dropArch(p)
+        line=cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
+        self.assert_(line == " deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid main restricted",
+                     "sources.list line incorrect, got %s" % line)
+
 if __name__ == "__main__":
     apt_pkg.init()
     apt_pkg.Config.Set("APT::Architecture","amd64")

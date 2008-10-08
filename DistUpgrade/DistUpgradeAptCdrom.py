@@ -25,7 +25,7 @@ import apt_pkg
 import logging
 import gzip
 import shutil
-
+import subprocess
 from gettext import gettext as _
 
 
@@ -40,9 +40,9 @@ class AptCdrom(object):
         self.view = view
         self.cdrompath = path
         # the directories we found on disk with signatures, packages and i18n
-        self.packagesdirs = set()
-        self.sigdirs = set()
-        self.i18ndirs = set()
+        self.packages = set()
+        self.signatures = set()
+        self.i18n = set()
 
     def restoreBackup(self, backup_ext):
         " restore the backup copy of the cdroms.list file (*not* sources.list)! "
@@ -59,58 +59,59 @@ class AptCdrom(object):
         scan the CD for interessting files and return them as:
         (packagesfiles, signaturefiles, i18nfiles)
         """
-        pass
-
-    def _doAdd(self):
-        " reimplement pkgCdrom::Add() in python "
-        # os.walk() will not follow symlinks so we don't need
-        # pkgCdrom::Score() and not dropRepeats() that deal with
-        # killing the links
+        packages = set()
+        signatures = set()
+        i18n = set()
         for root, dirs, files in os.walk(self.cdrompath, topdown=True):
             if root.endswith("debian-installer"):
                 del dirs[:]
                 continue
             elif  ".aptignr" in files:
                 continue
-            elif "Packages" in files or "Packages.gz" in files:
-                print "found Packages in ", root
-                packagesdir.add(root)
+            elif "Packages" in files:
+                packages.add(os.path.join(root,"Packages"))
+            elif "Packages.gz" in files:
+                packages.add(os.path.join(root,"Packages.gz"))
             elif "Sources" in files or "Sources.gz" in files:
                 logging.error("Sources entry found in %s but not supported" % root)
             elif "Release.gpg" in files:
-                print "found Release{.gpg} ", root
-                sigdir = set()
+                signatures.add(os.path.join(root,"Release.gpg"))
             elif "i18n" in dirs:
-                print "found translations", root
-                i18ndir = set()
+                for f in os.listdir(os.path.join(root,"i18n")):
+                    i18n.add(f)
             # there is nothing under pool but deb packages (no
             # indexfiles, so we skip that here
             elif os.path.split(root)[1] == ("pool"):
                 del dirs[:]
+        return (packages, signatures, i18n)
+
+    def _dropArch(self, packages):
+        " drop architectures that are not ours "
+        # create a copy
+        packages = set(packages)
         # now go over the packagesdirs and drop stuff that is not
         # our binary-$arch 
         arch = apt_pkg.Config.Find("APT::Architecture")
-        for d in set(packagesdir):
+        for d in set(packages):
             if "/binary-" in d and not arch in d:
-                packagesdir.remove(d)
-        if len(packagesdir) == 0:
-            logging.error("no useable indexes found on CD, wrong ARCH?")
-            raise AptCdromError, _("Unable to locate any package files, perhaps this is not a Ubuntu Disc or the wrong architecture?")
-        # now generate a sources.list line
+                packages.remove(d)
+        return packages
+    
+    def _readDiskName(self):
+        diskname = None
         info = os.path.join(self.cdrompath, ".disk","info")
         if os.path.exists(info):
             diskname = open(info).read()
             for special in ('"',']','[','_'):
                 diskname = diskname.replace(special,'_')
-        else:
-            logging.error("no .disk/ directory found")
-            return False
+        return diskname
 
+    def _generateSourcesListLine(self, diskname, packages):
         # see apts indexcopy.cc:364 for details
         path = ""                                    
         dist = ""
         comps = []
-        for d in packagesdir:
+        for d in packages:
             # match(1) is the path, match(2) the dist
             # and match(3) the components
             m = re.match("(.*)/dists/([^/]*)/(.*)/binary-*", d)
@@ -119,30 +120,102 @@ class AptCdrom(object):
             path = m.group(1)
             dist = m.group(2)
             comps.append(m.group(3))
-        # entry to the sources.lisst
+        if not path or not comps:
+            return None
+        comps.sort()
         pentry = "deb cdrom:[%s]/ %s %s" % (diskname, dist, " ".join(comps))
+        return pentry
 
+    def _copyPackages(self, packages, targetdir=None):
+        if not targetdir:
+            targetdir=apt_pkg.Config.FindDir("Dir::State::lists")
         # CopyPackages()
-        for dir in packagesdir:
-            fname = apt_pkg.URItoFileName("cdrom:[%s]/%sPackages" % (diskname,d[len(path)+1:]+"/"))
-            outf = apt_pkg.Config.FindDir("Dir::State::lists")+fname
-            inf = os.path.join(d,"Packages")
-            if os.path.exists(inf):
-                shutil.copy(inf,outf)
-            elif os.path.exists(inf+".gz"):
-                f=gzip.open(inf+".gz")
+        diskname = self._readDiskName()
+        for f in packages:
+            fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
+            outf = os.path.join(targetdir,os.path.splitext(fname)[0])
+            if f.endswith(".gz"):
+                g=gzip.open(f)
                 out=open(outf,"w")
                 # uncompress in 64k chunks
                 while True:
-                    s=f.read(64000)
+                    s=g.read(64000)
                     out.write(s)
                     if s == "":
                         break
-        # CopyAndVerify()
-        
+            else:
+                shutil.copy(f,outf)
+        return True
 
-        # add CD to cdroms.list
+    def _verifyRelease(self, signatures):
+        " verify the signatues and hashes "
+        gpgv = apt_pkg.Config.Find("Dir::Bin::gpg","/usr/bin/gpgv")
+        keyring = apt_pkg.Config.Find("Apt::GPGV::TrustedKeyring",
+                                      "/etc/apt/trusted.gpg")
+        for sig in signatures:
+            basepath = os.path.split(sig)[0]
+            # do gpg checking
+            releasef = os.path.splitext(sig)[0]
+            cmd = [gpgv,"--keyring",keyring,
+                   "--ignore-time-conflict",
+                   sig, releasef]
+            ret = subprocess.call(cmd)
+            if not (ret == 0):
+                return False
+            # now do the hash sum checks
+            t=apt_pkg.ParseTagFile(open(releasef))
+            t.Step()
+            for entry in t.Section["SHA256"].split("\n"):
+                (hash,size,name) = entry.split()
+                f=os.path.join(basepath,name)
+                if not os.path.exists(f):
+                    logging.info("ignoring missing '%s'" % f)
+                    continue
+                sum = apt_pkg.sha256sum(open(f))
+                if not (sum == hash):
+                    logging.error("hash sum mismatch expected %s but got %s" % (hash, sum))
+                    return False
+        return True
+
+    def _copyRelease(self, signatures, targetdir=None):
+        " copy the release file "
+        if not targetdir:
+            targetdir=apt_pkg.Config.FindDir("Dir::State::lists")
+        diskname = self._readDiskName()
+        for sig in signatures:
+            releasef = os.path.splitext(sig)[0]
+            # copy both Release and Release.gpg
+            for f in (sig, releasef):
+                fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
+                shutil.copy(f,os.path.join(targetdir,fname))
+        return True
+
+    def _doAdd(self):
+        " reimplement pkgCdrom::Add() in python "
+        # os.walk() will not follow symlinks so we don't need
+        # pkgCdrom::Score() and not dropRepeats() that deal with
+        # killing the links
+        (self.packages, self.signatures, self.i18n) = self._scanCD()
+        self.packages = self._dropArch(self.packages)
+        if len(packagesdir) == 0:
+            logging.error("no useable indexes found on CD, wrong ARCH?")
+            raise AptCdromError, _("Unable to locate any package files, perhaps this is not a Ubuntu Disc or the wrong architecture?")
+
+        # CopyAndVerify
+        if self._verifyRelease(self.signatures):
+            self._copyRelease(self.signatures)
+        
+        # copy the packages
+        self._copyPackages(self.packages)
+        
+        # add CD to cdroms.list "database"
         # update sources.list
+        diskname = self._readDiskName()
+        if not diskname:
+            logging.error("no .disk/ directory found")
+            return False
+        debline = self._generateSourcesListLine()
+
         return True
 
     def add(self, backup_ext=None):
@@ -161,7 +234,7 @@ class AptCdrom(object):
         # FIXME: add cdrom progress here for the view
         progress = self.view.getCdromProgress()
         try:
-            res = cdrom.Add(progress)
+            res = self._doAdd(progress)
         except (SystemError, AptCdromError), e:
             logging.error("can't add cdrom: %s" % e)
             self.view.error(_("Failed to add the CD"),

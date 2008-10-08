@@ -40,8 +40,10 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
     """A small application run by Adept to download, verify 
     and run the dist-upgrade tool"""
 
-    def __init__(self):
-        metaRelease = MetaReleaseCore(False, False)
+    def __init__(self, useDevelopmentRelease=False, useProposed=False):
+        self.useDevelopmentRelease = useDevelopmentRelease
+        self.useProposed = useProposed
+        metaRelease = MetaReleaseCore(useDevelopmentRelease, useProposed)
         while metaRelease.downloading:
             time.sleep(1)
         if metaRelease.new_dist is None and __name__ == "__main__":
@@ -56,9 +58,11 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
             self.APPDIR = "/usr/share/update-manager"
 
         uic.loadUi(self.APPDIR + "/fetch-progress.ui", self.progressDialogue)
+        self.progressDialogue.setWindowIcon(KIcon("system-software-update"))
+        self.progressDialogue.setWindowTitle(_("Upgrade"))
         self.progress = KDEFetchProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)
         DistUpgradeFetcherCore.__init__(self,metaRelease.new_dist,self.progress)
-        QTimer.singleShot(10, self.run)
+        #QTimer.singleShot(10, self.run)
 
     def error(self, summary, message):
         KMessageBox.sorry(None, message, summary)
@@ -111,6 +115,8 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
               return True
       if __name__ == "__main__":
           KApplication.kApplication().exit(1)
+      if self.useDevelopmentRelease or self.useProposed:
+          sys.exit()  #FIXME why does KApplication.kApplication().exit() crash but this doesn't?
       return False
 
 class KDEFetchProgressAdapter(apt.progress.FetchProgress):

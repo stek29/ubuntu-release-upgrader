@@ -144,8 +144,8 @@ class DistUpgradeFetcherCore(object):
         # see if we have a script file that we can run
         self.script = script = "%s/%s" % (self.tmpdir, self.new_dist.name)
         if not os.path.exists(script):
-            return error(_("Could not run the upgrade tool"),
-                         _("This is most likely a bug in the upgrade tool. "
+            return self.error(_("Could not run the upgrade tool"),
+                         _("Could not run the upgrade tool") + ".  " + _("This is most likely a bug in the upgrade tool. "
                           "Please report it as a bug"))
         return True
 

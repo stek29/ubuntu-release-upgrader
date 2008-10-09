@@ -164,6 +164,13 @@ class DistUpgradeQuirks(object):
                 # so that we can transiton him to the free "nv" one after
                 # the upgrade
                 self.controller.cache[pkgname].markKeep()
+        # kdelibs4-dev is unhappy (#279621)
+        fromp = "kdelibs4-dev"
+        to = "kdelibs5-dev"
+        if (self.controller.cache.has_key(fromp) and 
+            self.controller.cache[fromp].isInstalled and
+            self.controller.cache.has_key(to)):
+            self.controller.cache.markInstall(to, "kdelibs4-dev -> kdelibs5-dev transition")
 
     def hardyPostDistUpgradeCache(self):
         """ 

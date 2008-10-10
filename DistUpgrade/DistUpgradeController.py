@@ -984,9 +984,11 @@ class DistUpgradeController(object):
     def doPostUpgrade(self):
         # reopen cache
         self.openCache()
-        # run the quirks handler
-        self.quirks.run("PostUpgrade")
-
+        # run the quirks handler that does does like things adding
+        # missing groups or similar work arounds, only do it on real
+        # upgrades
+        if not self._partialUpgrade:
+            self.quirks.run("PostUpgrade")
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
         now_obsolete = self.cache._getObsoletesPkgs()
@@ -1059,7 +1061,10 @@ class DistUpgradeController(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
-        self.runPostInstallScripts()
+        # run the post upgrade scripts that can do fixup like xorg.conf
+        # fixes etc - only do on real upgrades
+        if not self._partialUpgrade:
+            self.runPostInstallScripts()
         return True
 
     def runPostInstallScripts(self):

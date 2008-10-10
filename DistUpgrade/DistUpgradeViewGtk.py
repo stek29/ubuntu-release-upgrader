@@ -323,8 +323,11 @@ class DistUpgradeVteTerminal(object):
     self.parent.expander_terminal.set_sensitive(True)
     if hidden==False:
       self.parent.expander_terminal.set_expanded(True)
-    self.term.fork_command(command=cmd[0],argv=cmd)
     self.finished = False
+    pid = self.term.fork_command(command=cmd[0],argv=cmd)
+    if pid < 0:
+      # error
+      return 
     while not self.finished:
       while gtk.events_pending():
         gtk.main_iteration()
@@ -560,7 +563,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
                        actions=None, removal_bold=True):
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
-        DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
+        if not DistUpgradeView.confirmChanges(self, summary, changes, downloadSize):
+          return False
         # append warning
         self.confirmChangesMessage +=  "\n\n<b>%s</b>" %  \
             _("To prevent data loss close all open "

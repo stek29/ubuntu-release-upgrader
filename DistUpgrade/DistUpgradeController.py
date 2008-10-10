@@ -1060,6 +1060,7 @@ class DistUpgradeController(object):
                                    "information. "),
                                    "%s" % e)
         self.runPostInstallScripts()
+        return True
 
     def runPostInstallScripts(self):
         """ 
@@ -1520,9 +1521,17 @@ class DistUpgradeController(object):
         self._view.setStep(STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
+            self._view.information(_("Upgrade complete"),
+                                   _("The upgrade is completed but there "
+                                     "were errors during the ugprade "
+                                     "process."))
             return False
         self._view.setStep(STEP_CLEANUP)
         if not self.doPostUpgrade():
+            self._view.information(_("Upgrade complete"),
+                                   _("The upgrade is completed but there "
+                                     "were errors during the ugprade "
+                                     "process."))
             return False
         self._view.information(_("Upgrade complete"),
                                _("The partial upgrade was completed."))

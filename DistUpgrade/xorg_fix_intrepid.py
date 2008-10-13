@@ -14,30 +14,31 @@ import shutil
 
 XORG_CONF="/etc/X11/xorg.conf"
 
-def removeInputDevices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
-    try:
-        from XKit import xutils, xorgparser
-    except Exception, e:
-        logging.error("failed to import xkit (%s)" % e)
-        return False
-
-    # parse
-    try:
-        a = xutils.XUtils(xorg_source)
-    except xorgparser.ParseException, e:
-        logging.error("failed to parse '%s' (%s)" % (xorg_source, e))
-        return False
-
-    # remove any input device
-    logging.info("removing InputDevice from %s " % xorg_source)
-    a.globaldict['InputDevice'] = {}
-
-    # remove any reference to input devices from the ServerLayout
-    a.removeOption('ServerLayout', 'InputDevice', 
-                   value=None, position=None, reference=None)
-    # write the changes to temp file and move into place
-    print xorg_destination+".new"
-    a.writeFile(xorg_destination+".new")
+def remove_input_devices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
+    logging.debug("remove_input_devices")
+    content=[]
+    in_input_devices = False
+    for raw in open(xorg_source):
+        line = raw.strip()
+        if (line.startswith("Section") and 
+            line.split("#")[0].strip().endswith('"InputDevice"')):
+            logging.debug("found 'InputDevice' section")
+            content.append("# commented out by update-manager, HAL is now used\n")
+            content.append("#"+raw)
+            in_input_devices=True
+        elif line.startswith("EndSection") and in_input_devices:
+            content.append("#"+raw)
+            in_input_devices=False
+        elif line.startswith("InputDevice"):
+            logging.debug("commenting out '%s' " % line)
+            content.append("# commented out by update-manager, HAL is now used\n")
+            content.append("#"+raw)
+        elif in_input_devices:
+            logging.debug("commenting out '%s' " % line)
+            content.append("#"+raw)
+        else:
+            content.append(raw)
+    open(xorg_destination+".new","w").write("".join(content))
     os.rename(xorg_destination+".new", xorg_destination)
     return True
 
@@ -82,7 +83,8 @@ if __name__ == "__main__":
         sys.exit(0)
         
     #make a backup of the xorg.conf
-    backup = XORG_CONF + "_dist-upgrade." + time.strftime("%Y%m%d%H%M%S")
+    backup = XORG_CONF + ".dist-upgrade-" + time.strftime("%Y%m%d%H%M")
+    logging.debug("creating backup '%s'" % backup)
     shutil.copy(XORG_CONF, backup)
 
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so") and
@@ -96,4 +98,4 @@ if __name__ == "__main__":
         replace_driver_from_xorg("nvidia","nv")
 
     # now run the removeInputDevices()
-    removeInputDevices(xorg_destination="/tmp/foox")
+    remove_input_devices()

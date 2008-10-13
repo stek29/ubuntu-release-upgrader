@@ -72,6 +72,10 @@ if __name__ == "__main__":
         print "Need to run as root"
         sys.exit(1)
 
+    # we pretend to be update-manger so that apport picks up when we crash
+    sys.argv[0] = "/usr/bin/update-manager"
+
+    # setup logging
     logging.basicConfig(level=logging.DEBUG,
                         filename="/var/log/dist-upgrade/xorg_fix_intrepid.log",
                         filemode='w')

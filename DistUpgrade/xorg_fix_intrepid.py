@@ -9,8 +9,37 @@ import sys
 import os
 import os.path
 import logging
+import time
+import shutil
 
 XORG_CONF="/etc/X11/xorg.conf"
+
+def removeInputDevices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
+    try:
+        from XKit import xutils, xorgparser
+    except Exception, e:
+        logging.error("failed to import xkit (%s)" % e)
+        return False
+
+    # parse
+    try:
+        a = xutils.XUtils(xorg_source)
+    except xorgparser.ParseException, e:
+        logging.error("failed to parse '%s' (%s)" % (xorg_source, e))
+        return False
+
+    # remove any input device
+    logging.info("removing InputDevice from %s " % xorg_source)
+    a.globaldict['InputDevice'] = {}
+
+    # remove any reference to input devices from the ServerLayout
+    a.removeOption('ServerLayout', 'InputDevice', 
+                   value=None, position=None, reference=None)
+    # write the changes to temp file and move into place
+    print xorg_destination+".new"
+    a.writeFile(xorg_destination+".new")
+    os.rename(xorg_destination+".new", xorg_destination)
+    return True
 
 def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     """
@@ -51,6 +80,10 @@ if __name__ == "__main__":
     if not os.path.exists(XORG_CONF):
         logging.info("No xorg.conf, exiting")
         sys.exit(0)
+        
+    #make a backup of the xorg.conf
+    backup = XORG_CONF + "_dist-upgrade." + time.strftime("%Y%m%d%H%M%S")
+    shutil.copy(XORG_CONF, backup)
 
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so") and
         "fglrx" in open(XORG_CONF).read()):
@@ -62,3 +95,5 @@ if __name__ == "__main__":
         logging.info("Removing nvidia from %s" % XORG_CONF)
         replace_driver_from_xorg("nvidia","nv")
 
+    # now run the removeInputDevices()
+    removeInputDevices(xorg_destination="/tmp/foox")

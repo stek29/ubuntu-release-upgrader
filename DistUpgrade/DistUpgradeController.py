@@ -859,32 +859,18 @@ class DistUpgradeController(object):
                                         self.cache.requiredDownload)
         return res
 
-    def _rewriteAptPeriodic(self, minAge, makeBackup=False):
-        # rewrite apt minage cleanup to avoid 
-        for name in ["/etc/apt/apt.conf.d/20archive",
-                     "/etc/apt/apt.conf.d/25adept-archive-limits"]:
-            if not os.path.exists(name):
-                logging.debug("no file '%s'" % name)
-                break
-            try:
-                outname = "%s.distUpgrade" % name
-                out = open(outname, "w")
-                for line in open(name):
-                    if line.startswith("APT::Archives::MinAge"):
-                        logging.debug("setting MinAge to %s" % minAge)
-                        line = 'APT::Archives::MinAge "%s";\n' % minAge
-                    out.write(line)
-                if makeBackup:
-                    shutil.copy(name, name+".save")
-                out.close()
-                os.rename(outname, name)
-            except Exception, e:
-                logging.waring("failed to modify '%s' (%s)" % (name, e))
+    def _disableAptCronJob(self):
+        self._aptCronJobPerms = 0755
+        if os.path.exists("/etc/cron.daily/apt"):
+            self._aptCronJobPerms = os.stat("/etc/cron.daily/apt")[ST_MODE]
+            os.chmod("/etc/cron.daily/apt",0644)
+    def _enableAptCronJob(self):
+        if os.path.exists("/etc/cron.daily/apt"):
+            os.chmod("/etc/cron.daily/apt", self._aptCronJobPerms)
 
     def doDistUpgradeFetching(self):
-        # rewrite cleanup minAge for a package to 10 days
-        self.apt_minAge = apt_pkg.Config.FindI("APT::Archives::MinAge")
-        self._rewriteAptPeriodic(10)
+        # ensure that no apt cleanup is run during the download/install
+        self._disableAptCronJob()
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -960,7 +946,7 @@ class DistUpgradeController(object):
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
                 self._view.getTerminal().call(["dpkg","--configure","-a"])
-                self._rewriteAptPeriodic(self.apt_minAge)
+                self._enableAptCronJob()
                 return False
             except IOError, e:
                 # fetch failed, will be retried
@@ -968,7 +954,7 @@ class DistUpgradeController(object):
                 currentRetry += 1
                 continue
             # no exception, so all was fine, we are done
-            self._rewriteAptPeriodic(self.apt_minAge)
+            self._enableAptCronJob()
             return True
         
         # maximum fetch-retries reached without a successful commit
@@ -1556,5 +1542,4 @@ if __name__ == "__main__":
     #dc._checkFreeSpace()
     #dc._rewriteFstab()
     #dc._checkAdminGroup()
-    #print apt_pkg.Config.Find("APT::Archives::MinAge")
     #dc._rewriteAptPeriodic(2)

@@ -21,6 +21,18 @@ class testAptCdrom(unittest.TestCase):
 #        apt_pkg.Config.Set("Dir::State::lists","/tmp")
 #        cdrom = AptCdrom(None, p)
 #        self.assert_(cdrom._doAdd())
+
+    def testWriteDatabase(self):
+        expect =  """CD::36e3f69081b7d10081d167b137886a71-2 "Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)";
+CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)";
+"""
+        p = "./test-data-cdrom"
+        database="./test-data-cdrom/cdrom.list"
+        apt_pkg.Config.Set("Dir::State::cdroms", database)
+        os.unlink(database)
+        cdrom = AptCdrom(None, p)
+        cdrom._writeDatabase()
+        self.assert_(open(database).read() == expect)
     
     def testScanCD(self):
         p = "./test-data-cdrom"
@@ -82,7 +94,7 @@ class testAptCdrom(unittest.TestCase):
         (p,s,i18n) = cdrom._scanCD()
         p=cdrom._dropArch(p)
         line=cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
-        self.assert_(line == " deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid main restricted",
+        self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid main restricted",
                      "sources.list line incorrect, got %s" % line)
 
 if __name__ == "__main__":

@@ -21,6 +21,7 @@
 
 import re
 import os
+import apt
 import apt_pkg
 import logging
 import gzip
@@ -84,6 +85,16 @@ class AptCdrom(object):
             elif os.path.split(root)[1] == ("pool"):
                 del dirs[:]
         return (packages, signatures, i18n)
+
+    def _writeDatabase(self):
+        " update apts cdrom.list "
+        dbfile = apt_pkg.Config.FindFile("Dir::State::cdroms")
+        cdrom = apt_pkg.GetCdrom()
+        (res,id)=cdrom.Ident(apt.progress.CdromProgress())
+        label = self._readDiskName()
+        out=open(dbfile,"a")
+        out.write('CD::%s "%s";\n' % (id, label))
+        out.write('CD::%s::Label "%s";\n' % (id, label))
 
     def _dropArch(self, packages):
         " drop architectures that are not ours "
@@ -239,7 +250,6 @@ class AptCdrom(object):
         # do the actual work
         apt_pkg.Config.Set("Acquire::cdrom::mount",self.cdrompath)
         apt_pkg.Config.Set("APT::CDROM::NoMount","true")
-        cdrom = apt_pkg.GetCdrom()
         # FIXME: add cdrom progress here for the view
         progress = self.view.getCdromProgress()
         try:

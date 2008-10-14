@@ -65,6 +65,15 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid main restricted",
                      "deb line wrong (got %s)" % line)
 
+    def testCopyi18n(self):
+        cdrom = AptCdrom(None, "./test-data-cdrom")
+        (p,s,i18n) = cdrom._scanCD()
+        p = cdrom._dropArch(p)
+        d=tempfile.mkdtemp()
+        cdrom._copyTranslations(i18n, d)
+        self.assert_(os.path.exists(os.path.join(d,"Ubuntu%208.10%20%5fIntrepid%20Ibex%5f%20-%20Beta%20amd64%20(20080930.4)_dists_intrepid_main_i18n_Translation-be")),
+                                                 "no outfile in '%s'" % os.listdir(d))
+
     def testCopyPackages(self):
         cdrom = AptCdrom(None, "./test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()

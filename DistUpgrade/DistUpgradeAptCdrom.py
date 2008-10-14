@@ -79,7 +79,7 @@ class AptCdrom(object):
                 signatures.add(os.path.join(root,"Release.gpg"))
             elif "i18n" in dirs:
                 for f in os.listdir(os.path.join(root,"i18n")):
-                    i18n.add(f)
+                    i18n.add(os.path.join(root,"i18n",f))
             # there is nothing under pool but deb packages (no
             # indexfiles, so we skip that here
             elif os.path.split(root)[1] == ("pool"):
@@ -136,6 +136,26 @@ class AptCdrom(object):
         comps.sort()
         pentry = "deb cdrom:[%s]/ %s %s" % (diskname, dist, " ".join(comps))
         return pentry
+
+    def _copyTranslations(self, translations, targetdir=None):
+        if not targetdir:
+            targetdir=apt_pkg.Config.FindDir("Dir::State::lists")
+        diskname = self._readDiskName()
+        for f in translations:
+            fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
+            outf = os.path.join(targetdir,os.path.splitext(fname)[0])
+            if f.endswith(".gz"):
+                g=gzip.open(f)
+                out=open(outf,"w")
+                # uncompress in 64k chunks
+                while True:
+                    s=g.read(64000)
+                    out.write(s)
+                    if s == "":
+                        break
+            else:
+                shutil.copy(f,outf)
+        return True
 
     def _copyPackages(self, packages, targetdir=None):
         if not targetdir:
@@ -216,13 +236,11 @@ class AptCdrom(object):
         if self._verifyRelease(self.signatures):
             self._copyRelease(self.signatures)
         
-        # copy the packages
+        # copy the packages and translations
         self._copyPackages(self.packages)
-        
-        # FIXME: copy the translations
+        self._copyTranslations(self.i18n)
 
-        # add CD to cdroms.list "database"
-        # update sources.list
+        # add CD to cdroms.list "database" and update sources.list
         diskname = self._readDiskName()
         if not diskname:
             logging.error("no .disk/ directory found")
@@ -233,8 +251,7 @@ class AptCdrom(object):
         sourceslist=apt_pkg.Config.FindFile("Dir::Etc::sourcelist")
         content=open(sourceslist).read()
         open(sourceslist,"w").write("# added by the release upgrader\n%s\n%s" % (debline,content))
-
-        # FIXME: add to /var/lib/apt/cdrom.list ?
+        self._writeDatabase()
 
         return True
 

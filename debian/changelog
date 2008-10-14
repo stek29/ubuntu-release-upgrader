@@ -3,8 +3,12 @@ update-manager (1:0.93.24) intrepid; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - disable the apt.cron.daily script during the upgrade
       (LP: #277079)
+  * DistUpgrade/DistUpgradeAptCdrom.py:
+    - work around the problem that the hardy "apt-cdrom add" will
+      fail when no uncompressed Packages files are on the CD
+      (LP: 276349)
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 14 Oct 2008 16:30:41 +0200
 
 update-manager (1:0.93.23) intrepid; urgency=low
 

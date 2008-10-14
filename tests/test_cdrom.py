@@ -26,10 +26,13 @@ class testAptCdrom(unittest.TestCase):
         expect =  """CD::36e3f69081b7d10081d167b137886a71-2 "Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)";
 CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)";
 """
-        p = "./test-data-cdrom"
+        p = "./test-data-cdrom/"
         database="./test-data-cdrom/cdrom.list"
         apt_pkg.Config.Set("Dir::State::cdroms", database)
-        os.unlink(database)
+        apt_pkg.Config.Set("Acquire::cdrom::mount", p)
+        apt_pkg.Config.Set("APT::CDROM::NoMount","true")
+        if os.path.exists(database):
+            os.unlink(database)
         cdrom = AptCdrom(None, p)
         cdrom._writeDatabase()
         self.assert_(open(database).read() == expect)
@@ -62,7 +65,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         p = cdrom._dropArch(p)
         line = cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
         #print line
-        self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid main restricted",
+        self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid restricted",
                      "deb line wrong (got %s)" % line)
 
     def testCopyi18n(self):
@@ -80,7 +83,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         p = cdrom._dropArch(p)
         d=tempfile.mkdtemp()
         cdrom._copyPackages(p, d)
-        self.assert_(os.path.exists(os.path.join(d,"Ubuntu%208.10%20%5fIntrepid%20Ibex%5f%20-%20Beta%20amd64%20(20080930.4)_dists_intrepid_main_binary-amd64_Packages")),
+        self.assert_(os.path.exists(os.path.join(d,"Ubuntu%208.10%20%5fIntrepid%20Ibex%5f%20-%20Beta%20amd64%20(20080930.4)_dists_intrepid_restricted_binary-amd64_Packages")),
                                                  "no outfile in '%s'" % os.listdir(d))
 
     def testVerifyRelease(self):
@@ -103,7 +106,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         (p,s,i18n) = cdrom._scanCD()
         p=cdrom._dropArch(p)
         line=cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
-        self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid main restricted",
+        self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid restricted",
                      "sources.list line incorrect, got %s" % line)
 
 if __name__ == "__main__":

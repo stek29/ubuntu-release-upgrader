@@ -863,9 +863,11 @@ class DistUpgradeController(object):
         self._aptCronJobPerms = 0755
         if os.path.exists("/etc/cron.daily/apt"):
             self._aptCronJobPerms = os.stat("/etc/cron.daily/apt")[ST_MODE]
+            logging.debug("disabling apt cron job (%s)" % oct(self._aptCronJobPerms))
             os.chmod("/etc/cron.daily/apt",0644)
     def _enableAptCronJob(self):
         if os.path.exists("/etc/cron.daily/apt"):
+            logging.debug("enabling apt cron job")
             os.chmod("/etc/cron.daily/apt", self._aptCronJobPerms)
 
     def doDistUpgradeFetching(self):
@@ -1533,10 +1535,13 @@ if __name__ == "__main__":
     from DistUpgradeView import DistUpgradeView
     from DistUpgradeViewText import DistUpgradeViewText
     from DistUpgradeCache import MyCache
+    logging.basicConfig(level=logging.DEBUG)
     v = DistUpgradeViewText()
     dc = DistUpgradeController(v)
     #dc.openCache()
-    dc._addRelatimeToFstab()
+    dc._disableAptCronJob()
+    dc._enableAptCronJob()
+    #dc._addRelatimeToFstab()
     #dc.prepare()
     #dc.askDistUpgrade()
     #dc._checkFreeSpace()

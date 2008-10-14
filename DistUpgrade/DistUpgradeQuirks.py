@@ -27,6 +27,10 @@ import sys
 import subprocess
 from subprocess import PIPE, Popen
 
+from DistUpgradeGettext import gettext as _
+from DistUpgradeGettext import ngettext
+import gettext
+
 class DistUpgradeQuirks(object):
     """
     This class collects the various quirks handlers that can
@@ -39,6 +43,10 @@ class DistUpgradeQuirks(object):
         self._view = controller._view
         self.config = config
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+
+        # init gettext
+        gettext.bindtextdomain("update-manager",localedir)
+        gettext.textdomain("update-manager")
         
     # the quirk function have the name:
     #  $todist$Name (e.g. intrepidPostUpgrade)

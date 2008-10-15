@@ -102,18 +102,18 @@ class DistUpgradeQuirks(object):
         " quirks that are run before the upgrade to intrepid "
         logging.debug("running %s" %  sys._getframe().f_code.co_name
 )
-        if self._checkVideoDriver("fglrx"):
-            res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the AMD 'fglrx' graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with Ubuntu "
-                                        "8.10.\n\nDo you want to continue?"))
-            if res == False:
-                self.controller.abort()
+#         if self._checkVideoDriver("fglrx"):
+#             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+#                                         "effects, and performance in games "
+#                                         "and other graphically intensive "
+#                                         "programs."),
+#                                       _("This computer is currently using "
+#                                         "the AMD 'fglrx' graphics driver. "
+#                                         "No version of this driver is "
+#                                         "available that works with Ubuntu "
+#                                         "8.10.\n\nDo you want to continue?"))
+#             if res == False:
+#                 self.controller.abort()
 
 
     # the post upgrade cache handlers

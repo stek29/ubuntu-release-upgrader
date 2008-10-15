@@ -9,6 +9,9 @@ update-manager (1:0.93.26) intrepid; urgency=low
     - do not use "kde" frontend during the upgrade, it
       crashes because of the kde3->kde4 transition
       if run at the wrong time (LP: #283942)
+  * DistUpgrade/DistUpgradeView.py:
+    - ignore SIGPIPE when forking the Dpkg::Pre-Install
+      scripts to fix error with etckeeper (LP: #283642)
 
  --
 

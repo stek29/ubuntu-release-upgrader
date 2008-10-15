@@ -26,6 +26,7 @@ from subprocess import Popen, PIPE
 import apt
 import os
 import apt_pkg 
+import signal
 
 from DistUpgradeApport import *
 
@@ -145,7 +146,19 @@ class InstallProgress(apt.progress.InstallProgress):
           os.link(new_link_target, nv_link)
         else:
           logging.warning("no '%s' found, link *not* updated" % new_link_target)
-        
+      
+  def run(self, pm):
+    pid = self.fork()
+    if pid == 0:
+      # child, ignore sigpipe, there are broken scripts out there
+      # like etckeeper (LP: #283642)
+      signal.signal(signal.SIGPIPE,signal.SIG_IGN) 
+      res = pm.DoInstall(self.writefd)
+      os._exit(res)
+    self.child_pid = pid
+    res = self.waitChild()
+    return res
+  
   def error(self, pkg, errormsg):
     " install error from a package "
     apt.progress.InstallProgress.error(self, pkg, errormsg)

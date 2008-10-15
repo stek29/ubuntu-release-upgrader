@@ -869,6 +869,7 @@ class DistUpgradeController(object):
                            "downloaded so far are kept."),
                            "%s" % e)
         # abort here because we want our sources.list back
+        self._enableAptCronJob()
         self.abort()
         
     

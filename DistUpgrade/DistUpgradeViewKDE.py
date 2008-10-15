@@ -328,7 +328,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         (self.child_pid, self.master_fd) = pty.fork()
         if self.child_pid == 0:
             os.environ["TERM"] = "dumb"
-            if not os.environ.has_key("DEBIAN_FRONTEND"):
+            if (not os.environ.has_key("DEBIAN_FRONTEND") or
+                os.environ["DEBIAN_FRONTEND"] == "kde"):
                 os.environ["DEBIAN_FRONTEND"] = "noninteractive"
             os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         logging.debug(" fork pid is: %s" % self.child_pid)

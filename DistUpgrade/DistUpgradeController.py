@@ -1018,8 +1018,13 @@ class DistUpgradeController(object):
         """
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
+            if not os.path.exists(script):
+                logging.warning("PostInstallScript: '%s' not found" % script)
+                continue
             logging.debug("Running PostInstallScript: '%s'" % script)
             try:
+                # work around kde tmpfile problem where it eats permissions
+                os.chmod(script, 0755)
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))

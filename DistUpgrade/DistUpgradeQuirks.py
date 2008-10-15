@@ -44,10 +44,6 @@ class DistUpgradeQuirks(object):
         self.config = config
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
 
-        # init gettext
-        gettext.bindtextdomain("update-manager",localedir)
-        gettext.textdomain("update-manager")
-        
     # the quirk function have the name:
     #  $todist$Name (e.g. intrepidPostUpgrade)
     #  $from_$fromdist$Name (e.g. from_dapperPostUpgrade)

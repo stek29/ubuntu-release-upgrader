@@ -32,17 +32,21 @@ def init_proxy(gconfclient=None):
       if proxy_host and proxy_port:
         proxy = "http://%s:%s/" % (proxy_host, proxy_port)
   # then gconf
-  elif gconfclient and gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
-    host = gconfclient.get_string("/system/http_proxy/host")
-    port = gconfclient.get_int("/system/http_proxy/port")
-    use_auth = gconfclient.get_bool("/system/http_proxy/use_authentication")
-    if host and port:
-      if use_auth:
-        auth_user = gconfclient.get_string("/system/http_proxy/authentication_user")
-        auth_pw = gconfclient.get_string("/system/http_proxy/authentication_password")
-        proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
-      else:
-        proxy = "http://%s:%s/" % (host, port)
+  elif gconfclient:
+    try: # see LP: #281248
+      if gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
+        host = gconfclient.get_string("/system/http_proxy/host")
+        port = gconfclient.get_int("/system/http_proxy/port")
+        use_auth = gconfclient.get_bool("/system/http_proxy/use_authentication")
+        if host and port:
+          if use_auth:
+            auth_user = gconfclient.get_string("/system/http_proxy/authentication_user")
+            auth_pw = gconfclient.get_string("/system/http_proxy/authentication_password")
+            proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
+          else:
+            proxy = "http://%s:%s/" % (host, port)
+    except Exception, e:
+      print "error from gconf: %s" % e
   # if we have a proxy, set it
   if proxy:
     # basic verification

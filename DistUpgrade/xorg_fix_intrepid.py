@@ -11,6 +11,8 @@ import os.path
 import logging
 import time
 import shutil
+import subprocess
+import apt_pkg
 
 XORG_CONF="/etc/X11/xorg.conf"
 
@@ -101,5 +103,8 @@ if __name__ == "__main__":
         logging.info("Removing nvidia from %s" % XORG_CONF)
         replace_driver_from_xorg("nvidia","nv")
 
-    # now run the removeInputDevices()
-    remove_input_devices()
+    # now run the removeInputDevices() if we have a new xserver
+    ver=subprocess.Popen(["dpkg-query","-W","-f=${Version}","xserver-xorg-core"], stdout=subprocess.PIPE).communicate()[0]
+    logging.info("xserver-xorg-core version is '%s'" % ver)
+    if ver and apt_pkg.VersionCompare(ver, "2:1.5.0") > 0:
+        remove_input_devices()

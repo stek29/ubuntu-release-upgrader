@@ -168,6 +168,31 @@ class DistUpgradeQuirks(object):
                 # so that we can transiton him to the free "nv" one after
                 # the upgrade
                 self.controller.cache[pkgname].markKeep()
+        # check if we have sse
+        for pkgname in ["nvidia-glx-173","nvidia-glx-177"]:
+            if (cache.has_key(pkgname) and 
+                cache[pkgname].markedInstall and
+                self._checkVideoDriver("nvidia")):
+                logging.debug("found %s video driver" % pkgname)
+                if not self._cpuHasSeeSupport():
+                    logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
+                    res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                        "effects, and performance in games "
+                                        "and other graphically intensive "
+                                        "programs."),
+                                      _("This computer is currently using "
+                                        "the NVIDIA 'nvidia' "
+                                        "graphics driver. "
+                                        "No version of this driver is "
+                                        "available that works with your "
+                                        "video card in Ubuntu "
+                                        "8.10.\n\nDo you want to continue?"))
+                    if res == False:
+                        self.controller.abort()
+                    # if the user continue, do not install the broken driver
+                    # so that we can transiton him to the free "nv" one after
+                    # the upgrade
+                    self.controller.cache[pkgname].markKeep()
         # kdelibs4-dev is unhappy (#279621)
         fromp = "kdelibs4-dev"
         to = "kdelibs5-dev"
@@ -310,8 +335,6 @@ class DistUpgradeQuirks(object):
                     except SystemError, e:
                         logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
                     
-                    
-                                  
     def dapperPostDistUpgradeCache(self):
         """ this function works around quirks in the breezy->dapper upgrade """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
@@ -322,6 +345,15 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markInstall("nvidia-glx")
 
     # helpers
+    def _cpuHasSEESupport(self, cpuinfo="/proc/cpuinfo"):
+        " helper that checks if the given cpu has sse support "
+        if not os.path.exists(cpuinfo):
+            return False
+        for line in open(cpuinfo):
+            if line.startswith("flags") and not " sse" in line:
+                return False
+        return True
+
     def _checkAndRemoveEvms(self):
         " check if evms is in use and if not, remove it "
         logging.debug("running _checkAndRemoveEvms")
@@ -465,7 +497,7 @@ class DistUpgradeQuirks(object):
         for line in open(XORG):
             s=line.split("#")[0].strip()
             # check for fglrx driver entry
-            if (s.startswith("Driver") and
+            if (s.lower().startswith("driver") and
                 s.endswith('"%s"' % name)):
                 return True
         return False

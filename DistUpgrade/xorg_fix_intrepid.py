@@ -22,16 +22,16 @@ def remove_input_devices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
     in_input_devices = False
     for raw in open(xorg_source):
         line = raw.strip()
-        if (line.startswith("Section") and 
-            line.split("#")[0].strip().endswith('"InputDevice"')):
+        if (line.lower().startswith("section") and 
+            line.lower().split("#")[0].strip().endswith('"inputdevice"')):
             logging.debug("found 'InputDevice' section")
             content.append("# commented out by update-manager, HAL is now used\n")
             content.append("#"+raw)
             in_input_devices=True
-        elif line.startswith("EndSection") and in_input_devices:
+        elif line.lower().startswith("endsection") and in_input_devices:
             content.append("#"+raw)
             in_input_devices=False
-        elif line.startswith("InputDevice"):
+        elif line.lower().startswith("inputdevice"):
             logging.debug("commenting out '%s' " % line)
             content.append("# commented out by update-manager, HAL is now used\n")
             content.append("#"+raw)
@@ -57,7 +57,7 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
         # remove comments
         s=line.split("#")[0].strip()
         # check for fglrx driver entry
-        if (s.startswith("Driver") and
+        if (s.lower().startswith("driver") and
             s.endswith('"%s"' % old_driver)):
             logging.debug("line '%s' found" % line)
             line='\tDriver\t"%s"\n' % new_driver

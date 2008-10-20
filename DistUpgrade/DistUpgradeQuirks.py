@@ -174,7 +174,7 @@ class DistUpgradeQuirks(object):
                 cache[pkgname].markedInstall and
                 self._checkVideoDriver("nvidia")):
                 logging.debug("found %s video driver" % pkgname)
-                if not self._cpuHasSeeSupport():
+                if not self._cpuHasSSESupport():
                     logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
                     res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
                                         "effects, and performance in games "
@@ -345,7 +345,7 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markInstall("nvidia-glx")
 
     # helpers
-    def _cpuHasSEESupport(self, cpuinfo="/proc/cpuinfo"):
+    def _cpuHasSSESupport(self, cpuinfo="/proc/cpuinfo"):
         " helper that checks if the given cpu has sse support "
         if not os.path.exists(cpuinfo):
             return False

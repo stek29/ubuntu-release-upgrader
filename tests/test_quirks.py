@@ -20,10 +20,10 @@ class MockConfig(object):
 
 class testQuirks(unittest.TestCase):
 
-    def test_cpuHasSEESupport(self):
+    def test_cpuHasSSESupport(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
-        self.assert_(q._cpuHasSEESupport(cpuinfo="test-data/cpuinfo-with-sse") == True)
-        self.assert_(q._cpuHasSEESupport(cpuinfo="test-data/cpuinfo-without-sse") == False)
+        self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse") == True)
+        self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-without-sse") == False)
 
 if __name__ == "__main__":
     unittest.main()

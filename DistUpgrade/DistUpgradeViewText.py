@@ -193,18 +193,24 @@ class DistUpgradeViewText(DistUpgradeView):
           self.showInPager(output)
         print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
 
-    def askYesNoQuestion(self, summary, msg, prompt=None):
+    def askYesNoQuestion(self, summary, msg, default='No'):
       print
       print twrap(summary)
       print twrap(msg)
-      if not prompt:
+      if default == 'No':
           print _("Continue [yN] "),
+          res = sys.stdin.readline()
+          # TRANSLATORS: first letter of a positive (yes) answer
+          if res.strip().lower().startswith(_("y")):
+              return True
+          return False
       else:
-          print prompt,
-      res = sys.stdin.readline()
-      if res.strip().lower().startswith(_("y")):
-        return True
-      return False
+          print _("Continue [Yn] "),
+          res = sys.stdin.readline()
+          # TRANSLATORS: first letter of a negative (no) answer
+          if res.strip().lower().startswith(_("n")):
+              return False
+          return True
 
 # FIXME: when we need this most the resolver is writing debug logs
 #        and we redirect stdout/stderr    
@@ -234,12 +240,16 @@ if __name__ == "__main__":
   #    view.processEvents()
   
   print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.", subsequent_indent=" ")
-  sys.exit(1)
+  #sys.exit(1)
 
   view = DistUpgradeViewText()
+  print view.askYesNoQuestion("hello", "Icecream?", "No")
+  print view.askYesNoQuestion("hello", "Icecream?", "Yes")
+  
+
   #view.confirmChangesMessage = "89 packages are going to be upgraded.\n You have to download a total of 82.7M.\n This download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem."
   #view.confirmChanges("xx",[], 100)
-  #sys.exit(0)
+  sys.exit(0)
 
   view.confirmRestart()
 

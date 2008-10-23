@@ -144,6 +144,9 @@ class DistUpgradeQuirks(object):
                 self.controller.cache[name].installedVersion == ver):
                 self.controller.cache.markRemove(name, 
                                 "custom landscape stub removal rule")
+                if self.controller.cache.has_key("landscape-common"):
+                    self.controller.cache["landscape-common"].markKeep()
+                    self.controller.cache.markInstall("landscape-common", 
         # now check for nvidia and show a warning if needed
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:

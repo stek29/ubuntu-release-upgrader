@@ -64,7 +64,8 @@ class AptCdrom(object):
         signatures = set()
         i18n = set()
         for root, dirs, files in os.walk(self.cdrompath, topdown=True):
-            if root.endswith("debian-installer"):
+            if (root.endswith("debian-installer") or 
+                root.endswith("dist-upgrader")):
                 del dirs[:]
                 continue
             elif  ".aptignr" in files:

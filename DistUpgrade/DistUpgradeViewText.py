@@ -193,14 +193,11 @@ class DistUpgradeViewText(DistUpgradeView):
           self.showInPager(output)
         print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
 
-    def askYesNoQuestion(self, summary, msg, prompt=None):
+    def askYesNoQuestion(self, summary, msg, default='No'):
       print
       print twrap(summary)
       print twrap(msg)
-      if not prompt:
-          print _("Continue [yN] "),
-      else:
-          print prompt,
+      print _("Continue [yN] "),
       res = sys.stdin.readline()
       if res.strip().lower().startswith(_("y")):
         return True

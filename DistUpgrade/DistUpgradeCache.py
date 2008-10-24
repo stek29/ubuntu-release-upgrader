@@ -767,7 +767,7 @@ class MyCache(apt.Cache):
         self.create_snapshot()
         try:
             self[pkgname].markDelete(purge=purge)
-            self.updateGUI()
+            self.view.processEvents()
             #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 

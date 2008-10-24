@@ -125,6 +125,18 @@ class DistUpgradeQuirks(object):
         hardy->intrepid upgrade 
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # language-support-* changed its dependencies from "recommends"
+        # to "suggests" for language-pack-* - this means that apt will
+        # think they are now auto-removalable if they got installed
+        # as a dep of language-support-* - we fix this here
+        for pkg in self.controller.cache:
+            if (pkg.name.startswith("language-pack-") and 
+                not pkg.name.endswith("-base") and
+                self.controller.cache._depcache.IsAutoInstalled(pkg._pkg) and
+                pkg.isInstalled):
+                logging.debug("setting '%s' to manual installed" % pkg.name)
+                pkg.markKeep()
+                pkg.markInstall()
         # for kde we need to switch from 
         # kubuntu-desktop-kde4 
         # to

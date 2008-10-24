@@ -2,7 +2,16 @@ update-manager (1:0.93.31) intrepid; urgency=low
 
   * DistUpgrade/DistUpgrade.cfg:
     - remove goubuntu-desktop from metapackages, we do no
-      longer build it (LP: #288267)
+      longer build it (LP: #283712)
+  * DistUpgrade/DistUpgradeCache.py: 
+    - never remove packages in the "KeepInstalled" section
+    - keep the GUI alive when calculating the packages
+      to cleanup
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - mark "language-pack-$lang" as manual installed to
+      workaround changes in "language-support-$lang" 
+      (LP: #287551)
+     
 
  --
 

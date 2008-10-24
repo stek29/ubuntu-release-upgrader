@@ -744,6 +744,11 @@ class MyCache(apt.Cache):
         if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False
+        # ensure we honor KeepInstalledSection here as well
+        for section in self.config.getlist("Distro","KeepInstalledSection"):
+            if self.has_key(pkgname) and self[pkgname].section == section:
+                logging.debug("skipping '%s' (in KeepInstalledSection)" % pkgname)
+                return False
         # if we don't have the package anyway, we are fine (this can
         # happen when forced_obsoletes are specified in the config file)
         if not self.has_key(pkgname):
@@ -762,6 +767,7 @@ class MyCache(apt.Cache):
         self.create_snapshot()
         try:
             self[pkgname].markDelete(purge=purge)
+            self.updateGUI()
             #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.getChanges():
                 if (pkg.name not in remove_candidates or 

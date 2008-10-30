@@ -20,6 +20,17 @@ class MockConfig(object):
 
 class testQuirks(unittest.TestCase):
 
+    def testFglrx(self):
+        mock_lspci_good = set(['1002:7145'])
+        mock_lspci_bad = set(['8086:ac56'])
+        q = DistUpgradeQuirks(MockController(), MockConfig)
+        self.assert_(q._supportInModaliases("fglrx",
+                                            "../DistUpgrade/modaliases/",
+                                            mock_lspci_good) == True)
+        self.assert_(q._supportInModaliases("fglrx",
+                                            "../DistUpgrade/modaliases/",
+                                            mock_lspci_bad) == False)
+
     def test_cpuHasSSESupport(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse") == True)

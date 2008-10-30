@@ -20,6 +20,7 @@
 #  USA
 
 import logging
+import re
 import os
 import os.path
 import shutil
@@ -71,6 +72,38 @@ class DistUpgradeQuirks(object):
             logging.debug("quirks: running %s" % funcname)
             func()
 
+    def _supportInModaliases(self, xorgdrivername, modaliasesdir="./modaliases", lspci=None):
+        """ 
+        Check if xorgdriver will work on this hardware
+
+        This helper will check with the modaliasesdir if the given 
+        xorgdriver will work on this hardware (or the hardware given
+        via the lspci argument)
+        """
+        if not lspci:
+            lspci = set()
+            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+            for line in p.communicate()[0].split("\n"):
+                if line:
+                    lspci.add(line.split()[2])
+        for filename in os.listdir(modaliasesdir):
+            for line in open(os.path.join(modaliasesdir,filename)):
+                line = line.strip()
+                if line == "" or line.startswith("#"):
+                    continue
+                (key, pciid, xorgdriver, pkgname) = line.split()
+                if xorgdriver != xorgdrivername:
+                    continue
+                m = re.match("pci:v0000(.+)d0000(.+)sv.*", pciid)
+                if m:
+                    matchid = "%s:%s" % (m.group(1), m.group(2))
+                    if matchid.lower() in lspci:
+                        logging.debug("found system pciid '%s' in modaliases" % matchid)
+                        return True
+        logging.debug("checking for %s support in modaliases but none found" % xorgdriver)
+        return False
+                    
+
     # individual quirks handler ----------------------------------------
     def from_dapperPostUpgrade(self):
         " this works around quirks for dapper->hardy upgrades "
@@ -98,18 +131,26 @@ class DistUpgradeQuirks(object):
         " quirks that are run before the upgrade to intrepid "
         logging.debug("running %s" %  sys._getframe().f_code.co_name
 )
-#         if self._checkVideoDriver("fglrx"):
-#             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-#                                         "effects, and performance in games "
-#                                         "and other graphically intensive "
-#                                         "programs."),
-#                                       _("This computer is currently using "
-#                                         "the AMD 'fglrx' graphics driver. "
-#                                         "No version of this driver is "
-#                                         "available that works with Ubuntu "
-#                                         "8.10.\n\nDo you want to continue?"))
-#             if res == False:
-#                 self.controller.abort()
+        if (self._checkVideoDriver("fglrx") and 
+            not self._supportInModaliases("fglrx")):
+             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                         "effects, and performance in games "
+                                         "and other graphically intensive "
+                                         "programs."),
+                                       _("This computer is currently using "
+                                         "the AMD 'fglrx' graphics driver. "
+                                         "No version of this driver is "
+                                         "available that works with your "
+                                         "hardware in Ubuntu "
+                                         "8.10.\n\nDo you want to continue?"))
+             if res == False:
+                 self.controller.abort()
+             # if the user wants to continue we remove the fglrx driver
+             # here because its no use (no support for this card)
+             self.controller.cache.markRemove("xorg-driver-fglrx",
+                                              "no support in new fglrx for the card")
+             self.controller.cache.markRemove("xorg-driver-fglrx-envy",
+                                              "no support in new fglrx for the card")
 
 
     # the post upgrade cache handlers

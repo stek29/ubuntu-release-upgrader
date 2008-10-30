@@ -190,7 +190,7 @@ class MetaReleaseCore(object):
         # first check if the current runing distro is in the meta-release
         # information. if not, we assume that we run on something not
         # supported and silently return
-        if current_dist == None:
+        if current_dist is None:
             print "current dist not found in meta-release file"
             return False
 

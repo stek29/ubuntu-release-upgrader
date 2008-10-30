@@ -21,15 +21,12 @@
 
 import sys
 import logging
-import string
-import time
 import subprocess
 
 import apt
-import apt_pkg
 import os
 
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
+from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
 import apt.progress
 
 import gettext

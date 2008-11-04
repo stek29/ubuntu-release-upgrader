@@ -150,7 +150,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         " install additional pkgs (list) into the vm before the ugprade "
         self.start()
         self._runInImage(["apt-get","update"])
-        ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y"]+pkgs)
+        ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--reinstall", "-y"]+pkgs)
         self.stop()
         return (ret == 0)
 
@@ -285,10 +285,11 @@ iface eth0 inet static
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
         while(len(pkgs)) > 0:
             print "installing additonal: %s" % pkgs[:CMAX]
-            ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","-y"]+pkgs[:CMAX])
+            ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","--reinstall","-y"]+pkgs[:CMAX])
             print "apt(2) returned: %s" % ret
             if ret != 0:
                 #self._cacheDebs(tmpdir)
+                self.stop()
                 return False
             pkgs = pkgs[CMAX+1:]
 

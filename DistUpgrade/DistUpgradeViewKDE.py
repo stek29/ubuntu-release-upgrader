@@ -540,9 +540,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def translate_widget(self, widget):
         if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
             if str(widget.text()) == "&Cancel":
-                widget.setText(gettext.dgettext("kdelibs", "&Cancel"))
-            if str(widget.text()) == "&Close":
-                widget.setText(gettext.dgettext("kdelibs", "&Close"))
+                widget.setText(unicode(gettext.dgettext("kdelibs", "&Cancel"), 'UTF-8'))
+            elif str(widget.text()) == "&Close":
+                widget.setText(unicode(gettext.dgettext("kdelibs", "&Close"), 'UTF-8'))
             elif str(widget.text()) != "":
                 widget.setText( _(str(widget.text())).replace("_", "&") )
 

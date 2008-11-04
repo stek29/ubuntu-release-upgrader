@@ -178,28 +178,6 @@ class MyCache(apt.Cache):
         binver = pkg.candidateVersion
         srcver = pkg.candidateVersion
         #print "bin: %s" % binver
-        try:
-            # try to get the source version of the pkg, this differs
-            # for some (e.g. libnspr4 on ubuntu)
-            # this feature only works if the correct deb-src are in the 
-            # sources.list
-            # otherwise we fall back to the binary version number
-            srcrecords = apt_pkg.GetPkgSrcRecords()
-            srcrec = srcrecords.Lookup(srcpkg)
-            if srcrec:
-                srcver = srcrecords.Version
-                #if apt_pkg.VersionCompare(binver, srcver) > 0:
-                #    srcver = binver
-                if not srcver:
-                    srcver = binver
-                #print "srcver: %s" % srcver
-                section = srcrecords.Section
-                #print "srcsect: %s" % section
-            else:
-                # fail into the error handler
-                raise SystemError
-        except SystemError, e:
-            srcver = binver
 
         l = section.split("/")
         if len(l) > 1:
@@ -241,9 +219,13 @@ class MyCache(apt.Cache):
                     changelogver = match.group(1)
                     if changelogver and ":" in changelogver:
                         changelogver = changelogver.split(":",1)[1]
-                    if installed and \
-                        apt_pkg.VersionCompare(changelogver,installed)<=0:
-                        break
+                    # we test for "==" here to ensure that the version
+                    # is actually really in the changelog - if not
+                    # just display it all, this catches cases like:
+                    # gcc-defaults with "binver=4.3.1" and srcver=1.76
+                    if (installed and 
+                        apt_pkg.VersionCompare(changelogver,installed)==0):
+                         break
                 # EOF (shouldn't really happen)
                 alllines = alllines + line
 

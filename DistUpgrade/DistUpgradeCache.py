@@ -731,6 +731,13 @@ class MyCache(apt.Cache):
     def _inRemovalBlacklist(self, pkgname):
         for expr in self.removal_blacklist:
             if re.compile(expr).match(pkgname):
+                # packages that are no longer downloadable are not honored
+                # by the removal blacklist to prevent accumulating cruft 
+                # (LP #293486)
+                if (self.has_key(pkgname) and 
+                    not self[pkgname].canidateDownloadable):
+                    logging.debug("pkg '%s' in removal blacklist but not downloadable, skipping" % pkgname)
+                    return False
                 return True
         return False
 

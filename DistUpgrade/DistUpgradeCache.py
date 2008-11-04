@@ -735,7 +735,7 @@ class MyCache(apt.Cache):
                 # by the removal blacklist to prevent accumulating cruft 
                 # (LP #293486)
                 if (self.has_key(pkgname) and 
-                    not self[pkgname].canidateDownloadable):
+                    not self[pkgname].candidateDownloadable):
                     logging.debug("pkg '%s' in removal blacklist but not downloadable, skipping" % pkgname)
                     return False
                 return True

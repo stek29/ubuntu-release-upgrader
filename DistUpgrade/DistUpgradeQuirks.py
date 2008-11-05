@@ -104,7 +104,7 @@ class DistUpgradeQuirks(object):
         return False
                     
 
-    # individual quirks handler ----------------------------------------
+    # individual quirks handler when the dpkg run is finished ---------
     def from_dapperPostUpgrade(self):
         " this works around quirks for dapper->hardy upgrades "
         logging.debug("running Controller.from_dapperQuirks handler")
@@ -125,6 +125,8 @@ class DistUpgradeQuirks(object):
         logging.debug("running Controller.feistyQuirks handler")
         self._rewriteFstab()
         self._checkAdminGroup()
+
+    # quirks when run when the initial apt-get update was run -------
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
     def intrepidPostInitialUpdate(self):
@@ -153,7 +155,7 @@ class DistUpgradeQuirks(object):
                                               "no support in new fglrx for the card")
 
 
-    # the post upgrade cache handlers
+    # quirks when the cache upgrade calculation is finished
     def from_dapperPostDistUpgradeCache(self):
         self.hardyPostDistUpgradeCache()
         self.gutsyPostDistUpgradeCache()
@@ -410,6 +412,21 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markRemove("nvidia-settings")
             self.controller.cache.markInstall("nvidia-glx")
 
+    def from_hardyPostDistUpgradeCache(self):
+        """ this function works around quirks in upgrades from hardy """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # evms got removed after hardy, warn and abort
+        if self._usesEvmsInMounts():
+            logging.error("evms in use in /etc/fstab")
+            self._view.error(_("evms in use"),
+                             _("Your system uses the 'evms' volume manager "
+                               "in /proc/mounts. "
+                               "The 'evms' software is no longer supported, "
+                               "please switch it off and run the upgrade "
+                               "again when this is done."))
+            self.controller.abort()
+            
+
     # helpers
     def _cpuHasSSESupport(self, cpuinfo="/proc/cpuinfo"):
         " helper that checks if the given cpu has sse support "
@@ -420,9 +437,9 @@ class DistUpgradeQuirks(object):
                 return False
         return True
 
-    def _checkAndRemoveEvms(self):
-        " check if evms is in use and if not, remove it "
-        logging.debug("running _checkAndRemoveEvms")
+    def _usesEvmsInMounts(self):
+        " check if evms is used in /proc/mounts "
+        logging.debug("running _usesEvmsInMounts")
         for line in open("/proc/mounts"):
             line = line.strip()
             if line == '' or line.startswith("#"):
@@ -434,7 +451,14 @@ class DistUpgradeQuirks(object):
                 continue
             if "evms" in device:
                 logging.debug("found evms device in line '%s', skipping " % line)
-                return False
+                return True
+        return False
+
+    def _checkAndRemoveEvms(self):
+        " check if evms is in use and if not, remove it "
+        logging.debug("running _checkAndRemoveEvms")
+        if self._usesEvmsInMounts():
+            return False
         # if not in use, nuke it
         for pkg in ["evms","libevms-2.5","libevms-dev",
                     "evms-ncurses", "evms-ha",

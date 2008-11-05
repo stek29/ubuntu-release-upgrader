@@ -520,9 +520,9 @@ class MyCache(apt.Cache):
                 if not self._installMetaPkgs(view):
                     raise SystemError, _("Can't upgrade required meta-packages")
 
-            # see if it all makes sense
-            if not self._verifyChanges():
-                raise SystemError, _("A essential package would have to be removed")
+            # see if it all makes sense, if not this function raises 
+            self._verifyChanges()
+
         except SystemError, e:
             # this should go into a finally: line, see below for the 
             # rationale why it doesn't 
@@ -530,12 +530,12 @@ class MyCache(apt.Cache):
             t.join()
             # FIXME: change the text to something more useful
             details =  _("An unresolvable problem occurred while "
-                         "calculating the upgrade.\n\n "
+                         "calculating the upgrade:\n%s\n\n "
                          "This can be caused by:\n"
                          " * Upgrading to a pre-release version of Ubuntu\n"
                          " * Running the current pre-release version of Ubuntu\n"
                          " * Unofficial software packages not provided by Ubuntu\n"
-                         "\n")
+                         "\n" % e)
             # we never have partialUpgrades (including removes) on a stable system
             # with only ubuntu sources so we do not recommend reporting a bug
             if partialUpgrade:
@@ -545,9 +545,12 @@ class MyCache(apt.Cache):
                 details += _("If none of this applies, then please report this bug against "
                              "the 'update-manager' package and include the files in "
                              "/var/log/dist-upgrade/ in the bugreport.")
-            # make the text available again
+            # make the error text available again on stdout for the 
+            # text frontend
             self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
+            # start the resolver log again because this is run with
+            # the withResolverLog decorator
             self._startAptResolverLog()            
             logging.error("Dist-upgrade failed: '%s'", e)
             return False
@@ -611,11 +614,11 @@ class MyCache(apt.Cache):
         for pkg in self.getChanges():
             if pkg.markedDelete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
-                return False
+                raise SystemError, _("The package '%s' is marked for removal but it is in the removal blacklist." % pkg.name)
             if pkg.markedDelete and (pkg._pkg.Essential == True and
                                      not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's a ESSENTIAL package", pkg.name)
-                return False
+                raise SystemError, _("The essential package '%s' is marked for removal." % pkg.name)
         return True
 
     @property

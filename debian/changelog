@@ -28,7 +28,7 @@ update-manager (1:0.93.33) intrepid; urgency=low
     - handle translations of non-ascii string on Cancel button 
       correctly (LP: #291115)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 29 Oct 2008 20:56:20 +0100
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Nov 2008 14:58:10 +0100
 
 update-manager (1:0.93.32) intrepid; urgency=low
 
@@ -52,17 +52,22 @@ update-manager (1:0.93.31) intrepid; urgency=low
     - mark "language-pack-$lang" as manual installed to
       workaround changes in "language-support-$lang" 
       (LP: #287551)
+   * po/:
+     - updated to the latest translations.launchpad.net
+       version
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 24 Oct 2008 15:02:03 +0200
 
 update-manager (1:0.93.30) intrepid; urgency=low
 
   * DistUpgrade/DistUpgradeViewText.py:
-    - fix incorrect "default" argument handling in 
-      askYesNoQuestion
+    - ignore "default" argument handling in askYesNoQuestion
+      to fix incorrect prompt for cdrom question
   * DistUpgrade/DistUpgradeQuirks.py:
     - ensure "landscape-common" is not marked auto-install
       (LP: #288051)
+  * DistUpgrade/ReleaseAnnouncement:
+    - updated for final release
   * DistUpgrade/DistUpgradeAptCdrom.py:
     - ignore "dist-upgrader" dirs when scanning for 
       packages (LP: #288169)

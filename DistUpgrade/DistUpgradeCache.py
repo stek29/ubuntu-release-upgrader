@@ -517,8 +517,8 @@ class MyCache(apt.Cache):
 
             # install missing meta-packages (if not in server upgrade mode)
             if not serverMode:
-                if not self._installMetaPkgs(view):
-                    raise SystemError, _("Can't upgrade required meta-packages")
+                # if this fails, a system error is raised
+                self._installMetaPkgs(view)
 
             # see if it all makes sense, if not this function raises 
             self._verifyChanges()
@@ -614,11 +614,11 @@ class MyCache(apt.Cache):
         for pkg in self.getChanges():
             if pkg.markedDelete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
-                raise SystemError, _("The package '%s' is marked for removal but it is in the removal blacklist." % pkg.name)
+                raise SystemError, _("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name
             if pkg.markedDelete and (pkg._pkg.Essential == True and
                                      not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's a ESSENTIAL package", pkg.name)
-                raise SystemError, _("The essential package '%s' is marked for removal." % pkg.name)
+                raise SystemError, _("The essential package '%s' is marked for removal.") % pkg.name
         return True
 
     @property
@@ -696,7 +696,7 @@ class MyCache(apt.Cache):
                     self[key].markUpgrade()
             except SystemError, e:
                 logging.debug("Can't mark '%s' for upgrade (%s)" % (key,e))
-                return False
+                raise SystemError, _("Can not mark '%s' for upgrade") % key
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
             logging.debug("none of the '%s' meta-pkgs installed" % metapkgs)
@@ -734,13 +734,6 @@ class MyCache(apt.Cache):
     def _inRemovalBlacklist(self, pkgname):
         for expr in self.removal_blacklist:
             if re.compile(expr).match(pkgname):
-                # packages that are no longer downloadable are not honored
-                # by the removal blacklist to prevent accumulating cruft 
-                # (LP #293486)
-                if (self.has_key(pkgname) and 
-                    not self[pkgname].candidateDownloadable):
-                    logging.debug("pkg '%s' in removal blacklist but not downloadable, skipping" % pkgname)
-                    return False
                 return True
         return False
 

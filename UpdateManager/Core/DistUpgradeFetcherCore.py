@@ -137,7 +137,6 @@ class DistUpgradeFetcherCore(object):
           return True
 
     def verifyDistUprader(self):
-        pass
         # FIXME: check a internal dependency file to make sure
         #        that the script will run correctly
           

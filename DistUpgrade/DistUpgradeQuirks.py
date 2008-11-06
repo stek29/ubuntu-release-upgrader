@@ -486,8 +486,9 @@ class DistUpgradeQuirks(object):
                 lines.append(line)
                 continue
             if (("ext2" in fstype or
-                "ext3" in fstype) and 
-                not "relatime" in options):
+                 "ext3" in fstype) and 
+                (not "noatime" in options) and
+                (not "relatime" in options) ):
                 logging.debug("adding 'relatime' to line '%s' " % line)
                 line = line.replace(options,"%s,relatime" % options)
                 logging.debug("replaced line is '%s' " % line)

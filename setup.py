@@ -17,7 +17,10 @@ setup(name='update-manager',
                 'DistUpgrade'
                 ],
       scripts=[
-               'update-manager', "do-release-upgrade", "update-manager-hildon"
+               'update-manager', 
+               "do-release-upgrade", 
+               "update-manager-hildon",
+               "check-new-release",
                ],
       data_files=[
                   ('share/update-manager/glade',

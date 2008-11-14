@@ -412,6 +412,9 @@ class DistUpgradeController(object):
 
         # look over the stuff we have
         foundToDist = False
+        # collect information on what components (main,universe) are enabled for what distro (sub)version
+        # e.g. found_components = { 'hardy':set("main","restricted"), 'hardy-updates':set("main") }
+        found_components = {}
         for entry in self.sources.list[:]:
 
             # ignore invalid records or disabled ones
@@ -439,7 +442,7 @@ class DistUpgradeController(object):
                 continue
 
             # special case for landscape.canonical.com because they
-            # don't use a standard archive layout
+            # don't use a standard archive layout (gutsy->hardy)
             if (not entry.disabled and
                 entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
                 logging.debug("commenting landscape.canonical.com out")
@@ -486,13 +489,19 @@ class DistUpgradeController(object):
                     entry.disabled = True
                     self.sources_disabled = True
                     logging.debug("entry '%s' was disabled (unknown dist)" % entry)
-                
                 # if we make it to this point, we have a official mirror
-                # 
+
+                # gather what components are enabled and are inconsitent
+                for d in ["%s" % self.toDist,"%s-updates" % self.toDist,"%s-security" % self.toDist]:
+                    if not found_components.has_key(d):
+                        found_components[d] = set()
+                    if not entry.disabled and entry.dist == d:
+                        for comp in entry.comps:
+                            found_components[d].add(comp)
+
                 # check if the arch is powerpc or sparc and if so, transition
                 # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
                 # in hardy)
-                    
                 if (entry.type == "deb" and
                     not "ports.ubuntu.com" in entry.uri and
                     (self.arch == "powerpc" or self.arch == "sparc")):
@@ -504,6 +513,19 @@ class DistUpgradeController(object):
                 entry.disabled = True
                 self.sources_disabled = True
                 logging.debug("entry '%s' was disabled (unknown mirror)" % entry)
+
+        # now go over the list again and check for missing components 
+        # in $dist-updates and $dist-security and add them
+        for entry in self.sources.list[:]:
+            # skip all comps that are not relevant (including e.g. "hardy")
+            if (entry.invalid or entry.disabled or entry.type == "deb-src" or 
+                entry.uri.startswith("cdrom:") or entry.dist == self.toDist):
+                continue
+            # now check for "$dist-updates" and "$dist-security" and add any inconsistencies
+            if found_components.has_key(entry.dist):
+                # add the delta between "hardy" comps and "hardy-updates" comps once
+                entry.comps.extend(list(found_components[self.toDist]-found_components[entry.dist]))
+                del found_components[entry.dist]
         return foundToDist
 
     def updateSourcesList(self):

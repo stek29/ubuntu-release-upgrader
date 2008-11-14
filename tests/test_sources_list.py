@@ -37,7 +37,6 @@ class testSourcesListUpdate(unittest.TestCase):
         self.assert_(res == True)
 
         # now test the result
-        print open(os.path.join(self.testdir,"sources.list")).read()
         self._verifySources("""
 deb http://archive.ubuntu.com/ubuntu gutsy main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
@@ -58,12 +57,14 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         self.assert_(res == True)
 
         # now test the result
+        #print open(os.path.join(self.testdir,"sources.list")).read()
         self._verifySources("""
 # main repo
 deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse universe
 deb http://de.archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
 deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
-deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted multiverse
+deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 """)
         # check that the backup file was created correctly
         self.assert_(subprocess.call(

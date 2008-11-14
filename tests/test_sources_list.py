@@ -23,6 +23,27 @@ class testSourcesListUpdate(unittest.TestCase):
         if os.path.exists(os.path.join(self.testdir, "sources.list")):
             os.unlink(os.path.join(self.testdir, "sources.list"))
 
+    def test_sources_list_with_nothing(self):
+        """
+        test sources.list rewrite with nothing in it
+        """
+        shutil.copy(os.path.join(self.testdir,"sources.list.nothing"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourcelist","sources.list")
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+
+        # now test the result
+        print open(os.path.join(self.testdir,"sources.list")).read()
+        self._verifySources("""
+deb http://archive.ubuntu.com/ubuntu gutsy main restricted
+deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+""")
+
     def test_sources_list_rewrite(self):
         """
         test regular sources.list rewrite

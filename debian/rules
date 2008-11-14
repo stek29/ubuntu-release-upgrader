@@ -77,19 +77,5 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-arch-build: 
-	# update the demotions
-	(cd utils && ./demotions.py intrepid jaunty > demotions.cfg)
-	(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
-	# run the test-suit
-	#echo "Running integrated tests"
-	#(cd tests && for test in *.py; do python $$test; done)
-	# update version
-	echo "VERSION='$(DEBVER)'" > DistUpgrade/DistUpgradeVersion.py
-	# build it
-	rm -rf debian/arch-build
-	mkdir -p debian/arch-build/$(PKG)-$(DEBVER)
-	tar -c --exclude=arch-build --no-recursion -f - `bzr inventory` | (cd debian/arch-build/$(PKG)-$(DEBVER);tar xf -)
-	(cd debian/arch-build/$(PKG)-$(DEBVER) && $(DEB_BUILD_PROG))
 
-.PHONY: build clean binary-indep binary-arch binary install arch-build
+.PHONY: build clean binary-indep binary-arch binary install

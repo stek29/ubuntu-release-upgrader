@@ -524,7 +524,9 @@ class DistUpgradeController(object):
             # now check for "$dist-updates" and "$dist-security" and add any inconsistencies
             if found_components.has_key(entry.dist):
                 # add the delta between "hardy" comps and "hardy-updates" comps once
+                entry.info("fixing components inconsistency from '%s'" % entry
                 entry.comps.extend(list(found_components[self.toDist]-found_components[entry.dist]))
+                entry.info("to new entry '%s'" % entry
                 del found_components[entry.dist]
         return foundToDist
 

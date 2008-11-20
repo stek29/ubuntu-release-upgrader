@@ -129,7 +129,7 @@ class DistUpgradeQuirks(object):
     # quirks when run when the initial apt-get update was run -------
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
-    def intrepidPostInitialUpdate(self):
+    def jauntyPostInitialUpdate(self):
         " quirks that are run before the upgrade to intrepid "
         logging.debug("running %s" %  sys._getframe().f_code.co_name
 )
@@ -144,7 +144,7 @@ class DistUpgradeQuirks(object):
                                          "No version of this driver is "
                                          "available that works with your "
                                          "hardware in Ubuntu "
-                                         "8.10.\n\nDo you want to continue?"))
+                                         "9.04.\n\nDo you want to continue?"))
              if res == False:
                  self.controller.abort()
              # if the user wants to continue we remove the fglrx driver

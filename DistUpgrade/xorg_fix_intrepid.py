@@ -69,6 +69,15 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
         open(xorg+".xorg_fix","w").write("".join(content))
         os.rename(xorg+".xorg_fix", xorg)
 
+def is_multiseat(xorg_source=XORG_CONF):
+    " check if we have a multiseat xorg config "
+    def is_serverlayout_line(line):
+        return (not line.strip().startswith("#") and
+                line.strip().lower().endswith('"serverlayout"'))
+    msl = len(filter(is_serverlayout_line, open(xorg_source)))
+    logging.debug("is_multiseat: lines %i", msl)
+    return msl > 1
+
 if __name__ == "__main__":
     if not os.getuid() == 0:
         print "Need to run as root"
@@ -107,4 +116,7 @@ if __name__ == "__main__":
     ver=subprocess.Popen(["dpkg-query","-W","-f=${Version}","xserver-xorg-core"], stdout=subprocess.PIPE).communicate()[0]
     logging.info("xserver-xorg-core version is '%s'" % ver)
     if ver and apt_pkg.VersionCompare(ver, "2:1.5.0") > 0:
-        remove_input_devices()
+        if not is_multiseat():
+            remove_input_devices()
+        else:
+            logging.info("multiseat setup, ignoring")

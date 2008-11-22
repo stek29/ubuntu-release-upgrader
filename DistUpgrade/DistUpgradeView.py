@@ -72,7 +72,7 @@ def FuzzyTimeToStr(sec):
     # plural form
     # 
     # Note: most western languages will not need to change this
-    return _("%(str_days)s %(str_hours)s %(str_minutes)s") % map
+    s = _("%(str_days)s %(str_hours)s %(str_minutes)s") % map
   elif hours > 0:
     # TRANSLATORS: you can alter the ordering of the remaining time
     # information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -83,11 +83,13 @@ def FuzzyTimeToStr(sec):
     # plural form
     # 
     # Note: most western languages will not need to change this
-    return _("%(str_hours)s %(str_minutes)s") % map
+    s = _("%(str_hours)s %(str_minutes)s") % map
   elif minutes > 0:
-    return map["str_minutes"]
-  return map["str_seconds"]
+    s = map["str_minutes"]
+  else:
+  	s = map["str_seconds"]
 
+  return s.strip().replace("  "," ")
 
 class FetchProgress(apt.progress.FetchProgress):
   def __init__(self):

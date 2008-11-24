@@ -179,6 +179,29 @@ class DistUpgradeController(object):
             sys.exit(1)
         logging.debug("/openCache()")
 
+    def _isRemoteLogin(self):
+        " check if we are running form a remote login "
+        # easy
+        if (os.environ.has_key("SSH_CONNECTION") or
+            os.environ.has_key("SSH_TTY")):
+            return True
+        # sudo cleans out SSH_ environment
+        out = subprocess.Popen(["who","-m","--ips"],stdout=subprocess.PIPE).communicate()[0]
+        logging.debug("who -m --ips: '%s'" % out)
+        # the host is in ()
+        if not "(" in out:
+            return False
+        # if we have a () parse it
+        ip = out.strip().rsplit('(')[1]
+        ip = ip.strip(')')
+        # if we have a ip here and it does not start with a
+        # ":" we have a remote login
+        # FIXME: what about IPv6 ?
+        if not ip.startswith(":"):
+            return True
+        return False
+
+
     def _sshMagic(self):
         """ this will check for server mode and if we run over ssh.
             if this is the case, we will ask and spawn a additional
@@ -186,9 +209,7 @@ class DistUpgradeController(object):
             of trouble)
         """
         pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
-        if (not os.path.exists(pidfile) and
-            (os.environ.has_key("SSH_CONNECTION") or
-             os.environ.has_key("SSH_TTY"))):
+        if (not os.path.exists(pidfile) and self._isRemoteLogin()):
             port = 9004
             res = self._view.askYesNoQuestion(
                 _("Continue running under SSH?"),
@@ -524,9 +545,9 @@ class DistUpgradeController(object):
             # now check for "$dist-updates" and "$dist-security" and add any inconsistencies
             if found_components.has_key(entry.dist):
                 # add the delta between "hardy" comps and "hardy-updates" comps once
-                entry.info("fixing components inconsistency from '%s'" % entry
+                logging.info("fixing components inconsistency from '%s'" % entry)
                 entry.comps.extend(list(found_components[self.toDist]-found_components[entry.dist]))
-                entry.info("to new entry '%s'" % entry
+                logging.info("to new entry '%s'" % entry)
                 del found_components[entry.dist]
         return foundToDist
 

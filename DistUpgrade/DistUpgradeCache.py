@@ -70,7 +70,7 @@ class MyCache(apt.Cache):
                 self.lock = True
             except SystemError, e:
                 # checking for this is ok, its not translatable
-                if "dpkg was interrupted" in str(e):
+                if "dpkg --configure -a" in str(e):
                     raise CacheExceptionDpkgInterrupted, e
                 raise CacheExceptionLockingFailed, e
         # a list of regexp that are not allowed to be removed

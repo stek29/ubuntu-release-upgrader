@@ -33,6 +33,7 @@ try:
 except:
     import fakegconf as gconf
 import gobject
+
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
@@ -57,20 +58,24 @@ import socket
 import time
 import thread
 import xml.sax.saxutils
-from Common.HelpViewer import HelpViewer
 
 import dbus
 import dbus.service
 import dbus.glib
+
+import GtkProgress
 
 from gettext import gettext as _
 from gettext import ngettext
 
 from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
+from Common.UpdateList import UpdateList
+from Common.HelpViewer import HelpViewer
+from Common.MyCache import MyCache
+
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
-import GtkProgress
 
 from Core.MetaRelease import Dist
 from MetaReleaseGObject import MetaRelease
@@ -85,242 +90,6 @@ from MetaReleaseGObject import MetaRelease
 
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
-
-SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
-
-CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-
-
-class MyCache(apt.Cache):
-    def __init__(self, progress, rootdir=None):
-        apt.Cache.__init__(self, progress, rootdir)
-        # raise if we have packages in reqreinst state
-        # and let the caller deal with that (runs partial upgrade)
-        assert len(self.reqReinstallPkgs) == 0
-        # init the regular cache
-        self._initDepCache()
-        self.all_changes = {}
-        # on broken packages, try to fix via saveDistUpgrade()
-        if self._depcache.BrokenCount > 0:
-            self.saveDistUpgrade()
-        assert (self._depcache.BrokenCount == 0 and 
-                self._depcache.DelCount == 0)
-
-    def _initDepCache(self):
-        #apt_pkg.Config.Set("Debug::pkgPolicy","1")
-        #self.depcache = apt_pkg.GetDepCache(self.cache)
-        #self._depcache = apt_pkg.GetDepCache(self._cache)
-        self._depcache.ReadPinFile()
-        if os.path.exists(SYNAPTIC_PINFILE):
-            self._depcache.ReadPinFile(SYNAPTIC_PINFILE)
-        self._depcache.Init()
-    def clear(self):
-        self._initDepCache()
-    @property
-    def requiredDownload(self):
-        """ get the size of the packages that are required to download """
-        pm = apt_pkg.GetPackageManager(self._depcache)
-        fetcher = apt_pkg.GetAcquire()
-        pm.GetArchives(fetcher, self._list, self._records)
-        return fetcher.FetchNeeded
-    @property
-    def installCount(self):
-        return self._depcache.InstCount
-    def saveDistUpgrade(self):
-        """ this functions mimics a upgrade but will never remove anything """
-        self._depcache.Upgrade(True)
-        wouldDelete = self._depcache.DelCount
-        if self._depcache.DelCount > 0:
-            self.clear()
-        assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
-        self._depcache.Upgrade()
-        return wouldDelete
-    def matchPackageOrigin(self, pkg, matcher):
-        """ match 'pkg' origin against 'matcher', take versions between
-            installedVersion and candidateVersion into account too
-            Useful if installed pkg A v1.0 is available in both
-            -updates (as v1.2) and -security (v1.1). we want to display
-            it as a security update then
-        """
-        inst_ver = pkg._pkg.CurrentVer
-        cand_ver = self._depcache.GetCandidateVer(pkg._pkg)
-        # init with empty match
-        update_origin = matcher[(None,None)]
-        for ver in pkg._pkg.VersionList:
-            # discard is < than installed ver
-            if (inst_ver and
-                apt_pkg.VersionCompare(ver.VerStr, inst_ver.VerStr) <= 0):
-                #print "skipping '%s' " % ver.VerStr
-                continue
-            # check if we have a match
-            for(verFileIter,index) in ver.FileList:
-                if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
-                    indexfile = pkg._list.FindIndex(verFileIter)
-                    if indexfile: # and indexfile.IsTrusted:
-                        match = matcher[verFileIter.Archive, verFileIter.Origin]
-                        if match.importance > update_origin.importance:
-                            update_origin = match
-        return update_origin
-        
-    def get_changelog(self, name, lock):
-        # don't touch the gui in this function, it needs to be thread-safe
-        pkg = self[name]
-
-        # get the src package name
-        srcpkg = pkg.sourcePackageName
-
-        # assume "main" section 
-        src_section = "main"
-        # use the section of the candidate as a starting point
-        section = pkg._depcache.GetCandidateVer(pkg._pkg).Section
-
-        # get the source version, start with the binaries version
-        binver = pkg.candidateVersion
-        srcver = pkg.candidateVersion
-        #print "bin: %s" % binver
-
-        l = section.split("/")
-        if len(l) > 1:
-            src_section = l[0]
-
-        # lib is handled special
-        prefix = srcpkg[0]
-        if srcpkg.startswith("lib"):
-            prefix = "lib" + srcpkg[3]
-
-        # stip epoch, but save epoch for later when displaying the
-        # launchpad changelog
-        srcver_epoch = srcver
-        l = string.split(srcver,":")
-        if len(l) > 1:
-            srcver = "".join(l[1:])
-
-        try:
-            uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver)
-            # print "Trying: %s " % uri
-            changelog = urllib2.urlopen(uri)
-            #print changelog.read()
-            # do only get the lines that are new
-            alllines = ""
-            regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
-
-            i=0
-            while True:
-                line = changelog.readline()
-                if line == "":
-                    break
-                match = re.match(regexp,line)
-                if match:
-                    # strip epoch from installed version
-                    # and from changelog too
-                    installed = pkg.installedVersion
-                    if installed and ":" in installed:
-                        installed = installed.split(":",1)[1]
-                    changelogver = match.group(1)
-                    if changelogver and ":" in changelogver:
-                        changelogver = changelogver.split(":",1)[1]
-                    # we test for "==" here to ensure that the version
-                    # is actually really in the changelog - if not
-                    # just display it all, this catches cases like:
-                    # gcc-defaults with "binver=4.3.1" and srcver=1.76
-                    if (installed and 
-                        apt_pkg.VersionCompare(changelogver,installed)==0):
-                        break
-                alllines = alllines + line
-
-            # Print an error if we failed to extract a changelog
-            if len(alllines) == 0:
-                alllines = _("The changelog does not contain any relevant changes.\n\n"
-                             "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-                             "until the changes become available or try again "
-                             "later.") % (srcpkg, srcver_epoch),
-            # only write if we where not canceld
-            if lock.locked():
-                self.all_changes[name] = [alllines, srcpkg]
-        except urllib2.HTTPError, e:
-            if lock.locked():
-                self.all_changes[name] = [
-                    _("The list of changes is not available yet.\n\n"
-                      "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-                      "until the changes become available or try again "
-                      "later.") % (srcpkg, srcver_epoch),
-                    srcpkg]
-        except (IOError, httplib.BadStatusLine, socket.error), e:
-            print "caught exception: ", e
-            if lock.locked():
-                self.all_changes[name] = [_("Failed to download the list "
-                                            "of changes. \nPlease "
-                                            "check your Internet "
-                                            "connection."), srcpkg]
-        if lock.locked():
-            lock.release()
-
-class UpdateList:
-  class UpdateOrigin:
-    def __init__(self, desc, importance):
-      self.packages = []
-      self.importance = importance
-      self.description = desc
-
-  def __init__(self, parent):
-    # a map of packages under their origin
-    try:
-        pipe = os.popen("lsb_release -c -s")
-        dist = pipe.read().strip()
-        del pipe
-    except Exception, e:
-        print "Error in lsb_release: %s" % e
-        parent.error(_("Failed to detect distribution"),
-                     _("A error '%s' occurred while checking what system "
-                       "you are using.") % e)
-        sys.exit(1)
-    self.distUpgradeWouldDelete = 0
-    self.pkgs = {}
-    self.num_updates = 0
-    self.matcher = self.initMatcher(dist)
-    
-  def initMatcher(self, dist):
-      # (origin, archive, description, importance)
-      matcher_templates = [
-          ("%s-security" % dist, "Ubuntu", _("Important security updates"),10),
-          ("%s-updates" % dist, "Ubuntu", _("Recommended updates"), 9),
-          ("%s-proposed" % dist, "Ubuntu", _("Proposed updates"), 8),
-          ("%s-backports" % dist, "Ubuntu", _("Backports"), 7),
-          (dist, "Ubuntu", _("Distribution updates"), 6)
-      ]
-      matcher = {}
-      for (origin, archive, desc, importance) in matcher_templates:
-          matcher[(origin, archive)] = self.UpdateOrigin(desc, importance)
-      matcher[(None,None)] = self.UpdateOrigin(_("Other updates"), -1)
-      return matcher
-
-  def update(self, cache):
-    self.held_back = []
-
-    # do the upgrade
-    self.distUpgradeWouldDelete = cache.saveDistUpgrade()
-
-    dselect_upgrade_origin = self.UpdateOrigin(_("Previous selected"), 1)
-
-    # sort by origin
-    for pkg in cache:
-      if pkg.isUpgradable or pkg.markedInstall:
-        if pkg.candidateOrigin == None:
-            # can happen for e.g. locked packages
-            # FIXME: do something more sensible here (but what?)
-            print "WARNING: upgradable but no canidateOrigin?!?: ", pkg.name
-            continue
-        # check where the package belongs
-        origin_node = cache.matchPackageOrigin(pkg, self.matcher)
-        if not self.pkgs.has_key(origin_node):
-          self.pkgs[origin_node] = []
-        self.pkgs[origin_node].append(pkg)
-        self.num_updates = self.num_updates + 1
-      if pkg.isUpgradable and not (pkg.markedUpgrade or pkg.markedInstall):
-          self.held_back.append(pkg.name)
-    for l in self.pkgs.keys():
-      self.pkgs[l].sort(lambda x,y: cmp(x.name,y.name))
-    self.keepcount = cache._depcache.KeepCount
 
 
 class UpdateManagerDbusControler(dbus.service.Object):

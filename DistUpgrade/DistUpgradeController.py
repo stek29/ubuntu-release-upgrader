@@ -54,9 +54,6 @@ import gettext
 from DistUpgradeCache import *
 from DistUpgradeApport import *
 
-# some constant
-# the initrd space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 12*1024*1024
 
 class NoBackportsFoundException(Exception):
     pass
@@ -730,94 +727,13 @@ class DistUpgradeController(object):
                     "Empty your trash and remove temporary "
                     "packages of former installations using "
                     "'sudo apt-get clean'.")
-
-        class FreeSpace(object):
-            " helper class that represents the free space on each mounted fs "
-            def __init__(self, initialFree):
-                self.free = initialFree
-                self.need = 0
-
-        def make_fs_id(d):
-            """ return 'id' of a directory so that directories on the
-                same filesystem get the same id (simply the mount_point)
-            """
-            for mount_point in mounted:
-                if d.startswith(mount_point):
-                    return mount_point
-            return "/"
-
-        # this is all a bit complicated
-        # 1) check what is mounted (in mounted)
-        # 2) create FreeSpace objects for the dirs we are interested in
-        #    (mnt_map)
-        # 3) use the  mnt_map to check if we have enough free space and
-        #    if not tell the user how much is missing
-        mounted = []
-        mnt_map = {}
-        fs_free = {}
-        for line in open("/proc/mounts"):
-            try:
-                (what, where, fs, options, a, b) = line.split()
-            except ValueError, e:
-                logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
-                continue
-            if not where in mounted:
-                mounted.append(where)
-        # make sure mounted is sorted by longest path
-        mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
-        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        for d in ["/","/usr","/var","/boot", archivedir, "/home"]:
-            d = os.path.realpath(d)
-            fs_id = make_fs_id(d)
-            st = os.statvfs(d)
-            free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
-            if fs_id in mnt_map:
-                logging.debug("Dir %s mounted on %s" % (d,mnt_map[fs_id]))
-                fs_free[d] = fs_free[mnt_map[fs_id]]
-            else:
-                logging.debug("Free space on %s: %s" % (d,free))
-                mnt_map[fs_id] = d
-                fs_free[d] = FreeSpace(free)
-        del mnt_map
-        logging.debug("fs_free contains: '%s'" % fs_free)
-
-        # now calculate the space that is required on /boot
-        # we do this by checking how many linux-image-$ver packages
-        # are installed or going to be installed
-        space_in_boot = 0
-        for pkg in self.cache:
-            # we match against everything that looks like a kernel
-            # and add space check to filter out metapackages
-            if re.match("^linux-(image|image-debug)-[0-9.]*-.*", pkg.name):
-                if pkg.markedInstall:
-                    logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    space_in_boot += KERNEL_INITRD_SIZE
-                elif (pkg.markedUpgrade or pkg.isInstalled):
-                    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    space_in_boot += KERNEL_INITRD_SIZE # creates .bak
-
-        # we check for various sizes:
-        # archivedir is were we download the debs
-        # /usr is assumed to get *all* of the install space (incorrect,
-        #      but as good as we can do currently + safety buffer
-        # /     has a small safety buffer as well
-        for (dir, size) in [(archivedir, self.cache.requiredDownload),
-                            ("/usr", self.cache.additionalRequiredSpace),
-                            ("/usr", 50*1024*1024),  # safety buffer /usr
-                            ("/boot", space_in_boot), 
-                            ("/", 10*1024*1024),     # small safety buffer /
-                           ]:
-            dir = os.path.realpath(dir)
-            logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
-            fs_free[dir].free -= size
-            fs_free[dir].need += size
-            if fs_free[dir].free < 0:
-                free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
-                logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
-                self._view.error(err_sum, err_long % (apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least, make_fs_id(dir)))
-                return False
-
-            
+        try:
+            self.cache.checkFreeSpace()
+        except NotEnoughFreeSpaceError, e:
+            self._view.error(err_sum, err_long % (e.size_total,
+                                                  e.dir,
+                                                  e.size_needed,
+                                                  e.dir))
         return True
 
 

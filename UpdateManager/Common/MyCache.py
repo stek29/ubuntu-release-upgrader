@@ -23,14 +23,15 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
-
 import os
+import DistUpgrade.DistUpgradeCache
+from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
 
 
-class MyCache(apt.Cache):
+class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def __init__(self, progress, rootdir=None):
         apt.Cache.__init__(self, progress, rootdir)
         # raise if we have packages in reqreinst state

@@ -72,7 +72,7 @@ from Common.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
 from Common.UpdateList import UpdateList
 from Common.HelpViewer import HelpViewer
-from Common.MyCache import MyCache
+from Common.MyCache import MyCache, NotEnoughFreeSpaceError
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
@@ -167,8 +167,6 @@ class UpdateManager(SimpleGladeApp):
     self.treeview_update.set_search_column(LIST_NAME)
     self.treeview_update.connect("button-press-event", self.show_context_menu)
     self.treeview_update.connect("row-activated", self.row_activated)
-
-
 
     # setup the help viewer and disable the help button if there
     # is no viewer available
@@ -506,6 +504,22 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_install_clicked(self, widget):
     #print "on_button_install_clicked"
+    err_sum = _("Not enough free disk space")
+    err_long= _("The upgrade needs a total of %s free space on disk '%s'. "
+                "Please free at least an additional %s of disk "
+                "space on '%s'. "
+                "Empty your trash and remove temporary "
+                "packages of former installations using "
+                "'sudo apt-get clean'.")
+    # check free space and error if its not enough
+    try:
+        self.cache.checkFreeSpace()
+    except NotEnoughFreeSpaceError, e:
+        self.error(err_sum, err_long % (e.size_total,
+                                        e.dir,
+                                        e.size_needed,
+                                        e.dir))
+        return
     self.invoke_manager(INSTALL)
     
   def invoke_manager(self, action):

@@ -24,6 +24,11 @@ warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import os
+import string
+import urllib2
+import httplib
+import socket
+import re
 import DistUpgrade.DistUpgradeCache
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 

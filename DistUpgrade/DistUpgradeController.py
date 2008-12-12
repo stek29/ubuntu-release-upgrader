@@ -288,7 +288,27 @@ class DistUpgradeController(object):
                 logging.debug("python symlink points to: '%s', but expected is '%s' or '%s'" % (fs_default_version, expected_default, os.path.join('/usr/bin', expected_default)))
                 return False
         return True
-    
+
+    # FIXME: this is currently run *after* /var/log/dist-upgrade/main.log
+    #        is opened and its not in the aufs file    
+    def setupAufs(self):
+        " setup aufs overlay "
+        rw_dir = "/tmp/upgrade-rw"
+        for d in ["/bin","/boot","/etc","/lib","/sbin","/usr","/var"]:
+            if not os.path.exists(rw_dir+d):
+                os.makedirs(rw_dir+d)
+            cmd = ["mount",
+                   "-t","aufs",
+                   "-o","br:%s:%s=ro" % (rw_dir+d, d),
+                   "none",
+                   d,]
+            res = subprocess.call(cmd)
+            if res != 0:
+                # FIXME: revert already mounted stuff
+                logging.error("Failed to mount %s with aufs" % d)
+                return False
+        return True
+
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
         # first check if that is a good upgrade
@@ -301,6 +321,10 @@ class DistUpgradeController(object):
                              _("An upgrade from '%s' to '%s' is not "
                                "supported with this tool." % (release, self.toDist)))
             sys.exit(1)
+
+        # setup aufs
+        self.setupAufs()
+
         # setup backports (if we have them)
         if self.options and self.options.havePrerequists:
             backportsdir = os.getcwd()+"/backports"

@@ -734,6 +734,7 @@ class DistUpgradeController(object):
                                                   e.dir,
                                                   e.size_needed,
                                                   e.dir))
+            return False
         return True
 
 

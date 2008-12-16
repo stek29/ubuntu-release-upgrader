@@ -73,6 +73,10 @@ def FuzzyTimeToStr(sec):
     # 
     # Note: most western languages will not need to change this
     return _("%(str_days)s %(str_hours)s") % map
+  # display no minutes for time > 3h, see LP: #144455
+  elif hours > 3:
+    return map["str_hours"]
+  # when we are near the end, become more precise again
   elif hours > 0:
     # TRANSLATORS: you can alter the ordering of the remaining time
     # information here if you shuffle %(str_hours)s %(str_minutes)s

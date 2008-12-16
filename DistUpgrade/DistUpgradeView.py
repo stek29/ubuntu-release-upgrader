@@ -72,7 +72,7 @@ def FuzzyTimeToStr(sec):
     # plural form
     # 
     # Note: most western languages will not need to change this
-    return _("%(str_days)s %(str_hours)s %(str_minutes)s") % map
+    return _("%(str_days)s %(str_hours)s") % map
   elif hours > 0:
     # TRANSLATORS: you can alter the ordering of the remaining time
     # information here if you shuffle %(str_hours)s %(str_minutes)s

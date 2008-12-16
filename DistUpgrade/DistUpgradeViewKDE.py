@@ -800,9 +800,11 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
         return False
 
 if __name__ == "__main__":
+  
+  view = DistUpgradeViewKDE()
+  view.askYesNoQuestion("input box test","bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar ")
 
   if sys.argv[1] == "--test-term":
-      view = DistUpgradeViewKDE4()
       pid = view.terminal_text.fork()
       if pid == 0:
           subprocess.call(["bash"])
@@ -821,7 +823,6 @@ if __name__ == "__main__":
       while True:
           QApplication.processEvents()
 
-  view = DistUpgradeViewKDE4()
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
     if cache[pkg].isInstalled and not cache[pkg].isUpgradable: 

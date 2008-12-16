@@ -1,24 +1,16 @@
-update-manager (1:0.95.3) jaunty; urgency=low
+update-manager (1:0.95.2) jaunty; urgency=low
 
   * DistUpgrade/DistUpgradeQuirks.py: 
-    - check the supprot of fglrx against the current
+    - check the support of fglrx against the current
       PCI card (LP: #284408)
   * DistUpgrade/xorg_fix_intrepid.py:
     - do not rewrite multiseat configs (LP: #292774)
-  * DistUpgrade/DistUpgradeController.py: 
-    - new test if the upgrade is run from a remote 
-      login (LP: #301787)
   * UpdateManager/Common/MyCache.py,
     UpdateManager/Common/UpdateList.py:
     - move the cache,updatelist implementation out into  
       its own file
   * fix free space check on regular update-manager 
     invocations (LP: #105113)
-
- --
-
-update-manager (1:0.95.2) jaunty; urgency=low
-
   * debian/rules 
     - remove the arch-build target
   * DistUpgrade/DistUpgradeController.py:
@@ -27,8 +19,10 @@ update-manager (1:0.95.2) jaunty; urgency=low
       components are enabled in intrepid vs intrepid-updates and 
       intrepid-security and automatically enable missing ones for
       intrepid-updates and intrepid-security
+    - new test if the upgrade is run from a remote 
+      login (LP: #301787)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 12 Nov 2008 14:12:50 +0100
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 15 Dec 2008 10:39:27 +0100
 
 update-manager (1:0.95.1) jaunty; urgency=low
 

@@ -109,8 +109,10 @@ class MetaReleaseCore(object):
             self.METARELEASE_URI += self.METARELEASE_URI_PROPOSED_POSTFIX
 
         self._debug("metarelease-uri: %s" % self.METARELEASE_URI)
-        self._buildMetaReleaseFile()
         self.metarelease_information = None
+        if not self._buildMetaReleaseFile():
+            self._debug("_buildMetaReleaseFile failed")
+            return
         # we start the download thread here and we have a timeout
         t=thread.start_new_thread(self.download, ())
         #t=thread.start_new_thread(self.check, ())
@@ -126,7 +128,11 @@ class MetaReleaseCore(object):
         except IOError, e:
             path = os.path.expanduser("~/.update-manager-core/")
             if not os.path.exists(path):
-                os.mkdir(path)
+		try:
+                    os.mkdir(path)
+		except OSError, e:
+                    sys.stderr.write("mkdir() failed: '%s'" % e)
+		    return False
             self.METARELEASE_FILE = os.path.join(path,os.path.basename(self.METARELEASE_URI))
         # if it is empty, remove it to avoid I-M-S hits on empty file
         try:

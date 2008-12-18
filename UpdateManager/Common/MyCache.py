@@ -31,6 +31,7 @@ import socket
 import re
 import DistUpgrade.DistUpgradeCache
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
+from gettext import gettext as _
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"

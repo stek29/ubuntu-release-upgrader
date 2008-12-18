@@ -2,6 +2,7 @@
 
 import apt
 import sys
+import thread
 from gettext import gettext as _
 
 from UpdateManager.Common.UpdateList import UpdateList
@@ -11,14 +12,13 @@ from UpdateManager.Common.utils import *
 from snack import *
 
 class UpdateManagerText(object):
-    DEBUG = True
+    DEBUG = False
 
     def __init__(self, datadir):
-        self.dl_size = 0
 	self.screen = SnackScreen()
 	self.button_bar = ButtonBar(self.screen, 
 				    ( (_("Cancel"), "cancel"),
-				      (_("Upgrade"), "ok")), 
+				      (_("Install"), "ok")), 
 				    compact = True)
 	self.textview_changes = Textbox(72, 8, "Changelog", True, True)
 	self.checkbox_tree_updates = CheckboxTree(height=8, width=72, scroll=1)
@@ -65,38 +65,74 @@ class UpdateManagerText(object):
 						   pkg,
 						   selected = True)
 
+    def updateSelectionStates(self):
+        """ 
+        helper that goes over the cache and updates the selection 
+        states in the UI based on the cache
+        """
+        for pkg in self.cache:
+            if not self.checkbox_tree_updates.item2key.has_key(pkg):
+                continue
+            # update based on the status
+            if pkg.markedUpgrade or pkg.markedInstall:
+                self.checkbox_tree_updates.setEntryValue(pkg, True)
+            else:
+                self.checkbox_tree_updates.setEntryValue(pkg, False)
+        self.updateUI()
+
+    def updateUI(self):
+        self.layout.draw()
+        self.screen.refresh()
+        
     def get_changelog(self, pkg):
 	name = pkg.name
         if self.cache.all_changes.has_key(name):
 		return  self.cache.all_changes[name][0]
         # FIXME: display some download information here or something
-        import thread
+        self.textview_changes.setText(_("Downloading changelog"))
+        self.updateUI()
 	lock = thread.allocate_lock()
 	lock.acquire()
 	descr = self.cache.get_changelog (name, lock)
 	while lock.locked():
-		time.sleep(0.1)
+            time.sleep(0.1)
 	return self.cache.all_changes[name][0]
 
     def checkbox_changed(self):
         # item is either a apt.package.Package or a str (for the headers)
-	item = self.checkbox_tree_updates.getCurrent()
+	pkg = self.checkbox_tree_updates.getCurrent()
 	descr = ""
-	if hasattr(item, "name"):
-		name = item.name
-		#descr = item.description
-		descr = self.get_changelog(item)
+	if hasattr(pkg, "name"):
+                need_refresh = False
+		name = pkg.name
+                if self.options.show_description:
+                    descr = pkg.description
+                else:
+                    descr = self.get_changelog(pkg)
 		# check if it is a wanted package
-		selected = self.checkbox_tree_updates.getEntryValue(item)[1]
-		if not selected:
-                    self.cache[name].markKeep()
-		else:
-                    self.cache[name].markInstall()
-		#print self.cache._depcache.InstCount
+		selected = self.checkbox_tree_updates.getEntryValue(pkg)[1]
+                marked_install_upgrade = pkg.markedInstall or pkg.markedUpgrade
+		if not selected and marked_install_upgrade:
+                    need_refresh = True
+                    pkg.markKeep()
+                if selected and not marked_install_upgrade:
+                    if not (name in self.list.held_back):
+                        # FIXME: properly deal with "fromUser" here
+                        need_refresh = True
+                        pkg.markInstall()
+                # fixup any problems
+                if self.cache._depcache.BrokenCount:
+                    need_refresh = True
+                    Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
+                    Fix.ResolveByKeep()
+                # update the list UI to reflect the cache state
+                if need_refresh:
+                    self.updateSelectionStates()
 	self.textview_changes.setText(descr)
-	self.layout.draw()
+	self.updateUI()
 
     def main(self, options):
+        self.options = options
         res = self.layout.runOnce()
 	self.screen.finish()
 	button = self.button_bar.buttonPressed(res)
@@ -110,4 +146,4 @@ class UpdateManagerText(object):
 if __name__ == "__main__":
 
     umt = UpdateManagerText()
-    umt.run()
+    umt.main()

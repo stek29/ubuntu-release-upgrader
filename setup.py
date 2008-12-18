@@ -14,10 +14,12 @@ setup(name='update-manager',
                 'UpdateManager.Common',
                 'UpdateManager.Core',
                 'UpdateManagerHildon',
+                'UpdateManagerText',
                 'DistUpgrade'
                 ],
       scripts=[
                'update-manager', 
+               'update-manager-text', 
                "do-release-upgrade", 
                "update-manager-hildon",
                "check-new-release",

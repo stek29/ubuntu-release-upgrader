@@ -23,12 +23,14 @@ class UpdateManagerText(object):
 	self.textview_changes = Textbox(72, 8, "Changelog", True, True)
 	self.checkbox_tree_updates = CheckboxTree(height=8, width=72, scroll=1)
 	self.checkbox_tree_updates.setCallback(self.checkbox_changed)
-	self.layout = GridForm(self.screen, "Updates", 1, 4)
+	self.layout = GridForm(self.screen, "Updates", 1, 5)
 	self.layout.add(self.checkbox_tree_updates, 0, 0)
 	# empty line to make it look less crowded
 	self.layout.add(Textbox(60, 1," ",False, False), 0, 1)
 	self.layout.add(self.textview_changes, 0, 2)
-	self.layout.add(self.button_bar, 0, 3)
+	# empty line to make it look less crowded
+	self.layout.add(Textbox(60, 1," ",False, False), 0, 3)
+	self.layout.add(self.button_bar, 0, 4)
 	if not self.DEBUG:
             apt_pkg.PkgSystemLock()
         # FIXME: better progress than the current suspend/resume screen thing

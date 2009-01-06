@@ -75,6 +75,11 @@ class DistUpgradeController(object):
         self.datadir = datadir
         self.options = options
 
+        # aufs stuff
+        self.aufs_rw_dir = "/tmp/upgrade-rw"
+        if self.options and self.options.aufs_rw_dir:
+            self.aufs_rw_dir = self.options.aufs_rw_dir
+
         # init gettext
         gettext.bindtextdomain("update-manager",localedir)
         gettext.textdomain("update-manager")
@@ -296,7 +301,7 @@ class DistUpgradeController(object):
 	logging.debug("setupAufs")
         # setup writable overlay into /tmp/upgrade-rw so that all 
         # changes are written there instead of the real fs
-        rw_dir = "/tmp/upgrade-rw"
+        rw_dir = self.aufs_rw_dir
         for d in ["/bin","/boot","/etc","/lib","/sbin","/usr","/var"]:
             if not os.path.exists(rw_dir+d):
                 os.makedirs(rw_dir+d)
@@ -312,8 +317,11 @@ class DistUpgradeController(object):
                 return False
         # FIXME: now what we *could* do to apply the changes is to
         #        mount -o bind / /orig 
+        #        (bind is important, *not* rbind that includes submounts)
+        # 
         #        This will give us the original "/" without the 
-        #        aufs rw overlay 
+        #        aufs rw overlay  - *BUT* only if "/" is all on one parition
+        #             
         #        then apply the diff (including the whiteouts) to /orig
         #        e.g. by "rsync -av /tmp/upgrade-rw /orig"
         #                "script that search for whiteouts and removes them"
@@ -841,11 +849,19 @@ class DistUpgradeController(object):
         # /usr is assumed to get *all* of the install space (incorrect,
         #      but as good as we can do currently + safety buffer
         # /     has a small safety buffer as well
+        required_for_aufs = 0.0
+        if self.options and self.options.useAufs:
+            # if we use the aufs rw overlay all the space is consumed
+            # the overlay dir
+            for pkg in self.cache:
+                if pkg.markedUpgrade or pkg.markedInstall:
+                    required_for_aufs += pkg.candidateInstalledSize
         for (dir, size) in [(archivedir, self.cache.requiredDownload),
                             ("/usr", self.cache.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),  # safety buffer /usr
                             ("/boot", space_in_boot), 
                             ("/", 10*1024*1024),     # small safety buffer /
+                            (self.aufs_rw_dir, required_for_aufs),
                            ]:
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))

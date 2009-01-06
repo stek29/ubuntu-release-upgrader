@@ -293,6 +293,9 @@ class DistUpgradeController(object):
     #        is opened and its not in the aufs file    
     def setupAufs(self):
         " setup aufs overlay "
+	logging.debug("setupAufs")
+        # setup writable overlay into /tmp/upgrade-rw so that all 
+        # changes are written there instead of the real fs
         rw_dir = "/tmp/upgrade-rw"
         for d in ["/bin","/boot","/etc","/lib","/sbin","/usr","/var"]:
             if not os.path.exists(rw_dir+d):
@@ -307,6 +310,15 @@ class DistUpgradeController(object):
                 # FIXME: revert already mounted stuff
                 logging.error("Failed to mount %s with aufs" % d)
                 return False
+        # FIXME: now what we *could* do to apply the changes is to
+        #        mount -o bind / /orig 
+        #        This will give us the original "/" without the 
+        #        aufs rw overlay 
+        #        then apply the diff (including the whiteouts) to /orig
+        #        e.g. by "rsync -av /tmp/upgrade-rw /orig"
+        #                "script that search for whiteouts and removes them"
+        #        (whiteout files start with .wh.$name
+        #         whiteout dirs with .wh..? - check with aufs man page)
         return True
 
     def prepare(self):
@@ -323,7 +335,11 @@ class DistUpgradeController(object):
             sys.exit(1)
 
         # setup aufs
-        self.setupAufs()
+        if self.options and self.options.useAufs:
+            if not self.setupAufs():
+                logging.error("aufs setup failed")
+                self._view.error("aufs setup failed","")
+                return False
 
         # setup backports (if we have them)
         if self.options and self.options.havePrerequists:

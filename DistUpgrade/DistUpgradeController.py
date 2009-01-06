@@ -79,6 +79,7 @@ class DistUpgradeController(object):
         self.aufs_rw_dir = "/tmp/upgrade-rw"
         if self.options and self.options.aufs_rw_dir:
             self.aufs_rw_dir = self.options.aufs_rw_dir
+        logging.debug("using '%s' as aufs_rw_dir" % self.aufs_rw_dir)
 
         # init gettext
         gettext.bindtextdomain("update-manager",localedir)
@@ -814,7 +815,7 @@ class DistUpgradeController(object):
         # make sure mounted is sorted by longest path
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
         archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        for d in ["/","/usr","/var","/boot", archivedir, "/home"]:
+        for d in ["/","/usr","/var","/boot", archivedir, "/home", self.aufs_rw_dir]:
             d = os.path.realpath(d)
             fs_id = make_fs_id(d)
             st = os.statvfs(d)
@@ -855,7 +856,7 @@ class DistUpgradeController(object):
             # the overlay dir
             for pkg in self.cache:
                 if pkg.markedUpgrade or pkg.markedInstall:
-                    required_for_aufs += pkg.candidateInstalledSize
+                    required_for_aufs += self.cache._depcache.GetCandidateVer(pkg._pkg).Size
         for (dir, size) in [(archivedir, self.cache.requiredDownload),
                             ("/usr", self.cache.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),  # safety buffer /usr

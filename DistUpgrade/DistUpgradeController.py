@@ -77,8 +77,12 @@ class DistUpgradeController(object):
 
         # aufs stuff
         self.aufs_rw_dir = "/tmp/upgrade-rw"
-        if self.options and self.options.aufs_rw_dir:
+        if (self.options and
+            self.options.useAufs and
+            self.options.aufs_rw_dir):
             self.aufs_rw_dir = self.options.aufs_rw_dir
+            if not os.path.exists(self.aufs_rw_dir):
+                os.makedirs(self.aufs_rw_dir)
         logging.debug("using '%s' as aufs_rw_dir" % self.aufs_rw_dir)
 
         # init gettext

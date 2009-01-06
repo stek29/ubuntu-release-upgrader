@@ -820,6 +820,8 @@ class DistUpgradeController(object):
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
         archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
         for d in ["/","/usr","/var","/boot", archivedir, "/home", self.aufs_rw_dir]:
+            if not os.path.exists(d):
+                continue
             d = os.path.realpath(d)
             fs_id = make_fs_id(d)
             st = os.statvfs(d)
@@ -868,6 +870,8 @@ class DistUpgradeController(object):
                             ("/", 10*1024*1024),     # small safety buffer /
                             (self.aufs_rw_dir, required_for_aufs),
                            ]:
+            if not os.path.exists(dir):
+                continue
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size

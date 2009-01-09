@@ -173,7 +173,7 @@ class DistUpgradeQuirks(object):
             "grub" in self.controller.cache and
             self.controller.cache["grub"].isInstalled):
             logging.debug("both grub and lilo installed")
-            if not os.path.exists("/etc/lilo.conf")):
+            if not os.path.exists("/etc/lilo.conf"):
                 self.controller.cache.markRemove("lilo",
                                                  "both grub and lilo installed "
                                                  "(#314004)")

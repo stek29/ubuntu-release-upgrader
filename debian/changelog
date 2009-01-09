@@ -1,4 +1,4 @@
-update-manager (1:0.96~ppa1) jaunty; urgency=low
+update-manager (1:0.96) jaunty; urgency=low
 
   * UpdateManager/Core/MetaRelease.py:
     - deal with full disks better when downloading
@@ -6,7 +6,11 @@ update-manager (1:0.96~ppa1) jaunty; urgency=low
   * DistUpgrade/DistUpgradeView.py:
     - make the FuzzyTimeToStr() function not display
       minutes when the total time is > 3h (LP: #144455)
-  * build update-manager-text package for the server team
+  * build update-manager-text package with text/newt based
+    update-manager frontend (update-manager-text)
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - check if both grub and lilo are installed and remove
+      the one that is not used (LP: #314004)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 18 Dec 2008 16:56:17 +0100
 

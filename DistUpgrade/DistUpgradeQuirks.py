@@ -162,6 +162,23 @@ class DistUpgradeQuirks(object):
         self.feistyPostDistUpgradeCache()
         self.edgyPostDistUpgradeCache()
 
+    def jauntyPostDistUpgradeCache(self):
+        """ 
+        this function works around quirks in the 
+        intrepid->jaunty upgrade calculation
+        """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        if ("lilo" in self.controller.cache and
+            self.controller.cache["lilo"].isInstalled and
+            "grub" in self.controller.cache and
+            self.controller.cache["grub"].isInstalled):
+            logging.debug("both grub and lilo installed")
+            self.controller.cache.markRemove("lilo",
+                                             "both grub and lilo installed "
+                                             "(#314004)")
+           
+        
+        
     def intrepidPostDistUpgradeCache(self):
         """ 
         this function works around quirks in the 

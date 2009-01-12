@@ -151,12 +151,34 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
             self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
             entry = "deb %s://archive.ubuntu.com/ubuntu/ xxx main" % scheme
             self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+
+    def testEOLUpgrades(self):
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        shutil.copy(os.path.join(self.testdir,"sources.list.EOL"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "warty"
+        d.toDist = "hoary"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        self._verifySources("""
+# main repo
+deb http://old-releases.ubuntu.com/ubuntu/ hoary main restricted multiverse universe
+deb-src http://old-releases.ubuntu.com/ubuntu/ hoary main restricted multiverse
+
+deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted
+""")
+        
         
     def _verifySources(self, expected):
         sources_list = open(apt_pkg.Config.FindFile("Dir::Etc::sourcelist")).read()
         for l in expected.split("\n"):
             self.assert_(l in sources_list,
-                         "expected entry '%s' in sources.list missing" % l)
+                         "expected entry '%s' in sources.list missing. got:\n'''%s'''" % (l, sources_list))
         
 
 if __name__ == "__main__":

@@ -138,7 +138,19 @@ deb-src http://archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
 deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
 """)
         apt_pkg.Config.Set("APT::Architecture",arch)
-        
+
+
+    def testVerifySourcesListEntry(self):
+        from aptsources.sourceslist import SourceEntry
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        for scheme in ["ftp","http"]:
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ hardy main universe restricted multiverse" % scheme
+            self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
+            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ xxx main" % scheme
+            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
         
     def _verifySources(self, expected):
         sources_list = open(apt_pkg.Config.FindFile("Dir::Etc::sourcelist")).read()
@@ -148,5 +160,8 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
         
 
 if __name__ == "__main__":
-    #logging.basicConfig(level=logging.DEBUG)
+    import sys
+    for e in sys.argv:
+        if e == "-v":
+            logging.basicConfig(level=logging.DEBUG)
     unittest.main()

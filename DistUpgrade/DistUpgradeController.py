@@ -38,6 +38,7 @@ import ConfigParser
 from stat import *
 from string import Template
 
+
 import DistUpgradeView
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeFetcherCore import country_mirror
@@ -372,8 +373,48 @@ class DistUpgradeController(object):
             self.useNetwork = res
             self.config.set("Options","withNetwork", str(self.useNetwork))
             logging.debug("useNetwork: '%s' (selected by user)" % res)
-            if res:
+        if res:
                 self._tryUpdateSelf()
+        return True
+
+    def _sourcesListEntryDownloadable(self, entry):
+        """
+        helper that checks if a sources.list entry points to 
+        something downloadable
+        """
+        logging.debug("verifySourcesListEntry: %s" % entry)
+        # no way to verify without network
+        if not self.useNetwork:
+            logging.debug("skiping downloadable check (no network)")
+            return True
+        # check if the entry points to something we can download
+        import urlparse
+        uri = "%s/dists/%s/Release" % (entry.uri, entry.dist)
+        (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
+        if scheme == "http":
+            import httplib
+            c = httplib.HTTPConnection(netloc)
+            c.request("HEAD", path)
+            res = c.getresponse()
+            logging.debug("_sourcesListEntryDownloadable result '%s'" % res.status)
+            res.close()
+            if res.status == 200:
+                return True
+            return False
+        elif scheme == "ftp":
+            import ftplib
+            f = ftplib.FTP(netloc)
+            f.login()
+            try:
+                f.cwd(os.path.dirname(path))
+                size = f.size(os.path.basename(path))
+                f.quit()
+                if size != 0:
+                    return True
+                return False
+            except Exception, e:
+                logging.debug("error from ftplib: '%s'" % e)
+                return False
         return True
 
     def rewriteSourcesList(self, mirror_check=True):
@@ -465,16 +506,6 @@ class DistUpgradeController(object):
                 entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
                 logging.debug("commenting landscape.canonical.com out")
                 entry.disabled = True
-                continue
-
-            # special case for old-releases.ubuntu.com, auto transition
-            # them back to archive.ubuntu.com - now this is a problem
-            # of course for people upgrading from EOL release to a 
-            # EOL release
-            if (not entry.disabled and
-                entry.uri.startswith("http://old-releases.ubuntu.com/ubuntu")):
-                entry.uri = "http://archive.ubuntu.com/ubuntu"
-                logging.debug("transitioning old-releases.ubuntu.com to '%s' " % entry)
                 continue
 
             logging.debug("examining: '%s'" % entry)

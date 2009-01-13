@@ -74,6 +74,14 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.baseimage = self.config.get("NonInteractive","BaseImage")
         if not os.path.exists(self.baseimage):
             raise NoImageFoundException
+        virtio = True
+        try:
+            virtio = not self.config.getboolean("NonInteractive","NoVirtio")
+        except ConfigParser.NoOptionError,e:
+            pass
+        if virtio:
+            self.qemu_options.extend(["-net","nic,model=virtio"])
+            self.qemu_options.extend(["-net","user"])
         if self.config.getWithDefault("NonInteractive","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))

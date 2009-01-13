@@ -1,12 +1,17 @@
 Images created with:
 
+First create a ssh key:
+$ ssh-keygen -N '' -f ssh-key
 
 [intrepid]
 
 Can use the official ubuntu-vm-builder pacakges]
 
 $ sudo ubuntu-vm-builder kvm intrepid --kernel-flavour generic  --ssh-key `pwd`/ssh-key.pub  --components main,restricted  --rootsize 80000 --arch i386
+$ mv ubuntu-kvm/disk0.qcow2 intrepid-i386.qcow2
+- login and check if openssh-server is installed (intrepid ubuntu-vm-builder FTW)
 
+For old releases:
 
 $ bzr get http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 

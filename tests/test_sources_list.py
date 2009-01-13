@@ -152,7 +152,8 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
             entry = "deb %s://archive.ubuntu.com/ubuntu/ xxx main" % scheme
             self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
 
-    def testEOLUpgrades(self):
+    def testEOL2EOLUpgrades(self):
+        " test upgrade from EOL release to EOL release "
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir,"sources.list.EOL"),
@@ -167,10 +168,56 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
         self.assert_(res == True)
         self._verifySources("""
 # main repo
-deb http://old-releases.ubuntu.com/ubuntu/ hoary main restricted multiverse universe
-deb-src http://old-releases.ubuntu.com/ubuntu/ hoary main restricted multiverse
+deb http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse universe
+deb-src http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse
 
 deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted
+""")
+
+    def testEOL2SupportedWithMirrorUpgrade(self):
+        " test upgrade from a EOL release to a supported release with mirroor"
+        os.environ["LANG"] = "de_DE.UTF-8"
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        shutil.copy(os.path.join(self.testdir,"sources.list.EOL2Supported"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "feisty"
+        d.toDist = "gutsy"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        self._verifySources("""
+# main repo
+deb http://de.archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
+deb-src http://de.archive.ubuntu.com/ubuntu gutsy main restricted multiverse
+
+deb http://de.archive.ubuntu.com/ubuntu gutsy-security main restricted
+""")
+
+    def testEOL2SupportedUpgrade(self):
+        " test upgrade from a EOL release to a supported release "
+        os.environ["LANG"] = "C"
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        shutil.copy(os.path.join(self.testdir,"sources.list.EOL2Supported"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "feisty"
+        d.toDist = "gutsy"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        self._verifySources("""
+# main repo
+deb http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
+
+deb http://archive.ubuntu.com/ubuntu gutsy-security main restricted
 """)
         
         

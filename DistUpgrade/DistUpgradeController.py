@@ -36,6 +36,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
+from utils import country_mirror
 from string import Template
 
 
@@ -373,7 +374,7 @@ class DistUpgradeController(object):
             self.useNetwork = res
             self.config.set("Options","withNetwork", str(self.useNetwork))
             logging.debug("useNetwork: '%s' (selected by user)" % res)
-        if res:
+            if res:
                 self._tryUpdateSelf()
         return True
 
@@ -394,10 +395,14 @@ class DistUpgradeController(object):
         if scheme == "http":
             import httplib
             c = httplib.HTTPConnection(netloc)
-            c.request("HEAD", path)
-            res = c.getresponse()
-            logging.debug("_sourcesListEntryDownloadable result '%s'" % res.status)
-            res.close()
+            try:
+                c.request("HEAD", path)
+                res = c.getresponse()
+                logging.debug("_sourcesListEntryDownloadable result '%s'" % res.status)
+                res.close()
+            except Exception, e:
+                logging.debug("error from httplib: '%s'" % e)
+                return False
             if res.status == 200:
                 return True
             return False
@@ -507,6 +512,22 @@ class DistUpgradeController(object):
                 logging.debug("commenting landscape.canonical.com out")
                 entry.disabled = True
                 continue
+            
+            # handle upgrades from a EOL release and check if there
+            # is a supported release available
+            if (not entry.disabled and
+                "old-releases.ubuntu.com/" in entry.uri):
+                logging.debug("upgrade from old-releases.ubuntu.com detected")
+                # test country mirror first, then archive.u.c
+                for uri in ["http://%sarchive.ubuntu.com/ubuntu" % country_mirror(),
+                            "http://archive.ubuntu.com/ubuntu"]:
+                    test_entry = copy.copy(entry)
+                    test_entry.uri = uri
+                    test_entry.dist = self.toDist
+                    if self._sourcesListEntryDownloadable(test_entry):
+                        logging.info("transition from old-release.u.c to %s" % uri)
+                        entry.uri = uri
+                        break
 
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or official site)

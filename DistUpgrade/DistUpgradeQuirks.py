@@ -130,9 +130,11 @@ class DistUpgradeQuirks(object):
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
     def jauntyPostInitialUpdate(self):
-        " quirks that are run before the upgrade to intrepid "
+        " quirks that are run before the upgrade to jaunty "
         logging.debug("running %s" %  sys._getframe().f_code.co_name
 )
+        # this is to deal with the fact that support for some of the cards
+        # that fglrx used to support got dropped
         if (self._checkVideoDriver("fglrx") and 
             not self._supportInModaliases("fglrx")):
              res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "

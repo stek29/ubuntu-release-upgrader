@@ -54,6 +54,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         logging.debug("setting up environ for non-interactive use")
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
+        os.environ["RELEASE_UPRADER_NO_APPORT"] = "1"
         self.config = DistUpgradeConfig(".")
         if self.config.getboolean("NonInteractive","ForceOverwrite"):
             apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")

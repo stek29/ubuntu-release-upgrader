@@ -52,6 +52,9 @@ def apport_pkgfailure(pkg, errormsg):
 
 def run_apport():
     " run apport, check if we have a display "
+    if "RELEASE_UPRADER_NO_APPORT" in os.environ:
+        logging.debug("RELEASE_UPRADER_NO_APPORT env set")
+        return False
     if "DISPLAY" in os.environ:
         for p in ["/usr/share/apport/apport-gtk", "/usr/share/apport/apport-qt"]:
             if os.path.exists(p):

@@ -219,6 +219,29 @@ deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
 
 deb http://archive.ubuntu.com/ubuntu gutsy-security main restricted
 """)
+
+    def test_partner_update(self):
+        """
+        test transition partner repository updates
+        """
+        shutil.copy(os.path.join(self.testdir,"sources.list.partner"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+
+        # now test the result
+        self._verifySources("""
+deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
+
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe multiverse
+
+deb http://archive.canonical.com/ubuntu gutsy partner
+""")
         
         
     def _verifySources(self, expected):

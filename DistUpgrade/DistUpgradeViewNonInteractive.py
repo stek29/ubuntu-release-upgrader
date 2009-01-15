@@ -36,6 +36,7 @@ import subprocess
 from subprocess import call, PIPE, Popen
 import copy
 import apt.progress
+from ConfigParser import NoSectionError, NoOptionError
 
 class NonInteractiveFetchProgress(FetchProgress):
     def updateStatus(self, uri, descr, shortDescr, status):
@@ -56,8 +57,11 @@ class NonInteractiveInstallProgress(InstallProgress):
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         os.environ["RELEASE_UPRADER_NO_APPORT"] = "1"
         self.config = DistUpgradeConfig(".")
-        if self.config.getboolean("NonInteractive","ForceOverwrite"):
-            apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        try:
+            if self.config.getboolean("NonInteractive","ForceOverwrite"):
+                apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+        except (NoSectionError, NoOptionError), e:
+            pass
         # more debug
         #apt_pkg.Config.Set("Debug::pkgOrderList","true")
         #apt_pkg.Config.Set("Debug::pkgDPkgPM","true")

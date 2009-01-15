@@ -425,6 +425,8 @@ class DistUpgradeController(object):
     def rewriteSourcesList(self, mirror_check=True):
         logging.debug("rewriteSourcesList()")
 
+        sync_components = self.config.getlist("Sources","Components")
+
         # check if we need to enable main
         if mirror_check == True and self.useNetwork:
             # now check if the base-meta pkgs are available in
@@ -559,15 +561,8 @@ class DistUpgradeController(object):
                     entry.disabled = True
                     self.sources_disabled = True
                     logging.debug("entry '%s' was disabled (unknown dist)" % entry)
-                # if we make it to this point, we have a official mirror
 
-                # gather what components are enabled and are inconsitent
-                for d in ["%s" % self.toDist,"%s-updates" % self.toDist,"%s-security" % self.toDist]:
-                    if not found_components.has_key(d):
-                        found_components[d] = set()
-                    if not entry.disabled and entry.dist == d:
-                        for comp in entry.comps:
-                            found_components[d].add(comp)
+                # if we make it to this point, we have a official mirror
 
                 # check if the arch is powerpc or sparc and if so, transition
                 # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
@@ -577,6 +572,19 @@ class DistUpgradeController(object):
                     (self.arch == "powerpc" or self.arch == "sparc")):
                     logging.debug("moving %s source entry to 'ports.ubuntu.com' " % self.arch)
                     entry.uri = "http://ports.ubuntu.com/ubuntu-ports/"
+
+                # gather what components are enabled and are inconsitent
+                for d in ["%s" % self.toDist,
+                          "%s-updates" % self.toDist,
+                          "%s-security" % self.toDist]:
+                    # create entry if needed
+                    found_components.setdefault(d,set())
+                    if not entry.disabled and entry.dist == d:
+                        for comp in entry.comps:
+                            # only sync components we know about
+                            if not comp in sync_components:
+                                continue
+                            found_components[d].add(comp)
                     
             # disable anything that is not from a official mirror
             if not validMirror:

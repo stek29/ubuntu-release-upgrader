@@ -25,6 +25,9 @@ from sourceslist import SourcesList
 class NoCredentialsFoundException(Exception):
     pass
 
+class OptionError(Exception):
+    pass
+
 
 # Step to perform for a ec2 upgrade test
 #
@@ -61,6 +64,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # verify the environemnt
         if not ("EC2_CERT" in os.environ and "EC2_PRIVATE_KEY" in os.environ):
             raise NoCredentialsFoundException("Need EC2_CERT and EC2_PRIVATE_KEY in environment")
+        if self.config.getboolean("NonInteractive","RealReboot"):
+            raise OptionError, "NonInteractive/RealReboot option must be set to False for the ec2 upgrader"
 
     def _copyToImage(self, fromF, toF):
         cmd = ["scp",
@@ -96,7 +101,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
     def _runInImage(self, command, **kwargs):
         ret = subprocess.call(["ssh",
-                               "-tt",
                                "-l","root",
                                "-p",self.ssh_port,
                                self.ec2hostname,
@@ -170,7 +174,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         assert(ret == 0)
 
         # done with the bootstrap
-        self.reboot_instance()
+
+        # FIXME: idealy we would reboot here, but its less important
+        #        because we can't get a new kernel anyway in ec2 (yet)
+        # - the reboot thing is *not* yet reliable!
+        #self.reboot_instance()
 
         # FIXME: support for caching/snapshoting the base image here
         
@@ -311,6 +319,9 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                     print "adding %s to mirrors" % entry.uri
                     self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
 
+
+        # FIXME: run this with nohup *and* create code that querries
+        #        when its finished and detects hangs ?
         # start the upgrader
         print "running the upgrader now"
         ret = self._runInImage(["(cd /upgrade-tester/ ; "

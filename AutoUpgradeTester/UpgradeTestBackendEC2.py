@@ -37,15 +37,28 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
     def __init__(self, profile, basedir):
         UpgradeTestBackend.__init__(self, profile, basedir)
-        self.profiledir = os.path.dirname(profile)
+        self.profiledir = os.path.abspath(os.path.dirname(profile))
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
-        self.ssh_port = 22
+        if self.ssh_key.startswith("./"):
+            self.ssh_key = self.profiledir + self.ssh_key[1:]
+        self.ssh_port = "22"
         # the public name of the instance, e.g. 
         #  ec2-174-129-152-83.compute-1.amazonaws.com
         self.ec2hostname = ""
+        # the instance name (e.g. i-3325ad4)
         self.ec2instance = ""
+        # get the tools
+        self.api_tools_path = self.config.get("EC2","ApiToolsPath")
+        if  self.api_tools_path.startswith("./"):
+            self.api_tools_path = self.profiledir + self.api_tools_path[1:]
+        os.environ["PATH"] = "%s:%s" % (self.api_tools_path, os.environ["PATH"])
+        self.ec2_run_instances = "%s/ec2-run-instances" % self.api_tools_path
+        self.ec2_describe_instances = "%s/ec2-describe-instances" % self.api_tools_path
+        self.ec2_reboot_instances = "%s/ec2-reboot-instances" % self.api_tools_path
+        self.ec2_terminate_instances = "%s/ec2-terminate-instances" % self.api_tools_path
+        # verify the environemnt
         if not ("EC2_CERT" in os.environ and "EC2_PRIVATE_KEY" in os.environ):
             raise NoCredentialsFoundException("Need EC2_CERT and EC2_PRIVATE_KEY in environment")
 
@@ -97,10 +110,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
     def installPackages(self, pkgs):
         " install additional pkgs (list) into the vm before the ugprade "
-        self.start()
         self._runInImage(["apt-get","update"])
         ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--reinstall", "-y"]+pkgs)
-        self.stop()
         return (ret == 0)
 
     def bootstrap(self, force=False):
@@ -131,7 +142,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
             print "apt(2) returned: %s" % ret
             if ret != 0:
                 #self._cacheDebs(tmpdir)
-                self.stop()
+                print "apt returned a error, stopping"
+                self.stop_instance()
                 return False
             pkgs = pkgs[CMAX+1:]
 
@@ -170,20 +182,29 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ec2-run-instances self.ec2ami -k self.ssh_key[:-4]
 
         # start the instance
-        subprocess.call(["ec2-run-instance",self.ec2ami,"-k",self.ssh_key[:-4]])
-        
+        # FIXME: get the instance ID here so that we know what
+        #        to look for in ec2-describe-instances
+        subprocess.call([self.ec2_run_instances, self.ec2ami,
+                         "-k",os.path.basename(self.ssh_key[:-4])])
+
+
         # now spin until it has a IP adress
         for i in range(900):
             time.sleep(1)
-            p = Popen(["ec2-describe-instances"], PIPE)
+            p = Popen(self.ec2_describe_instances, stdout=PIPE)
             output = p.communicate()[0]
+            print output
             for line in output.split("\n"):
                 if not line.startswith("INSTANCE"):
                     continue
                 try:
-                    (keyword, instance, ami, external_ip, internal_ip, status, keypair, number, type, time, location, aki, ari) = line.strip().split()
+                    (keyword, instance, ami, external_ip, internal_ip, status, keypair, number, type, rtime, location, aki, ari) = line.strip().split()
+                    if status != "running":
+                        print "instance not in state running"
+                        continue
                 except Exception, e:
                     print e
+                    continue
                 self.ec2hostname = external_ip
                 self.ec2instance = instance
             # check if we got something
@@ -205,12 +226,12 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         " reboot a ec2 instance and wait until its available again "
         # ec2-reboot-instance i-3a870237
         #  does that get a new IP? I guess not 
-        res = subprocess.call(["ec2-reboot-instance",self.instance])
+        res = subprocess.call([self.ec2_reboot_instances,self.ec2instance])
         # FIMXE: find a better way to know when the instance is 
         #        down - maybe with "-v" ?
         time.sleep(5)
         while True:
-            if self._runInImage(["/bin/true"]) != 0:
+            if self._runInImage(["/bin/true"]) == 0:
                 print "instance rebootet"
                 break
 
@@ -218,7 +239,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         " permanently stop a instance (it can never be started again "
         # ec2-terminate-instances i-3a870237
         # terminates are final - all data is lost
-        res = subprocess.call(["ec2-terminate-instance",self.instance])
+        res = subprocess.call([self.ec2_terminate_instances,self.ec2instance])
         # wait until its down
         while True:
             if self._runInImage(["/bin/true"]) != 0:

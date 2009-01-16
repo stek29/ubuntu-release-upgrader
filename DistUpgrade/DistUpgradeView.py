@@ -123,7 +123,6 @@ class InstallProgress(apt.progress.InstallProgress):
   """
   def __init__(self):
     apt.progress.InstallProgress.__init__(self)
-    self.pkg_failures = 0
     self.master_fd = None
 
   def startUpdate(self):
@@ -172,8 +171,7 @@ class InstallProgress(apt.progress.InstallProgress):
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    if apport_pkgfailure(pkg, errormsg):
-      self.pkg_failures += 1
+    apport_pkgfailure(pkg, errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd, hidden=False):
@@ -206,10 +204,10 @@ class DistUpgradeView(object):
         return apt.progress.OpProgress()
     def getFetchProgress(self):
         " return a fetch progress object "
-        return apt.progress.FetchProgress()
+        return FetchProgress()
     def getInstallProgress(self, cache=None):
         " return a install progress object "
-        return apt.progress.InstallProgress(cache)
+        return InstallProgress()
     def getTerminal(self):
         return DumbTerminal()
     def updateStatus(self, msg):

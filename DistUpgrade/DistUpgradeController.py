@@ -911,13 +911,6 @@ class DistUpgradeController(object):
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
-                # check if the installprogress catched a pkg_failures, 
-                # if not, generate a fallback here (pkg_failures can be
-                # zero because of e.g. disk-full problems)
-                if iprogress.pkg_failures == 0:
-                    logging.warning("cache.commit() error and pkg_failures == 0, generate a report against update-manager to investigate")
-                    errormsg = "SystemError in cache.commit(): %s" % e
-                    apport_pkgfailure("update-manager", errormsg)
                 # invoke the frontend now
                 msg = _("The upgrade aborts now. Your system "
                         "could be in an unusable state. A recovery "

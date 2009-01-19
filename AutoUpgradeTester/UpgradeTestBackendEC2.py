@@ -31,9 +31,27 @@ class OptionError(Exception):
 
 # Step to perform for a ec2 upgrade test
 #
-# 1. ec2-run-instances $ami-base-instance-name -k ec2-keypair.pem
+# 1. ec2-run-instances $ami-base-instance-name -k ec2-keypair -z us-east-1a
+#    (no path or extension or anything for ec2-keypair)
 # 2. get instance public name
 # 3. ssh -i ./ec2-keypair.pem root@<public-name> to communicate
+
+
+# TODO
+#
+# Using ebs (elastic block storage) and snapshots for the test
+# 1. ec2-create-volume -s 80 -z us-east-1a
+#    (check with ec2-describe-instance that its actually in 
+#     the right zone)
+# 2. ec2-attach-volume vol-7bd23de2 -i i-3325ad4 -d /dev/sdh
+#    (do not name it anything but sd*)
+# 3. mount/use the thing inside the instance
+#
+#
+# Other useful things:
+# - sda1: root fs
+# - sda2: free space (~140G)
+# - sda3: swapspace  (~1G)
 
 class UpgradeTestBackendEC2(UpgradeTestBackend):
     " EC2 backend "

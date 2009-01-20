@@ -218,8 +218,6 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         ret = subprocess.call(["tar","czf",outfile,"."])
         print "tar returned %s" % ret
 
-        print "Removing chroot"
-        shutil.rmtree(tmpdir)
         return True
 
     def _populateWithCachedDebs(self, tmpdir):
@@ -246,7 +244,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         # copy itself to the chroot (resolve symlinks)
         targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
         if not os.path.exists(targettmpdir):
-            os.mkdir(targettmpdir)
+            os.makedirs(targettmpdir)
         for f in glob.glob("%s/*" % os.path.join(self.basefilesdir,"DistUpgrade")):
             if not os.path.isdir(f):
                 shutil.copy(f, targettmpdir)

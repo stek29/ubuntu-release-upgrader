@@ -354,10 +354,12 @@ iface eth0 inet static
         print "restorevm"
         self.stop()
         shutil.copy(self.image+"."+name, self.image)
+	return
         # loadvm
-        self.qemu_pid.stdin.write("stop\n")
-        self.qemu_pid.stdin.write("loadvm %s\n" % name)
-        self.qemu_pid.stdin.write("cont\n")
+        # *sigh* buggy :/
+        #self.qemu_pid.stdin.write("stop\n")
+        #self.qemu_pid.stdin.write("loadvm %s\n" % name)
+        #self.qemu_pid.stdin.write("cont\n")
 
     def start(self):
         print "Starting %s %s" % (self.qemu_binary, self.qemu_options)

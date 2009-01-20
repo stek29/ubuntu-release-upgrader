@@ -141,7 +141,10 @@ if __name__ == "__main__":
             backend = createBackend(options.backend, options.profile, basedir)
             backend.genDiff()
         else:
-            res &= testUpgrade(options.backend, options.profile, basedir, options.add_pkgs.split(","), options.to_stdout)
+            add_pkgs = []
+            if  options.add_pkgs:
+                add_pkgs = options.add_pkgs.split(",")
+            res &= testUpgrade(options.backend, options.profile, basedir, add_pkgs, options.to_stdout)
     except Exception, e:
         print "ERROR: exception caught '%s' " % e
         import traceback

@@ -19,7 +19,7 @@ if __name__ == "__main__":
     apt_pkg.Config.Set("APT::Architecture","i386")
 
     # FIXME: hardcoding pathes sucks
-    basedir = "./profile/intrepid-auto-install"
+    basedir = "./profile/jaunty-auto-install"
     aptbasedir = os.path.join(basedir,"auto-install-test")
     profile = os.path.join(basedir, "DistUpgrade.cfg")
     backend = UpgradeTestBackendQemu(profile, profile)
@@ -59,21 +59,20 @@ if __name__ == "__main__":
     # now test if we can install stuff
     backend.start()
     backend._runInImage(["apt-get","update"])
-    backend.saveVMSnapshot("clean-base")
 
-    # sqlite browser
-    
     resultdir = os.path.join(basedir,"result")
     statusfile = open(os.path.join(resultdir,"pkgs_done.txt"),"w")
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
     # now see if we can install and remove it again
-    i=1
-    for pkg in cache:
-        print "\n\nPackage %i of %i (%s)" % (i, len(cache), float(i)/float(len(cache))*100)
+    for (i, pkg) in enumerate(cache):
+        print "\n\nPackage %i of %i (%s)" % (i, len(cache), 
+                                             float(i)/float(len(cache))*100)
+        pkg_failed = False
 
         # skip stuff in the ubuntu-minimal that we can't install or upgrade
         if pkg.isInstalled and not pkg.isUpgradable:
             continue
+
         # see if we can install/upgrade the pkg
         try:
             pkg.markInstall()
@@ -92,24 +91,23 @@ if __name__ == "__main__":
         if ret != 0:
             print "apt returned a error"
             failures.write("%s install (%s)\n" % (pkg.name,ret))
-            # FIXME: bugger, that does not seem to work, I'm unable
-            # to load the state later again when a new instance of
-            # kvm is loaded :(
-            #backend.saveVMSnapshot("failed-install-%s" % pkg.name)
             time.sleep(5)
             backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
+            pkg_failed = True
         # now remove it again
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","autoremove", "-y",pkg.name])
         print "apt returned: ", ret
         if ret != 0:
             failures.write("%s remove (%s)\n" % (pkg.name,ret))
-            #backend.saveVMSnapshot("failed-autoremove-%s" % pkg.name)
             time.sleep(5)
             backend._copyFromImage("/var/log/apt/term.log",os.path.join(basedir,"result","%s-fail.txt" % pkg.name))
-        backend.restoreVMSnapshot("clean-base")
+            pkg_failed = True
         statusfile.flush()
         failures.flush()
-        i+=1
+        if pkg_failed:
+            # restart with a clean image
+            self.stop()
+            self.start()
     # all done, stop the backend
     backend.stop()
 

@@ -74,17 +74,19 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.baseimage = self.config.get("NonInteractive","BaseImage")
         if not os.path.exists(self.baseimage):
             raise NoImageFoundException
-        virtio = True
+        # check if we want virtio here and default to yes
         try:
-            virtio = not self.config.getboolean("NonInteractive","NoVirtio")
+            virtio = self.config.getboolean("NonInteractive","Virtio")
         except ConfigParser.NoOptionError,e:
-            pass
+            virtio = True
         if virtio:
             self.qemu_options.extend(["-net","nic,model=virtio"])
             self.qemu_options.extend(["-net","user"])
+        # swapimage
         if self.config.getWithDefault("NonInteractive","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
+        # regular image
         self.image = os.path.join(self.profiledir, "test-image")
         # make ssh login possible (localhost 54321) available
         self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))

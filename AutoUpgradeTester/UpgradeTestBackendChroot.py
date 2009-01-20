@@ -54,7 +54,9 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
             os.system("mount -t sysfs sysfs /sys")
             os.system("mount -t proc proc /proc")
             os.system("mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc")
-            os.execve(command[0], command, { "DEBIAN_FRONTEND" : "NONINTERACTIVE" } )
+            env = os.environ
+            env["DEBIAN_FRONTEND"] = "noninteractive"
+            os.execve(command[0], command, env)
         else:
             print "Parent: waiting for %s" % pid
             (id, exitstatus) = os.waitpid(pid, 0)

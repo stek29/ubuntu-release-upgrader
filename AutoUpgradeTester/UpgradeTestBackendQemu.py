@@ -71,7 +71,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
         # setup mount dir/imagefile location
-        self.baseimage = self.config.get("NonInteractive","BaseImage")
+        self.baseimage = self.config.get("KVM","BaseImage")
         if not os.path.exists(self.baseimage):
             raise NoImageFoundException
         # check if we want virtio here and default to yes
@@ -83,18 +83,18 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
             self.qemu_options.extend(["-net","nic,model=virtio"])
             self.qemu_options.extend(["-net","user"])
         # swapimage
-        if self.config.getWithDefault("NonInteractive","SwapImage",""):
+        if self.config.getWithDefault("KVM","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
         # regular image
         self.image = os.path.join(self.profiledir, "test-image")
         # make ssh login possible (localhost 54321) available
         self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
-        self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
+        self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
         # vnc port/display
-        vncport = self.config.getWithDefault("NonInteractive","VncNum","0")
+        vncport = self.config.getWithDefault("KVM","VncNum","0")
         self.qemu_options.append("-vnc")
         self.qemu_options.append("localhost:%s" % vncport)
 
@@ -192,7 +192,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         #        way to do this currently without running as root
         # as a workaround we regenerate manually every now and then
         # and use UpgradeFromDistOnBootstrap=true here
-        self.config.set("NonInteractive","CacheBaseImage", "false")
+        self.config.set("KVM","CacheBaseImage", "false")
         self.config.set("NonInteractive","UpgradeFromDistOnBootstrap","true")
         self.baseimage = "jeos/%s-i386.qcow2" % self.config.get("Sources","To")
         self.image = diff_image

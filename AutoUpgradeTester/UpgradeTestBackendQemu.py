@@ -340,14 +340,20 @@ iface eth0 inet static
     def saveVMSnapshot(self,name):
         # savevm
         print "savevm"
-        self.qemu_pid.stdin.write("stop\n")
-        self.qemu_pid.stdin.write("savevm %s\n" % name)
-        self.qemu_pid.stdin.write("cont\n")
+        self.stop()
+        shutil.copy(self.image, self.image+"."+name)
+        return
+        # *sigh* buggy :/
+        #self.qemu_pid.stdin.write("stop\n")
+        #self.qemu_pid.stdin.write("savevm %s\n" % name)
+        #self.qemu_pid.stdin.write("cont\n")
     def delVMSnapshot(self,name):
         print "delvm"
         self.qemu_pid.stdin.write("delvm %s\n" % name)
     def restoreVMSnapshot(self,name):
         print "restorevm"
+        self.stop()
+        shutil.copy(self.image+"."+name, self.image)
         # loadvm
         self.qemu_pid.stdin.write("stop\n")
         self.qemu_pid.stdin.write("loadvm %s\n" % name)

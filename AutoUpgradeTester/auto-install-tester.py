@@ -57,6 +57,7 @@ if __name__ == "__main__":
     cache.open(apt.progress.OpProgress())
 
     # now test if we can install stuff
+    backend.saveVMSnapshot("clean-base")
     backend.start()
     backend._runInImage(["apt-get","update"])
 
@@ -105,9 +106,7 @@ if __name__ == "__main__":
         statusfile.flush()
         failures.flush()
         if pkg_failed:
-            # restart with a clean image
-            self.stop()
-            self.start()
+            backend.loadVMSnapshot("clean-base")
     # all done, stop the backend
     backend.stop()
 

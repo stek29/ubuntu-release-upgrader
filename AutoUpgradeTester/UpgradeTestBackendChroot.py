@@ -86,7 +86,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                         print "Can't copy '%s' (%s)" % (f,e)
 
     def _getTmpDir(self):
-        tmpdir = self.config.getWithDefault("NonInteractive","Tempdir",None)
+        tmpdir = self.config.getWithDefault("CHROOT","Tempdir",None)
         if tmpdir is None:
             tmpdir = tempfile.mkdtemp()
         else:
@@ -105,7 +105,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
 
         # don't bootstrap twice if this is something we can cache
         try:
-            if (self.config.getboolean("NonInteractive","CacheTarball") and
+            if (self.config.getboolean("CHROOT","CacheTarball") and
                 os.path.exists(self.tarball) ):
                 return True
         except ConfigParser.NoOptionError:

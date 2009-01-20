@@ -352,7 +352,7 @@ iface eth0 inet static
         self.qemu_pid.stdin.write("cont\n")
 
     def start(self):
-        print "Starting qemu"
+        print "Starting %s %s" % (self.qemu_binary, self.qemu_options)
         if self.qemu_pid != None:
             print "already runing"
             return True

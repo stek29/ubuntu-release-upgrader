@@ -66,8 +66,8 @@ if __name__ == "__main__":
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
     # now see if we can install and remove it again
     for (i, pkg) in enumerate(cache):
-        print "\n\nPackage %i of %i (%s)" % (i, len(cache), 
-                                             float(i)/float(len(cache))*100)
+        print "\n\nPackage %i of %i (%f.2)" % (i, len(cache), 
+                                               float(i)/float(len(cache))*100)
         pkg_failed = False
 
         # skip stuff in the ubuntu-minimal that we can't install or upgrade

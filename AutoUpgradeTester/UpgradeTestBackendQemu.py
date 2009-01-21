@@ -76,7 +76,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
             raise NoImageFoundException
         # check if we want virtio here and default to yes
         try:
-            virtio = self.config.getboolean("NonInteractive","Virtio")
+            virtio = self.config.getboolean("KVM","Virtio")
         except ConfigParser.NoOptionError,e:
             virtio = True
         if virtio:
@@ -85,7 +85,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # swapimage
         if self.config.getWithDefault("KVM","SwapImage",""):
             self.qemu_options.append("-hdb")
-            self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
+            self.qemu_options.append(self.config.get("KVM","SwapImage"))
         # regular image
         self.image = os.path.join(self.profiledir, "test-image")
         # make ssh login possible (localhost 54321) available
@@ -235,6 +235,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # get common vars
         mirror = self.config.get("NonInteractive","Mirror")
         basepkg = self.config.get("NonInteractive","BasePkg")
+        additional_base_pkg = self.config.get("NonInteractive","BaseMetaPkgs")
 
         # start the VM
         self.start()
@@ -290,7 +291,7 @@ iface eth0 inet static
         # FIXME: instead of this retrying (for network errors with 
         #        proxies) we should have a self._runAptInImage() 
         for i in range(3):
-            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg])
+            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
         assert(ret == 0)
 
         CMAX = 4000
@@ -321,11 +322,11 @@ iface eth0 inet static
             print "running apt-get upgrade in from dist (after bootstrap)"
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
-            assert(ret == 0)
+            assert(ret == 0, "dist-upgrade returned %s" % ret)
 
         print "Cleaning image"
         ret = self._runInImage(["apt-get","clean"])
-        assert(ret == 0)
+        assert(ret == 0, "apt-get clean returned %s" % ret)
 
         # done with the bootstrap
         self.stop()

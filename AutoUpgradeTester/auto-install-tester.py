@@ -106,7 +106,8 @@ if __name__ == "__main__":
         statusfile.flush()
         failures.flush()
         if pkg_failed:
-            backend.loadVMSnapshot("clean-base")
+            backend.restoreVMSnapshot("clean-base")
+            backend.start()
     # all done, stop the backend
     backend.stop()
 

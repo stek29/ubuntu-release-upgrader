@@ -235,7 +235,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # get common vars
         mirror = self.config.get("NonInteractive","Mirror")
         basepkg = self.config.get("NonInteractive","BasePkg")
-        additional_base_pkg = self.config.get("NonInteractive","BaseMetaPkgs")
+        additional_base_pkg = self.config.getlist("Distro","BaseMetaPkgs")
 
         # start the VM
         self.start()

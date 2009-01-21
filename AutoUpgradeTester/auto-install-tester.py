@@ -61,17 +61,29 @@ if __name__ == "__main__":
     backend.start()
     backend._runInImage(["apt-get","update"])
 
+    # set with package that have been tested successfully
+    pkgs_tested = set()
+
     resultdir = os.path.join(basedir,"result")
     statusfile = open(os.path.join(resultdir,"pkgs_done.txt"),"w")
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
     # now see if we can install and remove it again
     for (i, pkg) in enumerate(cache):
+        # clean the cache
+        cache._depcache.Init()
         print "\n\nPackage %i of %i (%f.2)" % (i, len(cache), 
-                                               float(i)/float(len(cache))*100)
+                                             float(i)/float(len(cache))*100)
+        print "pkgs_tested has %i entries\n\n" % len(pkgs_tested)
+
         pkg_failed = False
 
         # skip stuff in the ubuntu-minimal that we can't install or upgrade
         if pkg.isInstalled and not pkg.isUpgradable:
+            continue
+
+        # skip packages we tested already
+        if pkg.name in pkgs_tested:
+            print "already tested: ", pkg.name
             continue
 
         # see if we can install/upgrade the pkg
@@ -83,8 +95,7 @@ if __name__ == "__main__":
             print "pkg: %s not installable" % pkg.name
             failures.write("%s markInstall()\n " % pkg.name)
             continue
-        cache._depcache.Init()
-
+        
         statusfile.write("%s\n" % pkg.name)
         # try to install it
         ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",pkg.name])
@@ -108,6 +119,12 @@ if __name__ == "__main__":
         if pkg_failed:
             backend.restoreVMSnapshot("clean-base")
             backend.start()
+        else:
+            # installation worked, record that we have tested this package
+            for pkg in cache:
+                if pkg.markedInstall or pkg.markedUpgrade:
+                    pkgs_tested.add(pkg.name)
+            
     # all done, stop the backend
     backend.stop()
 

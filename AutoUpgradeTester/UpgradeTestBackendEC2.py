@@ -367,4 +367,15 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         return True
         
 
+    # compatibility for the auto-install-tester
+    def start(self):
+        self.start_instance()
+    def stop(self):
+        self.stop_instance()
+    def saveVMSnapshot(self):
+        print "saveVMSnapshot not supported yet"
+    def restoreVMSnapshot(self):
+        print "restoreVMSnapshot not supported yet"
+
     
+        

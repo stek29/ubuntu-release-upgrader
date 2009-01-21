@@ -71,33 +71,35 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
         # setup mount dir/imagefile location
-        self.baseimage = self.config.get("NonInteractive","BaseImage")
+        self.baseimage = self.config.get("KVM","BaseImage")
         if not os.path.exists(self.baseimage):
             raise NoImageFoundException
-        virtio = True
+        # check if we want virtio here and default to yes
         try:
-            virtio = not self.config.getboolean("NonInteractive","NoVirtio")
+            virtio = self.config.getboolean("NonInteractive","Virtio")
         except ConfigParser.NoOptionError,e:
-            pass
+            virtio = True
         if virtio:
             self.qemu_options.extend(["-net","nic,model=virtio"])
             self.qemu_options.extend(["-net","user"])
-        if self.config.getWithDefault("NonInteractive","SwapImage",""):
+        # swapimage
+        if self.config.getWithDefault("KVM","SwapImage",""):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
+        # regular image
         self.image = os.path.join(self.profiledir, "test-image")
         # make ssh login possible (localhost 54321) available
         self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
-        self.ssh_port = self.config.getWithDefault("NonInteractive","SshPort","54321")
+        self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
         # vnc port/display
-        vncport = self.config.getWithDefault("NonInteractive","VncNum","0")
+        vncport = self.config.getWithDefault("KVM","VncNum","0")
         self.qemu_options.append("-vnc")
         self.qemu_options.append("localhost:%s" % vncport)
 
         # make the memory configurable
-        mem = self.config.getWithDefault("NonInteractive","VirtualRam","768")
+        mem = self.config.getWithDefault("KVM","VirtualRam","768")
         self.qemu_options.append("-m")
         self.qemu_options.append(str(mem))
 
@@ -142,7 +144,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
         #     -o StrictHostKeyChecking=no
         ret = subprocess.call(["ssh",
-                               "-tt",
+#                               "-tt",
                                "-l","root",
                                "-p",self.ssh_port,
                                "localhost",
@@ -156,6 +158,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 
     def installPackages(self, pkgs):
         " install additional pkgs (list) into the vm before the ugprade "
+        if not pkgs:
+            return True
         self.start()
         self._runInImage(["apt-get","update"])
         ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--reinstall", "-y"]+pkgs)
@@ -190,7 +194,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         #        way to do this currently without running as root
         # as a workaround we regenerate manually every now and then
         # and use UpgradeFromDistOnBootstrap=true here
-        self.config.set("NonInteractive","CacheBaseImage", "false")
+        self.config.set("KVM","CacheBaseImage", "false")
         self.config.set("NonInteractive","UpgradeFromDistOnBootstrap","true")
         self.baseimage = "jeos/%s-i386.qcow2" % self.config.get("Sources","To")
         self.image = diff_image
@@ -336,21 +340,29 @@ iface eth0 inet static
     def saveVMSnapshot(self,name):
         # savevm
         print "savevm"
-        self.qemu_pid.stdin.write("stop\n")
-        self.qemu_pid.stdin.write("savevm %s\n" % name)
-        self.qemu_pid.stdin.write("cont\n")
+        self.stop()
+        shutil.copy(self.image, self.image+"."+name)
+        return
+        # *sigh* buggy :/
+        #self.qemu_pid.stdin.write("stop\n")
+        #self.qemu_pid.stdin.write("savevm %s\n" % name)
+        #self.qemu_pid.stdin.write("cont\n")
     def delVMSnapshot(self,name):
         print "delvm"
         self.qemu_pid.stdin.write("delvm %s\n" % name)
     def restoreVMSnapshot(self,name):
         print "restorevm"
+        self.stop()
+        shutil.copy(self.image+"."+name, self.image)
+	return
         # loadvm
-        self.qemu_pid.stdin.write("stop\n")
-        self.qemu_pid.stdin.write("loadvm %s\n" % name)
-        self.qemu_pid.stdin.write("cont\n")
+        # *sigh* buggy :/
+        #self.qemu_pid.stdin.write("stop\n")
+        #self.qemu_pid.stdin.write("loadvm %s\n" % name)
+        #self.qemu_pid.stdin.write("cont\n")
 
     def start(self):
-        print "Starting qemu"
+        print "Starting %s %s" % (self.qemu_binary, self.qemu_options)
         if self.qemu_pid != None:
             print "already runing"
             return True

@@ -733,6 +733,8 @@ class UpdateManager(SimpleGladeApp):
                                                 "guide you through the "
                                                 "upgrade process."))
       fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=progress)
+      if self.options.sandbox:
+          fetcher.run_options.append("--sandbox")
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):

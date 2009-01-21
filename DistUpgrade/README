@@ -12,7 +12,7 @@ onto the CD and it will support upgrades directly from the CD.
 
 Environment
 -----------
-The following environment variable will be honored:
+The following environment variable will be *honored*:
 
 RELEASE_UPGRADE_NO_FORCE_OVERWRITE:
 - if that is set, no --force-overwrite is used
@@ -20,7 +20,13 @@ RELEASE_UPGRADE_NO_FORCE_OVERWRITE:
 RELEASE_UPRADER_NO_APPORT:
 - if that is set, apport is not run in case of package install falures
 
-The following environment variable will be set by the upgrader:
+RELEASE_UPRADER_ALLOW_THIRD_PARTY:
+- if that is set, third party repositories will not be commented out
+  but instead tried to be upgraded
+
+
+
+The following environment variable will be *set* by the upgrader:
 RELEASE_UPGRADE_IN_PROGRESS:
 - set to "1" if a release-upgrade is running (and not a normal
   package/security upgrade)

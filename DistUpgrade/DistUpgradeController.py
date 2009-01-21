@@ -427,6 +427,11 @@ class DistUpgradeController(object):
 
         sync_components = self.config.getlist("Sources","Components")
 
+        # skip mirror check if special environment is set
+        # (useful for server admins with internal repos)
+        if "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ:
+            mirror_check=False
+
         # check if we need to enable main
         if mirror_check == True and self.useNetwork:
             # now check if the base-meta pkgs are available in

@@ -4,6 +4,10 @@ update-manager (1:0.96.4) jaunty; urgency=low
     - do not generate apport report against update-manager if 
       cache.commit() failed. the report is generated against
       the failing package instead (LP: #311220)
+    - honor RELEASE_UPRADER_ALLOW_THIRD_PARTY environment and do   
+      not  comment out third party repositories in this case 
+      (useful internal repositories, make sure that sudo does 
+       not clean this env when you make use of it)
   * DistUpgrade/DistUpgrade.cfg:
     - remove powermanagement-interface on upgrades for ubuntu 
       and kubuntu (no longer needed by them)

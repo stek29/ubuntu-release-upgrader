@@ -38,6 +38,15 @@ if __name__ == "__main__":
     aptbasedir = os.path.join(basedir,"auto-install-test")
     profile = os.path.join(basedir, "DistUpgrade.cfg")
 
+    # create apt dirs if needed
+    for d in ["etc/apt/",
+              "var/lib/dpkg",
+              "var/lib/apt/lists/partial",
+              "var/cache/apt/archives/partial"]:
+        if not os.path.exists(os.path.join(aptbasedir,d)):
+            os.makedirs(os.path.join(aptbasedir,d))
+
+
     backend = UpgradeTestBackendQemu(profile, profile)
     backend.bootstrap()
 
@@ -48,13 +57,6 @@ if __name__ == "__main__":
                            os.path.join(aptbasedir,"var/lib/dpkg/","status"))
     backend.stop()
 
-    # create dirs if needed
-    for d in ["etc/apt/",
-              "var/lib/dpkg",
-              "var/lib/apt/lists/partial",
-              "var/cache/apt/archives/partial"]:
-        if not os.path.exists(os.path.join(aptbasedir,d)):
-            os.makedirs(os.path.join(aptbasedir,d))
     # build apt stuff (outside of the kvm)
     mirror = backend.config.get("NonInteractive","Mirror")
     dist = backend.config.get("Sources","From")

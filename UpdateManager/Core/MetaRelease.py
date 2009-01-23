@@ -197,7 +197,7 @@ class MetaReleaseCore(object):
         # information. if not, we assume that we run on something not
         # supported and silently return
         if current_dist is None:
-            sys.stderr.write("current dist not found in meta-release file\n")
+            #sys.stderr.write("current dist not found in meta-release file\n")
             return False
 
         # then see what we can upgrade to (only upgrade to supported dists)

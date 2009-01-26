@@ -157,7 +157,11 @@ class DistUpgradeFetcherCore(object):
             af = apt_pkg.GetPkgAcqFile(fetcher,self.uri, descr=_("Upgrade tool"))
             if fetcher.Run() != fetcher.ResultContinue:
                 return False
-            return True
+            # check that both files are really there and non-null
+            for f in [os.path.basename(self.new_dist.upgradeToolSig),
+                      os.path.basename(self.new_dist.upgradeTool)]:
+              if not (os.path.exists(f) and os.path.getsize(fname_sig) > 0):
+                return False
         return False
 
     def runDistUpgrader(self):

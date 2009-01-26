@@ -58,10 +58,7 @@ def init_proxy(gconfclient=None):
   """
   SYNAPTIC_CONF_FILE = "/root/.synaptic/synaptic.conf"
   proxy = None
-  # environment wins
-  if os.getenv("http_proxy"):
-    return
-  # generic apt config wins next
+  # generic apt config wins
   apt_pkg.InitConfig()
   if apt_pkg.Config.Find("Acquire::http::Proxy") != '':
     proxy = apt_pkg.Config.Find("Acquire::http::Proxy")

@@ -160,7 +160,7 @@ class DistUpgradeFetcherCore(object):
             # check that both files are really there and non-null
             for f in [os.path.basename(self.new_dist.upgradeToolSig),
                       os.path.basename(self.new_dist.upgradeTool)]:
-              if not (os.path.exists(f) and os.path.getsize(fname_sig) > 0):
+              if not (os.path.exists(f) and os.path.getsize(f) > 0):
                 return False
         return False
 

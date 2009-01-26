@@ -30,6 +30,12 @@ import rfc822
 from ConfigParser import ConfigParser
 from subprocess import Popen,PIPE
 
+try:
+  from utils import *
+except Exception:
+  from UpdateManager.Common.utils import *
+
+
 class Dist(object):
     def __init__(self, name, version, date, supported):
         self.name = name
@@ -153,16 +159,6 @@ class MetaReleaseCore(object):
         """
         self.new_dist = dist
 
-    def get_dist(self):
-        " return the codename of the current runing distro "
-        p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
-        res = p.wait()
-        if res != 0:
-            sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
-            return "unknown distribution"
-        dist = string.strip(p.stdout.readline())
-        return dist
-    
     def parse(self):
         self._debug("MetaRelease.parse()")
         current_dist_name = self.get_dist()

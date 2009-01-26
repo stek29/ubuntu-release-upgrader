@@ -33,17 +33,21 @@ import shutil
 import sys
 import GnuPGInterface
 from gettext import gettext as _
-try:
-  from utils import country_mirror, url_downloadable
-except Exception:
-  from UpdateManager.Common.utils import country_mirror, url_downloadable
 
+try:
+  from utils import *
+except Exception:
+  from UpdateManager.Common.utils import *
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "
+
+    DEFAULT_MIRROR="http://archive.ubuntu.com/ubuntu"
+    DEFAULT_COMPONENT="main"
     
     def __init__(self, new_dist, progress):
         self.new_dist = new_dist
+        self.current_dist = get_dist()
         self._progress = progress
         # options to pass to the release upgrader when it is run
         self.run_options = []
@@ -132,8 +136,49 @@ class DistUpgradeFetcherCore(object):
                          _("Could not run the upgrade tool") + ".  " + _("This is most likely a bug in the upgrade tool. "
                           "Please report it as a bug"))
         return True
-    
+
+    def mirror_from_sources_list(self, uri, default_uri):
+      """
+      try to figure what the mirror is from current sources.list
+
+      do this by looing for matching DEFAULT_COMPONENT, current dist
+      in sources.list and then doing a http HEAD/ftp size request
+      to see if the uri is available on this server
+      """
+      from aptsources.sourceslist import SourcesList
+      sources = SourcesList(withMatcher=False)
+      seen = set()
+      for e in sources.list:
+        if e.disabled or e.invalid or not e.type == "deb":
+          continue
+        # check if we probed this mirror already
+        if e.uri in seen:
+          continue
+        # we are using the main mirror already, so we are fine
+        if (e.uri.startswith(default_uri) and 
+            e.dist == self.current_dist and
+            self.DEFAULT_COMPONENT in e.comps):
+          return uri
+        elif (e.dist == self.current_dist and
+              "main" in e.comps):
+          mirror_uri = e.uri+uri[len(default_uri):]
+          if url_downloadable(mirror_uri):
+            return mirror_uri
+          seen.add(e.uri)
+      return ""
+
     def _expandUri(self, uri):
+        """
+        expand the uri so that it uses a mirror if the url starts
+        with a well know string (like archive.ubuntu.com)
+        """
+        # try to guess the mirror from the sources.list
+        if uri.startswith(self.DEFAULT_MIRROR):
+          new_uri = self.mirror_from_sources_list(uri, self.DEFAULT_URI)
+          if new_uri:
+            return new_uri
+
+        # if that fails, use old method
         uri_template = Template(uri)
         m = country_mirror()
         new_uri = uri_template.safe_substitute(countrymirror=m)
@@ -225,7 +270,6 @@ class DistUpgradeFetcherCore(object):
         return True
 
 if __name__ == "__main__":
-    self.error("summary","message")
-    d = DistUpgradeFetcher(None,None)
-    print d.authenticate('/tmp/Release','/tmp/Release.gpg')
-
+    d = DistUpgradeFetcherCore(None,None)
+#    print d.authenticate('/tmp/Release','/tmp/Release.gpg')
+    print "got mirror: '%s'" % d.mirror_from_sources_list("http://archive.ubuntu.com/ubuntu/dists/intrepid-proposed/main/dist-upgrader-all/0.93.34/intrepid.tar.gz", "http://archive.ubuntu.com/ubuntu")

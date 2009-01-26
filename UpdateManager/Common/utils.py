@@ -47,6 +47,17 @@ def country_mirror():
     return lang[:2]+"."
   return ''
 
+def get_dist():
+  " return the codename of the current runing distro "
+  from subprocess import Popen, PIPE
+  p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
+  res = p.wait()
+  if res != 0:
+    sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
+    return "unknown distribution"
+  dist = p.stdout.readline().strip()
+  return dist
+
 def url_downloadable(uri, debug_func=None):
   """
   helper that checks if the given uri exists and is downloadable
@@ -229,3 +240,6 @@ def humanize_size(bytes):
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
         return locale.format(_("%.1f MB"), bytes / 1024 / 1024)
+
+if __name__ == "__main__":
+  print mirror_from_sources_list()

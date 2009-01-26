@@ -69,7 +69,7 @@ def url_downloadable(uri, debug_func=None):
         debug_func("_sourcesListEntryDownloadable result '%s'" % res.status)
       res.close()
     except Exception, e:
-      logging.debug("error from httplib: '%s'" % e)
+      debug_func("error from httplib: '%s'" % e)
       return False
     if res.status == 200:
       return True

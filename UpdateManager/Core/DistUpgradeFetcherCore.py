@@ -48,6 +48,10 @@ class DistUpgradeFetcherCore(object):
         # options to pass to the release upgrader when it is run
         self.run_options = []
 
+    def _debug(self, s):
+        " helper to show debug information "
+        print >> sys.stderr, s
+
     def showReleaseNotes(self):
         return True
 
@@ -128,14 +132,14 @@ class DistUpgradeFetcherCore(object):
                          _("Could not run the upgrade tool") + ".  " + _("This is most likely a bug in the upgrade tool. "
                           "Please report it as a bug"))
         return True
-
+    
     def _expandUri(self, uri):
         uri_template = Template(uri)
         m = country_mirror()
         new_uri = uri_template.safe_substitute(countrymirror=m)
         # be paranoid and check if the given uri is really downloadable
         try:
-            if not url_downloadable(new_uri):
+            if not url_downloadable(new_uri, self._debug):
               raise Exception("failed to download %s" % new_uri)
         except Exception,e:
             print >> sys.stderr, "url '%s' could not be downloaded" % e

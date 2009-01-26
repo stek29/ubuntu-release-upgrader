@@ -47,6 +47,49 @@ def country_mirror():
     return lang[:2]+"."
   return ''
 
+def url_downloadable(uri, debug_func=None):
+  """
+  helper that checks if the given uri exists and is downloadable
+  (supports optional debug_func function handler to support 
+   e.g. logging)
+
+  Supports http (via HEAD) and ftp (via size request)
+  """
+  if debug_func:
+    debug_func("url_downloadable: %s" % uri)
+  import urlparse
+  (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
+  if scheme == "http":
+    import httplib
+    c = httplib.HTTPConnection(netloc)
+    try:
+      c.request("HEAD", path)
+      res = c.getresponse()
+      if debug_func:
+        debug_func("_sourcesListEntryDownloadable result '%s'" % res.status)
+      res.close()
+    except Exception, e:
+      logging.debug("error from httplib: '%s'" % e)
+      return False
+    if res.status == 200:
+      return True
+    return False
+  elif scheme == "ftp":
+    import ftplib
+    f = ftplib.FTP(netloc)
+    f.login()
+    try:
+      f.cwd(os.path.dirname(path))
+      size = f.size(os.path.basename(path))
+      f.quit()
+      if size != 0:
+        return True
+      return False
+    except Exception, e:
+      if debug_func:
+        debug_func("error from ftplib: '%s'" % e)
+      return False
+    return True
 
 def init_proxy(gconfclient=None):
   """ init proxy settings 

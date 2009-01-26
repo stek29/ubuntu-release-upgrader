@@ -34,9 +34,9 @@ import sys
 import GnuPGInterface
 from gettext import gettext as _
 try:
-  from utils import country_mirror
+  from utils import country_mirror, url_downloadable
 except Exception:
-  from UpdateManager.Common.utils import country_mirror
+  from UpdateManager.Common.utils import country_mirror, url_downloadable
 
 
 class DistUpgradeFetcherCore(object):
@@ -133,12 +133,12 @@ class DistUpgradeFetcherCore(object):
         uri_template = Template(uri)
         m = country_mirror()
         new_uri = uri_template.safe_substitute(countrymirror=m)
-        # be paranoid and check if the given uri actually exists
-        host = urlparse.urlparse(new_uri)[1]
+        # be paranoid and check if the given uri is really downloadable
         try:
-            socket.gethostbyname(host)
-        except socket.gaierror,e:
-            print >> sys.stderr, "host '%s' could not be resolved" % host
+            if not url_downloadable(new_uri):
+              raise Exception("failed to download %s" % new_uri)
+        except Exception,e:
+            print >> sys.stderr, "url '%s' could not be downloaded" % e
             new_uri = uri_template.safe_substitute(countrymirror='')
         return new_uri
 

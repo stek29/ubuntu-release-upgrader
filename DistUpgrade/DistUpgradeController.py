@@ -36,7 +36,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror
+from utils import country_mirror, url_downloadable
 from string import Template
 
 
@@ -389,38 +389,8 @@ class DistUpgradeController(object):
             logging.debug("skiping downloadable check (no network)")
             return True
         # check if the entry points to something we can download
-        import urlparse
         uri = "%s/dists/%s/Release" % (entry.uri, entry.dist)
-        (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
-        if scheme == "http":
-            import httplib
-            c = httplib.HTTPConnection(netloc)
-            try:
-                c.request("HEAD", path)
-                res = c.getresponse()
-                logging.debug("_sourcesListEntryDownloadable result '%s'" % res.status)
-                res.close()
-            except Exception, e:
-                logging.debug("error from httplib: '%s'" % e)
-                return False
-            if res.status == 200:
-                return True
-            return False
-        elif scheme == "ftp":
-            import ftplib
-            f = ftplib.FTP(netloc)
-            f.login()
-            try:
-                f.cwd(os.path.dirname(path))
-                size = f.size(os.path.basename(path))
-                f.quit()
-                if size != 0:
-                    return True
-                return False
-            except Exception, e:
-                logging.debug("error from ftplib: '%s'" % e)
-                return False
-        return True
+        return url_downloadable(uri, logging.debug)
 
     def rewriteSourcesList(self, mirror_check=True):
         logging.debug("rewriteSourcesList()")

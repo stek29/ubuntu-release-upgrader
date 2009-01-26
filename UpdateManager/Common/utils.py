@@ -72,8 +72,8 @@ def url_downloadable(uri, debug_func=None):
   (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
   if scheme == "http":
     import httplib
-    c = httplib.HTTPConnection(netloc)
     try:
+      c = httplib.HTTPConnection(netloc)
       c.request("HEAD", path)
       res = c.getresponse()
       if debug_func:
@@ -87,9 +87,9 @@ def url_downloadable(uri, debug_func=None):
     return False
   elif scheme == "ftp":
     import ftplib
-    f = ftplib.FTP(netloc)
-    f.login()
     try:
+      f = ftplib.FTP(netloc)
+      f.login()
       f.cwd(os.path.dirname(path))
       size = f.size(os.path.basename(path))
       f.quit()

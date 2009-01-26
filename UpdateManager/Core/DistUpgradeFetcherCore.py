@@ -162,6 +162,7 @@ class DistUpgradeFetcherCore(object):
                       os.path.basename(self.new_dist.upgradeTool)]:
               if not (os.path.exists(f) and os.path.getsize(f) > 0):
                 return False
+            return True
         return False
 
     def runDistUpgrader(self):

@@ -9,7 +9,7 @@ from gettext import gettext as _
 
 from UpdateManager.Common.UpdateList import UpdateList
 from UpdateManager.Common.MyCache import MyCache, NotEnoughFreeSpaceError
-from UpdateManager.Common.utils import *
+from UpdateManager.Core.utils import *
 
 from snack import *
 

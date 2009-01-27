@@ -7,8 +7,8 @@ import thread
 import atexit
 from gettext import gettext as _
 
-from UpdateManager.Common.UpdateList import UpdateList
-from UpdateManager.Common.MyCache import MyCache, NotEnoughFreeSpaceError
+from UpdateManager.Core.UpdateList import UpdateList
+from UpdateManager.Core.MyCache import MyCache, NotEnoughFreeSpaceError
 from UpdateManager.Core.utils import *
 
 from snack import *

@@ -68,11 +68,12 @@ import GtkProgress
 from gettext import gettext as _
 from gettext import ngettext
 
-from Core.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
-from Common.UpdateList import UpdateList
 from Common.HelpViewer import HelpViewer
-from Common.MyCache import MyCache, NotEnoughFreeSpaceError
+
+from Core.utils import *
+from Core.UpdateList import UpdateList
+from Core.MyCache import MyCache, NotEnoughFreeSpaceError
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer

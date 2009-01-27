@@ -62,7 +62,6 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         self.progressDialogue.setWindowTitle(_("Upgrade"))
         self.progress = KDEFetchProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)
         DistUpgradeFetcherCore.__init__(self,metaRelease.new_dist,self.progress)
-        #QTimer.singleShot(10, self.run)
 
     def error(self, summary, message):
         KMessageBox.sorry(None, message, summary)
@@ -177,5 +176,6 @@ if __name__ == "__main__":
 
     app = KApplication()
     fetcher = DistUpgradeFetcherKDE()
+    QTimer.singleShot(10, fetcher.run)
 
     app.exec_()

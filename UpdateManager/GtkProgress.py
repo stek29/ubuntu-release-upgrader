@@ -25,7 +25,7 @@ import gtk
 import apt
 import apt_pkg
 from gettext import gettext as _
-from Common.utils import *
+from Core.utils import *
 
 # intervals of the start up progress
 # 3x caching and menu creation

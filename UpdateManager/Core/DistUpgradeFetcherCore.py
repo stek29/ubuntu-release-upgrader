@@ -34,10 +34,7 @@ import sys
 import GnuPGInterface
 from gettext import gettext as _
 
-try:
-  from utils import *
-except Exception:
-  from UpdateManager.Common.utils import *
+from utils import *
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "
@@ -174,7 +171,7 @@ class DistUpgradeFetcherCore(object):
         """
         # try to guess the mirror from the sources.list
         if uri.startswith(self.DEFAULT_MIRROR):
-          new_uri = self.mirror_from_sources_list(uri, self.DEFAULT_URI)
+          new_uri = self.mirror_from_sources_list(uri, self.DEFAULT_MIRROR)
           if new_uri:
             return new_uri
 

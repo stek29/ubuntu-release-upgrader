@@ -30,11 +30,7 @@ import rfc822
 from ConfigParser import ConfigParser
 from subprocess import Popen,PIPE
 
-try:
-  from utils import *
-except Exception:
-  from UpdateManager.Common.utils import *
-
+from utils import *
 
 class Dist(object):
     def __init__(self, name, version, date, supported):
@@ -161,7 +157,7 @@ class MetaReleaseCore(object):
 
     def parse(self):
         self._debug("MetaRelease.parse()")
-        current_dist_name = self.get_dist()
+        current_dist_name = get_dist()
         current_dist = None
         dists = []
 

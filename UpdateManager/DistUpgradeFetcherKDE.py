@@ -25,7 +25,7 @@ from PyQt4 import uic
 
 import sys
 
-from Common.utils import *
+from Core.utils import *
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 import urllib2
@@ -45,7 +45,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         self.useProposed = useProposed
         metaRelease = MetaReleaseCore(useDevelopmentRelease, useProposed)
         while metaRelease.downloading:
-            time.sleep(1)
+            time.sleep(0.2)
         if metaRelease.new_dist is None and __name__ == "__main__":
             sys.exit()
         elif metaRelease.new_dist is None:

@@ -68,7 +68,7 @@ import GtkProgress
 from gettext import gettext as _
 from gettext import ngettext
 
-from Common.utils import *
+from Core.utils import *
 from Common.SimpleGladeApp import SimpleGladeApp
 from Common.UpdateList import UpdateList
 from Common.HelpViewer import HelpViewer

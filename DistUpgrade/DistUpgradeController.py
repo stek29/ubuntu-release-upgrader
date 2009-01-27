@@ -1203,6 +1203,10 @@ class DistUpgradeController(object):
         # 
         # make sure to remove file on cancel
         
+        # FIXME: use the DistUpgradeFetcherCore logic
+        #        in mirror_from_sources_list() here
+        #        (and factor that code out into a helper)
+
         conf_option = "SourcesList"
         if self.config.has_option("PreRequists",conf_option+"-%s" % self.arch):
             conf_option = conf_option + "-%s" % self.arch

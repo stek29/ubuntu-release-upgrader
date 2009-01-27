@@ -19,7 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-
 from string import Template
 import os
 import apt_pkg
@@ -33,6 +32,7 @@ import shutil
 import sys
 import GnuPGInterface
 from gettext import gettext as _
+from aptsources.sourceslist import SourcesList
 
 from utils import *
 
@@ -45,7 +45,7 @@ class DistUpgradeFetcherCore(object):
 
     def __init__(self, new_dist, progress):
         self.new_dist = new_dist
-        self.current_dist = get_dist()
+        self.current_dist_name = get_dist()
         self._progress = progress
         # options to pass to the release upgrader when it is run
         self.run_options = []
@@ -144,7 +144,7 @@ class DistUpgradeFetcherCore(object):
       in sources.list and then doing a http HEAD/ftp size request
       to see if the uri is available on this server
       """
-      from aptsources.sourceslist import SourcesList
+      self._debug("mirror_from_sources_list: %s" % self.current_dist_name)
       sources = SourcesList(withMatcher=False)
       seen = set()
       for e in sources.list:
@@ -155,15 +155,16 @@ class DistUpgradeFetcherCore(object):
           continue
         # we are using the main mirror already, so we are fine
         if (e.uri.startswith(default_uri) and 
-            e.dist == self.current_dist and
+            e.dist == self.current_dist_name and
             self.DEFAULT_COMPONENT in e.comps):
           return uri
-        elif (e.dist == self.current_dist and
+        elif (e.dist == self.current_dist_name and
               "main" in e.comps):
           mirror_uri = e.uri+uri[len(default_uri):]
           if url_downloadable(mirror_uri, self._debug):
             return mirror_uri
           seen.add(e.uri)
+      self._debug("no mirror found")
       return ""
 
     def _expandUri(self, uri):
@@ -173,6 +174,7 @@ class DistUpgradeFetcherCore(object):
         """
         # try to guess the mirror from the sources.list
         if uri.startswith(self.DEFAULT_MIRROR):
+          self._debug("trying to find suitable mirror")
           new_uri = self.mirror_from_sources_list(uri, self.DEFAULT_MIRROR)
           if new_uri:
             return new_uri
@@ -185,7 +187,7 @@ class DistUpgradeFetcherCore(object):
             if not url_downloadable(new_uri, self._debug):
               raise Exception("failed to download %s" % new_uri)
         except Exception,e:
-            print >> sys.stderr, "url '%s' could not be downloaded" % e
+            self._debug("url '%s' could not be downloaded" % e)
             # else fallback to main server
             new_uri = uri_template.safe_substitute(countrymirror='')
         return new_uri
@@ -208,8 +210,8 @@ class DistUpgradeFetcherCore(object):
             # check that both files are really there and non-null
             for f in [os.path.basename(self.new_dist.upgradeToolSig),
                       os.path.basename(self.new_dist.upgradeTool)]:
-              if not (os.path.exists(f) and os.path.getsize(f) > 0):
-                return False
+                if not (os.path.exists(f) and os.path.getsize(f) > 0):
+                    return False
             return True
         return False
 

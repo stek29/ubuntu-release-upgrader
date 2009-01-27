@@ -62,6 +62,7 @@ class MetaReleaseCore(object):
         # information about the available dists
         self.downloading = True
         self.new_dist = None
+        self.current_dist_name = get_dist()
         self.no_longer_supported = None
 
         # default (if the conf file is missing)
@@ -157,7 +158,8 @@ class MetaReleaseCore(object):
 
     def parse(self):
         self._debug("MetaRelease.parse()")
-        current_dist_name = get_dist()
+        current_dist_name = self.current_dist_name
+        self._debug("current dist name: '%s'" % current_dist_name)
         current_dist = None
         dists = []
 

@@ -79,12 +79,11 @@ def url_downloadable(uri, debug_func=None):
       if debug_func:
         debug_func("url_downloadable result '%s'" % res.status)
       res.close()
+      if res.status == 200:
+        return True
     except Exception, e:
       debug_func("error from httplib: '%s'" % e)
       return False
-    if res.status == 200:
-      return True
-    return False
   elif scheme == "ftp":
     import ftplib
     try:
@@ -97,12 +96,11 @@ def url_downloadable(uri, debug_func=None):
         debug_func("ftplib.size() returned: %s" % size)
       if size != 0:
         return True
-      return False
     except Exception, e:
       if debug_func:
         debug_func("error from ftplib: '%s'" % e)
       return False
-    return True
+  return False
 
 def init_proxy(gconfclient=None):
   """ init proxy settings 

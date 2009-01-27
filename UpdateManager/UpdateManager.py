@@ -68,17 +68,16 @@ import GtkProgress
 from gettext import gettext as _
 from gettext import ngettext
 
-from Common.SimpleGladeApp import SimpleGladeApp
-from Common.HelpViewer import HelpViewer
 
 from Core.utils import *
 from Core.UpdateList import UpdateList
 from Core.MyCache import MyCache, NotEnoughFreeSpaceError
+from Core.MetaRelease import Dist
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
-
-from Core.MetaRelease import Dist
+from SimpleGladeApp import SimpleGladeApp
+from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
 
 #import pdb

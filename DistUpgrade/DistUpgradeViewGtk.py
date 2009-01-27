@@ -39,7 +39,7 @@ import os
 from DistUpgradeApport import *
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
-from UpdateManager.Common.SimpleGladeApp import SimpleGladeApp, bindtextdomain
+from SimpleGladeApp import SimpleGladeApp, bindtextdomain
 
 import gettext
 from DistUpgradeGettext import gettext as _

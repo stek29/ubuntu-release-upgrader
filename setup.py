@@ -11,7 +11,6 @@ setup(name='update-manager',
                              ['UpdateManager/fdsend/fdsend.c'])],
       packages=[
                 'UpdateManager',
-                'UpdateManager.Common',
                 'UpdateManager.Core',
                 'UpdateManagerHildon',
                 'UpdateManagerText',

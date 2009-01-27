@@ -41,7 +41,8 @@ class DistUpgradeFetcherCore(object):
 
     DEFAULT_MIRROR="http://archive.ubuntu.com/ubuntu"
     DEFAULT_COMPONENT="main"
-    
+    DEBUG = "DEBUG_UPDATE_MANAGER" in os.environ
+
     def __init__(self, new_dist, progress):
         self.new_dist = new_dist
         self.current_dist = get_dist()
@@ -49,9 +50,10 @@ class DistUpgradeFetcherCore(object):
         # options to pass to the release upgrader when it is run
         self.run_options = []
 
-    def _debug(self, s):
+    def _debug(self, msg):
         " helper to show debug information "
-        print >> sys.stderr, s
+        if self.DEBUG:
+            sys.stderr.write(msg+"\n")
 
     def showReleaseNotes(self):
         return True
@@ -159,7 +161,7 @@ class DistUpgradeFetcherCore(object):
         elif (e.dist == self.current_dist and
               "main" in e.comps):
           mirror_uri = e.uri+uri[len(default_uri):]
-          if url_downloadable(mirror_uri):
+          if url_downloadable(mirror_uri, self._debug):
             return mirror_uri
           seen.add(e.uri)
       return ""
@@ -174,7 +176,6 @@ class DistUpgradeFetcherCore(object):
           new_uri = self.mirror_from_sources_list(uri, self.DEFAULT_MIRROR)
           if new_uri:
             return new_uri
-
         # if that fails, use old method
         uri_template = Template(uri)
         m = country_mirror()
@@ -185,6 +186,7 @@ class DistUpgradeFetcherCore(object):
               raise Exception("failed to download %s" % new_uri)
         except Exception,e:
             print >> sys.stderr, "url '%s' could not be downloaded" % e
+            # else fallback to main server
             new_uri = uri_template.safe_substitute(countrymirror='')
         return new_uri
 

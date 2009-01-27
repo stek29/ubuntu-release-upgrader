@@ -77,7 +77,7 @@ def url_downloadable(uri, debug_func=None):
       c.request("HEAD", path)
       res = c.getresponse()
       if debug_func:
-        debug_func("_sourcesListEntryDownloadable result '%s'" % res.status)
+        debug_func("url_downloadable result '%s'" % res.status)
       res.close()
     except Exception, e:
       debug_func("error from httplib: '%s'" % e)
@@ -93,6 +93,8 @@ def url_downloadable(uri, debug_func=None):
       f.cwd(os.path.dirname(path))
       size = f.size(os.path.basename(path))
       f.quit()
+      if debug_func:
+        debug_func("ftplib.size() returned: %s" % size)
       if size != 0:
         return True
       return False

@@ -48,7 +48,7 @@ class MetaReleaseCore(object):
     distributions. 
     """
 
-    DEBUG = os.environ.has_key("DEBUG_UPDATE_MANAGER")
+    DEBUG = "DEBUG_UPDATE_MANAGER" in os.environ
 
     # some constants
     CONF = "/etc/update-manager/release-upgrades"

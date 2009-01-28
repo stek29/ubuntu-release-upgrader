@@ -179,7 +179,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                 alllines = _("The changelog does not contain any relevant changes.\n\n"
                              "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                              "until the changes become available or try again "
-                             "later.") % (srcpkg, srcver_epoch),
+                             "later.") % (srcpkg, srcver_epoch)
             # only write if we where not canceld
             if lock.locked():
                 self.all_changes[name] = [alllines, srcpkg]

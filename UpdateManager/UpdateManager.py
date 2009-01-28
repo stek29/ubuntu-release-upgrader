@@ -118,7 +118,6 @@ class UpdateManager(SimpleGladeApp):
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
     self.button_close.grab_focus()
-
     self.dl_size = 0
 
     # create text view
@@ -176,7 +175,10 @@ class UpdateManager(SimpleGladeApp):
 
     self.gconfclient = gconf.client_get_default()
     init_proxy(self.gconfclient)
-
+    try:
+        self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
+    except gobject.GError, e:
+        self.show_versions = False
     # restore state
     self.restore_state()
     self.window_main.show()
@@ -702,7 +704,7 @@ class UpdateManager(SimpleGladeApp):
                    "new_version" : pkg.candidateVersion}
           else:
               version = _("Version %s") % pkg.candidateVersion
-          if self.gconfclient.get_bool("/apps/update-manager/show_versions"):
+          if self.show_versions:
               contents = "%s\n<small>%s %s</small>" % (contents, version, size)
           else:
               contents = "%s <small>%s</small>" % (contents, size)

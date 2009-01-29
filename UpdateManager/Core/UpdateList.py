@@ -68,6 +68,14 @@ class UpdateList(object):
       matcher[(None,None)] = self.UpdateOrigin(_("Other updates"), -1)
       return matcher
 
+  def _has_automatic_origin(self, pkg):
+    for ver in pkg._pkg.VersionList:
+      print "looking at: ", ver
+      for (verFileIter, index) in ver.FileList:
+        if verFileIter.NotAutomatic:
+          return True
+    return False
+
   def update(self, cache):
     self.held_back = []
 
@@ -90,9 +98,16 @@ class UpdateList(object):
           self.pkgs[origin_node] = []
         self.pkgs[origin_node].append(pkg)
         self.num_updates = self.num_updates + 1
+      if (pkg.isInstalled and not pkg.isUpgradable and
+            pkg.candidateOrigin and self._has_automatic_origin(pkg)):
+        print "upgradable, but not automatic: ", pkg.name
+        label = self.UpdateOrigin("Not automatic", 1)
+        if not label in self.pkgs:
+          self.pkgs[label] = []
+        self.pkgs[label].append(pkg)
       if pkg.isUpgradable and not (pkg.markedUpgrade or pkg.markedInstall):
           self.held_back.append(pkg.name)
     for l in self.pkgs.keys():
       self.pkgs[l].sort(lambda x,y: cmp(x.name,y.name))
     self.keepcount = cache._depcache.KeepCount
-
+    print self.held_back

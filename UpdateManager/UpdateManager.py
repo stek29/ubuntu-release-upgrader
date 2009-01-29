@@ -561,16 +561,20 @@ class UpdateManager(SimpleGladeApp):
       iter = self.store.get_iter(path)
       pkg = self.store.get_value(iter, LIST_PKG)
       origin = self.store.get_value(iter, LIST_ORIGIN)
+
+      print pkg.name
+      print origin
+
       if pkg is not None:
           return
       self.setBusy(True)
       actiongroup = apt_pkg.GetPkgActionGroup(self.cache._depcache)
       for pkg in self.list.pkgs[origin]:
           if pkg.markedInstall or pkg.markedUpgrade:
-              #print "marking keep: ", pkg.name
+              print "marking keep: ", pkg.name
               pkg.markKeep()
           elif not (pkg.name in self.list.held_back):
-              #print "marking install: ", pkg.name
+              print "marking install: ", pkg.name
               pkg.markInstall(autoFix=False,autoInst=False)
       # check if we left breakage
       if self.cache._depcache.BrokenCount:
@@ -584,6 +588,7 @@ class UpdateManager(SimpleGladeApp):
 
   def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """
+    print "toggled"
     iter = self.store.get_iter(path)
     pkg = self.store.get_value(iter, LIST_PKG)
     # make sure that we don't allow to toggle deactivated updates
@@ -598,7 +603,20 @@ class UpdateManager(SimpleGladeApp):
             Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
             Fix.ResolveByKeep()
     else:
+        for ver in pkg._pkg.VersionList:
+            print "looking at: ", ver
+            for (verFileIter, index) in ver.FileList:
+                if verFileIter.NotAutomatic:
+                    print "setting candidate ver: ", ver
+                    pkg._depcache.SetCandidateVer(pkg._pkg, ver)
+                    print "new cand: ", pkg._depcache.GetCandidateVer(pkg._pkg)
+                    pkg._depcache.MarkInstall(pkg._pkg)
+                    print "new cand: ", pkg._depcache.GetCandidateVer(pkg._pkg)
+                    break
         pkg.markInstall()
+        print pkg.markedInstall
+        print pkg.markedUpgrade
+    print "new cand: ", pkg._depcache.GetCandidateVer(pkg._pkg)
     self.treeview_update.queue_draw()
     self.refresh_updates_count()
     self.setBusy(False)

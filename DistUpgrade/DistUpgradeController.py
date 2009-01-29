@@ -563,6 +563,9 @@ class DistUpgradeController(object):
                     
             # disable anything that is not from a official mirror
             if not validMirror:
+                if entry.dist == self.fromDist:
+                    entry.dist = self.toDist
+                entry.comment += _("disabled on upgrade to %s") % self.toDist
                 entry.disabled = True
                 self.sources_disabled = True
                 logging.debug("entry '%s' was disabled (unknown mirror)" % entry)

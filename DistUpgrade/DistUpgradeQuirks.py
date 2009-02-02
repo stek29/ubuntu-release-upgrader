@@ -46,6 +46,7 @@ class DistUpgradeQuirks(object):
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
 
     # the quirk function have the name:
+    #  $Name (e.g. PostUpgrade)
     #  $todist$Name (e.g. intrepidPostUpgrade)
     #  $from_$fromdist$Name (e.g. from_dapperPostUpgrade)
     def run(self, quirksName):
@@ -57,7 +58,15 @@ class DistUpgradeQuirks(object):
                                 in the cache
         - PostUpgrade: run *after* the upgrade is finished successfully and 
                        packages got installed
+        - PostCleanup: run *after* the cleanup (orphaned etc) is finished
         """
+        # run the handler that is common to all dists
+        funcname = "%s" % quirksName
+        func = getattr(self, funcname, None)
+        if func is not None:
+            logging.debug("quirks: running %s" % funcname)
+            func()
+
         # run the quirksHandler to-dist
         funcname = "%s%s" % (self.config.get("Sources","To"), quirksName)
         func = getattr(self, funcname, None)
@@ -105,6 +114,14 @@ class DistUpgradeQuirks(object):
                     
 
     # individual quirks handler when the dpkg run is finished ---------
+    def PostCleanup(self):
+        " run after cleanup " 
+        logging.debug("running Quirks.PostCleanup")
+        self.controller.cache.releaseLock()
+        res = subprocess.call(["dpkg","--forget-old-unavail"])
+        logging.debug("dpkg --forget-old-unavail returned %s" % res)
+        self.controller.cache.getLock()
+
     def from_dapperPostUpgrade(self):
         " this works around quirks for dapper->hardy upgrades "
         logging.debug("running Controller.from_dapperQuirks handler")

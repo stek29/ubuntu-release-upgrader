@@ -1003,6 +1003,9 @@ class DistUpgradeController(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
+        # run stuff after cleanup
+        if not self._partialUpgrade:
+            self.quirks.run("PostCleanup")
         # run the post upgrade scripts that can do fixup like xorg.conf
         # fixes etc - only do on real upgrades
         if not self._partialUpgrade:

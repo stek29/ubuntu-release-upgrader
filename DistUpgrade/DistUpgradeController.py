@@ -332,8 +332,13 @@ class DistUpgradeController(object):
 
     def setupAufs(self):
         " setup aufs overlay "
-        # FIXME: this is currently run *after* /var/log/dist-upgrade/main.log
-        #        is opened and its not in the aufs file    
+        # FIXME: * this is currently run *after* /var/log/dist-upgrade/main.log
+        #          is opened and its not in the aufs file    
+        #        * we need to find a way to tell all the existing daemon 
+        #          to look into the new namespace. so probably something
+        #          like a reboot is required and some hackery in initramfs-tools
+        #          to ensure that we boot into a overlay ready system
+
 	logging.debug("setupAufs")
         rw_dir = self.aufs_rw_dir
         # aufs mounts do not support stacked filesystems, so

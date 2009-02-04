@@ -2,6 +2,7 @@
 
 from UpgradeTestBackend import UpgradeTestBackend
 from DistUpgradeConfigParser import DistUpgradeConfig
+from boto.ec2.connection import EC2Connection
 
 import ConfigParser
 import subprocess
@@ -57,33 +58,31 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     " EC2 backend "
 
     def __init__(self, profile, basedir):
+
         UpgradeTestBackend.__init__(self, profile, basedir)
+
         self.profiledir = os.path.abspath(os.path.dirname(profile))
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
-        if self.ssh_key.startswith("./"):
+	self.access_key_id = self.config.get("EC2","access_key_id")
+	self.secret_access_key = self.config.get("EC2","secret_access_key")
+
+    	self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
+        
+	if self.ssh_key.startswith("./"):
             self.ssh_key = self.profiledir + self.ssh_key[1:]
         self.ssh_port = "22"
+
         # the public name of the instance, e.g. 
         #  ec2-174-129-152-83.compute-1.amazonaws.com
         self.ec2hostname = ""
         # the instance name (e.g. i-3325ad4)
         self.ec2instance = ""
-        # get the tools
-        self.api_tools_path = self.config.get("EC2","ApiToolsPath")
-        if  self.api_tools_path.startswith("./"):
-            self.api_tools_path = self.profiledir + self.api_tools_path[1:]
-        os.environ["PATH"] = "%s:%s" % (self.api_tools_path, os.environ["PATH"])
-        self.ec2_run_instances = "%s/ec2-run-instances" % self.api_tools_path
-        self.ec2_describe_instances = "%s/ec2-describe-instances" % self.api_tools_path
-        self.ec2_reboot_instances = "%s/ec2-reboot-instances" % self.api_tools_path
-        self.ec2_terminate_instances = "%s/ec2-terminate-instances" % self.api_tools_path
-        # verify the environemnt
-        if not ("EC2_CERT" in os.environ and "EC2_PRIVATE_KEY" in os.environ):
-            raise NoCredentialsFoundException("Need EC2_CERT and EC2_PRIVATE_KEY in environment")
+
         if self.config.getboolean("NonInteractive","RealReboot"):
             raise OptionError, "NonInteractive/RealReboot option must be set to False for the ec2 upgrader"
+
 
     def _copyToImage(self, fromF, toF):
         cmd = ["scp",

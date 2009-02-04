@@ -66,12 +66,17 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
-        self.access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+        self.access_key_id = os.getenv("AWS_ACCESS_KEY_ID") \
                              or self.config.get("EC2","access_key_id")
-        self.secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+        self.secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") \
                                  or self.config.get("EC2","secret_access_key")
     	self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         
+        try:
+            self.security_groups = self.config.get("EC2","SecurityGroups")
+        except ConfigParser.NoOptionError:
+            self.security_groups = []
+
     	if self.ssh_key.startswith("./"):
             self.ssh_key = self.profiledir + self.ssh_key[1:]
         self.ssh_port = "22"
@@ -210,7 +215,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         self.instance = self._conn.run_instances(
                            image_id = self.ec2ami,
                            security_groups = self.security_groups,
-                           key_name = ssh_key)[0]
+                           key_name = self.ssh_key)[0]
 
         while self.instance.state == "pending":
                 print "Waiting for instance %u to come up..." % instance.id
@@ -359,4 +364,5 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         print "restoreVMSnapshot not supported yet"
 
     
-        
+# vim:ts=4:sw=4:et
+

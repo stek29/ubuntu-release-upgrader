@@ -212,19 +212,20 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         print "Starting ec2 instance and wait until its availabe "
 
         # start the instance
-        self.instance = self._conn.run_instances(
+        reservation = self._conn.run_instances(
                            image_id = self.ec2ami,
                            security_groups = self.security_groups,
-                           key_name = self.ssh_key[:-4].split("/")[-1])[0]
+                           key_name = self.ssh_key[:-4].split("/")[-1])
 
+        self.instance = reservation.instances[0]
         while self.instance.state == "pending":
-                print "Waiting for instance %u to come up..." % instance.id
+                print "Waiting for instance %u to come up..." % self.instance.id
                 time.sleep(10)
                 self.instance.update()
 
 	print "It's up: hostname =", instance.dns_name
-        self.ec2hostname = instance.dns_name
-        self.ec2instance = instance.id
+        self.ec2hostname = self.instance.dns_name
+        self.ec2instance = self.instance.id
 
         # now sping until ssh comes up in the instance
         for i in range(900):
@@ -239,7 +240,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     
     def reboot_instance(self):
         " reboot a ec2 instance and wait until its available again "
-	self.instance.reboot()
+        self.instance.reboot()
         # FIMXE: find a better way to know when the instance is 
         #        down - maybe with "-v" ?
         time.sleep(5)

@@ -205,8 +205,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     def start_instance(self):
         print "Starting ec2 instance and wait until its availabe "
 
-        # ec2-run-instances self.ec2ami -k self.ssh_key[:-4]
-
         # start the instance
         self.instance = self._conn.run_instances(
                            image_id = self.ec2ami,
@@ -214,10 +212,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                            key_name = ssh_key)[0]
 
         while self.instance.state == "pending":
-                print "Waiting for instance to come up..."
+                print "Waiting for instance %u to come up..." % instance.id
                 time.sleep(10)
                 self.instance.update()
-        
+
+	print "It's up: hostname =", instance.dns_name
         self.ec2hostname = instance.dns_name
         self.ec2instance = instance.id
 
@@ -234,8 +233,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     
     def reboot_instance(self):
         " reboot a ec2 instance and wait until its available again "
-        # ec2-reboot-instance i-3a870237
-        #  does that get a new IP? I guess not 
 	self.instance.reboot()
         # FIMXE: find a better way to know when the instance is 
         #        down - maybe with "-v" ?
@@ -247,7 +244,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
     def stop_instance(self):
         " permanently stop a instance (it can never be started again "
-        # ec2-terminate-instances i-3a870237
         # terminates are final - all data is lost
         self.instance.stop()
         # wait until its down

@@ -70,14 +70,14 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                              or self.config.get("EC2","access_key_id")
         self.secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") \
                                  or self.config.get("EC2","secret_access_key")
-    	self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
+        self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         
         try:
             self.security_groups = self.config.get("EC2","SecurityGroups")
         except ConfigParser.NoOptionError:
             self.security_groups = []
 
-    	if self.ssh_key.startswith("./"):
+        if self.ssh_key.startswith("./"):
             self.ssh_key = self.profiledir + self.ssh_key[1:]
         self.ssh_port = "22"
 
@@ -223,7 +223,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                 time.sleep(10)
                 self.instance.update()
 
-	print "It's up: hostname =", self.instance.dns_name
+        print "It's up: hostname =", self.instance.dns_name
         self.ec2hostname = self.instance.dns_name
         self.ec2instance = self.instance.id
 

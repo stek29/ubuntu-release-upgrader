@@ -236,7 +236,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         " reboot a ec2 instance and wait until its available again "
         # ec2-reboot-instance i-3a870237
         #  does that get a new IP? I guess not 
-        res = subprocess.call([self.ec2_reboot_instances,self.ec2instance])
+	self.instance.reboot()
         # FIMXE: find a better way to know when the instance is 
         #        down - maybe with "-v" ?
         time.sleep(5)
@@ -249,7 +249,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         " permanently stop a instance (it can never be started again "
         # ec2-terminate-instances i-3a870237
         # terminates are final - all data is lost
-        res = subprocess.call([self.ec2_terminate_instances,self.ec2instance])
+        self.instance.stop()
         # wait until its down
         while True:
             if self._runInImage(["/bin/true"]) != 0:

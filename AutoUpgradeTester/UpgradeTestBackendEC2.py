@@ -219,7 +219,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
         self.instance = reservation.instances[0]
         while self.instance.state == "pending":
-                print "Waiting for instance %u to come up..." % self.instance.id
+                print "Waiting for instance %s to come up..." % self.instance.id
                 time.sleep(10)
                 self.instance.update()
 

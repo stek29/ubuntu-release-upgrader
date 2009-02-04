@@ -66,14 +66,20 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
-        self.access_key_id = os.getenv("AWS_ACCESS_KEY_ID") \
-                             or self.config.get("EC2","access_key_id")
-        self.secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") \
-                                 or self.config.get("EC2","secret_access_key")
+        try:
+            self.access_key_id = os.getenv("AWS_ACCESS_KEY_ID") \
+                                 or self.config.get("EC2","access_key_id")
+            self.secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") \
+                                     or self.config.get("EC2","secret_access_key")
+        except ConfigParser.NoOptionError:
+            print "Either export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY or"
+            print "set access_key_id and secret_access_key in the profile config"
+            print "file."
+            sys.exit(1)
         self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         
         try:
-            self.security_groups = self.config.get("EC2","SecurityGroups").split(",")
+            self.security_groups = self.config.getlist("EC2","SecurityGroups")
         except ConfigParser.NoOptionError:
             self.security_groups = []
 

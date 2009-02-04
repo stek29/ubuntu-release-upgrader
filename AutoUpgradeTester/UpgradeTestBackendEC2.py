@@ -215,7 +215,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         self.instance = self._conn.run_instances(
                            image_id = self.ec2ami,
                            security_groups = self.security_groups,
-                           key_name = self.ssh_key)[0]
+                           key_name = self.ssh_key[:-4].split("/")[-1])[0]
 
         while self.instance.state == "pending":
                 print "Waiting for instance %u to come up..." % instance.id

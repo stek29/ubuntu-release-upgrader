@@ -73,7 +73,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         
         try:
-            self.security_groups = self.config.get("EC2","SecurityGroups")
+            self.security_groups = self.config.get("EC2","SecurityGroups").split(",")
         except ConfigParser.NoOptionError:
             self.security_groups = []
 

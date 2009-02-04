@@ -32,10 +32,11 @@ class OptionError(Exception):
 
 # Step to perform for a ec2 upgrade test
 #
-# 1. ec2-run-instances $ami-base-instance-name -k ec2-keypair -z us-east-1a
-#    (no path or extension or anything for ec2-keypair)
-# 2. get instance public name
-# 3. ssh -i ./ec2-keypair.pem root@<public-name> to communicate
+# 1. conn = EC2Connect()
+# 2. reservation = conn.run_instances(image_id = image, security_groups = groups, key_name = key)
+# 3. wait for instance.state == 'running':
+#    instance.update()
+# 4. ssh -i <key> root@instance.dns_name <command>
 
 
 # TODO
@@ -65,12 +66,12 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
-	self.access_key_id = self.config.get("EC2","access_key_id")
-	self.secret_access_key = self.config.get("EC2","secret_access_key")
+        self.access_key_id = self.config.get("EC2","access_key_id")
+        self.secret_access_key = self.config.get("EC2","secret_access_key")
 
     	self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         
-	if self.ssh_key.startswith("./"):
+    	if self.ssh_key.startswith("./"):
             self.ssh_key = self.profiledir + self.ssh_key[1:]
         self.ssh_port = "22"
 
@@ -207,34 +208,18 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ec2-run-instances self.ec2ami -k self.ssh_key[:-4]
 
         # start the instance
-        # FIXME: get the instance ID here so that we know what
-        #        to look for in ec2-describe-instances
-        subprocess.call([self.ec2_run_instances, self.ec2ami,
-                         "-k",os.path.basename(self.ssh_key[:-4])])
+        self.instance = self._conn.run_instances(
+                           image_id = self.ec2ami,
+                           security_groups = self.security_groups,
+                           key_name = ssh_key)[0]
 
-
-        # now spin until it has a IP adress
-        for i in range(900):
-            time.sleep(1)
-            p = Popen(self.ec2_describe_instances, stdout=PIPE)
-            output = p.communicate()[0]
-            print output
-            for line in output.split("\n"):
-                if not line.startswith("INSTANCE"):
-                    continue
-                try:
-                    (keyword, instance, ami, external_ip, internal_ip, status, keypair, number, type, rtime, location, aki, ari) = line.strip().split()
-                    if status != "running":
-                        print "instance not in state running"
-                        continue
-                except Exception, e:
-                    print e
-                    continue
-                self.ec2hostname = external_ip
-                self.ec2instance = instance
-            # check if we got something
-            if self.ec2hostname and self.ec2instance:
-                break
+        while self.instance.state == "pending":
+                print "Waiting for instance to come up..."
+                time.sleep(10)
+                self.instance.update()
+        
+        self.ec2hostname = instance.dns_name
+        self.ec2instance = instance.id
 
         # now sping until ssh comes up in the instance
         for i in range(900):

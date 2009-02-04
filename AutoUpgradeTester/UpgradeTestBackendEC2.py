@@ -223,7 +223,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                 time.sleep(10)
                 self.instance.update()
 
-	print "It's up: hostname =", instance.dns_name
+	print "It's up: hostname =", self.instance.dns_name
         self.ec2hostname = self.instance.dns_name
         self.ec2instance = self.instance.id
 

@@ -66,9 +66,10 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
-        self.access_key_id = self.config.get("EC2","access_key_id")
-        self.secret_access_key = self.config.get("EC2","secret_access_key")
-
+        self.access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+                             or self.config.get("EC2","access_key_id")
+        self.secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+                                 or self.config.get("EC2","secret_access_key")
     	self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         
     	if self.ssh_key.startswith("./"):

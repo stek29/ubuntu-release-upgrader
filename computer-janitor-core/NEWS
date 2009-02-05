@@ -1,0 +1,135 @@
+NEWS for Computer Janitor
+=========================
+
+This file summarizes mainly user-visible changes. For detailed
+changes, please see the bzr commit log messages.
+
+Version 1.11, released 2009-02-03
+
+    * Renamed to Computer Janitor. The old name, Cruft Remover, was using
+      computer jargon (cruft) and gave the wrong impression (the program
+      does not just remove stuff).
+      
+    * New plugin to compact the dpkg status file, from Michael Vogt.
+
+Version 1.10.5, released 2009-01-16
+
+    * Upon startup, we now verify that the package lists look sane by
+      checking for the dash and gzip packages. If they're not available,
+      we assume something is badly wrong and we won't continue. This
+      makes is very unlikely that people will accidentally remove all
+      their packages because apt didn't have any package lists available.
+
+    * A further safeguard: the running kernel and related packages
+      won't ever be considered cruft anymore.
+      
+    * It is now no longer enough to click on the "Cleanup" button to
+      initiate changes (pacxkage removals etc). Instead, a dialog window
+      will pop up and the user has to click on "OK" to continue.
+
+    * A .deb package's short description is now shown in the cruft
+      description. This will help users have an idea what it's all
+      about. (It's insufficient, but was all that there was time for
+      for the Ubuntu intrepid release schedule.)
+      
+    * Columns in the cruft list now have titles, to make it easier
+      to understand what ticks mean (remove cruft? don't remove
+      cruft?).
+      
+    * The program now reads whitelists in /etc/cruft-remover.d. Cruft
+      named in files in that directory will _not_ be removed.
+      
+    * The plugin to remove packages apt considers autoremovable is now
+      enabled. It has been written ages ago, but not been enabled by
+      default until now.
+
+    * The application now uses the icon it has.
+
+    * Added Polish translation from Piotr Makowski.
+
+    * Added Finnish translation from Lars Wirzenius and Timo Jyrinki.
+
+Version 1.10.4, released 2008-10-27
+
+    * Quick bug fixes for the Ubuntu 8.10 release. A proper release
+      of Cruft Remover will be made later.
+
+Version 1.10.3, released 2008-10-14
+
+    * Bug fixes to how messages are logged, primarily to how character
+      sets are encoded. Found by James Westby.
+
+Version 1.10.2, released 2008-10-14
+
+    IMPORTANT CHANGES:
+    
+    * If setting up logging to syslog fails, don't crash. Thanks,
+      Ricardo Wurmus. (LP:#274970)
+
+    * The program now supports translations via gettext. A Finnish
+      translation was added. (LP:#279580)
+
+    * Handles errors by giving nice(r) error messages also in the
+      command line version. The GTK+ version already did that.
+      Thanks, Marco Rodrigues. (LP:#281657)
+
+    MINOR CHANGES:
+    
+    * Wording in manual page fixed. Thanks, James Westby.
+
+    * Non-functional help button hidden. Thanks, Loïc Minier. (LP:#279577)
+    
+    * Cruft description in the GTK+ user interface is cleared after cruft has 
+      been cleaned up.
+
+Version 1.10.1, released 2008-10-06
+
+    * Bugfix: Cruft in /etc/fstab now goes away from the GTK user interface
+      after a cleanup. Found by James Westby, thanks.
+
+    * cruft-remover-gtk now has a manual page.
+
+    * Bugfix: The GTK user interface now no longer imports the gtk and
+      gobject Python modules globally, but only when the code actually
+      runs, to prevent them from being loaded when running unit tests,
+      etc. (The GTK UI code is not unit tested.)
+
+Version 1.10, released 2008-09-30
+
+    * Important fixes to how GTK+ and threads are used: now all GTK+
+      stuff happens only in the main thread. This turns out to be
+      easier to get right than using gtk.gdk.threads_enter and _leave
+      correctly in all situations, and also allows things like
+      gtk.Dialog.run to be used.
+      
+    * Missing test module for the deb_plugin module written.
+    
+    * SystemError exceptions (which are raised by python-apt when
+      there is a dpkg error) are now handled, and an error displayed
+      to the user. This fixes LP: #275034.
+      
+    * The GTK user interface now displays the version number at startup.
+      The command line interface shows it with the new --version option.
+
+Version 1.9, released 2008-09-26
+
+    * Bug fix: cruft-remover-gtk now correctly refreshes the list of
+      cruft after a bug has been fixed. (LP:274715)
+      
+    * Bug fix: cruft-remover-gtk disables the "Cleanup" button if there
+      is nothing to clean up. (LP:274717)
+
+Version 1.8, released 2008-09-23
+
+    * The GTK user interface now lets you select a row without toggling
+      the status of the cruft. This is useful, because the description
+      of each cruft is shown for the selected row only.
+      
+    * Both the GTK and command line user interfaces now attempt to 
+      be more helpful in describing what each piece of cruft is.
+
+Version 1.7, released 2008-09-12
+
+    * First real public release, despite the version number. (If you have
+      seen any earlier versions, they were not real. Not real, I tell
+      you! Not real! They didn't exist! Really!)

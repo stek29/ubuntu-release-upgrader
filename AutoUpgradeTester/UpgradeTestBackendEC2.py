@@ -2,6 +2,7 @@
 
 from UpgradeTestBackend import UpgradeTestBackend
 from DistUpgradeConfigParser import DistUpgradeConfig
+from boto.ec2.connection import EC2Connection
 
 import ConfigParser
 import subprocess
@@ -11,11 +12,8 @@ import os.path
 import shutil
 import glob
 import time
-import signal
-import signal
-import crypt
-import tempfile
 import copy
+import atexit
 
 from subprocess import Popen, PIPE
 from sourceslist import SourcesList
@@ -31,10 +29,11 @@ class OptionError(Exception):
 
 # Step to perform for a ec2 upgrade test
 #
-# 1. ec2-run-instances $ami-base-instance-name -k ec2-keypair -z us-east-1a
-#    (no path or extension or anything for ec2-keypair)
-# 2. get instance public name
-# 3. ssh -i ./ec2-keypair.pem root@<public-name> to communicate
+# 1. conn = EC2Connect()
+# 2. reservation = conn.run_instances(image_id = image, security_groups = groups, key_name = key)
+# 3. wait for instance.state == 'running':
+#    instance.update()
+# 4. ssh -i <key> root@instance.dns_name <command>
 
 
 # TODO
@@ -62,28 +61,42 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
         self.ssh_key = self.config.get("EC2","SSHKey")
+        try:
+            self.access_key_id = (os.getenv("AWS_ACCESS_KEY_ID") or
+                                  self.config.get("EC2","access_key_id"))
+            self.secret_access_key = (os.getenv("AWS_SECRET_ACCESS_KEY") or
+                                      self.config.get("EC2","secret_access_key"))
+        except ConfigParser.NoOptionError:
+            print "Either export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY or"
+            print "set access_key_id and secret_access_key in the profile config"
+            print "file."
+            sys.exit(1)
+        self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
+        
+        try:
+            self.security_groups = self.config.getlist("EC2","SecurityGroups")
+        except ConfigParser.NoOptionError:
+            self.security_groups = []
+
         if self.ssh_key.startswith("./"):
             self.ssh_key = self.profiledir + self.ssh_key[1:]
         self.ssh_port = "22"
+        self.instance = None
+
         # the public name of the instance, e.g. 
         #  ec2-174-129-152-83.compute-1.amazonaws.com
         self.ec2hostname = ""
         # the instance name (e.g. i-3325ad4)
         self.ec2instance = ""
-        # get the tools
-        self.api_tools_path = self.config.get("EC2","ApiToolsPath")
-        if  self.api_tools_path.startswith("./"):
-            self.api_tools_path = self.profiledir + self.api_tools_path[1:]
-        os.environ["PATH"] = "%s:%s" % (self.api_tools_path, os.environ["PATH"])
-        self.ec2_run_instances = "%s/ec2-run-instances" % self.api_tools_path
-        self.ec2_describe_instances = "%s/ec2-describe-instances" % self.api_tools_path
-        self.ec2_reboot_instances = "%s/ec2-reboot-instances" % self.api_tools_path
-        self.ec2_terminate_instances = "%s/ec2-terminate-instances" % self.api_tools_path
-        # verify the environemnt
-        if not ("EC2_CERT" in os.environ and "EC2_PRIVATE_KEY" in os.environ):
-            raise NoCredentialsFoundException("Need EC2_CERT and EC2_PRIVATE_KEY in environment")
-        if self.config.getboolean("NonInteractive","RealReboot"):
+        if (self.config.has_option("NonInteractive","RealReboot") and
+            self.config.getboolean("NonInteractive","RealReboot")):
             raise OptionError, "NonInteractive/RealReboot option must be set to False for the ec2 upgrader"
+        atexit.register(self._cleanup)
+
+    def _cleanup(self):
+        print "_cleanup(): stopping running instance"
+        if self.instance:
+            self.instance.stop()
 
     def _copyToImage(self, fromF, toF):
         cmd = ["scp",
@@ -133,7 +146,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     def installPackages(self, pkgs):
         " install additional pkgs (list) into the vm before the ugprade "
         self._runInImage(["apt-get","update"])
-        ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--reinstall", "-y"]+pkgs)
+        ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--reinstall", "--allow-unauthenticated", "-y"]+pkgs)
         return (ret == 0)
 
     def bootstrap(self, force=False):
@@ -153,14 +166,14 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # FIXME: instead of this retrying (for network errors with 
         #        proxies) we should have a self._runAptInImage() 
         for i in range(3):
-            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg])
+            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--allow-unauthenticated", "-y",basepkg])
         assert(ret == 0)
 
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
         while(len(pkgs)) > 0:
             print "installing additonal: %s" % pkgs[:CMAX]
-            ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","--reinstall","-y"]+pkgs[:CMAX])
+            ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","--reinstall", "--allow-unauthenticated", "-y"]+pkgs[:CMAX])
             print "apt(2) returned: %s" % ret
             if ret != 0:
                 #self._cacheDebs(tmpdir)
@@ -184,7 +197,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                                       "UpgradeFromDistOnBootstrap", False):
             print "running apt-get upgrade in from dist (after bootstrap)"
             for i in range(3):
-                ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
+                ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","--allow-unauthenticated", "-y","dist-upgrade"])
             assert(ret == 0)
 
         print "Cleaning image"
@@ -205,37 +218,19 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     def start_instance(self):
         print "Starting ec2 instance and wait until its availabe "
 
-        # ec2-run-instances self.ec2ami -k self.ssh_key[:-4]
-
         # start the instance
-        # FIXME: get the instance ID here so that we know what
-        #        to look for in ec2-describe-instances
-        subprocess.call([self.ec2_run_instances, self.ec2ami,
-                         "-k",os.path.basename(self.ssh_key[:-4])])
+        reservation = self._conn.run_instances(image_id=self.ec2ami,
+                                               security_groups=self.security_groups,
+                                               key_name=self.ssh_key[:-4].split("/")[-1])
+        self.instance = reservation.instances[0]
+        while self.instance.state == "pending":
+                print "Waiting for instance %s to come up..." % self.instance.id
+                time.sleep(10)
+                self.instance.update()
 
-
-        # now spin until it has a IP adress
-        for i in range(900):
-            time.sleep(1)
-            p = Popen(self.ec2_describe_instances, stdout=PIPE)
-            output = p.communicate()[0]
-            print output
-            for line in output.split("\n"):
-                if not line.startswith("INSTANCE"):
-                    continue
-                try:
-                    (keyword, instance, ami, external_ip, internal_ip, status, keypair, number, type, rtime, location, aki, ari) = line.strip().split()
-                    if status != "running":
-                        print "instance not in state running"
-                        continue
-                except Exception, e:
-                    print e
-                    continue
-                self.ec2hostname = external_ip
-                self.ec2instance = instance
-            # check if we got something
-            if self.ec2hostname and self.ec2instance:
-                break
+        print "It's up: hostname =", self.instance.dns_name
+        self.ec2hostname = self.instance.dns_name
+        self.ec2instance = self.instance.id
 
         # now sping until ssh comes up in the instance
         for i in range(900):
@@ -250,9 +245,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
     
     def reboot_instance(self):
         " reboot a ec2 instance and wait until its available again "
-        # ec2-reboot-instance i-3a870237
-        #  does that get a new IP? I guess not 
-        res = subprocess.call([self.ec2_reboot_instances,self.ec2instance])
+        self.instance.reboot()
         # FIMXE: find a better way to know when the instance is 
         #        down - maybe with "-v" ?
         time.sleep(5)
@@ -263,9 +256,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
     def stop_instance(self):
         " permanently stop a instance (it can never be started again "
-        # ec2-terminate-instances i-3a870237
         # terminates are final - all data is lost
-        res = subprocess.call([self.ec2_terminate_instances,self.ec2instance])
+        self.instance.stop()
         # wait until its down
         while True:
             if self._runInImage(["/bin/true"]) != 0:
@@ -378,4 +370,5 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         print "restoreVMSnapshot not supported yet"
 
     
-        
+# vim:ts=4:sw=4:et
+

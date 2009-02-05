@@ -160,6 +160,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # start the VM
         self.start_instance()
 
+        # prepare the sources.list
+        mirror = self.config.get("NonInteractive","Mirror")
+        ret = self._runInImage(["sed","-i","s#http://archive.ubuntu.com/ubuntu#%s#" % mirror, "/etc/apt/sources.list"]) 
+        assert(ret == 0)
+
         # install some useful stuff
         ret = self._runInImage(["apt-get","update"])
         assert(ret == 0)

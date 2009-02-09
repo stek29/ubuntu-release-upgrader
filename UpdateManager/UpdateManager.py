@@ -106,7 +106,7 @@ class UpdateManagerDbusControler(dbus.service.Object):
 
 class UpdateManager(SimpleGladeApp):
 
-  def __init__(self, datadir):
+  def __init__(self, datadir, options):
     self.setupDbus()
     gtk.window_set_default_icon_name("update-manager")
 
@@ -179,8 +179,16 @@ class UpdateManager(SimpleGladeApp):
         self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
     except gobject.GError, e:
         self.show_versions = False
+    # get progress object
+    self.progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
+                                              self.progressbar_cache,
+                                              self.label_cache,
+                                              self.window_main)
     # restore state
     self.restore_state()
+    if options.no_focus_on_map:
+        self.window_main.set_focus_on_map(False)
+        self.progress._window.set_focus_on_map(False)
     self.window_main.show()
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
@@ -742,13 +750,7 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      progress = GtkProgress.GtkFetchProgress(self,
-                                              _("Downloading the upgrade "
-                                                "tool"),
-                                              _("The upgrade tool will "
-                                                "guide you through the "
-                                                "upgrade process."))
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=progress)
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=self.progress)
       fetcher.run()
       
   def new_dist_available(self, meta_release, upgradable_to):
@@ -780,15 +782,11 @@ class UpdateManager(SimpleGladeApp):
         #sys.exit()
 
     try:
-        progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
-                                             self.progressbar_cache,
-                                             self.label_cache,
-                                             self.window_main)
         if hasattr(self, "cache"):
-            self.cache.open(progress)
+            self.cache.open(self.progress)
             self.cache._initDepCache()
         else:
-            self.cache = MyCache(progress)
+            self.cache = MyCache(self.progress)
     except AssertionError:
         # if the cache could not be opened for some reason,
         # let the release upgrader handle it, it deals
@@ -810,7 +808,7 @@ class UpdateManager(SimpleGladeApp):
         dialog.destroy()
         sys.exit(1)
     else:
-        progress.hide()
+        self.progress.hide()
 
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform

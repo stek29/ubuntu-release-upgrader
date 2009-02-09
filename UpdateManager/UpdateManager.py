@@ -441,11 +441,15 @@ class UpdateManager(SimpleGladeApp):
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
       else:
-          text_header = "<big><b>%s</b></big>" % \
-                        (ngettext("You can install %s update.",
-                                  "You can install %s updates.", 
-                                  num_updates) % \
-                                  num_updates)
+          # show different text on first run (UX team suggestion)
+          firstrun = self.gconfclient.get_bool("/apps/update-manager/first_run")
+          if firstrun:
+              text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
+              text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
+              self.gconfclient.set_bool("/apps/update-manager/first_run", False)
+          else:
+              text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
+              text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from the Administration menu later.")
           text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)

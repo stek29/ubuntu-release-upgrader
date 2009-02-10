@@ -312,7 +312,7 @@ class UpdateManager(SimpleGladeApp):
       if self.expander_details.get_expanded():
         lock = thread.allocate_lock()
         lock.acquire()
-        t=thread.start_new_thread(self.cache.get_changelog,(name,lock))
+        t=thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
         changes_buffer.set_text("%s\n" % _("Downloading list of changes..."))
         iter = changes_buffer.get_iter_at_line(1)
         anchor = changes_buffer.create_child_anchor(iter)
@@ -329,10 +329,15 @@ class UpdateManager(SimpleGladeApp):
         # download finished (or canceld, or time-out)
         button.hide()
         button.disconnect(id);
-
+    # display NEWS.Debian first, then the changelog
+    changes = ""
+    srcpkg = self.cache[name].sourcePackageName
+    if self.cache.all_news.has_key(name):
+        changes += self.cache.all_news[name]
     if self.cache.all_changes.has_key(name):
-      changes = self.cache.all_changes[name]
-      self.set_changes_buffer(changes_buffer, changes[0], name, changes[1])
+        changes += self.cache.all_changes[name]
+    if changes:
+        self.set_changes_buffer(changes_buffer, changes, name, srcpkg)
 
   def show_context_menu(self, widget, event):
     """

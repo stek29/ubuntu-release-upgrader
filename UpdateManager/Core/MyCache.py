@@ -34,7 +34,7 @@ from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 from gettext import gettext as _
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
-CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"
 
 
 class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
@@ -46,6 +46,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         # init the regular cache
         self._initDepCache()
         self.all_changes = {}
+        self.all_news = {}
         # on broken packages, try to fix via saveDistUpgrade()
         if self._depcache.BrokenCount > 0:
             self.saveDistUpgrade()
@@ -107,8 +108,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                         if match.importance > update_origin.importance:
                             update_origin = match
         return update_origin
+
+    def _strip_epoch(self, verstr):
+        " strip of the epoch "
+        l = string.split(verstr,":")
+        if len(l) > 1:
+            verstr = "".join(l[1:])
+        return verstr
         
-    def get_changelog(self, name, lock):
+    def _get_changelog_or_news(self, name, fname, strict_versioning=False):
+        " helper that fetches the file in question "
         # don't touch the gui in this function, it needs to be thread-safe
         pkg = self[name]
 
@@ -122,7 +131,8 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
 
         # get the source version, start with the binaries version
         binver = pkg.candidateVersion
-        srcver = pkg.candidateVersion
+        srcver_epoch = pkg.candidateVersion
+        srcver = self._strip_epoch(srcver_epoch)
         #print "bin: %s" % binver
 
         l = section.split("/")
@@ -134,70 +144,85 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         if srcpkg.startswith("lib"):
             prefix = "lib" + srcpkg[3]
 
-        # stip epoch, but save epoch for later when displaying the
-        # launchpad changelog
-        srcver_epoch = srcver
-        l = string.split(srcver,":")
-        if len(l) > 1:
-            srcver = "".join(l[1:])
-
-        try:
-            uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver)
-            # print "Trying: %s " % uri
-            changelog = urllib2.urlopen(uri)
-            #print changelog.read()
-            # do only get the lines that are new
-            alllines = ""
-            regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
-
-            i=0
-            while True:
-                line = changelog.readline()
-                if line == "":
-                    break
-                match = re.match(regexp,line)
-                if match:
-                    # strip epoch from installed version
-                    # and from changelog too
-                    installed = pkg.installedVersion
-                    if installed and ":" in installed:
-                        installed = installed.split(":",1)[1]
-                    changelogver = match.group(1)
-                    if changelogver and ":" in changelogver:
-                        changelogver = changelogver.split(":",1)[1]
-                    # we test for "==" here to ensure that the version
-                    # is actually really in the changelog - if not
-                    # just display it all, this catches cases like:
-                    # gcc-defaults with "binver=4.3.1" and srcver=1.76
+        uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
+        # print "Trying: %s " % uri
+        changelog = urllib2.urlopen(uri)
+        #print changelog.read()
+        # do only get the lines that are new
+        alllines = ""
+        regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
+        
+        i=0
+        while True:
+            line = changelog.readline()
+            if line == "":
+                break
+            match = re.match(regexp,line)
+            if match:
+                # strip epoch from installed version
+                # and from changelog too
+                installed = pkg.installedVersion
+                if installed and ":" in installed:
+                    installed = installed.split(":",1)[1]
+                changelogver = match.group(1)
+                if changelogver and ":" in changelogver:
+                    changelogver = changelogver.split(":",1)[1]
+                # we test for "==" here for changelogs 
+                # to ensure that the version
+                # is actually really in the changelog - if not
+                # just display it all, this catches cases like:
+                # gcc-defaults with "binver=4.3.1" and srcver=1.76
+                # 
+                # for NEWS.Debian we do require the changelogver > installed
+                if strict_versioning:
+                    if (installed and 
+                        apt_pkg.VersionCompare(changelogver,installed)<0):
+                        break
+                else:
                     if (installed and 
                         apt_pkg.VersionCompare(changelogver,installed)==0):
                         break
-                alllines = alllines + line
-
-            # Print an error if we failed to extract a changelog
-            if len(alllines) == 0:
-                alllines = _("The changelog does not contain any relevant changes.\n\n"
-                             "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-                             "until the changes become available or try again "
-                             "later.") % (srcpkg, srcver_epoch)
-            # only write if we where not canceld
-            if lock.locked():
-                self.all_changes[name] = [alllines, srcpkg]
+            alllines = alllines + line
+        return alllines
+        
+    def get_news_and_changelog(self, name, lock):
+        self.get_news(name)
+        self.get_changelog(name)
+        lock.release()        
+    
+    def get_news(self, name):
+        " get the NEWS.Debian file from the changelogs location "
+        try:
+            news = self._get_changelog_or_news(name, "NEWS.Debian", True)
+        except Exception, e:
+            return
+        if news:
+            self.all_news[name] = news
+                    
+    def get_changelog(self, name):
+        " get the changelog file from the changelog location "
+        srcpkg = self[name].sourcePackageName
+        srcver_epoch = self[name].candidateVersion
+        try:
+            changelog = self._get_changelog_or_news(name, "changelog")
+            if len(changelog) == 0:
+                changelog = _("The changelog does not contain any relevant changes.\n\n"
+                              "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+                              "until the changes become available or try again "
+                              "later.") % (srcpkg, srcver_epoch)
         except urllib2.HTTPError, e:
-            if lock.locked():
-                self.all_changes[name] = [
-                    _("The list of changes is not available yet.\n\n"
-                      "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-                      "until the changes become available or try again "
-                      "later.") % (srcpkg, srcver_epoch),
-                    srcpkg]
+            changelog = _("The list of changes is not available yet.\n\n"
+                          "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+                          "until the changes become available or try again "
+                          "later.") % (srcpkg, srcver_epoch)
         except (IOError, httplib.BadStatusLine, socket.error), e:
             print "caught exception: ", e
             if lock.locked():
-                self.all_changes[name] = [_("Failed to download the list "
-                                            "of changes. \nPlease "
-                                            "check your Internet "
-                                            "connection."), srcpkg]
-        if lock.locked():
-            lock.release()
+                self.all_changes[name] = _("Failed to download the list "
+                                           "of changes. \nPlease "
+                                           "check your Internet "
+                                           "connection.")
+        self.all_changes[name] = changelog
+
+
 

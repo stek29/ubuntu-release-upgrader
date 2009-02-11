@@ -1,5 +1,16 @@
+update-manager (1:0.97.2) UNRELEASED; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - fixes in the error string (thanks to Jean-Baptiste 
+      Lallement, LP: #298296)
+  * support getting NEWS.Debian information in addition
+    to the changelog
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 10 Feb 2009 15:28:49 +0100
+
 update-manager (1:0.97.1) jaunty; urgency=low
 
+  [ Michael Vogt ]
   * UpdateManager/UpdateManager.py:
     - make the gconf handling more robust (LP: #320586)
   * UpdateManager/Core/MyCache.py:
@@ -15,13 +26,24 @@ update-manager (1:0.97.1) jaunty; urgency=low
     - add "PostCleanup" hook 
   * DistUpgrade/cdromupgrade:
     - fixed typo (LP: #312184)
-
+  * add "--no-focus-on-map option to bring update-manager up
+    in the background (UX team)
+  * change default text and add /apps/update-manager/first_run
+    gconf key for the first run welcome message (UX team)
+  * UpdateManager/ChangelogViewer.py:
+    - support "LP: #nr:" linking in changelog entries (LP: #274737)
 
   [ Jonathan Riddell ]
   * DistUpgrade/DistUpgrade.cfg
     - remove guidance-power-manager on kubuntu-desktop upgrade
 
- --
+  [ Andy Whitcroft ]
+  * DistUpgrade/cdromupgrade
+    - move to using dists/$CODENAME to locate the installer eliminating
+      any dependance on symlinks in the image.  This allows usb-creator based
+      images to be used unmodified.  (LP: #326856)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 09 Feb 2009 13:48:01 +0100
 
 update-manager (1:0.97) jaunty; urgency=low
 

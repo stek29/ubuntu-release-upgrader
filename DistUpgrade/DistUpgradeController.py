@@ -1440,7 +1440,7 @@ class DistUpgradeController(object):
             # don't abort here, because it would restore the sources.list
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             sys.exit(1) 
             
@@ -1482,14 +1482,14 @@ class DistUpgradeController(object):
         if not self.doDistUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             return False
         self._view.setStep(STEP_CLEANUP)
         if not self.doPostUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             return False
         self._view.information(_("Upgrade complete"),

@@ -59,4 +59,4 @@ class DpkgStatusPlugin(computerjanitor.Plugin):
                 n_cruft += 1
         if n_cruft:
             return [DpkgStatusCruft(n_cruft)]
-        return None # pragma: no cover
+        return [] # pragma: no cover

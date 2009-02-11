@@ -1,5 +1,5 @@
 # setup.py - distutils module for Computer Janitor
-# Copyright (C) 2008  Canonical, Ltd.
+# Copyright (C) 2008, 2009  Canonical, Ltd.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,10 +34,7 @@ setup(name='computer-janitor',
       author='Lars Wirzenius',
       author_email='lars@ubuntu.com',
       packages=['computerjanitor'],
-      scripts=['computer-janitor'],
-      data_files=[('share/man/man8', ['computer-janitor.8', 
-                                      'computer-janitor-gtk.8']),
-                  ('share/computer-janitor/plugins', plugins())],
+      data_files=[('share/computer-janitor/plugins', plugins())],
       cmdclass = { "build" : build_extra.build_extra,
                    "build_i18n" :  build_i18n.build_i18n,
                    "build_help" :  build_help.build_help,

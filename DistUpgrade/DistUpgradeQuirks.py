@@ -32,6 +32,8 @@ from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
 import gettext
 
+from computerjanitor.plugin import PluginManager
+
 class DistUpgradeQuirks(object):
     """
     This class collects the various quirks handlers that can
@@ -44,6 +46,7 @@ class DistUpgradeQuirks(object):
         self._view = controller._view
         self.config = config
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.plugin_manager = PluginManager(self, ["./plugins"])
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -60,6 +63,16 @@ class DistUpgradeQuirks(object):
                        packages got installed
         - PostCleanup: run *after* the cleanup (orphaned etc) is finished
         """
+        # first check for matching plugins
+        for condition in [
+            quirksName,
+            "%s%s" %  (self.config.get("Sources","To"), quirksName),
+            "from_%s%s" % (self.config.get("Sources","From"), quirksName)
+            ]:
+            for plugin in self.plugin_manager.get_plugins(condition):
+                print plugin
+                plugin.do_cleanup_cruft()
+        
         # run the handler that is common to all dists
         funcname = "%s" % quirksName
         func = getattr(self, funcname, None)
@@ -630,4 +643,5 @@ class DistUpgradeQuirks(object):
                 s.endswith('"%s"' % name)):
                 return True
         return False
-        
+
+

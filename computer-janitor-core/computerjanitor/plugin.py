@@ -31,6 +31,17 @@ class Plugin(object):
     method for details.
     
     """
+
+    def get_condition(self):
+        if hasattr(self, "_condition"):
+            return self._condition
+        else:
+            return None
+            
+    def set_condition(self, condition):
+        self._condition = condition
+
+    condition = property(get_condition, set_condition)
     
     def set_application(self, app):
         """Set the Application instance this plugin belongs to.
@@ -124,7 +135,7 @@ class PluginManager(object):
         f.close()
         return module
 
-    def get_plugins(self, callback=None):
+    def get_plugins(self, condition=None, callback=None):
         """Return all plugins that have been found.
         
         If callback is specified, it is called after each plugin has
@@ -147,4 +158,5 @@ class PluginManager(object):
                     plugin.set_application(self._app)
                     self._plugins.append(plugin)
         
-        return self._plugins
+        return [p for p in self._plugins 
+                if p.condition == condition or condition == "*"]

@@ -30,6 +30,7 @@ class FstabPluginTests(unittest.TestCase):
 /dev/hda2 /bar ext3 defaults 0 2
 /dev/hda3 /yo ext3 relatime 0 2
 /dev/hda3 /yay ext3 noatime 0 2
+/dev/scd0 /cdrom auto defaults 0 0
 remote:/foobar /foobar nfs auto 0 0
 """
 
@@ -54,20 +55,6 @@ remote:/foobar /foobar nfs auto 0 0
                 return line
         raise Exception("Not found in fstab: %s" % dir)
 
-    def testAddsRelatimeToExt2Filesystem(self):
-        line = self.find("/foo")
-        self.assertEqual(set(line.options), 
-                         set(["relatime", "errors=remount-ro"]))
-
-    def testAddsRelatimeToExt3Filesystem(self):
-        line = self.find("/bar")
-        self.assertEqual(set(line.options), 
-                         set(["relatime", "defaults"]))
-
-    def testDoesNotAddSecondRelatimeToLineWithItAlready(self):
-        line = self.find("/yo")
-        self.assertEqual(line.options, ["relatime"])
-
     def testDoesNotAddRelatimeToLineWithNoatime(self):
         line = self.find("/yay")
         self.assertEqual(line.options, ["noatime"])
@@ -76,31 +63,61 @@ remote:/foobar /foobar nfs auto 0 0
         line = self.find("/foobar")
         self.assertEqual(line.options, ["auto"])
 
-    def testReturnsCruft(self):
-        self.assertNotEqual(self.cruft, [])
-        
-    def testReturnsAllRelatimeCruft(self):
-        for cruft in self.cruft:
-            self.assert_(isinstance(cruft, fstab_plugin.RelatimeCruft))
-
-    def testReturnsCruftWithCorrectPrefix(self):
-        for cruft in self.cruft:
-            self.assertEqual(cruft.get_prefix(), "relatime")
-
-    def testReturnsCruftWithCorrectPrefixDescription(self):
-        for cruft in self.cruft:
-            self.assertEqual(cruft.get_prefix_description(), 
-                             "fstab mount option relatime missing")
-
-    def testReturnsCruftWithCorrectShortname(self):
-        for cruft in self.cruft:
-            self.assert_(cruft.get_shortname() in ["/foo", "/bar"])
-
-    def testReturnsCruftForExt2FilesystemThatMentionsTheRightDirectory(self):
-        self.assert_("/foo" in self.cruft[0].get_description())
-
-    def testReturnsCruftForExt3FilesystemThatMentionsTheRightDirectory(self):
-        self.assert_("/bar" in self.cruft[1].get_description())
-
     def testFindsNoCruftAfterPostCommit(self):
         self.assertEqual(self.plugin.get_cruft(), [])
+
+
+class RelatimeCruftTests(unittest.TestCase):
+
+    def setUp(self):
+        self.lines = {}
+        self.crufts = {}
+        for x in ["ext2", "ext3"]:
+            self.lines[x] = fstab.Line("/dev/disk /mnt %s defaults 0 2")
+            self.crufts[x] = fstab_plugin.RelatimeCruft(self.lines[x])
+            self.crufts[x].cleanup()
+
+    def test_returns_correct_prefix(self):
+        self.assertEqual(self.crufts["ext2"].get_prefix(), "relatime")
+    
+    def test_prefix_description_mentions_relatime(self):
+        self.assert_("relatime" in 
+                     self.crufts["ext2"].get_prefix_description())
+
+    def test_returns_correct_shortname(self):
+        self.assertEqual(self.crufts["ext2"].get_shortname(), "/mnt")
+        
+    def test_description_contains_mount_point(self):
+        self.assert_("/mnt" in self.crufts["ext2"].get_description())
+
+    def test_adds_relatime_to_ext2(self):
+        self.assertEqual(set(self.lines["ext2"].options),
+                         set(["relatime", "defaults"]))
+
+    def test_adds_relatime_to_ext3(self):
+        self.assertEqual(set(self.lines["ext3"].options),
+                         set(["relatime", "defaults"]))
+
+
+class Scd0CruftTests(unittest.TestCase):
+
+    def setUp(self):
+        self.line = fstab.Line("/dev/scd0 /cdrom defaults noauto 0 2")
+        self.cruft = fstab_plugin.Scd0Cruft(self.line)
+        self.cruft.cleanup()
+
+    def test_returns_correct_prefix(self):
+        self.assertEqual(self.cruft.get_prefix(), "scd0")
+    
+    def test_prefix_description_mentions_scd0(self):
+        self.assert_("/dev/scd0" in self.cruft.get_prefix_description())
+    
+    def test_returns_correct_shortname(self):
+        self.assertEqual(self.cruft.get_shortname(), "/dev/scd0")
+        
+    def test_description_contains_old_and_new_device(self):
+        self.assert_("/dev/scd0" in self.cruft.get_description())
+        self.assert_("/dev/cdrom" in self.cruft.get_description())
+
+    def testRewritesScd0AsCdromDevice(self):
+        self.assertEqual(self.line.device, "/dev/cdrom")

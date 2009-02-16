@@ -62,7 +62,7 @@ class Plugin(object):
         
         self.app = app
 
-    def do_cleanup_cruft(self):
+    def do_cleanup_cruft(self): # pragma: no cover
         """Find cruft and clean it up.
 
         This is a helper method.

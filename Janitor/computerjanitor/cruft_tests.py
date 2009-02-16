@@ -24,9 +24,10 @@ class CruftTests(unittest.TestCase):
     def setUp(self):
         self.cruft = computerjanitor.Cruft()
 
-    def testRaisesErrorForDefaultGetPrefix(self):
-        self.assertRaises(computerjanitor.UnimplementedMethod,
-                          self.cruft.get_prefix)
+    def testReturnsClassNameAsDefaultPrefix(self):
+        class Mockup(computerjanitor.Cruft):
+            pass
+        self.assertEqual(Mockup().get_prefix(), "Mockup")
 
     def testReturnsEmptyStringAsDefaultPrefixDescription(self):
         self.assertEqual(self.cruft.get_prefix_description(), "")

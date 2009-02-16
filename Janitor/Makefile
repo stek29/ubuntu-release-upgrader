@@ -15,7 +15,7 @@
 
 all:
 
-check: check-unittests check-has-unit-tests check-licenses
+check: check-unittests check-has-unit-tests
 
 check-unittests:
 	env COMPUTER_JANITOR_UNITTEST=yes LC_ALL=C python -m CoverageTestRunner
@@ -24,13 +24,11 @@ check-unittests:
 check-has-unit-tests:
 	find computerjanitor plugins -name '*.py' ! -name '*_tests.py' | \
 	grep -Exv '^computerjanitor/(__init__|ui_gtk).py' | \
+	grep -Exv '^plugins/(remove_lilo|check_admin_group)_plugin.py' | \
 	sed 's/\.py$$//' | \
 	while read file; do \
 	    [ -e $${file}_tests.py ] || \
 	    (echo "Missing unit test: $$file.py"; exit 1); done
-
-check-licenses:
-	./license-check
 
 clean:
 	rm -f computerjanitor/*.py[co] testplugins/*.py[co] .coverage

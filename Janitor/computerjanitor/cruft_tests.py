@@ -32,6 +32,10 @@ class CruftTests(unittest.TestCase):
     def testReturnsEmptyStringAsDefaultPrefixDescription(self):
         self.assertEqual(self.cruft.get_prefix_description(), "")
 
+    def testReturnsDescriptionAsDefaultPrefixDescription(self):
+        self.cruft.get_description = lambda: "foo"
+        self.assertEqual(self.cruft.get_prefix_description(), "foo")
+
     def testRaisesErrorForDefaultGetShortname(self):
         self.assertRaises(computerjanitor.UnimplementedMethod,
                           self.cruft.get_shortname)

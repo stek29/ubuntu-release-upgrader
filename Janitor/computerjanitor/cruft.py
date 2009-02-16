@@ -46,7 +46,7 @@ class Cruft(object):
     
     def get_prefix_description(self):
         """Return human-readable description of class of cruft."""
-        return ""
+        return self.get_description()
     
     def get_shortname(self):
         """Return the name of this piece of cruft.

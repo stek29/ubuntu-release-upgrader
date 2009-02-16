@@ -120,6 +120,7 @@ class DistUpgradeQuirks(object):
         self.controller.cache.releaseLock()
         res = subprocess.call(["dpkg","--forget-old-unavail"])
         logging.debug("dpkg --forget-old-unavail returned %s" % res)
+        # FIXME: we should call --clear-avail as well? 
         self.controller.cache.getLock()
 
     def from_dapperPostUpgrade(self):

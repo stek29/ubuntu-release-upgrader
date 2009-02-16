@@ -24,11 +24,16 @@ class RemoveLiloPlugin(computerjanitor.Plugin):
 
     """Plugin to remove lilo if grub is also installed."""
 
-    description = _("Remove lilo since grub is also installed.")
+    description = _("Remove lilo since grub is also installed."
+                    "(See bug #314004 for details.)")
 
     def get_cruft(self):
         if "lilo" in self.app.apt_cache and "grub" in self.app.apt_cache:
             lilo = self.app.apt_cache["lilo"]
             grub = self.app.apt_cache["grub"]
-            if lio.isInstalled and grub.isInstalled:
-                yield computerjanitor.PackageCruft(lilo, self.description)
+            if lilo.isInstalled and grub.isInstalled:
+                if not os.path.exists("/etc/lilo.conf"):
+                    yield computerjanitor.PackageCruft(lilo, self.description)
+                else:
+                    logging.warning("lilo and grub installed, but "
+                                    "lilo.conf exists")

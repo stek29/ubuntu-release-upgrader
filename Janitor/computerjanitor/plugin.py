@@ -63,10 +63,11 @@ class Plugin(object):
         self.app = app
 
     def do_cleanup_cruft(self):
-        """Find cruft and clean it up
+        """Find cruft and clean it up.
 
-        This is a helper method
+        This is a helper method.
         """
+
         for cruft in self.get_cruft():
             cruft.cleanup()
         self.post_cleanup()

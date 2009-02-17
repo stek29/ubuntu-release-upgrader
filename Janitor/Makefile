@@ -26,6 +26,8 @@ check-has-unit-tests:
 	grep -Exv '^computerjanitor/(__init__|ui_gtk).py' | \
 	grep -Exv '^plugins/(remove_lilo|check_admin_group)_plugin.py' | \
 	grep -Exv '^plugins/(add_nfs_common)_plugin.py' | \
+	grep -Exv '^plugins/(kdelibs4to5|langpack_manual)_plugin.py' | \
+	grep -Exv '^plugins/(add_nfs_common)_plugin.py' | \
 	sed 's/\.py$$//' | \
 	while read file; do \
 	    [ -e $${file}_tests.py ] || \

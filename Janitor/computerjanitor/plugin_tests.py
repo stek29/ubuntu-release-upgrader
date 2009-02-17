@@ -42,7 +42,7 @@ class PluginTests(unittest.TestCase):
 
     def testSetsRequiredConditionToNoneByDefault(self):
         p = computerjanitor.Plugin()
-        self.assertEqual(p.condition, None)
+        self.assertEqual(p.condition, [])
 
 
 class PluginManagerTests(unittest.TestCase):
@@ -87,18 +87,26 @@ class ConditionTests(unittest.TestCase):
 
         class Red(computerjanitor.Plugin):
             def __init__(self):
-                self.condition = "red"
+                self.condition = ["red"]
+
+        class RedBlack(computerjanitor.Plugin):
+            def __init__(self):
+                self.condition = ["red","black"]
 
         self.white = White()
         self.red = Red()
-        self.pm._plugins = [self.white, self.red]
+        self.redblack = RedBlack()
+        self.pm._plugins = [self.white, self.red, self.redblack]
 
     def testReturnsOnlyConditionlessPluginByDefault(self):
         self.assertEqual(self.pm.get_plugins(), [self.white])
 
     def testReturnsOnlyRedPluginWhenConditionIsRed(self):
-        self.assertEqual(self.pm.get_plugins(condition="red"), [self.red])
+        self.assertEqual(self.pm.get_plugins(condition="red"), [self.red, self.redblack])
+
+    def testReturnsOnlyRedPluginWhenConditionIsRedAndBlack(self):
+        self.assertEqual(self.pm.get_plugins(condition=["red","black"]), [self.redblack])
 
     def testReturnsEallPluginsWhenRequested(self):
         self.assertEqual(set(self.pm.get_plugins(condition="*")),
-                         set([self.white, self.red]))
+                         set([self.white, self.red, self.redblack]))

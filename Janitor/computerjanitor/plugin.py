@@ -36,7 +36,7 @@ class Plugin(object):
         if hasattr(self, "_condition"):
             return self._condition
         else:
-            return None
+            return []
             
     def set_condition(self, condition):
         self._condition = condition
@@ -148,7 +148,7 @@ class PluginManager(object):
         f.close()
         return module
 
-    def get_plugins(self, condition=None, callback=None):
+    def get_plugins(self, condition=[], callback=None):
         """Return all plugins that have been found.
         
         If callback is specified, it is called after each plugin has
@@ -170,6 +170,8 @@ class PluginManager(object):
                 for plugin in self._find_plugins(module):
                     plugin.set_application(self._app)
                     self._plugins.append(plugin)
-        
+
         return [p for p in self._plugins 
-                if p.condition == condition or condition == "*"]
+                if (p.condition == condition) or
+                   (condition in p.condition) or
+                   (condition == "*") ]

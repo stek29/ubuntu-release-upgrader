@@ -54,7 +54,7 @@ class RelatimeCruft(FstabCruftBase):
 # FIXME: this should either be like the
 #    def _rewriteFstab(self) in DistUpgradeQuirks()
 # or not exit at all
-class CdromCruft(FstabCruftBase):
+class Scd0Cruft(FstabCruftBase):
 
     """Rewrite iso9660 fs devices as/dev/cdrom in fstab."""
 

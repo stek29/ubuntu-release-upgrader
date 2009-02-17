@@ -22,8 +22,9 @@ class MissingPackageCruft(computerjanitor.Cruft):
 
     """Install a missing package."""
         
-    def __init__(self, package):
+    def __init__(self, package, description=None):
         self.package = package
+        self.description = description
         
     def get_prefix(self):
         return "install-deb"
@@ -35,7 +36,10 @@ class MissingPackageCruft(computerjanitor.Cruft):
         return self.package.name
         
     def get_description(self):
-        return _("Package %s should be installed.") % self.package.name
+        if self.description:    
+            return self.description
+        else:
+            return _("Package %s should be installed.") % self.package.name
                 
     def cleanup(self):
         self.package.markInstall()

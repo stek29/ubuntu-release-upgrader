@@ -51,6 +51,10 @@ class MissingPackageCruftTests(unittest.TestCase):
 
     def testReturnsCorrectDescription(self):
         self.assert_("name" in self.cruft.get_description())
+
+    def testSetsDescriptionWhenAsked(self):
+        pkg = computerjanitor.MissingPackageCruft(self.pkg, "foo")
+        self.assertEqual(pkg.get_description(), "foo")
     
     def testInstallsPackage(self):
         self.cruft.cleanup()

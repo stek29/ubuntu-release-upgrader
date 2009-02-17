@@ -62,11 +62,12 @@ class Plugin(object):
         
         self.app = app
 
-    def do_cleanup_cruft(self):
-        """Find cruft and clean it up
+    def do_cleanup_cruft(self): # pragma: no cover
+        """Find cruft and clean it up.
 
-        This is a helper method
+        This is a helper method.
         """
+
         for cruft in self.get_cruft():
             cruft.cleanup()
         self.post_cleanup()
@@ -139,8 +140,11 @@ class PluginManager(object):
         logging.debug(_("Loading module %s") % filename)
         module_name, dummy = os.path.splitext(os.path.basename(filename))
         f = file(filename, "r")
-        module = imp.load_module(module_name, f, filename,
-                                 (".py", "r", imp.PY_SOURCE))
+        try:
+            module = imp.load_module(module_name, f, filename,
+                                     (".py", "r", imp.PY_SOURCE))
+        except ImportError, e:
+            logging.warning("Failed to load plugin '%s' (%s)" % (module_name, e))
         f.close()
         return module
 

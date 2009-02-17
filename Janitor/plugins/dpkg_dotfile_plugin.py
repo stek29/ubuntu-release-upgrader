@@ -30,6 +30,8 @@ class DpkgDotfilePlugin(computerjanitor.Plugin):
     known to have conffiles. Any regular files with a .dpkg-old or
     .dpkg-new suffix is added to the list.
     
+    The find-conffiles-dirs script in the source code does this.
+    
     """
 
     cruft_description = _("File was left on the disk by dpkg as part of "

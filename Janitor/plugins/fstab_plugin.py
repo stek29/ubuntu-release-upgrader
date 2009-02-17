@@ -20,12 +20,17 @@ import computerjanitor
 _ = computerjanitor.setup_gettext()
 
 
-class RelatimeCruft(computerjanitor.Cruft):
+class FstabCruftBase(computerjanitor.Cruft):
 
-    """Cruft consisting of a missing 'relatime' option for a filesystem."""
+    """Base class for cruft in the fstab file."""
 
     def __init__(self, fstab_line):
         self.fstab_line = fstab_line
+
+
+class RelatimeCruft(FstabCruftBase):
+
+    """Cruft consisting of a missing 'relatime' option for a filesystem."""
         
     def get_prefix(self):
         return "relatime"
@@ -43,6 +48,31 @@ class RelatimeCruft(computerjanitor.Cruft):
     def cleanup(self):
         if "relatime" not in self.fstab_line.options:
             self.fstab_line.options += ["relatime"]
+
+
+
+# FIXME: this should either be like the
+#    def _rewriteFstab(self) in DistUpgradeQuirks()
+# or not exit at all
+class CdromCruft(FstabCruftBase):
+
+    """Rewrite iso9660 fs devices as/dev/cdrom in fstab."""
+
+    def get_prefix(self):
+        return "scd0"
+        
+    def get_prefix_description(self):
+        return "/dev/scd0 should be /dev/cdrom"
+        
+    def get_shortname(self):
+        return "/dev/scd0"
+        
+    def get_description(self):
+        return _("The '/dev/scd0' device should be '/dev/cdrom' in fstab.")
+                
+    def cleanup(self):
+        if self.fstab_line.device == "/dev/scd0":
+            self.fstab_line.device = "/dev/cdrom"
 
 
 class FstabPlugin(computerjanitor.Plugin):
@@ -64,15 +94,28 @@ class FstabPlugin(computerjanitor.Plugin):
         self.fstab_filename = "/etc/fstab"
         self.fstab = None
         
+    def is_relatime_cruft(self, line):
+        return (line.fstype in self.allowed_fstypes and
+                "relatime" not in line.options and
+                "noatime" not in line.options)
+
+    def is_scd0_cruft(self, line):
+        # FIXME: deactivated for now, see above reason why
+        return False
+        #return line.device == "/dev/sc0"
+
     def get_cruft(self):
+        tests = [(self.is_relatime_cruft, RelatimeCruft),
+                 (self.is_scd0_cruft, Scd0Cruft)]
+
         self.fstab = fstab.Fstab()
         self.fstab.read(self.fstab_filename)
+
         cruft = []
         for line in self.fstab.lines:
-            if line.fstype in self.allowed_fstypes:
-                if "relatime" not in line.options:
-                    if "noatime" not in line.options:
-                        cruft.append(RelatimeCruft(line))
+            for test, klass in tests:
+                if test(line):
+                    cruft.append(klass(line))
         return cruft
 
     def post_cleanup(self):

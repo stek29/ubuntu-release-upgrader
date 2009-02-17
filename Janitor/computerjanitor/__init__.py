@@ -43,6 +43,7 @@ def setup_gettext():
 from cruft import Cruft
 from file_cruft import FileCruft
 from package_cruft import PackageCruft
+from missing_package_cruft import MissingPackageCruft
 from exc import ComputerJanitorException as Exception, UnimplementedMethod
 from plugin import Plugin, PluginManager
 

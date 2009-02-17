@@ -36,16 +36,17 @@ class Cruft(object):
         of 'deb'. This way, the package foo is not confused with the
         file foo, or the username foo.
         
-        Subclasses MUST define this. The default implementation
-        raises an exception.
+        Subclasses SHOULD define this. The default implementation
+        returns the name of the class, which is rarely useful to
+        the user.
         
         """
-
-        raise computerjanitor.UnimplementedMethod(self.get_prefix)
+        
+        return self.__class__.__name__
     
     def get_prefix_description(self):
         """Return human-readable description of class of cruft."""
-        return ""
+        return self.get_description()
     
     def get_shortname(self):
         """Return the name of this piece of cruft.

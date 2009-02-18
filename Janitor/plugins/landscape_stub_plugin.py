@@ -44,7 +44,7 @@ class LandscapeStubPlugin(computerjanitor.Plugin):
         self.condition = ["from_hardyPostDistUpgradeCache"]
 
     def get_cruft(self):
-        if not hasattr(self.app, "serverMode"):
+        if not hasattr(self.app, "serverMode"): # pragma: no cover
             return
         name = "landscape-client"
         ver = "0.1"

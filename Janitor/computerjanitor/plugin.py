@@ -21,7 +21,7 @@ import os
 
 import computerjanitor
 _ = computerjanitor.setup_gettext()
-
+import logging
 
 class Plugin(object):
 
@@ -172,8 +172,11 @@ class PluginManager(object):
                 for plugin in self._find_plugins(module):
                     plugin.set_application(self._app)
                     self._plugins.append(plugin)
-
-        return [p for p in self._plugins 
-                if (p.condition == condition) or
+        # get the matching plugins
+        plugins = [p for p in self._plugins 
+                   if (p.condition == condition) or
                    (condition in p.condition) or
                    (condition == "*") ]
+        logging.debug("plugins for condition '%s' are '%s'" %
+                      (condition, plugins))
+        return plugins

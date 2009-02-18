@@ -130,10 +130,6 @@ class DistUpgradeQuirks(object):
     def PostCleanup(self):
         " run after cleanup " 
         logging.debug("running Quirks.PostCleanup")
-        self.controller.cache.releaseLock()
-        res = subprocess.call(["dpkg","--forget-old-unavail"])
-        logging.debug("dpkg --forget-old-unavail returned %s" % res)
-        self.controller.cache.getLock()
 
     def from_dapperPostUpgrade(self):
         " this works around quirks for dapper->hardy upgrades "

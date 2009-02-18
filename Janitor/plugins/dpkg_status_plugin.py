@@ -43,17 +43,8 @@ class DpkgStatusCruft(computerjanitor.Cruft):
 
     def cleanup(self): # pragma: no cover
         logging.debug("calling dpkg --forget-old-unavail")
-        try:
-            PkgSystemUnLock()
-        except Exception, e:
-            logging.warning("PkgSystemUnLock failed: %s" % e)
         res = subprocess.call(["dpkg","--forget-old-unavail"])
         logging.debug("dpkg --forget-old-unavail returned %s" % res)
-        try:
-            PkgSystemLock()
-        except Exception, e:
-            logging.warning("PkgSystemLock failed: %s" % e)
-            
 
 class DpkgStatusPlugin(computerjanitor.Plugin):
 
@@ -69,6 +60,7 @@ class DpkgStatusPlugin(computerjanitor.Plugin):
             (want, flag, status) = statusline.split()
             if want == "purge" and flag == "ok" and status == "not-installed":
                 n_cruft += 1
+        logging.debug("DpkgStatusPlugin found %s cruft items" % n_cruft)
         if n_cruft:
             return [DpkgStatusCruft(n_cruft)]
         return [] # pragma: no cover

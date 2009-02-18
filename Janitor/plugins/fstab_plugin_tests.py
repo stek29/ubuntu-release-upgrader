@@ -99,25 +99,25 @@ class RelatimeCruftTests(unittest.TestCase):
                          set(["relatime", "defaults"]))
 
 
-# class Scd0CruftTests(unittest.TestCase):
+class Scd0CruftTests(unittest.TestCase):
 
-#     def setUp(self):
-#         self.line = fstab.Line("/dev/scd0 /cdrom defaults noauto 0 2")
-#         self.cruft = fstab_plugin.Scd0Cruft(self.line)
-#         self.cruft.cleanup()
+    def setUp(self):
+        self.line = fstab.Line("/dev/scd0 /cdrom defaults noauto 0 2")
+        self.cruft = fstab_plugin.Scd0Cruft(self.line)
+        self.cruft.cleanup()
 
-#     def test_returns_correct_prefix(self):
-#         self.assertEqual(self.cruft.get_prefix(), "scd0")
+    def test_returns_correct_prefix(self):
+        self.assertEqual(self.cruft.get_prefix(), "scd0")
     
-#     def test_prefix_description_mentions_scd0(self):
-#         self.assert_("/dev/scd0" in self.cruft.get_prefix_description())
+    def test_prefix_description_mentions_scd0(self):
+        self.assert_("/dev/scd0" in self.cruft.get_prefix_description())
     
-#     def test_returns_correct_shortname(self):
-#         self.assertEqual(self.cruft.get_shortname(), "/dev/scd0")
+    def test_returns_correct_shortname(self):
+        self.assertEqual(self.cruft.get_shortname(), "/dev/scd0")
         
-#     def test_description_contains_old_and_new_device(self):
-#         self.assert_("/dev/scd0" in self.cruft.get_description())
-#         self.assert_("/dev/cdrom" in self.cruft.get_description())
+    def test_description_contains_old_and_new_device(self):
+        self.assert_("/dev/scd0" in self.cruft.get_description())
+        self.assert_("/dev/cdrom" in self.cruft.get_description())
 
-#     def testRewritesScd0AsCdromDevice(self):
-#         self.assertEqual(self.line.device, "/dev/cdrom")
+    def testRewritesScd0AsCdromDevice(self):
+        self.assertEqual(self.line.device, "/dev/cdrom")

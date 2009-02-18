@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from apt_pkg import ParseTagFile
+from apt_pkg import ParseTagFile, PkgSystemLock, PkgSystemUnLock
 import subprocess
 
 import computerjanitor
@@ -27,7 +27,6 @@ class DpkgStatusCruft(computerjanitor.Cruft):
 
     def __init__(self, n_items):
         self.n_items = n_items
-        self.condition = "PostCleanup"
 
     def get_prefix(self):
         return "dpkg-status"
@@ -42,17 +41,24 @@ class DpkgStatusCruft(computerjanitor.Cruft):
         return _("Obsolete dpkg status entries")
 
     def cleanup(self): # pragma: no cover
-        # FIXME: need to check for dpkg lock and release
-        #        it
         logging.debug("calling dpkg --forget-old-unavail")
+        try:
+            PkgSystemUnLock()
+        except Exception, e:
+            logging.warning("PkgSystemUnLock failed: %s" % e)
         res = subprocess.call(["dpkg","--forget-old-unavail"])
         logging.debug("dpkg --forget-old-unavail returned %s" % res)
-
+        try:
+            PkgSystemLock()
+        except Exception, e:
+            logging.warning("PkgSystemLock failed: %s" % e)
+            
 
 class DpkgStatusPlugin(computerjanitor.Plugin):
 
     def __init__(self, fname="/var/lib/dpkg/status"):
         self.status = fname
+        self.condition = ["PostCleanup"]
     
     def get_cruft(self):
         n_cruft = 0

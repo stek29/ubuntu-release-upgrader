@@ -231,10 +231,12 @@ class DistUpgradeQuirks(object):
             self.controller.cache[topkg].markInstall()
         # next check if a key depends of kubuntu-kde4-desktop is installed
         # and transition in this case as well
-        deps_found = True
-        for pkg in self.config.getlist(frompkg,"KeyDependencies"):
-            deps_found &= (self.controller.cache.has_key(pkg) and
-                           self.controller.cache[pkg].isInstalled)
+        deps_found = False
+        if self.config.getlist(frompkg,"KeyDependencies"):
+            deps_found = True
+            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
+                deps_found &= (self.controller.cache.has_key(pkg) and
+                               self.controller.cache[pkg].isInstalled)
         if deps_found:
             logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
             self.controller.cache[topkg].markInstall()

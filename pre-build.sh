@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # update demotions
-#(cd utils && ./demotions.py intrepid jaunty > demotions.cfg)
-#(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
+(cd utils && ./demotions.py intrepid jaunty > demotions.cfg)
+# cleanup
+rm -rf utils/apt/lists
+(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
 
 # run the test-suit
 #echo "Running integrated tests"

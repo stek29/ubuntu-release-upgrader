@@ -143,8 +143,9 @@ class PluginManager(object):
         try:
             module = imp.load_module(module_name, f, filename,
                                      (".py", "r", imp.PY_SOURCE))
-        except Exception, e:
-            logging.warning("Failed to load plugin '%s' (%s)" % (module_name, e))
+        except Exception, e: # pragma: no cover
+            logging.warning("Failed to load plugin '%s' (%s)" % 
+                            (module_name, e))
             return None
         f.close()
         return module

@@ -34,7 +34,7 @@ def setup_gettext():
     import gettext
     import os
 
-    domain = 'computerjanitor'
+    domain = 'update-manager'
     localedir = os.environ.get('LOCPATH', None)
     t = gettext.translation(domain, localedir=localedir, fallback=True)
     return t.ugettext

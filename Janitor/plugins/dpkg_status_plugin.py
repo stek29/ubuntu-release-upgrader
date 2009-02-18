@@ -18,6 +18,7 @@
 
 from apt_pkg import ParseTagFile, PkgSystemLock, PkgSystemUnLock
 import subprocess
+import logging
 
 import computerjanitor
 _ = computerjanitor.setup_gettext()

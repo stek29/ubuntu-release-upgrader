@@ -17,6 +17,7 @@
 import computerjanitor
 _ = computerjanitor.setup_gettext()
 
+import logging
 
 class ManualInstallCruft(computerjanitor.Cruft):
 

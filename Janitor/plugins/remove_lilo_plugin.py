@@ -16,6 +16,7 @@
 
 import os
 
+import logging
 import computerjanitor
 _ = computerjanitor.setup_gettext()
 

@@ -36,8 +36,6 @@ install: build
 	set -e; \
 	for v in $(PYVERS); do \
 	  python$$v setup.py install --prefix=$(CURDIR)/debian/tmp/usr; \
-	  (cd computer-janitor-core && \
-	   python$$v setup.py install --prefix=$(CURDIR)/debian/tmp/usr); \
 	done
 
 # Build architecture-independent files here.

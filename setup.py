@@ -16,6 +16,8 @@ setup(name='update-manager',
                 'UpdateManagerText',
                 'DistUpgrade',
                 'Janitor',
+                'Janitor.computerjanitor',
+                'Janitor.plugins',
                 ],
       scripts=[
                'update-manager', 

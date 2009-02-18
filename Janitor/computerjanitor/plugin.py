@@ -119,7 +119,7 @@ class PluginManager(object):
         for dirname in self._plugin_dirs:
             basenames = [x for x in os.listdir(dirname) 
                             if x.endswith("_plugin.py")]
-            logging.debug(_("Plugin modules in %s: %s") % 
+            logging.debug("Plugin modules in %s: %s" % 
                             (dirname, " ".join(basenames)))
             names += [os.path.join(dirname, x) for x in basenames]
         
@@ -131,20 +131,21 @@ class PluginManager(object):
         for dummy, member in inspect.getmembers(module):
             if inspect.isclass(member) and issubclass(member, Plugin):
                 plugins.append(member)
-        logging.debug(_("Plugins in %s: %s") %
+        logging.debug("Plugins in %s: %s" %
                       (module, " ".join(str(x) for x in plugins)))
         return [plugin() for plugin in plugins]
 
     def _load_module(self, filename):
         """Load a module from a filename."""
-        logging.debug(_("Loading module %s") % filename)
+        logging.debug("Loading module %s" % filename)
         module_name, dummy = os.path.splitext(os.path.basename(filename))
         f = file(filename, "r")
         try:
             module = imp.load_module(module_name, f, filename,
                                      (".py", "r", imp.PY_SOURCE))
-        except ImportError, e:
+        except Exception, e:
             logging.warning("Failed to load plugin '%s' (%s)" % (module_name, e))
+            return None
         f.close()
         return module
 

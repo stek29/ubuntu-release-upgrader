@@ -22,7 +22,7 @@ import computerjanitor
 _ = computerjanitor.setup_gettext()
 
 
-class AdminGroupCruft(computerplugin.Cruft):
+class AdminGroupCruft(computerjanitor.Cruft):
 
     """Create admin group, if missing, and add user to it."""
         

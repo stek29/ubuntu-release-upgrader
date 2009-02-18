@@ -108,13 +108,15 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                            shell=True) == 0:
             raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
 
-    def _copyToImage(self, fromF, toF):
+    def _copyToImage(self, fromF, toF, recursive=False):
         cmd = ["scp",
                "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts"]
+        if recursive:
+            cmd.append("-r")
         # we support both single files and lists of files
         if isinstance(fromF,list):
             cmd += fromF
@@ -413,6 +415,9 @@ iface eth0 inet static
         for f in glob.glob("%s/DistUpgrade/*" % self.basefilesdir):
             if not os.path.isdir(f):
                 files.append(f)
+            elif os.path.islink(f):
+                print "Copying link '%s' to image " % f
+                self._copyToImage(f, "/upgrade-tester", recursive=True)
         self._copyToImage(files, "/upgrade-tester")
         # copy the profile
         if os.path.exists(self.profile):

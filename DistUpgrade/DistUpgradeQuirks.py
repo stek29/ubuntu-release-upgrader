@@ -32,6 +32,8 @@ from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
 import gettext
 
+from computerjanitor.plugin import PluginManager
+
 class DistUpgradeQuirks(object):
     """
     This class collects the various quirks handlers that can
@@ -44,6 +46,7 @@ class DistUpgradeQuirks(object):
         self._view = controller._view
         self.config = config
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.plugin_manager = PluginManager(self.controller, ["./plugins"])
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -60,6 +63,16 @@ class DistUpgradeQuirks(object):
                        packages got installed
         - PostCleanup: run *after* the cleanup (orphaned etc) is finished
         """
+        # first check for matching plugins
+        for condition in [
+            quirksName,
+            "%s%s" %  (self.config.get("Sources","To"), quirksName),
+            "from_%s%s" % (self.config.get("Sources","From"), quirksName)
+            ]:
+            for plugin in self.plugin_manager.get_plugins(condition):
+                logging.debug("running quirks plugin %s" % plugin)
+                plugin.do_cleanup_cruft()
+        
         # run the handler that is common to all dists
         funcname = "%s" % quirksName
         func = getattr(self, funcname, None)
@@ -117,11 +130,6 @@ class DistUpgradeQuirks(object):
     def PostCleanup(self):
         " run after cleanup " 
         logging.debug("running Quirks.PostCleanup")
-        self.controller.cache.releaseLock()
-        res = subprocess.call(["dpkg","--forget-old-unavail"])
-        logging.debug("dpkg --forget-old-unavail returned %s" % res)
-        # FIXME: we should call --clear-avail as well? 
-        self.controller.cache.getLock()
 
     def from_dapperPostUpgrade(self):
         " this works around quirks for dapper->hardy upgrades "
@@ -188,18 +196,8 @@ class DistUpgradeQuirks(object):
         intrepid->jaunty upgrade calculation
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        if ("lilo" in self.controller.cache and
-            self.controller.cache["lilo"].isInstalled and
-            "grub" in self.controller.cache and
-            self.controller.cache["grub"].isInstalled):
-            logging.debug("both grub and lilo installed")
-            if not os.path.exists("/etc/lilo.conf"):
-                self.controller.cache.markRemove("lilo",
-                                                 "both grub and lilo installed "
-                                                 "(#314004)")
-            else:
-                logging.warning("lilo and grub installed but lilo.conf exists")
-       
+        # nothing to do here currently, this has been converted
+        # to computer janitor plugins
         
     def intrepidPostDistUpgradeCache(self):
         """ 
@@ -207,29 +205,7 @@ class DistUpgradeQuirks(object):
         hardy->intrepid upgrade 
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # language-support-* changed its dependencies from "recommends"
-        # to "suggests" for language-pack-* - this means that apt will
-        # think they are now auto-removalable if they got installed
-        # as a dep of language-support-* - we fix this here
-        for pkg in self.controller.cache:
-            if (pkg.name.startswith("language-pack-") and 
-                not pkg.name.endswith("-base") and
-                self.controller.cache._depcache.IsAutoInstalled(pkg._pkg) and
-                pkg.isInstalled):
-                logging.debug("setting '%s' to manual installed" % pkg.name)
-                pkg.markKeep()
-                pkg.markInstall()
-        # for kde we need to switch from 
-        # kubuntu-desktop-kde4 
-        # to
-        # kubuntu-desktop
-        frompkg = "kubuntu-kde4-desktop"
-        topkg = "kubuntu-desktop"
-        if (self.controller.cache.has_key(frompkg) and
-            self.controller.cache[frompkg].isInstalled):
-            logging.debug("transitioning %s to %s" % (frompkg, topkg))
-            self.controller.cache[topkg].markInstall()
-        # next check if a key depends of kubuntu-kde4-desktop is installed
+        # check if a key depends of kubuntu-kde4-desktop is installed
         # and transition in this case as well
         deps_found = False
         if self.config.getlist(frompkg,"KeyDependencies"):
@@ -240,19 +216,6 @@ class DistUpgradeQuirks(object):
         if deps_found:
             logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
             self.controller.cache[topkg].markInstall()
-        # landscape-client (in desktop mode) goes away (was a stub
-        # anyway)
-        name = "landscape-client"
-        ver = "0.1"
-        if not self.controller.serverMode:
-            if (self.controller.cache.has_key(name) and
-                self.controller.cache[name].installedVersion == ver):
-                self.controller.cache.markRemove(name, 
-                                "custom landscape stub removal rule")
-                if self.controller.cache.has_key("landscape-common"):
-                    self.controller.cache["landscape-common"].markKeep()
-                    self.controller.cache.markInstall("landscape-common", 
-                                "custom landscape-common stub install rule (to ensure its nor marked for auto-remove)")
         # now check for nvidia and show a warning if needed
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
@@ -633,4 +596,5 @@ class DistUpgradeQuirks(object):
                 s.endswith('"%s"' % name)):
                 return True
         return False
-        
+
+

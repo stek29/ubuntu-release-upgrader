@@ -158,6 +158,8 @@ class DistUpgradeController(object):
                                  self.quirks,
                                  self._view.getOpCacheProgress(),
                                  lock)
+            # alias name for the plugin interface code
+            self.apt_cache = self.cache
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
@@ -176,6 +178,7 @@ class DistUpgradeController(object):
                                "already running. Please close that "
                                "application first."));
             sys.exit(1)
+        self.cache.partialUpgrade = self._partialUpgrade
         logging.debug("/openCache()")
 
     def _isRemoteLogin(self):
@@ -689,7 +692,8 @@ class DistUpgradeController(object):
         # check if we have packages in ReqReinst state that are not
         # downloadable
         logging.debug("doPostInitialUpdate")
-        self.quirks.run("PostInitialUpdate")
+        if not self._partialUpgrade:
+            self.quirks.run("PostInitialUpdate")
         if len(self.cache.reqReinstallPkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)

@@ -77,6 +77,7 @@ class MyCache(apt.Cache):
         self.view = view
         self.quirks = quirks
         self.lock = False
+        self.partialUpgrade = False
         self.config = config
         self.metapkgs = self.config.getlist("Distro","MetaPkgs")
         # acquire lock
@@ -390,7 +391,8 @@ class MyCache(apt.Cache):
                     for pkg in self.config.getlist(key,"PostUpgrade%s" % rule):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
         # run the quirks handlers
-        self.quirks.run("PostDistUpgradeCache")
+        if not self.partialUpgrade:
+            self.quirks.run("PostDistUpgradeCache")
 
     def identifyObsoleteKernels(self):
         # we have a funny policy that we remove security updates

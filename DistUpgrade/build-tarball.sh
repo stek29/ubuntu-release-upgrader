@@ -6,7 +6,11 @@ DIST=$(lsb_release -c -s)
 
 # cleanup
 echo "Cleaning up"
-rm -f *~ *.bak *.pyc *.moved '#'* *.rej *.orig
+
+for d in ./ plugins/ computerjanitor/; do
+    rm -f $d/*~ $d/*.bak $d/*.pyc $d/*.moved $d/'#'* $d/*.rej $d/*.orig
+done
+
 #sudo rm -rf backports/ profile/ result/ tarball/ *.deb
 
 # automatically generate codename for the distro in the 

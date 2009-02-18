@@ -223,8 +223,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # set it up
         if (not force and
             os.path.exists("%s.%s" % (self.image,self.fromDist)) and 
-            self.config.has_option("NonInteractive","CacheBaseImage") and
-            self.config.getboolean("NonInteractive","CacheBaseImage")):
+            self.config.has_option("KVM","CacheBaseImage") and
+            self.config.getboolean("KVM","CacheBaseImage")):
             print "Not bootstraping again, we have a cached BaseImage"
             shutil.copy("%s.%s" % (self.image,self.fromDist), self.image)
             return True
@@ -332,8 +332,8 @@ iface eth0 inet static
         self.stop()
 
         # copy cache into place (if needed)
-        if (self.config.has_option("NonInteractive","CacheBaseImage") and
-            self.config.getboolean("NonInteractive","CacheBaseImage")):
+        if (self.config.has_option("KVM","CacheBaseImage") and
+            self.config.getboolean("KVM","CacheBaseImage")):
             shutil.copy(self.image, "%s.%s" % (self.image,self.fromDist))
         
         return True

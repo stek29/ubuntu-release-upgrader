@@ -158,6 +158,8 @@ class DistUpgradeController(object):
                                  self.quirks,
                                  self._view.getOpCacheProgress(),
                                  lock)
+            # alias name for the plugin interface code
+            self.apt_cache = self.cache
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:

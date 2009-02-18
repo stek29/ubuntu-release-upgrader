@@ -471,7 +471,7 @@ iface eth0 inet static
         print "Shuting down the VM"
         self.stop()
 
-        return True
+        return (ret == 0)
 
     def test(self):
         # FIXME: add some tests here to see if the upgrade worked

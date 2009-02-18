@@ -27,6 +27,9 @@ class RemoveLiloPlugin(computerjanitor.Plugin):
     description = _("Remove lilo since grub is also installed."
                     "(See bug #314004 for details.)")
 
+    def __init__(self):
+        self.condition = ["jauntyPostDistUpgradeCache"]
+
     def get_cruft(self):
         if "lilo" in self.app.apt_cache and "grub" in self.app.apt_cache:
             lilo = self.app.apt_cache["lilo"]

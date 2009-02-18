@@ -39,7 +39,7 @@ class AddNfsCommonPlugin(computerjanitor.Plugin):
         if "nfs-common" not in self.app.apt_cache:
             logging.warning("nfs-common package not available")
             return
-        pks = self.app.apt_cache["nfs-common"]
+        pkg = self.app.apt_cache["nfs-common"]
         try:
             for line in map(string.strip, open("/proc/mounts")):
                 if line == '' or line.startswith("#"):

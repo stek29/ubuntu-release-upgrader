@@ -46,6 +46,9 @@ class MarkLangpacksManuallyInstalledPlugin(computerjanitor.Plugin):
 
     """
 
+    def __init__(self):
+        self.condition = ["from_hardyPostDistUpgradeCache"]
+
     def get_cruft(self):
         # language-support-* changed its dependencies from "recommends"
         # to "suggests" for language-pack-* - this means that apt will
@@ -58,5 +61,4 @@ class MarkLangpacksManuallyInstalledPlugin(computerjanitor.Plugin):
                 cache._depcache.IsAutoInstalled(pkg._pkg) and
                 pkg.isInstalled):
                 logging.debug("setting '%s' to manual installed" % pkg.name)
-                pkg.markKeep()
-                pkg.markInstall()
+                yield ManualInstallCruft(pkg)

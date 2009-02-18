@@ -30,7 +30,7 @@ class MissingPackageCruft(computerjanitor.Cruft):
         return "install-deb"
         
     def get_prefix_description(self):
-        return "Install missing package."
+        return _("Install missing package.")
         
     def get_shortname(self):
         return self.package.name

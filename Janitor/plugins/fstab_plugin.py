@@ -51,9 +51,12 @@ class RelatimeCruft(FstabCruftBase):
 
 
 
+# FIXME: this should either be like the
+#    def _rewriteFstab(self) in DistUpgradeQuirks()
+# or not exit at all
 class Scd0Cruft(FstabCruftBase):
 
-    """Rewrite /dev/scd0 as/dev/cdrom in fstab."""
+    """Rewrite iso9660 fs devices as/dev/cdrom in fstab."""
 
     def get_prefix(self):
         return "scd0"
@@ -97,7 +100,9 @@ class FstabPlugin(computerjanitor.Plugin):
                 "noatime" not in line.options)
 
     def is_scd0_cruft(self, line):
-        return line.device == "/dev/sc0"
+        # FIXME: deactivated for now, see above reason why
+        return False
+        #return line.device == "/dev/sc0"
 
     def get_cruft(self):
         tests = [(self.is_relatime_cruft, RelatimeCruft),

@@ -36,7 +36,7 @@ class Plugin(object):
         if hasattr(self, "_condition"):
             return self._condition
         else:
-            return None
+            return []
             
     def set_condition(self, condition):
         self._condition = condition
@@ -119,7 +119,7 @@ class PluginManager(object):
         for dirname in self._plugin_dirs:
             basenames = [x for x in os.listdir(dirname) 
                             if x.endswith("_plugin.py")]
-            logging.debug(_("Plugin modules in %s: %s") % 
+            logging.debug("Plugin modules in %s: %s" % 
                             (dirname, " ".join(basenames)))
             names += [os.path.join(dirname, x) for x in basenames]
         
@@ -131,21 +131,25 @@ class PluginManager(object):
         for dummy, member in inspect.getmembers(module):
             if inspect.isclass(member) and issubclass(member, Plugin):
                 plugins.append(member)
-        logging.debug(_("Plugins in %s: %s") %
+        logging.debug("Plugins in %s: %s" %
                       (module, " ".join(str(x) for x in plugins)))
         return [plugin() for plugin in plugins]
 
     def _load_module(self, filename):
         """Load a module from a filename."""
-        logging.debug(_("Loading module %s") % filename)
+        logging.debug("Loading module %s" % filename)
         module_name, dummy = os.path.splitext(os.path.basename(filename))
         f = file(filename, "r")
-        module = imp.load_module(module_name, f, filename,
-                                 (".py", "r", imp.PY_SOURCE))
+        try:
+            module = imp.load_module(module_name, f, filename,
+                                     (".py", "r", imp.PY_SOURCE))
+        except Exception, e:
+            logging.warning("Failed to load plugin '%s' (%s)" % (module_name, e))
+            return None
         f.close()
         return module
 
-    def get_plugins(self, condition=None, callback=None):
+    def get_plugins(self, condition=[], callback=None):
         """Return all plugins that have been found.
         
         If callback is specified, it is called after each plugin has
@@ -167,6 +171,8 @@ class PluginManager(object):
                 for plugin in self._find_plugins(module):
                     plugin.set_application(self._app)
                     self._plugins.append(plugin)
-        
+
         return [p for p in self._plugins 
-                if p.condition == condition or condition == "*"]
+                if (p.condition == condition) or
+                   (condition in p.condition) or
+                   (condition == "*") ]

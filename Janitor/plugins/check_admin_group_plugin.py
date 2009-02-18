@@ -22,7 +22,7 @@ import computerjanitor
 _ = computerjanitor.setup_gettext()
 
 
-class AdminGroupCruft(computerplugin.Cruft):
+class AdminGroupCruft(computerjanitor.Cruft):
 
     """Create admin group, if missing, and add user to it."""
         
@@ -33,7 +33,7 @@ class AdminGroupCruft(computerplugin.Cruft):
         return "admingroup"
         
     def get_prefix_description(self):
-        return "User is missing from admin group."
+        return _("User is missing from admin group.")
         
     def get_shortname(self):
         return self.username

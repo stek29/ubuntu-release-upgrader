@@ -26,13 +26,16 @@ class Kdelibs4devToKdelibs5devPlugin(computerjanitor.Plugin):
     
     """
 
+    def __init__(self):
+        self.condition = ["from_hardyPostDistUpgradeCache"]
+
     def get_cruft(self):
         fromp = "kdelibs4-dev"
-        to = "kdelibs5-dev"
+        top = "kdelibs5-dev"
         cache = self.app.apt_cache
         if (fromp in cache and cache[fromp].isInstalled and
-            to in cache and not cache[to].isInstalled):
-                yield computerjanitor.MissingPackageCruft(cache[to],
+            top in cache and not cache[top].isInstalled):
+                yield computerjanitor.MissingPackageCruft(cache[top],
                         _("When upgrading, if kdelibs4-dev is installed, "
                           "kdelibs5-dev needs to be installed to. See "
                           "bugs.launchpad.net, bug ##279621 for details."))

@@ -248,7 +248,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         summary = _("Could not install '%s'") % pkg
         msg = _("The upgrade will continue but the '%s' package may be "
                 "in a not working state. Please consider submitting a "
-                "bugreport about it.") % pkg
+                "bug report about it.") % pkg
         msg = "<big><b>%s</b></big><br />%s" % (summary, msg)
         dialogue = dialog_error(self.parent.window_main)
         dialogue.label_error.setText(utf8(msg))

@@ -138,15 +138,122 @@ deb-src http://archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
 deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
 """)
         apt_pkg.Config.Set("APT::Architecture",arch)
+
+
+    def testVerifySourcesListEntry(self):
+        from aptsources.sourceslist import SourceEntry
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        for scheme in ["ftp","http"]:
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ hardy main universe restricted multiverse" % scheme
+            self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
+            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ xxx main" % scheme
+            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+
+    def testEOL2EOLUpgrades(self):
+        " test upgrade from EOL release to EOL release "
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        shutil.copy(os.path.join(self.testdir,"sources.list.EOL"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "warty"
+        d.toDist = "hoary"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        self._verifySources("""
+# main repo
+deb http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse universe
+deb-src http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse
+
+deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted
+""")
+
+    def testEOL2SupportedWithMirrorUpgrade(self):
+        " test upgrade from a EOL release to a supported release with mirroor"
+        os.environ["LANG"] = "de_DE.UTF-8"
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        shutil.copy(os.path.join(self.testdir,"sources.list.EOL2Supported"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "feisty"
+        d.toDist = "gutsy"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        self._verifySources("""
+# main repo
+deb http://de.archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
+deb-src http://de.archive.ubuntu.com/ubuntu gutsy main restricted multiverse
+
+deb http://de.archive.ubuntu.com/ubuntu gutsy-security main restricted
+""")
+
+    def testEOL2SupportedUpgrade(self):
+        " test upgrade from a EOL release to a supported release "
+        os.environ["LANG"] = "C"
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        shutil.copy(os.path.join(self.testdir,"sources.list.EOL2Supported"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.fromDist = "feisty"
+        d.toDist = "gutsy"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+        self._verifySources("""
+# main repo
+deb http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
+
+deb http://archive.ubuntu.com/ubuntu gutsy-security main restricted
+""")
+
+    def test_partner_update(self):
+        """
+        test transition partner repository updates
+        """
+        shutil.copy(os.path.join(self.testdir,"sources.list.partner"),
+                    os.path.join(self.testdir,"sources.list"))
+        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+
+        # now test the result
+        self._verifySources("""
+deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
+
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe multiverse
+
+deb http://archive.canonical.com/ubuntu gutsy partner
+""")
         
         
     def _verifySources(self, expected):
         sources_list = open(apt_pkg.Config.FindFile("Dir::Etc::sourcelist")).read()
         for l in expected.split("\n"):
             self.assert_(l in sources_list,
-                         "expected entry '%s' in sources.list missing" % l)
+                         "expected entry '%s' in sources.list missing. got:\n'''%s'''" % (l, sources_list))
         
 
 if __name__ == "__main__":
-    #logging.basicConfig(level=logging.DEBUG)
+    import sys
+    for e in sys.argv:
+        if e == "-v":
+            logging.basicConfig(level=logging.DEBUG)
     unittest.main()

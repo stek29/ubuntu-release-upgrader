@@ -72,7 +72,11 @@ def FuzzyTimeToStr(sec):
     # plural form
     # 
     # Note: most western languages will not need to change this
-    return _("%(str_days)s %(str_hours)s %(str_minutes)s") % map
+    return _("%(str_days)s %(str_hours)s") % map
+  # display no minutes for time > 3h, see LP: #144455
+  elif hours > 3:
+    return map["str_hours"]
+  # when we are near the end, become more precise again
   elif hours > 0:
     # TRANSLATORS: you can alter the ordering of the remaining time
     # information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -119,7 +123,6 @@ class InstallProgress(apt.progress.InstallProgress):
   """
   def __init__(self):
     apt.progress.InstallProgress.__init__(self)
-    self.pkg_failures = 0
     self.master_fd = None
 
   def startUpdate(self):
@@ -168,8 +171,7 @@ class InstallProgress(apt.progress.InstallProgress):
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport
-    if apport_pkgfailure(pkg, errormsg):
-      self.pkg_failures += 1
+    apport_pkgfailure(pkg, errormsg)
 
 class DumbTerminal(object):
     def call(self, cmd, hidden=False):
@@ -202,10 +204,10 @@ class DistUpgradeView(object):
         return apt.progress.OpProgress()
     def getFetchProgress(self):
         " return a fetch progress object "
-        return apt.progress.FetchProgress()
+        return FetchProgress()
     def getInstallProgress(self, cache=None):
         " return a install progress object "
-        return apt.progress.InstallProgress(cache)
+        return InstallProgress()
     def getTerminal(self):
         return DumbTerminal()
     def updateStatus(self, msg):

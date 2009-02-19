@@ -31,7 +31,7 @@ import gtk
 import apt
 import apt_pkg
 from gettext import gettext as _
-from UpdateManager.Common.utils import *
+from UpdateManager.Core.utils import *
 
 import logging
 import time

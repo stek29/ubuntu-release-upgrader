@@ -46,8 +46,9 @@ binary-indep: build install
 	(cd DistUpgrade/ && \
 	   ./build-tarball.sh && \
 	   mkdir -p $(DEBVER)  && \
-	   cp $(DIST).tar.gz ReleaseAnnouncement $(DEBVER) && \
-	   tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )
+	   cp $(DIST).tar.gz ReleaseAnnouncement DevelReleaseAnnouncement \
+	      $(DEBVER) && \
+	   tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/DevelReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )
 	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
 
 # Build architecture-dependent files here.

@@ -36,7 +36,9 @@ import time
 import copy
 import ConfigParser
 from stat import *
+from utils import country_mirror, url_downloadable
 from string import Template
+
 
 import DistUpgradeView
 from DistUpgradeConfigParser import DistUpgradeConfig
@@ -55,9 +57,6 @@ import gettext
 from DistUpgradeCache import *
 from DistUpgradeApport import *
 
-# some constant
-# the initrd space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 12*1024*1024
 
 class NoBackportsFoundException(Exception):
     pass
@@ -75,16 +74,6 @@ class DistUpgradeController(object):
             gladedir = datadir
         self.datadir = datadir
         self.options = options
-
-        # aufs stuff
-        self.aufs_rw_dir = "/tmp/upgrade-rw"
-        if (self.options and
-            self.options.useAufs and
-            self.options.aufs_rw_dir):
-            self.aufs_rw_dir = self.options.aufs_rw_dir
-            if not os.path.exists(self.aufs_rw_dir):
-                os.makedirs(self.aufs_rw_dir)
-        logging.debug("using '%s' as aufs_rw_dir" % self.aufs_rw_dir)
 
         # init gettext
         gettext.bindtextdomain("update-manager",localedir)
@@ -114,7 +103,15 @@ class DistUpgradeController(object):
         # ConfigParser deals only with strings it seems *sigh*
         self.config.add_section("Options")
         self.config.set("Options","withNetwork", str(self.useNetwork))
-        
+
+        # aufs stuff
+        self.aufs_rw_dir = self.options.aufs_rw_dir
+        if self.options and self.options.useAufs:
+            if not os.path.exists(self.aufs_rw_dir):
+                os.makedirs(self.aufs_rw_dir)
+            self.config.set("Options","aufs_rw_dir", self.aufs_rw_dir)
+            logging.debug("using '%s' as aufs_rw_dir" % self.aufs_rw_dir)
+
         # some constants here
         self.fromDist = self.config.get("Sources","From")
         self.toDist = self.config.get("Sources","To")
@@ -170,6 +167,8 @@ class DistUpgradeController(object):
                                  self.quirks,
                                  self._view.getOpCacheProgress(),
                                  lock)
+            # alias name for the plugin interface code
+            self.apt_cache = self.cache
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
@@ -188,6 +187,7 @@ class DistUpgradeController(object):
                                "already running. Please close that "
                                "application first."));
             sys.exit(1)
+        self.cache.partialUpgrade = self._partialUpgrade
         logging.debug("/openCache()")
 
     def _isRemoteLogin(self):
@@ -401,8 +401,29 @@ class DistUpgradeController(object):
                 self._tryUpdateSelf()
         return True
 
+    def _sourcesListEntryDownloadable(self, entry):
+        """
+        helper that checks if a sources.list entry points to 
+        something downloadable
+        """
+        logging.debug("verifySourcesListEntry: %s" % entry)
+        # no way to verify without network
+        if not self.useNetwork:
+            logging.debug("skiping downloadable check (no network)")
+            return True
+        # check if the entry points to something we can download
+        uri = "%s/dists/%s/Release" % (entry.uri, entry.dist)
+        return url_downloadable(uri, logging.debug)
+
     def rewriteSourcesList(self, mirror_check=True):
         logging.debug("rewriteSourcesList()")
+
+        sync_components = self.config.getlist("Sources","Components")
+
+        # skip mirror check if special environment is set
+        # (useful for server admins with internal repos)
+        if "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ:
+            mirror_check=False
 
         # check if we need to enable main
         if mirror_check == True and self.useNetwork:
@@ -491,16 +512,22 @@ class DistUpgradeController(object):
                 logging.debug("commenting landscape.canonical.com out")
                 entry.disabled = True
                 continue
-
-            # special case for old-releases.ubuntu.com, auto transition
-            # them back to archive.ubuntu.com - now this is a problem
-            # of course for people upgrading from EOL release to a 
-            # EOL release
+            
+            # handle upgrades from a EOL release and check if there
+            # is a supported release available
             if (not entry.disabled and
-                entry.uri.startswith("http://old-releases.ubuntu.com/ubuntu")):
-                entry.uri = "http://archive.ubuntu.com/ubuntu"
-                logging.debug("transitioning old-releases.ubuntu.com to '%s' " % entry)
-                continue
+                "old-releases.ubuntu.com/" in entry.uri):
+                logging.debug("upgrade from old-releases.ubuntu.com detected")
+                # test country mirror first, then archive.u.c
+                for uri in ["http://%sarchive.ubuntu.com/ubuntu" % country_mirror(),
+                            "http://archive.ubuntu.com/ubuntu"]:
+                    test_entry = copy.copy(entry)
+                    test_entry.uri = uri
+                    test_entry.dist = self.toDist
+                    if self._sourcesListEntryDownloadable(test_entry):
+                        logging.info("transition from old-release.u.c to %s" % uri)
+                        entry.uri = uri
+                        break
 
             logging.debug("examining: '%s'" % entry)
             # check if it's a mirror (or official site)
@@ -532,15 +559,8 @@ class DistUpgradeController(object):
                     entry.disabled = True
                     self.sources_disabled = True
                     logging.debug("entry '%s' was disabled (unknown dist)" % entry)
-                # if we make it to this point, we have a official mirror
 
-                # gather what components are enabled and are inconsitent
-                for d in ["%s" % self.toDist,"%s-updates" % self.toDist,"%s-security" % self.toDist]:
-                    if not found_components.has_key(d):
-                        found_components[d] = set()
-                    if not entry.disabled and entry.dist == d:
-                        for comp in entry.comps:
-                            found_components[d].add(comp)
+                # if we make it to this point, we have a official mirror
 
                 # check if the arch is powerpc or sparc and if so, transition
                 # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
@@ -550,9 +570,25 @@ class DistUpgradeController(object):
                     (self.arch == "powerpc" or self.arch == "sparc")):
                     logging.debug("moving %s source entry to 'ports.ubuntu.com' " % self.arch)
                     entry.uri = "http://ports.ubuntu.com/ubuntu-ports/"
+
+                # gather what components are enabled and are inconsitent
+                for d in ["%s" % self.toDist,
+                          "%s-updates" % self.toDist,
+                          "%s-security" % self.toDist]:
+                    # create entry if needed
+                    found_components.setdefault(d,set())
+                    if not entry.disabled and entry.dist == d:
+                        for comp in entry.comps:
+                            # only sync components we know about
+                            if not comp in sync_components:
+                                continue
+                            found_components[d].add(comp)
                     
             # disable anything that is not from a official mirror
             if not validMirror:
+                if entry.dist == self.fromDist:
+                    entry.dist = self.toDist
+                entry.comment += _("disabled on upgrade to %s") % self.toDist
                 entry.disabled = True
                 self.sources_disabled = True
                 logging.debug("entry '%s' was disabled (unknown mirror)" % entry)
@@ -676,7 +712,8 @@ class DistUpgradeController(object):
         # check if we have packages in ReqReinst state that are not
         # downloadable
         logging.debug("doPostInitialUpdate")
-        self.quirks.run("PostInitialUpdate")
+        if not self._partialUpgrade:
+            self.quirks.run("PostInitialUpdate")
         if len(self.cache.reqReinstallPkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
@@ -752,106 +789,14 @@ class DistUpgradeController(object):
                     "Empty your trash and remove temporary "
                     "packages of former installations using "
                     "'sudo apt-get clean'.")
-
-        class FreeSpace(object):
-            " helper class that represents the free space on each mounted fs "
-            def __init__(self, initialFree):
-                self.free = initialFree
-                self.need = 0
-
-        def make_fs_id(d):
-            """ return 'id' of a directory so that directories on the
-                same filesystem get the same id (simply the mount_point)
-            """
-            for mount_point in mounted:
-                if d.startswith(mount_point):
-                    return mount_point
-            return "/"
-
-        # this is all a bit complicated
-        # 1) check what is mounted (in mounted)
-        # 2) create FreeSpace objects for the dirs we are interested in
-        #    (mnt_map)
-        # 3) use the  mnt_map to check if we have enough free space and
-        #    if not tell the user how much is missing
-        mounted = []
-        mnt_map = {}
-        fs_free = {}
-        for line in open("/proc/mounts"):
-            try:
-                (what, where, fs, options, a, b) = line.split()
-            except ValueError, e:
-                logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
-                continue
-            if not where in mounted:
-                mounted.append(where)
-        # make sure mounted is sorted by longest path
-        mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
-        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        for d in ["/","/usr","/var","/boot", archivedir, "/home", self.aufs_rw_dir]:
-            if not os.path.exists(d):
-                continue
-            d = os.path.realpath(d)
-            fs_id = make_fs_id(d)
-            st = os.statvfs(d)
-            free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
-            if fs_id in mnt_map:
-                logging.debug("Dir %s mounted on %s" % (d,mnt_map[fs_id]))
-                fs_free[d] = fs_free[mnt_map[fs_id]]
-            else:
-                logging.debug("Free space on %s: %s" % (d,free))
-                mnt_map[fs_id] = d
-                fs_free[d] = FreeSpace(free)
-        del mnt_map
-        logging.debug("fs_free contains: '%s'" % fs_free)
-
-        # now calculate the space that is required on /boot
-        # we do this by checking how many linux-image-$ver packages
-        # are installed or going to be installed
-        space_in_boot = 0
-        for pkg in self.cache:
-            # we match against everything that looks like a kernel
-            # and add space check to filter out metapackages
-            if re.match("^linux-(image|image-debug)-[0-9.]*-.*", pkg.name):
-                if pkg.markedInstall:
-                    logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    space_in_boot += KERNEL_INITRD_SIZE
-                elif (pkg.markedUpgrade or pkg.isInstalled):
-                    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    space_in_boot += KERNEL_INITRD_SIZE # creates .bak
-
-        # we check for various sizes:
-        # archivedir is were we download the debs
-        # /usr is assumed to get *all* of the install space (incorrect,
-        #      but as good as we can do currently + safety buffer
-        # /     has a small safety buffer as well
-        required_for_aufs = 0.0
-        if self.options and self.options.useAufs:
-            # if we use the aufs rw overlay all the space is consumed
-            # the overlay dir
-            for pkg in self.cache:
-                if pkg.markedUpgrade or pkg.markedInstall:
-                    required_for_aufs += self.cache._depcache.GetCandidateVer(pkg._pkg).Size
-        for (dir, size) in [(archivedir, self.cache.requiredDownload),
-                            ("/usr", self.cache.additionalRequiredSpace),
-                            ("/usr", 50*1024*1024),  # safety buffer /usr
-                            ("/boot", space_in_boot), 
-                            ("/", 10*1024*1024),     # small safety buffer /
-                            (self.aufs_rw_dir, required_for_aufs),
-                           ]:
-            if not os.path.exists(dir):
-                continue
-            dir = os.path.realpath(dir)
-            logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
-            fs_free[dir].free -= size
-            fs_free[dir].need += size
-            if fs_free[dir].free < 0:
-                free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
-                logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
-                self._view.error(err_sum, err_long % (apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least, make_fs_id(dir)))
-                return False
-
-            
+        try:
+            self.cache.checkFreeSpace()
+        except NotEnoughFreeSpaceError, e:
+            self._view.error(err_sum, err_long % (e.size_total,
+                                                  e.dir,
+                                                  e.size_needed,
+                                                  e.dir))
+            return False
         return True
 
 
@@ -954,9 +899,27 @@ class DistUpgradeController(object):
         # abort here because we want our sources.list back
         self._enableAptCronJob()
         self.abort()
+
+    def enableApport(self, fname="/etc/default/apport"):
+        " enable apoprt "
+        if not os.path.exists(fname):
+            return 
+        lines = []
+        for line in open(fname):
+            if line.strip().startswith("enabled=1"):
+                logging.debug("apport already enabled, nothign to do")
+                return
+            elif line.strip().startswith("enabled=0"):
+                logging.debug("enabling apport crash reporting")
+                line = "enabled=1\n"
+            lines.append(line)
+        open(fname,"w").write("".join(lines))
+        subprocess.call(["/etc/init.d/apport","start"])
         
-    
     def doDistUpgrade(self):
+        # check if we want apport running during the upgrade
+        if self.config.getWithDefault("Distro","EnableApport", False):
+            self.enableApport()
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -968,13 +931,6 @@ class DistUpgradeController(object):
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
-                # check if the installprogress catched a pkg_failures, 
-                # if not, generate a fallback here (pkg_failures can be
-                # zero because of e.g. disk-full problems)
-                if iprogress.pkg_failures == 0:
-                    logging.warning("cache.commit() error and pkg_failures == 0, generate a report against update-manager to investigate")
-                    errormsg = "SystemError in cache.commit(): %s" % e
-                    apport_pkgfailure("update-manager", errormsg)
                 # invoke the frontend now
                 msg = _("The upgrade aborts now. Your system "
                         "could be in an unusable state. A recovery "
@@ -1089,6 +1045,9 @@ class DistUpgradeController(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
+        # run stuff after cleanup
+        if not self._partialUpgrade:
+            self.quirks.run("PostCleanup")
         # run the post upgrade scripts that can do fixup like xorg.conf
         # fixes etc - only do on real upgrades
         if not self._partialUpgrade:
@@ -1292,6 +1251,10 @@ class DistUpgradeController(object):
         # 
         # make sure to remove file on cancel
         
+        # FIXME: use the DistUpgradeFetcherCore logic
+        #        in mirror_from_sources_list() here
+        #        (and factor that code out into a helper)
+
         conf_option = "SourcesList"
         if self.config.has_option("PreRequists",conf_option+"-%s" % self.arch):
             conf_option = conf_option + "-%s" % self.arch
@@ -1519,7 +1482,7 @@ class DistUpgradeController(object):
             # don't abort here, because it would restore the sources.list
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             sys.exit(1) 
             
@@ -1561,14 +1524,14 @@ class DistUpgradeController(object):
         if not self.doDistUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             return False
         self._view.setStep(STEP_CLEANUP)
         if not self.doPostUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             return False
         self._view.information(_("Upgrade complete"),

@@ -1,7 +1,7 @@
 Source: update-manager
 Section: gnome
 Priority: optional
-XS-Python-Version: all
+XS-Python-Version: current
 Maintainer: Michael Vogt <michael.vogt@ubuntu.com>
 Build-Depends: debhelper (>= 5.0.51), python-all-dev, python-central (>= 0.5.6), python-distutils-extra (>= 1.90), python-apt (>= 0.7.5), lsb-release, nvidia-common [i386 amd64], fglrx-modaliases [i386 amd64]
 Build-Depends-Indep: libxml-parser-perl, scrollkeeper, intltool
@@ -15,7 +15,7 @@ XB-Python-Version: ${python:Versions}
 Depends: ${python:Depends}, ${misc:Depends}, python-apt (>= 0.7.5),  lsb-release,  python-gnupginterface
 Recommends: update-motd
 Replaces: update-manager (<< 1:0.93.7)
-Conflicts: update-manager (<< 1:0.93.7)
+Conflicts: update-manager (<< 1:0.93.7), computer-janitor (<= 1.11-0ubuntu1)
 Description: manage release upgrades
  This is the core of update-manager and the release upgrader
 
@@ -37,6 +37,14 @@ Description: Hildon application that manages apt updates
  This is the Hildon apt update manager.  It checks for updates and lets the user
  choose which to install.
 
+Package: update-manager-text
+Architecture: all
+XB-Python-Version: ${python:Versions}
+Depends: ${python:Depends}, ${misc:Depends}, update-manager-core, python-newt
+Description: Text application that manages apt updates
+ This is the newt apt update manager.  It checks for updates and lets the user
+ choose which to install.
+
 Package: update-manager-kde
 Architecture: all
 XB-Python-Version: ${python:Versions}
@@ -45,10 +53,10 @@ Description: Support modules for Update Notifier KDE
  Support modules for update-notifier-kde to check for new distro releases and download the
  dist-upgrade tool.
 
-Package: auto-upgrade-tester
-Architecture: all
-XB-Python-Version: ${python:Versions}
-Depends: ${python:Depends}, ${misc:Depends}, update-manager-core (= ${source:Version}), ubuntu-vm-builder, kvm
-Description: Test release upgrades in a kvm environement
- A tool to do QA for release upgrades in ubuntu that performs upgrades
- in a kvm environment.
+#Package: auto-upgrade-tester
+#Architecture: all
+#XB-Python-Version: ${python:Versions}
+#Depends: ${python:Depends}, ${misc:Depends}, update-manager-core (= ${source:Version}), ubuntu-vm-builder, kvm
+#Description: Test release upgrades in a kvm environement
+# A tool to do QA for release upgrades in ubuntu that performs upgrades
+# in a kvm environment.

@@ -45,28 +45,36 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
 
     def _runInChroot(self, chrootdir, command, cmd_options=[]):
         print "runing: ",command
+        print "in: ", chrootdir
         pid = os.fork()
         if pid == 0:
             os.chroot(chrootdir)
+            os.chdir("/")
             os.system("mount -t devpts devpts /dev/pts")
             os.system("mount -t sysfs sysfs /sys")
             os.system("mount -t proc proc /proc")
             os.system("mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc")
-            os.execv(command[0], command)
+            env = os.environ
+            env["DEBIAN_FRONTEND"] = "noninteractive"
+            os.execve(command[0], command, env)
         else:
             print "Parent: waiting for %s" % pid
             (id, exitstatus) = os.waitpid(pid, 0)
             self._umount(chrootdir)
             return exitstatus
 
-    def installPackages(self, pkgs):
-        #self._runApt(tmpdir, "install", pkgs)
-        raise NotImplementedException
-
     def _runApt(self, tmpdir, command, cmd_options=[]):
         ret = self._runInChroot(tmpdir,
                                 ["/usr/bin/apt-get", command]+self.apt_options+cmd_options)
         return ret
+
+
+    def installPackages(self, pkgs):
+        print "installPackages: ", pkgs
+        if not pkgs:
+            return True
+        res = self._runApt(self.tmpdir, "install", pkgs)
+        return res == 0
 
     def _tryRandomPkgInstall(self, amount):
         " install 'amount' packages randomly "
@@ -86,7 +94,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                         print "Can't copy '%s' (%s)" % (f,e)
 
     def _getTmpDir(self):
-        tmpdir = self.config.getWithDefault("NonInteractive","Tempdir",None)
+        tmpdir = self.config.getWithDefault("CHROOT","Tempdir",None)
         if tmpdir is None:
             tmpdir = tempfile.mkdtemp()
         else:
@@ -105,14 +113,18 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
 
         # don't bootstrap twice if this is something we can cache
         try:
-            if (self.config.getboolean("NonInteractive","CacheTarball") and
+            if (self.config.getboolean("CHROOT","CacheTarball") and
                 os.path.exists(self.tarball) ):
+                self.tmpdir = self._unpackToTmpdir(self.tarball)
+                if not self.tmpdir:
+                    print "Error extracting tarball"
+                    return False
                 return True
         except ConfigParser.NoOptionError:
             pass
         
         # bootstrap!
-        tmpdir = self._getTmpDir()
+        self.tmpdir = tmpdir = self._getTmpDir()
         print "tmpdir is %s" % tmpdir
 
         print "bootstraping to %s" % outfile
@@ -143,7 +155,8 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         # write new sources.list
         if (self.config.has_option("NonInteractive","Components") and
             self.config.has_option("NonInteractive","Pockets")):
-            shutil.copy(self.getSourcesListFile(), tmpdir+"/etc/apt/sources.list")
+            sourcelist=self.getSourcesListFile()
+            shutil.copy(sourcelist.name, tmpdir+"/etc/apt/sources.list")
             print open(tmpdir+"/etc/apt/sources.list","r").read()
 
         # move the cache debs
@@ -205,8 +218,6 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         ret = subprocess.call(["tar","czf",outfile,"."])
         print "tar returned %s" % ret
 
-        print "Removing chroot"
-        shutil.rmtree(tmpdir)
         return True
 
     def _populateWithCachedDebs(self, tmpdir):
@@ -225,9 +236,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
             tarball = self.tarball
         assert(tarball != None)
         print "runing upgrade on: %s" % tarball
-        tmpdir = self._unpackToTmpdir(tarball)
-        if not tmpdir:
-            print "Error extracting tarball"
+        tmpdir = self.tmpdir
         #self._runApt(tmpdir, "install",["apache2"])
 
         self._populateWithCachedDebs(tmpdir)
@@ -235,7 +244,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         # copy itself to the chroot (resolve symlinks)
         targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
         if not os.path.exists(targettmpdir):
-            os.mkdir(targettmpdir)
+            os.makedirs(targettmpdir)
         for f in glob.glob("%s/*" % os.path.join(self.basefilesdir,"DistUpgrade")):
             if not os.path.isdir(f):
                 shutil.copy(f, targettmpdir)
@@ -276,7 +285,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
 
     def _unpackToTmpdir(self, baseTarBall):
         # unpack the tarball
-        tmpdir = self._getTmpDir()
+        self.tmpdir = tmpdir = self._getTmpDir()
         os.chdir(tmpdir)
         ret = subprocess.call(["tar","xzf",baseTarBall])
         if ret != 0:

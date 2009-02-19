@@ -68,16 +68,16 @@ import GtkProgress
 from gettext import gettext as _
 from gettext import ngettext
 
-from Common.utils import *
-from Common.SimpleGladeApp import SimpleGladeApp
-from Common.UpdateList import UpdateList
-from Common.HelpViewer import HelpViewer
-from Common.MyCache import MyCache
+
+from Core.utils import *
+from Core.UpdateList import UpdateList
+from Core.MyCache import MyCache, NotEnoughFreeSpaceError
+from Core.MetaRelease import Dist
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
-
-from Core.MetaRelease import Dist
+from SimpleGladeApp import SimpleGladeApp
+from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
 
 #import pdb
@@ -106,7 +106,7 @@ class UpdateManagerDbusControler(dbus.service.Object):
 
 class UpdateManager(SimpleGladeApp):
 
-  def __init__(self, datadir):
+  def __init__(self, datadir, options):
     self.setupDbus()
     gtk.window_set_default_icon_name("update-manager")
 
@@ -118,7 +118,6 @@ class UpdateManager(SimpleGladeApp):
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
     self.button_close.grab_focus()
-
     self.dl_size = 0
 
     # create text view
@@ -168,8 +167,6 @@ class UpdateManager(SimpleGladeApp):
     self.treeview_update.connect("button-press-event", self.show_context_menu)
     self.treeview_update.connect("row-activated", self.row_activated)
 
-
-
     # setup the help viewer and disable the help button if there
     # is no viewer available
     self.help_viewer = HelpViewer("update-manager")
@@ -178,9 +175,20 @@ class UpdateManager(SimpleGladeApp):
 
     self.gconfclient = gconf.client_get_default()
     init_proxy(self.gconfclient)
-
+    try:
+        self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
+    except gobject.GError, e:
+        self.show_versions = False
+    # get progress object
+    self.progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
+                                              self.progressbar_cache,
+                                              self.label_cache,
+                                              self.window_main)
     # restore state
     self.restore_state()
+    if options.no_focus_on_map:
+        self.window_main.set_focus_on_map(False)
+        self.progress._window.set_focus_on_map(False)
     self.window_main.show()
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
@@ -304,7 +312,7 @@ class UpdateManager(SimpleGladeApp):
       if self.expander_details.get_expanded():
         lock = thread.allocate_lock()
         lock.acquire()
-        t=thread.start_new_thread(self.cache.get_changelog,(name,lock))
+        t=thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
         changes_buffer.set_text("%s\n" % _("Downloading list of changes..."))
         iter = changes_buffer.get_iter_at_line(1)
         anchor = changes_buffer.create_child_anchor(iter)
@@ -321,10 +329,15 @@ class UpdateManager(SimpleGladeApp):
         # download finished (or canceld, or time-out)
         button.hide()
         button.disconnect(id);
-
+    # display NEWS.Debian first, then the changelog
+    changes = ""
+    srcpkg = self.cache[name].sourcePackageName
+    if self.cache.all_news.has_key(name):
+        changes += self.cache.all_news[name]
     if self.cache.all_changes.has_key(name):
-      changes = self.cache.all_changes[name]
-      self.set_changes_buffer(changes_buffer, changes[0], name, changes[1])
+        changes += self.cache.all_changes[name]
+    if changes:
+        self.set_changes_buffer(changes_buffer, changes, name, srcpkg)
 
   def show_context_menu(self, widget, event):
     """
@@ -433,11 +446,15 @@ class UpdateManager(SimpleGladeApp):
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
       else:
-          text_header = "<big><b>%s</b></big>" % \
-                        (ngettext("You can install %s update.",
-                                  "You can install %s updates.", 
-                                  num_updates) % \
-                                  num_updates)
+          # show different text on first run (UX team suggestion)
+          firstrun = self.gconfclient.get_bool("/apps/update-manager/first_run")
+          if firstrun:
+              text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
+              text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
+              self.gconfclient.set_bool("/apps/update-manager/first_run", False)
+          else:
+              text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
+              text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from the Administration menu later.")
           text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
@@ -506,6 +523,22 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_install_clicked(self, widget):
     #print "on_button_install_clicked"
+    err_sum = _("Not enough free disk space")
+    err_long= _("The upgrade needs a total of %s free space on disk '%s'. "
+                "Please free at least an additional %s of disk "
+                "space on '%s'. "
+                "Empty your trash and remove temporary "
+                "packages of former installations using "
+                "'sudo apt-get clean'.")
+    # check free space and error if its not enough
+    try:
+        self.cache.checkFreeSpace()
+    except NotEnoughFreeSpaceError, e:
+        self.error(err_sum, err_long % (e.size_total,
+                                        e.dir,
+                                        e.size_needed,
+                                        e.dir))
+        return
     self.invoke_manager(INSTALL)
     
   def invoke_manager(self, action):
@@ -688,7 +721,7 @@ class UpdateManager(SimpleGladeApp):
                    "new_version" : pkg.candidateVersion}
           else:
               version = _("Version %s") % pkg.candidateVersion
-          if self.gconfclient.get_bool("/apps/update-manager/show_versions"):
+          if self.show_versions:
               contents = "%s\n<small>%s %s</small>" % (contents, version, size)
           else:
               contents = "%s <small>%s</small>" % (contents, size)
@@ -726,13 +759,7 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      progress = GtkProgress.GtkFetchProgress(self,
-                                              _("Downloading the upgrade "
-                                                "tool"),
-                                              _("The upgrade tool will "
-                                                "guide you through the "
-                                                "upgrade process."))
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=progress)
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=self.progress)
       if self.options.sandbox:
           fetcher.run_options.append("--sandbox")
       fetcher.run()
@@ -766,15 +793,11 @@ class UpdateManager(SimpleGladeApp):
         #sys.exit()
 
     try:
-        progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
-                                             self.progressbar_cache,
-                                             self.label_cache,
-                                             self.window_main)
         if hasattr(self, "cache"):
-            self.cache.open(progress)
+            self.cache.open(self.progress)
             self.cache._initDepCache()
         else:
-            self.cache = MyCache(progress)
+            self.cache = MyCache(self.progress)
     except AssertionError:
         # if the cache could not be opened for some reason,
         # let the release upgrader handle it, it deals
@@ -796,7 +819,7 @@ class UpdateManager(SimpleGladeApp):
         dialog.destroy()
         sys.exit(1)
     else:
-        progress.hide()
+        self.progress.hide()
 
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform

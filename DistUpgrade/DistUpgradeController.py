@@ -919,7 +919,7 @@ class DistUpgradeController(object):
                     if not run_apport():
                         msg += _("\n\nPlease report this bug against the 'update-manager' "
                                  "package and include the files in /var/log/dist-upgrade/ "
-                                 "in the bugreport.\n"
+                                 "in the bug report.\n"
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
@@ -1363,7 +1363,7 @@ class DistUpgradeController(object):
                                "against the 'update-manager' "
                                "package and include the files in "
                                "/var/log/dist-upgrade/ "
-                               "in the bugreport." ))
+                               "in the bug report." ))
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -1384,7 +1384,7 @@ class DistUpgradeController(object):
                                    "against the 'update-manager' "
                                    "package and include the files in "
                                    "/var/log/dist-upgrade/ "
-                                   "in the bugreport." ))
+                                   "in the bug report." ))
                 self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
@@ -1437,7 +1437,7 @@ class DistUpgradeController(object):
                                    "This indicates a serious error, please "
                                    "report this bug against the 'update-manager' "
                                    "package and include the files in /var/log/dist-upgrade/ "
-                                   "in the bugreport.") % pkg)
+                                   "in the bug report.") % pkg)
                 self.abort()
 
         # calc the dist-upgrade and see if the removals are ok/expected

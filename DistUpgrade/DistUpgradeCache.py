@@ -564,7 +564,7 @@ class MyCache(apt.Cache):
             else:
                 details += _("If none of this applies, then please report this bug against "
                              "the 'update-manager' package and include the files in "
-                             "/var/log/dist-upgrade/ in the bugreport.")
+                             "/var/log/dist-upgrade/ in the bug report.")
             # make the error text available again on stdout for the 
             # text frontend
             self._stopAptResolverLog()

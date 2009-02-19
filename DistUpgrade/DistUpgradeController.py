@@ -43,6 +43,7 @@ from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeFetcherCore import country_mirror
 from DistUpgradeQuirks import DistUpgradeQuirks
 from DistUpgradeAptCdrom import AptCdrom
+from DistUpgradeAufs import setupAufs
 
 from sourceslist import SourcesList, SourceEntry, is_mirror
 from distro import Distribution, get_distro, NoDistroTemplateException
@@ -299,77 +300,6 @@ class DistUpgradeController(object):
                 return False
         return True
 
-    def _bindMount(self, from_dir, to_dir):
-        " helper that bind mounts a given dir to a new place "
-        if not os.path.exists(to_dir):
-            os.makedirs(to_dir)
-        cmd = ["mount","--bind", from_dir, to_dir]
-        res = subprocess.call(cmd)
-        if res != 0:
-            # FIXME: revert already mounted stuff
-            logging.error("Failed to bind mount from '%s' to '%s'" % (from_dir, to_dir))
-            return False
-        return True
-
-    def _aufsOverlayMount(self, target, rw_dir):
-        """ 
-        helper that takes a target dir and mounts a rw dir over it, e.g.
-        /var , /tmp/upgrade-rw
-        """
-        if not os.path.exists(rw_dir+target):
-            os.makedirs(rw_dir+target)
-        cmd = ["mount",
-               "-t","aufs",
-               "-o","br:%s:%s=ro" % (rw_dir+target, target),
-               "none",
-               target]
-        res = subprocess.call(cmd)
-        if res != 0:
-            # FIXME: revert already mounted stuff
-            logging.error("Failed to mount rw aufs overlay for '%s'" % target)
-            return False
-        return True
-
-    def setupAufs(self):
-        " setup aufs overlay "
-        # FIXME: * this is currently run *after* /var/log/dist-upgrade/main.log
-        #          is opened and its not in the aufs file    
-        #        * we need to find a way to tell all the existing daemon 
-        #          to look into the new namespace. so probably something
-        #          like a reboot is required and some hackery in initramfs-tools
-        #          to ensure that we boot into a overlay ready system
-
-	logging.debug("setupAufs")
-        rw_dir = self.aufs_rw_dir
-        # aufs mounts do not support stacked filesystems, so
-        # if we mount /var we will loose the tmpfs stuff
-        # first bind mount varun and varlock into the tmpfs
-        tmpfses = ["/var/run","/var/lock"]
-        for d in tmpfses:
-            if not self._bindMount(d, rw_dir+"/tmpfs/"+d):
-                return False
-        # setup writable overlay into /tmp/upgrade-rw so that all 
-        # changes are written there instead of the real fs
-        for d in ["/bin","/boot","/etc","/lib","/sbin","/usr","/var"]:
-            if not self._aufsOverlayMount(d, rw_dir):
-                return False
-        # now bind back the tempfs to the original location
-        for d in tmpfses:
-            if not self._bindMount(rw_dir+"/tmpfs/"+d, d):
-                return False
-        # FIXME: now what we *could* do to apply the changes is to
-        #        mount -o bind / /orig 
-        #        (bind is important, *not* rbind that includes submounts)
-        # 
-        #        This will give us the original "/" without the 
-        #        aufs rw overlay  - *BUT* only if "/" is all on one parition
-        #             
-        #        then apply the diff (including the whiteouts) to /orig
-        #        e.g. by "rsync -av /tmp/upgrade-rw /orig"
-        #                "script that search for whiteouts and removes them"
-        #        (whiteout files start with .wh.$name
-        #         whiteout dirs with .wh..? - check with aufs man page)
-        return True
 
     def prepare(self):
         """ initial cache opening, sanity checking, network checking """
@@ -386,9 +316,11 @@ class DistUpgradeController(object):
 
         # setup aufs
         if self.options and self.options.useAufs:
-            if not self.setupAufs():
+            if not setupAufs(self.aufs_rw_dir):
                 logging.error("aufs setup failed")
-                self._view.error("aufs setup failed","")
+                self._view.error(_("Sandbox setup failed"),
+                                 _("It was not possible to create the sandbox "
+                                   "environment."))
                 return False
 
         # setup backports (if we have them)

@@ -311,7 +311,7 @@ class DistUpgradeController(object):
             return False
         return True
 
-    def _aufsOverlayMount(self, target, rwdir):
+    def _aufsOverlayMount(self, target, rw_dir):
         """ 
         helper that takes a target dir and mounts a rw dir over it, e.g.
         /var , /tmp/upgrade-rw
@@ -322,7 +322,7 @@ class DistUpgradeController(object):
                "-t","aufs",
                "-o","br:%s:%s=ro" % (rw_dir+target, target),
                "none",
-               d,]
+               target]
         res = subprocess.call(cmd)
         if res != 0:
             # FIXME: revert already mounted stuff

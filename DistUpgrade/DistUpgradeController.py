@@ -879,9 +879,27 @@ class DistUpgradeController(object):
         # abort here because we want our sources.list back
         self._enableAptCronJob()
         self.abort()
+
+    def enableApport(self, fname="/etc/default/apport"):
+        " enable apoprt "
+        if not os.path.exists(fname):
+            return 
+        lines = []
+        for line in open(fname):
+            if line.strip().startswith("enabled=1"):
+                logging.debug("apport already enabled, nothign to do")
+                return
+            elif line.strip().startswith("enabled=0"):
+                logging.debug("enabling apport crash reporting")
+                line = "enabled=1\n"
+            lines.append(line)
+        open(fname,"w").write("".join(lines))
+        subprocess.call(["/etc/init.d/apport","start"])
         
-    
     def doDistUpgrade(self):
+        # check if we want apport running during the upgrade
+        if self.config.getWithDefault("Distro","EnableApport", False):
+            self.enableApport()
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()

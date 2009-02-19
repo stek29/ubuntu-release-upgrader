@@ -33,6 +33,7 @@ def _aufsOverlayMount(target, rw_dir):
         # FIXME: revert already mounted stuff
         logging.error("Failed to mount rw aufs overlay for '%s'" % target)
         return False
+    logging.debug("cmd '%s' return '%s' " % (cmd, res))
     return True
 
 def is_aufs_mount(dir):

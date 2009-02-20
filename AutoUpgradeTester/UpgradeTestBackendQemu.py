@@ -487,6 +487,14 @@ iface eth0 inet static
         # - generate diff of upgrade vs fresh install
         # ...
         #self.genDiff()
+        self.start()
+        self._copyFromImage("/var/crash/*.crash", self.resultdir)
+        crashfiles = glob.glob(self.resultdir+"/*.crash")
+        self.stop()
+        if len(crashfiles) > 0:
+            print "WARNING: crash files detected on the upgrade"
+            print crashfiles
+            return False
         return True
         
 

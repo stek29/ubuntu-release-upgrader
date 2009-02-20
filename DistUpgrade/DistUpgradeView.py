@@ -141,7 +141,7 @@ class InstallProgress(apt.progress.InstallProgress):
     logging.debug("adding pkgremove file")
     if not os.path.exists("/var/lib/pycentral/"):
       os.makedirs("/var/lib/pycentral")
-    os.open("/var/lib/pycentral/pkgremove","w")
+    open("/var/lib/pycentral/pkgremove","w")
       
   def run(self, pm):
     pid = self.fork()

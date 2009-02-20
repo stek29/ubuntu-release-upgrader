@@ -135,20 +135,11 @@ class InstallProgress(apt.progress.InstallProgress):
       if os.path.exists(ap):
         logging.debug("removing bad script '%s'" % ap)
         os.unlink(ap)
-    # fix crash during gutsy->hardy upgrade if any nvidia-glx is installed
-    dist = Popen(["lsb_release","-c","-s"], stdout=PIPE).communicate()[0].strip()
-    nv_link = "/usr/lib/libnvidia-tls.so.1"
-    if dist == "gutsy" and os.path.exists(nv_link):
-      (link_path, link_target_name) = os.path.split(os.path.realpath(nv_link))
-      if not link_path.startswith("/usr/lib/lts"):
-        logging.warning("%s does not points to /usr/lib/tls" % nv_link)
-        new_link_target = os.path.join("/usr/lib/tls",link_target_name)
-        if os.path.exists(new_link_target):
-          logging.info("%s -> %s updated" % (nv_link, new_link_target))
-          os.unlink(nv_link)
-          os.link(new_link_target, nv_link)
-        else:
-          logging.warning("no '%s' found, link *not* updated" % new_link_target)
+    # intrepid->jaunty, create /var/lib/pycentral/pkgremove flag file
+    # to help python-central so that it removes all preinst links
+    # on upgrade
+    if os.path.exists("/var/lib/pycentral/"):
+      os.open("/var/lib/pycentral/pkgremove","w")
       
   def run(self, pm):
     pid = self.fork()

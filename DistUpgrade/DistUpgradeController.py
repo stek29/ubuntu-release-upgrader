@@ -710,7 +710,7 @@ class DistUpgradeController(object):
                                "or remove it from the system.",
                                "The packages '%s' are in an inconsistent "
                                "state and need to be reinstalled, but "
-                               "no archive can be found for it."
+                               "no archive can be found for them. "
                                "Please reinstall the packages manually "
                                "or remove them from the system.",
                                len(reqreinst)) % ", ".join(reqreinst)

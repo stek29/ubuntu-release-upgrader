@@ -126,7 +126,7 @@ class MyCache(apt.Cache):
                                "Do you want to remove this package "
                                "now to continue?",
                                "The packages '%s' are in an inconsistent "
-                               "state and needs to be reinstalled, but "
+                               "state and need to be reinstalled, but "
                                "no archives can be found for them. Do you "
                                "want to remove these packages now to "
                                "continue?",

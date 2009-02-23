@@ -762,7 +762,7 @@ class DistUpgradeController(object):
     def _checkFreeSpace(self):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
-        err_long= _("The upgrade aborts now. "
+        err_long= _("The upgrade is now aborted. "
                     "The upgrade needs a total of %s free space on disk '%s'. "
                     "Please free at least an additional %s of disk "
                     "space on '%s'. "
@@ -871,7 +871,7 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade aborts now. Please check your "
+                         _("The upgrade is now aborted. Please check your "
                            "Internet connection or "
                            "installation media and try again. All files "
                            "downloaded so far are kept."),
@@ -912,7 +912,7 @@ class DistUpgradeController(object):
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
                 # invoke the frontend now
-                msg = _("The upgrade aborts now. Your system "
+                msg = _("The upgrade is now aborted. Your system "
                         "could be in an unusable state. A recovery "
                         "will run now (dpkg --configure -a).")
                 if not self._partialUpgrade:
@@ -938,7 +938,7 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade aborts now. Please check your "\
+                         _("The upgrade is now aborted. Please check your "\
                            "Internet connection or "\
                            "installation media and try again. "),
                            "%s" % e)

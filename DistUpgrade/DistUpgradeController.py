@@ -402,7 +402,9 @@ class DistUpgradeController(object):
 
         # skip mirror check if special environment is set
         # (useful for server admins with internal repos)
-        if "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ:
+        if (self.config.getWithDefault("Sources","AllowThirdParty",False) or
+            "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ):
+            logging.warning("mirror check skipped, *overriden* via config")
             mirror_check=False
 
         # check if we need to enable main

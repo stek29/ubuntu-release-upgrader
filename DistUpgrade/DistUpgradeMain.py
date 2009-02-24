@@ -59,7 +59,7 @@ def setup_logging(options, config):
     # check if logs exists and move logs into place
     if glob.glob(logdir+"/*.log"):
         now = datetime.now()
-        backup_dir = logdir+"/%s%s%s-%s%s" % (now.year,now.month,now.day,now.hour,now.minute)
+        backup_dir = logdir+"/%04i%02i%02i-%02i%02i" % (now.year,now.month,now.day,now.hour,now.minute)
         if not os.path.exists(backup_dir):
             os.mkdir(backup_dir)
         for f in glob.glob(logdir+"/*.log"):
@@ -72,6 +72,9 @@ def setup_logging(options, config):
                         filename=fname,
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode='w')
+    # log what config files are in use here to detect user
+    # changes
+    logging.info("Using config files '%s'" % config.config_files)
     return logdir
     
 def setup_view(options, config, logdir):

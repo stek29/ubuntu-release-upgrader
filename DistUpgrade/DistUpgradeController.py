@@ -769,6 +769,11 @@ class DistUpgradeController(object):
                     "Empty your trash and remove temporary "
                     "packages of former installations using "
                     "'sudo apt-get clean'.")
+        # allow override
+        if self.config.getWithDefault("FreeSpace","SkipCheck",False):
+            logging.warning("free space check skipped via config override")
+            return True
+        # do the check
         try:
             self.cache.checkFreeSpace()
         except NotEnoughFreeSpaceError, e:

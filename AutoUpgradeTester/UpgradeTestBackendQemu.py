@@ -411,7 +411,7 @@ iface eth0 inet static
         print "copy upgrader into image"
         # copy the upgrade into target+/upgrader-tester/
         files = []
-        self._runInImage(["mkdir","/upgrade-tester"])
+        self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
         for f in glob.glob("%s/DistUpgrade/*" % self.basefilesdir):
             if not os.path.isdir(f):
                 files.append(f)
@@ -421,11 +421,12 @@ iface eth0 inet static
         self._copyToImage(files, "/upgrade-tester")
         # copy the profile
         if os.path.exists(self.profile):
-            print "Copying '%s' to image " % self.profile
-            self._copyToImage(self.profile, "/upgrade-tester")
+            print "Copying '%s' to image overrides" % self.profile
+            self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
         # and any other cfg files
         for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
-            if os.path.isfile(f):
+            if (os.path.isfile(f) and
+                not os.path.basename(f).startswith("DistUpgrade.cfg")):
                 print "Copying '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester")
         # and prereq lists

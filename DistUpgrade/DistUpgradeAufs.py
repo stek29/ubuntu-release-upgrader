@@ -70,6 +70,16 @@ def is_real_fs(fs):
         return False
     return True
 
+def doAufsChroot(aufs_rw_dir="/tmp/upgrade-rw",
+                 aufs_chroot_dir = "/tmp/upgrade-chroot"):
+    " helper that sets the chroot up and does chroot() into it "
+    if not setupAufsChroot(aufs_rw_dir, aufs_chroot_dir):
+        return False
+    os.chroot(aufs_chroot_dir)
+    os.chdir("/")
+    return True
+
+
 def setupAufsChroot(rw_dir, chroot_dir):
     " setup aufs chroot that is based on / but with a writable overlay "
     # with the chroot aufs we can just rsync the changes back

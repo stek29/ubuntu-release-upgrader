@@ -106,10 +106,7 @@ class DistUpgradeController(object):
 
         # aufs stuff
         self.aufs_rw_dir = self.options.aufs_rw_dir
-        if ( (self.options and self.options.useAufs) or
-             self.config.getWithDefault("Aufs","EnableFullOverlay",False)):
-            if not os.path.exists(self.aufs_rw_dir):
-                os.makedirs(self.aufs_rw_dir)
+        if self.options and self.options.useAufs:
             self.config.set("Options","aufs_rw_dir", self.aufs_rw_dir)
             logging.debug("using '%s' as aufs_rw_dir" % self.aufs_rw_dir)
 
@@ -316,13 +313,27 @@ class DistUpgradeController(object):
             sys.exit(1)
 
         # setup aufs
-        if self.options and self.options.useAufs:
+        if ( (self.options and self.options.useAufs) or
+             self.config.getWithDefault("Aufs","EnableFullOverlay",False)):
+            if not os.path.exists(self.aufs_rw_dir):
+                os.makedirs(self.aufs_rw_dir)
             if not setupAufs(self.aufs_rw_dir):
                 logging.error("aufs setup failed")
                 self._view.error(_("Sandbox setup failed"),
                                  _("It was not possible to create the sandbox "
                                    "environment."))
                 return False
+            # all good, tell the user about it
+            logging.info("running in aufs overlay mode")
+            self._view.information(_("Sandbox mode"),
+                                   _("This upgrade is running in sandbox "
+                                     "(test) mode. All changes are written "
+                                     "to '%s' and will be lost on the next "
+                                     "reboot.\n\n"
+                                     "*No* changes written to a systemdir "
+                                     "from now until the next reboot are "
+                                     "permanent.") % self.aufs_rw_dir)
+            
 
         # setup backports (if we have them)
         if self.options and self.options.havePrerequists:

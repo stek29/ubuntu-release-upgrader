@@ -72,6 +72,12 @@ def is_real_fs(fs):
 
 def setupAufsChroot(rw_dir, chroot_dir):
     " setup aufs chroot that is based on / but with a writable overlay "
+    # with the chroot aufs we can just rsync the changes back
+    # from the chroot dir to the real dirs
+    # 
+    # (if we run rsync with --backup --backup-dir we could even
+    # create something vaguely rollbackable
+    
     # get the mount points before the aufs buisiness starts
     mounts = open("/proc/mounts").read()
 

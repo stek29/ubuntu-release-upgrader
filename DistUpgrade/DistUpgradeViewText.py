@@ -108,7 +108,7 @@ class DistUpgradeViewText(DistUpgradeView):
                  _("Please report this as a bug and include the "
                    "files /var/log/dist-upgrade/main.log and "
                    "/var/log/dist-upgrade/apt.log "
-                   "in your report. The upgrade aborts now.\n"
+                   "in your report. The upgrade is now aborted.\n"
                    "Your original sources.list was saved in "
                    "/etc/apt/sources.list.distUpgrade."),
                  "\n".join(lines))

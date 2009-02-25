@@ -36,7 +36,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror
+from utils import country_mirror, url_downloadable
 from string import Template
 
 
@@ -158,6 +158,8 @@ class DistUpgradeController(object):
                                  self.quirks,
                                  self._view.getOpCacheProgress(),
                                  lock)
+            # alias name for the plugin interface code
+            self.apt_cache = self.cache
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
@@ -176,6 +178,7 @@ class DistUpgradeController(object):
                                "already running. Please close that "
                                "application first."));
             sys.exit(1)
+        self.cache.partialUpgrade = self._partialUpgrade
         logging.debug("/openCache()")
 
     def _isRemoteLogin(self):
@@ -389,43 +392,20 @@ class DistUpgradeController(object):
             logging.debug("skiping downloadable check (no network)")
             return True
         # check if the entry points to something we can download
-        import urlparse
         uri = "%s/dists/%s/Release" % (entry.uri, entry.dist)
-        (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
-        if scheme == "http":
-            import httplib
-            c = httplib.HTTPConnection(netloc)
-            try:
-                c.request("HEAD", path)
-                res = c.getresponse()
-                logging.debug("_sourcesListEntryDownloadable result '%s'" % res.status)
-                res.close()
-            except Exception, e:
-                logging.debug("error from httplib: '%s'" % e)
-                return False
-            if res.status == 200:
-                return True
-            return False
-        elif scheme == "ftp":
-            import ftplib
-            f = ftplib.FTP(netloc)
-            f.login()
-            try:
-                f.cwd(os.path.dirname(path))
-                size = f.size(os.path.basename(path))
-                f.quit()
-                if size != 0:
-                    return True
-                return False
-            except Exception, e:
-                logging.debug("error from ftplib: '%s'" % e)
-                return False
-        return True
+        return url_downloadable(uri, logging.debug)
 
     def rewriteSourcesList(self, mirror_check=True):
         logging.debug("rewriteSourcesList()")
 
         sync_components = self.config.getlist("Sources","Components")
+
+        # skip mirror check if special environment is set
+        # (useful for server admins with internal repos)
+        if (self.config.getWithDefault("Sources","AllowThirdParty",False) or
+            "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ):
+            logging.warning("mirror check skipped, *overriden* via config")
+            mirror_check=False
 
         # check if we need to enable main
         if mirror_check == True and self.useNetwork:
@@ -588,6 +568,9 @@ class DistUpgradeController(object):
                     
             # disable anything that is not from a official mirror
             if not validMirror:
+                if entry.dist == self.fromDist:
+                    entry.dist = self.toDist
+                entry.comment += _("disabled on upgrade to %s") % self.toDist
                 entry.disabled = True
                 self.sources_disabled = True
                 logging.debug("entry '%s' was disabled (unknown mirror)" % entry)
@@ -711,7 +694,8 @@ class DistUpgradeController(object):
         # check if we have packages in ReqReinst state that are not
         # downloadable
         logging.debug("doPostInitialUpdate")
-        self.quirks.run("PostInitialUpdate")
+        if not self._partialUpgrade:
+            self.quirks.run("PostInitialUpdate")
         if len(self.cache.reqReinstallPkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
@@ -728,7 +712,7 @@ class DistUpgradeController(object):
                                "or remove it from the system.",
                                "The packages '%s' are in an inconsistent "
                                "state and need to be reinstalled, but "
-                               "no archive can be found for it."
+                               "no archive can be found for them. "
                                "Please reinstall the packages manually "
                                "or remove them from the system.",
                                len(reqreinst)) % ", ".join(reqreinst)
@@ -780,13 +764,18 @@ class DistUpgradeController(object):
     def _checkFreeSpace(self):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
-        err_long= _("The upgrade aborts now. "
+        err_long= _("The upgrade is now aborted. "
                     "The upgrade needs a total of %s free space on disk '%s'. "
                     "Please free at least an additional %s of disk "
                     "space on '%s'. "
                     "Empty your trash and remove temporary "
                     "packages of former installations using "
                     "'sudo apt-get clean'.")
+        # allow override
+        if self.config.getWithDefault("FreeSpace","SkipCheck",False):
+            logging.warning("free space check skipped via config override")
+            return True
+        # do the check
         try:
             self.cache.checkFreeSpace()
         except NotEnoughFreeSpaceError, e:
@@ -889,7 +878,7 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade aborts now. Please check your "
+                         _("The upgrade is now aborted. Please check your "
                            "Internet connection or "
                            "installation media and try again. All files "
                            "downloaded so far are kept."),
@@ -897,9 +886,27 @@ class DistUpgradeController(object):
         # abort here because we want our sources.list back
         self._enableAptCronJob()
         self.abort()
+
+    def enableApport(self, fname="/etc/default/apport"):
+        " enable apoprt "
+        if not os.path.exists(fname):
+            return 
+        lines = []
+        for line in open(fname):
+            if line.strip().startswith("enabled=1"):
+                logging.debug("apport already enabled, nothign to do")
+                return
+            elif line.strip().startswith("enabled=0"):
+                logging.debug("enabling apport crash reporting")
+                line = "enabled=1\n"
+            lines.append(line)
+        open(fname,"w").write("".join(lines))
+        subprocess.call(["/etc/init.d/apport","start"])
         
-    
     def doDistUpgrade(self):
+        # check if we want apport running during the upgrade
+        if self.config.getWithDefault("Distro","EnableApport", False):
+            self.enableApport()
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -912,14 +919,14 @@ class DistUpgradeController(object):
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
                 # invoke the frontend now
-                msg = _("The upgrade aborts now. Your system "
+                msg = _("The upgrade is now aborted. Your system "
                         "could be in an unusable state. A recovery "
                         "will run now (dpkg --configure -a).")
                 if not self._partialUpgrade:
                     if not run_apport():
                         msg += _("\n\nPlease report this bug against the 'update-manager' "
                                  "package and include the files in /var/log/dist-upgrade/ "
-                                 "in the bugreport.\n"
+                                 "in the bug report.\n"
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
@@ -938,7 +945,7 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade aborts now. Please check your "\
+                         _("The upgrade is now aborted. Please check your "\
                            "Internet connection or "\
                            "installation media and try again. "),
                            "%s" % e)
@@ -1025,6 +1032,9 @@ class DistUpgradeController(object):
                                    "Please see the below message for more "
                                    "information. "),
                                    "%s" % e)
+        # run stuff after cleanup
+        if not self._partialUpgrade:
+            self.quirks.run("PostCleanup")
         # run the post upgrade scripts that can do fixup like xorg.conf
         # fixes etc - only do on real upgrades
         if not self._partialUpgrade:
@@ -1228,6 +1238,10 @@ class DistUpgradeController(object):
         # 
         # make sure to remove file on cancel
         
+        # FIXME: use the DistUpgradeFetcherCore logic
+        #        in mirror_from_sources_list() here
+        #        (and factor that code out into a helper)
+
         conf_option = "SourcesList"
         if self.config.has_option("PreRequists",conf_option+"-%s" % self.arch):
             conf_option = conf_option + "-%s" % self.arch
@@ -1356,7 +1370,7 @@ class DistUpgradeController(object):
                                "against the 'update-manager' "
                                "package and include the files in "
                                "/var/log/dist-upgrade/ "
-                               "in the bugreport." ))
+                               "in the bug report." ))
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -1377,7 +1391,7 @@ class DistUpgradeController(object):
                                    "against the 'update-manager' "
                                    "package and include the files in "
                                    "/var/log/dist-upgrade/ "
-                                   "in the bugreport." ))
+                                   "in the bug report." ))
                 self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
@@ -1430,7 +1444,7 @@ class DistUpgradeController(object):
                                    "This indicates a serious error, please "
                                    "report this bug against the 'update-manager' "
                                    "package and include the files in /var/log/dist-upgrade/ "
-                                   "in the bugreport.") % pkg)
+                                   "in the bug report.") % pkg)
                 self.abort()
 
         # calc the dist-upgrade and see if the removals are ok/expected
@@ -1455,7 +1469,7 @@ class DistUpgradeController(object):
             # don't abort here, because it would restore the sources.list
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             sys.exit(1) 
             
@@ -1497,14 +1511,14 @@ class DistUpgradeController(object):
         if not self.doDistUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             return False
         self._view.setStep(STEP_CLEANUP)
         if not self.doPostUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade is completed but there "
-                                     "were errors during the ugprade "
+                                     "were errors during the upgrade "
                                      "process."))
             return False
         self._view.information(_("Upgrade complete"),

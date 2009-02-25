@@ -5,18 +5,30 @@ import glob
 import os
 from DistUtilsExtra.command import *
 
+
+disabled = []
+
+def plugins():
+    return [os.path.join('Janitor/plugins', name)
+            for name in os.listdir('Janitor/plugins')
+            if name.endswith('_plugin.py') and name not in disabled]
+
 setup(name='update-manager',
       version='0.56',
       ext_modules=[Extension('UpdateManager/fdsend',
                              ['UpdateManager/fdsend/fdsend.c'])],
       packages=[
                 'UpdateManager',
-                'UpdateManager.Common',
                 'UpdateManager.Core',
                 'UpdateManagerHildon',
                 'UpdateManagerText',
-                'DistUpgrade'
+                'DistUpgrade',
+                'computerjanitor',
                 ],
+      package_dir={
+                   '': '.',
+                   'computerjanitor': 'Janitor/computerjanitor',
+                  },
       scripts=[
                'update-manager', 
                'update-manager-text', 
@@ -39,6 +51,8 @@ setup(name='update-manager',
                   ('../etc/update-manager/',
                    ['data/release-upgrades',
                     'data/meta-release']),
+                  ('share/computerjanitor/plugins',
+                   plugins()),
                   ],
       cmdclass = { "build" : build_extra.build_extra,
                    "build_i18n" :  build_i18n.build_i18n,

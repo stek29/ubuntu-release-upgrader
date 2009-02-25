@@ -1,14 +1,149 @@
+update-manager (1:0.98.2) jaunty; urgency=low
+
+  [ Michael Vogt ]
+  * DistUpgrade/DistUpgradeController.py:
+    - enable apport crash capturing during upgrades
+  * DistUpgrade/DistUpgradeView.py:
+    - create /var/lib/pycentral/pkgremove before the upgrade to
+      help pycentral transition to the new python policy (thanks
+      to doko)
+  * ensure pidgin-libnotify is ugpraded (LP: #332328)
+  * better wording for aborts (thanks to Gabor Kelemen and
+    Jean-Baptiste Lallement), LP: #289303
+  * wording fixes, thanks to Brian Murray and Gabor Kelemen 
+    LP: #269583
+  * i18n fix, thanks to Gabor Kelemen, LP: #331821
+  * support /etc/update-manager/release-upgrades.d/ directory
+    for local overrides of the upgrade process. Useful to force
+    certain site-specific options (like third party repository
+    handling)
+  * allow "[FreeSpace]\nSkipCheck=yes" override to skip free 
+    space checks (useful for testing)
+  * support "[Sources"]\nAllowThirdParty=yes" override to skip
+    commenting out of unknown repositories (LP: #147080)
+
+  [ Brian Murray ]
+  * DistUpgrade/multiple files:
+    - fixed typographical error
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 23 Feb 2009 17:55:51 +0100
+
+update-manager (1:0.98.1) jaunty; urgency=low
+
+  * reenable the demotions.cfg generation and mirror updates
+  * setup.py cleanup (thanks to liw)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 19 Feb 2009 00:22:58 +0100
+
+update-manager (1:0.98) jaunty; urgency=low
+
+  [ Michael Vogt ]
+  * DistUpgrade/DistUpgradeController.py:
+    - fixes in the error string (thanks to Jean-Baptiste 
+      Lallement, LP: #298296)
+  * support getting NEWS.Debian information in addition
+    to the changelog
+  * debian/update-manager-core.links:
+    - fix typo (thanks to tjaalton)
+  * merge the 'computer-janitor' core and quirks code into
+    update-manager-core (part of the jaunty-cruftremover-improvements
+    spec)
+  * conflicts with the current version of computer-janitor
+
+  [ Brian Murray ]
+  * DistUpgrade - Release Announcements:
+    - Modified reporting bugs sections to recommend using ubuntu-bug instead
+      of filing bugs directly in Launchpad. (LP: #327800)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 18 Feb 2009 23:44:17 +0100
+
+update-manager (1:0.97.1) jaunty; urgency=low
+
+  [ Michael Vogt ]
+  * UpdateManager/UpdateManager.py:
+    - make the gconf handling more robust (LP: #320586)
+  * UpdateManager/Core/MyCache.py:
+    - fix crash when no changelog can be found (LP: #320894)
+  * UpdateManager/Core/MetaRelease.py:
+    - do not crash on disk full (LP: #321872)
+  * DistUpgrade/DistUpgradeController.py:
+    - when commenting out third party repositories add a comment
+      why they were disabled and update them to the current dist  
+      to make re-enabling easier
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - run dpkg --forget-old-unvail after the upgrade finished
+    - add "PostCleanup" hook 
+  * DistUpgrade/cdromupgrade:
+    - fixed typo (LP: #312184)
+  * add "--no-focus-on-map option to bring update-manager up
+    in the background (UX team)
+  * change default text and add /apps/update-manager/first_run
+    gconf key for the first run welcome message (UX team)
+  * UpdateManager/ChangelogViewer.py:
+    - support "LP: #nr:" linking in changelog entries (LP: #274737)
+
+  [ Jonathan Riddell ]
+  * DistUpgrade/DistUpgrade.cfg
+    - remove guidance-power-manager on kubuntu-desktop upgrade
+
+  [ Andy Whitcroft ]
+  * DistUpgrade/cdromupgrade
+    - move to using dists/$CODENAME to locate the installer eliminating
+      any dependance on symlinks in the image.  This allows usb-creator based
+      images to be used unmodified.  (LP: #326856)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 09 Feb 2009 13:48:01 +0100
+
+update-manager (1:0.97) jaunty; urgency=low
+
+  * UpdateManager/Core/MetaRelease.py:
+    - remove debug message (LP: #310046)
+  * UpdateManager/Common/utils.py:
+    - when  initializing the proxy configuration, do in this
+      order:
+      * check apt setting
+      * check synaptic setting
+      * check users gconf
+      * check http_proxy environment 
+    (LP: #24250)
+  * UpdateManager/Core/DistUpgradeFetcherCore.py:
+    - ensure correct error message if downloading failed
+      (LP: #113658)
+    - when fetching from mirrors, add fallback if the mirror
+      is too loaded to cope
+    - improve logic that detects what mirror is in use by
+      sources.list inspection (LP: #107983)
+  * DistUpgrade/DistUpgradeMain.py, dist-upgrade.py:
+    - re-factor and make code more modular
+    - do not overwrite existing log files on upgrade
+      (LP: #111819)
+  * reorganize the imports and get rid of "Common" submodule 
+    and merge that all into "Core"
+  * improve the debug output via the "DEBUG_UPDATE_MANAGER"
+    environment
+  
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 26 Jan 2009 17:26:40 +0100
+
 update-manager (1:0.96.4) jaunty; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
     - do not generate apport report against update-manager if 
       cache.commit() failed. the report is generated against
       the failing package instead (LP: #311220)
+    - honor RELEASE_UPRADER_ALLOW_THIRD_PARTY environment and do   
+      not  comment out third party repositories in this case 
+      (useful internal repositories, make sure that sudo does 
+       not clean this env when you make use of it)
   * DistUpgrade/DistUpgrade.cfg:
     - remove powermanagement-interface on upgrades for ubuntu 
       and kubuntu (no longer needed by them)
+  * DistUpgrade/DevelReleaseAnnouncement:
+    - include a different release announcement for the 
+      development releases
+  * pre-build.sh:
+    - fix version parsing
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 21 Jan 2009 22:12:06 +0100
 
 update-manager (1:0.96.3) jaunty; urgency=low
 

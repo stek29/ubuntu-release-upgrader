@@ -76,7 +76,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
             raise NoImageFoundException
         # check if we want virtio here and default to yes
         try:
-            virtio = self.config.getboolean("NonInteractive","Virtio")
+            virtio = self.config.getboolean("KVM","Virtio")
         except ConfigParser.NoOptionError,e:
             virtio = True
         if virtio:
@@ -85,7 +85,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # swapimage
         if self.config.getWithDefault("KVM","SwapImage",""):
             self.qemu_options.append("-hdb")
-            self.qemu_options.append(self.config.get("NonInteractive","SwapImage"))
+            self.qemu_options.append(self.config.get("KVM","SwapImage"))
         # regular image
         self.image = os.path.join(self.profiledir, "test-image")
         # make ssh login possible (localhost 54321) available
@@ -108,13 +108,15 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
                            shell=True) == 0:
             raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
 
-    def _copyToImage(self, fromF, toF):
+    def _copyToImage(self, fromF, toF, recursive=False):
         cmd = ["scp",
                "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts"]
+        if recursive:
+            cmd.append("-r")
         # we support both single files and lists of files
         if isinstance(fromF,list):
             cmd += fromF
@@ -223,8 +225,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # set it up
         if (not force and
             os.path.exists("%s.%s" % (self.image,self.fromDist)) and 
-            self.config.has_option("NonInteractive","CacheBaseImage") and
-            self.config.getboolean("NonInteractive","CacheBaseImage")):
+            self.config.has_option("KVM","CacheBaseImage") and
+            self.config.getboolean("KVM","CacheBaseImage")):
             print "Not bootstraping again, we have a cached BaseImage"
             shutil.copy("%s.%s" % (self.image,self.fromDist), self.image)
             return True
@@ -235,6 +237,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # get common vars
         mirror = self.config.get("NonInteractive","Mirror")
         basepkg = self.config.get("NonInteractive","BasePkg")
+        additional_base_pkgs = self.config.getlist("Distro","BaseMetaPkgs")
 
         # start the VM
         self.start()
@@ -290,7 +293,7 @@ iface eth0 inet static
         # FIXME: instead of this retrying (for network errors with 
         #        proxies) we should have a self._runAptInImage() 
         for i in range(3):
-            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg])
+            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
         assert(ret == 0)
 
         CMAX = 4000
@@ -321,18 +324,18 @@ iface eth0 inet static
             print "running apt-get upgrade in from dist (after bootstrap)"
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
-            assert(ret == 0)
+            assert(ret == 0, "dist-upgrade returned %s" % ret)
 
         print "Cleaning image"
         ret = self._runInImage(["apt-get","clean"])
-        assert(ret == 0)
+        assert(ret == 0, "apt-get clean returned %s" % ret)
 
         # done with the bootstrap
         self.stop()
 
         # copy cache into place (if needed)
-        if (self.config.has_option("NonInteractive","CacheBaseImage") and
-            self.config.getboolean("NonInteractive","CacheBaseImage")):
+        if (self.config.has_option("KVM","CacheBaseImage") and
+            self.config.getboolean("KVM","CacheBaseImage")):
             shutil.copy(self.image, "%s.%s" % (self.image,self.fromDist))
         
         return True
@@ -408,18 +411,22 @@ iface eth0 inet static
         print "copy upgrader into image"
         # copy the upgrade into target+/upgrader-tester/
         files = []
-        self._runInImage(["mkdir","/upgrade-tester"])
+        self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
         for f in glob.glob("%s/DistUpgrade/*" % self.basefilesdir):
             if not os.path.isdir(f):
                 files.append(f)
+            elif os.path.islink(f):
+                print "Copying link '%s' to image " % f
+                self._copyToImage(f, "/upgrade-tester", recursive=True)
         self._copyToImage(files, "/upgrade-tester")
         # copy the profile
         if os.path.exists(self.profile):
-            print "Copying '%s' to image " % self.profile
-            self._copyToImage(self.profile, "/upgrade-tester")
+            print "Copying '%s' to image overrides" % self.profile
+            self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
         # and any other cfg files
         for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
-            if os.path.isfile(f):
+            if (os.path.isfile(f) and
+                not os.path.basename(f).startswith("DistUpgrade.cfg")):
                 print "Copying '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester")
         # and prereq lists
@@ -470,7 +477,7 @@ iface eth0 inet static
         print "Shuting down the VM"
         self.stop()
 
-        return True
+        return (ret == 0)
 
     def test(self):
         # FIXME: add some tests here to see if the upgrade worked
@@ -481,6 +488,14 @@ iface eth0 inet static
         # - generate diff of upgrade vs fresh install
         # ...
         #self.genDiff()
+        self.start()
+        self._copyFromImage("/var/crash/*.crash", self.resultdir)
+        crashfiles = glob.glob(self.resultdir+"/*.crash")
+        self.stop()
+        if len(crashfiles) > 0:
+            print "WARNING: crash files detected on the upgrade"
+            print crashfiles
+            return False
         return True
         
 

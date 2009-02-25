@@ -1,1 +1,1 @@
-../UpdateManager/Common/utils.py
+../UpdateManager/Core/utils.py

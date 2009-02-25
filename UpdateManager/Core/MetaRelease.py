@@ -30,6 +30,8 @@ import rfc822
 from ConfigParser import ConfigParser
 from subprocess import Popen,PIPE
 
+from utils import *
+
 class Dist(object):
     def __init__(self, name, version, date, supported):
         self.name = name
@@ -46,7 +48,7 @@ class MetaReleaseCore(object):
     distributions. 
     """
 
-    DEBUG = os.environ.has_key("DEBUG_UPDATE_MANAGER")
+    DEBUG = "DEBUG_UPDATE_MANAGER" in os.environ
 
     # some constants
     CONF = "/etc/update-manager/release-upgrades"
@@ -60,6 +62,7 @@ class MetaReleaseCore(object):
         # information about the available dists
         self.downloading = True
         self.new_dist = None
+        self.current_dist_name = get_dist()
         self.no_longer_supported = None
 
         # default (if the conf file is missing)
@@ -153,19 +156,10 @@ class MetaReleaseCore(object):
         """
         self.new_dist = dist
 
-    def get_dist(self):
-        " return the codename of the current runing distro "
-        p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
-        res = p.wait()
-        if res != 0:
-            sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
-            return "unknown distribution"
-        dist = string.strip(p.stdout.readline())
-        return dist
-    
     def parse(self):
         self._debug("MetaRelease.parse()")
-        current_dist_name = self.get_dist()
+        current_dist_name = self.current_dist_name
+        self._debug("current dist name: '%s'" % current_dist_name)
         current_dist = None
         dists = []
 
@@ -197,7 +191,7 @@ class MetaReleaseCore(object):
         # information. if not, we assume that we run on something not
         # supported and silently return
         if current_dist is None:
-            sys.stderr.write("current dist not found in meta-release file\n")
+            #sys.stderr.write("current dist not found in meta-release file\n")
             return False
 
         # then see what we can upgrade to (only upgrade to supported dists)
@@ -242,12 +236,16 @@ class MetaReleaseCore(object):
                     os.unlink(self.METARELEASE_FILE)
                 except OSError,e:
                     print "Can't unlink '%s' (%s)" % (self.METARELEASE_FILE,e)
-            f=open(self.METARELEASE_FILE,"w+")
-            for line in uri.readlines():
-                f.write(line)
-            f.flush()
-            f.seek(0,0)
-            self.metarelease_information=f
+            # we may get excpetion here on e.g. disk full
+            try:
+                f=open(self.METARELEASE_FILE,"w+")
+                for line in uri.readlines():
+                    f.write(line)
+                f.flush()
+                f.seek(0,0)
+                self.metarelease_information=f
+            except IOError, e:
+                pass
             uri.close()
         except urllib2.URLError:
             if os.path.exists(self.METARELEASE_FILE):

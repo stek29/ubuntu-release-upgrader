@@ -98,13 +98,15 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         if self.instance:
             self.instance.stop()
 
-    def _copyToImage(self, fromF, toF):
+    def _copyToImage(self, fromF, toF, recursive=False):
         cmd = ["scp",
                "-P",self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts"]
+        if recursive:
+            cmd.append("-r")
         # we support both single files and lists of files
         if isinstance(fromF,list):
             cmd += fromF
@@ -286,18 +288,22 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         print "copy upgrader into image"
         # copy the upgrade into target+/upgrader-tester/
         files = []
-        self._runInImage(["mkdir","/upgrade-tester"])
+        self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
         for f in glob.glob("%s/DistUpgrade/*" % self.basefilesdir):
             if not os.path.isdir(f):
                 files.append(f)
+            elif os.path.islink(f):
+                print "Copying link '%s' to image " % f
+                self._copyToImage(f, "/upgrade-tester", recursive=True)
         self._copyToImage(files, "/upgrade-tester")
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to image " % self.profile
-            self._copyToImage(self.profile, "/upgrade-tester")
+            self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
         # and any other cfg files
         for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
-            if os.path.isfile(f):
+            if (os.path.isfile(f) and
+                not os.path.basename(f).startswith("DistUpgrade.cfg")):
                 print "Copying '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester")
         # and prereq lists

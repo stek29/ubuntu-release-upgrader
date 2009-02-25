@@ -47,6 +47,60 @@ def country_mirror():
     return lang[:2]+"."
   return ''
 
+def get_dist():
+  " return the codename of the current runing distro "
+  from subprocess import Popen, PIPE
+  p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
+  res = p.wait()
+  if res != 0:
+    sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
+    return "unknown distribution"
+  dist = p.stdout.readline().strip()
+  return dist
+
+def url_downloadable(uri, debug_func=None):
+  """
+  helper that checks if the given uri exists and is downloadable
+  (supports optional debug_func function handler to support 
+   e.g. logging)
+
+  Supports http (via HEAD) and ftp (via size request)
+  """
+  if debug_func:
+    debug_func("url_downloadable: %s" % uri)
+  import urlparse
+  (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
+  if scheme == "http":
+    import httplib
+    try:
+      c = httplib.HTTPConnection(netloc)
+      c.request("HEAD", path)
+      res = c.getresponse()
+      if debug_func:
+        debug_func("url_downloadable result '%s'" % res.status)
+      res.close()
+      if res.status == 200:
+        return True
+    except Exception, e:
+      debug_func("error from httplib: '%s'" % e)
+      return False
+  elif scheme == "ftp":
+    import ftplib
+    try:
+      f = ftplib.FTP(netloc)
+      f.login()
+      f.cwd(os.path.dirname(path))
+      size = f.size(os.path.basename(path))
+      f.quit()
+      if debug_func:
+        debug_func("ftplib.size() returned: %s" % size)
+      if size != 0:
+        return True
+    except Exception, e:
+      if debug_func:
+        debug_func("error from ftplib: '%s'" % e)
+      return False
+  return False
 
 def init_proxy(gconfclient=None):
   """ init proxy settings 
@@ -58,10 +112,7 @@ def init_proxy(gconfclient=None):
   """
   SYNAPTIC_CONF_FILE = "/root/.synaptic/synaptic.conf"
   proxy = None
-  # environment wins
-  if os.getenv("http_proxy"):
-    return
-  # generic apt config wins next
+  # generic apt config wins
   apt_pkg.InitConfig()
   if apt_pkg.Config.Find("Acquire::http::Proxy") != '':
     proxy = apt_pkg.Config.Find("Acquire::http::Proxy")
@@ -189,3 +240,6 @@ def humanize_size(bytes):
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
         return locale.format(_("%.1f MB"), bytes / 1024 / 1024)
+
+if __name__ == "__main__":
+  print mirror_from_sources_list()

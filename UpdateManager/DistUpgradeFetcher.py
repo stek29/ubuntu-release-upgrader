@@ -24,7 +24,7 @@ pygtk.require('2.0')
 import gtk
 
 from ReleaseNotesViewer import ReleaseNotesViewer
-from Common.utils import *
+from Core.utils import *
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 import urllib2

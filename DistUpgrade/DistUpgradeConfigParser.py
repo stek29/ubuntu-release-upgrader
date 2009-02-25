@@ -2,6 +2,9 @@ from ConfigParser import ConfigParser, NoOptionError, NoSectionError
 import subprocess
 import os.path
 import logging
+import glob
+
+CONFIG_OVERRIDE_DIR =  "/etc/update-manager/release-upgrades.d"
 
 class DistUpgradeConfig(ConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg"):
@@ -13,7 +16,12 @@ class DistUpgradeConfig(ConfigParser):
         self.datadir=datadir
         if os.path.exists(name+"."+from_release):
             name = name+"."+from_release
-        self.read(os.path.join(datadir,name))
+        maincfg = os.path.join(datadir,name)
+        override_dir = CONFIG_OVERRIDE_DIR
+        self.config_files = [maincfg]
+        for cfg in glob.glob(override_dir+"/*.cfg"):
+            self.config_files.append(cfg)
+        self.read(self.config_files)
     def getWithDefault(self, section, option, default):
         try:
             return self.get(section, option)

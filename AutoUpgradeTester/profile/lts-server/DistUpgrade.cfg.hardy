@@ -1,0 +1,72 @@
+[View]
+#View=DistUpgradeViewGtk
+View=DistUpgradeViewNonInteractive
+
+# Distro contains global information about the upgrade
+[Distro]
+# the meta-pkgs we support
+MetaPkgs=ubuntu-desktop, kubuntu-desktop
+BaseMetaPkgs=ubuntu-minimal
+Demotions=demotions.cfg
+AllowUnauthenticated=yes
+
+[ubuntu-desktop]
+KeyDependencies=gdm, usplash-theme-ubuntu, ubuntu-artwork, ubuntu-sounds
+# those pkgs will be marked remove right after the distUpgrade in the cache
+PostUpgradeRemove=xscreensaver, gnome-cups-manager, powermanagement-interface
+ForcedObsoletes=desktop-effects, cups-pdf
+
+[kubuntu-desktop]
+KeyDependencies=kdm, kubuntu-artwork-usplash
+PostUpgradeRemove=powermanagement-interface
+# those packages are marked as obsolete right after the upgrade
+ForcedObsoletes=ivman, cups-pdf, guidance-power-manager
+
+
+[Files]
+BackupExt=distUpgrade
+
+[ubuntu-standard]
+KeyDependencies=w3m, wget
+
+[Sources]
+From=hardy
+To=jaunty
+ValidOrigin=Ubuntu
+ValidMirrors = mirrors.cfg
+Components=main,restricted,universe,multiverse
+
+[Network]
+MaxRetries=3
+
+
+[KernelRemoval]
+Version=2.6.24
+BaseNames=linux-image,linux-headers,linux-image-debug,linux-ubuntu-modules,linux-header-lum,linux-backport-modules,linux-header-lbm,linux-restricted-modules
+Types=386,generic,rt,server,virtual
+
+[NonInteractive]
+ProfileName=server
+BasePkg = ubuntu-standard
+AdditionalPkgs = pkgs.cfg
+Mirror = http://archive.ubuntu.com/ubuntu
+Proxy=http://192.168.1.1:3128/
+ForceOverwrite=no
+RealReboot=yes
+SSHKey=ssh-key
+Components=main,restricted
+Pockets=security,updates
+UpgradeFromDistOnBootstrap=true
+;AddRepo=local_testing.list
+
+[KVM]
+Virtio=True
+VncNum=1
+SshPort=54322
+BaseImage=jeos/hardy-i386.qcow2
+;SwapImage=jeos/swap.qcow2
+CacheBaseImage=yes
+
+[CHROOT]
+Tempdir=/tmp/upgrade-tester
+CacheTarball=yes

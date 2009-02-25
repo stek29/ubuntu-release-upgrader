@@ -82,7 +82,7 @@ class ChangelogViewer(gtk.TextView):
         # some convinient end-markers
         ws = [" ","\t","\n"]
         brak = [")","]",">"]
-        punct = [",","!"]
+        punct = [",","!",":"]
         dot = ["."]+punct
         # search items are start-str, list-of-end-strs, url-prefix
         # a lot of this search is "TEH SUCK"(tm) because of limitations

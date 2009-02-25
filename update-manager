@@ -63,6 +63,9 @@ if __name__ == "__main__":
   parser.add_option ("-p","--proposed", action="store_true",
                      dest="use_proposed", default=False,
                      help=_("Upgrade using the latest proposed version of the release upgrader"))
+  parser.add_option ("--no-focus-on-map", action="store_true",
+                     dest="no_focus_on_map", default=False,
+                     help=_("Do not focus on map when starting"))
   parser.add_option ("--dist-upgrade", action="store_true",
                      dest="dist_upgrade", default=False,
                      help=_("Try to run a dist-upgrade"))
@@ -88,5 +91,5 @@ if __name__ == "__main__":
     controler = DistUpgradeController(view, datadir=data_dir)
     controler.doPartialUpgrade()
   else:
-    app = UpdateManager(data_dir)
+    app = UpdateManager(data_dir, options)
     app.main(options)

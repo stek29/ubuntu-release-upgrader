@@ -6,8 +6,8 @@ sys.path.insert(0,"../")
 
 import apt
 import unittest
-from UpdateManager.Common.UpdateList import UpdateList
-from UpdateManager.Common.MyCache import MyCache
+from UpdateManager.Core.UpdateList import UpdateList
+from UpdateManager.Core.MyCache import MyCache
 
 
 class testOriginMatcher(unittest.TestCase):

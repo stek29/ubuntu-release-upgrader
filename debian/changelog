@@ -1,9 +1,32 @@
 update-manager (1:0.98.2) jaunty; urgency=low
 
+  [ Michael Vogt ]
   * DistUpgrade/DistUpgradeController.py:
     - enable apport crash capturing during upgrades
+  * DistUpgrade/DistUpgradeView.py:
+    - create /var/lib/pycentral/pkgremove before the upgrade to
+      help pycentral transition to the new python policy (thanks
+      to doko)
+  * ensure pidgin-libnotify is ugpraded (LP: #332328)
+  * better wording for aborts (thanks to Gabor Kelemen and
+    Jean-Baptiste Lallement), LP: #289303
+  * wording fixes, thanks to Brian Murray and Gabor Kelemen 
+    LP: #269583
+  * i18n fix, thanks to Gabor Kelemen, LP: #331821
+  * support /etc/update-manager/release-upgrades.d/ directory
+    for local overrides of the upgrade process. Useful to force
+    certain site-specific options (like third party repository
+    handling)
+  * allow "[FreeSpace]\nSkipCheck=yes" override to skip free 
+    space checks (useful for testing)
+  * support "[Sources"]\nAllowThirdParty=yes" override to skip
+    commenting out of unknown repositories (LP: #147080)
 
- --
+  [ Brian Murray ]
+  * DistUpgrade/multiple files:
+    - fixed typographical error
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 23 Feb 2009 17:55:51 +0100
 
 update-manager (1:0.98.1) jaunty; urgency=low
 

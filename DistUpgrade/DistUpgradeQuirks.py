@@ -182,7 +182,6 @@ class DistUpgradeQuirks(object):
              self.controller.cache.markRemove("xorg-driver-fglrx-envy",
                                               "no support in new fglrx for the card")
 
-
     # quirks when the cache upgrade calculation is finished
     def from_dapperPostDistUpgradeCache(self):
         self.hardyPostDistUpgradeCache()
@@ -196,8 +195,13 @@ class DistUpgradeQuirks(object):
         intrepid->jaunty upgrade calculation
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # nothing to do here currently, this has been converted
-        # to computer janitor plugins
+        # bug 332328 - make sure pidgin-libnotify is upgraded
+        pkg = "pidgin-libnotify"
+        if (self.controller.cache.has_key(pkg) and
+            self.controller.cache[pkg].isInstalled and
+            not self.controller.cache[pkg].markedUpgrade):
+            logging.debug("forcing %s upgrade" % pkg)
+            self.controller.cache[pkg].markUpgrade()
         
     def intrepidPostDistUpgradeCache(self):
         """ 

@@ -204,7 +204,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         summary = _("Could not install '%s'") % pkg
         msg = _("The upgrade will continue but the '%s' package may be "
                 "in a not working state. Please consider submitting a "
-                "bugreport about it.") % pkg
+                "bug report about it.") % pkg
         markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
         self.parent.dialog_error.realize()
         self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
@@ -418,7 +418,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
                    _("Please report this as a bug (if you haven't already) and include the "
                      "files /var/log/dist-upgrade/main.log and "
                      "/var/log/dist-upgrade/apt.log "
-                     "in your report. The upgrade aborts now.\n"
+                     "in your report. The upgrade is now aborted.\n"
                      "Your original sources.list was saved in "
                      "/etc/apt/sources.list.distUpgrade."),
                    "\n".join(lines))

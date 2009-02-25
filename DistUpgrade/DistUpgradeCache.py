@@ -126,7 +126,7 @@ class MyCache(apt.Cache):
                                "Do you want to remove this package "
                                "now to continue?",
                                "The packages '%s' are in an inconsistent "
-                               "state and needs to be reinstalled, but "
+                               "state and need to be reinstalled, but "
                                "no archives can be found for them. Do you "
                                "want to remove these packages now to "
                                "continue?",
@@ -564,7 +564,7 @@ class MyCache(apt.Cache):
             else:
                 details += _("If none of this applies, then please report this bug against "
                              "the 'update-manager' package and include the files in "
-                             "/var/log/dist-upgrade/ in the bugreport.")
+                             "/var/log/dist-upgrade/ in the bug report.")
             # make the error text available again on stdout for the 
             # text frontend
             self._stopAptResolverLog()

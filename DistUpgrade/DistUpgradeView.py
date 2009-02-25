@@ -28,6 +28,7 @@ import os
 import apt_pkg 
 import signal
 
+from DistUpgradeAufs import setupAufs, setupAufsChroot
 from DistUpgradeApport import *
 
 
@@ -153,6 +154,16 @@ class InstallProgress(apt.progress.InstallProgress):
   def run(self, pm):
     pid = self.fork()
     if pid == 0:
+      # check if we need to setup/enable the aufs chroot stuff
+      if "RELEASE_UPGRADE_USE_AUFS_CHROOT" in os.environ:
+        # FIXME: remove the hardcoded pathes
+        aufs_rw_dir = "/tmp/upgrade-rw"
+        aufs_chroot_dir = "/tmp/upgrade-chroot"
+        if not setupAufsChroot(aufs_rw_dir, aufs_chroot_dir):
+          print "ERROR: failed to setup aufs chroot overlay"
+          os._exit(1)
+        os.chroot(aufs_chroot_dir)
+        os.chdir("/")
       # child, ignore sigpipe, there are broken scripts out there
       # like etckeeper (LP: #283642)
       signal.signal(signal.SIGPIPE,signal.SIG_IGN) 

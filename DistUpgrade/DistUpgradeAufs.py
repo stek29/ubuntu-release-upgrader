@@ -1,14 +1,22 @@
-
+import string
 import logging
 import os
 import os.path
 import subprocess
 
-def _bindMount(from_dir, to_dir):
+# dirs that the packages will touch
+systemdirs = ["/bin","/boot","/etc","/initrd","/lib","/lib32","/sbin","/usr","/var"]
+
+def _bindMount(from_dir, to_dir, rbind=False):
     " helper that bind mounts a given dir to a new place "
     if not os.path.exists(to_dir):
         os.makedirs(to_dir)
-    cmd = ["mount","--bind", from_dir, to_dir]
+    if rbind:
+        bind = "--rbind"
+    else:
+        bind = "--bind"
+    cmd = ["mount",bind, from_dir, to_dir]
+    logging.debug("cmd: %s" % cmd)
     res = subprocess.call(cmd)
     if res != 0:
         # FIXME: revert already mounted stuff
@@ -16,18 +24,20 @@ def _bindMount(from_dir, to_dir):
         return False
     return True
 
-def _aufsOverlayMount(target, rw_dir):
+def _aufsOverlayMount(target, rw_dir, chroot_dir="/"):
     """ 
     helper that takes a target dir and mounts a rw dir over it, e.g.
     /var , /tmp/upgrade-rw
     """
     if not os.path.exists(rw_dir+target):
         os.makedirs(rw_dir+target)
+    if not os.path.exists(chroot_dir+target):
+        os.makedirs(chroot_dir+target)
     cmd = ["mount",
            "-t","aufs",
            "-o","br:%s:%s=ro" % (rw_dir+target, target),
            "none",
-           target]
+           chroot_dir+target]
     res = subprocess.call(cmd)
     if res != 0:
         # FIXME: revert already mounted stuff
@@ -46,6 +56,7 @@ def is_aufs_mount(dir):
 
 def is_submount(mountpoint, systemdirs):
     " helper: check if the given mountpoint is a submount of a systemdir "
+    logging.debug("is_submount: %s %s" % (mountpoint, systemdirs))
     for d in systemdirs:
         if mountpoint.startswith(d):
             return True
@@ -57,6 +68,37 @@ def is_real_fs(fs):
     if fs in ["rootfs","tmpfs","proc","fusectrl","aufs",
               "devpts","binfmt_misc", "sysfs"]:
         return False
+    return True
+
+def setupAufsChroot(rw_dir, chroot_dir):
+    " setup aufs chroot that is based on / but with a writable overlay "
+    # get the mount points before the aufs buisiness starts
+    mounts = open("/proc/mounts").read()
+
+    # aufs mount or bind mount required dirs
+    for d in os.listdir("/"):
+        d = os.path.join("/",d)
+        if os.path.isdir(d):
+            if d in systemdirs:
+                logging.debug("bind mounting %s" % d)
+                if not _aufsOverlayMount(d, rw_dir, chroot_dir):
+                    return False
+            else:
+                logging.debug("overlay mounting %s" % d)
+                if not _bindMount(d, chroot_dir+d, rbind=True):
+                    return False
+
+    # create binds for the systemdirs
+    needs_bind_mount = set()
+    for line in map(string.strip, mounts.split("\n")):
+        if not line: continue
+        (device, mountpoint, fstype, options, a, b) = line.split()
+        if (fstype != "aufs" and
+            not is_real_fs(fstype) and
+            is_submount(mountpoint, systemdirs)):
+            logging.debug("found %s that needs bind mount", mountpoint)
+            if not _bindMount(mountpoint, chroot_dir+mountpoint):
+                return False
     return True
 
 def setupAufs(rw_dir):
@@ -72,7 +114,6 @@ def setupAufs(rw_dir):
     if not os.path.exists("/proc/mounts"):
         logging.debug("no /proc/mounts, can not do aufs overlay")
         return False
-    systemdirs = ["/bin","/boot","/etc","/lib","/sbin","/usr","/var"]
 
     # verify that there are no submounts of a systemdir and collect
     # the stuff that needs bind mounting (because a aufs does not
@@ -120,4 +161,6 @@ def setupAufs(rw_dir):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    print setupAufs("/tmp/upgrade-rw")
+    #print setupAufs("/tmp/upgrade-rw")
+    print setupAufsChroot("/tmp/upgrade-chroot-rw",
+                          "/tmp/upgrade-chroot")

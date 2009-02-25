@@ -106,7 +106,8 @@ class DistUpgradeController(object):
 
         # aufs stuff
         self.aufs_rw_dir = self.options.aufs_rw_dir
-        if self.options and self.options.useAufs:
+        if ( (self.options and self.options.useAufs) or
+             self.config.getWithDefault("Aufs","EnableFullOverlay",False)):
             if not os.path.exists(self.aufs_rw_dir):
                 os.makedirs(self.aufs_rw_dir)
             self.config.set("Options","aufs_rw_dir", self.aufs_rw_dir)
@@ -920,6 +921,8 @@ class DistUpgradeController(object):
         # check if we want apport running during the upgrade
         if self.config.getWithDefault("Distro","EnableApport", False):
             self.enableApport()
+        if self.config.getWithDefault("Aufs","EnableChrootOverlay",False):
+            os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"] = "1"
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()

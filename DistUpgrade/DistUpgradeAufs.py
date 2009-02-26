@@ -70,6 +70,24 @@ def is_real_fs(fs):
         return False
     return True
 
+def doAufsChrootRsync(aufs_chroot_dir="/tmp/upgrade-chroot"):
+    """
+    helper that rsyncs the changes in the aufs chroot back to the
+    real system
+    """
+    for d in systemdirs:
+        if not os.path.exists(d):
+            continue
+        # its important to have the "/" at the end of source
+        # and dest so that rsync knows what to do
+        cmd = ["rsync","-aHAX","--del","-v", "--progress",
+               "/%s/%s/" % (aufs_chroot_dir, d),
+               "/%s/" % d]
+        logging.debug("running: '%s'" % cmd)
+        ret = subprocess.call(cmd)
+        logging.debug("rsync back result for %s: %i" % (d, ret))
+    return True
+
 def doAufsChroot(aufs_rw_dir="/tmp/upgrade-rw",
                  aufs_chroot_dir = "/tmp/upgrade-chroot"):
     " helper that sets the chroot up and does chroot() into it "

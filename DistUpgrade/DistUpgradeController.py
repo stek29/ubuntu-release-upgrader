@@ -941,6 +941,8 @@ class DistUpgradeController(object):
             self.enableApport()
         if self.config.getWithDefault("Aufs","EnableChrootOverlay",False):
             os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"] = "1"
+        if self.config.getWithDefault("Aufs","EnableChrootRsync",False):
+            os.environ["RELEASE_UPGRADE_RSYNC_AUFS_CHROOT"] = "1"
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()

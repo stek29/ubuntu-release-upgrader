@@ -28,7 +28,7 @@ import os
 import apt_pkg 
 import signal
 
-from DistUpgradeAufs import doAufsChroot
+from DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
 from DistUpgradeApport import *
 
 
@@ -159,8 +159,14 @@ class InstallProgress(apt.progress.InstallProgress):
       os._exit(res)
     self.child_pid = pid
     res = self.waitChild()
-    # FIMXE: at this point we could rsync the changes from the
-    #        chroot back to the real FS
+    # check if we want to sync the changes back, *only* do that
+    # if res is positive
+    if (res == 0 and
+        "RELEASE_UPGRADE_RSYNC_AUFS_CHROOT" in os.environ):
+      logging.info("doing rsync commit of the update")
+      if not doAufsChrootRsync():
+        logging.error("FATAL ERROR: doAufsChrootRsync() returned FALSE")
+        return False
     return res
   
   def error(self, pkg, errormsg):

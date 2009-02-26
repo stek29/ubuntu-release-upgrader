@@ -102,7 +102,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             # check if we have a match
             for(verFileIter,index) in ver.FileList:
                 if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
-                    indexfile = pkg._list.FindIndex(verFileIter)
+                    indexfile = pkg._pcache._list.FindIndex(verFileIter)
                     if indexfile: # and indexfile.IsTrusted:
                         match = matcher[verFileIter.Archive, verFileIter.Origin]
                         if match.importance > update_origin.importance:

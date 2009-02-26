@@ -493,7 +493,7 @@ class MyCache(apt.Cache):
         # check now
         for pkg in self:
             # WORKADOUND bug on the CD/python-apt #253255
-            ver = pkg._depcache.GetCandidateVer(pkg._pkg)
+            ver = pkg._pcache._depcache.GetCandidateVer(pkg._pkg)
             if ver and ver.Priority == 0:
                 logging.error("Package %s has no priority set" % pkg.name)
                 continue
@@ -649,7 +649,7 @@ class MyCache(apt.Cache):
             if not pkg._lookupRecord():
                 logging.debug("no PkgRecord found for '%s', skipping " % pkg.name)
                 continue
-            for line in pkg._records.Record.split("\n"):
+            for line in pkg._pcache._records.Record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):
                         task = task.strip()
@@ -672,10 +672,10 @@ class MyCache(apt.Cache):
             if pkg.markedInstall or pkg.isInstalled:
                 continue
             pkg._lookupRecord()
-            if not (hasattr(pkg._records,"Record") and pkg._records.Record):
+            if not (hasattr(pkg._pcache._records,"Record") and pkg._pcache._records.Record):
                 logging.warning("can not find Record for '%s'" % pkg.name)
                 continue
-            for line in pkg._records.Record.split("\n"):
+            for line in pkg._pcache._records.Record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):
                         task = task.strip()

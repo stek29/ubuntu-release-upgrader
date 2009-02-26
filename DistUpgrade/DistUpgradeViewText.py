@@ -226,8 +226,7 @@ class DistUpgradeViewText(DistUpgradeView):
                                    _("To finish the upgrade, a restart is "
                                      "required.\n"
                                      "If you select 'y' the system "
-                                     "will be restarted."),
-                                   _("Restart the system now [yN] "))
+                                     "will be restarted."), default='No')
 
 
 if __name__ == "__main__":

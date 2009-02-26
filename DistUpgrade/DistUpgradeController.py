@@ -1436,7 +1436,7 @@ class DistUpgradeController(object):
                 #        but we need to be careful to not duplicate them
                 #        (i.e. the error here could be something else than
                 #        missing sources entries but network errors etc)
-                logging.error("No '%s' after sources.list rewrite+update")
+                logging.error("No '%s' after sources.list rewrite+update" % pkg) 
                 self._view.error(_("Invalid package information"),
                                  _("After your package information was "
                                    "updated the essential package '%s' can "

@@ -21,6 +21,14 @@ update-manager (1:0.98.2) jaunty; urgency=low
     space checks (useful for testing)
   * support "[Sources"]\nAllowThirdParty=yes" override to skip
     commenting out of unknown repositories (LP: #147080)
+  * debian/*.install:
+    - updated for the new python layout (/u/l/p/dist-packages instead of
+      /u/l/p/site-packages)
+  * debian/rules:
+    - use DH_PYCENTRAL=include-links instead of "nomove"
+    - use "--install-layout=deb" in distutils
+  * debian/control:
+    - use "XS-Python-Version: all" instead of current
 
   [ Brian Murray ]
   * DistUpgrade/multiple files:

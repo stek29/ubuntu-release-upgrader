@@ -35,7 +35,7 @@ install: build
 	dh_installdirs
 	set -e; \
 	for v in $(PYVERS); do \
-	  python$$v setup.py install --prefix=$(CURDIR)/debian/tmp/usr; \
+	  python$$v setup.py install --root=$(CURDIR)/debian/tmp/ --install-layout=deb   ; \
 	done
 
 # Build architecture-independent files here.
@@ -69,7 +69,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	DH_PYCENTRAL=nomove dh_pycentral
+	DH_PYCENTRAL=include-links dh_pycentral
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

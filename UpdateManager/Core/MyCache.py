@@ -90,7 +90,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             it as a security update then
         """
         inst_ver = pkg._pkg.CurrentVer
-        cand_ver = self._depcache.GetCandidateVer(pkg._pkg)
+        cand_ver = self._pcache._depcache.GetCandidateVer(pkg._pkg)
         # init with empty match
         update_origin = matcher[(None,None)]
         for ver in pkg._pkg.VersionList:
@@ -127,7 +127,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         # assume "main" section 
         src_section = "main"
         # use the section of the candidate as a starting point
-        section = pkg._depcache.GetCandidateVer(pkg._pkg).Section
+        section = pkg._pcache._depcache.GetCandidateVer(pkg._pkg).Section
 
         # get the source version, start with the binaries version
         binver = pkg.candidateVersion

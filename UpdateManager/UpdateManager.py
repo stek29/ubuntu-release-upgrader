@@ -173,6 +173,9 @@ class UpdateManager(SimpleGladeApp):
     if self.help_viewer.check() == False:
         self.button_help.set_sensitive(False)
 
+    if not os.path.exists("/usr/bin/software-properties-gtk"):
+        self.button_settings.set_sensitive(False)
+
     self.gconfclient = gconf.client_get_default()
     init_proxy(self.gconfclient)
     try:
@@ -521,6 +524,24 @@ class UpdateManager(SimpleGladeApp):
   def on_button_help_clicked(self, widget):
     self.help_viewer.run()
 
+  def on_button_settings_clicked(self, widget):
+      #print "on_button_settings_clicked"
+      try:
+          apt_pkg.PkgSystemUnLock()
+      except SystemError:
+          pass
+      cmd = ["/usr/bin/gksu", 
+             "--desktop", "/usr/share/applications/software-properties.desktop", 
+             "--", "/usr/bin/software-properties-gtk","--open-tab","2",
+             "--toplevel", "%s" % self.window_main.window.xid ]
+      self.window_main.set_sensitive(False)
+      p = subprocess.Popen(cmd)
+      while p.poll() is None:
+          while gtk.events_pending():
+              gtk.main_iteration()
+          time.sleep(0.05)
+      self.fillstore()
+
   def on_button_install_clicked(self, widget):
     #print "on_button_install_clicked"
     err_sum = _("Not enough free disk space")
@@ -574,7 +595,6 @@ class UpdateManager(SimpleGladeApp):
     self.window_main.window.set_cursor(None)
 
   def row_activated(self, treeview, path, column):
-      print self.list.held_back
       iter = self.store.get_iter(path)
       pkg = self.store.get_value(iter, LIST_PKG)
       origin = self.store.get_value(iter, LIST_ORIGIN)

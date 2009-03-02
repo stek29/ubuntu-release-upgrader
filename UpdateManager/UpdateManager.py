@@ -178,10 +178,16 @@ class UpdateManager(SimpleGladeApp):
 
     self.gconfclient = gconf.client_get_default()
     init_proxy(self.gconfclient)
+    # init show version
     try:
         self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
     except gobject.GError, e:
         self.show_versions = False
+    # keep track when we run (for update-notifier)
+    try:
+        self.gconfclient.set_int("/apps/update-manager/launch_time", time.time())
+    except gobject.GError, e:
+        print "Error setting launch_time: ", e
     # get progress object
     self.progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
                                               self.progressbar_cache,

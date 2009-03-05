@@ -169,9 +169,9 @@ class UpdateManager(SimpleGladeApp):
 
     # setup the help viewer and disable the help button if there
     # is no viewer available
-    self.help_viewer = HelpViewer("update-manager")
-    if self.help_viewer.check() == False:
-        self.button_help.set_sensitive(False)
+    #self.help_viewer = HelpViewer("update-manager")
+    #if self.help_viewer.check() == False:
+    #    self.button_help.set_sensitive(False)
 
     if not os.path.exists("/usr/bin/software-properties-gtk"):
         self.button_settings.set_sensitive(False)
@@ -527,8 +527,8 @@ class UpdateManager(SimpleGladeApp):
     self.check_metarelease()
     self.invoke_manager(UPDATE)
 
-  def on_button_help_clicked(self, widget):
-    self.help_viewer.run()
+  #def on_button_help_clicked(self, widget):
+  #  self.help_viewer.run()
 
   def on_button_settings_clicked(self, widget):
       #print "on_button_settings_clicked"

@@ -14,6 +14,11 @@ CODENAME=jaunty
 UPGRADER_DIR=dists/$CODENAME/main/dist-upgrader/binary-all/
 
 cddirname="${0%\/*}"
+case "$cddirname" in
+/*) ;;
+*)  cddirname="$(pwd)/$cddirname" ;;
+esac
+
 fullpath="$cddirname/$UPGRADER_DIR"
 
 # extract the tar to a TMPDIR and run it from there

@@ -217,11 +217,10 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                           "later.") % (srcpkg, srcver_epoch)
         except (IOError, httplib.BadStatusLine, socket.error), e:
             print "caught exception: ", e
-            if lock.locked():
-                self.all_changes[name] = _("Failed to download the list "
-                                           "of changes. \nPlease "
-                                           "check your Internet "
-                                           "connection.")
+            changelog = _("Failed to download the list "
+                          "of changes. \nPlease "
+                          "check your Internet "
+                          "connection.")
         self.all_changes[name] = changelog
 
 

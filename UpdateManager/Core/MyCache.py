@@ -202,7 +202,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
         srcpkg = self[name].sourcePackageName
-        srcver_epoch = self[name].candidateVersion
+        srcver_epoch = self[name].candidateVersion.replace(':', '%3A')
         try:
             changelog = self._get_changelog_or_news(name, "changelog")
             if len(changelog) == 0:

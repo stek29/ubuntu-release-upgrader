@@ -158,7 +158,7 @@ class UpdateManager(SimpleGladeApp):
       column_install.set_fixed_width(30)
       column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
       column.set_fixed_width(100)
-      self.treeview_update.set_fixed_height_mode(True)
+      self.treeview_update.set_fixed_height_mode(False)
 
     self.treeview_update.append_column(column_install)
     column_install.set_visible(True)

@@ -31,6 +31,7 @@ import gtk
 import pango
 import subprocess
 import os
+from gettext import gettext as _
 
 class ChangelogViewer(gtk.TextView):
     def __init__(self, changelog=None):
@@ -49,7 +50,7 @@ class ChangelogViewer(gtk.TextView):
         self.set_pixels_above_lines(4)
         self.buffer = gtk.TextBuffer()
         self.set_buffer(self.buffer)
-        self.connect("event-after", self.event_after)
+        self.connect("button-press-event", self.button_press_event)
         self.connect("motion-notify-event", self.motion_notify_event)
         self.connect("visibility-notify-event", self.visibility_notify_event)
         #self.buffer.connect("changed", self.search_links)
@@ -57,6 +58,35 @@ class ChangelogViewer(gtk.TextView):
         # search for links in the changelog and make them clickable
         if changelog != None:
             self.buffer.set_text(changelog)
+            
+    def create_context_menu(self, url):
+        """Create the context menu to be displayed when links are right clicked"""
+        self.menu = gtk.Menu()
+        
+        # create menu items
+        item_grey_link = gtk.MenuItem(url)
+        item_grey_link.connect("activate", self.handle_context_menu, "open", url)
+        item_seperator = gtk.MenuItem()
+        item_open_link = gtk.MenuItem(_("Open Link in Browser"))
+        item_open_link.connect("activate", self.handle_context_menu, "open", url)
+        item_copy_link = gtk.MenuItem(_("Copy Link to Clipboard"))
+        item_copy_link.connect("activate", self.handle_context_menu, "copy", url)
+        
+        # add menu items
+        self.menu.add(item_grey_link)
+        self.menu.add(item_seperator)
+        self.menu.add(item_open_link)
+        self.menu.add(item_copy_link)
+        self.menu.show_all()
+    
+    def handle_context_menu(self, menuitem, action, url):
+        """Handle activate event for the links' context menu"""
+        if action == "open":
+            self.open_url(url)
+        if action == "copy":
+            cb = gtk.Clipboard()
+            cb.set_text(url)
+            cb.store()
 
     def tag_link(self, start, end, url):
         """Apply the tag that marks links to the specified buffer selection"""
@@ -137,12 +167,10 @@ class ChangelogViewer(gtk.TextView):
                 # set the starting point for the next search
                 iter = match_end
 
-    def event_after(self, text_view, event):
+    def button_press_event(self, text_view, event):
         """callback for mouse click events"""
-        # we only react on left mouse clicks
-        if event.type != gtk.gdk.BUTTON_RELEASE:
-            return False
-        if event.button != 1:
+        # we only react on left or right mouse clicks
+        if event.button != 1 and event.button != 3:
             return False
 
         # try to get a selection
@@ -159,13 +187,18 @@ class ChangelogViewer(gtk.TextView):
                                               int(event.x), int(event.y))
         iter = self.get_iter_at_location(x, y)
         
-        # call open_url if an URL is assigned to the iter
+        # call open_url or menu.popup if an URL is assigned to the iter
         tags = iter.get_tags()
         for tag in tags:
             url = tag.get_data("url")
             if url != None:
-                self.open_url(url)
-                break
+                if event.button == 1: 
+                    self.open_url(url)
+                    break
+                if event.button == 3:
+                    self.create_context_menu(url)
+                    self.menu.popup(None, None, None, event.button, event.time)
+                    return True
 
     def open_url(self, url):
         """Open the specified URL in a browser"""

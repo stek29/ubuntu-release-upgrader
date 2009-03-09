@@ -149,7 +149,8 @@ class InstallProgress(apt.progress.InstallProgress):
     if pid == 0:
       # check if we need to setup/enable the aufs chroot stuff
       if "RELEASE_UPGRADE_USE_AUFS_CHROOT" in os.environ:
-        if not doAufsChroot():
+        if not doAufsChroot(os.environ["RELEASE_UPGRADE_AUFS_RWDIR"],
+                            os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
           print "ERROR: failed to setup aufs chroot overlay"
           os._exit(1)
       # child, ignore sigpipe, there are broken scripts out there
@@ -164,7 +165,7 @@ class InstallProgress(apt.progress.InstallProgress):
     if (res == 0 and
         "RELEASE_UPGRADE_RSYNC_AUFS_CHROOT" in os.environ):
       logging.info("doing rsync commit of the update")
-      if not doAufsChrootRsync():
+      if not doAufsChrootRsync(os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
         logging.error("FATAL ERROR: doAufsChrootRsync() returned FALSE")
         return False
     return res

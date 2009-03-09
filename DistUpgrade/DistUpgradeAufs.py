@@ -70,7 +70,7 @@ def is_real_fs(fs):
         return False
     return True
 
-def doAufsChrootRsync(aufs_chroot_dir="/tmp/upgrade-chroot"):
+def doAufsChrootRsync(aufs_chroot_dir):
     """
     helper that rsyncs the changes in the aufs chroot back to the
     real system
@@ -88,8 +88,7 @@ def doAufsChrootRsync(aufs_chroot_dir="/tmp/upgrade-chroot"):
         logging.debug("rsync back result for %s: %i" % (d, ret))
     return True
 
-def doAufsChroot(aufs_rw_dir="/tmp/upgrade-rw",
-                 aufs_chroot_dir = "/tmp/upgrade-chroot"):
+def doAufsChroot(aufs_rw_dir, aufs_chroot_dir):
     " helper that sets the chroot up and does chroot() into it "
     if not setupAufsChroot(aufs_rw_dir, aufs_chroot_dir):
         return False

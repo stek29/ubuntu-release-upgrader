@@ -108,6 +108,7 @@ class DistUpgradeController(object):
         self.aufs_rw_dir = self.options.aufs_rw_dir
         if self.options and self.options.useAufs:
             self.config.set("Options","aufs_rw_dir", self.aufs_rw_dir)
+            os.environ["RELEASE_UPGRADE_AUFS_RWDIR"] = self.aufs_rw_dir
             logging.debug("using '%s' as aufs_rw_dir" % self.aufs_rw_dir)
 
         # some constants here

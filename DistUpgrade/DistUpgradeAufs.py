@@ -137,13 +137,11 @@ def setupAufsChroot(rw_dir, chroot_dir):
 
 def setupAufs(rw_dir):
     " setup aufs overlay over the rootfs "
-    
-    # FIXME: * this is currently run *after* /var/log/dist-upgrade/main.log
-    #          is opened and its not in the aufs file    
     #        * we need to find a way to tell all the existing daemon 
     #          to look into the new namespace. so probably something
     #          like a reboot is required and some hackery in initramfs-tools
     #          to ensure that we boot into a overlay ready system
+    #        * this is much less of a issue with the aufsChroot code
     logging.debug("setupAufs")
     if not os.path.exists("/proc/mounts"):
         logging.debug("no /proc/mounts, can not do aufs overlay")
@@ -178,8 +176,9 @@ def setupAufs(rw_dir):
     for d in needs_bind_mount:
         if not _bindMount(rw_dir+"/needs_bind_mount/"+d, d):
             return False
-        
-    # FIXME: now what we *could* do to apply the changes is to
+
+    # The below information is only of historical relevance:
+    #        now what we *could* do to apply the changes is to
     #        mount -o bind / /orig 
     #        (bind is important, *not* rbind that includes submounts)
     # 

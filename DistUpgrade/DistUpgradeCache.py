@@ -903,7 +903,13 @@ class MyCache(apt.Cache):
         # make sure mounted is sorted by longest path
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
         archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        for d in ["/","/usr","/var","/boot", archivedir, "/home"]:
+        aufs_rw_dir = "/tmp/"
+        if self.config.getWithDefault("Aufs","Enabled", False):
+            aufs_rw_dir = self.config.get("Aufs","RWDir")
+            if not os.path.exists(aufs_rw_dir):
+                os.makedirs(aufs_rw_dir)
+        logging.debug("cache aufs_rw_dir: %s" % aufs_rw_dir)
+        for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home"]:
             d = os.path.realpath(d)
             fs_id = make_fs_id(d)
             st = os.statvfs(d)
@@ -938,11 +944,22 @@ class MyCache(apt.Cache):
         # /usr is assumed to get *all* of the install space (incorrect,
         #      but as good as we can do currently + safety buffer
         # /     has a small safety buffer as well
+        required_for_aufs = 0.0
+        if self.config.getWithDefault("Aufs","Enabled", False):
+            logging.debug("taking aufs overlay into space calculation")
+            aufs_rw_dir = self.config.get("Aufs","RWDir")
+            # if we use the aufs rw overlay all the space is consumed
+            # the overlay dir
+            for pkg in self:
+                if pkg.markedUpgrade or pkg.markedInstall:
+                    required_for_aufs += self._depcache.GetCandidateVer(pkg._pkg).Size
+        # now back to the regular calculation
         for (dir, size) in [(archivedir, self.requiredDownload),
                             ("/usr", self.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),  # safety buffer /usr
                             ("/boot", space_in_boot), 
                             ("/", 10*1024*1024),     # small safety buffer /
+                            (aufs_rw_dir, required_for_aufs),
                            ]:
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))

@@ -24,7 +24,7 @@ class DistUpgradeConfig(ConfigParser):
         self.read(self.config_files)
     def getWithDefault(self, section, option, default):
         try:
-            return self.get(section, option)
+            return self.get(section, option, raw=True)
         except (NoSectionError, NoOptionError),e:
             return default
     def getlist(self, section, option):

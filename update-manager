@@ -69,6 +69,8 @@ if __name__ == "__main__":
   parser.add_option ("--dist-upgrade", action="store_true",
                      dest="dist_upgrade", default=False,
                      help=_("Try to run a dist-upgrade"))
+  parser.add_option ("-s","--sandbox", action="store_true", default=False,
+                     help=_("Test upgrade with a sandbox aufs overlay"))
 
   (options, args) = parser.parse_args()
 

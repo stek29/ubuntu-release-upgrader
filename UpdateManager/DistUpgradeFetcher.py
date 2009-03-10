@@ -48,7 +48,8 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         if os.getuid() != 0:
             os.execv("/usr/bin/gksu",["gksu",
                                       "--desktop","/usr/share/applications/update-manager.desktop",
-                                      self.script])
+                                      "--",
+                                      self.script]+self.run_options)
         else:
             os.execv(self.script,[self.script]+self.run_options)
         # we shouldn't come to this point, but if we do, undo our

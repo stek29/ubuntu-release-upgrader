@@ -902,6 +902,8 @@ class MyCache(apt.Cache):
         aufs_rw_dir = "/tmp/"
         if self.config.getWithDefault("Aufs","Enabled", False):
             aufs_rw_dir = self.config.get("Aufs","RWDir")
+            if not os.path.exists(aufs_rw_dir):
+                os.makedirs(aufs_rw_dir)
         logging.debug("cache aufs_rw_dir: %s" % aufs_rw_dir)
         for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home"]:
             d = os.path.realpath(d)

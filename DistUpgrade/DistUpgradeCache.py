@@ -617,12 +617,16 @@ class MyCache(apt.Cache):
             logging.error("Unauthenticated packages found: '%s'" % \
                           " ".join(untrusted))
             # FIXME: maybe ask a question here? instead of failing?
+            self._stopAptResolverLog()
             view.error(_("Error authenticating some packages"),
                        _("It was not possible to authenticate some "
                          "packages. This may be a transient network problem. "
                          "You may want to try again later. See below for a "
                          "list of unauthenticated packages."),
                        "\n".join(untrusted))
+            # start the resolver log again because this is run with
+            # the withResolverLog decorator
+            self._startAptResolverLog()            
             return False
         return True
 

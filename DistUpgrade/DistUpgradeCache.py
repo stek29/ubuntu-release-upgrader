@@ -899,9 +899,9 @@ class MyCache(apt.Cache):
         # make sure mounted is sorted by longest path
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
         archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
-        aufs_rw_dir = "/tmp"
-        if self.config.has_option("Options","aufs_rw_dir"):
-            aufs_rw_dir = self.config.get("Options","aufs_rw_dir")
+        aufs_rw_dir = "/tmp/"
+        if self.config.getWithDefault("Aufs","Enabled", False):
+            aufs_rw_dir = self.config.get("Aufs","RWDir")
         logging.debug("cache aufs_rw_dir: %s" % aufs_rw_dir)
         for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home"]:
             d = os.path.realpath(d)
@@ -939,9 +939,9 @@ class MyCache(apt.Cache):
         #      but as good as we can do currently + safety buffer
         # /     has a small safety buffer as well
         required_for_aufs = 0.0
-        if self.config.has_option("Options","aufs_rw_dir"):
+        if self.config.getWithDefault("Aufs","Enabled", False):
             logging.debug("taking aufs overlay into space calculation")
-            aufs_rw_dir = self.config.get("Options","aufs_rw_dir")
+            aufs_rw_dir = self.config.get("Aufs","RWDir")
             # if we use the aufs rw overlay all the space is consumed
             # the overlay dir
             for pkg in self:

@@ -36,9 +36,6 @@ def do_commandline():
     parser.add_option("-s", "--sandbox", dest="useAufs", default=False,
                       action="store_true",
                       help=_("Sandbox upgrade using aufs"))
-    parser.add_option("", "--aufs-rw-dir", dest="aufs_rw_dir", 
-                      default="/tmp/upgrade-rw", 
-                      help=_("Sandbox aufs rw overlay dir (default in /tmp)"))
     parser.add_option("-c", "--cdrom", dest="cdromPath", default=None,
                       help=_("Use the given path to search for a cdrom with upgradable packages"))
     parser.add_option("--have-prerequists", dest="havePrerequists",

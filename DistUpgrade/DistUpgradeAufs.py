@@ -7,6 +7,42 @@ import subprocess
 # dirs that the packages will touch
 systemdirs = ["/bin","/boot","/etc","/initrd","/lib","/lib32","/sbin","/usr","/var"]
 
+
+def aufsOptionsAndEnvironmentSetup(options, config):
+    """ setup the environment based on the config and options
+    It will use
+    config("Aufs","Enabled") - to show if its enabled
+    and
+    config("Aufs","RWDir") - for the writable overlay dir
+    """
+    logging.debug("aufsOptionsAndEnvironmentSetup()")
+    # enabled from the commandline (full overlay by default)
+    if options and options.useAufs:
+        logging.debug("enabling full overlay from commandline")
+        config.set("Aufs","Enabled", True)
+        config.set("Aufs","EnableFullOverlay",True)
+    
+    # setup environment based on config
+    aufs_rw_dir = config.getWithDefault("Aufs","RWDir","/tmp/upgrade-rw")
+    logging.debug("using '%s' as aufs_rw_dir" % aufs_rw_dir)
+    os.environ["RELEASE_UPGRADE_AUFS_RWDIR"] = aufs_rw_dir
+    config.set("Aufs","RWDir",aufs_rw_dir)
+    aufs_chroot_dir = config.getWithDefault("Aufs","ChrootDir","/tmp/upgrade-chroot")
+    logging.debug("using '%s' as aufs chroot dir" % aufs_chroot_dir)
+    
+    if config.getWithDefault("Aufs","EnableFullOverlay", False):
+        logging.debug("enabling aufs full overlay (from config)")
+        config.set("Aufs","Enabled", True)        
+        os.environ["RELEASE_UPGRADE_USE_AUFS_FULL_OVERLAY"] = "1"
+    if config.getWithDefault("Aufs","EnableChrootOverlay",False):
+        logging.debug("enabling aufs chroot overlay")
+        config.set("Aufs","Enabled", True)        
+        os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"] = aufs_chroot_dir
+    if config.getWithDefault("Aufs","EnableChrootRsync",False):
+        logging.debug("enable aufs chroot rsync back to real system")
+        os.environ["RELEASE_UPGRADE_RSYNC_AUFS_CHROOT"] = "1"
+    
+
 def _bindMount(from_dir, to_dir, rbind=False):
     " helper that bind mounts a given dir to a new place "
     if not os.path.exists(to_dir):
@@ -104,7 +140,7 @@ def setupAufsChroot(rw_dir, chroot_dir):
     # 
     # (if we run rsync with --backup --backup-dir we could even
     # create something vaguely rollbackable
-    
+
     # get the mount points before the aufs buisiness starts
     mounts = open("/proc/mounts").read()
 

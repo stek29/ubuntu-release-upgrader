@@ -310,7 +310,7 @@ class DistUpgradeController(object):
             sys.exit(1)
 
         # setup aufs
-        if self.config.getWithDefault("Aufs", "Enabled", False):
+        if self.config.getWithDefault("Aufs", "EnableFullOverlay", False):
             aufs_rw_dir = self.config.get("Aufs","RWDir")
             if not setupAufs(aufs_rw_dir):
                 logging.error("aufs setup failed")
@@ -320,16 +320,15 @@ class DistUpgradeController(object):
                 return False
 
             # all good, tell the user about the sandbox mode
-            if not self.config.getWithDefault("Aufs","EnableChrootRsync",False):
-                logging.info("running in aufs overlay mode")
-                self._view.information(_("Sandbox mode"),
-                                       _("This upgrade is running in sandbox "
-                                         "(test) mode. All changes are written "
-                                         "to '%s' and will be lost on the next "
-                                         "reboot.\n\n"
-                                         "*No* changes written to a systemdir "
-                                         "from now until the next reboot are "
-                                         "permanent.") % aufs_rw_dir)
+            logging.info("running in aufs overlay mode")
+            self._view.information(_("Sandbox mode"),
+                                   _("This upgrade is running in sandbox "
+                                     "(test) mode. All changes are written "
+                                     "to '%s' and will be lost on the next "
+                                     "reboot.\n\n"
+                                     "*No* changes written to a systemdir "
+                                     "from now until the next reboot are "
+                                     "permanent.") % aufs_rw_dir)
 
         # setup backports (if we have them)
         if self.options and self.options.havePrerequists:

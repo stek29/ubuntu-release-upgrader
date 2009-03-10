@@ -203,6 +203,16 @@ class DistUpgradeController(object):
             return True
         return False
 
+    def _viewSupportsSSH(self):
+      """
+      Returns True if this view support upgrades over ssh.
+      In theory all views should support it, but for savety
+      we do only allow text ssh upgrades (see LP: #322482)
+      """
+      supported = self.config.getlist("View","SupportSSH")
+      if self._view.__class__.__name__ in supported:
+          return True
+      return False
 
     def _sshMagic(self):
         """ this will check for server mode and if we run over ssh.
@@ -212,6 +222,19 @@ class DistUpgradeController(object):
         """
         pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
         if (not os.path.exists(pidfile) and self._isRemoteLogin()):
+            # check if the frontend supports ssh ugprades (see lp: #322482)
+            if not self._viewSupportsSSH():
+                logging.error("upgrade over ssh not alllowed")
+                self._view.error(_("Upgrading over remote connection not supported"),
+                                 _("You are running the upgrade over a "
+                                   "remote ssh connection with a frontend "
+                                   "that does "
+                                   "not support this. The upgrade will "
+                                   "abort now. Please try without ssh.")
+                                 )
+                sys.exit(1)
+                return False
+            # ask for a spare one to start
             port = 9004
             res = self._view.askYesNoQuestion(
                 _("Continue running under SSH?"),
@@ -236,6 +259,7 @@ class DistUpgradeController(object):
                       "If anything goes wrong with the running ssh "
                       "you can still connect to the additional one.\n"
                       ) % port)
+        return True
 
     def _tryUpdateSelf(self):
         """ this is a helper that is run if we are started from a CD

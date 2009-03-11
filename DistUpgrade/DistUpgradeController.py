@@ -940,6 +940,11 @@ class DistUpgradeController(object):
 
     def enableApport(self, fname="/etc/default/apport"):
         " enable apoprt "
+        # for jaunty and later we could use this instead:
+        #  env = copy.copy(os.environ)
+        #  env["force_start"] = "1"
+        #  subprocess.call(["/etc/init.d/apport","start"], env=env)
+        # but hardy and intrepid do not have the force_start yet
         if not os.path.exists(fname):
             return 
         lines = []

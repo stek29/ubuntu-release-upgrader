@@ -185,7 +185,7 @@ class UpdateManager(SimpleGladeApp):
         self.show_versions = False
     # keep track when we run (for update-notifier)
     try:
-        self.gconfclient.set_int("/apps/update-manager/launch_time", time.time())
+        self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
     except gobject.GError, e:
         print "Error setting launch_time: ", e
     # get progress object

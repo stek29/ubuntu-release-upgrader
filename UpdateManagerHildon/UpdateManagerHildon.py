@@ -134,8 +134,8 @@ class UpdateManagerHildon(UpdateManager):
 
     fprogress = HildonFetchProgress(self.view, 
                 _("Downloading Package Information"),
-                _("The repositories will be checked for new, removed, or "
-                  "updated software packages"))
+                _("The repositories are being checked for new, removed, "
+                  "or updated software packages"))
     self.view.window_main.show()
 
     # FIXME: add error handling (commit() and update() both can

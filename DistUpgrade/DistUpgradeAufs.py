@@ -5,7 +5,15 @@ import os.path
 import subprocess
 
 # dirs that the packages will touch
-systemdirs = ["/bin","/boot","/etc","/initrd","/lib","/lib32","/sbin","/usr","/var"]
+systemdirs = ["/bin",
+              "/boot",
+              "/etc",
+              "/initrd",
+              "/lib",
+              "/lib32", # ???
+              "/sbin",
+              "/usr",
+              "/var"]
 
 
 def aufsOptionsAndEnvironmentSetup(options, config):
@@ -94,6 +102,8 @@ def is_submount(mountpoint, systemdirs):
     " helper: check if the given mountpoint is a submount of a systemdir "
     logging.debug("is_submount: %s %s" % (mountpoint, systemdirs))
     for d in systemdirs:
+        if not d.endswith("/"):
+            d += "/"
         if mountpoint.startswith(d):
             return True
     return False

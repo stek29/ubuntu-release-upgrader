@@ -4,6 +4,7 @@
 import apt
 import sys
 import thread
+import time
 import atexit
 from gettext import gettext as _
 
@@ -106,19 +107,28 @@ This can be caused by:
         self.layout.draw()
         self.screen.refresh()
         
-    def get_changelog(self, pkg):
+    def get_news_and_changelog(self, pkg):
+        changes = ""
 	name = pkg.name
+        
+        # if we don't have it, get it
+        if (not self.cache.all_changes.has_key(name) and
+            not self.cache.all_news.has_key(name)):
+            self.textview_changes.setText(_("Downloading changelog"))
+            lock = thread.allocate_lock()
+            lock.acquire()
+            t=thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
+            # this lock should never take more than 2s even with network down
+            while lock.locked():
+                time.sleep(0.03)
+
+        # build changes from NEWS and changelog
+        if self.cache.all_news.has_key(name):
+            changes += self.cache.all_news[name]
         if self.cache.all_changes.has_key(name):
-		return  self.cache.all_changes[name][0]
-        # FIXME: display some download information here or something
-        self.textview_changes.setText(_("Downloading changelog"))
-        self.updateUI()
-	lock = thread.allocate_lock()
-	lock.acquire()
-	descr = self.cache.get_changelog (name, lock)
-	while lock.locked():
-            time.sleep(0.03)
-	return self.cache.all_changes[name][0]
+            changes += self.cache.all_changes[name]
+
+	return changes
 
     def checkbox_changed(self):
         # item is either a apt.package.Package or a str (for the headers)
@@ -130,7 +140,7 @@ This can be caused by:
                 if self.options.show_description:
                     descr = pkg.description
                 else:
-                    descr = self.get_changelog(pkg)
+                    descr = self.get_news_and_changelog(pkg)
 		# check if it is a wanted package
 		selected = self.checkbox_tree_updates.getEntryValue(pkg)[1]
                 marked_install_upgrade = pkg.markedInstall or pkg.markedUpgrade

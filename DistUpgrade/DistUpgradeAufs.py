@@ -3,6 +3,7 @@ import logging
 import os
 import os.path
 import subprocess
+import tempfile
 
 # dirs that the packages will touch
 systemdirs = ["/bin",
@@ -31,11 +32,14 @@ def aufsOptionsAndEnvironmentSetup(options, config):
         config.set("Aufs","EnableFullOverlay",True)
     
     # setup environment based on config
-    aufs_rw_dir = config.getWithDefault("Aufs","RWDir","/tmp/upgrade-rw")
+    tmprw = tempfile.mkdtemp(prefix="upgrade-rw-")
+    aufs_rw_dir = config.getWithDefault("Aufs","RWDir", tmprw)
     logging.debug("using '%s' as aufs_rw_dir" % aufs_rw_dir)
     os.environ["RELEASE_UPGRADE_AUFS_RWDIR"] = aufs_rw_dir
     config.set("Aufs","RWDir",aufs_rw_dir)
-    aufs_chroot_dir = config.getWithDefault("Aufs","ChrootDir","/tmp/upgrade-chroot")
+    # now the chroot tmpdir
+    tmpchroot = tempfile.mkdtemp(prefix="upgrade-chroot-")
+    aufs_chroot_dir = config.getWithDefault("Aufs","ChrootDir", tmpchroot)
     logging.debug("using '%s' as aufs chroot dir" % aufs_chroot_dir)
     
     if config.getWithDefault("Aufs","EnableFullOverlay", False):

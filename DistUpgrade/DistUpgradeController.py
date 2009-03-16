@@ -1022,6 +1022,14 @@ class DistUpgradeController(object):
         now_foreign = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
         logging.debug("Obsolete: %s" % " ".join(now_obsolete))
         logging.debug("Foreign: %s" % " ".join(now_foreign))
+        # now sanity check - if a base meta package is in the obsolete list now, that means
+        # that something went wrong (see #335154) badly with the network. this should never happen, but it did happen
+        # at least once so we add extra paranoia here
+        for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
+            if pkg in now_obsolete:
+                logging.error("the BaseMetaPkg '%s' is in the obsolete list, something is wrong, ignoring the obsoletes" % pkg)
+                now_obsolete = set()
+                break
         # check if we actually want obsolete removal
         if not self.config.getWithDefault("Distro","RemoveObsoletes", True):
             logging.debug("Skipping obsolete Removal")

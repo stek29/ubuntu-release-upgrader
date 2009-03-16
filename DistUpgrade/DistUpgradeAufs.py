@@ -196,6 +196,7 @@ def setupAufs(rw_dir):
     # the stuff that needs bind mounting (because a aufs does not
     # include sub mounts)
     needs_bind_mount = set()
+    needs_bind_mount.add("/var/cache/apt/archives")
     for line in open("/proc/mounts"):
         (device, mountpoint, fstype, options, a, b) = line.split()
         if is_real_fs(fstype) and is_submount(mountpoint, systemdirs):

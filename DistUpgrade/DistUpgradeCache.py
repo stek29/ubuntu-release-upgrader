@@ -211,8 +211,10 @@ class MyCache(apt.Cache):
         dir lock
         """
         self.unlockListsDir()
-        apt.Cache.update(self, fprogress)
+        res = apt.Cache.update(self, fprogress)
         self.lockListsDir()
+        if res == False:
+            raise IOError("apt.cache.update() returned False, but did not raise exception?!?")
 
     def commit(self, fprogress, iprogress):
         logging.info("cache.commit()")

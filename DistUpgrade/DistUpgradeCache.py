@@ -63,6 +63,8 @@ class FreeSpaceRequired(object):
         self.size_total = size_total
         self.dir = dir
         self.size_needed = size_needed
+    def __str__(self):
+        return "FreeSpaceRequired Object: Dir: %s size_total: %s size_needed: %s" % (self.dir, self.size_total, self.size_needed)
     
 
 class NotEnoughFreeSpaceError(CacheException):
@@ -967,11 +969,11 @@ class MyCache(apt.Cache):
                 if pkg.markedUpgrade or pkg.markedInstall:
                     required_for_aufs += self._depcache.GetCandidateVer(pkg._pkg).Size
                     
-        required_list = []
-        # now back to the regular calculation
+        # sum up space requirements
         for (dir, size) in [(archivedir, self.requiredDownload),
                             # plus 50M safety buffer in /usr
-                            ("/usr", self.additionalRequiredSpace + (50*1024*1024)),
+                            ("/usr", self.additionalRequiredSpace),
+                            ("/usr", 50*1024*1024),
                             ("/boot", space_in_boot), 
                             ("/", 10*1024*1024),     # small safety buffer /
                             (aufs_rw_dir, required_for_aufs),
@@ -980,14 +982,20 @@ class MyCache(apt.Cache):
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
             fs_free[dir].need += size
+
+        # check for space required violations
+        required_list = {}
+        for dir in fs_free:
             if fs_free[dir].free < 0:
                 free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
-                logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
-                # not enough free space, raise
-                required_list.append(FreeSpaceRequired(apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least))
+                # make_fs_id ensures we only get stuff on the same
+                # mountpoint, so we report the requirements only once
+                # per mountpoint
+                required_list[make_fs_id(dir)] = FreeSpaceRequired(apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least)
         # raise exception if free space check fails
         if len(required_list) > 0:
-            raise NotEnoughFreeSpaceError(required_list)
+            logging.error("Not enough free space: %s" % [str(i) for i in required_list])
+            raise NotEnoughFreeSpaceError(required_list.values())
         return True
 
 
@@ -997,9 +1005,10 @@ if __name__ == "__main__":
         import DistUpgradeView
         print "foo"
 	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
-                    DistUpgradeView.DistUpgradeView())
+                    DistUpgradeView.DistUpgradeView(), None)
         #c.checkForNvidia()
-        print c._identifyObsoleteKernels()
+        #print c._identifyObsoleteKernels()
+        print c.checkFreeSpace()
         sys.exit()
 	c.clear()
         c.create_snapshot()

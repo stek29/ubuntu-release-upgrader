@@ -830,10 +830,14 @@ class DistUpgradeController(object):
         try:
             self.cache.checkFreeSpace()
         except NotEnoughFreeSpaceError, e:
-            self._view.error(err_sum, err_long % (e.size_total,
-                                                  e.dir,
-                                                  e.size_needed,
-                                                  e.dir))
+            # ok, showing multiple error dialog sucks from the UI
+            # perspective, but it means we do not need to break the
+            # string freeze
+            for required in e.free_space_required_list:
+                self._view.error(err_sum, err_long % (required.size_total,
+                                                      required.dir,
+                                                      required.size_needed,
+                                                      required.dir))
             return False
         return True
 

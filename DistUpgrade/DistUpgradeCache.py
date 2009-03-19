@@ -51,9 +51,8 @@ class CacheExceptionDpkgInterrupted(CacheException):
 # the initrd space required in /boot for each kernel
 KERNEL_INITRD_SIZE = 12*1024*1024
 
-class NotEnoughFreeSpaceError(CacheException):
-    """ 
-    Exception if there is not enough free space for this operation 
+class FreeSpaceRequired(object):
+    """ FreeSpaceRequired object:
     
     This exposes:
     - the total size required (size_total)
@@ -64,6 +63,15 @@ class NotEnoughFreeSpaceError(CacheException):
         self.size_total = size_total
         self.dir = dir
         self.size_needed = size_needed
+    
+
+class NotEnoughFreeSpaceError(CacheException):
+    """ 
+    Exception if there is not enough free space for this operation 
+    
+    """
+    def __init__(self, free_space_required_list):
+        self.free_space_required_list = free_space_required_list
 
 class MyCache(apt.Cache):
     ReInstReq = 1
@@ -958,10 +966,12 @@ class MyCache(apt.Cache):
             for pkg in self:
                 if pkg.markedUpgrade or pkg.markedInstall:
                     required_for_aufs += self._depcache.GetCandidateVer(pkg._pkg).Size
+                    
+        required_list = []
         # now back to the regular calculation
         for (dir, size) in [(archivedir, self.requiredDownload),
-                            ("/usr", self.additionalRequiredSpace),
-                            ("/usr", 50*1024*1024),  # safety buffer /usr
+                            # plus 50M safety buffer in /usr
+                            ("/usr", self.additionalRequiredSpace + (50*1024*1024)),
                             ("/boot", space_in_boot), 
                             ("/", 10*1024*1024),     # small safety buffer /
                             (aufs_rw_dir, required_for_aufs),
@@ -974,7 +984,10 @@ class MyCache(apt.Cache):
                 free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
                 logging.error("not enough free space on %s (missing %s)" % (dir, free_at_least))
                 # not enough free space, raise
-                raise NotEnoughFreeSpaceError(apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least)
+                required_list.append(FreeSpaceRequired(apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least))
+        # raise exception if free space check fails
+        if len(required_list) > 0:
+            raise NotEnoughFreeSpaceError(required_list)
         return True
 
 

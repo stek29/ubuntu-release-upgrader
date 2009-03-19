@@ -938,9 +938,10 @@ class MyCache(apt.Cache):
                 if pkg.markedInstall:
                     logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
                     space_in_boot += KERNEL_INITRD_SIZE
-                elif (pkg.markedUpgrade or pkg.isInstalled):
-                    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    space_in_boot += KERNEL_INITRD_SIZE # creates .bak
+                # mvo: jaunty does not create .bak files anymore
+                #elif (pkg.markedUpgrade or pkg.isInstalled):
+                #    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
+                #    space_in_boot += KERNEL_INITRD_SIZE # creates .bak
 
         # we check for various sizes:
         # archivedir is were we download the debs

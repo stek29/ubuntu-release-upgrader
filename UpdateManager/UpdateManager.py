@@ -785,7 +785,7 @@ class UpdateManager(SimpleGladeApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=self.progress)
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkProgress.GtkFetchProgress(self))
       if self.options.sandbox:
           fetcher.run_options.append("--sandbox")
       fetcher.run()

@@ -7,6 +7,11 @@ update-manager (1:0.110.0) UNRELEASED; urgency=low
       for each directory (if multiple need more space) LP: #219416
   * DistUpgrade/DevelReleaseAnnouncement:
     - updated for beta
+  * UpdateManager/DistUpgradeFetcher.py:
+    - set 5s timeout for the ReleaseNotes fetching (LP: #109397)
+  * UpdateManager/UpdateManager.py:
+    - pass the correct FetchProgress to the release-upgrade fetching
+      code instead of the incorrect OpProgress
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 19 Mar 2009 16:48:11 +0100
 

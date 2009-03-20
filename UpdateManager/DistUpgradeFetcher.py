@@ -30,6 +30,7 @@ from gettext import gettext as _
 import urllib2
 import dbus
 import os
+import socket
 
 
 class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
@@ -68,7 +69,9 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           # download/display the release notes
           # FIXME: add some progress reporting here
           res = gtk.RESPONSE_CANCEL
+          timeout = socket.getdefaulttimeout()
           try:
+              socket.setdefaulttimeout(5)
               release_notes = urllib2.urlopen(uri)
               notes = release_notes.read()
               textview_release_notes = ReleaseNotesViewer(notes)
@@ -99,6 +102,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               dialog.format_secondary_text(secondary);
               dialog.run()
               dialog.destroy()
+          socket.setdefaulttimeout(timeout)              
           self.window_main.set_sensitive(True)
           self.window_main.window.set_cursor(None)
           # user clicked cancel

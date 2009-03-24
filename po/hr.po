@@ -7,42 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2008-10-20 18:10+0000\n"
-"PO-Revision-Date: 2008-10-18 18:27+0000\n"
-"Last-Translator: Saša Teković <Unknown>\n"
+"POT-Creation-Date: 2009-03-21 01:27+0000\n"
+"PO-Revision-Date: 2008-12-20 16:12+0000\n"
+"Last-Translator: Launchpad Translations Administrators "
+"<rosetta@launchpad.net>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-10-24 13:41+0000\n"
+"X-Launchpad-Export-Date: 2009-03-24 09:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:138 ../UpdateManager/Common/utils.py:138
+#: ../DistUpgrade/utils.py:233 ../UpdateManager/Core/utils.py:233
 msgid "0 KB"
 msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:141 ../UpdateManager/Common/utils.py:141
+#: ../DistUpgrade/utils.py:236 ../UpdateManager/Core/utils.py:236
 msgid "1 KB"
 msgstr "1 KB"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:144 ../UpdateManager/Common/utils.py:144
+#: ../DistUpgrade/utils.py:239 ../UpdateManager/Core/utils.py:239
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KB"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:147 ../UpdateManager/Common/utils.py:147
+#: ../DistUpgrade/utils.py:242 ../UpdateManager/Core/utils.py:242
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#: ../DistUpgrade/distro.py:207 ../DistUpgrade/distro.py:422
 #, python-format
 msgid "Server for %s"
 msgstr "Poslužitelj za %s"
@@ -50,74 +51,64 @@ msgstr "Poslužitelj za %s"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
-#: ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:225 ../DistUpgrade/distro.py:231
+#: ../DistUpgrade/distro.py:247
 msgid "Main server"
 msgstr "Glavni poslužitelj"
 
-#: ../DistUpgrade/distro.py:235
+#: ../DistUpgrade/distro.py:251
 msgid "Custom servers"
 msgstr "Osobni poslužitelji"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr "Koristi danu putanju za traženje CD-ROM-a s paketima nadogradnji"
-
-#: ../DistUpgrade/dist-upgrade.py:21
-msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:131
+msgid "Could not calculate sources.list entry"
 msgstr ""
-"Koristi grafičko sučelje. Trenutno su dostupna: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 
-#: ../DistUpgrade/dist-upgrade.py:24
-msgid "*DEPRECATED* this option will be ignore"
-msgstr "*ZASTARJELO* ova opcija će biti ignoriranje"
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:234
+msgid ""
+"Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
+"wrong architecture?"
+msgstr ""
 
-#: ../DistUpgrade/dist-upgrade.py:27
-msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr "Izvrši samo djelomičnu nadogradnju (sources.list se ne prepisuje)"
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:277
+msgid "Failed to add the CD"
+msgstr ""
 
-#: ../DistUpgrade/dist-upgrade.py:29
-msgid "Set datadir"
-msgstr "Postavi datadir"
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:278
+#, python-format
+msgid ""
+"There was a error adding the CD, the upgrade will abort. Please report this "
+"as a bug if this is a valid Ubuntu CD.\n"
+"\n"
+"The error message was:\n"
+"'%s'"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:101
+#: ../DistUpgrade/DistUpgradeCache.py:130
 msgid "Remove package in bad state"
 msgid_plural "Remove packages in bad state"
 msgstr[0] "Ukloni paket koji je u lošem stanju"
 msgstr[1] "Ukloni pakete koji su u lošem stanju"
 msgstr[2] "Ukloni pakete koji su u lošem stanju"
 
-#: ../DistUpgrade/DistUpgradeCache.py:104
+#: ../DistUpgrade/DistUpgradeCache.py:133
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
 "but no archive can be found for it. Do you want to remove this package now "
 "to continue?"
 msgid_plural ""
-"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
+"The packages '%s' are in an inconsistent state and need to be reinstalled, "
 "but no archives can be found for them. Do you want to remove these packages "
 "now to continue?"
 msgstr[0] ""
-"Paket '%s' je u nedosljednom stanju i treba biti ponovno instaliran, no nije "
-"pronađena nikakva arhiva za to. Želite li ovaj paket ukloniti odmah kako "
-"biste mogli nastavili?"
 msgstr[1] ""
-"Paketi '%s' su u nedosljednom stanju i trebaju biti ponovno instalirani, no "
-"nije pronađena nikakva arhiva za to. Želite li ove pakete ukloniti odmah "
-"kako biste mogli nastaviti?"
-msgstr[2] ""
-"Paketi '%s' su u nedosljednom stanju i trebaju biti ponovno instalirani, no "
-"nije pronađena nikakva arhiva za to. Želite li ove pakete ukloniti odmah "
-"kako biste mogli nastaviti?"
 
-#: ../DistUpgrade/DistUpgradeCache.py:299
+#: ../DistUpgrade/DistUpgradeCache.py:330
 msgid "Broken packages"
 msgstr "Neispravni paketi"
 
-#: ../DistUpgrade/DistUpgradeCache.py:300
+#: ../DistUpgrade/DistUpgradeCache.py:331
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
@@ -125,18 +116,12 @@ msgstr ""
 "Vaš sustav sadrži neispravne pakete koji nisu mogli biti popravljeni ovim "
 "programom. Prije nastavljanja, popravite ih koristeći synaptic ili apt-get."
 
-#: ../DistUpgrade/DistUpgradeCache.py:521
-msgid "Can't upgrade required meta-packages"
-msgstr "Ne mogu nadograditi potrebne meta-pakete"
-
-#: ../DistUpgrade/DistUpgradeCache.py:525
-msgid "A essential package would have to be removed"
-msgstr "Bitan paket bi morao biti uklonjen"
-
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:532
+#: ../DistUpgrade/DistUpgradeCache.py:564
+#, python-format
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade.\n"
+"An unresolvable problem occurred while calculating the upgrade:\n"
+"%s\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -144,41 +129,30 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
-"Došlo je do nerješivog problema prilikom obračunavanja paketa.\n"
-"\n"
-"Mogući uzrok problema je:\n"
-" * Nadogradnja na razvojnu inačicu Ubuntua\n"
-" * Trenutno korištenje razvojne inačice Ubuntua\n"
-" * Korištenje neslužbenih programskih paketa koji ne nudi Ubuntu\n"
-"\n"
 
-#: ../DistUpgrade/DistUpgradeCache.py:542
+#: ../DistUpgrade/DistUpgradeCache.py:574
 msgid "This is most likely a transient problem, please try again later."
 msgstr ""
 "Najvjerojatnije se radi o privremenom problemu, stoga, molim vas, pokušajte "
 "ponovno kasnije."
 
-#: ../DistUpgrade/DistUpgradeCache.py:545
+#: ../DistUpgrade/DistUpgradeCache.py:577
 msgid ""
 "If none of this applies, then please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
+"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+"report."
 msgstr ""
-"Ukoliko se ne radi o ničemu navedenom, molim prijavite grešku za paket "
-"'update-manager' i uz prijavu priložite datoteke iz /var/log/dist-upgrade/ "
-"direktorija."
 
-#: ../DistUpgrade/DistUpgradeCache.py:550
-#: ../UpdateManager/UpdateManager.py:906
+#: ../DistUpgrade/DistUpgradeCache.py:583
+#: ../UpdateManager/UpdateManager.py:717
 msgid "Could not calculate the upgrade"
 msgstr "Nisam mogao obračunati nadogradnju"
 
-#. FIXME: maybe ask a question here? instead of failing?
-#: ../DistUpgrade/DistUpgradeCache.py:597
+#: ../DistUpgrade/DistUpgradeCache.py:633
 msgid "Error authenticating some packages"
 msgstr "Greška pri identifikaciji nekih paketa"
 
-#: ../DistUpgrade/DistUpgradeCache.py:598
+#: ../DistUpgrade/DistUpgradeCache.py:634
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -188,12 +162,28 @@ msgstr ""
 "problemu s mrežom, stoga pokušajte ponovno kasnije. Popis neidentificiranih "
 "paketa dostupan je niže."
 
-#: ../DistUpgrade/DistUpgradeCache.py:710
+#: ../DistUpgrade/DistUpgradeCache.py:653
+#, python-format
+msgid ""
+"The package '%s' is marked for removal but it is in the removal blacklist."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:657
+#, python-format
+msgid "The essential package '%s' is marked for removal."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:735
+#, python-format
+msgid "Can not mark '%s' for upgrade"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:749
 #, python-format
 msgid "Can't install '%s'"
 msgstr "Ne mogu instalirati '%s'"
 
-#: ../DistUpgrade/DistUpgradeCache.py:711
+#: ../DistUpgrade/DistUpgradeCache.py:750
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -201,11 +191,11 @@ msgstr ""
 "Traženi paket nije bilo moguće instalirati. Molim prijavite ovo kao grešku. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:719
+#: ../DistUpgrade/DistUpgradeCache.py:758
 msgid "Can't guess meta-package"
 msgstr "Ne mogu pretpostaviti meta-paket"
 
-#: ../DistUpgrade/DistUpgradeCache.py:720
+#: ../DistUpgrade/DistUpgradeCache.py:759
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -223,11 +213,11 @@ msgstr ""
 msgid "Reading cache"
 msgstr "Čitam priručnu memoriju"
 
-#: ../DistUpgrade/DistUpgradeController.py:172
+#: ../DistUpgrade/DistUpgradeController.py:178
 msgid "Unable to get exclusive lock"
 msgstr "Isključivo zaključavanje nije uspjelo"
 
-#: ../DistUpgrade/DistUpgradeController.py:173
+#: ../DistUpgrade/DistUpgradeController.py:179
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -235,11 +225,22 @@ msgstr ""
 "Ovo obično znači da je neka drugi program za upravljanje paketima već "
 "pokrenut (npr. apt-get ili aptitude). Molim, prvo zatvorite taj program."
 
-#: ../DistUpgrade/DistUpgradeController.py:193
+#: ../DistUpgrade/DistUpgradeController.py:232
+msgid "Upgrading over remote connection not supported"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:233
+msgid ""
+"You are running the upgrade over a remote ssh connection with a frontend "
+"that does not support this. The upgrade will abort now. Please try without "
+"ssh."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:244
 msgid "Continue running under SSH?"
 msgstr "Nastaviti rad pod SSH-om?"
 
-#: ../DistUpgrade/DistUpgradeController.py:194
+#: ../DistUpgrade/DistUpgradeController.py:245
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -255,11 +256,11 @@ msgstr ""
 "Ukoliko nastavite, dodatan SSH servis će biti pokrenut pri portu '%s'.\n"
 "Želite li nastaviti?"
 
-#: ../DistUpgrade/DistUpgradeController.py:209
+#: ../DistUpgrade/DistUpgradeController.py:260
 msgid "Starting additional sshd"
 msgstr "Pokreni dodatni sshd"
 
-#: ../DistUpgrade/DistUpgradeController.py:210
+#: ../DistUpgrade/DistUpgradeController.py:261
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -270,28 +271,50 @@ msgstr ""
 "portu '%s'. Ukoliko nešto pođe po zlu s pokrenutim SSH-om, tada ćete se moći "
 "povezati na dodatni.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:278
-#: ../DistUpgrade/DistUpgradeController.py:301
+#: ../DistUpgrade/DistUpgradeController.py:331
+#: ../DistUpgrade/DistUpgradeController.py:376
 msgid "Can not upgrade"
 msgstr "Nadogradnja nije moguća"
 
-#: ../DistUpgrade/DistUpgradeController.py:279
+#: ../DistUpgrade/DistUpgradeController.py:332
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "Nadogradnja iz '%s' u '%s' nije podržana ovim alatom."
 
-#: ../DistUpgrade/DistUpgradeController.py:302
+#: ../DistUpgrade/DistUpgradeController.py:341
+msgid "Sandbox setup failed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:342
+msgid "It was not possible to create the sandbox environment."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:348
+msgid "Sandbox mode"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:349
+#, python-format
+msgid ""
+"This upgrade is running in sandbox (test) mode. All changes are written to "
+"'%s' and will be lost on the next reboot.\n"
+"\n"
+"*No* changes written to a systemdir from now until the next reboot are "
+"permanent."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:377
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 "Vaša instalacija pythona je neispravna. Molim, popravite simboličku "
 "poveznicu '/usr/bin/python'."
 
-#: ../DistUpgrade/DistUpgradeController.py:328
+#: ../DistUpgrade/DistUpgradeController.py:403
 msgid "Package 'debsig-verify' is installed"
 msgstr "Paket 'debsig-verify' je instaliran"
 
-#: ../DistUpgrade/DistUpgradeController.py:329
+#: ../DistUpgrade/DistUpgradeController.py:404
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
@@ -301,11 +324,11 @@ msgstr ""
 "Molim, najprije ga uklonite uz pomoć synaptica ili naredbe 'apt-get remove "
 "debsig-verify' i potom ponovno pokrenite nadogradnju."
 
-#: ../DistUpgrade/DistUpgradeController.py:339
+#: ../DistUpgrade/DistUpgradeController.py:414
 msgid "Include latest updates from the Internet?"
 msgstr "Uključiti posljednje nadogradnje s Interneta?"
 
-#: ../DistUpgrade/DistUpgradeController.py:340
+#: ../DistUpgrade/DistUpgradeController.py:415
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -325,11 +348,16 @@ msgstr ""
 "najnovija ažuriranja odmah po završetku nadogradnje.\n"
 "Ako ovdje odgovorite 'ne', to znači da se mreža uopće ne koristi."
 
-#: ../DistUpgrade/DistUpgradeController.py:511
+#: ../DistUpgrade/DistUpgradeController.py:624
+#, python-format
+msgid "disabled on upgrade to %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:650
 msgid "No valid mirror found"
 msgstr "Ispravan zrcalni poslužitelj nije pronađen"
 
-#: ../DistUpgrade/DistUpgradeController.py:512
+#: ../DistUpgrade/DistUpgradeController.py:651
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -350,11 +378,11 @@ msgstr ""
 "Ako odaberete 'ne' nadogradnja će biti prekinuta."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:532
+#: ../DistUpgrade/DistUpgradeController.py:671
 msgid "Generate default sources?"
 msgstr "Kreirati zadane izvore?"
 
-#: ../DistUpgrade/DistUpgradeController.py:533
+#: ../DistUpgrade/DistUpgradeController.py:672
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -368,11 +396,11 @@ msgstr ""
 "Da li bi zadani unosi za '%s' trebali biti dodani? Ako odaberete 'ne' "
 "nadogradnja će biti prekinuta."
 
-#: ../DistUpgrade/DistUpgradeController.py:567
+#: ../DistUpgrade/DistUpgradeController.py:707
 msgid "Repository information invalid"
 msgstr "Podaci repozitorija neispravni"
 
-#: ../DistUpgrade/DistUpgradeController.py:568
+#: ../DistUpgrade/DistUpgradeController.py:708
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -380,11 +408,11 @@ msgstr ""
 "Nadogradnja podataka repozitorija je rezultirala neispravnom datotekom. "
 "Molim, prijavite ovo kao grešku."
 
-#: ../DistUpgrade/DistUpgradeController.py:574
+#: ../DistUpgrade/DistUpgradeController.py:714
 msgid "Third party sources disabled"
 msgstr "Izvori trećih strana su isključeni"
 
-#: ../DistUpgrade/DistUpgradeController.py:575
+#: ../DistUpgrade/DistUpgradeController.py:715
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -394,14 +422,14 @@ msgstr ""
 "ih uključiti nakon nadogradnje sa 'software-properties' alatom ili s vašim "
 "upraviteljem paketa."
 
-#: ../DistUpgrade/DistUpgradeController.py:615
+#: ../DistUpgrade/DistUpgradeController.py:756
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Paket u nedosljednom stanju"
 msgstr[1] "Paketi u nedosljednom stanju"
 msgstr[2] "Paketi u nedosljednom stanju"
 
-#: ../DistUpgrade/DistUpgradeController.py:618
+#: ../DistUpgrade/DistUpgradeController.py:759
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -409,26 +437,16 @@ msgid ""
 "remove it from the system."
 msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archive can be found for it.Please reinstall the packages manually or "
-"remove them from the system."
+"but no archive can be found for them. Please reinstall the packages manually "
+"or remove them from the system."
 msgstr[0] ""
-"Paket '%s' je u nedosljednom stanju i treba biti ponovno instaliran, no nije "
-"pronađena nikakva arhiva za to. Molim, paket ponovno instalirajte ručno ili "
-"ga uklonite iz sustava."
 msgstr[1] ""
-"Paketi '%s' je u nedosljednom stanju i trebaju biti ponovno instalirani, no "
-"nije pronađena nikakva arhiva za to. Molim, pakete ponovno instalirajte "
-"ručno ili ih uklonite iz sustava."
-msgstr[2] ""
-"Paketi '%s' je u nedosljednom stanju i trebaju biti ponovno instalirani, no "
-"nije pronađena nikakva arhiva za to. Molim, pakete ponovno instalirajte "
-"ručno ili ih uklonite iz sustava."
 
-#: ../DistUpgrade/DistUpgradeController.py:666
+#: ../DistUpgrade/DistUpgradeController.py:807
 msgid "Error during update"
 msgstr "Greška prilikom nadogradnje"
 
-#: ../DistUpgrade/DistUpgradeController.py:667
+#: ../DistUpgrade/DistUpgradeController.py:808
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -437,28 +455,26 @@ msgstr ""
 "problemu s mrežom, stoga molim da provjerite svoju vezu na mrežu i pokušate "
 "ponovno."
 
-#: ../DistUpgrade/DistUpgradeController.py:676
+#. print "on_button_install_clicked"
+#: ../DistUpgrade/DistUpgradeController.py:817
+#: ../UpdateManager/UpdateManager.py:553
 msgid "Not enough free disk space"
 msgstr "Na disku nema dovoljno slobodnog prostora"
 
-#: ../DistUpgrade/DistUpgradeController.py:677
+#: ../DistUpgrade/DistUpgradeController.py:818
 #, python-format
 msgid ""
-"The upgrade aborts now. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
-msgstr ""
-"Nadogradnja se prekida. Nadogradnja zahtijeva ukupno %s slobodnog prostora "
-"na disku '%s'. Molim, oslobodite dodanih %s prostora na disku '%s'. "
-"Ispraznite smeće i uklonite pakete prethodnih instalacija koristeći naredbu "
+"The upgrade is now aborted. The upgrade needs a total of %s free space on "
+"disk '%s'. Please free at least an additional %s of disk space on '%s'. "
+"Empty your trash and remove temporary packages of former installations using "
 "'sudo apt-get clean'."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:788
+#: ../DistUpgrade/DistUpgradeController.py:858
 msgid "Support for some applications ended"
 msgstr "Podrška za neke programe je istekla"
 
-#: ../DistUpgrade/DistUpgradeController.py:789
+#: ../DistUpgrade/DistUpgradeController.py:859
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -474,84 +490,72 @@ msgstr ""
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:798
-#: ../DistUpgrade/DistUpgradeController.py:1419
+#: ../DistUpgrade/DistUpgradeController.py:868
+#: ../DistUpgrade/DistUpgradeController.py:1520
 msgid "Calculating the changes"
 msgstr "Analiza promjena"
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:813
+#: ../DistUpgrade/DistUpgradeController.py:883
 msgid "Do you want to start the upgrade?"
 msgstr "Želite li pokrenuti nadogradnju?"
 
-#: ../DistUpgrade/DistUpgradeController.py:865
-#: ../DistUpgrade/DistUpgradeController.py:921
+#: ../DistUpgrade/DistUpgradeController.py:935
+#: ../DistUpgrade/DistUpgradeController.py:1007
 msgid "Could not download the upgrades"
 msgstr "Nisam mogao preuzeti nadogradnje"
 
-#: ../DistUpgrade/DistUpgradeController.py:866
+#: ../DistUpgrade/DistUpgradeController.py:936
 msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
+"The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
-"Nadogradnja se prekida. Molim, provjerite svoju vezu na Internet ili "
-"instalacijski medij, te pokušajte ponovno. Sve datoteke koje su dosad "
-"preuzete su zadržane."
 
 #. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeController.py:896
+#: ../DistUpgrade/DistUpgradeController.py:982
 msgid ""
-"The upgrade aborts now. Your system could be in an unusable state. A "
+"The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"Nadogradnja se prekida. Vaš sustav bi mogao biti u neupotrebljivom stanju. "
-"Obnavljanje je pokrenuto (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:901
+#: ../DistUpgrade/DistUpgradeController.py:987
 #, python-format
 msgid ""
 "\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
-"files in /var/log/dist-upgrade/ in the bugreport.\n"
+"files in /var/log/dist-upgrade/ in the bug report.\n"
 "%s"
 msgstr ""
-"\n"
-"\n"
-"Molim, prijavite grešku za paket 'update-manager' i uz prijavu priložite "
-"datoteke iz /var/log/dist-upgrade/ direktorija.\n"
-"%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:905
+#: ../DistUpgrade/DistUpgradeController.py:991
 msgid "Could not install the upgrades"
 msgstr "Nadogradnje nisu mogle biti instalirane"
 
-#: ../DistUpgrade/DistUpgradeController.py:922
+#: ../DistUpgrade/DistUpgradeController.py:1008
 msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
+"The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
-"Nadogradnja se prekida. Molim, provjerite svoju vezu na Internet ili "
-"instalacijski medij, te pokušajte ponovno. "
 
-#: ../DistUpgrade/DistUpgradeController.py:992
+#: ../DistUpgrade/DistUpgradeController.py:1086
 msgid "Remove obsolete packages?"
 msgstr "Ukloniti zastarjele pakete?"
 
-#: ../DistUpgrade/DistUpgradeController.py:993
+#: ../DistUpgrade/DistUpgradeController.py:1087
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Zadrži"
 
-#: ../DistUpgrade/DistUpgradeController.py:993
+#: ../DistUpgrade/DistUpgradeController.py:1087
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: ../DistUpgrade/DistUpgradeController.py:1004
+#: ../DistUpgrade/DistUpgradeController.py:1098
 msgid "Error during commit"
 msgstr "Greška prilikom čina"
 
-#: ../DistUpgrade/DistUpgradeController.py:1005
+#: ../DistUpgrade/DistUpgradeController.py:1099
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -560,124 +564,110 @@ msgstr ""
 "za više informacija. "
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1040
+#: ../DistUpgrade/DistUpgradeController.py:1137
 msgid "Restoring original system state"
 msgstr "Vraćam početno stanje sustava"
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1078
+#: ../DistUpgrade/DistUpgradeController.py:1175
 msgid "Required depends is not installed"
 msgstr "Potrebna zavisnost nije instalirana"
 
-#: ../DistUpgrade/DistUpgradeController.py:1079
+#: ../DistUpgrade/DistUpgradeController.py:1176
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Potrebna zavisnost '%s' nije instalirana. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1329
-#: ../DistUpgrade/DistUpgradeController.py:1396
+#: ../DistUpgrade/DistUpgradeController.py:1430
+#: ../DistUpgrade/DistUpgradeController.py:1497
 msgid "Checking package manager"
 msgstr "Provjeravam upravitelja paketima"
 
-#: ../DistUpgrade/DistUpgradeController.py:1334
+#: ../DistUpgrade/DistUpgradeController.py:1435
 msgid "Preparing the upgrade failed"
 msgstr "Priprema nadogradnje nije uspjela"
 
-#: ../DistUpgrade/DistUpgradeController.py:1335
+#: ../DistUpgrade/DistUpgradeController.py:1436
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
-"upgrade/ in the bugreport."
+"upgrade/ in the bug report."
 msgstr ""
-"Priprema sustava za njegovu nadogradnju nije uspjela. Molim, prijavite "
-"grešku za paket 'update-manager' i uz prijavu priložite datoteke iz "
-"/var/log/dist-upgrade/ direktorija."
 
-#: ../DistUpgrade/DistUpgradeController.py:1351
+#: ../DistUpgrade/DistUpgradeController.py:1452
 msgid "Getting upgrade prerequisites failed"
 msgstr "Preuzimanje preduvjeta za nadogradnju nije uspjelo"
 
-#: ../DistUpgrade/DistUpgradeController.py:1352
+#: ../DistUpgrade/DistUpgradeController.py:1453
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
 "\n"
 "Please report this as a bug against the 'update-manager' package and include "
-"the files in /var/log/dist-upgrade/ in the bugreport."
+"the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
-"Sustav nije mogao doći do preduvjeta za nadogradnju. Nadogradnja će se "
-"prekinuti i bit će vraćeno izvorno stanje sustava.\n"
-"\n"
-"Molim, prijavite grešku za paket 'update-manager' i uz prijavu priložite "
-"datoteke iz /var/log/dist-upgrade/ direktorija."
 
-#: ../DistUpgrade/DistUpgradeController.py:1382
+#: ../DistUpgrade/DistUpgradeController.py:1483
 msgid "Updating repository information"
 msgstr "Nadograđujem podatke repozitorija"
 
-#: ../DistUpgrade/DistUpgradeController.py:1407
+#: ../DistUpgrade/DistUpgradeController.py:1508
 msgid "Invalid package information"
 msgstr "Neispravni podaci paketa"
 
-#: ../DistUpgrade/DistUpgradeController.py:1408
+#: ../DistUpgrade/DistUpgradeController.py:1509
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
 "not be found anymore.\n"
 "This indicates a serious error, please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
+"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+"report."
 msgstr ""
-"Nakon što su podaci paketa ažurirani, bitan paket '%s' više ne može biti "
-"pronađen.\n"
-"Ovo upućuje na ozbiljnu grešku, stoga molim da prijavite ovo kao grešku u "
-"'update-manager' paketu, te da uz prijavu priložite datoteke iz "
-"/var/log/dist-upgrade/ direktorija."
 
-#: ../DistUpgrade/DistUpgradeController.py:1425
-#: ../DistUpgrade/DistUpgradeController.py:1473
+#: ../DistUpgrade/DistUpgradeController.py:1526
+#: ../DistUpgrade/DistUpgradeController.py:1574
 msgid "Fetching"
 msgstr "Dohvaćanje"
 
-#: ../DistUpgrade/DistUpgradeController.py:1432
-#: ../DistUpgrade/DistUpgradeController.py:1477
+#: ../DistUpgrade/DistUpgradeController.py:1533
+#: ../DistUpgrade/DistUpgradeController.py:1578
 msgid "Upgrading"
 msgstr "Nadogradnja"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1437
-#: ../DistUpgrade/DistUpgradeController.py:1479
-#: ../DistUpgrade/DistUpgradeController.py:1486
-#: ../DistUpgrade/DistUpgradeController.py:1491
+#: ../DistUpgrade/DistUpgradeController.py:1538
+#: ../DistUpgrade/DistUpgradeController.py:1580
+#: ../DistUpgrade/DistUpgradeController.py:1587
+#: ../DistUpgrade/DistUpgradeController.py:1592
 msgid "Upgrade complete"
 msgstr "Nadogradnja dovršena"
 
-#: ../DistUpgrade/DistUpgradeController.py:1438
-#: ../DistUpgrade/DistUpgradeController.py:1480
-#: ../DistUpgrade/DistUpgradeController.py:1487
+#: ../DistUpgrade/DistUpgradeController.py:1539
+#: ../DistUpgrade/DistUpgradeController.py:1581
+#: ../DistUpgrade/DistUpgradeController.py:1588
 msgid ""
-"The upgrade is completed but there were errors during the ugprade process."
+"The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
-"Nadogradnja je dovršena, ali došlo je do nekih grešaka prilikom procesa "
-"nadogradnje."
 
-#: ../DistUpgrade/DistUpgradeController.py:1445
+#: ../DistUpgrade/DistUpgradeController.py:1546
 msgid "Searching for obsolete software"
 msgstr "Potraga za zastarjelim programima"
 
-#: ../DistUpgrade/DistUpgradeController.py:1450
+#: ../DistUpgrade/DistUpgradeController.py:1551
 msgid "System upgrade is complete."
 msgstr "Nadogradnja sustava je dovršena."
 
-#: ../DistUpgrade/DistUpgradeController.py:1492
+#: ../DistUpgrade/DistUpgradeController.py:1593
 msgid "The partial upgrade was completed."
 msgstr "Djelomična nadogradnja dovršena"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:154
-#: ../DistUpgrade/DistUpgradeQuirks.py:179
+#: ../DistUpgrade/DistUpgradeQuirks.py:166
+#: ../DistUpgrade/DistUpgradeQuirks.py:230
+#: ../DistUpgrade/DistUpgradeQuirks.py:255
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -685,8 +675,16 @@ msgstr ""
 "Nadogradnja može umanjiti efekte radne površine i performanse u igrama i "
 "ostalim grafički zahtjevnim programima."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:158
-#: ../DistUpgrade/DistUpgradeQuirks.py:183
+#: ../DistUpgrade/DistUpgradeQuirks.py:170
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 9.04.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:234
+#: ../DistUpgrade/DistUpgradeQuirks.py:259
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
@@ -700,9 +698,21 @@ msgstr ""
 "\n"
 "Želite li nastaviti?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:429
+msgid "evms in use"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:430
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+
 #. print "mediaChange %s %s" % (medium, drive)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:108
 #: ../DistUpgrade/DistUpgradeViewKDE.py:190
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:148
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Molim, ubacite '%s' u uređaj '%s'"
@@ -757,10 +767,8 @@ msgstr "Nisam mogao instalirati '%s'"
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may be in a not working "
-"state. Please consider submitting a bugreport about it."
+"state. Please consider submitting a bug report about it."
 msgstr ""
-"Nadogradnja će se nastaviti ali '%s' paket možda neće raditi ispravno. "
-"Molim, uzmite u obzir podnošenje izvješća o ovoj grešci."
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:221
@@ -788,7 +796,7 @@ msgid "The 'diff' command was not found"
 msgstr "Naredba 'diff' nije pronađena"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:417
-#: ../DistUpgrade/DistUpgradeViewText.py:110
+#: ../DistUpgrade/DistUpgradeViewText.py:107
 msgid "A fatal error occurred"
 msgstr "Došlo je do ozbiljne greške"
 
@@ -796,14 +804,9 @@ msgstr "Došlo je do ozbiljne greške"
 msgid ""
 "Please report this as a bug (if you haven't already) and include the files "
 "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-"report. The upgrade aborts now.\n"
+"report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Molim, prijavite ovo kao grešku (ako već niste) i uz prijavu priložite "
-"datoteke /var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log. "
-"Nadogradnja se prekida.\n"
-"Vaša izvorna sources.list datoteka je spremljena u direktorij "
-"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:433
 msgid "Ctrl-c pressed"
@@ -847,7 +850,9 @@ msgstr "Instaliraj %s"
 msgid "Upgrade %s"
 msgstr "Nadogradi %s"
 
+#. change = QMessageBox.question(None, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
 #: ../DistUpgrade/DistUpgradeViewKDE.py:191
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:150
 msgid "Media Change"
 msgstr "Promjena medija"
 
@@ -892,7 +897,7 @@ msgid "Details"
 msgstr "Detalji"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:778
-#: ../DistUpgrade/DistUpgradeViewText.py:222
+#: ../DistUpgrade/DistUpgradeViewText.py:225
 msgid "Restart required"
 msgstr "Potrebno je ponovno pokretanje"
 
@@ -925,7 +930,7 @@ msgstr ""
 msgid "Cancel Upgrade?"
 msgstr "Otkazati nadogradnju?"
 
-#: ../DistUpgrade/DistUpgradeView.py:57
+#: ../DistUpgrade/DistUpgradeView.py:58
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
@@ -933,7 +938,7 @@ msgstr[0] "%li dan"
 msgstr[1] "%li dana"
 msgstr[2] "%li dan"
 
-#: ../DistUpgrade/DistUpgradeView.py:59
+#: ../DistUpgrade/DistUpgradeView.py:60
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
@@ -941,7 +946,7 @@ msgstr[0] "%li sat"
 msgstr[1] "%li sati"
 msgstr[2] "%li sat"
 
-#: ../DistUpgrade/DistUpgradeView.py:61
+#: ../DistUpgrade/DistUpgradeView.py:62
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
@@ -949,7 +954,7 @@ msgstr[0] "%li minuta"
 msgstr[1] "%li minuta"
 msgstr[2] "%li minuta"
 
-#: ../DistUpgrade/DistUpgradeView.py:62
+#: ../DistUpgrade/DistUpgradeView.py:63
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
@@ -966,10 +971,10 @@ msgstr[2] "%li sekunda"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:75
+#: ../DistUpgrade/DistUpgradeView.py:76
 #, python-format
-msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
-msgstr "%(str_days)s %(str_hours)s %(str_minutes)s"
+msgid "%(str_days)s %(str_hours)s"
+msgstr ""
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -980,51 +985,49 @@ msgstr "%(str_days)s %(str_hours)s %(str_minutes)s"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:86
+#: ../DistUpgrade/DistUpgradeView.py:91
 #, python-format
 msgid "%(str_hours)s %(str_minutes)s"
 msgstr "%(str_hours)s %(str_minutes)s"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
-#: ../DistUpgrade/DistUpgradeView.py:107
+#: ../DistUpgrade/DistUpgradeView.py:112
 #, python-format
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
-"with a 56k modem"
+"with a 56k modem."
 msgstr ""
-"Preuzimanje će trajati oko %s s DSL vezom propusnosti 1Mbit ili %s s 56k "
-"modemskom vezom"
 
 #. if we have a estimated speed, use it
-#: ../DistUpgrade/DistUpgradeView.py:111
+#: ../DistUpgrade/DistUpgradeView.py:116
 #, python-format
 msgid "This download will take about %s with your connection. "
 msgstr "Preuzimanje će trajati oko %s s vašom vezom. "
 
-#: ../DistUpgrade/DistUpgradeView.py:189 ../DistUpgrade/DistUpgrade.glade.h:14
+#: ../DistUpgrade/DistUpgradeView.py:199 ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Preparing to upgrade"
 msgstr "Pripremam za nadogradnju"
 
-#: ../DistUpgrade/DistUpgradeView.py:190
+#: ../DistUpgrade/DistUpgradeView.py:200
 msgid "Getting new software channels"
 msgstr "Dobivam nove softverske kanale"
 
-#: ../DistUpgrade/DistUpgradeView.py:191 ../DistUpgrade/DistUpgrade.glade.h:12
+#: ../DistUpgrade/DistUpgradeView.py:201 ../DistUpgrade/DistUpgrade.glade.h:12
 msgid "Getting new packages"
 msgstr "Dobivanje novih paketa"
 
-#: ../DistUpgrade/DistUpgradeView.py:192 ../DistUpgrade/DistUpgrade.glade.h:13
+#: ../DistUpgrade/DistUpgradeView.py:202 ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Installing the upgrades"
 msgstr "Instalacija nadogradnji"
 
-#: ../DistUpgrade/DistUpgradeView.py:193 ../DistUpgrade/DistUpgrade.glade.h:8
+#: ../DistUpgrade/DistUpgradeView.py:203 ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
 msgstr "Čišćenje"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:266
+#: ../DistUpgrade/DistUpgradeView.py:276
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
@@ -1032,7 +1035,7 @@ msgstr[0] "%d paket će biti uklonjen."
 msgstr[1] "%d paketa će biti uklonjena."
 msgstr[2] "%d paketa će biti uklonjeno."
 
-#: ../DistUpgrade/DistUpgradeView.py:271
+#: ../DistUpgrade/DistUpgradeView.py:281
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
@@ -1040,7 +1043,7 @@ msgstr[0] "%d novi paket će biti instaliran."
 msgstr[1] "%d nova paketa će biti instalirana."
 msgstr[2] "%d novih paketa će biti instalirano."
 
-#: ../DistUpgrade/DistUpgradeView.py:277
+#: ../DistUpgrade/DistUpgradeView.py:287
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
@@ -1048,7 +1051,7 @@ msgstr[0] "%d paket će biti nadograđen."
 msgstr[1] "%d paketa će biti nadograđena."
 msgstr[2] "%d paketa će biti nadograđeno."
 
-#: ../DistUpgrade/DistUpgradeView.py:282
+#: ../DistUpgrade/DistUpgradeView.py:292
 #, python-format
 msgid ""
 "\n"
@@ -1059,7 +1062,7 @@ msgstr ""
 "\n"
 "Morate preuzeti ukupno %s. "
 
-#: ../DistUpgrade/DistUpgradeView.py:286
+#: ../DistUpgrade/DistUpgradeView.py:296
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -1068,71 +1071,71 @@ msgstr ""
 "preuzimanje završi, proces nesmije biti otkazan."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:292 ../UpdateManager/UpdateManager.py:672
+#: ../DistUpgrade/DistUpgradeView.py:302 ../UpdateManager/UpdateManager.py:446
 msgid "Your system is up-to-date"
 msgstr "Vaš sustav je ažuran"
 
-#: ../DistUpgrade/DistUpgradeView.py:293
+#: ../DistUpgrade/DistUpgradeView.py:303
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
 msgstr ""
 "Nema dostupnih nadogradnji za vaš sustav. Nadogradnja će biti otkazana"
 
-#: ../DistUpgrade/DistUpgradeView.py:306
+#: ../DistUpgrade/DistUpgradeView.py:316
 msgid "Reboot required"
 msgstr "Potrebno je ponovno pokretanje računala"
 
-#: ../DistUpgrade/DistUpgradeView.py:307
+#: ../DistUpgrade/DistUpgradeView.py:317
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
 "Nadogradnja je završena i potrebno je ponovo pokrenuti računalo. Želite li "
 "to učiniti sada?"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:134
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:134
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
 msgid "Could not run the upgrade tool"
 msgstr "Alat za nadogradnju nije pronađen"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
 "Najvjerojatnije se radi o grešci u alatu za nadogradnju. Molim, prijavite "
 "ovo kao grešku"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:204
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:204
 msgid "Upgrade tool signature"
 msgstr "Potpis alata za nadogradnju"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
 msgid "Upgrade tool"
 msgstr "Alat za nadogradnju"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:237
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:237
 msgid "Failed to fetch"
 msgstr "Preuzimanje nije uspjelo"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:238
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:238
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr ""
 "Preuzimanje nadogradnje nije uspjelo. Vjerojatno je problem u mreži. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:242
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:242
 msgid "Failed to extract"
 msgstr "Neuspjelo raspakiravanje"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:243
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:243
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -1140,13 +1143,13 @@ msgstr ""
 "Raspakiravanje nadogradnje nije uspjelo. Vjerojatno je problem u mreži ili "
 "poslužitelju. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:248
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
 msgid "Verfication failed"
 msgstr "Provjera nije uspjela"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:249
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
@@ -1154,13 +1157,13 @@ msgstr ""
 "Provjera nadogradnje nije uspjela. Vjerojatno je problem u mreži ili "
 "poslužitelju. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:254
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:254
 msgid "Authentication failed"
 msgstr "Autorizacija nije uspjela"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:255
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:255
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -1168,15 +1171,15 @@ msgstr ""
 "Autorizacija nadogradnje nije uspjela. Vjerojatno je problem u mreži ili "
 "poslužitelju. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:263
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:269
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:263
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:269
 msgid "Can not run the upgrade"
 msgstr "Pokretanje nadogradnje nije moguće"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:264
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:264
 msgid ""
 "This usually is caused by a system were /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
@@ -1184,86 +1187,84 @@ msgstr ""
 "Ovo najčešće uzrokuje sustav kojemu je /tmp pridružen s noexec. Molim, "
 "pridružite ponovno bez noexec i još jednom pokrenite nadogradnju."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:270
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:270
 #, python-format
 msgid "The error message is '%s'."
 msgstr "Poruka greške je '%s'."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:111
+#: ../DistUpgrade/DistUpgradeViewText.py:108
 msgid ""
 "Please report this as a bug and include the files /var/log/dist-"
 "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade aborts now.\n"
+"upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Molim, prijavite ovo kao grešku i uz prijavu priložite datoteku "
-"/var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log. Nadogradnja "
-"se prekida.\n"
-"Vaša izvorna sources.list datoteka je spremljena u direktorij "
-"/etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:135
+#: ../DistUpgrade/DistUpgradeViewText.py:132
 msgid "Aborting"
 msgstr "Odustajanje"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:140
+#: ../DistUpgrade/DistUpgradeViewText.py:137
 msgid "Demoted:\n"
 msgstr "Degradirano:\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
-#: ../DistUpgrade/DistUpgradeViewText.py:201
+#: ../DistUpgrade/DistUpgradeViewText.py:169
+#: ../DistUpgrade/DistUpgradeViewText.py:191
+#: ../DistUpgrade/DistUpgradeViewText.py:198
 msgid "Continue [yN] "
 msgstr "Nastavi [dN] "
 
-#: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
+#: ../DistUpgrade/DistUpgradeViewText.py:169
+#: ../DistUpgrade/DistUpgradeViewText.py:191
 msgid "Details [d]"
 msgstr "Detalji [e]"
 
 #. TRANSLATORS: the "y" is "yes"
-#: ../DistUpgrade/DistUpgradeViewText.py:176
-#: ../DistUpgrade/DistUpgradeViewText.py:205
+#. TRANSLATORS: first letter of a positive (yes) answer
+#: ../DistUpgrade/DistUpgradeViewText.py:173
+#: ../DistUpgrade/DistUpgradeViewText.py:201
 msgid "y"
 msgstr "d"
 
 #. TRANSLATORS: the "n" is "no"
-#: ../DistUpgrade/DistUpgradeViewText.py:179
+#. TRANSLATORS: first letter of a negative (no) answer
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#: ../DistUpgrade/DistUpgradeViewText.py:208
 msgid "n"
 msgstr "n"
 
 #. TRANSLATORS: the "d" is "details"
-#: ../DistUpgrade/DistUpgradeViewText.py:182
+#: ../DistUpgrade/DistUpgradeViewText.py:179
 msgid "d"
 msgstr "e"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:186
+#: ../DistUpgrade/DistUpgradeViewText.py:183
 #, python-format
 msgid "Remove: %s\n"
 msgstr "Ukloni: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:189
+#: ../DistUpgrade/DistUpgradeViewText.py:186
 #, python-format
 msgid "Install: %s\n"
 msgstr "Instaliraj: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:192
+#: ../DistUpgrade/DistUpgradeViewText.py:189
 #, python-format
 msgid "Upgrade: %s\n"
 msgstr "Nadogradi: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:223
+#: ../DistUpgrade/DistUpgradeViewText.py:205
+msgid "Continue [Yn] "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewText.py:226
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
 msgstr ""
 "Za dovršetak nadogradnje, potrebno je ponovno pokretanje.\n"
 "Ako odaberete 'd' sustav će biti ponovno pokrenut."
-
-#: ../DistUpgrade/DistUpgradeViewText.py:227
-msgid "Restart the system now [yN] "
-msgstr "Odmah ponovno pokreni sustav [dN] "
 
 #: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
@@ -1286,8 +1287,8 @@ msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Pokrenuti nadogradnju?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
-msgstr "<b><big>Nadogradnja Ubuntua na inačicu 8.10</big></b>"
+msgid "<b><big>Upgrading Ubuntu to version 9.04</big></b>"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
@@ -1333,21 +1334,59 @@ msgstr "_Nastavi nadogradnju"
 msgid "_Start Upgrade"
 msgstr "_Pokreni nadogradnju"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:81
+#: ../UpdateManager/DistUpgradeFetcher.py:85
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:103
 msgid "Could not find the release notes"
 msgstr "Bilješke izdanja nisu pronađene"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:82
+#: ../UpdateManager/DistUpgradeFetcher.py:86
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:104
 msgid "The server may be overloaded. "
 msgstr "Poslužitelj bi mogao biti preopterećen. "
 
-#: ../UpdateManager/DistUpgradeFetcher.py:92
+#: ../UpdateManager/DistUpgradeFetcher.py:96
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:108
 msgid "Could not download the release notes"
 msgstr "Bilješke izdanja nisu mogle biti preuzete"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:93
+#: ../UpdateManager/DistUpgradeFetcher.py:97
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:109
 msgid "Please check your internet connection."
 msgstr "Molim, provjerite vašu Internet vezu."
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:62
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:85
+msgid "Upgrade"
+msgstr ""
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:89
+#: ../data/glade/UpdateManager.glade.h:11
+msgid "Release Notes"
+msgstr "Bilješke izdanja"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:128
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
+msgid "Downloading additional package files..."
+msgstr ""
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
+#, python-format
+msgid "File %s of %s at %sB/s"
+msgstr ""
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
+#, python-format
+msgid "File %s of %s"
+msgstr ""
+
+#: ../UpdateManager/ChangelogViewer.py:70
+msgid "Open Link in Browser"
+msgstr ""
+
+#: ../UpdateManager/ChangelogViewer.py:72
+msgid "Copy Link to Clipboard"
+msgstr ""
 
 #: ../UpdateManager/GtkProgress.py:108
 #, python-format
@@ -1359,97 +1398,34 @@ msgstr "Preuzimanje datoteke %(current)li od %(total)li pri %(speed)s/s"
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "Preuzimam datoteku %(current)li od %(total)li"
 
-#: ../UpdateManager/UpdateManager.py:252
-msgid "The list of changes is not available"
-msgstr "Popis promjena nije dostupan."
-
-#: ../UpdateManager/UpdateManager.py:260
-#, python-format
-msgid ""
-"The list of changes is not available yet.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-"Popis promjena još nije dostupan.\n"
-"\n"
-"Molim, posjetite http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"dok promjene ne postanu dostupne ili pokušajte ponovno kasnije."
-
-#: ../UpdateManager/UpdateManager.py:268
-msgid ""
-"Failed to download the list of changes. \n"
-"Please check your Internet connection."
-msgstr ""
-"Preuzimanje popisa promjena nije uspjelo. \n"
-"Molim, provjerite svoju Internet vezu."
-
-#: ../UpdateManager/UpdateManager.py:290
-msgid "Failed to detect distribution"
-msgstr "Prepoznavanje distribucije nije uspjelo"
-
-#: ../UpdateManager/UpdateManager.py:291
-#, python-format
-msgid "A error '%s' occurred while checking what system you are using."
-msgstr ""
-"Došlo je do greške '%s' prilikom prilikom provjere sustava kojeg koristite."
-
-#: ../UpdateManager/UpdateManager.py:302
-msgid "Important security updates"
-msgstr "Važna sigurnosna ažuriranja"
-
-#: ../UpdateManager/UpdateManager.py:303
-msgid "Recommended updates"
-msgstr "Preporučena ažuriranja"
-
-#: ../UpdateManager/UpdateManager.py:304
-msgid "Proposed updates"
-msgstr "Predložena ažuriranja"
-
-#: ../UpdateManager/UpdateManager.py:305
-msgid "Backports"
-msgstr "Backporti"
-
-#: ../UpdateManager/UpdateManager.py:306
-msgid "Distribution updates"
-msgstr "Ažuriranja distribucije"
-
-#: ../UpdateManager/UpdateManager.py:311
-msgid "Other updates"
-msgstr "Ostala ažuriranja"
-
-#: ../UpdateManager/UpdateManager.py:320
-msgid "Previous selected"
-msgstr "Prethodno označeno"
-
-#: ../UpdateManager/UpdateManager.py:495
+#: ../UpdateManager/UpdateManager.py:264
 #, python-format
 msgid "Version %s: \n"
 msgstr "Verzija %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:556
+#: ../UpdateManager/UpdateManager.py:325
 msgid "Downloading list of changes..."
 msgstr "Preuzimanje popisa promjena..."
 
-#: ../UpdateManager/UpdateManager.py:583
+#: ../UpdateManager/UpdateManager.py:357
 msgid "_Uncheck All"
 msgstr "Od_znači sve"
 
-#: ../UpdateManager/UpdateManager.py:589
+#: ../UpdateManager/UpdateManager.py:363
 msgid "_Check All"
 msgstr "_Označi sve"
 
 #. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:633 ../UpdateManager/UpdateManager.py:689
+#: ../UpdateManager/UpdateManager.py:407 ../UpdateManager/UpdateManager.py:467
 #, python-format
 msgid "Download size: %s"
 msgstr "Veličina preuzimanja: %s"
 
-#: ../UpdateManager/UpdateManager.py:637
+#: ../UpdateManager/UpdateManager.py:411
 msgid "Unknown download size"
 msgstr "Nepoznata veličina preuzimanja"
 
-#: ../UpdateManager/UpdateManager.py:645
+#: ../UpdateManager/UpdateManager.py:419
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
@@ -1457,7 +1433,7 @@ msgstr ""
 "Nije poznato kad su informacije o paketu zadnji put ažurirane. Molim, "
 "probajte kliknuti na \"Provjeri\" da biste ažurirali informacije."
 
-#: ../UpdateManager/UpdateManager.py:654
+#: ../UpdateManager/UpdateManager.py:428
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
@@ -1465,7 +1441,7 @@ msgstr[0] "Informacije paketa su zadnji put ažurirane prije %s dan."
 msgstr[1] "Informacije paketa su zadnji put ažurirane prije %s dana."
 msgstr[2] "Informacije paketa su zadnji put ažurirane prije %s dana."
 
-#: ../UpdateManager/UpdateManager.py:658
+#: ../UpdateManager/UpdateManager.py:432
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
@@ -1473,12 +1449,12 @@ msgstr[0] "Informacije paketa su zadnji put ažurirane prije %s sat."
 msgstr[1] "Informacije paketa su zadnji put ažurirane prije %s sati."
 msgstr[2] "Informacije paketa su zadnji put ažurirane prije %s sati."
 
-#: ../UpdateManager/UpdateManager.py:662
+#: ../UpdateManager/UpdateManager.py:436
 msgid "The package information was last updated less than one hour ago."
 msgstr ""
 "Informacije o paketu su zadnji put ažurirane prije manje od jednog sata."
 
-#: ../UpdateManager/UpdateManager.py:670
+#: ../UpdateManager/UpdateManager.py:444
 #: ../data/glade/UpdateManager.glade.h:21
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
@@ -1487,31 +1463,53 @@ msgstr ""
 "Ažuriranja programa ispravljaju greške, uklanjaju sigurnosne propuste i "
 "donose nove mogućnosti."
 
-#: ../UpdateManager/UpdateManager.py:685
-#, python-format
-msgid "You can install %s update."
-msgid_plural "You can install %s updates."
-msgstr[0] "Možete instalirati %s ažuriranje."
-msgstr[1] "Možete instalirati %s ažuriranja."
-msgstr[2] "Možete instalirati %s ažuriranja."
+#: ../UpdateManager/UpdateManager.py:461
+msgid "Welcome to Ubuntu"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:727
+#: ../UpdateManager/UpdateManager.py:462
+msgid ""
+"These software updates have been issued since Ubuntu was released. If you "
+"don't want to install them now, choose \"Update Manager\" from the "
+"Administration Menu later."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:465
+msgid "Software updates are available for this computer"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:466
+msgid ""
+"If you don't want to install them now, choose \"Update Manager\" from the "
+"Administration menu later."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:505
 msgid "Please wait, this can take some time."
 msgstr "Molim pričekajte, ovo može potrajati."
 
-#: ../UpdateManager/UpdateManager.py:729
+#: ../UpdateManager/UpdateManager.py:507
 msgid "Update is complete"
 msgstr "Ažuriranje je dovršeno"
 
-#: ../UpdateManager/UpdateManager.py:781
+#: ../UpdateManager/UpdateManager.py:554
+#, python-format
+msgid ""
+"The upgrade needs a total of %s free space on disk '%s'. Please free at "
+"least an additional %s of disk space on '%s'. Empty your trash and remove "
+"temporary packages of former installations using 'sudo apt-get clean'."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:593
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "Čitanje informacija paketa"
 
-#: ../UpdateManager/UpdateManager.py:884
+#: ../UpdateManager/UpdateManager.py:695
 msgid "Could not initialize the package information"
 msgstr "Ne mogu inicijalizirati informacije paketa"
 
-#: ../UpdateManager/UpdateManager.py:885
+#: ../UpdateManager/UpdateManager.py:696
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1525,7 +1523,7 @@ msgstr ""
 "Molim, prijavite grešku u 'update-manager' paketu i priložite sljedeću "
 "grešku:\n"
 
-#: ../UpdateManager/UpdateManager.py:907
+#: ../UpdateManager/UpdateManager.py:718
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1538,26 +1536,26 @@ msgstr ""
 "grešku:"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:932
+#: ../UpdateManager/UpdateManager.py:743
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Veličina: %s)"
 
-#: ../UpdateManager/UpdateManager.py:934
+#: ../UpdateManager/UpdateManager.py:745
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "S inačice %(old_version)s na %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:938
+#: ../UpdateManager/UpdateManager.py:749
 #, python-format
 msgid "Version %s"
 msgstr "Inačica %s"
 
-#: ../UpdateManager/UpdateManager.py:951
+#: ../UpdateManager/UpdateManager.py:762
 msgid "Your distribution is not supported anymore"
 msgstr "Vaša distribucija više nije podržana"
 
-#: ../UpdateManager/UpdateManager.py:952
+#: ../UpdateManager/UpdateManager.py:763
 msgid ""
 "You will not get any further security fixes or critical updates. Upgrade to "
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
@@ -1567,25 +1565,17 @@ msgstr ""
 "sustav na noviju inačicu Ubuntu Linuxa. Posjetite http://www.ubuntu.com za "
 "više informacija o nadogradnji."
 
-#: ../UpdateManager/UpdateManager.py:978
-msgid "Downloading the upgrade tool"
-msgstr "Preuzimam alat za nadogradnju"
-
-#: ../UpdateManager/UpdateManager.py:980
-msgid "The upgrade tool will guide you through the upgrade process."
-msgstr "Alat za nadogradnju će vas voditi kroz proces nadogradnje."
-
-#: ../UpdateManager/UpdateManager.py:988
+#: ../UpdateManager/UpdateManager.py:795
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr "<b>Novo izdanje distribucije, '%s', je dostupno</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:1031
+#: ../UpdateManager/UpdateManager.py:834
 msgid "Software index is broken"
 msgstr "Indeks programa je oštećen"
 
-#: ../UpdateManager/UpdateManager.py:1032
+#: ../UpdateManager/UpdateManager.py:835
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1594,6 +1584,127 @@ msgstr ""
 "Nemoguće je instalirati ili ukloniti bilo koji program. Molim koristite "
 "upravitelja paketima \"Synaptic\" ili upišite \"sudo apt-get install -f\" u "
 "terminalu za ispravljanje ovog problema."
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:136
+msgid "Downloading Package Information"
+msgstr ""
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:137
+msgid ""
+"The repositories are being checked for new, removed, or updated software "
+"packages"
+msgstr ""
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:145
+msgid "Downloading Package Updates"
+msgstr ""
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:146
+msgid ""
+"The selected package updates are being downloaded and installed on the system"
+msgstr ""
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:152
+msgid "run_synaptic called with unknown action"
+msgstr ""
+
+#: ../UpdateManagerText/UpdateManagerText.py:26
+msgid "Cancel"
+msgstr ""
+
+#: ../UpdateManagerText/UpdateManagerText.py:27
+msgid "Install"
+msgstr ""
+
+#: ../UpdateManagerText/UpdateManagerText.py:45
+msgid "Building Updates List"
+msgstr ""
+
+#: ../UpdateManagerText/UpdateManagerText.py:48
+msgid ""
+"\n"
+"A normal upgrade can not be calculated, please run: \n"
+"  sudo apt-get dist-upgrade\n"
+"\n"
+"\n"
+"This can be caused by:\n"
+" ◦ A previous upgrade which didn't complete\n"
+" ◦ Problems with some of the installed software\n"
+" ◦ Unofficial software packages not provided by Ubuntu\n"
+" ◦ Normal changes of a pre-release version of Ubuntu"
+msgstr ""
+
+#: ../UpdateManagerText/UpdateManagerText.py:117
+msgid "Downloading changelog"
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:209
+#, python-format
+msgid ""
+"The changelog does not contain any relevant changes.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:214
+#, python-format
+msgid ""
+"The list of changes is not available yet.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+"Popis promjena još nije dostupan.\n"
+"\n"
+"Molim, posjetite http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"dok promjene ne postanu dostupne ili pokušajte ponovno kasnije."
+
+#: ../UpdateManager/Core/MyCache.py:220
+msgid ""
+"Failed to download the list of changes. \n"
+"Please check your Internet connection."
+msgstr ""
+"Preuzimanje popisa promjena nije uspjelo. \n"
+"Molim, provjerite svoju Internet vezu."
+
+#: ../UpdateManager/Core/UpdateList.py:47
+msgid "Failed to detect distribution"
+msgstr "Prepoznavanje distribucije nije uspjelo"
+
+#: ../UpdateManager/Core/UpdateList.py:48
+#, python-format
+msgid "A error '%s' occurred while checking what system you are using."
+msgstr ""
+"Došlo je do greške '%s' prilikom prilikom provjere sustava kojeg koristite."
+
+#: ../UpdateManager/Core/UpdateList.py:59
+msgid "Important security updates"
+msgstr "Važna sigurnosna ažuriranja"
+
+#: ../UpdateManager/Core/UpdateList.py:60
+msgid "Recommended updates"
+msgstr "Preporučena ažuriranja"
+
+#: ../UpdateManager/Core/UpdateList.py:61
+msgid "Proposed updates"
+msgstr "Predložena ažuriranja"
+
+#: ../UpdateManager/Core/UpdateList.py:62
+msgid "Backports"
+msgstr "Backporti"
+
+#: ../UpdateManager/Core/UpdateList.py:63
+msgid "Distribution updates"
+msgstr "Ažuriranja distribucije"
+
+#: ../UpdateManager/Core/UpdateList.py:68
+msgid "Other updates"
+msgstr "Ostala ažuriranja"
+
+#: ../UpdateManager/Core/UpdateList.py:77
+msgid "Previous selected"
+msgstr "Prethodno označeno"
 
 #: ../data/glade/UpdateManager.glade.h:1
 msgid ""
@@ -1608,42 +1719,34 @@ msgstr ""
 "pod <i>Softver repozitoriji</i> u kartici <i>Ažuriranja</i>."
 
 #: ../data/glade/UpdateManager.glade.h:4
-msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr "<big><b>Zadržite vaš sustav ažurnim</b></big>"
-
-#: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
 msgstr "<big><b>Ne mogu biti instalirana sva ažuriranja</b></big>"
 
-#: ../data/glade/UpdateManager.glade.h:6
+#: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Starting Update Manager</b></big>"
 msgstr "<big><b>Pokretanje Upravitelja nadogradnji</b></big>"
 
-#: ../data/glade/UpdateManager.glade.h:7
+#: ../data/glade/UpdateManager.glade.h:6
 msgid "Changes"
 msgstr "Promjene"
 
-#: ../data/glade/UpdateManager.glade.h:8
+#: ../data/glade/UpdateManager.glade.h:7
 msgid "Chec_k"
 msgstr "P_rovjeri"
 
-#: ../data/glade/UpdateManager.glade.h:9
+#: ../data/glade/UpdateManager.glade.h:8
 msgid "Check the software channels for new updates"
 msgstr "Provjeri programske kanale za nove nadogradnje"
 
-#: ../data/glade/UpdateManager.glade.h:10
+#: ../data/glade/UpdateManager.glade.h:9
 msgid "Description"
 msgstr "Opis"
 
-#: ../data/glade/UpdateManager.glade.h:11
+#: ../data/glade/UpdateManager.glade.h:10
 msgid "Description of update"
 msgstr "Opis ažuriranja"
 
 #: ../data/glade/UpdateManager.glade.h:12
-msgid "Release Notes"
-msgstr "Bilješke izdanja"
-
-#: ../data/glade/UpdateManager.glade.h:13
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
@@ -1661,6 +1764,10 @@ msgstr ""
 " ◦ Neslužbeni programski paketi koje ne nudi Ubuntu\n"
 " ◦ Normalne promjene razvojne inačice Ubuntua"
 
+#: ../data/glade/UpdateManager.glade.h:19
+msgid "Settings…"
+msgstr ""
+
 #: ../data/glade/UpdateManager.glade.h:20
 msgid "Show progress of individual files"
 msgstr "Prikaži napredak pojedinačnih datoteka"
@@ -1671,6 +1778,7 @@ msgstr "Na_dogradnja"
 
 #: ../data/glade/UpdateManager.glade.h:23
 #: ../data/update-manager.desktop.in.h:3
+#: ../data/update-manager-hildon.desktop.in.h:3
 msgid "Update Manager"
 msgstr "Upravitelj nadogradnjama"
 
@@ -1699,10 +1807,12 @@ msgid "updates"
 msgstr "ažuriranja"
 
 #: ../data/update-manager.desktop.in.h:1
+#: ../data/update-manager-hildon.desktop.in.h:1
 msgid "Show and install available updates"
 msgstr "Pokaži i instaliraj dostupna ažuriranja"
 
 #: ../data/update-manager.desktop.in.h:2
+#: ../data/update-manager-hildon.desktop.in.h:2
 msgid "Software Updates"
 msgstr "Programska ažuriranja"
 
@@ -1715,6 +1825,10 @@ msgid "Auto close the install window after successful install"
 msgstr "Automatski zatvori instalacijski prozor nakon uspješne instalacije"
 
 #: ../data/update-manager.schemas.in.h:3
+msgid "First run welcome message"
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If automatic checking for updates is disabled, you have to reload the "
 "channel list manually. This option allows to hide the reminder shown in this "
@@ -1724,7 +1838,11 @@ msgstr ""
 "učitavanje popis repozitorija morate obavljati ručno. Ova opcija omogućuje "
 "skrivanje podsjetnika prikazanog u ovom slučaju."
 
-#: ../data/update-manager.schemas.in.h:4
+#: ../data/update-manager.schemas.in.h:5
+msgid "If this key is set a first run welcome message will be presented."
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:6
 msgid ""
 "If this key is set the install window will be automatically closed on "
 "successful installation."
@@ -1732,7 +1850,7 @@ msgstr ""
 "Ako je ova opcija uključena, instalacijski prozor će se automatski zatvoriti "
 "po uspješnom završetku instalaciji."
 
-#: ../data/update-manager.schemas.in.h:5
+#: ../data/update-manager.schemas.in.h:7
 msgid ""
 "If this key is set the main update list window will show version information "
 "(from version to version)."
@@ -1740,34 +1858,34 @@ msgstr ""
 "Ako je ova opcija uključena, prozor s glavnim popisom ažuriranja će "
 "prikazati informacije o inačicama (od inačice do inačice)"
 
-#: ../data/update-manager.schemas.in.h:6
+#: ../data/update-manager.schemas.in.h:8
 msgid "Remind to reload the channel list"
 msgstr "Podsjeti na ponovno učitavanje popisa kanala"
 
-#: ../data/update-manager.schemas.in.h:7
+#: ../data/update-manager.schemas.in.h:9
 msgid "Show details of an update"
 msgstr "Prikaži detalje ažuriranja"
 
-#: ../data/update-manager.schemas.in.h:8
+#: ../data/update-manager.schemas.in.h:10
 msgid "Show version in update list"
 msgstr "Prikaži inačicu u popisu ažuriranja"
 
-#: ../data/update-manager.schemas.in.h:9
+#: ../data/update-manager.schemas.in.h:11
 msgid "Stores the size of the update-manager dialog"
 msgstr "Sprema veličinu prozora upravitelja nadogradnji"
 
-#: ../data/update-manager.schemas.in.h:10
+#: ../data/update-manager.schemas.in.h:12
 msgid ""
 "Stores the state of the expander that contains the list of changes and the "
 "description"
 msgstr ""
 "Sprema stanje proširivog dijela prozora koji sadrži popis promjena i opise"
 
-#: ../data/update-manager.schemas.in.h:11
+#: ../data/update-manager.schemas.in.h:13
 msgid "The window size"
 msgstr "Veličina prozora"
 
-#: ../data/update-manager.schemas.in.h:12
+#: ../data/update-manager.schemas.in.h:14
 msgid ""
 "This key is deprecated in favor of the file /etc/update-manager/release-"
 "upgrades Check automatically if a new version of the current distribution is "
@@ -1785,7 +1903,7 @@ msgstr "Prikaži inačicu i izađi"
 msgid "Check if a new distribution release is available"
 msgstr "Provjeri dostupnost novog izdanja distribucije"
 
-#: ../update-manager:61 ../do-release-upgrade:23
+#: ../update-manager:61 ../do-release-upgrade:23 ../check-new-release:24
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "Provjeri ako je moguća nadogradnja na posljednje razvojno izdanje"
 
@@ -1795,14 +1913,22 @@ msgstr ""
 "Nadogradi na najnoviju predloženu inačicu koju ponudi nadograditelj izdanja"
 
 #: ../update-manager:68
+msgid "Do not focus on map when starting"
+msgstr ""
+
+#: ../update-manager:71
 msgid "Try to run a dist-upgrade"
 msgstr "Pokušaj pokrenuti dist-upgrade"
 
-#: ../update-manager:87
+#: ../update-manager:73 ../do-release-upgrade:39
+msgid "Test upgrade with a sandbox aufs overlay"
+msgstr ""
+
+#: ../update-manager:92
 msgid "Running partial upgrade"
 msgstr "Izvršavanje djelomične nadogradnje"
 
-#: ../do-release-upgrade:27
+#: ../do-release-upgrade:27 ../check-new-release:28
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
@@ -1823,38 +1949,268 @@ msgstr ""
 msgid "Run the specified frontend"
 msgstr "Pokreni odabrano sučelje"
 
-#: ../do-release-upgrade:41
+#: ../do-release-upgrade:43
 msgid "Checking for a new ubuntu release"
 msgstr "Provjeravanje za novo Ubuntu izdanje"
 
-#: ../do-release-upgrade:48
+#: ../do-release-upgrade:50
 msgid "No new release found"
 msgstr "Nije pronađeno novo izdanje"
 
+#: ../check-new-release:32
+#, c-format
+msgid ""
+"Do not output anything, just return %s if there is a new release and %s if "
+"there is none."
+msgstr ""
+
+#: ../check-new-release:46
+#, c-format
+msgid "New release '%s' available."
+msgstr ""
+
+#: ../check-new-release:47
+msgid "Run 'do-release-upgrade' to upgrade to it."
+msgstr ""
+
+#: ../Janitor/computerjanitor/exc.py:30
+#, python-format
+msgid "Unimplemented method: %s"
+msgstr ""
+
+#: ../Janitor/computerjanitor/file_cruft.py:46
+msgid "A file on disk"
+msgstr ""
+
+#: ../Janitor/computerjanitor/package_cruft.py:45
+msgid ".deb package"
+msgstr ""
+
+#. pragma: no cover
+#: ../Janitor/plugins/dpkg_status_plugin.py:36
+#, python-format
+msgid "%i obsolete entries in the status file"
+msgstr ""
+
+#: ../Janitor/plugins/dpkg_status_plugin.py:39
+msgid "Obsolete entries in dpkg status"
+msgstr ""
+
+#. pragma: no cover
+#: ../Janitor/plugins/dpkg_status_plugin.py:42
+msgid "Obsolete dpkg status entries"
+msgstr ""
+
 #~ msgid ""
-#~ "Use special upgrade mode. Available:\n"
-#~ "desktop, server"
+#~ "If none of this applies, then please report this bug against the 'update-"
+#~ "manager' package and include the files in /var/log/dist-upgrade/ in the "
+#~ "bugreport."
 #~ msgstr ""
-#~ "Koristi poseban način nadogradnje. Mogućnosti:\n"
-#~ "stolno računalo, poslužitelj"
+#~ "Ukoliko se ne radi o ničemu navedenom, molim prijavite grešku za paket "
+#~ "'update-manager' i uz prijavu priložite datoteke iz /var/log/dist-upgrade/ "
+#~ "direktorija."
+
+#~ msgid "The upgrade tool will guide you through the upgrade process."
+#~ msgstr "Alat za nadogradnju će vas voditi kroz proces nadogradnje."
+
+#~ msgid "*DEPRECATED* this option will be ignore"
+#~ msgstr "*ZASTARJELO* ova opcija će biti ignoriranje"
+
+#~ msgid "Perform a partial upgrade only (no sources.list rewriting)"
+#~ msgstr "Izvrši samo djelomičnu nadogradnju (sources.list se ne prepisuje)"
+
+#~ msgid "Set datadir"
+#~ msgstr "Postavi datadir"
+
+#~ msgid "Can't upgrade required meta-packages"
+#~ msgstr "Ne mogu nadograditi potrebne meta-pakete"
+
+#~ msgid "A essential package would have to be removed"
+#~ msgstr "Bitan paket bi morao biti uklonjen"
+
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Došlo je do nerješivog problema prilikom obračunavanja paketa.\n"
+#~ "\n"
+#~ "Mogući uzrok problema je:\n"
+#~ " * Nadogradnja na razvojnu inačicu Ubuntua\n"
+#~ " * Trenutno korištenje razvojne inačice Ubuntua\n"
+#~ " * Korištenje neslužbenih programskih paketa koji ne nudi Ubuntu\n"
+#~ "\n"
+
 
 #, python-format
-#~ msgid "Fetching file %li of %li at %sb/s"
-#~ msgstr "Preuzimanje datoteke %li od %li pri %sb/s"
-
-#, python-format
-#~ msgid "%li days %li hours %li minutes"
-#~ msgstr "%li dana %li sati i %li minuta"
+#~ msgid ""
+#~ "The upgrade aborts now. The upgrade needs a total of %s free space on disk "
+#~ "'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
+#~ "your trash and remove temporary packages of former installations using 'sudo "
+#~ "apt-get clean'."
+#~ msgstr ""
+#~ "Nadogradnja se prekida. Nadogradnja zahtijeva ukupno %s slobodnog prostora "
+#~ "na disku '%s'. Molim, oslobodite dodanih %s prostora na disku '%s'. "
+#~ "Ispraznite smeće i uklonite pakete prethodnih instalacija koristeći naredbu "
+#~ "'sudo apt-get clean'."
 
 #~ msgid ""
-#~ "The list of changes is not available yet.\n"
-#~ "Please try again later."
+#~ "The upgrade aborts now. Please check your Internet connection or "
+#~ "installation media and try again. All files downloaded so far are kept."
 #~ msgstr ""
-#~ "Popis promjena trenutno nije dostupan. \n"
-#~ "Molim, pokušajte ponovno kasnije."
+#~ "Nadogradnja se prekida. Molim, provjerite svoju vezu na Internet ili "
+#~ "instalacijski medij, te pokušajte ponovno. Sve datoteke koje su dosad "
+#~ "preuzete su zadržane."
 
-#~ msgid "_Check"
-#~ msgstr "Pro_vjeri"
+#~ msgid ""
+#~ "The upgrade aborts now. Your system could be in an unusable state. A "
+#~ "recovery will run now (dpkg --configure -a)."
+#~ msgstr ""
+#~ "Nadogradnja se prekida. Vaš sustav bi mogao biti u neupotrebljivom stanju. "
+#~ "Obnavljanje je pokrenuto (dpkg --configure -a)."
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please report this bug against the 'update-manager' package and include the "
+#~ "files in /var/log/dist-upgrade/ in the bugreport.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Molim, prijavite grešku za paket 'update-manager' i uz prijavu priložite "
+#~ "datoteke iz /var/log/dist-upgrade/ direktorija.\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "The upgrade aborts now. Please check your Internet connection or "
+#~ "installation media and try again. "
+#~ msgstr ""
+#~ "Nadogradnja se prekida. Molim, provjerite svoju vezu na Internet ili "
+#~ "instalacijski medij, te pokušajte ponovno. "
+
+#~ msgid ""
+#~ "The upgrade is completed but there were errors during the ugprade process."
+#~ msgstr ""
+#~ "Nadogradnja je dovršena, ali došlo je do nekih grešaka prilikom procesa "
+#~ "nadogradnje."
+
+#~ msgid ""
+#~ "Please report this as a bug (if you haven't already) and include the files "
+#~ "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+#~ "report. The upgrade aborts now.\n"
+#~ "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+#~ msgstr ""
+#~ "Molim, prijavite ovo kao grešku (ako već niste) i uz prijavu priložite "
+#~ "datoteke /var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log. "
+#~ "Nadogradnja se prekida.\n"
+#~ "Vaša izvorna sources.list datoteka je spremljena u direktorij "
+#~ "/etc/apt/sources.list.distUpgrade."
+
+#, python-format
+#~ msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
+#~ msgstr "%(str_days)s %(str_hours)s %(str_minutes)s"
+
+#, python-format
+#~ msgid ""
+#~ "This download will take about %s with a 1Mbit DSL connection and about %s "
+#~ "with a 56k modem"
+#~ msgstr ""
+#~ "Preuzimanje će trajati oko %s s DSL vezom propusnosti 1Mbit ili %s s 56k "
+#~ "modemskom vezom"
+
+#~ msgid ""
+#~ "Please report this as a bug and include the files /var/log/dist-"
+#~ "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+#~ "upgrade aborts now.\n"
+#~ "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
+#~ msgstr ""
+#~ "Molim, prijavite ovo kao grešku i uz prijavu priložite datoteku "
+#~ "/var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log. Nadogradnja "
+#~ "se prekida.\n"
+#~ "Vaša izvorna sources.list datoteka je spremljena u direktorij "
+#~ "/etc/apt/sources.list.distUpgrade."
+
+#~ msgid "Restart the system now [yN] "
+#~ msgstr "Odmah ponovno pokreni sustav [dN] "
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
+#~ msgstr "<b><big>Nadogradnja Ubuntua na inačicu 8.10</big></b>"
+
+#~ msgid "The list of changes is not available"
+#~ msgstr "Popis promjena nije dostupan."
+
+#, python-format
+#~ msgid "You can install %s update."
+#~ msgid_plural "You can install %s updates."
+#~ msgstr[0] "Možete instalirati %s ažuriranje."
+#~ msgstr[1] "Možete instalirati %s ažuriranja."
+#~ msgstr[2] "Možete instalirati %s ažuriranja."
+
+#~ msgid "<big><b>Keep your system up-to-date</b></big>"
+#~ msgstr "<big><b>Zadržite vaš sustav ažurnim</b></big>"
+
+#~ msgid "Use the given path to search for a cdrom with upgradable packages"
+#~ msgstr "Koristi danu putanju za traženje CD-ROM-a s paketima nadogradnji"
+
+#~ msgid ""
+#~ "Use frontend. Currently available: \n"
+#~ "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+#~ msgstr ""
+#~ "Koristi grafičko sučelje. Trenutno su dostupna: \n"
+#~ "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#~ msgid ""
+#~ "Preparing the system for the upgrade failed. Please report this as a bug "
+#~ "against the 'update-manager' package and include the files in /var/log/dist-"
+#~ "upgrade/ in the bugreport."
+#~ msgstr ""
+#~ "Priprema sustava za njegovu nadogradnju nije uspjela. Molim, prijavite "
+#~ "grešku za paket 'update-manager' i uz prijavu priložite datoteke iz "
+#~ "/var/log/dist-upgrade/ direktorija."
+
+#~ msgid ""
+#~ "The system was unable to get the prerequisites for the upgrade. The upgrade "
+#~ "will abort now and restore the original system state.\n"
+#~ "\n"
+#~ "Please report this as a bug against the 'update-manager' package and include "
+#~ "the files in /var/log/dist-upgrade/ in the bugreport."
+#~ msgstr ""
+#~ "Sustav nije mogao doći do preduvjeta za nadogradnju. Nadogradnja će se "
+#~ "prekinuti i bit će vraćeno izvorno stanje sustava.\n"
+#~ "\n"
+#~ "Molim, prijavite grešku za paket 'update-manager' i uz prijavu priložite "
+#~ "datoteke iz /var/log/dist-upgrade/ direktorija."
+
+#, python-format
+#~ msgid ""
+#~ "After your package information was updated the essential package '%s' can "
+#~ "not be found anymore.\n"
+#~ "This indicates a serious error, please report this bug against the 'update-"
+#~ "manager' package and include the files in /var/log/dist-upgrade/ in the "
+#~ "bugreport."
+#~ msgstr ""
+#~ "Nakon što su podaci paketa ažurirani, bitan paket '%s' više ne može biti "
+#~ "pronađen.\n"
+#~ "Ovo upućuje na ozbiljnu grešku, stoga molim da prijavite ovo kao grešku u "
+#~ "'update-manager' paketu, te da uz prijavu priložite datoteke iz "
+#~ "/var/log/dist-upgrade/ direktorija."
+
+#, python-format
+#~ msgid ""
+#~ "The upgrade will continue but the '%s' package may be in a not working "
+#~ "state. Please consider submitting a bugreport about it."
+#~ msgstr ""
+#~ "Nadogradnja će se nastaviti ali '%s' paket možda neće raditi ispravno. "
+#~ "Molim, uzmite u obzir podnošenje izvješća o ovoj grešci."
+
+#~ msgid "Downloading the upgrade tool"
+#~ msgstr "Preuzimam alat za nadogradnju"
 
 #~ msgid "Daily"
 #~ msgstr "Dnevno"
@@ -1877,6 +2233,15 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "After one month"
 #~ msgstr "Nakon mjesec dana"
 
+#~ msgid "Fetching file %li of %li at %sb/s"
+#~ msgstr "Preuzimanje datoteke %li od %li pri %sb/s"
+
+#~ msgid "%li days %li hours %li minutes"
+#~ msgstr "%li dana %li sati i %li minuta"
+
+#~ msgid "_Check"
+#~ msgstr "Pro_vjeri"
+
 #~ msgid "Import key"
 #~ msgstr "Uvoz ključa"
 
@@ -1885,14 +2250,6 @@ msgstr "Nije pronađeno novo izdanje"
 
 #~ msgid "Error removing the key"
 #~ msgstr "Greška prilikom brisanja ključa"
-
-#~ msgid ""
-#~ "The key you selected could not be removed. Please report this as a bug."
-#~ msgstr ""
-#~ "Ključ koji ste odabrali se ne može obrisati. Molimo prijavite ovu grešku."
-
-#~ msgid "_Skip This Step"
-#~ msgstr "_Preskoči ovaj korak"
 
 #~ msgid "Checking for updates"
 #~ msgstr "Tražim moguće nadogradnje"
@@ -1909,14 +2266,8 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "Please insert a disc in the drive:"
 #~ msgstr "Ubacite CD u uređaj:"
 
-#~ msgid "<b>Internet updates</b>"
-#~ msgstr "<b>Internet nadogradnje</b>"
-
 #~ msgid "Authentication"
 #~ msgstr "Autorizacija"
-
-#~ msgid "Internet Updates"
-#~ msgstr "Internet nadogradnje"
 
 #~ msgid "_Check for updates automatically:"
 #~ msgstr "_Provjeri postojanje nadogradnji automatski:"
@@ -1926,9 +2277,6 @@ msgstr "Nije pronađeno novo izdanje"
 
 #~ msgid "<b>Comment:</b>"
 #~ msgstr "<b>Komentar:</b>"
-
-#~ msgid "<b>URI:</b>"
-#~ msgstr "<b>URI:</b>"
 
 #~ msgid ""
 #~ "Binary\n"
@@ -1952,8 +2300,22 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "     "
 #~ msgstr "     "
 
-#~ msgid "System Update Tool"
-#~ msgstr "Alat za nadogradnju sustava"
+#~ msgid ""
+#~ "Use special upgrade mode. Available:\n"
+#~ "desktop, server"
+#~ msgstr ""
+#~ "Koristi poseban način nadogradnje. Mogućnosti:\n"
+#~ "stolno računalo, poslužitelj"
+
+#~ msgid ""
+#~ "The list of changes is not available yet.\n"
+#~ "Please try again later."
+#~ msgstr ""
+#~ "Popis promjena trenutno nije dostupan. \n"
+#~ "Molim, pokušajte ponovno kasnije."
+
+#~ msgid "_Skip This Step"
+#~ msgstr "_Preskoči ovaj korak"
 
 #~ msgid "Asking for confirmation"
 #~ msgstr "Pitam za potvrdu"
@@ -1964,8 +2326,25 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "Fetch data from the network for the upgrade?"
 #~ msgstr "Preuzeti podatke za nadogradnju putem mreže?"
 
+#~ msgid ""
+#~ "The key you selected could not be removed. Please report this as a bug."
+#~ msgstr ""
+#~ "Ključ koji ste odabrali se ne može obrisati. Molimo prijavite ovu grešku."
+
 #~ msgid "The selected file may not be a GPG key file or it might be corrupt."
 #~ msgstr "Odabrana datoteka možda nije GPG ključ ili je možda oštećena."
+
+#~ msgid "<b>Internet updates</b>"
+#~ msgstr "<b>Internet nadogradnje</b>"
+
+#~ msgid "Internet Updates"
+#~ msgstr "Internet nadogradnje"
+
+#~ msgid "<b>URI:</b>"
+#~ msgstr "<b>URI:</b>"
+
+#~ msgid "System Update Tool"
+#~ msgstr "Alat za nadogradnju sustava"
 
 #~ msgid ""
 #~ "A unresolvable problem occurred while calculating the upgrade.\n"
@@ -1990,26 +2369,11 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "(Source Code)"
 #~ msgstr "(Izvorni kod)"
 
-#~ msgid "Source Code"
-#~ msgstr "Izvorni kod"
-
-#~ msgid ""
-#~ "<big><b>Error scanning the CD</b></big>\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "<big><b>Greška prilikom očitavanja CD-a</b></big>\n"
-#~ "\n"
-#~ "%s"
-
 #~ msgid "<b>Automatic updates</b>"
 #~ msgstr "<b>Automatske nadogradnje</b>"
 
 #~ msgid "<b>Internet</b>"
 #~ msgstr "<b>Internet</b>"
-
-#~ msgid "Add Cdrom"
-#~ msgstr "Dodaj CD-ROM"
 
 #~ msgid "D_elete downloaded software files:"
 #~ msgstr "_Obriši dobavljene datoteke programa:"
@@ -2036,29 +2400,8 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "Software Sources"
 #~ msgstr "Softver repozitoriji"
 
-#~ msgid "Source code"
-#~ msgstr "Izvorni kod"
-
-#~ msgid "_Download updates automatically, but do not install them"
-#~ msgstr "P_reuzmi nadogradnje automatski, ali ih ne instaliraj"
-
 #~ msgid "_Install security updates without confirmation"
 #~ msgstr "_Instaliraj sigurnosne nadogradnje bez potvrde"
-
-#~ msgid ""
-#~ "<b><big>The information about available software is out-of-date</big></b>\n"
-#~ "\n"
-#~ "To install software and updates from newly added or changed sources, you "
-#~ "have to reload the information about available software.\n"
-#~ "\n"
-#~ "You need a working internet connection to continue."
-#~ msgstr ""
-#~ "<b><big>Informacije o repozitoriju su prestare</big></b>\n"
-#~ "\n"
-#~ "Morate ponovno učitati repozitorij za instalaciju programa i nadogradnju s "
-#~ "novog ili promijenjenog repozitorija. \n"
-#~ "\n"
-#~ "Trebate funkcionalnu internet vezu za nastavak."
 
 #~ msgid "<b>Components:</b>"
 #~ msgstr "<b>Komponente:</b>"
@@ -2068,19 +2411,6 @@ msgstr "Nije pronađeno novo izdanje"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Vrsta:</b>"
-
-#~ msgid ""
-#~ "<big><b>Enter the complete APT line of the repository that you want to add "
-#~ "as source</b></big>\n"
-#~ "\n"
-#~ "The APT line includes the type, location and components of a repository, for "
-#~ "example <i>\"deb http://ftp.debian.org sarge main\"</i>."
-#~ msgstr ""
-#~ "<big><b>Unesite kompletnu APT liniju repozitorija koji želite "
-#~ "dodati</b></big>\n"
-#~ "\n"
-#~ "APT linija uključuje vrstu, lokaciju i komponente kanala, na primjer "
-#~ "<i>\"deb http://ftp.debian.org sarge main\"</i>."
 
 #~ msgid "APT line:"
 #~ msgstr "APT linija:"
@@ -2224,17 +2554,6 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "Your system has already been upgraded."
 #~ msgstr "Vaš sustav je već nadograđen."
 
-#~ msgid ""
-#~ "<span weight=\"bold\" size=\"x-large\">Upgrading to Ubuntu 6.10</span>"
-#~ msgstr ""
-#~ "<span weight=\"bold\" size=\"x-large\">Nadograđujem na Ubuntu 6.10</span>"
-
-#~ msgid "Important security updates of Ubuntu"
-#~ msgstr "Uvezi sigurnosne nadogradnje za Ubuntu"
-
-#~ msgid "Updates of Ubuntu"
-#~ msgstr "Ubuntu nadogradnje"
-
 #~ msgid "Cannot install all available updates"
 #~ msgstr "Ne mogu instalirati sve dostupne nadogradnje"
 
@@ -2314,9 +2633,6 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "_Custom"
 #~ msgstr "_Prilagođeno"
 
-#~ msgid "Ubuntu 6.06 LTS"
-#~ msgstr "Ubuntu 6.06 LTS"
-
 #~ msgid "Ubuntu 6.06 LTS Security Updates"
 #~ msgstr "Ubuntu 6.06 LTS sigurnosne nadogradnje"
 
@@ -2326,11 +2642,63 @@ msgstr "Nije pronađeno novo izdanje"
 #~ msgid "Ubuntu 6.06 LTS Backports"
 #~ msgstr "Ubuntu 6.06 LTS backporti"
 
+#~ msgid "Ubuntu 6.06 LTS"
+#~ msgstr "Ubuntu 6.06 LTS"
+
 #~ msgid "Some software no longer officially supported"
 #~ msgstr "Neki paketi više nisu službeno podržani"
 
 #~ msgid "About %li seconds remaining"
 #~ msgstr "Otprilike je ostalo %li sekundi"
+
+#~ msgid "Source Code"
+#~ msgstr "Izvorni kod"
+
+#~ msgid ""
+#~ "<big><b>Error scanning the CD</b></big>\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "<big><b>Greška prilikom očitavanja CD-a</b></big>\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Add Cdrom"
+#~ msgstr "Dodaj CD-ROM"
+
+#~ msgid "Source code"
+#~ msgstr "Izvorni kod"
+
+#~ msgid "_Download updates automatically, but do not install them"
+#~ msgstr "P_reuzmi nadogradnje automatski, ali ih ne instaliraj"
+
+#~ msgid ""
+#~ "<b><big>The information about available software is out-of-date</big></b>\n"
+#~ "\n"
+#~ "To install software and updates from newly added or changed sources, you "
+#~ "have to reload the information about available software.\n"
+#~ "\n"
+#~ "You need a working internet connection to continue."
+#~ msgstr ""
+#~ "<b><big>Informacije o repozitoriju su prestare</big></b>\n"
+#~ "\n"
+#~ "Morate ponovno učitati repozitorij za instalaciju programa i nadogradnju s "
+#~ "novog ili promijenjenog repozitorija. \n"
+#~ "\n"
+#~ "Trebate funkcionalnu internet vezu za nastavak."
+
+#~ msgid ""
+#~ "<big><b>Enter the complete APT line of the repository that you want to add "
+#~ "as source</b></big>\n"
+#~ "\n"
+#~ "The APT line includes the type, location and components of a repository, for "
+#~ "example <i>\"deb http://ftp.debian.org sarge main\"</i>."
+#~ msgstr ""
+#~ "<big><b>Unesite kompletnu APT liniju repozitorija koji želite "
+#~ "dodati</b></big>\n"
+#~ "\n"
+#~ "APT linija uključuje vrstu, lokaciju i komponente kanala, na primjer "
+#~ "<i>\"deb http://ftp.debian.org sarge main\"</i>."
 
 #~ msgid "None"
 #~ msgstr "Ništa"
@@ -2400,3 +2768,14 @@ msgstr "Nije pronađeno novo izdanje"
 
 #~ msgid "Backported updates"
 #~ msgstr "Backport nadogradnje"
+
+#~ msgid ""
+#~ "<span weight=\"bold\" size=\"x-large\">Upgrading to Ubuntu 6.10</span>"
+#~ msgstr ""
+#~ "<span weight=\"bold\" size=\"x-large\">Nadograđujem na Ubuntu 6.10</span>"
+
+#~ msgid "Important security updates of Ubuntu"
+#~ msgstr "Uvezi sigurnosne nadogradnje za Ubuntu"
+
+#~ msgid "Updates of Ubuntu"
+#~ msgstr "Ubuntu nadogradnje"

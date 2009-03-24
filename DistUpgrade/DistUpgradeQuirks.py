@@ -177,10 +177,12 @@ class DistUpgradeQuirks(object):
                  self.controller.abort()
              # if the user wants to continue we remove the fglrx driver
              # here because its no use (no support for this card)
-             self.controller.cache.markRemove("xorg-driver-fglrx",
-                                              "no support in new fglrx for the card")
-             self.controller.cache.markRemove("xorg-driver-fglrx-envy",
-                                              "no support in new fglrx for the card")
+             logging.debug("remove xorg-driver-fglrx,xorg-driver-fglrx-envy,fglrx-kernel-source")
+             l=self.controller.config.getlist("Distro","PostUpgradePurge")
+             l.append("xorg-driver-fglrx")
+             l.append("xorg-driver-fglrx-envy")
+             l.append("fglrx-kernel-source")
+             self.controller.config.set("Distro","PostUpgradePurge",",".join(l))
 
     # quirks when the cache upgrade calculation is finished
     def from_dapperPostDistUpgradeCache(self):

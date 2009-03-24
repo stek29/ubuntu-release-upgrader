@@ -220,6 +220,11 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
     def bootstrap(self, force=False):
         print "bootstrap()"
 
+        # move old crash files away so that test() is not
+        # confused by them
+        for f in glob.glob(self.resultdir+"/*.crash"):
+            shutil.move(f, f+".old")
+
         # copy image into place, use baseimage as template
         # we expect to be able to ssh into the baseimage to
         # set it up

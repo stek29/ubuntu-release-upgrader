@@ -182,6 +182,9 @@ class DistUpgradeQuirks(object):
              l.append("xorg-driver-fglrx")
              l.append("xorg-driver-fglrx-envy")
              l.append("fglrx-kernel-source")
+             l.append("fglrx-amdcccle")
+             l.append("xorg-driver-fglrx-dev")
+             l.append("libamdxvba1")
              self.controller.config.set("Distro","PostUpgradePurge",",".join(l))
 
     # quirks when the cache upgrade calculation is finished

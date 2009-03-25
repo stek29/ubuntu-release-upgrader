@@ -122,7 +122,7 @@ class DistUpgradeQuirks(object):
                     if matchid.lower() in lspci:
                         logging.debug("found system pciid '%s' in modaliases" % matchid)
                         return True
-        logging.debug("checking for %s support in modaliases but none found" % xorgdriver)
+        logging.debug("checking for %s support in modaliases but none found" % xorgdrivername)
         return False
                     
 

@@ -608,9 +608,11 @@ class DistUpgradeController(object):
                 for d in ["%s" % self.toDist,
                           "%s-updates" % self.toDist,
                           "%s-security" % self.toDist]:
-                    # create entry if needed
+                    # create entry if needed, ignore disabled
+                    # entries and deb-src
                     found_components.setdefault(d,set())
-                    if not entry.disabled and entry.dist == d:
+                    if (not entry.disabled and entry.dist == d and
+                        entry.type == "deb"):
                         for comp in entry.comps:
                             # only sync components we know about
                             if not comp in sync_components:

@@ -65,11 +65,17 @@ if __name__ == "__main__":
                      help=_("Upgrade using the latest proposed version of the release upgrader"))
   parser.add_option ("--no-focus-on-map", action="store_true",
                      dest="no_focus_on_map", default=False,
+                     # TRANSLATORS: this describes the "focus-on-map" gtk
+                     # property that controls if a new window takes the
+                     # input focus control when it is displayed for the
+                     # first time (see also the gtk devhelp page)
                      help=_("Do not focus on map when starting"))
   parser.add_option ("--dist-upgrade", action="store_true",
                      dest="dist_upgrade", default=False,
                      help=_("Try to run a dist-upgrade"))
   parser.add_option ("-s","--sandbox", action="store_true", default=False,
+                     # TRANSLATORS: aufs is the name of the filesystem
+                     # that is used to create the overlay
                      help=_("Test upgrade with a sandbox aufs overlay"))
 
   (options, args) = parser.parse_args()

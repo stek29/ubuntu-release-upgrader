@@ -147,6 +147,7 @@ class InstallProgress(apt.progress.InstallProgress):
     # remove old crash files
     try:
       for f in glob.glob("/var/crash/*.crash"):
+        logging.debug("removing old crash file '%s'" % f)
         os.unlink(f)
     except Exception, e:
       logging.warning("error during unlink of old crash files (%s)" % e)

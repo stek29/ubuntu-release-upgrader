@@ -27,6 +27,7 @@ import apt
 import os
 import apt_pkg 
 import signal
+import glob
 
 from DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
 from DistUpgradeApport import *
@@ -143,6 +144,12 @@ class InstallProgress(apt.progress.InstallProgress):
     if not os.path.exists("/var/lib/pycentral/"):
       os.makedirs("/var/lib/pycentral")
     open("/var/lib/pycentral/pkgremove","w")
+    # remove old crash files
+    try:
+      for f in glob.glob("/var/crash/*.crash"):
+        os.unlink(f)
+    except Exception, e:
+      logging.warning("error during unlink of old crash files (%s)" % e)
       
   def run(self, pm):
     pid = self.fork()

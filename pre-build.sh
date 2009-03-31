@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # update demotions
 (cd utils && ./demotions.py intrepid jaunty > demotions.cfg)
 # cleanup

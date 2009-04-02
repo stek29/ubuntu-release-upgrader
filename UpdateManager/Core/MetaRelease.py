@@ -21,6 +21,7 @@
 
 import thread
 import urllib2
+import httplib
 import os
 import string
 import apt_pkg
@@ -247,7 +248,7 @@ class MetaReleaseCore(object):
             except IOError, e:
                 pass
             uri.close()
-        except urllib2.URLError:
+        except (urllib2.URLError, httplib.BadStatusLine), e:
             if os.path.exists(self.METARELEASE_FILE):
                 self.metarelease_information=open(self.METARELEASE_FILE,"r")
         # now check the information we have

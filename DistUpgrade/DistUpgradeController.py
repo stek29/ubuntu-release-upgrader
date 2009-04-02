@@ -952,17 +952,11 @@ class DistUpgradeController(object):
         #  subprocess.call(["/etc/init.d/apport","start"], env=env)
         # but hardy and intrepid do not have the force_start yet
         if not os.path.exists(fname):
-            return 
-        lines = []
-        for line in open(fname):
-            if line.strip().startswith("enabled=1"):
-                logging.debug("apport already enabled, nothign to do")
-                return
-            elif line.strip().startswith("enabled=0"):
-                logging.debug("enabling apport crash reporting")
-                line = "enabled=1\n"
-            lines.append(line)
-        open(fname,"w").write("".join(lines))
+            return
+        # copy the jaunty version of the conf file in place
+        # (this avoids a conffile prompt later)
+        logging.debug("enabling apport")
+        shutil.copy("etc-default-apport","/etc/default/apport")
         subprocess.call(["/etc/init.d/apport","start"])
         
     def doDistUpgrade(self):

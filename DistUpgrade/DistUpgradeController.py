@@ -974,7 +974,20 @@ class DistUpgradeController(object):
                 res = self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
-                # invoke the frontend now
+                # if its a ordering bug we can cleanly revert to
+                # the previous release, no packages have been installed
+                # yet (LP: #328655)
+                if str(e).startswith("E:Internal Error, Could not perform immediate configuration"):
+                    self._enableAptCronJob()
+                    # FIXME: strings are not good, but we are in string freeze
+                    # currently
+                    msg = _("Error during commit")
+                    msg += "\n'%s'\n" % str(e)
+                    msg += _("Restoring original system state")
+                    self._view.error(_("Could not install the upgrades"), msg)
+                    self.abort()
+                
+                # invoke the frontend now and show a error message
                 msg = _("The upgrade is now aborted. Your system "
                         "could be in an unusable state. A recovery "
                         "will run now (dpkg --configure -a).")

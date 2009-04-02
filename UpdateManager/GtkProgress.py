@@ -53,7 +53,10 @@ class GtkOpProgress(apt.OpProgress):
         #print percent
         #print self.Op
         #print self.SubOp
-        self._window.show()
+        # only show progress bar if the parent is not iconified (#353195)
+        state = self._parent.window.get_state()
+        if not (state  & gtk.gdk.WINDOW_STATE_ICONIFIED):
+            self._window.show()
         self._parent.set_sensitive(False)
         # if the old percent was higher, a new progress was started
         if self.old > percent:

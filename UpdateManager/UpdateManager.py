@@ -195,10 +195,20 @@ class UpdateManager(SimpleGladeApp):
                                               self.window_main)
     # restore state
     self.restore_state()
+    # deal with no-focus-on-map
     if options.no_focus_on_map:
         self.window_main.set_focus_on_map(False)
         self.progress._window.set_focus_on_map(False)
+    # show the main window
     self.window_main.show()
+    # it can only the iconified *after* it is shown (even if the docs
+    # claim otherwise)
+    if options.no_focus_on_map:
+        self.window_main.iconify()
+        self.window_main.set_urgency_hint(True)
+        self.window_main.connect("focus-in-event",
+                                 lambda w,e: (w.set_urgency_hint(False) and False))
+
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
     pkg = model.get_value(iter, LIST_PKG)

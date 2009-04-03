@@ -647,6 +647,7 @@ class MyCache(apt.Cache):
             our constrains (blacklisted removals etc)
         """
         removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
+        # check changes
         for pkg in self.getChanges():
             if pkg.markedDelete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
@@ -655,6 +656,15 @@ class MyCache(apt.Cache):
                                      not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's a ESSENTIAL package", pkg.name)
                 raise SystemError, _("The essential package '%s' is marked for removal.") % pkg.name
+        # check bad-versions blacklist
+        badVersions = self.config.getlist("Distro","BadVersions")
+        for bv in badVersions:
+            (pkgname, ver) = bv.split("_")
+            if (self.has_key(pkgname) and
+                self[pkgname].candidateVersion == ver and
+                (self[pkgname].markedInstall or
+                 self[pkgname].markedUpgrade)):
+                raise SystemError, "Trying to install blacklisted version '%s'" % bv
         return True
 
     @property

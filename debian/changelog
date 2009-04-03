@@ -2,12 +2,16 @@ update-manager (1:0.111.1) jaunty; urgency=low
 
   * DistUpgrade/DistUpgrade.cfg:
     - ensure that dontzap is installed on kubuntu (LP: #349263)
+    - ensure to not upgrade to a known broken python2.6 (e.g.
+      if the mirrors do not catch up)
   * DistUpgrade/DistUpgradeController.py:
     - avoid conffile prompt because we enabled apport (LP: #348301)
     - deal better with apt ordering bugs and restore the system
       cleanly in this case
     - when commenting out third party sources, leave a space
       between previous comments (thanks to Sidnei da Silva)
+  * DistUpgrade/DistUpgradeCache.py:
+    - add "BadVersions" config option
   * UpdateManager/Core/MetaRelease.py:
     - ignore bad header line errors (LP: #353335)
   * UpdateManager/UpdateManager.py:
@@ -16,7 +20,7 @@ update-manager (1:0.111.1) jaunty; urgency=low
   * po/*.po:
     - updated translations from rosetta
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 31 Mar 2009 15:42:55 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 03 Apr 2009 22:42:17 +0200
 
 update-manager (1:0.111.0) jaunty; urgency=low
 

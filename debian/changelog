@@ -1,3 +1,14 @@
+update-manager (1:0.111.2) jaunty; urgency=low
+
+  * UpdateManager/Core/MyCache.py:
+    - when calculating what category a update should be put in,
+      make sure that candidate versions for "other updates" always
+      end up there
+    - do not try to get changelogs for packages that do not have
+      a ubuntu origin (LP: #354740)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 06 Apr 2009 10:50:40 +0200
+
 update-manager (1:0.111.1) jaunty; urgency=low
 
   * DistUpgrade/DistUpgrade.cfg:

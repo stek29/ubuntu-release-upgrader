@@ -15,6 +15,7 @@ class testOriginMatcher(unittest.TestCase):
         self.dpkg_status = open("apt/var/lib/dpkg/status","w")
         self.dpkg_status.flush()
         self.cache = MyCache(apt.progress.OpProgress(), rootdir=os.path.join(os.getcwd(),"apt/"))
+        self.cache._listsLock = 0
         self.cache.update()
         self.cache.open(apt.progress.OpProgress())
 
@@ -26,7 +27,7 @@ class testOriginMatcher(unittest.TestCase):
                     if l.archive == "dapper-security"]:
                     test_pkgs.add(pkg.name)
         self.assert_(len(test_pkgs) > 0)
-        ul = UpdateList()
+        ul = UpdateList(None)
         matcher = ul.initMatcher("dapper")
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
@@ -51,7 +52,7 @@ class testOriginMatcher(unittest.TestCase):
                      "no suitable test package found that has a version in both -security and -updates and where -updates is newer")
 
         # now test if versions in -security are detected
-        ul = UpdateList()
+        ul = UpdateList(None)
         matcher = ul.initMatcher("dapper")
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]

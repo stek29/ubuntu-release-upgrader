@@ -91,8 +91,22 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         """
         inst_ver = pkg._pkg.CurrentVer
         cand_ver = self._depcache.GetCandidateVer(pkg._pkg)
-        # init with empty match
+        # init matcher with candidateVer
         update_origin = matcher[(None,None)]
+        for(verFileIter,index) in cand_ver.FileList:
+            if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
+                indexfile = pkg._pcache._list.FindIndex(verFileIter)
+                if indexfile: # and indexfile.IsTrusted:
+                    match = matcher[verFileIter.Archive, verFileIter.Origin]
+                    update_origin = match
+        # if the candidate comes from a unknown source (e.g. a PPA) skip
+        # skip the shadow logic below as it would put e.g. a PPA package
+        # in "Recommended updates" when the version in the PPA 
+        # is higher than the one in %s-updates
+        if update_origin.importance < 0:
+            return update_origin
+        # for known packages, check if we have higher versions that
+        # "shadow" this one
         for ver in pkg._pkg.VersionList:
             # discard is < than installed ver
             if (inst_ver and
@@ -201,6 +215,11 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
+        origins = self[name].candidateOrigin
+        if not "Ubuntu" in [o.origin for o in origins]:
+            # FIXME: better string, but we are in string freeze
+            self.all_changes[name] = _("Failed to detect distribution")
+            return
         srcpkg = self[name].sourcePackageName
         srcver_epoch = self[name].candidateVersion.replace(':', '%3A')
         try:

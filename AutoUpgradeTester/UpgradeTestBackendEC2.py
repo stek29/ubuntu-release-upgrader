@@ -296,6 +296,10 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                 print "Copying link '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester", recursive=True)
         self._copyToImage(files, "/upgrade-tester")
+        # copy the patches
+        d="%s/DistUpgrade/patches" % self.basefilesdir
+        print "Copying '%s' to image" % d
+        self._copyToImage(d, "/upgrade-tester/", recursive=True)
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to image " % self.profile

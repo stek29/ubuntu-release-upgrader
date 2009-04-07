@@ -127,31 +127,6 @@ class InstallProgress(apt.progress.InstallProgress):
     apt.progress.InstallProgress.__init__(self)
     self.master_fd = None
 
-  def startUpdate(self):
-    # apache: workaround #95325 (edgy->feisty)
-    # pango-libthai #103384 (edgy->feisty)
-    bad_scripts = ["/var/lib/dpkg/info/apache2-common.prerm",
-                   "/var/lib/dpkg/info/pango-libthai.postrm",
-                   ]
-    for ap in bad_scripts:
-      if os.path.exists(ap):
-        logging.debug("removing bad script '%s'" % ap)
-        os.unlink(ap)
-    # intrepid->jaunty, create /var/lib/pycentral/pkgremove flag file
-    # to help python-central so that it removes all preinst links
-    # on upgrade
-    logging.debug("adding pkgremove file")
-    if not os.path.exists("/var/lib/pycentral/"):
-      os.makedirs("/var/lib/pycentral")
-    open("/var/lib/pycentral/pkgremove","w")
-    # remove old crash files
-    try:
-      for f in glob.glob("/var/crash/*.crash"):
-        logging.debug("removing old crash file '%s'" % f)
-        os.unlink(f)
-    except Exception, e:
-      logging.warning("error during unlink of old crash files (%s)" % e)
-      
   def run(self, pm):
     pid = self.fork()
     if pid == 0:

@@ -19,14 +19,17 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+import glob
 import logging
-import re
 import os
 import os.path
+import re
 import shutil
+import string
 import sys
 import subprocess
-from subprocess import PIPE, Popen
+from subprocess import PIPE, Popen, call
+from hashlib import md5
 
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
@@ -59,6 +62,8 @@ class DistUpgradeQuirks(object):
                              after a initial apt-get update
         - PostDistUpgradeCache: run *after* the dist-upgrade was calculated
                                 in the cache
+        - StartUpgrade: before the first package gets installed (but the
+                        download is finished)
         - PostUpgrade: run *after* the upgrade is finished successfully and 
                        packages got installed
         - PostCleanup: run *after* the cleanup (orphaned etc) is finished
@@ -93,38 +98,6 @@ class DistUpgradeQuirks(object):
         if func is not None:
             logging.debug("quirks: running %s" % funcname)
             func()
-
-    def _supportInModaliases(self, xorgdrivername, modaliasesdir="./modaliases", lspci=None):
-        """ 
-        Check if xorgdriver will work on this hardware
-
-        This helper will check with the modaliasesdir if the given 
-        xorgdriver will work on this hardware (or the hardware given
-        via the lspci argument)
-        """
-        if not lspci:
-            lspci = set()
-            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
-            for line in p.communicate()[0].split("\n"):
-                if line:
-                    lspci.add(line.split()[2])
-        for filename in os.listdir(modaliasesdir):
-            for line in open(os.path.join(modaliasesdir,filename)):
-                line = line.strip()
-                if line == "" or line.startswith("#"):
-                    continue
-                (key, pciid, xorgdriver, pkgname) = line.split()
-                if xorgdriver != xorgdrivername:
-                    continue
-                m = re.match("pci:v0000(.+)d0000(.+)sv.*", pciid)
-                if m:
-                    matchid = "%s:%s" % (m.group(1), m.group(2))
-                    if matchid.lower() in lspci:
-                        logging.debug("found system pciid '%s' in modaliases" % matchid)
-                        return True
-        logging.debug("checking for %s support in modaliases but none found" % xorgdrivername)
-        return False
-                    
 
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
@@ -438,9 +411,48 @@ class DistUpgradeQuirks(object):
                                "please switch it off and run the upgrade "
                                "again when this is done."))
             self.controller.abort()
-            
+
+    # run right before the first packages get installed
+    def StartUpgrade(self):
+        self._applyPatches()
+        self._removeOldApportCrashes()
+        self._removeBadMaintainerScripts()
+    def jauntyStartUpgrade(self):
+        self._createPycentralPkgRemove()
 
     # helpers
+    def _removeBadMaintainerScripts(self):
+        " remove bad/broken maintainer scripts (last resort) "
+        # apache: workaround #95325 (edgy->feisty)
+        # pango-libthai #103384 (edgy->feisty)
+        bad_scripts = ["/var/lib/dpkg/info/apache2-common.prerm",
+                       "/var/lib/dpkg/info/pango-libthai.postrm",
+                       ]
+        for ap in bad_scripts:
+            if os.path.exists(ap):
+                logging.debug("removing bad script '%s'" % ap)
+                os.unlink(ap)
+
+    def _createPycentralPkgRemove(self):
+        """
+        intrepid->jaunty, create /var/lib/pycentral/pkgremove flag file
+        to help python-central so that it removes all preinst links
+        on upgrade
+        """
+        logging.debug("adding pkgremove file")
+        if not os.path.exists("/var/lib/pycentral/"):
+            os.makedirs("/var/lib/pycentral")
+        open("/var/lib/pycentral/pkgremove","w")
+
+    def _removeOldApportCrashes(self):
+        " remove old apport crash files "
+        try:
+            for f in glob.glob("/var/crash/*.crash"):
+                logging.debug("removing old crash file '%s'" % f)
+                os.unlink(f)
+        except Exception, e:
+            logging.warning("error during unlink of old crash files (%s)" % e)
+
     def _cpuHasSSESupport(self, cpuinfo="/proc/cpuinfo"):
         " helper that checks if the given cpu has sse support "
         if not os.path.exists(cpuinfo):
@@ -605,5 +617,65 @@ class DistUpgradeQuirks(object):
                 s.endswith('"%s"' % name)):
                 return True
         return False
+
+    def _applyPatches(self, patchdir="./patches"):
+        """
+        helper that applies the patches in patchdir. the format is
+        _path_to_file.md5sum
+        
+        and it will apply the diff to that file if the md5sum
+        matches
+        """
+        if not os.path.exists(patchdir):
+            return
+        for f in os.listdir(patchdir):
+            logging.debug("check if patch '%s' needs to be applied" % f)
+            (encoded_path, md5sum) = string.split(f, ".", 1)
+            # FIXME: this is not clever and needs quoting support for
+            #        filenames with "_" in the name
+            path = encoded_path.replace("_","/")
+            if (os.path.exists(path) and
+                md5(open(path).read()).hexdigest() == md5sum):
+                logging.info("applying '%s'" % f)
+                # dry-run first, then patch if ok
+                res = call(["patch","--dry-run","-q","-p0","-i",
+                            patchdir+"/"+f])
+                if res == 0:
+                    res = call(["patch","-p0","-q","-i",patchdir+"/"+f])
+                    logging.info("applied '%s' with %i status" % (f,res))
+                else:
+                    logging.warning("dry run failed, ignoring patch '%s'" % f)
+                    
+    def _supportInModaliases(self, xorgdrivername, modaliasesdir="./modaliases", lspci=None):
+        """ 
+        Check if xorgdriver will work on this hardware
+
+        This helper will check with the modaliasesdir if the given 
+        xorgdriver will work on this hardware (or the hardware given
+        via the lspci argument)
+        """
+        if not lspci:
+            lspci = set()
+            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+            for line in p.communicate()[0].split("\n"):
+                if line:
+                    lspci.add(line.split()[2])
+        for filename in os.listdir(modaliasesdir):
+            for line in open(os.path.join(modaliasesdir,filename)):
+                line = line.strip()
+                if line == "" or line.startswith("#"):
+                    continue
+                (key, pciid, xorgdriver, pkgname) = line.split()
+                if xorgdriver != xorgdrivername:
+                    continue
+                m = re.match("pci:v0000(.+)d0000(.+)sv.*", pciid)
+                if m:
+                    matchid = "%s:%s" % (m.group(1), m.group(2))
+                    if matchid.lower() in lspci:
+                        logging.debug("found system pciid '%s' in modaliases" % matchid)
+                        return True
+        logging.debug("checking for %s support in modaliases but none found" % xorgdrivername)
+        return False
+                    
 
 

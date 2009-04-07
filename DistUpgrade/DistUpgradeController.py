@@ -969,6 +969,7 @@ class DistUpgradeController(object):
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
         maxRetries = self.config.getint("Network","MaxRetries")
+        self.quirks.run("StartUpgrade")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)
@@ -978,6 +979,7 @@ class DistUpgradeController(object):
                 # the previous release, no packages have been installed
                 # yet (LP: #328655)
                 if str(e).startswith("E:Internal Error, Could not perform immediate configuration"):
+                    logging.debug("detected preconfigure error, restorting state")
                     self._enableAptCronJob()
                     # FIXME: strings are not good, but we are in string freeze
                     # currently

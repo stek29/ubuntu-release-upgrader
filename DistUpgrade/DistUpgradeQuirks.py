@@ -638,10 +638,10 @@ class DistUpgradeQuirks(object):
                 md5(open(path).read()).hexdigest() == md5sum):
                 logging.info("applying '%s'" % f)
                 # dry-run first, then patch if ok
-                res = call(["patch","--dry-run","-q","-p0","-i",
+                res = call(["patch","--dry-run","-s","-p0","-i",
                             patchdir+"/"+f])
                 if res == 0:
-                    res = call(["patch","-p0","-q","-i",patchdir+"/"+f])
+                    res = call(["patch","-p0","-s","-i",patchdir+"/"+f])
                     logging.info("applied '%s' with %i status" % (f,res))
                 else:
                     logging.warning("dry run failed, ignoring patch '%s'" % f)

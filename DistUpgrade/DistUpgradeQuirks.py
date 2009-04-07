@@ -629,6 +629,9 @@ class DistUpgradeQuirks(object):
         if not os.path.exists(patchdir):
             return
         for f in os.listdir(patchdir):
+            # skip, not a patch file, they all end with .$md5sum
+            if not "." in f:
+                continue
             logging.debug("check if patch '%s' needs to be applied" % f)
             (encoded_path, md5sum) = string.split(f, ".", 1)
             # FIXME: this is not clever and needs quoting support for

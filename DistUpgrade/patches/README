@@ -1,0 +1,13 @@
+This dir can be used to drop patches (normal diffs) to fixup
+stuff that is problematic during the upgrade (like doc-base and
+/usr/sbin/install-docs).
+
+The files have the format _path_to_binary.md5sum  
+The upgrader will check for binaries with the matching md5sum and
+apply the patches if the md5sum is correct (first --dry-run to 
+ensure it applies cleanly).
+
+Caveats:
+- it does *not* do binary patching
+- the md5sum calculation in python is not efficient, so do
+  *not* patch huge files

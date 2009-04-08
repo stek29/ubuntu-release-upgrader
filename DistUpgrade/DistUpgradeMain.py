@@ -66,7 +66,7 @@ def setup_logging(options, config):
         if not os.path.exists(backup_dir):
             os.mkdir(backup_dir)
         for f in glob.glob(logdir+"/*.log"):
-            shutil.move(f, backup_dir)
+            shutil.move(f, os.path.join(backup_dir,os.path.basename(f)))
     fname = os.path.join(logdir,"main.log")
     # do not overwrite the default main.log
     if options.partial:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-03-28 11:40+0000\n"
+"POT-Creation-Date: 2009-04-07 08:37+0000\n"
 "PO-Revision-Date: 2008-12-20 15:07+0000\n"
 "Last-Translator: Khandakar Mujahidul Islam <suzan@bengalinux.org>\n"
 "Language-Team: Bengali <bn@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-03-31 14:44+0000\n"
+"X-Launchpad-Export-Date: 2009-04-08 12:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
@@ -137,7 +137,7 @@ msgid ""
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:583
-#: ../UpdateManager/UpdateManager.py:717
+#: ../UpdateManager/UpdateManager.py:727
 msgid "Could not calculate the upgrade"
 msgstr "আপগ্রেড গণনা করতে পারছে না"
 
@@ -152,28 +152,28 @@ msgid ""
 "unauthenticated packages."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:653
+#: ../DistUpgrade/DistUpgradeCache.py:654
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:657
+#: ../DistUpgrade/DistUpgradeCache.py:658
 #, python-format
 msgid "The essential package '%s' is marked for removal."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:735
+#: ../DistUpgrade/DistUpgradeCache.py:745
 #, python-format
 msgid "Can not mark '%s' for upgrade"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:749
+#: ../DistUpgrade/DistUpgradeCache.py:759
 #, python-format
 msgid "Can't install '%s'"
 msgstr "'%s' ইন্সটল করা যাচ্ছে না"
 
-#: ../DistUpgrade/DistUpgradeCache.py:750
+#: ../DistUpgrade/DistUpgradeCache.py:760
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -182,11 +182,11 @@ msgstr ""
 "হিসাবে রিপোর্ট করুন। "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:758
+#: ../DistUpgrade/DistUpgradeCache.py:768
 msgid "Can't guess meta-package"
 msgstr "meta-package অনুমান করা যাচ্ছ না"
 
-#: ../DistUpgrade/DistUpgradeCache.py:759
+#: ../DistUpgrade/DistUpgradeCache.py:769
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -400,7 +400,7 @@ msgstr ""
 
 #. print "on_button_install_clicked"
 #: ../DistUpgrade/DistUpgradeController.py:819
-#: ../UpdateManager/UpdateManager.py:553
+#: ../UpdateManager/UpdateManager.py:563
 msgid "Not enough free disk space"
 msgstr "ডিস্কে যথেস্ট ফাঁকা জায়গা নেই"
 
@@ -429,7 +429,7 @@ msgstr ""
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
 #: ../DistUpgrade/DistUpgradeController.py:870
-#: ../DistUpgrade/DistUpgradeController.py:1522
+#: ../DistUpgrade/DistUpgradeController.py:1529
 msgid "Calculating the changes"
 msgstr ""
 
@@ -439,7 +439,7 @@ msgid "Do you want to start the upgrade?"
 msgstr "আপনি কি আপগ্রেড শুরু করতে চান?"
 
 #: ../DistUpgrade/DistUpgradeController.py:937
-#: ../DistUpgrade/DistUpgradeController.py:1009
+#: ../DistUpgrade/DistUpgradeController.py:1016
 msgid "Could not download the upgrades"
 msgstr "আপগ্রেড ডাউনলোড করা যায় নি"
 
@@ -449,14 +449,32 @@ msgid ""
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
 
-#. invoke the frontend now
+#. FIXME: strings are not good, but we are in string freeze
+#. currently
 #: ../DistUpgrade/DistUpgradeController.py:984
+#: ../DistUpgrade/DistUpgradeController.py:1107
+msgid "Error during commit"
+msgstr "প্রেরণ করার সময় সমস্যা"
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:986
+#: ../DistUpgrade/DistUpgradeController.py:1146
+msgid "Restoring original system state"
+msgstr "সিস্টেমটি রিস্টার্ট করছি"
+
+#: ../DistUpgrade/DistUpgradeController.py:987
+#: ../DistUpgrade/DistUpgradeController.py:1000
+msgid "Could not install the upgrades"
+msgstr "আপগ্রেড ইন্সটল করা যায় নি"
+
+#. invoke the frontend now and show a error message
+#: ../DistUpgrade/DistUpgradeController.py:991
 msgid ""
 "The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:989
+#: ../DistUpgrade/DistUpgradeController.py:996
 #, python-format
 msgid ""
 "\n"
@@ -466,78 +484,65 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:993
-msgid "Could not install the upgrades"
-msgstr "আপগ্রেড ইন্সটল করা যায় নি"
-
-#: ../DistUpgrade/DistUpgradeController.py:1010
+#: ../DistUpgrade/DistUpgradeController.py:1017
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1088
+#: ../DistUpgrade/DistUpgradeController.py:1095
 msgid "Remove obsolete packages?"
 msgstr "অপ্রচলিত প্যাকেজগুলো মুছে ফেলা হবে?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1089
+#: ../DistUpgrade/DistUpgradeController.py:1096
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "রাখো (_K)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1089
+#: ../DistUpgrade/DistUpgradeController.py:1096
 msgid "_Remove"
 msgstr "সরাও (_স)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1100
-msgid "Error during commit"
-msgstr "প্রেরণ করার সময় সমস্যা"
-
-#: ../DistUpgrade/DistUpgradeController.py:1101
+#: ../DistUpgrade/DistUpgradeController.py:1108
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
 msgstr ""
 
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1139
-msgid "Restoring original system state"
-msgstr "সিস্টেমটি রিস্টার্ট করছি"
-
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1177
+#: ../DistUpgrade/DistUpgradeController.py:1184
 msgid "Required depends is not installed"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1178
+#: ../DistUpgrade/DistUpgradeController.py:1185
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr ""
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1432
-#: ../DistUpgrade/DistUpgradeController.py:1499
+#: ../DistUpgrade/DistUpgradeController.py:1439
+#: ../DistUpgrade/DistUpgradeController.py:1506
 msgid "Checking package manager"
 msgstr "প্যাকেজ ম্যানেজার পরীক্ষা করা হচ্ছ"
 
-#: ../DistUpgrade/DistUpgradeController.py:1437
+#: ../DistUpgrade/DistUpgradeController.py:1444
 msgid "Preparing the upgrade failed"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1438
+#: ../DistUpgrade/DistUpgradeController.py:1445
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bug report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1454
+#: ../DistUpgrade/DistUpgradeController.py:1461
 msgid "Getting upgrade prerequisites failed"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1455
+#: ../DistUpgrade/DistUpgradeController.py:1462
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -546,15 +551,15 @@ msgid ""
 "the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1485
+#: ../DistUpgrade/DistUpgradeController.py:1492
 msgid "Updating repository information"
 msgstr "রিপজিটরির তথ্য আপডেট করা হচ্ছে"
 
-#: ../DistUpgrade/DistUpgradeController.py:1510
+#: ../DistUpgrade/DistUpgradeController.py:1517
 msgid "Invalid package information"
 msgstr "ভুল প্যাকেজ তথ্য"
 
-#: ../DistUpgrade/DistUpgradeController.py:1511
+#: ../DistUpgrade/DistUpgradeController.py:1518
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -564,40 +569,40 @@ msgid ""
 "report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1528
-#: ../DistUpgrade/DistUpgradeController.py:1576
+#: ../DistUpgrade/DistUpgradeController.py:1535
+#: ../DistUpgrade/DistUpgradeController.py:1583
 msgid "Fetching"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1535
-#: ../DistUpgrade/DistUpgradeController.py:1580
+#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1587
 msgid "Upgrading"
 msgstr "আপগ্রেড করা হচ্ছে"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1540
-#: ../DistUpgrade/DistUpgradeController.py:1582
+#: ../DistUpgrade/DistUpgradeController.py:1547
 #: ../DistUpgrade/DistUpgradeController.py:1589
-#: ../DistUpgrade/DistUpgradeController.py:1594
+#: ../DistUpgrade/DistUpgradeController.py:1596
+#: ../DistUpgrade/DistUpgradeController.py:1601
 msgid "Upgrade complete"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1541
-#: ../DistUpgrade/DistUpgradeController.py:1583
+#: ../DistUpgrade/DistUpgradeController.py:1548
 #: ../DistUpgrade/DistUpgradeController.py:1590
+#: ../DistUpgrade/DistUpgradeController.py:1597
 msgid ""
 "The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1548
+#: ../DistUpgrade/DistUpgradeController.py:1555
 msgid "Searching for obsolete software"
 msgstr "অপ্রচলিত সফ্টওয়্যার অনুসন্ধান করা হচ্ছে"
 
-#: ../DistUpgrade/DistUpgradeController.py:1553
+#: ../DistUpgrade/DistUpgradeController.py:1560
 msgid "System upgrade is complete."
 msgstr "সিস্টেম আপগ্রেড সম্পন্ন।"
 
-#: ../DistUpgrade/DistUpgradeController.py:1595
+#: ../DistUpgrade/DistUpgradeController.py:1602
 msgid "The partial upgrade was completed."
 msgstr ""
 
@@ -1000,7 +1005,7 @@ msgid ""
 msgstr ""
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:446
+#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:456
 msgid "Your system is up-to-date"
 msgstr "আপনার সিস্টেম আপ-টু-ডেট"
 
@@ -1300,104 +1305,104 @@ msgstr ""
 msgid "Copy Link to Clipboard"
 msgstr ""
 
-#: ../UpdateManager/GtkProgress.py:108
+#: ../UpdateManager/GtkProgress.py:111
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr ""
 
-#: ../UpdateManager/GtkProgress.py:113
+#: ../UpdateManager/GtkProgress.py:116
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:264
+#: ../UpdateManager/UpdateManager.py:274
 #, python-format
 msgid "Version %s: \n"
 msgstr "ভার্সন %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:325
+#: ../UpdateManager/UpdateManager.py:335
 msgid "Downloading list of changes..."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:357
+#: ../UpdateManager/UpdateManager.py:367
 msgid "_Uncheck All"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:363
+#: ../UpdateManager/UpdateManager.py:373
 msgid "_Check All"
 msgstr ""
 
 #. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:407 ../UpdateManager/UpdateManager.py:467
+#: ../UpdateManager/UpdateManager.py:417 ../UpdateManager/UpdateManager.py:477
 #, python-format
 msgid "Download size: %s"
 msgstr "ডাউনলোড এর আকার: %s"
 
-#: ../UpdateManager/UpdateManager.py:411
+#: ../UpdateManager/UpdateManager.py:421
 msgid "Unknown download size"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:419
+#: ../UpdateManager/UpdateManager.py:429
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:428
+#: ../UpdateManager/UpdateManager.py:438
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:432
+#: ../UpdateManager/UpdateManager.py:442
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:436
+#: ../UpdateManager/UpdateManager.py:446
 msgid "The package information was last updated less than one hour ago."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:444
+#: ../UpdateManager/UpdateManager.py:454
 #: ../data/glade/UpdateManager.glade.h:21
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:461
+#: ../UpdateManager/UpdateManager.py:471
 msgid "Welcome to Ubuntu"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:462
+#: ../UpdateManager/UpdateManager.py:472
 msgid ""
 "These software updates have been issued since Ubuntu was released. If you "
 "don't want to install them now, choose \"Update Manager\" from the "
 "Administration Menu later."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:465
+#: ../UpdateManager/UpdateManager.py:475
 msgid "Software updates are available for this computer"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:466
+#: ../UpdateManager/UpdateManager.py:476
 msgid ""
 "If you don't want to install them now, choose \"Update Manager\" from the "
 "Administration menu later."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:505
+#: ../UpdateManager/UpdateManager.py:515
 msgid "Please wait, this can take some time."
 msgstr "অনুগ্রহ করে অপেক্ষা করুন, এটি কিছুটা সময় নিতে পারে।"
 
-#: ../UpdateManager/UpdateManager.py:507
+#: ../UpdateManager/UpdateManager.py:517
 msgid "Update is complete"
 msgstr "আপডেট সম্পন্ন"
 
-#: ../UpdateManager/UpdateManager.py:554
+#: ../UpdateManager/UpdateManager.py:564
 #, python-format
 msgid ""
 "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -1405,16 +1410,16 @@ msgid ""
 "temporary packages of former installations using 'sudo apt-get clean'."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:593
+#: ../UpdateManager/UpdateManager.py:603
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:695
+#: ../UpdateManager/UpdateManager.py:705
 msgid "Could not initialize the package information"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:696
+#: ../UpdateManager/UpdateManager.py:706
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1423,7 +1428,7 @@ msgid ""
 "following error message:\n"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:718
+#: ../UpdateManager/UpdateManager.py:728
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1432,43 +1437,43 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:743
+#: ../UpdateManager/UpdateManager.py:753
 #, python-format
 msgid "(Size: %s)"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:745
+#: ../UpdateManager/UpdateManager.py:755
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:749
+#: ../UpdateManager/UpdateManager.py:759
 #, python-format
 msgid "Version %s"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:762
+#: ../UpdateManager/UpdateManager.py:772
 msgid "Your distribution is not supported anymore"
 msgstr "আপনার ডিস্ট্রিবিউশনটি আর সমর্থিত নয়"
 
-#: ../UpdateManager/UpdateManager.py:763
+#: ../UpdateManager/UpdateManager.py:773
 msgid ""
 "You will not get any further security fixes or critical updates. Upgrade to "
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
 "information on upgrading."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:795
+#: ../UpdateManager/UpdateManager.py:805
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr ""
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:834
+#: ../UpdateManager/UpdateManager.py:844
 msgid "Software index is broken"
 msgstr "সফ্টওয়্যার ইন্ডেক্সটি নস্ট"
 
-#: ../UpdateManager/UpdateManager.py:835
+#: ../UpdateManager/UpdateManager.py:845
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1528,7 +1533,12 @@ msgstr ""
 msgid "Downloading changelog"
 msgstr ""
 
-#: ../UpdateManager/Core/MyCache.py:209
+#. FIXME: better string, but we are in string freeze
+#: ../UpdateManager/Core/MyCache.py:221 ../UpdateManager/Core/UpdateList.py:47
+msgid "Failed to detect distribution"
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:228
 #, python-format
 msgid ""
 "The changelog does not contain any relevant changes.\n"
@@ -1537,7 +1547,7 @@ msgid ""
 "until the changes become available or try again later."
 msgstr ""
 
-#: ../UpdateManager/Core/MyCache.py:214
+#: ../UpdateManager/Core/MyCache.py:233
 #, python-format
 msgid ""
 "The list of changes is not available yet.\n"
@@ -1546,14 +1556,10 @@ msgid ""
 "until the changes become available or try again later."
 msgstr ""
 
-#: ../UpdateManager/Core/MyCache.py:220
+#: ../UpdateManager/Core/MyCache.py:239
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
-msgstr ""
-
-#: ../UpdateManager/Core/UpdateList.py:47
-msgid "Failed to detect distribution"
 msgstr ""
 
 #: ../UpdateManager/Core/UpdateList.py:48

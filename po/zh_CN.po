@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager HEAD\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-03-28 11:40+0000\n"
-"PO-Revision-Date: 2009-03-25 06:23+0000\n"
+"POT-Creation-Date: 2009-04-07 08:37+0000\n"
+"PO-Revision-Date: 2009-04-06 13:53+0000\n"
 "Last-Translator: zhangmiao <mymzhang@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2009-03-31 14:44+0000\n"
+"X-Launchpad-Export-Date: 2009-04-08 12:13+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
@@ -147,7 +147,7 @@ msgstr ""
 "upgrade/下面的文件包含到错误报告里面。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:583
-#: ../UpdateManager/UpdateManager.py:717
+#: ../UpdateManager/UpdateManager.py:727
 msgid "Could not calculate the upgrade"
 msgstr "无法计算更新"
 
@@ -162,39 +162,39 @@ msgid ""
 "unauthenticated packages."
 msgstr "无法认证一些软件包。这可能是暂时的网络问题。你可以在稍后再试。以下是未认证软件包的列表。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:653
+#: ../DistUpgrade/DistUpgradeCache.py:654
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
-msgstr "软件包 '%s' 已在移除列表中。"
+msgstr "软件包 '%s'标记为可移除，但它已在移除黑名单中。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:657
+#: ../DistUpgrade/DistUpgradeCache.py:658
 #, python-format
 msgid "The essential package '%s' is marked for removal."
 msgstr "必要的软件包'%s'被标记为移除。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:735
+#: ../DistUpgrade/DistUpgradeCache.py:745
 #, python-format
 msgid "Can not mark '%s' for upgrade"
 msgstr "%s不能被标记为升级"
 
-#: ../DistUpgrade/DistUpgradeCache.py:749
+#: ../DistUpgrade/DistUpgradeCache.py:759
 #, python-format
 msgid "Can't install '%s'"
 msgstr "无法安装 '%s'"
 
-#: ../DistUpgrade/DistUpgradeCache.py:750
+#: ../DistUpgrade/DistUpgradeCache.py:760
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
 msgstr "无法安装要求的软件包。请汇报这个错误。 "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:758
+#: ../DistUpgrade/DistUpgradeCache.py:768
 msgid "Can't guess meta-package"
-msgstr "无法猜出元包"
+msgstr "无法猜出元数据包"
 
-#: ../DistUpgrade/DistUpgradeCache.py:759
+#: ../DistUpgrade/DistUpgradeCache.py:769
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -425,7 +425,7 @@ msgstr "升级时候出错。这通常是一些网络问题，请检查你的网
 
 #. print "on_button_install_clicked"
 #: ../DistUpgrade/DistUpgradeController.py:819
-#: ../UpdateManager/UpdateManager.py:553
+#: ../UpdateManager/UpdateManager.py:563
 msgid "Not enough free disk space"
 msgstr "磁盘空间不足"
 
@@ -459,17 +459,17 @@ msgstr ""
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
 #: ../DistUpgrade/DistUpgradeController.py:870
-#: ../DistUpgrade/DistUpgradeController.py:1522
+#: ../DistUpgrade/DistUpgradeController.py:1529
 msgid "Calculating the changes"
 msgstr "正在计算改变"
 
 #. ask the user if he wants to do the changes
 #: ../DistUpgrade/DistUpgradeController.py:885
 msgid "Do you want to start the upgrade?"
-msgstr "你想现在升级吗？"
+msgstr "您想现在开始升级吗？"
 
 #: ../DistUpgrade/DistUpgradeController.py:937
-#: ../DistUpgrade/DistUpgradeController.py:1009
+#: ../DistUpgrade/DistUpgradeController.py:1016
 msgid "Could not download the upgrades"
 msgstr "无法下载升级包"
 
@@ -479,14 +479,32 @@ msgid ""
 "installation media and try again. All files downloaded so far are kept."
 msgstr "升级失败。请检查你的网络连接或安装媒体然后重试。所有到目前为止已下载的文件已保存。"
 
-#. invoke the frontend now
+#. FIXME: strings are not good, but we are in string freeze
+#. currently
 #: ../DistUpgrade/DistUpgradeController.py:984
+#: ../DistUpgrade/DistUpgradeController.py:1107
+msgid "Error during commit"
+msgstr "确认时出错"
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:986
+#: ../DistUpgrade/DistUpgradeController.py:1146
+msgid "Restoring original system state"
+msgstr "正在恢复原始系统状态"
+
+#: ../DistUpgrade/DistUpgradeController.py:987
+#: ../DistUpgrade/DistUpgradeController.py:1000
+msgid "Could not install the upgrades"
+msgstr "无法安装升级"
+
+#. invoke the frontend now and show a error message
+#: ../DistUpgrade/DistUpgradeController.py:991
 msgid ""
 "The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr "升级失败。你的系统可能处在不可用的状态。修复将立即运行(dpkg --configure -a)。"
 
-#: ../DistUpgrade/DistUpgradeController.py:989
+#: ../DistUpgrade/DistUpgradeController.py:996
 #, python-format
 msgid ""
 "\n"
@@ -500,67 +518,54 @@ msgstr ""
 "请提交一份对软件包'update-manager'的错误报告，并在报告中包含目录/var/log/dist-upgrade/下的所有文件.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:993
-msgid "Could not install the upgrades"
-msgstr "无法安装升级"
-
-#: ../DistUpgrade/DistUpgradeController.py:1010
+#: ../DistUpgrade/DistUpgradeController.py:1017
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr "升级失败。请检查你的网络连接或安装媒介然后重试 "
 
-#: ../DistUpgrade/DistUpgradeController.py:1088
+#: ../DistUpgrade/DistUpgradeController.py:1095
 msgid "Remove obsolete packages?"
 msgstr "删除陈旧的软件包？"
 
-#: ../DistUpgrade/DistUpgradeController.py:1089
+#: ../DistUpgrade/DistUpgradeController.py:1096
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "保持(_K)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1089
+#: ../DistUpgrade/DistUpgradeController.py:1096
 msgid "_Remove"
 msgstr "删除(_R)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1100
-msgid "Error during commit"
-msgstr "确认时出错"
-
-#: ../DistUpgrade/DistUpgradeController.py:1101
+#: ../DistUpgrade/DistUpgradeController.py:1108
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
 msgstr "清理时出现问题。更多信息请查看以下消息。 "
 
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1139
-msgid "Restoring original system state"
-msgstr "正在恢复原始系统状态"
-
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1177
+#: ../DistUpgrade/DistUpgradeController.py:1184
 msgid "Required depends is not installed"
 msgstr "需要的依赖关系未安装"
 
-#: ../DistUpgrade/DistUpgradeController.py:1178
+#: ../DistUpgrade/DistUpgradeController.py:1185
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "需要的依赖关系 '%s' 未安装 。 "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1432
-#: ../DistUpgrade/DistUpgradeController.py:1499
+#: ../DistUpgrade/DistUpgradeController.py:1439
+#: ../DistUpgrade/DistUpgradeController.py:1506
 msgid "Checking package manager"
 msgstr "正在检查软件包管理器"
 
-#: ../DistUpgrade/DistUpgradeController.py:1437
+#: ../DistUpgrade/DistUpgradeController.py:1444
 msgid "Preparing the upgrade failed"
 msgstr "升级准备失败"
 
-#: ../DistUpgrade/DistUpgradeController.py:1438
+#: ../DistUpgrade/DistUpgradeController.py:1445
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
@@ -568,11 +573,11 @@ msgid ""
 msgstr ""
 "准备升级失败。请将此报告为'update-manager'软件包的bug并将/var/log/dist-upgrade/下的文件包含在bug报告中。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1454
+#: ../DistUpgrade/DistUpgradeController.py:1461
 msgid "Getting upgrade prerequisites failed"
 msgstr "升级的准备失败"
 
-#: ../DistUpgrade/DistUpgradeController.py:1455
+#: ../DistUpgrade/DistUpgradeController.py:1462
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -583,15 +588,15 @@ msgstr ""
 "系统无法满足升级条件。将退出升级并恢复到原来的系统状态。\n"
 "请将此报告为'update-manager'软件包的bug并将/var/log/dist-upgrade/下的文件包含在bug报告中。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1485
+#: ../DistUpgrade/DistUpgradeController.py:1492
 msgid "Updating repository information"
 msgstr "更新源的信息"
 
-#: ../DistUpgrade/DistUpgradeController.py:1510
+#: ../DistUpgrade/DistUpgradeController.py:1517
 msgid "Invalid package information"
 msgstr "无效的包信息"
 
-#: ../DistUpgrade/DistUpgradeController.py:1511
+#: ../DistUpgrade/DistUpgradeController.py:1518
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -604,40 +609,40 @@ msgstr ""
 "这表明发生了严重的错误。请将此报告为'update-manager'软件包的bug并将/var/log/dist-"
 "upgrade/下的文件包含在bug报告中。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1528
-#: ../DistUpgrade/DistUpgradeController.py:1576
+#: ../DistUpgrade/DistUpgradeController.py:1535
+#: ../DistUpgrade/DistUpgradeController.py:1583
 msgid "Fetching"
 msgstr "正在获取"
 
-#: ../DistUpgrade/DistUpgradeController.py:1535
-#: ../DistUpgrade/DistUpgradeController.py:1580
+#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1587
 msgid "Upgrading"
 msgstr "正在更新"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1540
-#: ../DistUpgrade/DistUpgradeController.py:1582
+#: ../DistUpgrade/DistUpgradeController.py:1547
 #: ../DistUpgrade/DistUpgradeController.py:1589
-#: ../DistUpgrade/DistUpgradeController.py:1594
+#: ../DistUpgrade/DistUpgradeController.py:1596
+#: ../DistUpgrade/DistUpgradeController.py:1601
 msgid "Upgrade complete"
 msgstr "更新完成"
 
-#: ../DistUpgrade/DistUpgradeController.py:1541
-#: ../DistUpgrade/DistUpgradeController.py:1583
+#: ../DistUpgrade/DistUpgradeController.py:1548
 #: ../DistUpgrade/DistUpgradeController.py:1590
+#: ../DistUpgrade/DistUpgradeController.py:1597
 msgid ""
 "The upgrade is completed but there were errors during the upgrade process."
 msgstr "升级已经完成，但在升级过程中发生了错误。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1548
+#: ../DistUpgrade/DistUpgradeController.py:1555
 msgid "Searching for obsolete software"
-msgstr "寻找陈旧的软件包"
+msgstr "正在搜索陈旧的软件包"
 
-#: ../DistUpgrade/DistUpgradeController.py:1553
+#: ../DistUpgrade/DistUpgradeController.py:1560
 msgid "System upgrade is complete."
 msgstr "系统更新完毕"
 
-#: ../DistUpgrade/DistUpgradeController.py:1595
+#: ../DistUpgrade/DistUpgradeController.py:1602
 msgid "The partial upgrade was completed."
 msgstr "部分升级完成。"
 
@@ -686,7 +691,7 @@ msgstr "您的系统在 /proc/mounts 中使用 “evms” 卷管理器。“evms
 
 #: ../DistUpgrade/DistUpgradeMain.py:38
 msgid "Sandbox upgrade using aufs"
-msgstr ""
+msgstr "使用 aufs 进行沙箱升级"
 
 #: ../DistUpgrade/DistUpgradeMain.py:40
 msgid "Use the given path to search for a cdrom with upgradable packages"
@@ -706,7 +711,7 @@ msgstr "*已废弃* 这个选项将会被忽略"
 
 #: ../DistUpgrade/DistUpgradeMain.py:52
 msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr ""
+msgstr "仅进行部分升级(不重写 sources.list)"
 
 #: ../DistUpgrade/DistUpgradeMain.py:54
 msgid "Set datadir"
@@ -825,7 +830,7 @@ msgstr "这将取消本次操作且可能是系统处于被破坏的状态。你
 #. append warning
 #: ../DistUpgrade/DistUpgradeViewGtk.py:570
 msgid "To prevent data loss close all open applications and documents."
-msgstr "关闭所有打开的程序和文档以防止数据丢失。"
+msgstr "为防止数据丢失，请关闭所有打开的应用程序和文档。"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:584
 #, python-format
@@ -1052,7 +1057,7 @@ msgid ""
 msgstr "获取并安装升级可能会持续几个小时。一旦下载结束，进程将不能被取消。"
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:446
+#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:456
 msgid "Your system is up-to-date"
 msgstr "您的系统已为最新"
 
@@ -1356,102 +1361,102 @@ msgstr "在浏览器中打开链接"
 msgid "Copy Link to Clipboard"
 msgstr "链接复制到剪贴板"
 
-#: ../UpdateManager/GtkProgress.py:108
+#: ../UpdateManager/GtkProgress.py:111
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr "正在下载文件 %(current)li of %(total)li 速度是 %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:113
+#: ../UpdateManager/GtkProgress.py:116
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "正在下载文件 %(current)li 从 %(total)li"
 
-#: ../UpdateManager/UpdateManager.py:264
+#: ../UpdateManager/UpdateManager.py:274
 #, python-format
 msgid "Version %s: \n"
 msgstr "版本 %s： \n"
 
-#: ../UpdateManager/UpdateManager.py:325
+#: ../UpdateManager/UpdateManager.py:335
 msgid "Downloading list of changes..."
 msgstr "正在下载更新列表..."
 
-#: ../UpdateManager/UpdateManager.py:357
+#: ../UpdateManager/UpdateManager.py:367
 msgid "_Uncheck All"
 msgstr "取消全部(_U)"
 
-#: ../UpdateManager/UpdateManager.py:363
+#: ../UpdateManager/UpdateManager.py:373
 msgid "_Check All"
 msgstr "选中全部(_C)"
 
 #. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:407 ../UpdateManager/UpdateManager.py:467
+#: ../UpdateManager/UpdateManager.py:417 ../UpdateManager/UpdateManager.py:477
 #, python-format
 msgid "Download size: %s"
 msgstr "下载文件大小：%s"
 
-#: ../UpdateManager/UpdateManager.py:411
+#: ../UpdateManager/UpdateManager.py:421
 msgid "Unknown download size"
 msgstr "未知下载大小"
 
-#: ../UpdateManager/UpdateManager.py:419
+#: ../UpdateManager/UpdateManager.py:429
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
 msgstr "上次更新时没有获取到该软件包的更新信息。请单击 '检查' 按钮，以检查该软件包的更新。"
 
-#: ../UpdateManager/UpdateManager.py:428
+#: ../UpdateManager/UpdateManager.py:438
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
 msgstr[0] "软件包信息于%s天前更新"
 
-#: ../UpdateManager/UpdateManager.py:432
+#: ../UpdateManager/UpdateManager.py:442
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
 msgstr[0] "软件包信息上次更新于 %s 小时前。"
 
-#: ../UpdateManager/UpdateManager.py:436
+#: ../UpdateManager/UpdateManager.py:446
 msgid "The package information was last updated less than one hour ago."
 msgstr "这个包显示上次升级是一小时以内。"
 
-#: ../UpdateManager/UpdateManager.py:444
+#: ../UpdateManager/UpdateManager.py:454
 #: ../data/glade/UpdateManager.glade.h:21
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
 msgstr "软件更新可以为你修复错误，消除安全漏洞及提供新的特性"
 
-#: ../UpdateManager/UpdateManager.py:461
+#: ../UpdateManager/UpdateManager.py:471
 msgid "Welcome to Ubuntu"
 msgstr "欢迎使用 Ubuntu"
 
-#: ../UpdateManager/UpdateManager.py:462
+#: ../UpdateManager/UpdateManager.py:472
 msgid ""
 "These software updates have been issued since Ubuntu was released. If you "
 "don't want to install them now, choose \"Update Manager\" from the "
 "Administration Menu later."
 msgstr "Ubuntu 发布之后如下软件已经升级。如果您不想现在安装，稍后可以在“系统管理”菜单选择“更新管理器”进行安装。"
 
-#: ../UpdateManager/UpdateManager.py:465
+#: ../UpdateManager/UpdateManager.py:475
 msgid "Software updates are available for this computer"
 msgstr "有适合本计算机软件更新"
 
-#: ../UpdateManager/UpdateManager.py:466
+#: ../UpdateManager/UpdateManager.py:476
 msgid ""
 "If you don't want to install them now, choose \"Update Manager\" from the "
 "Administration menu later."
 msgstr "如果您不想现在安装，稍后可以在“系统管理”菜单选择“更新管理器”进行安装。"
 
-#: ../UpdateManager/UpdateManager.py:505
+#: ../UpdateManager/UpdateManager.py:515
 msgid "Please wait, this can take some time."
 msgstr "请稍等，这需要花一些时间。"
 
-#: ../UpdateManager/UpdateManager.py:507
+#: ../UpdateManager/UpdateManager.py:517
 msgid "Update is complete"
 msgstr "更新完成"
 
-#: ../UpdateManager/UpdateManager.py:554
+#: ../UpdateManager/UpdateManager.py:564
 #, python-format
 msgid ""
 "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -1461,16 +1466,16 @@ msgstr ""
 "这个更新需要花去%s盘一共%s的空间.请在%s盘腾出空闲的%s空间.清空你的回收站和临时文件包，用 'sudo apt-get "
 "clean'清理以前的安装文件."
 
-#: ../UpdateManager/UpdateManager.py:593
+#: ../UpdateManager/UpdateManager.py:603
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "读取包信息"
 
-#: ../UpdateManager/UpdateManager.py:695
+#: ../UpdateManager/UpdateManager.py:705
 msgid "Could not initialize the package information"
 msgstr "不能够初始化包信息"
 
-#: ../UpdateManager/UpdateManager.py:696
+#: ../UpdateManager/UpdateManager.py:706
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1482,7 +1487,7 @@ msgstr ""
 "\n"
 "请汇报这个此 'update-manager' 软件包的错误，并且将如下信息包含在报告中：\n"
 
-#: ../UpdateManager/UpdateManager.py:718
+#: ../UpdateManager/UpdateManager.py:728
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1494,26 +1499,26 @@ msgstr ""
 "请汇报这个有关 'update-manager' 软件包的错误，并且将下列错误信息包含在错误报告中："
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:743
+#: ../UpdateManager/UpdateManager.py:753
 #, python-format
 msgid "(Size: %s)"
 msgstr "(大小：%s)"
 
-#: ../UpdateManager/UpdateManager.py:745
+#: ../UpdateManager/UpdateManager.py:755
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "从版本 %(old_version)s 到 %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:749
+#: ../UpdateManager/UpdateManager.py:759
 #, python-format
 msgid "Version %s"
 msgstr "版本 %s"
 
-#: ../UpdateManager/UpdateManager.py:762
+#: ../UpdateManager/UpdateManager.py:772
 msgid "Your distribution is not supported anymore"
 msgstr "您的发行版不再被支持"
 
-#: ../UpdateManager/UpdateManager.py:763
+#: ../UpdateManager/UpdateManager.py:773
 msgid ""
 "You will not get any further security fixes or critical updates. Upgrade to "
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
@@ -1522,17 +1527,17 @@ msgstr ""
 "你将不再获得未来的安全修订或重要更新。升级到更高版本的 Ubuntu Linux。请参见\r\n"
 "http://www.ubuntu.com 来获取更多有关升级的信息。"
 
-#: ../UpdateManager/UpdateManager.py:795
+#: ../UpdateManager/UpdateManager.py:805
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr "<b>新发行版 '%s' 可用</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:834
+#: ../UpdateManager/UpdateManager.py:844
 msgid "Software index is broken"
 msgstr "软件索引已被破坏"
 
-#: ../UpdateManager/UpdateManager.py:835
+#: ../UpdateManager/UpdateManager.py:845
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1603,7 +1608,12 @@ msgstr ""
 msgid "Downloading changelog"
 msgstr "正在下载变更日志"
 
-#: ../UpdateManager/Core/MyCache.py:209
+#. FIXME: better string, but we are in string freeze
+#: ../UpdateManager/Core/MyCache.py:221 ../UpdateManager/Core/UpdateList.py:47
+msgid "Failed to detect distribution"
+msgstr "检测发行版失败"
+
+#: ../UpdateManager/Core/MyCache.py:228
 #, python-format
 msgid ""
 "The changelog does not contain any relevant changes.\n"
@@ -1616,7 +1626,7 @@ msgstr ""
 "请访问 http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "直到变更可用或再试一遍。"
 
-#: ../UpdateManager/Core/MyCache.py:214
+#: ../UpdateManager/Core/MyCache.py:233
 #, python-format
 msgid ""
 "The list of changes is not available yet.\n"
@@ -1629,17 +1639,13 @@ msgstr ""
 "请使用http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "直至这些选项可用或者稍后再试。"
 
-#: ../UpdateManager/Core/MyCache.py:220
+#: ../UpdateManager/Core/MyCache.py:239
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
 "无法下载更新列表。 \n"
 "请检查您的网络连接。"
-
-#: ../UpdateManager/Core/UpdateList.py:47
-msgid "Failed to detect distribution"
-msgstr "检测发行版失败"
 
 #: ../UpdateManager/Core/UpdateList.py:48
 #, python-format
@@ -1942,7 +1948,7 @@ msgstr ".deb 软件包"
 
 #: ../Janitor/computerjanitor/missing_package_cruft.py:33
 msgid "Install missing package."
-msgstr ""
+msgstr "安装缺失的软件包。"
 
 #: ../Janitor/computerjanitor/missing_package_cruft.py:42
 #, python-format
@@ -1969,6 +1975,8 @@ msgid ""
 "When upgrading, if kdelibs4-dev is installed, kdelibs5-dev needs to be "
 "installed. See bugs.launchpad.net, bug ##279621 for details."
 msgstr ""
+"进行升级时，如果已经安装了 kdelibs4-dev，需要安装 kdelibs5-dev。详情见 bugs.launchpad.net, bug "
+"##279621。"
 
 #: ../Janitor/plugins/langpack_manual_plugin.py:34
 #, python-format

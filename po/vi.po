@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager Gnome HEAD\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-03-28 11:40+0000\n"
+"POT-Creation-Date: 2009-04-07 08:37+0000\n"
 "PO-Revision-Date: 2009-03-25 02:45+0000\n"
 "Last-Translator: buixuanduong1983 <buixuanduong1983@gmail.com>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2009-03-31 14:44+0000\n"
+"X-Launchpad-Export-Date: 2009-04-08 12:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
@@ -154,7 +154,7 @@ msgstr ""
 "manager' kèm theo tập tin /var/log/dist-upgrade/ trong báo cáo lỗi."
 
 #: ../DistUpgrade/DistUpgradeCache.py:583
-#: ../UpdateManager/UpdateManager.py:717
+#: ../UpdateManager/UpdateManager.py:727
 msgid "Could not calculate the upgrade"
 msgstr "Không thể tính được dung lượng cần nâng cấp"
 
@@ -172,7 +172,7 @@ msgstr ""
 "vui lòng thử lại sau. Bên dưới là danh sách các gói chưa được xác thực đầy "
 "đủ."
 
-#: ../DistUpgrade/DistUpgradeCache.py:653
+#: ../DistUpgrade/DistUpgradeCache.py:654
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
@@ -180,22 +180,22 @@ msgstr ""
 "Gói phần mềm '%s' được đánh dấu đề gỡ bỏ nhưng nó nằm trong danh sách các "
 "phần mềm không thể gỡ bỏ."
 
-#: ../DistUpgrade/DistUpgradeCache.py:657
+#: ../DistUpgrade/DistUpgradeCache.py:658
 #, python-format
 msgid "The essential package '%s' is marked for removal."
 msgstr "Gói phần mềm quan trọng '%s' sẽ bị gỡ bỏ."
 
-#: ../DistUpgrade/DistUpgradeCache.py:735
+#: ../DistUpgrade/DistUpgradeCache.py:745
 #, python-format
 msgid "Can not mark '%s' for upgrade"
 msgstr "Không thể đánh dấu '%s' để nâng cấp"
 
-#: ../DistUpgrade/DistUpgradeCache.py:749
+#: ../DistUpgrade/DistUpgradeCache.py:759
 #, python-format
 msgid "Can't install '%s'"
 msgstr "Không thể cài đặt '%s'"
 
-#: ../DistUpgrade/DistUpgradeCache.py:750
+#: ../DistUpgrade/DistUpgradeCache.py:760
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -203,11 +203,11 @@ msgstr ""
 "Không thể cài đặt được phần mềm. Hãy thông báo lỗi trên với chúng tôi. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:758
+#: ../DistUpgrade/DistUpgradeCache.py:768
 msgid "Can't guess meta-package"
 msgstr "Không thể đoán được gói gốc"
 
-#: ../DistUpgrade/DistUpgradeCache.py:759
+#: ../DistUpgrade/DistUpgradeCache.py:769
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -470,7 +470,7 @@ msgstr ""
 
 #. print "on_button_install_clicked"
 #: ../DistUpgrade/DistUpgradeController.py:819
-#: ../UpdateManager/UpdateManager.py:553
+#: ../UpdateManager/UpdateManager.py:563
 msgid "Not enough free disk space"
 msgstr "Không còn không gian đĩa trống"
 
@@ -508,7 +508,7 @@ msgstr ""
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
 #: ../DistUpgrade/DistUpgradeController.py:870
-#: ../DistUpgrade/DistUpgradeController.py:1522
+#: ../DistUpgrade/DistUpgradeController.py:1529
 msgid "Calculating the changes"
 msgstr "Tính toán các thay đổi cần thực hiện"
 
@@ -518,7 +518,7 @@ msgid "Do you want to start the upgrade?"
 msgstr "Bạn có muốn bắt đầu nâng cấp?"
 
 #: ../DistUpgrade/DistUpgradeController.py:937
-#: ../DistUpgrade/DistUpgradeController.py:1009
+#: ../DistUpgrade/DistUpgradeController.py:1016
 msgid "Could not download the upgrades"
 msgstr "Không thể tải xuống các gói nâng cấp"
 
@@ -530,8 +530,26 @@ msgstr ""
 "Quá trình nâng cấp bị hủy bỏ. Hãy kiểm tra kết nối Internet hoặc đĩa cài và "
 "thực hiện lại. Những tập tin đã được tải về vẫn được giữ lại."
 
-#. invoke the frontend now
+#. FIXME: strings are not good, but we are in string freeze
+#. currently
 #: ../DistUpgrade/DistUpgradeController.py:984
+#: ../DistUpgrade/DistUpgradeController.py:1107
+msgid "Error during commit"
+msgstr "Lỗi trong giai đoạn commit"
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:986
+#: ../DistUpgrade/DistUpgradeController.py:1146
+msgid "Restoring original system state"
+msgstr "Khôi phục lại trạng thái hệ thống ban đầu"
+
+#: ../DistUpgrade/DistUpgradeController.py:987
+#: ../DistUpgrade/DistUpgradeController.py:1000
+msgid "Could not install the upgrades"
+msgstr "Không thể cài đặt các gói nâng cấp"
+
+#. invoke the frontend now and show a error message
+#: ../DistUpgrade/DistUpgradeController.py:991
 msgid ""
 "The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
@@ -539,7 +557,7 @@ msgstr ""
 "Quá trình nâng cấp bị hủy bỏ. Hệ thống có thể đang không ổn định. Quá trình "
 "phục hồi sẽ bắt đầu (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:989
+#: ../DistUpgrade/DistUpgradeController.py:996
 #, python-format
 msgid ""
 "\n"
@@ -554,11 +572,7 @@ msgstr ""
 "/var/log/dist-upgrade/.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:993
-msgid "Could not install the upgrades"
-msgstr "Không thể cài đặt các gói nâng cấp"
-
-#: ../DistUpgrade/DistUpgradeController.py:1010
+#: ../DistUpgrade/DistUpgradeController.py:1017
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
@@ -566,24 +580,20 @@ msgstr ""
 "Quá trình nâng cấp bị hủy bỏ. Hãy kiểm tra kết nối Internet hoặc đĩa cài và "
 "thực hiện lại. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1088
+#: ../DistUpgrade/DistUpgradeController.py:1095
 msgid "Remove obsolete packages?"
 msgstr "Xóa các gói không còn dùng nữa"
 
-#: ../DistUpgrade/DistUpgradeController.py:1089
+#: ../DistUpgrade/DistUpgradeController.py:1096
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Giữ lại"
 
-#: ../DistUpgrade/DistUpgradeController.py:1089
+#: ../DistUpgrade/DistUpgradeController.py:1096
 msgid "_Remove"
 msgstr "_Xóa bỏ"
 
-#: ../DistUpgrade/DistUpgradeController.py:1100
-msgid "Error during commit"
-msgstr "Lỗi trong giai đoạn commit"
-
-#: ../DistUpgrade/DistUpgradeController.py:1101
+#: ../DistUpgrade/DistUpgradeController.py:1108
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -591,34 +601,29 @@ msgstr ""
 "Có lỗi trong quá trình kết thúc nâng cấp. Vui lòng xem thông báo bên dưới để "
 "biết thông tin thêm. "
 
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1139
-msgid "Restoring original system state"
-msgstr "Khôi phục lại trạng thái hệ thống ban đầu"
-
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1177
+#: ../DistUpgrade/DistUpgradeController.py:1184
 msgid "Required depends is not installed"
 msgstr "Các gói phụ thuộc chưa được cài đặt"
 
-#: ../DistUpgrade/DistUpgradeController.py:1178
+#: ../DistUpgrade/DistUpgradeController.py:1185
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Gói phụ thuộc '%s' chưa được cài đặt. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1432
-#: ../DistUpgrade/DistUpgradeController.py:1499
+#: ../DistUpgrade/DistUpgradeController.py:1439
+#: ../DistUpgrade/DistUpgradeController.py:1506
 msgid "Checking package manager"
 msgstr "Đang kiểm tra trình quản lý gói"
 
-#: ../DistUpgrade/DistUpgradeController.py:1437
+#: ../DistUpgrade/DistUpgradeController.py:1444
 msgid "Preparing the upgrade failed"
 msgstr "Quá trình chuẩn bị để nâng cấp thất bại"
 
-#: ../DistUpgrade/DistUpgradeController.py:1438
+#: ../DistUpgrade/DistUpgradeController.py:1445
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
@@ -627,11 +632,11 @@ msgstr ""
 "Có lỗi khi chuẩn bị để nâng cấp. Hãy thông báo lỗi của 'update-manager' kèm "
 "theo các tập tin trong /var/log/dist-upgrade/."
 
-#: ../DistUpgrade/DistUpgradeController.py:1454
+#: ../DistUpgrade/DistUpgradeController.py:1461
 msgid "Getting upgrade prerequisites failed"
 msgstr "Quá trình tải các gói phụ thuộc cần thiết để nâng cấp thất bại"
 
-#: ../DistUpgrade/DistUpgradeController.py:1455
+#: ../DistUpgrade/DistUpgradeController.py:1462
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -645,15 +650,15 @@ msgstr ""
 "Hãy thông báo lỗi của 'update-manager' kèm theo các tập tin trong "
 "/var/log/dist-upgrade/."
 
-#: ../DistUpgrade/DistUpgradeController.py:1485
+#: ../DistUpgrade/DistUpgradeController.py:1492
 msgid "Updating repository information"
 msgstr "Cập nhật thông tin về các nguồn cập nhật"
 
-#: ../DistUpgrade/DistUpgradeController.py:1510
+#: ../DistUpgrade/DistUpgradeController.py:1517
 msgid "Invalid package information"
 msgstr "Thông tin gói không hợp lệ"
 
-#: ../DistUpgrade/DistUpgradeController.py:1511
+#: ../DistUpgrade/DistUpgradeController.py:1518
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -667,40 +672,40 @@ msgstr ""
 "Đây là một lỗi nghiêm trọng, hãy thông báo lỗi của 'update-manager' kèm theo "
 "các tập tin trong /var/log/dist-upgrade/."
 
-#: ../DistUpgrade/DistUpgradeController.py:1528
-#: ../DistUpgrade/DistUpgradeController.py:1576
+#: ../DistUpgrade/DistUpgradeController.py:1535
+#: ../DistUpgrade/DistUpgradeController.py:1583
 msgid "Fetching"
 msgstr "Đang lấy về"
 
-#: ../DistUpgrade/DistUpgradeController.py:1535
-#: ../DistUpgrade/DistUpgradeController.py:1580
+#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1587
 msgid "Upgrading"
 msgstr "Đang nâng cấp"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1540
-#: ../DistUpgrade/DistUpgradeController.py:1582
+#: ../DistUpgrade/DistUpgradeController.py:1547
 #: ../DistUpgrade/DistUpgradeController.py:1589
-#: ../DistUpgrade/DistUpgradeController.py:1594
+#: ../DistUpgrade/DistUpgradeController.py:1596
+#: ../DistUpgrade/DistUpgradeController.py:1601
 msgid "Upgrade complete"
 msgstr "Nâng cấp hoàn tất"
 
-#: ../DistUpgrade/DistUpgradeController.py:1541
-#: ../DistUpgrade/DistUpgradeController.py:1583
+#: ../DistUpgrade/DistUpgradeController.py:1548
 #: ../DistUpgrade/DistUpgradeController.py:1590
+#: ../DistUpgrade/DistUpgradeController.py:1597
 msgid ""
 "The upgrade is completed but there were errors during the upgrade process."
 msgstr "Quá trình nâng cấp kết thúc song đã có lỗi xảy ra."
 
-#: ../DistUpgrade/DistUpgradeController.py:1548
+#: ../DistUpgrade/DistUpgradeController.py:1555
 msgid "Searching for obsolete software"
 msgstr "Đang tìm các phần mềm không còn dùng nữa"
 
-#: ../DistUpgrade/DistUpgradeController.py:1553
+#: ../DistUpgrade/DistUpgradeController.py:1560
 msgid "System upgrade is complete."
 msgstr "Quá trình nâng cấp hệ thống đã hoàn thành"
 
-#: ../DistUpgrade/DistUpgradeController.py:1595
+#: ../DistUpgrade/DistUpgradeController.py:1602
 msgid "The partial upgrade was completed."
 msgstr "Quá trình nâng cấp từng phần kết thúc."
 
@@ -1134,7 +1139,7 @@ msgstr ""
 "đặt không thể hủy bỏ giữa chừng sau khi quá trình tải xuống đã hoàn tất."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:446
+#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:456
 msgid "Your system is up-to-date"
 msgstr "Hệ thống của bạn đã được cập nhật mới nhất"
 
@@ -1450,44 +1455,44 @@ msgstr "Mở trong Trình duyệt"
 msgid "Copy Link to Clipboard"
 msgstr "Sao chép vào Bộ nhớ"
 
-#: ../UpdateManager/GtkProgress.py:108
+#: ../UpdateManager/GtkProgress.py:111
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr "Đang tải tập tin %(current)li của %(total)li với tốc độ %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:113
+#: ../UpdateManager/GtkProgress.py:116
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "Đang tải tập tin %(current)li của %(total)li"
 
-#: ../UpdateManager/UpdateManager.py:264
+#: ../UpdateManager/UpdateManager.py:274
 #, python-format
 msgid "Version %s: \n"
 msgstr "Phiên bản %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:325
+#: ../UpdateManager/UpdateManager.py:335
 msgid "Downloading list of changes..."
 msgstr "Đang tải danh sách các thay đổi"
 
-#: ../UpdateManager/UpdateManager.py:357
+#: ../UpdateManager/UpdateManager.py:367
 msgid "_Uncheck All"
 msgstr "_Không chọn tất cả"
 
-#: ../UpdateManager/UpdateManager.py:363
+#: ../UpdateManager/UpdateManager.py:373
 msgid "_Check All"
 msgstr "_Chọn tất cả"
 
 #. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:407 ../UpdateManager/UpdateManager.py:467
+#: ../UpdateManager/UpdateManager.py:417 ../UpdateManager/UpdateManager.py:477
 #, python-format
 msgid "Download size: %s"
 msgstr "Dung lượng cần tải xuống: %s"
 
-#: ../UpdateManager/UpdateManager.py:411
+#: ../UpdateManager/UpdateManager.py:421
 msgid "Unknown download size"
 msgstr "Không tính được dung lượng cần tải xuống"
 
-#: ../UpdateManager/UpdateManager.py:419
+#: ../UpdateManager/UpdateManager.py:429
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
@@ -1495,23 +1500,23 @@ msgstr ""
 "Không rõ thời gian lần cập nhật cuối thông tin về gói. Vui lòng nhấn nút "
 "'Kiểm tra' để cập nhật thông tin."
 
-#: ../UpdateManager/UpdateManager.py:428
+#: ../UpdateManager/UpdateManager.py:438
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
 msgstr[0] "Thông tin về các gói được cập nhật %s ngày trước đây."
 
-#: ../UpdateManager/UpdateManager.py:432
+#: ../UpdateManager/UpdateManager.py:442
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
 msgstr[0] "Thông tin về các gói được cập nhật %s giờ trước đây."
 
-#: ../UpdateManager/UpdateManager.py:436
+#: ../UpdateManager/UpdateManager.py:446
 msgid "The package information was last updated less than one hour ago."
 msgstr "Thông tin về gói được cập nhật lần cuối chưa đầy một giờ."
 
-#: ../UpdateManager/UpdateManager.py:444
+#: ../UpdateManager/UpdateManager.py:454
 #: ../data/glade/UpdateManager.glade.h:21
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
@@ -1520,11 +1525,11 @@ msgstr ""
 "Các bản cập nhật phần mềm giúp sửa lỗi, loại bỏ các lổ hổng bảo mật và cung "
 "cấp các tính năng mới."
 
-#: ../UpdateManager/UpdateManager.py:461
+#: ../UpdateManager/UpdateManager.py:471
 msgid "Welcome to Ubuntu"
 msgstr "Chào mừng đến với Ubuntu"
 
-#: ../UpdateManager/UpdateManager.py:462
+#: ../UpdateManager/UpdateManager.py:472
 msgid ""
 "These software updates have been issued since Ubuntu was released. If you "
 "don't want to install them now, choose \"Update Manager\" from the "
@@ -1534,11 +1539,11 @@ msgstr ""
 "không muốn cài đặt chúng ngay, chọn \"Trình Quản lý cập nhật\"  từ trình đơn "
 "Quản lý sau này."
 
-#: ../UpdateManager/UpdateManager.py:465
+#: ../UpdateManager/UpdateManager.py:475
 msgid "Software updates are available for this computer"
 msgstr "Có thông tin về cập nhật gói phần mềm"
 
-#: ../UpdateManager/UpdateManager.py:466
+#: ../UpdateManager/UpdateManager.py:476
 msgid ""
 "If you don't want to install them now, choose \"Update Manager\" from the "
 "Administration menu later."
@@ -1546,15 +1551,15 @@ msgstr ""
 "Nếu không muốn cài chúng ngay bây giờ, bạn có thể cài sau này bằng \"Trình "
 "Quản lý cập nhật\" từ trình đơn Quản lý"
 
-#: ../UpdateManager/UpdateManager.py:505
+#: ../UpdateManager/UpdateManager.py:515
 msgid "Please wait, this can take some time."
 msgstr "Vui lòng đợi trong chốc lát."
 
-#: ../UpdateManager/UpdateManager.py:507
+#: ../UpdateManager/UpdateManager.py:517
 msgid "Update is complete"
 msgstr "Cập nhật hoàn thành"
 
-#: ../UpdateManager/UpdateManager.py:554
+#: ../UpdateManager/UpdateManager.py:564
 #, python-format
 msgid ""
 "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -1565,16 +1570,16 @@ msgstr ""
 "nhất %s trống trên đĩa '%s'. Chẳng hạn: làm sạch Thùng rác và dùng 'sudo apt-"
 "get clean' để xóa các tập tin tạm của các gói đã cài đặt."
 
-#: ../UpdateManager/UpdateManager.py:593
+#: ../UpdateManager/UpdateManager.py:603
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "Đang đọc thông tin về gói"
 
-#: ../UpdateManager/UpdateManager.py:695
+#: ../UpdateManager/UpdateManager.py:705
 msgid "Could not initialize the package information"
 msgstr "Không thể khởi tạo thông tin về gói"
 
-#: ../UpdateManager/UpdateManager.py:696
+#: ../UpdateManager/UpdateManager.py:706
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1586,7 +1591,7 @@ msgstr ""
 "\n"
 "Hãy thông báo lỗi của 'update-manager' và kèm theo thông báo lỗi sau:\n"
 
-#: ../UpdateManager/UpdateManager.py:718
+#: ../UpdateManager/UpdateManager.py:728
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1598,26 +1603,26 @@ msgstr ""
 "Hãy thông báo lỗi của 'update-manager' và kèm theo thông báo lỗi sau:"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:743
+#: ../UpdateManager/UpdateManager.py:753
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Dung lượng: %s)"
 
-#: ../UpdateManager/UpdateManager.py:745
+#: ../UpdateManager/UpdateManager.py:755
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "Từ phiên bản %(old_version)s lên %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:749
+#: ../UpdateManager/UpdateManager.py:759
 #, python-format
 msgid "Version %s"
 msgstr "Phiên bản %s"
 
-#: ../UpdateManager/UpdateManager.py:762
+#: ../UpdateManager/UpdateManager.py:772
 msgid "Your distribution is not supported anymore"
 msgstr "Bản phân phối bạn đang dùng không còn được hỗ trợ"
 
-#: ../UpdateManager/UpdateManager.py:763
+#: ../UpdateManager/UpdateManager.py:773
 msgid ""
 "You will not get any further security fixes or critical updates. Upgrade to "
 "a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
@@ -1627,17 +1632,17 @@ msgstr ""
 "trọng. Hãy nâng cấp lên phiên bản mới nhất của Ubuntu Linux. Xem "
 "http://www.ubuntu.com để có thêm thông tin về việc nâng cấp."
 
-#: ../UpdateManager/UpdateManager.py:795
+#: ../UpdateManager/UpdateManager.py:805
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr "<b>Bản phân phối mới phiên hiệu '%s' đã sẵn sàng</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:834
+#: ../UpdateManager/UpdateManager.py:844
 msgid "Software index is broken"
 msgstr "Chỉ mục phần mềm bị hỏng"
 
-#: ../UpdateManager/UpdateManager.py:835
+#: ../UpdateManager/UpdateManager.py:845
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1714,7 +1719,12 @@ msgstr ""
 msgid "Downloading changelog"
 msgstr "Đang tải về bản ghi thay đổi"
 
-#: ../UpdateManager/Core/MyCache.py:209
+#. FIXME: better string, but we are in string freeze
+#: ../UpdateManager/Core/MyCache.py:221 ../UpdateManager/Core/UpdateList.py:47
+msgid "Failed to detect distribution"
+msgstr "Không thể tìm ra bản phân phối"
+
+#: ../UpdateManager/Core/MyCache.py:228
 #, python-format
 msgid ""
 "The changelog does not contain any relevant changes.\n"
@@ -1727,7 +1737,7 @@ msgstr ""
 "Vui lòng xem tạm trên http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "đến khi thay đổi sẵn sàng hoặc thử lại sau."
 
-#: ../UpdateManager/Core/MyCache.py:214
+#: ../UpdateManager/Core/MyCache.py:233
 #, python-format
 msgid ""
 "The list of changes is not available yet.\n"
@@ -1740,17 +1750,13 @@ msgstr ""
 "Vui lòng sử dụng http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "đến khi thay đổi sẵn sàng hoặc thử lại sau."
 
-#: ../UpdateManager/Core/MyCache.py:220
+#: ../UpdateManager/Core/MyCache.py:239
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
 "Không tải được danh sách các thay đổi. \n"
 "Hãy kiểm tra kết nối Internet của bạn."
-
-#: ../UpdateManager/Core/UpdateList.py:47
-msgid "Failed to detect distribution"
-msgstr "Không thể tìm ra bản phân phối"
 
 #: ../UpdateManager/Core/UpdateList.py:48
 #, python-format

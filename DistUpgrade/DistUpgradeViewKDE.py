@@ -432,6 +432,9 @@ class UpgraderMainWindow(QWidget):
 class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None, logdir=None):
+        # silence the PyQt4 logger
+        logger = logging.getLogger("PyQt4")
+        logger.setLevel(logging.INFO)
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:

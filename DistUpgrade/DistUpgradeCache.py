@@ -464,6 +464,7 @@ class MyCache(apt.Cache):
                 return False
             # check which one to use
             driver = nv.selectDriver()
+            logging.debug("nv.selectDriver() returned '%s'" % driver)
             if (self.has_key(driver) and not
                 (self[driver].markedInstall or self[driver].markedUpgrade)):
                 self[driver].markInstall()

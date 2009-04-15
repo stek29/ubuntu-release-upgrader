@@ -627,6 +627,12 @@ class DistUpgradeQuirks(object):
         matches
         """
         if not os.path.exists(patchdir):
+            logging.debug("no patchdir")
+            return
+        if not ("PATH" in os.environ and
+                [p for p in os.environ["PATH"].split(":")
+                 if os.path.exists(os.path.join(p,"patch"))]):
+            logging.debug("no binary 'patch' found in PATH")
             return
         for f in os.listdir(patchdir):
             # skip, not a patch file, they all end with .$md5sum

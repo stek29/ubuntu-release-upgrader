@@ -951,7 +951,7 @@ class DistUpgradeController(object):
         #  env["force_start"] = "1"
         #  subprocess.call(["/etc/init.d/apport","start"], env=env)
         # but hardy and intrepid do not have the force_start yet
-        if not os.path.exists(fname):
+        if not (os.path.exists(fname) and os.path.exists("etc-default-apport")):
             return
         # copy the jaunty version of the conf file in place
         # (this avoids a conffile prompt later)

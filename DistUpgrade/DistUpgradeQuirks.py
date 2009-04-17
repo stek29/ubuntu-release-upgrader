@@ -174,12 +174,12 @@ class DistUpgradeQuirks(object):
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # bug 332328 - make sure pidgin-libnotify is upgraded
-        pkg = "pidgin-libnotify"
-        if (self.controller.cache.has_key(pkg) and
-            self.controller.cache[pkg].isInstalled and
-            not self.controller.cache[pkg].markedUpgrade):
-            logging.debug("forcing %s upgrade" % pkg)
-            self.controller.cache[pkg].markUpgrade()
+        for pkg in ["pidgin-libnotify", "gwenview"]:
+            if (self.controller.cache.has_key(pkg) and
+                self.controller.cache[pkg].isInstalled and
+                not self.controller.cache[pkg].markedUpgrade):
+                logging.debug("forcing '%s' upgrade" % pkg)
+                self.controller.cache[pkg].markUpgrade()
         
     def intrepidPostDistUpgradeCache(self):
         """ 

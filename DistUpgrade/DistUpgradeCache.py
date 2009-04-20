@@ -343,6 +343,12 @@ class MyCache(apt.Cache):
             if not (self[pkg].markedInstall or self[pkg].markedUpgrade):
                 logging.error("Installing/upgrading '%s' failed" % pkg)
                 #raise (SystemError, "Installing '%s' failed" % pkg)
+    def markUpgrade(self, pkg, reason=""):
+        logging.debug("Upgrading '%s' (%s)" % (pkg, reason))
+        if self.has_key(pkg) and self[pkg].isInstalled:
+            self[pkg].marUpgrade()
+            if not self[pkg].markedUpgrade:
+                logging.error("Upgrading '%s' failed" % pkg)
     def markRemove(self, pkg, reason=""):
         logging.debug("Removing '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
@@ -392,6 +398,7 @@ class MyCache(apt.Cache):
     def postUpgradeRule(self):
         " run after the upgrade was done in the cache "
         for (rule, action) in [("Install", self.markInstall),
+                               ("Upgrade", self.markUpgrade),
                                ("Remove", self.markRemove),
                                ("Purge", self.markPurge)]:
             # first the global list

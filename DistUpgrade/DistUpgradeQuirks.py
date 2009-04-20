@@ -417,10 +417,27 @@ class DistUpgradeQuirks(object):
         self._applyPatches()
         self._removeOldApportCrashes()
         self._removeBadMaintainerScripts()
+        self._killUpdateNotifier()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
-
+    def dapperStartUpgrade(self):
+        # check theme, crux is known to fail badly when upgraded 
+        # from dapper
+        if "DISPLAY" in os.environ and "SUDO_USER" in os.environ:
+            out = subprocess.Popen(["sudo","-u", os.environ["SUDO_USER"],
+                                    "./theme-switch-helper.py", "-g"],
+                                    stdout=subprocess.PIPE).communicate()[0]
+            if "Crux" in out:
+                subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
+                                    "./theme-switch-helper.py", "--defaults"])
+        return True
     # helpers
+    def _killUpdateNotifier(self):
+        "kill update-notifier"
+        # kill update-notifier now to suppress reboot required
+        if os.path.exists("/usr/bin/killall"):
+            logging.debug("killing update-notifier")
+            subprocess.call(["killall","-q","update-notifier"])
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

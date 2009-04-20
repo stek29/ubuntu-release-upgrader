@@ -346,7 +346,7 @@ class MyCache(apt.Cache):
     def markUpgrade(self, pkg, reason=""):
         logging.debug("Upgrading '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg) and self[pkg].isInstalled:
-            self[pkg].marUpgrade()
+            self[pkg].markUpgrade()
             if not self[pkg].markedUpgrade:
                 logging.error("Upgrading '%s' failed" % pkg)
     def markRemove(self, pkg, reason=""):

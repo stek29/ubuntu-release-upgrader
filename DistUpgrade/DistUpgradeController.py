@@ -36,7 +36,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable
+from utils import country_mirror, url_downloadable, check_and_fix_xbit
 from string import Template
 
 
@@ -130,6 +130,7 @@ class DistUpgradeController(object):
         os.environ["PYCENTRAL_FORCE_OVERWRITE"] = "1"
         os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
+        check_and_fix_xbit("./imported/invoke-rc.d")
 
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
@@ -1138,7 +1139,7 @@ class DistUpgradeController(object):
             logging.debug("Running PostInstallScript: '%s'" % script)
             try:
                 # work around kde tmpfile problem where it eats permissions
-                os.chmod(script, 0755)
+                check_and_fix_xbit(script)
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
@@ -1419,8 +1420,7 @@ class DistUpgradeController(object):
         else:
             args.append("--without-network")
         # work around kde being clever and removing the x bit
-        if not ((S_IMODE(os.stat(sys.argv[0])[ST_MODE]) & S_IXUSR) == S_IXUSR):
-            os.chmod(sys.argv[0], 0755)
+        check_and_fix_xbit(sys.argv[0])
         os.execve(sys.argv[0],args, os.environ)
 
     # this is the core

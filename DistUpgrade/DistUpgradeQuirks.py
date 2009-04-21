@@ -174,12 +174,12 @@ class DistUpgradeQuirks(object):
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # bug 332328 - make sure pidgin-libnotify is upgraded
-        pkg = "pidgin-libnotify"
-        if (self.controller.cache.has_key(pkg) and
-            self.controller.cache[pkg].isInstalled and
-            not self.controller.cache[pkg].markedUpgrade):
-            logging.debug("forcing %s upgrade" % pkg)
-            self.controller.cache[pkg].markUpgrade()
+        for pkg in ["pidgin-libnotify", "gwenview"]:
+            if (self.controller.cache.has_key(pkg) and
+                self.controller.cache[pkg].isInstalled and
+                not self.controller.cache[pkg].markedUpgrade):
+                logging.debug("forcing '%s' upgrade" % pkg)
+                self.controller.cache[pkg].markUpgrade()
         
     def intrepidPostDistUpgradeCache(self):
         """ 
@@ -420,6 +420,17 @@ class DistUpgradeQuirks(object):
         self._killUpdateNotifier()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
+        # hal/NM triggers problem, if the old (intrepid) hal gets
+        # triggered for a restart this causes NM to drop all connections
+        # because (old) hal thinks it has no devices anymore (LP: #327053)
+        ap = "/var/lib/dpkg/info/hal.postinst"
+        if os.path.exists(ap):
+            # intrepid md5 of hal.postinst (jaunty one is different)
+            # md5 jaunty 22c146857d751181cfe299a171fc11c9
+            md5sum = "146145275900af343d990a4dea968d7c"
+            if md5(open(ap).read()).hexdigest() == md5sum:
+                logging.debug("removing bad script '%s'" % ap)
+                os.unlink(ap)
     def dapperStartUpgrade(self):
         # check theme, crux is known to fail badly when upgraded 
         # from dapper

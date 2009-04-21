@@ -571,10 +571,11 @@ class UpdateManager(SimpleGladeApp):
     try:
         self.cache.checkFreeSpace()
     except NotEnoughFreeSpaceError, e:
-        self.error(err_sum, err_long % (e.size_total,
-                                        e.dir,
-                                        e.size_needed,
-                                        e.dir))
+        for req in e.free_space_required_list:
+            self.error(err_sum, err_long % (req.size_total,
+                                            req.dir,
+                                            req.size_needed,
+                                            req.dir))
         return
     self.invoke_manager(INSTALL)
     

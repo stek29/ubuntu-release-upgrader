@@ -11,6 +11,46 @@ update-manager (1:0.120) karmic; urgency=low
 
  --
 
+update-manager (1:0.111.8) jaunty-proposed; urgency=low
+
+  * DistUpgrade/DistUpgrade.cfg:
+    - add "grub" to the list of packages to keep installed
+      (LP: #363465)
+    - ensure brasero is upgraded (thanks to Chris Jones for
+      the report) (LP: #364136)
+  * DistUpgrade/DistUpgradeCache.py:
+    - support DistUpgradeCache.markUpgrade()
+  * DistUpgrade/mirrors.cfg:
+    - add "mirror.files.bigpond.com" (thanks to wgrant)
+  * debian/control:
+    - build-depend on latest nvidia-common (LP: #363500) to ensure
+      the nvidia-common if is included in the internal copy of
+      u-m
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - when the upgrade starts, remove old hal.postinst to prevent
+      the trigger from running that causes network-manager to shutdown
+      all connections (LP: #327053)
+  * UpdateManager/Core/MetaRelease.py, UpdateManager/MetaReleaseGObject.py:
+    - fix "no longer supported" message (LP: #364583)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 20 Apr 2009 13:53:01 +0200
+
+update-manager (1:0.111.7) jaunty; urgency=low
+
+  * DistUpgrade/ReleaseAnnouncement:
+    - updated for the final release
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - ensure qwenview is upgraded (LP: #360222)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 17 Apr 2009 22:11:04 +0200
+
+update-manager (1:0.111.6) jaunty; urgency=low
+
+  * UpdateManager/UpdateManager.py:
+    - fix crash in free space check (LP: #362066)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 16 Apr 2009 11:07:01 +0200
+
 update-manager (1:0.111.5) jaunty; urgency=low
 
   * DistUpgrade/DistUpgradeQuirks.py:

@@ -173,7 +173,7 @@ class MetaReleaseCore(object):
                 #print name
                 rawdate = index_tag.Section["Date"]
                 date = time.mktime(rfc822.parsedate(rawdate))
-                supported = bool(index_tag.Section["Supported"])
+                supported = int(index_tag.Section["Supported"])
                 version = index_tag.Section["Version"]
                 # add the information to a new date object
                 dist = Dist(name, version, date,supported)
@@ -207,7 +207,7 @@ class MetaReleaseCore(object):
         # the development version is also unsupported)
         if upgradable_to != "" and not current_dist.supported:
             self.dist_no_longer_supported(upgradable_to)
-        elif upgradable_to != "":
+        if upgradable_to != "":
             self.new_dist_available(upgradable_to)
 
         # parsing done and sucessfully

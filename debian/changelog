@@ -13,6 +13,10 @@ update-manager (1:0.111.8) jaunty-proposed; urgency=low
     - build-depend on latest nvidia-common (LP: #363500) to ensure
       the nvidia-common if is included in the internal copy of
       u-m
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - when the upgrade starts, remove old hal.postinst to prevent
+      the trigger from running that causes network-manager to shutdown
+      all connections (LP: #327053)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 20 Apr 2009 13:53:01 +0200
 

@@ -419,6 +419,18 @@ class DistUpgradeQuirks(object):
         self._removeBadMaintainerScripts()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
+        # hal/NM triggers problem, if the old (intrepid) hal gets
+        # triggered for a restart this causes NM to drop all connections
+        # because (old) hal thinks it has no devices anymore (LP: #327053)
+        ap = "/var/lib/dpkg/info/hal.postinst"
+        if os.path.exists(ap):
+            # intrepid md5 of hal.postinst (jaunty one is different)
+            # md5 jaunty 22c146857d751181cfe299a171fc11c9
+            md5sum = "146145275900af343d990a4dea968d7c"
+            if md5(open(ap).read()).hexdigest() == md5sum:
+                logging.debug("removing bad script '%s'" % ap)
+                os.unlink(ap)
+
 
     # helpers
     def _removeBadMaintainerScripts(self):

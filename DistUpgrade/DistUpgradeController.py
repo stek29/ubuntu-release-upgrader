@@ -1099,13 +1099,13 @@ class DistUpgradeController(object):
 
         # get changes
         changes = self.cache.getChanges()
-        logging.debug("The following packages are remove candidates: %s" % " ".join([pkg.name for pkg in changes]))
+        logging.debug("The following packages are marked for removal: %s" % " ".join([pkg.name for pkg in changes]))
         summary = _("Remove obsolete packages?")
         actions = [_("_Keep"), _("_Remove")]
         # FIXME Add an explanation about what obsolete packages are
         #explanation = _("")
-        if len(changes) > 0 and \
-               self._view.confirmChanges(summary, changes, 0, actions, False):
+        if (len(changes) > 0 and 
+            self._view.confirmChanges(summary, changes, 0, actions, False)):
             fprogress = self._view.getFetchProgress()
             iprogress = self._view.getInstallProgress(self.cache)
             try:

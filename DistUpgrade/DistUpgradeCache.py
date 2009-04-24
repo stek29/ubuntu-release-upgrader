@@ -48,8 +48,8 @@ class CacheExceptionLockingFailed(CacheException):
 class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
-# the initrd space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 12*1024*1024
+# the initrd/vmlinuz/abi space required in /boot for each kernel
+KERNEL_INITRD_SIZE = 15*1024*1024
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:

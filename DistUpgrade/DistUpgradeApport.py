@@ -10,7 +10,7 @@ import errno
 def apport_crash(type, value, tb):
     logging.debug("running apport_crash()")
     try:
-        from apport.python_hook import apport_excepthook
+        from apport_python_hook import apport_excepthook
         from apport.report import Report
     except ImportError, e:
         logging.error("failed to import apport python module, can't report bug: %s" % e)

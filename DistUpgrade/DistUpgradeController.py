@@ -748,8 +748,7 @@ class DistUpgradeController(object):
         # check if we have packages in ReqReinst state that are not
         # downloadable
         logging.debug("doPostInitialUpdate")
-        if not self._partialUpgrade:
-            self.quirks.run("PostInitialUpdate")
+        self.quirks.run("PostInitialUpdate")
         if len(self.cache.reqReinstallPkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
@@ -1035,8 +1034,7 @@ class DistUpgradeController(object):
         # run the quirks handler that does does like things adding
         # missing groups or similar work arounds, only do it on real
         # upgrades
-        if not self._partialUpgrade:
-            self.quirks.run("PostUpgrade")
+        self.quirks.run("PostUpgrade")
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
         now_obsolete = self.cache._getObsoletesPkgs()
@@ -1118,8 +1116,7 @@ class DistUpgradeController(object):
                                    "information. "),
                                    "%s" % e)
         # run stuff after cleanup
-        if not self._partialUpgrade:
-            self.quirks.run("PostCleanup")
+        self.quirks.run("PostCleanup")
         # run the post upgrade scripts that can do fixup like xorg.conf
         # fixes etc - only do on real upgrades
         if not self._partialUpgrade:

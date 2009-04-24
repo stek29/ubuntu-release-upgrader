@@ -68,6 +68,10 @@ class DistUpgradeQuirks(object):
                        packages got installed
         - PostCleanup: run *after* the cleanup (orphaned etc) is finished
         """
+        # we do not run any quirks in partialUpgrade mode
+        if self.controller._partialUpgrade:
+            logging.info("not running quirks in partialUpgrade mode")
+            return
         # first check for matching plugins
         for condition in [
             quirksName,

@@ -522,10 +522,22 @@ class DistUpgradeController(object):
             # we disable breezy cdrom sources to make sure that demoted
             # packages are removed
             if entry.uri.startswith("cdrom:") and entry.dist == self.fromDist:
+                logging.debug("disabled '%s' cdrom entry (dist == fromDist)" % entry)
                 entry.disabled = True
                 continue
-            # ignore cdrom sources otherwise
+            # check if there is actually a lists file for them available
+            # and disable them if not
             elif entry.uri.startswith("cdrom:"):
+                # 
+                listdir = apt_pkg.Config.FindDir("Dir::State::lists")
+                if not os.path.exists("%s/%s%s_%s_%s" % 
+                                      (listdir,
+                                       apt_pkg.URItoFileName(entry.uri),
+                                       "dists",
+                                       entry.dist,
+                                       "Release")):
+                    logging.warning("disabling cdrom source '%s' because it has no  Release file" % entry)
+                    entry.disabled = True
                 continue
 
             # special case for archive.canonical.com that needs to
@@ -1143,6 +1155,7 @@ class DistUpgradeController(object):
         
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
+        logging.debug("abort called")
         if hasattr(self, "sources"):
             self.sources.restoreBackup(self.sources_backup_ext)
         if hasattr(self, "aptcdrom"):

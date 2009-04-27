@@ -3,6 +3,9 @@ update-manager (1:0.120) karmic; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - do not fail in partial upgrades if apport must be
       enabled (LP: #357755)
+    - when rewriting sources.list, check for cdrom entries
+      that do not have associated list files and disable
+      them (LP: #366459)
   * DistUpgrade/xorg_fix_proprietary.py:
     - instead of replacing fglrx->ati and nvidia->nv just
       comment out the driver and let xorg figure it out

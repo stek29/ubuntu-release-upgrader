@@ -587,8 +587,8 @@ class DistUpgradeController(object):
                 validTo = True
                 if (entry.disabled or
                     entry.type == "deb-src" or
-                    entry.uri.startswith("http://security.ubuntu.com") or
-                    entry.uri.startswith("http://archive.canonical.com")):
+                    "/security.ubuntu.com" in entry.uri or
+                    "/archive.canonical.com" in entry.uri):
                     validTo = False
                 if entry.dist in toDists:
                     # so the self.sources.list is already set to the new

@@ -472,8 +472,10 @@ class MyCache(apt.Cache):
             # check which one to use
             driver = nv.selectDriver()
             logging.debug("nv.selectDriver() returned '%s'" % driver)
-            if (self.has_key(driver) and not
-                (self[driver].markedInstall or self[driver].markedUpgrade)):
+            if not self.has_key(driver):
+                logging.warning("no '%s' found" % driver)
+                return False
+            if not (self[driver].markedInstall or self[driver].markedUpgrade):
                 self[driver].markInstall()
                 logging.info("installing %s as suggested by NvidiaDetector" % driver)
                 return True

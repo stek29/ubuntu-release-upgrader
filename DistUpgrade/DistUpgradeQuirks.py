@@ -174,11 +174,21 @@ class DistUpgradeQuirks(object):
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # bug 332328 - make sure pidgin-libnotify is upgraded
-        for pkg in ["pidgin-libnotify", "gwenview"]:
+        for pkg in ["pidgin-libnotify"]:
             if (self.controller.cache.has_key(pkg) and
                 self.controller.cache[pkg].isInstalled and
                 not self.controller.cache[pkg].markedUpgrade):
                 logging.debug("forcing '%s' upgrade" % pkg)
+                self.controller.cache[pkg].markUpgrade()
+        # deal with kipi/gwenview/kphotoalbum
+        for pkg in ["gwenview","digikam"]:
+            if (self.controller.cache.has_key(pkg) and
+                self.controller.cache[pkg].isInstalled and
+                not self.controller.cache[pkg].markedUpgrade):
+                logging.debug("forcing libkipi '%s' upgrade" % pkg)
+                if self.controller.cache.has_key("libkipi0"):
+                    logging.debug("removing  libkipi0)")
+                    self.controller.cache["libkipi0"].markDelete()
                 self.controller.cache[pkg].markUpgrade()
         
     def intrepidPostDistUpgradeCache(self):

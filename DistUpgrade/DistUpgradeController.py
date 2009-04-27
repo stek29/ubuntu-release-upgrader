@@ -1254,8 +1254,17 @@ class DistUpgradeController(object):
 
     def isMirror(self, uri):
         " check if uri is a known mirror "
+        uri = uri.rstrip("/")
         for mirror in self.valid_mirrors:
+            mirror = mirror.rstrip("/")
             if is_mirror(mirror, uri):
+                return True
+            # deal with mirrors like
+            #    deb http://localhost:9977/security.ubuntu.com/ubuntu intrepid-security main restricted
+            # both apt-debtorrent and apt-cacher use this (LP: #365537)
+            mirror_host_part = mirror.split("//")[1]
+            if uri.endswith(mirror_host_part):
+                logging.debug("found apt-cacher/apt-torrent style uri %s" % uri)
                 return True
         return False
 

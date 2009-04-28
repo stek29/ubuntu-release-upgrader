@@ -68,6 +68,10 @@ class DistUpgradeQuirks(object):
                        packages got installed
         - PostCleanup: run *after* the cleanup (orphaned etc) is finished
         """
+        # we do not run any quirks in partialUpgrade mode
+        if self.controller._partialUpgrade:
+            logging.info("not running quirks in partialUpgrade mode")
+            return
         # first check for matching plugins
         for condition in [
             quirksName,
@@ -427,6 +431,7 @@ class DistUpgradeQuirks(object):
         self._applyPatches()
         self._removeOldApportCrashes()
         self._removeBadMaintainerScripts()
+        self._killUpdateNotifier()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
         # hal/NM triggers problem, if the old (intrepid) hal gets
@@ -440,9 +445,24 @@ class DistUpgradeQuirks(object):
             if md5(open(ap).read()).hexdigest() == md5sum:
                 logging.debug("removing bad script '%s'" % ap)
                 os.unlink(ap)
-
-
+    def dapperStartUpgrade(self):
+        # check theme, crux is known to fail badly when upgraded 
+        # from dapper
+        if "DISPLAY" in os.environ and "SUDO_USER" in os.environ:
+            out = subprocess.Popen(["sudo","-u", os.environ["SUDO_USER"],
+                                    "./theme-switch-helper.py", "-g"],
+                                    stdout=subprocess.PIPE).communicate()[0]
+            if "Crux" in out:
+                subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
+                                    "./theme-switch-helper.py", "--defaults"])
+        return True
     # helpers
+    def _killUpdateNotifier(self):
+        "kill update-notifier"
+        # kill update-notifier now to suppress reboot required
+        if os.path.exists("/usr/bin/killall"):
+            logging.debug("killing update-notifier")
+            subprocess.call(["killall","-q","update-notifier"])
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

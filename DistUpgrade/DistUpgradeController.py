@@ -36,7 +36,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable
+from utils import country_mirror, url_downloadable, check_and_fix_xbit
 from string import Template
 
 
@@ -130,6 +130,7 @@ class DistUpgradeController(object):
         os.environ["PYCENTRAL_FORCE_OVERWRITE"] = "1"
         os.environ["PATH"] = "%s:%s" % (os.getcwd()+"/imported",
                                         os.environ["PATH"])
+        check_and_fix_xbit("./imported/invoke-rc.d")
 
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
@@ -521,10 +522,22 @@ class DistUpgradeController(object):
             # we disable breezy cdrom sources to make sure that demoted
             # packages are removed
             if entry.uri.startswith("cdrom:") and entry.dist == self.fromDist:
+                logging.debug("disabled '%s' cdrom entry (dist == fromDist)" % entry)
                 entry.disabled = True
                 continue
-            # ignore cdrom sources otherwise
+            # check if there is actually a lists file for them available
+            # and disable them if not
             elif entry.uri.startswith("cdrom:"):
+                # 
+                listdir = apt_pkg.Config.FindDir("Dir::State::lists")
+                if not os.path.exists("%s/%s%s_%s_%s" % 
+                                      (listdir,
+                                       apt_pkg.URItoFileName(entry.uri),
+                                       "dists",
+                                       entry.dist,
+                                       "Release")):
+                    logging.warning("disabling cdrom source '%s' because it has no  Release file" % entry)
+                    entry.disabled = True
                 continue
 
             # special case for archive.canonical.com that needs to
@@ -574,8 +587,8 @@ class DistUpgradeController(object):
                 validTo = True
                 if (entry.disabled or
                     entry.type == "deb-src" or
-                    entry.uri.startswith("http://security.ubuntu.com") or
-                    entry.uri.startswith("http://archive.canonical.com")):
+                    "/security.ubuntu.com" in entry.uri or
+                    "/archive.canonical.com" in entry.uri):
                     validTo = False
                 if entry.dist in toDists:
                     # so the self.sources.list is already set to the new
@@ -747,8 +760,7 @@ class DistUpgradeController(object):
         # check if we have packages in ReqReinst state that are not
         # downloadable
         logging.debug("doPostInitialUpdate")
-        if not self._partialUpgrade:
-            self.quirks.run("PostInitialUpdate")
+        self.quirks.run("PostInitialUpdate")
         if len(self.cache.reqReinstallPkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fixReqReinst(self._view)
@@ -951,7 +963,7 @@ class DistUpgradeController(object):
         #  env["force_start"] = "1"
         #  subprocess.call(["/etc/init.d/apport","start"], env=env)
         # but hardy and intrepid do not have the force_start yet
-        if not os.path.exists(fname):
+        if not (os.path.exists(fname) and os.path.exists("etc-default-apport")):
             return
         # copy the jaunty version of the conf file in place
         # (this avoids a conffile prompt later)
@@ -1035,8 +1047,7 @@ class DistUpgradeController(object):
         # run the quirks handler that does does like things adding
         # missing groups or similar work arounds, only do it on real
         # upgrades
-        if not self._partialUpgrade:
-            self.quirks.run("PostUpgrade")
+        self.quirks.run("PostUpgrade")
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
         now_obsolete = self.cache._getObsoletesPkgs()
@@ -1099,13 +1110,13 @@ class DistUpgradeController(object):
 
         # get changes
         changes = self.cache.getChanges()
-        logging.debug("The following packages are remove candidates: %s" % " ".join([pkg.name for pkg in changes]))
+        logging.debug("The following packages are marked for removal: %s" % " ".join([pkg.name for pkg in changes]))
         summary = _("Remove obsolete packages?")
         actions = [_("_Keep"), _("_Remove")]
         # FIXME Add an explanation about what obsolete packages are
         #explanation = _("")
-        if len(changes) > 0 and \
-               self._view.confirmChanges(summary, changes, 0, actions, False):
+        if (len(changes) > 0 and 
+            self._view.confirmChanges(summary, changes, 0, actions, False)):
             fprogress = self._view.getFetchProgress()
             iprogress = self._view.getInstallProgress(self.cache)
             try:
@@ -1118,8 +1129,7 @@ class DistUpgradeController(object):
                                    "information. "),
                                    "%s" % e)
         # run stuff after cleanup
-        if not self._partialUpgrade:
-            self.quirks.run("PostCleanup")
+        self.quirks.run("PostCleanup")
         # run the post upgrade scripts that can do fixup like xorg.conf
         # fixes etc - only do on real upgrades
         if not self._partialUpgrade:
@@ -1139,13 +1149,14 @@ class DistUpgradeController(object):
             logging.debug("Running PostInstallScript: '%s'" % script)
             try:
                 # work around kde tmpfile problem where it eats permissions
-                os.chmod(script, 0755)
+                check_and_fix_xbit(script)
                 self._view.getTerminal().call([script], hidden=True)
             except Exception, e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
         
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
+        logging.debug("abort called")
         if hasattr(self, "sources"):
             self.sources.restoreBackup(self.sources_backup_ext)
         if hasattr(self, "aptcdrom"):
@@ -1244,8 +1255,17 @@ class DistUpgradeController(object):
 
     def isMirror(self, uri):
         " check if uri is a known mirror "
+        uri = uri.rstrip("/")
         for mirror in self.valid_mirrors:
+            mirror = mirror.rstrip("/")
             if is_mirror(mirror, uri):
+                return True
+            # deal with mirrors like
+            #    deb http://localhost:9977/security.ubuntu.com/ubuntu intrepid-security main restricted
+            # both apt-debtorrent and apt-cacher use this (LP: #365537)
+            mirror_host_part = mirror.split("//")[1]
+            if uri.endswith(mirror_host_part):
+                logging.debug("found apt-cacher/apt-torrent style uri %s" % uri)
                 return True
         return False
 
@@ -1420,26 +1440,8 @@ class DistUpgradeController(object):
         else:
             args.append("--without-network")
         # work around kde being clever and removing the x bit
-        if not ((S_IMODE(os.stat(sys.argv[0])[ST_MODE]) & S_IXUSR) == S_IXUSR):
-            os.chmod(sys.argv[0], 0755)
+        check_and_fix_xbit(sys.argv[0])
         os.execve(sys.argv[0],args, os.environ)
-
-    def preDoDistUpgrade(self):
-        " this runs right before apt calls out to dpkg "
-        # kill update-notifier now to suppress reboot required
-        if os.path.exists("/usr/bin/killall"):
-            subprocess.call(["killall","-q","update-notifier"])
-        # check theme, crux is known to fail badly when upgraded 
-        # from dapper
-        if (self.fromDist == "dapper" and 
-            "DISPLAY" in os.environ and "SUDO_USER" in os.environ):
-            out = subprocess.Popen(["sudo","-u", os.environ["SUDO_USER"],
-                                    "./theme-switch-helper.py", "-g"],
-                                    stdout=subprocess.PIPE).communicate()[0]
-            if "Crux" in out:
-                subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
-                                    "./theme-switch-helper.py", "--defaults"])
-        return True
 
     # this is the core
     def fullUpgrade(self):
@@ -1545,7 +1547,6 @@ class DistUpgradeController(object):
             self.abort()
 
         # now do the upgrade
-        self.preDoDistUpgrade()
         self._view.setStep(DistUpgradeView.STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():

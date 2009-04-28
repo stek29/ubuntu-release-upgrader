@@ -773,13 +773,15 @@ class UpdateManager(SimpleGladeApp):
           (_("Your distribution is not supported anymore"),
 	   _("You will not get any further security fixes or critical "
              "updates. "
-             "Upgrade to a later version of Ubuntu Linux. See "
-             "http://www.ubuntu.com for more information on "
-             "upgrading."))
+             "Please Upgrade to a later version of Ubuntu Linux."))
     dialog = gtk.MessageDialog(self.window_main, 0, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_CLOSE,"")
     dialog.set_title("")
     dialog.set_markup(msg)
+    button = gtk.LinkButton(_("Upgrade information"))
+    button.set_uri("http://www.ubuntu.com/getubuntu/upgrading")
+    button.show()
+    dialog.get_content_area().pack_end(button)
     dialog.run()
     dialog.destroy()
 

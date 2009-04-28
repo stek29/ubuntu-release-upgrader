@@ -22,8 +22,18 @@
 from gettext import gettext as _
 import locale
 import os
+import os.path
 import apt_pkg
 import urllib2
+from stat import *
+
+def check_and_fix_xbit(path):
+  " check if a given binary has the executable bit and if not, add it"
+  if not os.path.exists(path):
+    return
+  mode = S_IMODE(os.stat(path)[ST_MODE])
+  if not ((mode & S_IXUSR) == S_IXUSR):
+    os.chmod(path, mode | S_IXUSR)
 
 def country_mirror():
   " helper to get the country mirror from the current locale "

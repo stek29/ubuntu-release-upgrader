@@ -1,3 +1,36 @@
+update-manager (1:0.120) karmic; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - do not fail in partial upgrades if apport must be
+      enabled (LP: #357755)
+    - when rewriting sources.list, check for cdrom entries
+      that do not have associated list files and disable
+      them (LP: #366459)
+    - when rewriting sources.list, deal better with apt-cacher
+      apt-torrent style uris (LP: #365537)
+  * DistUpgrade/xorg_fix_proprietary.py:
+    - instead of replacing fglrx->ati and nvidia->nv just
+      comment out the driver and let xorg figure it out
+      with its own magic (LP: #351394)
+    - update tests/ for the change
+  * UpdateManager/UpdateManager.py:
+    - use a gtk link button to point the user to further
+      upgrade information
+  * DistUpgrade/DistUpgradeController.py:
+    - ensure ./imported/invoke-rc.d is executable (LP: #147742)
+  * refactor the quirks handlers and not run them in partial
+    upgrade mode
+  * tests/test_sources_list.py:
+    - update tests for apt-torrent style uris (LP: #365537)
+  * DistUpgrade/DistUpgrade.cfg:
+    - remove edubuntu-desktop from the flavour metapackages, its
+      not its own flavour anymore
+  * help/C/update-manager-C.omf:
+    - point to file:/usr/share/gnome/help/update-manager/C/update-manager.xml
+      (LP: #368140)
+
+ --
+
 update-manager (1:0.111.9) jaunty-proposed; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:

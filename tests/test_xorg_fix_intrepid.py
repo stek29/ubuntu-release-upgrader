@@ -8,8 +8,9 @@ import apt
 import unittest
 import shutil
 import subprocess
+import re
 
-from DistUpgrade.xorg_fix_intrepid import replace_driver_from_xorg, is_multiseat
+from DistUpgrade.xorg_fix_proprietary import comment_out_driver_from_xorg, replace_driver_from_xorg, is_multiseat
 
 class testOriginMatcher(unittest.TestCase):
     ORIG="test-data/xorg.conf.orig"
@@ -31,6 +32,15 @@ class testOriginMatcher(unittest.TestCase):
         self.assert_(is_multiseat(self.ORIG) == False)
         self.assert_(is_multiseat(self.FGLRX) == False)
         self.assert_(is_multiseat(self.MULTISEAT) == True)
+    def testComment(self):
+        shutil.copy(self.FGLRX, self.NEW)
+        comment_out_driver_from_xorg("fglrx",self.NEW)
+        for line in open(self.NEW):
+            if re.match('^#.*Driver.*fglrx',line):
+                logging.info("commented out line found")
+                break
+        else:
+            raise Exception("commenting the line did *not* work")
         
 
 if __name__ == "__main__":

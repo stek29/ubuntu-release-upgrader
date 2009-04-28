@@ -46,8 +46,8 @@ def remove_input_devices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
 
 def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     """
-    this removes the fglrx driver from the xorg.conf and subsitutes
-    it with the ati one
+    this removes old_driver driver from the xorg.conf and subsitutes
+    it with the new_driver
     """
     if not os.path.exists(xorg):
         logging.warning("file %s not found" % xorg)
@@ -66,6 +66,30 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     # write out the new version
     if open(xorg).readlines() != content:
         logging.info("saveing new %s (%s -> %s)" % (xorg, old_driver, new_driver))
+        open(xorg+".xorg_fix","w").write("".join(content))
+        os.rename(xorg+".xorg_fix", xorg)
+
+def comment_out_driver_from_xorg(old_driver, xorg=XORG_CONF):
+    """
+    this comments out a driver from xorg.conf
+    """
+    if not os.path.exists(xorg):
+        logging.warning("file %s not found" % xorg)
+        return
+    content=[]
+    for line in open(xorg):
+        # remove comments
+        s=line.split("#")[0].strip()
+        # check for old_driver driver entry
+        if (s.lower().startswith("driver") and
+            s.endswith('"%s"' % old_driver)):
+            logging.debug("line '%s' found" % line)
+            line='#%s' % line
+            logging.debug("replacing with '%s'" % line)
+        content.append(line)
+    # write out the new version
+    if open(xorg).readlines() != content:
+        logging.info("saveing new %s (commenting %s)" % (xorg, old_driver))
         open(xorg+".xorg_fix","w").write("".join(content))
         os.rename(xorg+".xorg_fix", xorg)
 
@@ -105,12 +129,12 @@ if __name__ == "__main__":
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/fglrx_drv.so") and
         "fglrx" in open(XORG_CONF).read()):
         logging.info("Removing fglrx from %s" % XORG_CONF)
-        replace_driver_from_xorg("fglrx","ati")
+        comment_out_driver_from_xorg("fglrx")
 
     if (not os.path.exists("/usr/lib/xorg/modules/drivers/nvidia_drv.so") and
         "nvidia" in open(XORG_CONF).read()):
         logging.info("Removing nvidia from %s" % XORG_CONF)
-        replace_driver_from_xorg("nvidia","nv")
+        comment_out_driver_from_xorg("nvidia")
 
     # now run the removeInputDevices() if we have a new xserver
     ver=subprocess.Popen(["dpkg-query","-W","-f=${Version}","xserver-xorg-core"], stdout=subprocess.PIPE).communicate()[0]

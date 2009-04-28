@@ -3,7 +3,7 @@
 set -e
 
 # update demotions
-(cd utils && ./demotions.py intrepid jaunty > demotions.cfg)
+(cd utils && ./demotions.py jaunty karmic > demotions.cfg)
 # cleanup
 rm -rf utils/apt/lists
 (cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)

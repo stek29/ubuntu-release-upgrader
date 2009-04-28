@@ -969,7 +969,8 @@ class DistUpgradeController(object):
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
         maxRetries = self.config.getint("Network","MaxRetries")
-        self.quirks.run("StartUpgrade")
+        if not self._partialUpgrade:
+            self.quirks.run("StartUpgrade")
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)

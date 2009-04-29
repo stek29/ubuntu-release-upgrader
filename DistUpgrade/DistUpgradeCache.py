@@ -772,6 +772,7 @@ class MyCache(apt.Cache):
                                      "this as a bug. "))
                         return False
                     logging.debug("markedInstall: '%s' -> '%s'" % (key, self[key].markedInstall))
+                    break
         # check if we actually found one
         if not metaPkgInstalled():
             # FIXME: provide a list

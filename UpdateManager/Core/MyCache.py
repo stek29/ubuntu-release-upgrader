@@ -35,7 +35,7 @@ from gettext import gettext as _
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"
-
+CHANGELOG_ORIGIN = "Ubuntu"
 
 class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def __init__(self, progress, rootdir=None):
@@ -216,9 +216,10 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
         origins = self[name].candidateOrigin
-        if not "Ubuntu" in [o.origin for o in origins]:
-            # FIXME: better string, but we are in string freeze
-            self.all_changes[name] = _("Failed to detect distribution")
+        self.all_changes[name] = _("Changes for the versions:\n%s\n%s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
+        if not CHANGELOG_ORIGIN in [o.origin for o in origins]:
+            self.all_changes[name] += _("This changes is not comming from "
+                                        "a source that supports changelogs\n")
             return
         srcpkg = self[name].sourcePackageName
         srcver_epoch = self[name].candidateVersion.replace(':', '%3A')
@@ -240,7 +241,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                           "of changes. \nPlease "
                           "check your Internet "
                           "connection.")
-        self.all_changes[name] = changelog
+        self.all_changes[name] += changelog
 
 
 

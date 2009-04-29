@@ -201,17 +201,6 @@ class DistUpgradeQuirks(object):
         hardy->intrepid upgrade 
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # check if a key depends of kubuntu-kde4-desktop is installed
-        # and transition in this case as well
-        deps_found = False
-        if self.config.getlist(frompkg,"KeyDependencies"):
-            deps_found = True
-            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
-                deps_found &= (self.controller.cache.has_key(pkg) and
-                               self.controller.cache[pkg].isInstalled)
-        if deps_found:
-            logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
-            self.controller.cache[topkg].markInstall()
         # now check for nvidia and show a warning if needed
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
@@ -425,6 +414,20 @@ class DistUpgradeQuirks(object):
                                "please switch it off and run the upgrade "
                                "again when this is done."))
             self.controller.abort()
+        # check if a key depends of kubuntu-kde4-desktop is installed
+        # and transition in this case as well
+        deps_found = False
+        frompkg = "kubuntu-kde4-desktop"
+        topkg = "kubuntu-desktop"
+        if self.config.getlist(frompkg,"KeyDependencies"):
+            deps_found = True
+            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
+                deps_found &= (self.controller.cache.has_key(pkg) and
+                               self.controller.cache[pkg].isInstalled)
+        if deps_found:
+            logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
+            self.controller.cache[topkg].markInstall()
+            
 
     # run right before the first packages get installed
     def StartUpgrade(self):

@@ -674,7 +674,7 @@ class MyCache(apt.Cache):
                 self[pkgname].candidateVersion == ver and
                 (self[pkgname].markedInstall or
                  self[pkgname].markedUpgrade)):
-                raise SystemError, "Trying to install blacklisted version '%s'" % bv
+                raise SystemError, _("Trying to install blacklisted version '%s'") % bv
         return True
 
     @property

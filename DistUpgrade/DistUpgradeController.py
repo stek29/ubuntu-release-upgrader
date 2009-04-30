@@ -1515,15 +1515,18 @@ class DistUpgradeController(object):
         # then open the cache (again)
         self._view.updateStatus(_("Checking package manager"))
         self.openCache()
-        # now check if we still have some key packages after the update
-        # if not something went seriously wrong
+        # now check if we still have some key packages available/downloadable
+        # after the update - if not something went seriously wrong
+        # (this happend e.g. during the intrepid->jaunty upgrade for some
+        #  users when de.archive.ubuntu.com was overloaded)
         for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
-            if not self.cache.has_key(pkg):
+            if (not self.cache.has_key(pkg) or
+                not self.cache.anyVersionDownloadable(self.cache[pkg])):
                 # FIXME: we could offer to add default source entries here,
                 #        but we need to be careful to not duplicate them
                 #        (i.e. the error here could be something else than
                 #        missing sources entries but network errors etc)
-                logging.error("No '%s' after sources.list rewrite+update" % pkg) 
+                logging.error("No '%s' available/downloadalbe after sources.list rewrite+update" % pkg) 
                 self._view.error(_("Invalid package information"),
                                  _("After your package information was "
                                    "updated the essential package '%s' can "

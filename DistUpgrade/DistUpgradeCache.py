@@ -676,13 +676,31 @@ class MyCache(apt.Cache):
                  self[pkgname].markedUpgrade)):
                 raise SystemError, _("Trying to install blacklisted version '%s'") % bv
         return True
+    
+    def _lookupPkgRecord(self, pkg):
+        """ 
+        helper to make sure that the pkg._records is pointing to the right
+        location - needed because python-apt 0.7.9 dropped the python-apt
+        version but we can not yet use the new version because on upgrade
+        the old version is still installed
+        """ 
+        ver = pkg._pcache._depcache.GetCandidateVer(pkg._pkg)
+        if ver is None:
+            print "No candidate ver: ", pkg.name
+            return False
+        if ver.FileList is None:
+            print "No FileList for: %s " % self._pkg.Name()
+            return False
+        f, index = ver.FileList.pop(0)
+        pkg._pcache._records.Lookup((f, index))
+        return True
 
     @property
     def installedTasks(self):
         tasks = {}
         installed_tasks = set()
         for pkg in self:
-            if not pkg._lookupRecord():
+            if not self._lookupPkgRecord(pkg):
                 logging.debug("no PkgRecord found for '%s', skipping " % pkg.name)
                 continue
             for line in pkg._pcache._records.Record.split("\n"):
@@ -707,7 +725,7 @@ class MyCache(apt.Cache):
         for pkg in self:
             if pkg.markedInstall or pkg.isInstalled:
                 continue
-            pkg._lookupRecord()
+            self._lookupPkgRecord(pkg)
             if not (hasattr(pkg._pcache._records,"Record") and pkg._pcache._records.Record):
                 logging.warning("can not find Record for '%s'" % pkg.name)
                 continue

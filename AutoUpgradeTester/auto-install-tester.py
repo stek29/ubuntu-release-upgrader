@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+from optparse import OptionParser
 import os
 import os.path
 import time
@@ -30,13 +31,19 @@ def do_install_remove(backend, pkgname):
 
 if __name__ == "__main__":
 
+    parser = OptionParser()
+    parser.add_option("-p", "--profile", dest="profile", 
+                      default="profile/ubuntu/DistUpgrade.cfg",
+                      help="write report to FILE")
+
+    (options, args) = parser.parse_args()
+    basedir = os.path.abspath(os.path.dirname(options.profile))
+    aptbasedir = os.path.join(basedir,"auto-install-test")
+    profile = os.path.join(basedir, "DistUpgrade.cfg")
+
     # create backend
     apt_pkg.Config.Set("APT::Architecture","i386")
 
-    # FIXME: hardcoding pathes sucks
-    basedir = "./profile/jaunty-auto-install"
-    aptbasedir = os.path.join(basedir,"auto-install-test")
-    profile = os.path.join(basedir, "DistUpgrade.cfg")
 
     # create apt dirs if needed
     for d in ["etc/apt/",

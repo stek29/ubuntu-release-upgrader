@@ -184,7 +184,7 @@ class DistUpgradeController(object):
                                "application first."));
             sys.exit(1)
         self.cache.partialUpgrade = self._partialUpgrade
-        logging.debug("/openCache()")
+        logging.debug("/openCache(), new cache size %i" % len(self.cache))
 
     def _isRemoteLogin(self):
         " check if we are running form a remote login "

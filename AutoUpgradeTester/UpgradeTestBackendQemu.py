@@ -54,10 +54,6 @@ class PortInUseException(Exception):
 class UpgradeTestBackendQemu(UpgradeTestBackend):
     " qemu/kvm backend - need qemu >= 0.9.0"
 
-    # FIXME: make this part of the config file
-    #qemu_binary = "qemu"
-    qemu_binary = "kvm"
-    
     qemu_options = [
         "-monitor","stdio",
         "-localtime",
@@ -70,6 +66,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         UpgradeTestBackend.__init__(self, profile, basedir)
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
+        # get the kvm binary
+        self.qemu_binary = self.config.getWithDefault("KVM","KVM","kvm")
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("KVM","BaseImage")
         if not os.path.exists(self.baseimage):

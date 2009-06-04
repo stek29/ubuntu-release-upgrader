@@ -32,6 +32,7 @@ import re
 import DistUpgrade.DistUpgradeCache
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 from gettext import gettext as _
+from UpdateList import UpdateOrigin
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"
@@ -93,17 +94,24 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         cand_ver = self._depcache.GetCandidateVer(pkg._pkg)
         # init matcher with candidateVer
         update_origin = matcher[(None,None)]
-        for(verFileIter,index) in cand_ver.FileList:
+        verFileIter = None
+        for (verFileIter,index) in cand_ver.FileList:
             if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
                 indexfile = pkg._pcache._list.FindIndex(verFileIter)
                 if indexfile: # and indexfile.IsTrusted:
                     match = matcher[verFileIter.Archive, verFileIter.Origin]
                     update_origin = match
+                    break
+        else:
+            # add a node for each origin/archive combination
+            if verFileIter and verFileIter.Origin and verFileIter.Archive:
+                matcher[verFileIter.Archive, verFileIter.Origin] = UpdateOrigin(_("Other updates (%s)") % verFileIter.Origin, 0)
+                update_origin = matcher[verFileIter.Archive, verFileIter.Origin]
         # if the candidate comes from a unknown source (e.g. a PPA) skip
         # skip the shadow logic below as it would put e.g. a PPA package
         # in "Recommended updates" when the version in the PPA 
         # is higher than the one in %s-updates
-        if update_origin.importance < 0:
+        if update_origin.importance <= 0:
             return update_origin
         # for known packages, check if we have higher versions that
         # "shadow" this one

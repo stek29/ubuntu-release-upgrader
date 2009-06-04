@@ -24,17 +24,17 @@ from gettext import ngettext
 import os
 import sys
 
+class UpdateOrigin(object):
+  def __init__(self, desc, importance):
+    self.packages = []
+    self.importance = importance
+    self.description = desc
+
 class UpdateList(object):
   """
   class that contains the list of available updates in 
   self.pkgs[origin] where origin is the user readable string
   """
-
-  class UpdateOrigin:
-    def __init__(self, desc, importance):
-      self.packages = []
-      self.importance = importance
-      self.description = desc
 
   def __init__(self, parent):
     # a map of packages under their origin
@@ -64,8 +64,8 @@ class UpdateList(object):
       ]
       matcher = {}
       for (origin, archive, desc, importance) in matcher_templates:
-          matcher[(origin, archive)] = self.UpdateOrigin(desc, importance)
-      matcher[(None,None)] = self.UpdateOrigin(_("Other updates"), -1)
+          matcher[(origin, archive)] = UpdateOrigin(desc, importance)
+      matcher[(None,None)] = UpdateOrigin(_("Other updates"), -1)
       return matcher
 
   def update(self, cache):
@@ -74,7 +74,7 @@ class UpdateList(object):
     # do the upgrade
     self.distUpgradeWouldDelete = cache.saveDistUpgrade()
 
-    dselect_upgrade_origin = self.UpdateOrigin(_("Previous selected"), 1)
+    dselect_upgrade_origin = UpdateOrigin(_("Previous selected"), 1)
 
     # sort by origin
     for pkg in cache:

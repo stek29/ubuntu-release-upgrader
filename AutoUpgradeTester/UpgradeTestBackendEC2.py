@@ -1,7 +1,10 @@
 # ec2 backend
 
 from UpgradeTestBackend import UpgradeTestBackend
-from DistUpgradeConfigParser import DistUpgradeConfig
+
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.sourceslist import SourcesList
+
 from boto.ec2.connection import EC2Connection
 
 import ConfigParser
@@ -16,7 +19,6 @@ import copy
 import atexit
 
 from subprocess import Popen, PIPE
-from sourceslist import SourcesList
 
 # images created with EC2
 

@@ -3,7 +3,7 @@
 # abstraction for non-interactive backends (like chroot, qemu)
 #
 
-from DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 
 import ConfigParser
 import os

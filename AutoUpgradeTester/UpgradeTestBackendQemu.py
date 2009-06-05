@@ -1,7 +1,8 @@
 # qemu backend
 
 from UpgradeTestBackend import UpgradeTestBackend
-from DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.sourceslist import SourcesList
 
 import ConfigParser
 import subprocess
@@ -17,7 +18,6 @@ import crypt
 import tempfile
 import copy
 
-from sourceslist import SourcesList
 
 # images created with http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 #  ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted --rootsize 20G

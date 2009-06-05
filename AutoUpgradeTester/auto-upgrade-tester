@@ -125,6 +125,9 @@ if __name__ == "__main__":
 
     res = True
     try:
+        add_pkgs = []
+        if  options.add_pkgs:
+            add_pkgs = options.add_pkgs.split(",")
         if options.auto:
             print "running in auto-mode"
             base="/usr/share/auto-upgrade-tester/profiles/"
@@ -132,7 +135,7 @@ if __name__ == "__main__":
                 os.dup2(fd1, 1)
                 os.dup2(fd2, 2)
                 print "Testing '%s'" % d
-                res &= testUpgrade(options.backend, base+d, basedir)
+                res &= testUpgrade(options.backend, base+d, add_pkgs)
         elif options.login:
             backend = createBackend(options.backend, options.profile)
             login(backend)
@@ -144,9 +147,6 @@ if __name__ == "__main__":
             backend.genDiff()
         else:
             print "Testing '%s'" % options.profile
-            add_pkgs = []
-            if  options.add_pkgs:
-                add_pkgs = options.add_pkgs.split(",")
             res &= testUpgrade(options.backend, options.profile, add_pkgs, options.to_stdout)
     except Exception, e:
         print "ERROR: exception caught '%s' " % e

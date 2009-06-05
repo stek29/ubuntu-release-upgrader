@@ -62,8 +62,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
 #        "-no-kvm",      # crashes sometimes with kvm HW
         ]
 
-    def __init__(self, profile, basedir):
-        UpgradeTestBackend.__init__(self, profile, basedir)
+    def __init__(self, profile):
+        UpgradeTestBackend.__init__(self, profile)
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
         # get the kvm binary
@@ -399,43 +399,29 @@ iface eth0 inet static
             self.qemu_pid = None
             print "qemu stopped"
 
-    def upgrade(self):
-        print "upgrade()"
-        upgrader_args = ""
-        upgrader_env = ""
-
-        # clean from any leftover pyc files
-        for f in glob.glob(self.basefilesdir+"/DistUpgrade/*.pyc"):
-            os.unlink(f)
-
-        print "Starting for upgrade"
-        self.start()
-
+    def _copyUpgraderFilesFromBzrCheckout(self):
+        " copy upgrader files from a bzr checkout "
         print "copy upgrader into image"
         # copy the upgrade into target+/upgrader-tester/
         files = []
         self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
-        for f in glob.glob("%s/DistUpgrade/*" % self.basefilesdir):
+        for f in glob.glob("%s/*" % self.upgradefilesdir):
             if not os.path.isdir(f):
                 files.append(f)
             elif os.path.islink(f):
                 print "Copying link '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester", recursive=True)
         self._copyToImage(files, "/upgrade-tester")
-        # copy the patches
-        d="%s/DistUpgrade/patches" % self.basefilesdir
-        print "Copying '%s' to image" % d
-        self._copyToImage(d, "/upgrade-tester/", recursive=True)
-        # copy the profile
-        if os.path.exists(self.profile):
-            print "Copying '%s' to image overrides" % self.profile
-            self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
         # and any other cfg files
         for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
             if (os.path.isfile(f) and
                 not os.path.basename(f).startswith("DistUpgrade.cfg")):
                 print "Copying '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester")
+        # copy the patches
+        pd="%s/patches" %  self.upgradefilesdir
+        print "Copying '%s' to image" % pd
+        self._copyToImage(pd, "/upgrade-tester/", recursive=True)
         # and prereq lists
         prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
         if prereq is not None:
@@ -443,9 +429,17 @@ iface eth0 inet static
             print "Copying '%s' to image" % prereq
             self._copyToImage(prereq, "/upgrade-tester")
 
+
+    def _runBzrCheckoutUpgrade(self):
+        # start the upgrader
+        print "running the upgrader now"
+
         # this is to support direct copying of backport udebs into the 
         # qemu image - useful for testing backports without having to
         # push them into the archive
+        upgrader_args = ""
+        upgrader_env = ""
+
         backports = self.config.getlist("NonInteractive", "PreRequistsFiles")
         if backports:
             self._runInImage(["mkdir -p /upgrade-tester/backports"])
@@ -456,7 +450,27 @@ iface eth0 inet static
             upgrader_args = " --have-prerequists"
             upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
 
-        # copy test repo sources.list (if available)
+        ret = self._runInImage(["(cd /upgrade-tester/ ; "
+                                "%s./dist-upgrade.py %s)" % (upgrader_env,
+                                                             upgrader_args)])
+        return ret
+
+    def upgrade(self):
+        print "upgrade()"
+
+        # clean from any leftover pyc files
+        for f in glob.glob("%s/*.pyc" %  self.upgradefilesdir):
+            os.unlink(f)
+
+        print "Starting for upgrade"
+        self.start()
+
+        # copy the profile
+        if os.path.exists(self.profile):
+            print "Copying '%s' to image overrides" % self.profile
+            self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
+
+        # copy test repo sources.list (if needed)
         test_repo = self.config.getWithDefault("NonInteractive","AddRepo","")
         if test_repo:
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
@@ -470,10 +484,14 @@ iface eth0 inet static
                     print "adding %s to mirrors" % entry.uri
                     self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
 
-        # start the upgrader
-        print "running the upgrader now"
-        ret = self._runInImage(["(cd /upgrade-tester/ ; "
-                                "%s./dist-upgrade.py %s)" % (upgrader_env, upgrader_args)])
+        # check if we have a bzr checkout dir to run against or
+        # if we should just run the normal upgrader
+        if os.path.exists(self.upgradefilesdir):
+            self._copyUpgraderFilesFromBzrCheckout()
+            ret = self._runBzrCheckoutUpgrade()
+        else:
+            ret = self._runInImage(["do-release-upgrade","-d",
+                                    "-f","DistUpgradeViewNonInteractive"])
         print "dist-upgrade.py returned: %i" % ret
 
         # copy the result

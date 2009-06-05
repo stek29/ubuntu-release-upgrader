@@ -126,12 +126,13 @@ if __name__ == "__main__":
     res = True
     try:
         if options.auto:
-            # we have some profiles that have DistUpgrade.cfg.dapper
-            for d in glob.glob("./profile/*/DistUpgrade.cfg*"):
+            print "running in auto-mode"
+            base="/usr/share/auto-upgrade-tester/profiles/"
+            for d in os.listdir(base):
                 os.dup2(fd1, 1)
                 os.dup2(fd2, 2)
                 print "Testing '%s'" % d
-                res &= testUpgrade(options.backend, d, basedir)
+                res &= testUpgrade(options.backend, base+d, basedir)
         elif options.login:
             backend = createBackend(options.backend, options.profile)
             login(backend)

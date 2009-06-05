@@ -36,7 +36,7 @@ setup(name='update-manager',
                "do-release-upgrade", 
                "update-manager-hildon",
                "check-new-release",
-               "AutoUpgradeTester/automatic-upgrade-testing",
+               "AutoUpgradeTester/auto-upgrade-tester",
                ],
       data_files=[
                   ('share/update-manager/glade',

@@ -67,7 +67,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
         # get ssh key name
-        self.ssh_key = os.path.abspath(self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
+        self.ssh_key = os.path.abspath(self.config.getWithDefault("NonInteractive","SSHKey","/var/cache/auto-upgrade-tester/ssh-key"))
         if not os.path.exists(self.ssh_key):
             print "Creating key: %s" % self.ssh_key
             subprocess.call(["ssh-keygen","-N","","-f",self.ssh_key])
@@ -78,12 +78,12 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         if not os.path.exists(self.baseimage):
             ret = subprocess.call(["ubuntu-vm-builder","kvm", self.fromDist,
                                    "--kernel-flavour", "generic",
-                                   "--ssh-key", self.ssh_key,
+                                   "--ssh-key", "%s.pub" % self.ssh_key ,
                                    "--components", "main,restricted",
                                    "--rootsize", "80000",
                                    "--arch", "i386"])
             # move the disk in place
-            shutil.move("ubuntu-kvm/disk0.img",self.baseimage)
+            shutil.move("ubuntu-kvm/disk0.qcow2",self.baseimage)
             if ret != 0:
                 raise NoImageFoundException
         # check if we want virtio here and default to yes
@@ -99,7 +99,10 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("KVM","SwapImage"))
         # regular image
-        self.image = os.path.join(self.profiledir, "test-image")
+        profilename = self.config.get("NonInteractive","ProfileName")
+        self.image = os.path.join(os.path.dirname(self.baseimage),
+                                  "test-image.%s" % profilename)
+
         # make ssh login possible (localhost 54321) available
         self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
         self.qemu_options.append("-redir")

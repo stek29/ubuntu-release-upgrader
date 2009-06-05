@@ -66,12 +66,26 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         UpgradeTestBackend.__init__(self, profile)
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
+        # get ssh key name
+        self.ssh_key = os.path.abspath(self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
+        if not os.path.exists(self.ssh_key):
+            print "Creating key: %s" % self.ssh_key
+            subprocess.call(["ssh-keygen","-N","","-f",self.ssh_key])
         # get the kvm binary
         self.qemu_binary = self.config.getWithDefault("KVM","KVM","kvm")
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("KVM","BaseImage")
         if not os.path.exists(self.baseimage):
-            raise NoImageFoundException
+            ret = subprocess.call(["ubuntu-vm-builder","kvm", self.fromDist,
+                                   "--kernel-flavour", "generic",
+                                   "--ssh-key", self.ssh_key,
+                                   "--components", "main,restricted",
+                                   "--rootsize", "80000",
+                                   "--arch", "i386"])
+            # move the disk in place
+            shutil.move("ubuntu-kvm/disk0.img",self.baseimage)
+            if ret != 0:
+                raise NoImageFoundException
         # check if we want virtio here and default to yes
         try:
             virtio = self.config.getboolean("KVM","Virtio")
@@ -87,7 +101,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         # regular image
         self.image = os.path.join(self.profiledir, "test-image")
         # make ssh login possible (localhost 54321) available
-        self.ssh_key = os.path.join(self.profiledir,self.config.getWithDefault("NonInteractive","SSHKey","ssh-key"))
         self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)

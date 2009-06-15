@@ -30,6 +30,7 @@ import sys
 import subprocess
 from subprocess import PIPE, Popen, call
 from hashlib import md5
+from utils import lsmod
 
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
@@ -170,6 +171,15 @@ class DistUpgradeQuirks(object):
         self.gutsyPostDistUpgradeCache()
         self.feistyPostDistUpgradeCache()
         self.edgyPostDistUpgradeCache()
+
+    def karmicPostDistUpgradeCache(self):
+        """ 
+        this function works around quirks in the 
+        jaunty->karmic upgrade calculation
+        """
+        # check if "wl" module is loaded and if so, install
+        # bcmwl-kernel-source
+        self._checkAndInstallBroadcom()
 
     def jauntyPostDistUpgradeCache(self):
         """ 
@@ -460,6 +470,16 @@ class DistUpgradeQuirks(object):
                                     "./theme-switch-helper.py", "--defaults"])
         return True
     # helpers
+    def _checkAndInstallBroadcom(self):
+        """
+        check for the 'wl' kernel module and install bcmwl-kernel-source
+        if the module is loaded
+        """
+        logging.debug("checking for 'wl' module")
+        if "wl" in lsmod():
+            self.controller.cache.markInstall("bcmwl-kernel-source",
+                                              "'wl' module found in lsmod")
+        
     def _killUpdateNotifier(self):
         "kill update-notifier"
         # kill update-notifier now to suppress reboot required

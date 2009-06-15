@@ -25,7 +25,22 @@ import os
 import os.path
 import apt_pkg
 import urllib2
+import subprocess
 from stat import *
+
+def lsmod():
+  " return list of loaded modules "
+  modules=[]
+  p=subprocess.Popen(["/sbin/lsmod"], stdout=subprocess.PIPE)
+  lines=p.communicate()[0].split("\n")
+  # remove heading line: "Modules Size Used by"
+  del lines[0]
+  # add lines to list, skip empty lines
+  for line in lines:
+    if line:
+      modules.append(line.split()[0])
+  return modules
+
 
 def check_and_fix_xbit(path):
   " check if a given binary has the executable bit and if not, add it"

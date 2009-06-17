@@ -87,6 +87,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         # if the new preinst fails, its not yet in /var/lib/dpkg/info
         # so this is inaccurate as well
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+        if not self.config.getboolean("NonInteractive","DebugBrokenScripts"):
+            return
         environ = copy.copy(os.environ)
         environ["PYCENTRAL"] = "debug"
         cmd = []
@@ -173,7 +175,7 @@ class NonInteractiveInstallProgress(InstallProgress):
     def startUpdate(self):
         InstallProgress.startUpdate(self)
         self.last_activity = time.time()
-        progress_log = self.config.getWithDefault("NonInteractive","DpkgProgressLog", False)
+        progress_log = self.config.getboolean("NonInteractive","DpkgProgressLog")
         if progress_log:
             fullpath = os.path.join(self.logdir, "dpkg-progress.%s.log" % self.install_run_number)
             logging.debug("writing dpkg progress log to '%s'" % fullpath)

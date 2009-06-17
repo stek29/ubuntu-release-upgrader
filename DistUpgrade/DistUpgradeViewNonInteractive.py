@@ -50,13 +50,15 @@ class NonInteractiveFetchProgress(FetchProgress):
         
 
 class NonInteractiveInstallProgress(InstallProgress):
-    def __init__(self):
+    def __init__(self, logdir):
         InstallProgress.__init__(self)
         logging.debug("setting up environ for non-interactive use")
         os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         os.environ["RELEASE_UPRADER_NO_APPORT"] = "1"
         self.config = DistUpgradeConfig(".")
+        self.logdir = logdir
+        self.install_run_number = 0
         try:
             if self.config.getboolean("NonInteractive","ForceOverwrite"):
                 apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
@@ -171,7 +173,24 @@ class NonInteractiveInstallProgress(InstallProgress):
     def startUpdate(self):
         InstallProgress.startUpdate(self)
         self.last_activity = time.time()
-          
+        progress_log = self.config.getWithDefault("NonInteractive","DpkgProgressLog", False)
+        if progress_log:
+            fullpath = os.path.join(self.logdir, "dpkg-progress.%s.log" % self.install_run_number)
+            logging.debug("writing dpkg progress log to '%s'" % fullpath)
+            self.dpkg_progress_log = open(fullpath, "w")
+        else:
+            self.dpkg_progress_log(open(os.devnull), "w")
+        self.dpkg_progress_log.write("%s: Start\n" % time.time())
+    def finishUpdate(self):
+        InstallProgress.finishUpdate(self)
+        self.dpkg_progress_log.write("%s: Finished\n" % time.time())
+        self.dpkg_progress_log.close()
+        self.install_run_number += 1
+    def statusChange(self, pkg, percent, status_str):
+        self.dpkg_progress_log.write("%s:%s:%s:%s\n" % (time.time(),
+                                                        percent,
+                                                        pkg,
+                                                        status_str))
     def updateInterface(self):
         if self.statusfd == None:
             return
@@ -243,7 +262,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     def __init__(self, datadir=None, logdir=None):
         self.config = DistUpgradeConfig(".")
         self._fetchProgress = NonInteractiveFetchProgress()
-        self._installProgress = NonInteractiveInstallProgress()
+        self._installProgress = NonInteractiveInstallProgress(logdir)
         self._opProgress = apt.progress.OpProgress()
         sys.__excepthook__ = self.excepthook
     def excepthook(self, type, value, traceback):

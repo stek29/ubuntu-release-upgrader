@@ -124,6 +124,8 @@ def main():
             sys.exit(1)
         sys.exit(0)
 
-    # full upgrade
-    app.run()
+    # full upgrade, return error code for success/failure
+    if app.run():
+        return 0
+    return 1
 

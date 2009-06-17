@@ -1575,10 +1575,11 @@ class DistUpgradeController(object):
         if self._view.confirmRestart():
             p = subprocess.Popen("/sbin/reboot")
             sys.exit(0)
+        return True
         
     def run(self):
         self._view.processEvents()
-        self.fullUpgrade()
+        return self.fullUpgrade()
     
     def doPartialUpgrade(self):
         " partial upgrade mode, useful for repairing "

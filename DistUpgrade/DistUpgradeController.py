@@ -151,6 +151,8 @@ class DistUpgradeController(object):
         # debugging
         #apt_pkg.Config.Set("DPkg::Options::","--debug=0077")
 
+        # apt cron job
+        self._aptCronJobPerms = 0755
 
     def openCache(self, lock=True):
         logging.debug("openCache()")
@@ -900,9 +902,8 @@ class DistUpgradeController(object):
         return res
 
     def _disableAptCronJob(self):
-        self._aptCronJobPerms = 0755
         if os.path.exists("/etc/cron.daily/apt"):
-            self._aptCronJobPerms = os.stat("/etc/cron.daily/apt")[ST_MODE]
+            #self._aptCronJobPerms = os.stat("/etc/cron.daily/apt")[ST_MODE]
             logging.debug("disabling apt cron job (%s)" % oct(self._aptCronJobPerms))
             os.chmod("/etc/cron.daily/apt",0644)
     def _enableAptCronJob(self):

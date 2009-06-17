@@ -178,7 +178,7 @@ class DistUpgradeQuirks(object):
         jaunty->karmic upgrade calculation
         """
         # check if "wl" module is loaded and if so, install
-        # bcmwl-kernel-source
+        # bcmwl-kernel-source (this is needed for lts->lts as well)
         self._checkAndInstallBroadcom()
 
     def jauntyPostDistUpgradeCache(self):

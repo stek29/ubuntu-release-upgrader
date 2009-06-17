@@ -26,9 +26,11 @@ import os
 import sys
 import glob
 import shutil
+import atexit
 from datetime import datetime
 from optparse import OptionParser
 from gettext import gettext as _
+
 
 def do_commandline():
     " setup option parser and parse the commandline "
@@ -114,6 +116,7 @@ def main():
     # create view and app objects
     view = setup_view(options, config, logdir)
     app = DistUpgradeController(view, options, datadir=options.datadir)
+    atexit.register(app._enableAptCronJob)
 
     # partial upgrade only
     if options.partial:

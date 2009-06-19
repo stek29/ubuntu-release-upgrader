@@ -43,6 +43,15 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
             print "Umount '%s'" % mpoint
             os.system("umount %s" % mpoint)
 
+            
+    def login(self):
+        d = self._unpackToTmpdir(self.tarball)
+        print "logging into: '%s'" % d
+        self._runInChroot(d, ["/bin/sh"])
+        print "Cleaning up"
+        if d:
+            shutil.rmtree(d)
+
     def _runInChroot(self, chrootdir, command, cmd_options=[]):
         print "runing: ",command
         print "in: ", chrootdir

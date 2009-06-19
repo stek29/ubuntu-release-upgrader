@@ -40,10 +40,6 @@ class UpgradeTestBackend(object):
         # init the dirs
         assert(profiledir != None)
         profiledir = os.path.normpath(profiledir)
-        self.resultdir = os.path.abspath(os.path.join("results-upgrade-tester",
-                                                      profiledir.split("/")[-1]))
-        if not os.path.exists(self.resultdir):
-            os.makedirs(self.resultdir)
         profile = os.path.join(os.path.abspath(profiledir), "DistUpgrade.cfg")
         self.upgradefilesdir = "./DistUpgrade"
         # init the rest
@@ -53,6 +49,13 @@ class UpgradeTestBackend(object):
                                             name=os.path.basename(profile))
         else:
             raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
+        base_resultdir = self.config.getWithDefault("NonInteractive",
+                                                    "ResultDir",
+                                                    "results-upgrade-tester")
+        self.resultdir = os.path.abspath(
+            os.path.join(base_resultdir, profiledir.split("/")[-1]))
+        if not os.path.exists(self.resultdir):
+            os.makedirs(self.resultdir)
         
         self.fromDist = self.config.get("Sources","From")
         if "http_proxy" in os.environ and not self.config.has_option("NonInteractive","Proxy"):

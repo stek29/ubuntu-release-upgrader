@@ -100,9 +100,8 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
             self.qemu_options.append(self.config.get("KVM","SwapImage"))
         # regular image
         profilename = self.config.get("NonInteractive","ProfileName")
-        self.image = os.path.join(os.path.dirname(self.baseimage),
-                                  "test-image.%s" % profilename)
-
+        imagedir = self.config.get("KVM","ImageDir")
+        self.image = os.path.join(imagedir, "test-image.%s" % profilename)
         # make ssh login possible (localhost 54321) available
         self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
         self.qemu_options.append("-redir")
@@ -140,6 +139,12 @@ class UpgradeTestBackendQemu(UpgradeTestBackend):
         #print cmd
         ret = subprocess.call(cmd)
         return ret
+
+    def login(self):
+        print "login"
+        self.start()
+        ret = self._runInImage(["/bin/sh"])
+        self.stop()
 
     def _copyFromImage(self, fromF, toF):
         cmd = ["scp",

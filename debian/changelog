@@ -8,6 +8,16 @@ update-manager (1:0.123) UNRELEASEDkarmic; urgency=low
     - fix bug in dpkg_progress_log filea
   * AutoUpgradeTester/UpgradeTestBackend.py:
     - import the http_proxy from the environment
+    - make the resultdir configrable and default to
+      /var/cache/auto-upgrade-tester/result/
+  * AutoUpgradeTester/UpgradeTestBackendQemu.py:
+    - make the path for the kvm working images configurable
+      and default to /var/cache/auto-upgrade-tester
+  * AutoUpgradeTester/auto-upgrade-tester:
+    - move login() into the backends
+  * AutoUpgradeTester/auto-upgrade-tester:
+    - allow shorthand profile names like "ubuntu" instead of
+      full pathes
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 19 Jun 2009 17:31:36 +0200
 

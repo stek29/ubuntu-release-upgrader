@@ -55,7 +55,9 @@ class UpgradeTestBackend(object):
             raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
         
         self.fromDist = self.config.get("Sources","From")
-        if self.config.has_option("NonInteractive","Proxy"):
+        if "http_proxy" in os.environ and not self.config.has_option("NonInteractive","Proxy"):
+	    self.config.set("NonInteractive","Proxy", os.environ["http_proxy"])
+        elif self.config.has_option("NonInteractive","Proxy"):
             proxy=self.config.get("NonInteractive","Proxy")
             os.putenv("http_proxy",proxy)
         os.putenv("DEBIAN_FRONTEND","noninteractive")

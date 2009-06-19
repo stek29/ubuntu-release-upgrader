@@ -181,7 +181,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             logging.debug("writing dpkg progress log to '%s'" % fullpath)
             self.dpkg_progress_log = open(fullpath, "w")
         else:
-            self.dpkg_progress_log(open(os.devnull), "w")
+            self.dpkg_progress_log = open(os.devnull, "w")
         self.dpkg_progress_log.write("%s: Start\n" % time.time())
     def finishUpdate(self):
         InstallProgress.finishUpdate(self)

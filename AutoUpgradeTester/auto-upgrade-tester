@@ -23,10 +23,10 @@ from AutoUpgradeTester.UpgradeTestBackend import UpgradeTestBackend
 class OutputThread(multiprocessing.Process):
     def __init__(self, filename):
         multiprocessing.Process.__init__(self)
-        self.file = open(filename)
+        self.file = os.open(filename, os.O_RDONLY)
     def run(self):
         while True:
-            s = self.file.read()
+            s = os.read(self.file, 512)
             if s:
                 print s,
 

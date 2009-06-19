@@ -226,8 +226,8 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         origins = self[name].candidateOrigin
         self.all_changes[name] = _("Changes for the versions:\n%s\n%s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
         if not CHANGELOG_ORIGIN in [o.origin for o in origins]:
-            self.all_changes[name] += _("This changes is not comming from "
-                                        "a source that supports changelogs\n")
+            self.all_changes[name] += _( "This change is not coming from a "
+                                         "source that supports changelogs.")
             return
         srcpkg = self[name].sourcePackageName
         srcver_epoch = self[name].candidateVersion.replace(':', '%3A')

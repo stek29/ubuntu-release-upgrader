@@ -5,7 +5,7 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 
-from DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 from UpgradeTestBackend import UpgradeTestBackend
 
 import tempfile
@@ -24,8 +24,8 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                "/usr/sbin/install-info",
 	       "/sbin/start-stop-daemon"]
 
-    def __init__(self, profile, basefiledir):
-        UpgradeTestBackend.__init__(self, profile, basefiledir)
+    def __init__(self, profile):
+        UpgradeTestBackend.__init__(self, profile)
         self.tarball = None
 
     def _umount(self, chrootdir):
@@ -145,12 +145,13 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         shutil.copy("/etc/hostname","%s/etc/hostanme" % tmpdir)
 
         # copy the stuff from toChroot/
-        os.chdir("toChroot/")
-        for (dirpath, dirnames, filenames) in os.walk("."):
-            for name in filenames:
-                if not os.path.exists(os.path.join(tmpdir,dirpath,name)):
-                    shutil.copy(os.path.join(dirpath,name), os.path.join(tmpdir,dirpath,name))
-        os.chdir("..")
+        if os.path.exists("./toChroot/"):
+            os.chdir("toChroot/")
+            for (dirpath, dirnames, filenames) in os.walk("."):
+                for name in filenames:
+                    if not os.path.exists(os.path.join(tmpdir,dirpath,name)):
+                        shutil.copy(os.path.join(dirpath,name), os.path.join(tmpdir,dirpath,name))
+            os.chdir("..")
 
         # write new sources.list
         if (self.config.has_option("NonInteractive","Components") and
@@ -245,9 +246,10 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         targettmpdir = os.path.join(tmpdir,"tmp","dist-upgrade")
         if not os.path.exists(targettmpdir):
             os.makedirs(targettmpdir)
-        for f in glob.glob("%s/*" % os.path.join(self.basefilesdir,"DistUpgrade")):
+        for f in glob.glob("%s/*" %  self.upgradefilesdir):
             if not os.path.isdir(f):
                 shutil.copy(f, targettmpdir)
+                
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to '%s' " % (self.profile,targettmpdir)
@@ -267,8 +269,13 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
             os.system("mount -t sysfs sysfs /sys")
             os.system("mount -t proc proc /proc")
             os.system("mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc")
-            os.execl("/tmp/dist-upgrade/dist-upgrade.py",
-                     "/tmp/dist-upgrade/dist-upgrade.py")
+            if os.path.exists("/tmp/dist-upgrade/dist-upgrade.py"):
+                os.execl("/tmp/dist-upgrade/dist-upgrade.py",
+                         "/tmp/dist-upgrade/dist-upgrade.py")
+            else:
+                os.execl("/usr/bin/do-release-upgrade",
+                         "/usr/bin/do-release-upgrade","-d",
+                         "-f","DistUpgradeViewNonInteractive")
         else:
             print "Parent: waiting for %s" % pid
             (id, exitstatus) = os.waitpid(pid, 0)

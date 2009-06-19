@@ -13,6 +13,16 @@ def plugins():
             for name in os.listdir('Janitor/plugins')
             if name.endswith('_plugin.py') and name not in disabled]
 
+def profiles():
+    profiles = []
+    # FIXME: ship with a small collection of profiles for now
+    #for d in os.listdir("AutoUpgradeTester/profile/"):
+    for d in ["server","ubuntu"]:
+        base="AutoUpgradeTester/profile/"
+        cfgs = [f for f in glob.glob("%s/%s/*" % (base,d)) if os.path.isfile(f)]
+        profiles.append(("share/auto-upgrade-tester/profiles/"+d,cfgs))
+    return profiles
+
 setup(name='update-manager',
       version='0.56',
       ext_modules=[Extension('UpdateManager/fdsend',
@@ -24,6 +34,7 @@ setup(name='update-manager',
                 'UpdateManagerText',
                 'DistUpgrade',
                 'computerjanitor',
+                'AutoUpgradeTester',
                 ],
       package_dir={
                    '': '.',
@@ -35,6 +46,7 @@ setup(name='update-manager',
                "do-release-upgrade", 
                "update-manager-hildon",
                "check-new-release",
+               "AutoUpgradeTester/auto-upgrade-tester",
                ],
       data_files=[
                   ('share/update-manager/glade',
@@ -53,7 +65,7 @@ setup(name='update-manager',
                     'data/meta-release']),
                   ('share/computerjanitor/plugins',
                    plugins()),
-                  ],
+                  ]+profiles(),
       cmdclass = { "build" : build_extra.build_extra,
                    "build_i18n" :  build_i18n.build_i18n,
                    "build_help" :  build_help.build_help,

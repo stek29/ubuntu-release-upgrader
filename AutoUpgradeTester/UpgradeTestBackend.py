@@ -3,7 +3,7 @@
 # abstraction for non-interactive backends (like chroot, qemu)
 #
 
-from DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 
 import ConfigParser
 import os
@@ -35,12 +35,17 @@ class UpgradeTestBackend(object):
 
     apt_options = ["-y","--allow-unauthenticated"]
 
-    def __init__(self, profile, basefiledir):
+    def __init__(self, profiledir, resultdir=""):
         " init the backend with the given profile "
         # init the dirs
-        assert(profile != None)
-        self.resultdir = os.path.abspath(os.path.join(os.path.dirname(profile),"result"))
-        self.basefilesdir = os.path.abspath(basefiledir)
+        assert(profiledir != None)
+        profiledir = os.path.normpath(profiledir)
+        self.resultdir = os.path.abspath(os.path.join("results-upgrade-tester",
+                                                      profiledir.split("/")[-1]))
+        if not os.path.exists(self.resultdir):
+            os.makedirs(self.resultdir)
+        profile = os.path.join(os.path.abspath(profiledir), "DistUpgrade.cfg")
+        self.upgradefilesdir = "./DistUpgrade"
         # init the rest
         if os.path.exists(profile):
             self.profile = os.path.abspath(profile)
@@ -62,7 +67,6 @@ class UpgradeTestBackend(object):
         # init a sensible environment (to ensure proper operation if
         # run from cron)
         os.environ["PATH"] = "/usr/sbin:/usr/bin:/sbin:/bin"
-
 
     def installPackages(self, pkgs):
         """

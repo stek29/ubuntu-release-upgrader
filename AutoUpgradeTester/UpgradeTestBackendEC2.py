@@ -1,7 +1,11 @@
 # ec2 backend
 
+from UpgradeTestBackendQemu import UpgradeTestBackendQemu
 from UpgradeTestBackend import UpgradeTestBackend
-from DistUpgradeConfigParser import DistUpgradeConfig
+
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.sourceslist import SourcesList
+
 from boto.ec2.connection import EC2Connection
 
 import ConfigParser
@@ -16,10 +20,8 @@ import copy
 import atexit
 
 from subprocess import Popen, PIPE
-from sourceslist import SourcesList
 
 # images created with EC2
-
 class NoCredentialsFoundException(Exception):
     pass
 
@@ -52,11 +54,11 @@ class OptionError(Exception):
 # - sda2: free space (~140G)
 # - sda3: swapspace  (~1G)
 
-class UpgradeTestBackendEC2(UpgradeTestBackend):
+class UpgradeTestBackendEC2(UpgradeTestBackendQemu):
     " EC2 backend "
 
-    def __init__(self, profile, basedir):
-        UpgradeTestBackend.__init__(self, profile, basedir)
+    def __init__(self, profile):
+        UpgradeTestBackend.__init__(self, profile)
         self.profiledir = os.path.abspath(os.path.dirname(profile))
         # ami base name (e.g .ami-44bb5c2d)
         self.ec2ami = self.config.get("EC2","AMI")
@@ -97,59 +99,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         print "_cleanup(): stopping running instance"
         if self.instance:
             self.instance.stop()
-
-    def _copyToImage(self, fromF, toF, recursive=False):
-        cmd = ["scp",
-               "-P",self.ssh_port,
-               "-q","-q", # shut it up
-               "-i",self.ssh_key,
-               "-o", "StrictHostKeyChecking=no",
-               "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts"]
-        if recursive:
-            cmd.append("-r")
-        # we support both single files and lists of files
-        if isinstance(fromF,list):
-            cmd += fromF
-        else:
-            cmd.append(fromF)
-        cmd.append("root@%s:%s" %  (self.ec2hostname, toF))
-        #print cmd
-        ret = subprocess.call(cmd)
-        return ret
-
-    def _copyFromImage(self, fromF, toF):
-        cmd = ["scp",
-               "-P",self.ssh_port,
-               "-q","-q", # shut it up
-               "-i",self.ssh_key,
-               "-o", "StrictHostKeyChecking=no",
-               "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-               "root@%s:%s" %  (self.ec2hostname,fromF),
-               toF
-               ]
-        #print cmd
-        ret = subprocess.call(cmd)
-        return ret
-
-
-    def _runInImage(self, command, **kwargs):
-        ret = subprocess.call(["ssh",
-                               "-l","root",
-                               "-p",self.ssh_port,
-                               self.ec2hostname,
-                               "-q","-q", # shut it up
-                               "-i",self.ssh_key,
-                               "-o", "StrictHostKeyChecking=no",
-                               "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-                               ]+command, **kwargs)
-        return ret
-
-
-    def installPackages(self, pkgs):
-        " install additional pkgs (list) into the vm before the ugprade "
-        self._runInImage(["apt-get","update"])
-        ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "--reinstall", "--allow-unauthenticated", "-y"]+pkgs)
-        return (ret == 0)
 
     def bootstrap(self, force=False):
         print "bootstrap()"
@@ -277,60 +226,21 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         upgrader_env = ""
 
         # clean from any leftover pyc files
-        for f in glob.glob(self.basefilesdir+"/DistUpgrade/*.pyc"):
-            os.unlink(f)
+        for d in self.upgradefilesdirs:        
+            for f in glob.glob("%s/*.pyc" %s):
+                os.unlink(f)
 
         print "Starting for upgrade"
 
         assert(self.ec2instance)
         assert(self.ec2hostname)
 
-        print "copy upgrader into image"
-        # copy the upgrade into target+/upgrader-tester/
-        files = []
-        self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
-        for f in glob.glob("%s/DistUpgrade/*" % self.basefilesdir):
-            if not os.path.isdir(f):
-                files.append(f)
-            elif os.path.islink(f):
-                print "Copying link '%s' to image " % f
-                self._copyToImage(f, "/upgrade-tester", recursive=True)
-        self._copyToImage(files, "/upgrade-tester")
-        # copy the patches
-        d="%s/DistUpgrade/patches" % self.basefilesdir
-        print "Copying '%s' to image" % d
-        self._copyToImage(d, "/upgrade-tester/", recursive=True)
         # copy the profile
         if os.path.exists(self.profile):
-            print "Copying '%s' to image " % self.profile
+            print "Copying '%s' to image overrides" % self.profile
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
-        # and any other cfg files
-        for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
-            if (os.path.isfile(f) and
-                not os.path.basename(f).startswith("DistUpgrade.cfg")):
-                print "Copying '%s' to image " % f
-                self._copyToImage(f, "/upgrade-tester")
-        # and prereq lists
-        prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
-        if prereq is not None:
-            prereq = os.path.join(os.path.dirname(self.profile),prereq)
-            print "Copying '%s' to image" % prereq
-            self._copyToImage(prereq, "/upgrade-tester")
 
-        # this is to support direct copying of backport udebs into the 
-        # qemu image - useful for testing backports without having to
-        # push them into the archive
-        backports = self.config.getlist("NonInteractive", "PreRequistsFiles")
-        if backports:
-            self._runInImage(["mkdir -p /upgrade-tester/backports"])
-            for f in backports:
-                print "Copying %s" % os.path.basename(f)
-                self._copyToImage(f, "/upgrade-tester/backports/")
-                self._runInImage(["(cd /upgrade-tester/backports ; dpkg-deb -x %s . )" % os.path.basename(f)])
-            upgrader_args = " --have-prerequists"
-            upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
-
-        # copy test repo sources.list (if available)
+        # copy test repo sources.list (if needed)
         test_repo = self.config.getWithDefault("NonInteractive","AddRepo","")
         if test_repo:
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
@@ -344,14 +254,16 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
                     print "adding %s to mirrors" % entry.uri
                     self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
 
-
-        # FIXME: run this with nohup *and* create code that querries
-        #        when its finished and detects hangs ?
-        # start the upgrader
-        print "running the upgrader now"
-        ret = self._runInImage(["(cd /upgrade-tester/ ; "
-                                "%s./dist-upgrade.py %s)" % (upgrader_env, upgrader_args)])
+        # check if we have a bzr checkout dir to run against or
+        # if we should just run the normal upgrader
+        if os.path.exists(self.upgradefilesdir):
+            self._copyUpgraderFilesFromBzrCheckout()
+            ret = self._runBzrCheckoutUpgrade()
+        else:
+            ret = self._runInImage(["do-release-upgrade","-d",
+                                    "-f","DistUpgradeViewNonInteractive"])
         print "dist-upgrade.py returned: %i" % ret
+        
 
         # copy the result
         print "coyping the result"

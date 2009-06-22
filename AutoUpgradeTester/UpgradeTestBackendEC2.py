@@ -1,6 +1,6 @@
 # ec2 backend
 
-from UpgradeTestBackendQemu import UpgradeTestBackendQemu
+from UpgradeTestBackendSSH import UpgradeTestBackendSSH
 from UpgradeTestBackend import UpgradeTestBackend
 
 from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
@@ -54,7 +54,7 @@ class OptionError(Exception):
 # - sda2: free space (~140G)
 # - sda3: swapspace  (~1G)
 
-class UpgradeTestBackendEC2(UpgradeTestBackendQemu):
+class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
     " EC2 backend "
 
     def __init__(self, profile):

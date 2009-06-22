@@ -67,13 +67,14 @@ def do_install(cache):
 
 def blacklisted(name):
    global pkg_blacklist
-   if pkg_blacklist is None:
+   if pkg_blacklist is None and os.path.exists("install_blacklist.cfg"):
       pkg_blacklist = set()
       for name in map(string.strip, open("install_blacklist.cfg").readlines()):
          if name and not name.startswith("#"):
             pkg_blacklist.add(name)
       print "blacklist: ", pkg_blacklist
-   for b in pkg_blacklist:
+   if pkg_blacklist:
+      for b in pkg_blacklist:
 	   if re.match(b, name):
               return True
    return False

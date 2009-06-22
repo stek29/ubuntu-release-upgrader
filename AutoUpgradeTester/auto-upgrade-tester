@@ -100,9 +100,6 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
 if __name__ == "__main__":
 
     parser = OptionParser()
-    parser.add_option("-p", "--profile", dest="profile", 
-                      default="ubuntu",
-                      help="the profile dir to use (a file DistUpgrade.cfg is expected there)")
     parser.add_option("--additinoal", "--additional-pkgs", dest="add_pkgs", 
                       default="",
                       help="add additional pkgs before running the upgrade")
@@ -126,7 +123,6 @@ if __name__ == "__main__":
                       help="quiet operation")
     
     (options, args) = parser.parse_args()
-    basedir = os.getcwd()
 
     # save for later
     fd1 = os.dup(1)
@@ -134,38 +130,53 @@ if __name__ == "__main__":
 
     # FIXME: move this to a configuration
     base="/usr/share/auto-upgrade-tester/profiles/"
-    if not "/" in options.profile:
-        options.profile = base + options.profile
+    # check if we have something to do
+    profiles = args
+    if not profiles and not options.auto:
+        print sys.argv[0]
+        print "No profile specified, available default profiles:"
+        print "\n".join(os.listdir(base))
+        print 
+        print "Or use '-a' for 'auto' mode"
+        sys.exit(1)
 
+    # generic
     res = True
-    try:
-        add_pkgs = []
-        if  options.add_pkgs:
-            add_pkgs = options.add_pkgs.split(",")
-        if options.auto:
-            print "running in auto-mode"
-            for d in os.listdir(base):
-                os.dup2(fd1, 1)
-                os.dup2(fd2, 2)
-                print "Testing '%s'" % d
-                res &= testUpgrade(options.backend, base+d, add_pkgs)
-        elif options.login:
-            backend = createBackend(options.backend, options.profile)
-            login(backend)
-	elif options.bootstrap_only:
-            backend = createBackend(options.backend, options.profile)
-	    backend.bootstrap(force=True)
-        elif options.gen_diff:
-            backend = createBackend(options.backend, options.profile)
-            backend.genDiff()
-        else:
-            print "Testing '%s'" % options.profile
-            res &= testUpgrade(options.backend, options.profile, add_pkgs, options.quiet)
-    except Exception, e:
-        print "ERROR: exception caught '%s' " % e
-        import traceback
-        traceback.print_exc()
-        res = False
+    add_pkgs = []
+    if  options.add_pkgs:
+        add_pkgs = options.add_pkgs.split(",")
+    # auto mode
+    if options.auto:
+        print "running in auto-mode"
+        for d in os.listdir(base):
+            os.dup2(fd1, 1)
+            os.dup2(fd2, 2)
+            print "Testing '%s'" % d
+            res &= testUpgrade(options.backend, base+d, add_pkgs)
+            sys.exit(not res)
+    # profile mode, test the given profiles
+    for profile in profiles:
+        if not "/" in profile:
+            profile = base + profile
+        try:
+            if options.login:
+                backend = createBackend(options.backend, profile)
+                login(backend)
+            elif options.bootstrap_only:
+                backend = createBackend(options.backend, profile)
+                backend.bootstrap(force=True)
+            elif options.gen_diff:
+                backend = createBackend(options.backend, profile)
+                backend.genDiff()
+            else:
+                print "Testing '%s'" % profile
+                res &= testUpgrade(options.backend, profile, 
+                                   add_pkgs, options.quiet)
+        except Exception, e:
+            print "ERROR: exception caught '%s' " % e
+            import traceback
+            traceback.print_exc()
+            res = False
 
-    # return error
+    # return exit code
     sys.exit(not res)

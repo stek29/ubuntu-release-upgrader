@@ -17,7 +17,7 @@ import signal
 import crypt
 import tempfile
 import copy
-
+import atexit
 
 # images created with http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 #  ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted --rootsize 20G
@@ -114,6 +114,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         if subprocess.call("netstat -t -l -n |grep 0.0.0.0:%s" % self.ssh_port,
                            shell=True) == 0:
             raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
+
+        # register exit handler to ensure that we quit kvm on exit
+        atexit.register(self.stop)
 
     def genDiff(self):
         """ 
@@ -241,12 +244,12 @@ iface eth0 inet static
 
         # install some useful stuff
         ret = self._runInImage(["apt-get","update"])
-        assert(ret == 0)
+        assert ret == 0
         # FIXME: instead of this retrying (for network errors with 
         #        proxies) we should have a self._runAptInImage() 
         for i in range(3):
             ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
-        assert(ret == 0)
+        assert ret == 0
 
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
@@ -266,8 +269,13 @@ iface eth0 inet static
             if os.path.exists(script):
                 self._runInImage(["mkdir","/upgrade-tester"])
                 self._copyToImage(script, "/upgrade-tester")
-                print "running script: %s" % os.path.join("/tmp",script)
-                self._runInImage([os.path.join("/upgrade-tester",script)])
+                script_name = os.path.basename(script)
+                self._runInImage(["chmod","755",
+                                  os.path.join("/upgrade-tester",script_name)])
+                print "running script: %s" % os.path.join("/tmp",script_name)
+                ret = self._runInImage([os.path.join("/upgrade-tester",script_name)])
+                print "PostBootstrapScript returned: %s" % ret
+                assert ret == 0, "PostBootstrapScript returned non-zero"
             else:
                 print "WARNING: %s not found" % script
 
@@ -276,11 +284,11 @@ iface eth0 inet static
             print "running apt-get upgrade in from dist (after bootstrap)"
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
-            assert(ret == 0, "dist-upgrade returned %s" % ret)
+            assert ret == 0, "dist-upgrade returned %s" % ret
 
         print "Cleaning image"
         ret = self._runInImage(["apt-get","clean"])
-        assert(ret == 0, "apt-get clean returned %s" % ret)
+        assert ret == 0, "apt-get clean returned %s" % ret
 
         # done with the bootstrap
         self.stop()

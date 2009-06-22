@@ -17,7 +17,7 @@ def profiles():
     profiles = []
     # FIXME: ship with a small collection of profiles for now
     #for d in os.listdir("AutoUpgradeTester/profile/"):
-    for d in ["server","ubuntu"]:
+    for d in ["server","ubuntu", "kubuntu"]:
         base="AutoUpgradeTester/profile/"
         cfgs = [f for f in glob.glob("%s/%s/*" % (base,d)) if os.path.isfile(f)]
         profiles.append(("share/auto-upgrade-tester/profiles/"+d,cfgs))

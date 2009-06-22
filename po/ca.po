@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-04-07 08:37+0000\n"
+"POT-Creation-Date: 2009-06-22 10:11+0200\n"
 "PO-Revision-Date: 2008-12-20 15:11+0000\n"
 "Last-Translator: Joan Duran <jodufi@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -19,29 +19,29 @@ msgstr ""
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:233 ../UpdateManager/Core/utils.py:233
+#: ../DistUpgrade/utils.py:258 ../UpdateManager/Core/utils.py:258
 msgid "0 KB"
 msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:236 ../UpdateManager/Core/utils.py:236
+#: ../DistUpgrade/utils.py:261 ../UpdateManager/Core/utils.py:261
 msgid "1 KB"
 msgstr "1 KB"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:239 ../UpdateManager/Core/utils.py:239
+#: ../DistUpgrade/utils.py:264 ../UpdateManager/Core/utils.py:264
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KB"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:242 ../UpdateManager/Core/utils.py:242
+#: ../DistUpgrade/utils.py:267 ../UpdateManager/Core/utils.py:267
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:207 ../DistUpgrade/distro.py:422
+#: ../DistUpgrade/distro.py:208 ../DistUpgrade/distro.py:423
 #, python-format
 msgid "Server for %s"
 msgstr "Servidor per %s"
@@ -49,12 +49,12 @@ msgstr "Servidor per %s"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:225 ../DistUpgrade/distro.py:231
-#: ../DistUpgrade/distro.py:247
+#: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:248
 msgid "Main server"
 msgstr "Servidor principal"
 
-#: ../DistUpgrade/distro.py:251
+#: ../DistUpgrade/distro.py:252
 msgid "Custom servers"
 msgstr "Servidors personalitzats"
 
@@ -119,7 +119,7 @@ msgstr ""
 "aquesta aplicació. Utilitzeu el Synaptic o l'apt-get abans de continuar."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:564
+#: ../DistUpgrade/DistUpgradeCache.py:574
 #, python-format
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade:\n"
@@ -132,27 +132,27 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:574
+#: ../DistUpgrade/DistUpgradeCache.py:584
 msgid "This is most likely a transient problem, please try again later."
 msgstr "Això sembla un problema transitori, torneu a provar-ho més tard."
 
-#: ../DistUpgrade/DistUpgradeCache.py:577
+#: ../DistUpgrade/DistUpgradeCache.py:587
 msgid ""
 "If none of this applies, then please report this bug against the 'update-"
 "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
 "report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:583
-#: ../UpdateManager/UpdateManager.py:727
+#: ../DistUpgrade/DistUpgradeCache.py:593
+#: ../UpdateManager/UpdateManager.py:728
 msgid "Could not calculate the upgrade"
 msgstr "No s'ha pogut calcular l'actualització"
 
-#: ../DistUpgrade/DistUpgradeCache.py:633
+#: ../DistUpgrade/DistUpgradeCache.py:643
 msgid "Error authenticating some packages"
 msgstr "S'ha produït un error en autenticar alguns paquets"
 
-#: ../DistUpgrade/DistUpgradeCache.py:634
+#: ../DistUpgrade/DistUpgradeCache.py:644
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -162,28 +162,33 @@ msgstr ""
 "amb la xarxa. Podeu provar-ho més tard. A continuació es mostra la llista "
 "amb els paquets no autenticats."
 
-#: ../DistUpgrade/DistUpgradeCache.py:654
+#: ../DistUpgrade/DistUpgradeCache.py:664
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:658
+#: ../DistUpgrade/DistUpgradeCache.py:668
 #, python-format
 msgid "The essential package '%s' is marked for removal."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:745
+#: ../DistUpgrade/DistUpgradeCache.py:677
+#, python-format
+msgid "Trying to install blacklisted version '%s'"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:773
 #, python-format
 msgid "Can not mark '%s' for upgrade"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:759
+#: ../DistUpgrade/DistUpgradeCache.py:787
 #, python-format
 msgid "Can't install '%s'"
 msgstr "No s'ha pogut instal·lar «%s»"
 
-#: ../DistUpgrade/DistUpgradeCache.py:760
+#: ../DistUpgrade/DistUpgradeCache.py:788
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -192,11 +197,11 @@ msgstr ""
 "informe d'error. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:768
+#: ../DistUpgrade/DistUpgradeCache.py:797
 msgid "Can't guess meta-package"
 msgstr "No s'ha pogut conjecturar el metapaquet"
 
-#: ../DistUpgrade/DistUpgradeCache.py:769
+#: ../DistUpgrade/DistUpgradeCache.py:798
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -214,11 +219,11 @@ msgstr ""
 msgid "Reading cache"
 msgstr "S'està llegint la memòria cau"
 
-#: ../DistUpgrade/DistUpgradeController.py:178
+#: ../DistUpgrade/DistUpgradeController.py:181
 msgid "Unable to get exclusive lock"
 msgstr "No s'ha pogut obtenir un bloqueig exclusiu"
 
-#: ../DistUpgrade/DistUpgradeController.py:179
+#: ../DistUpgrade/DistUpgradeController.py:182
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -226,22 +231,22 @@ msgstr ""
 "En general això es deu al fet que teniu un altre gestor de paquets en "
 "execució (com l'apt-get o l'aptitude) i cal que abans el tanqueu."
 
-#: ../DistUpgrade/DistUpgradeController.py:232
+#: ../DistUpgrade/DistUpgradeController.py:235
 msgid "Upgrading over remote connection not supported"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:233
+#: ../DistUpgrade/DistUpgradeController.py:236
 msgid ""
 "You are running the upgrade over a remote ssh connection with a frontend "
 "that does not support this. The upgrade will abort now. Please try without "
 "ssh."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:244
+#: ../DistUpgrade/DistUpgradeController.py:247
 msgid "Continue running under SSH?"
 msgstr "Voleu continuar treballant via SSH?"
 
-#: ../DistUpgrade/DistUpgradeController.py:245
+#: ../DistUpgrade/DistUpgradeController.py:248
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -257,11 +262,11 @@ msgstr ""
 "Si continueu, s'iniciarà un dimoni ssh addicional al port «%s».\n"
 "Voleu continuar?"
 
-#: ../DistUpgrade/DistUpgradeController.py:260
+#: ../DistUpgrade/DistUpgradeController.py:263
 msgid "Starting additional sshd"
 msgstr "S'està iniciant un sshd addicional"
 
-#: ../DistUpgrade/DistUpgradeController.py:261
+#: ../DistUpgrade/DistUpgradeController.py:264
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -269,53 +274,53 @@ msgid ""
 "still connect to the additional one.\n"
 msgstr ""
 "Per facilitar la recuperació en cas de fallada, s'iniciarà un sshd "
-"addicional al port «%s». Si alguna cosa anés malament amb el ssh en ús, "
-"podeu fer servir l'addicional.\n"
+"addicional al port «%s». Si alguna cosa anés malament amb el ssh en ús, podeu "
+"fer servir l'addicional.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:331
-#: ../DistUpgrade/DistUpgradeController.py:376
+#: ../DistUpgrade/DistUpgradeController.py:334
+#: ../DistUpgrade/DistUpgradeController.py:379
 msgid "Can not upgrade"
 msgstr "No es pot actualitzar"
 
-#: ../DistUpgrade/DistUpgradeController.py:332
+#: ../DistUpgrade/DistUpgradeController.py:335
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "Aquesta eina no permet l'actualització de «%s» a «%s»."
 
-#: ../DistUpgrade/DistUpgradeController.py:341
+#: ../DistUpgrade/DistUpgradeController.py:344
 msgid "Sandbox setup failed"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:342
+#: ../DistUpgrade/DistUpgradeController.py:345
 msgid "It was not possible to create the sandbox environment."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:348
+#: ../DistUpgrade/DistUpgradeController.py:351
 msgid "Sandbox mode"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:349
+#: ../DistUpgrade/DistUpgradeController.py:352
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:377
+#: ../DistUpgrade/DistUpgradeController.py:380
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"La vostra instal·lació de python està malmesa. Reviseu l'enllaç simbòlic "
-"«/usr/bin/python»."
+"La vostra instal·lació de python està malmesa. Reviseu l'enllaç simbòlic «/"
+"usr/bin/python»."
 
-#: ../DistUpgrade/DistUpgradeController.py:403
+#: ../DistUpgrade/DistUpgradeController.py:406
 msgid "Package 'debsig-verify' is installed"
 msgstr "El paquet 'debsig-verify' està instal·lat"
 
-#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:407
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
@@ -325,11 +330,11 @@ msgstr ""
 "Elimineu-lo amb el synaptic o amb l'ordre 'apt-get remove debsig-verify' i "
 "torneu a executar l'actualització."
 
-#: ../DistUpgrade/DistUpgradeController.py:414
+#: ../DistUpgrade/DistUpgradeController.py:417
 msgid "Include latest updates from the Internet?"
 msgstr "Voleu incloure les darreres actualitzacions d'Internet?"
 
-#: ../DistUpgrade/DistUpgradeController.py:415
+#: ../DistUpgrade/DistUpgradeController.py:418
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -349,16 +354,16 @@ msgstr ""
 "el sistema.\n"
 "Si responeu «no» la xarxa no s'utilitzarà per a res."
 
-#: ../DistUpgrade/DistUpgradeController.py:626
+#: ../DistUpgrade/DistUpgradeController.py:641
 #, python-format
 msgid "disabled on upgrade to %s"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:652
+#: ../DistUpgrade/DistUpgradeController.py:667
 msgid "No valid mirror found"
 msgstr "No s'ha trobat cap rèplica vàlida"
 
-#: ../DistUpgrade/DistUpgradeController.py:653
+#: ../DistUpgrade/DistUpgradeController.py:668
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -378,11 +383,11 @@ msgstr ""
 "Si trieu l'opció «No», es cancel·larà l'actualització."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:673
+#: ../DistUpgrade/DistUpgradeController.py:688
 msgid "Generate default sources?"
 msgstr "Voleu generar les fonts per defecte?"
 
-#: ../DistUpgrade/DistUpgradeController.py:674
+#: ../DistUpgrade/DistUpgradeController.py:689
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -396,11 +401,11 @@ msgstr ""
 "S'haurien d'afegir les entrades per defecte per a «%s»? Si seleccioneu «No», "
 "es cancel·larà l'actualització."
 
-#: ../DistUpgrade/DistUpgradeController.py:709
+#: ../DistUpgrade/DistUpgradeController.py:724
 msgid "Repository information invalid"
 msgstr "La informació dels dipòsits no és vàlida"
 
-#: ../DistUpgrade/DistUpgradeController.py:710
+#: ../DistUpgrade/DistUpgradeController.py:725
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -408,11 +413,11 @@ msgstr ""
 "S'ha produït un error en actualitzar la informació dels dipòsits. Hauríeu "
 "d'informar-ne."
 
-#: ../DistUpgrade/DistUpgradeController.py:716
+#: ../DistUpgrade/DistUpgradeController.py:731
 msgid "Third party sources disabled"
 msgstr "S'han desactivat les fonts de tercers"
 
-#: ../DistUpgrade/DistUpgradeController.py:717
+#: ../DistUpgrade/DistUpgradeController.py:732
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -422,13 +427,13 @@ msgstr ""
 "l'actualització des de l'eina «software-properties» en el vostre gestor de "
 "paquets."
 
-#: ../DistUpgrade/DistUpgradeController.py:758
+#: ../DistUpgrade/DistUpgradeController.py:772
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Paquet en estat inconsistent"
 msgstr[1] "Paquets en estat inconsistent"
 
-#: ../DistUpgrade/DistUpgradeController.py:761
+#: ../DistUpgrade/DistUpgradeController.py:775
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -441,11 +446,11 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeController.py:809
+#: ../DistUpgrade/DistUpgradeController.py:823
 msgid "Error during update"
 msgstr "S'ha produït un error en l'actualització"
 
-#: ../DistUpgrade/DistUpgradeController.py:810
+#: ../DistUpgrade/DistUpgradeController.py:824
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -455,12 +460,12 @@ msgstr ""
 "torneu a intentar-ho."
 
 #. print "on_button_install_clicked"
-#: ../DistUpgrade/DistUpgradeController.py:819
+#: ../DistUpgrade/DistUpgradeController.py:833
 #: ../UpdateManager/UpdateManager.py:563
 msgid "Not enough free disk space"
 msgstr "No disposeu de suficient espai al disc"
 
-#: ../DistUpgrade/DistUpgradeController.py:820
+#: ../DistUpgrade/DistUpgradeController.py:834
 #, python-format
 msgid ""
 "The upgrade is now aborted. The upgrade needs a total of %s free space on "
@@ -469,11 +474,11 @@ msgid ""
 "'sudo apt-get clean'."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:860
+#: ../DistUpgrade/DistUpgradeController.py:874
 msgid "Support for some applications ended"
 msgstr "S'ha deixat de donar suport a algunes aplicacions"
 
-#: ../DistUpgrade/DistUpgradeController.py:861
+#: ../DistUpgrade/DistUpgradeController.py:875
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -489,22 +494,22 @@ msgstr ""
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:870
-#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:884
+#: ../DistUpgrade/DistUpgradeController.py:1543
 msgid "Calculating the changes"
 msgstr "S'estan calculant els canvis"
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:885
+#: ../DistUpgrade/DistUpgradeController.py:899
 msgid "Do you want to start the upgrade?"
 msgstr "Voleu iniciar l'actualització?"
 
-#: ../DistUpgrade/DistUpgradeController.py:937
-#: ../DistUpgrade/DistUpgradeController.py:1016
+#: ../DistUpgrade/DistUpgradeController.py:950
+#: ../DistUpgrade/DistUpgradeController.py:1037
 msgid "Could not download the upgrades"
 msgstr "No s'han pogut baixar les actualitzacions"
 
-#: ../DistUpgrade/DistUpgradeController.py:938
+#: ../DistUpgrade/DistUpgradeController.py:951
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
@@ -512,30 +517,30 @@ msgstr ""
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
-#: ../DistUpgrade/DistUpgradeController.py:984
-#: ../DistUpgrade/DistUpgradeController.py:1107
+#: ../DistUpgrade/DistUpgradeController.py:1004
+#: ../DistUpgrade/DistUpgradeController.py:1127
 msgid "Error during commit"
 msgstr "S'ha produït un error durant l'enviament"
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:986
-#: ../DistUpgrade/DistUpgradeController.py:1146
+#: ../DistUpgrade/DistUpgradeController.py:1006
+#: ../DistUpgrade/DistUpgradeController.py:1166
 msgid "Restoring original system state"
 msgstr "S'està restaurant l'estat original del sistema"
 
-#: ../DistUpgrade/DistUpgradeController.py:987
-#: ../DistUpgrade/DistUpgradeController.py:1000
+#: ../DistUpgrade/DistUpgradeController.py:1007
+#: ../DistUpgrade/DistUpgradeController.py:1021
 msgid "Could not install the upgrades"
 msgstr "No s'han pogut instal·lar les actualitzacions"
 
 #. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:991
+#: ../DistUpgrade/DistUpgradeController.py:1012
 msgid ""
 "The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:996
+#: ../DistUpgrade/DistUpgradeController.py:1017
 #, python-format
 msgid ""
 "\n"
@@ -545,26 +550,26 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1017
+#: ../DistUpgrade/DistUpgradeController.py:1038
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1095
+#: ../DistUpgrade/DistUpgradeController.py:1115
 msgid "Remove obsolete packages?"
 msgstr "Voleu suprimir els paquets obsolets?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1096
+#: ../DistUpgrade/DistUpgradeController.py:1116
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Manté"
 
-#: ../DistUpgrade/DistUpgradeController.py:1096
+#: ../DistUpgrade/DistUpgradeController.py:1116
 msgid "_Remove"
 msgstr "Sup_rimeix"
 
-#: ../DistUpgrade/DistUpgradeController.py:1108
+#: ../DistUpgrade/DistUpgradeController.py:1128
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -574,38 +579,38 @@ msgstr ""
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1184
+#: ../DistUpgrade/DistUpgradeController.py:1204
 msgid "Required depends is not installed"
 msgstr "Les dependències requerides no estan instal·lades"
 
-#: ../DistUpgrade/DistUpgradeController.py:1185
+#: ../DistUpgrade/DistUpgradeController.py:1205
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "La dependència requerida «%s» no està instal·lada. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1439
-#: ../DistUpgrade/DistUpgradeController.py:1506
+#: ../DistUpgrade/DistUpgradeController.py:1450
+#: ../DistUpgrade/DistUpgradeController.py:1517
 msgid "Checking package manager"
 msgstr "S'està comprovant el gestor de paquets"
 
-#: ../DistUpgrade/DistUpgradeController.py:1444
+#: ../DistUpgrade/DistUpgradeController.py:1455
 msgid "Preparing the upgrade failed"
 msgstr "S'ha produït un error en la preparació de l'actualització"
 
-#: ../DistUpgrade/DistUpgradeController.py:1445
+#: ../DistUpgrade/DistUpgradeController.py:1456
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bug report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1461
+#: ../DistUpgrade/DistUpgradeController.py:1472
 msgid "Getting upgrade prerequisites failed"
 msgstr "S'ha produït un error en obtenir els prerequisits de l'actualització"
 
-#: ../DistUpgrade/DistUpgradeController.py:1462
+#: ../DistUpgrade/DistUpgradeController.py:1473
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -614,15 +619,15 @@ msgid ""
 "the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1492
+#: ../DistUpgrade/DistUpgradeController.py:1503
 msgid "Updating repository information"
 msgstr "S'està actualitzant la informació dels dipòsits"
 
-#: ../DistUpgrade/DistUpgradeController.py:1517
+#: ../DistUpgrade/DistUpgradeController.py:1531
 msgid "Invalid package information"
 msgstr "La informació dels paquets no és valida"
 
-#: ../DistUpgrade/DistUpgradeController.py:1518
+#: ../DistUpgrade/DistUpgradeController.py:1532
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -632,46 +637,46 @@ msgid ""
 "report."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1535
-#: ../DistUpgrade/DistUpgradeController.py:1583
+#: ../DistUpgrade/DistUpgradeController.py:1549
+#: ../DistUpgrade/DistUpgradeController.py:1597
 msgid "Fetching"
 msgstr "S'està recollint"
 
-#: ../DistUpgrade/DistUpgradeController.py:1542
-#: ../DistUpgrade/DistUpgradeController.py:1587
+#: ../DistUpgrade/DistUpgradeController.py:1555
+#: ../DistUpgrade/DistUpgradeController.py:1601
 msgid "Upgrading"
 msgstr "S'està actualitzant"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1547
-#: ../DistUpgrade/DistUpgradeController.py:1589
-#: ../DistUpgrade/DistUpgradeController.py:1596
-#: ../DistUpgrade/DistUpgradeController.py:1601
+#: ../DistUpgrade/DistUpgradeController.py:1560
+#: ../DistUpgrade/DistUpgradeController.py:1603
+#: ../DistUpgrade/DistUpgradeController.py:1610
+#: ../DistUpgrade/DistUpgradeController.py:1615
 msgid "Upgrade complete"
 msgstr "S'ha completat l'actualització"
 
-#: ../DistUpgrade/DistUpgradeController.py:1548
-#: ../DistUpgrade/DistUpgradeController.py:1590
-#: ../DistUpgrade/DistUpgradeController.py:1597
+#: ../DistUpgrade/DistUpgradeController.py:1561
+#: ../DistUpgrade/DistUpgradeController.py:1604
+#: ../DistUpgrade/DistUpgradeController.py:1611
 msgid ""
 "The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1555
+#: ../DistUpgrade/DistUpgradeController.py:1568
 msgid "Searching for obsolete software"
 msgstr "S'està cercant programari obsolet"
 
-#: ../DistUpgrade/DistUpgradeController.py:1560
+#: ../DistUpgrade/DistUpgradeController.py:1573
 msgid "System upgrade is complete."
 msgstr "S'ha completat l'actualització del sistema"
 
-#: ../DistUpgrade/DistUpgradeController.py:1602
+#: ../DistUpgrade/DistUpgradeController.py:1616
 msgid "The partial upgrade was completed."
 msgstr "L'actualització parcial s'ha completat."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:166
-#: ../DistUpgrade/DistUpgradeQuirks.py:235
-#: ../DistUpgrade/DistUpgradeQuirks.py:260
+#: ../DistUpgrade/DistUpgradeQuirks.py:144
+#: ../DistUpgrade/DistUpgradeQuirks.py:221
+#: ../DistUpgrade/DistUpgradeQuirks.py:246
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -679,7 +684,7 @@ msgstr ""
 "L'actualització pot reduir els efectes d'escriptori i el rendiment en jocs i "
 "altres programes que facin un ús exhaustiu de processament gràfic."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:170
+#: ../DistUpgrade/DistUpgradeQuirks.py:148
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
 "of this driver is available that works with your hardware in Ubuntu 9.04.\n"
@@ -687,8 +692,8 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:239
-#: ../DistUpgrade/DistUpgradeQuirks.py:264
+#: ../DistUpgrade/DistUpgradeQuirks.py:225
+#: ../DistUpgrade/DistUpgradeQuirks.py:250
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
@@ -702,27 +707,27 @@ msgstr ""
 "\n"
 "Voleu continuar?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:434
+#: ../DistUpgrade/DistUpgradeQuirks.py:420
 msgid "evms in use"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:435
+#: ../DistUpgrade/DistUpgradeQuirks.py:421
 msgid ""
 "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
 "software is no longer supported, please switch it off and run the upgrade "
 "again when this is done."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeMain.py:38
+#: ../DistUpgrade/DistUpgradeMain.py:40
 msgid "Sandbox upgrade using aufs"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeMain.py:40
+#: ../DistUpgrade/DistUpgradeMain.py:42
 msgid "Use the given path to search for a cdrom with upgradable packages"
 msgstr ""
 "Utilitza el camí especificat per cercar un CDROM amb paquets actualitzables"
 
-#: ../DistUpgrade/DistUpgradeMain.py:46
+#: ../DistUpgrade/DistUpgradeMain.py:48
 msgid ""
 "Use frontend. Currently available: \n"
 "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
@@ -730,16 +735,16 @@ msgstr ""
 "Utilitzeu un frontal. Actualment es disposa de: \n"
 "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 
-#: ../DistUpgrade/DistUpgradeMain.py:49
+#: ../DistUpgrade/DistUpgradeMain.py:51
 msgid "*DEPRECATED* this option will be ignore"
 msgstr "*EN DESÚS* aquesta opció serà ignorada"
 
-#: ../DistUpgrade/DistUpgradeMain.py:52
+#: ../DistUpgrade/DistUpgradeMain.py:54
 msgid "Perform a partial upgrade only (no sources.list rewriting)"
 msgstr ""
 "Realitza només una actualització parcial (sense reescriure el sources.list)"
 
-#: ../DistUpgrade/DistUpgradeMain.py:54
+#: ../DistUpgrade/DistUpgradeMain.py:56
 msgid "Set datadir"
 msgstr "Estableix el datadir"
 
@@ -836,8 +841,8 @@ msgstr "S'ha produït un error greu"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:418
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
@@ -867,19 +872,19 @@ msgid "<b>Downgrade %s</b>"
 msgstr "<b>Torna a una versió anterior de %s</b>"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:586
-#: ../DistUpgrade/DistUpgradeViewKDE.py:750
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #, python-format
 msgid "Remove %s"
 msgstr "Suprimeix %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:591
-#: ../DistUpgrade/DistUpgradeViewKDE.py:752
+#: ../DistUpgrade/DistUpgradeViewKDE.py:755
 #, python-format
 msgid "Install %s"
 msgstr "Instal·la %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:593
-#: ../DistUpgrade/DistUpgradeViewKDE.py:754
+#: ../DistUpgrade/DistUpgradeViewKDE.py:757
 #, python-format
 msgid "Upgrade %s"
 msgstr "Actualitza %s"
@@ -898,56 +903,55 @@ msgstr "Mostra les diferències >>>"
 msgid "<<< Hide Difference"
 msgstr "<<< Oculta les diferències"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:531
+#: ../DistUpgrade/DistUpgradeViewKDE.py:534
 msgid "Error"
 msgstr "Error"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:543
+#: ../DistUpgrade/DistUpgradeViewKDE.py:546
 msgid "&Cancel"
 msgstr "&Cancel·la"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:545
-#: ../DistUpgrade/DistUpgradeViewKDE.py:782
+#: ../DistUpgrade/DistUpgradeViewKDE.py:548
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 msgid "&Close"
 msgstr "&Tanca"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:591
+#: ../DistUpgrade/DistUpgradeViewKDE.py:594
 msgid "Show Terminal >>>"
 msgstr "Mostra el terminal >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:594
+#: ../DistUpgrade/DistUpgradeViewKDE.py:597
 msgid "<<< Hide Terminal"
 msgstr "<<< Oculta el terminal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:674
+#: ../DistUpgrade/DistUpgradeViewKDE.py:677
 msgid "Information"
 msgstr "Informació"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:724
-#: ../DistUpgrade/DistUpgradeViewKDE.py:765
+#: ../DistUpgrade/DistUpgradeViewKDE.py:727
 #: ../DistUpgrade/DistUpgradeViewKDE.py:768
+#: ../DistUpgrade/DistUpgradeViewKDE.py:771
 #: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
 msgstr "Detalls"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:778
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #: ../DistUpgrade/DistUpgradeViewText.py:225
 msgid "Restart required"
 msgstr "Cal que reinicieu el sistema"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:778
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
-"<b><big>Reinicieu el sistema per a completar l'actualització</big></b>"
+msgstr "<b><big>Reinicieu el sistema per a completar l'actualització</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:781
+#: ../DistUpgrade/DistUpgradeViewKDE.py:784
 #: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
 msgstr "_Reinicia"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:793
+#: ../DistUpgrade/DistUpgradeViewKDE.py:796
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -959,7 +963,7 @@ msgstr ""
 "El sistema pot quedar inusable si cancel·leu l'actualització. Es molt "
 "recomanable continuar amb l'actualització."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:797
+#: ../DistUpgrade/DistUpgradeViewKDE.py:800
 msgid "Cancel Upgrade?"
 msgstr "Voleu cancel·lar l'actualització?"
 
@@ -995,10 +999,10 @@ msgstr[1] "%li segons"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:77
 #, python-format
@@ -1009,10 +1013,10 @@ msgstr ""
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:92
 #, python-format
@@ -1034,50 +1038,50 @@ msgstr ""
 msgid "This download will take about %s with your connection. "
 msgstr "La baixada trigarà aproximadament %s amb la vostra connexió. "
 
-#: ../DistUpgrade/DistUpgradeView.py:207 ../DistUpgrade/DistUpgrade.glade.h:14
+#: ../DistUpgrade/DistUpgradeView.py:182 ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Preparing to upgrade"
 msgstr "S'està preparant l'actualització"
 
-#: ../DistUpgrade/DistUpgradeView.py:208
+#: ../DistUpgrade/DistUpgradeView.py:183
 msgid "Getting new software channels"
 msgstr "S'estan obtenint canals de programari nous"
 
-#: ../DistUpgrade/DistUpgradeView.py:209 ../DistUpgrade/DistUpgrade.glade.h:12
+#: ../DistUpgrade/DistUpgradeView.py:184 ../DistUpgrade/DistUpgrade.glade.h:12
 msgid "Getting new packages"
 msgstr "S'estan obtenint els paquets nous"
 
-#: ../DistUpgrade/DistUpgradeView.py:210 ../DistUpgrade/DistUpgrade.glade.h:13
+#: ../DistUpgrade/DistUpgradeView.py:185 ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Installing the upgrades"
 msgstr "S'estan instal·lant les actualitzacions"
 
-#: ../DistUpgrade/DistUpgradeView.py:211 ../DistUpgrade/DistUpgrade.glade.h:8
+#: ../DistUpgrade/DistUpgradeView.py:186 ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
 msgstr "S'està netejant"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:284
+#: ../DistUpgrade/DistUpgradeView.py:259
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "Se suprimirà %d paquet"
 msgstr[1] "Se suprimiran %d paquets"
 
-#: ../DistUpgrade/DistUpgradeView.py:289
+#: ../DistUpgrade/DistUpgradeView.py:264
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "S'instal·larà %d paquet nou"
 msgstr[1] "S'instal·laran %d paquets nous"
 
-#: ../DistUpgrade/DistUpgradeView.py:295
+#: ../DistUpgrade/DistUpgradeView.py:270
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "S'actualitzarà %d paquet"
 msgstr[1] "S'actualitzaran %d paquets"
 
-#: ../DistUpgrade/DistUpgradeView.py:300
+#: ../DistUpgrade/DistUpgradeView.py:275
 #, python-format
 msgid ""
 "\n"
@@ -1088,7 +1092,7 @@ msgstr ""
 "\n"
 "Heu de baixar un total de %s. "
 
-#: ../DistUpgrade/DistUpgradeView.py:304
+#: ../DistUpgrade/DistUpgradeView.py:279
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -1097,11 +1101,11 @@ msgstr ""
 "cancel·lar aquesta última un cop hagi començat."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:456
+#: ../DistUpgrade/DistUpgradeView.py:285 ../UpdateManager/UpdateManager.py:456
 msgid "Your system is up-to-date"
 msgstr "El vostre sistema està actualitzat"
 
-#: ../DistUpgrade/DistUpgradeView.py:311
+#: ../DistUpgrade/DistUpgradeView.py:286
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
@@ -1109,11 +1113,11 @@ msgstr ""
 "No hi ha actualitzacions disponibles per al vostre sistema. L'actualització "
 "es cancel·larà"
 
-#: ../DistUpgrade/DistUpgradeView.py:324
+#: ../DistUpgrade/DistUpgradeView.py:299
 msgid "Reboot required"
 msgstr "Cal que reinicieu el sistema"
 
-#: ../DistUpgrade/DistUpgradeView.py:325
+#: ../DistUpgrade/DistUpgradeView.py:300
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
@@ -1222,9 +1226,9 @@ msgstr "El missatge d'error és «%s»"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:108
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 
@@ -1314,8 +1318,9 @@ msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Voleu iniciar l'actualització?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-msgid "<b><big>Upgrading Ubuntu to version 9.04</big></b>"
-msgstr ""
+#, fuzzy
+msgid "<b><big>Upgrading Ubuntu to version 9.10</big></b>"
+msgstr "<b><big>S'està actualitzant l'Ubuntu a la versió 8.10</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
@@ -1530,16 +1535,16 @@ msgid ""
 "temporary packages of former installations using 'sudo apt-get clean'."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:603
+#: ../UpdateManager/UpdateManager.py:604
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "S'està llegint la informació dels paquets"
 
-#: ../UpdateManager/UpdateManager.py:705
+#: ../UpdateManager/UpdateManager.py:706
 msgid "Could not initialize the package information"
 msgstr "No es pot inicialitzar la informació dels paquets"
 
-#: ../UpdateManager/UpdateManager.py:706
+#: ../UpdateManager/UpdateManager.py:707
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1552,7 +1557,7 @@ msgstr ""
 "\n"
 "Informeu d'aquest error de l'update-manager i incloeu el missatge següent:\n"
 
-#: ../UpdateManager/UpdateManager.py:728
+#: ../UpdateManager/UpdateManager.py:729
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1564,54 +1569,59 @@ msgstr ""
 "Informeu d'aquest error de l'update-manager i incloeu el missatge següent:"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:753
+#: ../UpdateManager/UpdateManager.py:754
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Mida: %s)"
 
-#: ../UpdateManager/UpdateManager.py:755
+#: ../UpdateManager/UpdateManager.py:756
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "De la versió %(old_version)s a la %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:759
+#: ../UpdateManager/UpdateManager.py:760
 #, python-format
 msgid "Version %s"
 msgstr "Versió %s"
 
-#: ../UpdateManager/UpdateManager.py:772
+#: ../UpdateManager/UpdateManager.py:773
 msgid "Your distribution is not supported anymore"
 msgstr "La vostra distribució ja no es mantindrà més"
 
-#: ../UpdateManager/UpdateManager.py:773
+#: ../UpdateManager/UpdateManager.py:774
+#, fuzzy
 msgid ""
-"You will not get any further security fixes or critical updates. Upgrade to "
-"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
-"information on upgrading."
+"You will not get any further security fixes or critical updates. Please "
+"Upgrade to a later version of Ubuntu Linux."
 msgstr ""
 "Ja no rebreu actualitzacions de seguretat o crítiques. Actualitzeu el vostre "
 "sistema a la darrera versió de l'Ubuntu. Vegeu http://www.ubuntu.com per a "
 "més informació."
 
-#: ../UpdateManager/UpdateManager.py:805
+#: ../UpdateManager/UpdateManager.py:781
+#, fuzzy
+msgid "Upgrade information"
+msgstr "S'està actualitzant la informació dels dipòsits"
+
+#: ../UpdateManager/UpdateManager.py:808
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr "<b>Ja està disponible la nova distribució «%s»</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:844
+#: ../UpdateManager/UpdateManager.py:847
 msgid "Software index is broken"
 msgstr "L'índex de programari està trencat"
 
-#: ../UpdateManager/UpdateManager.py:845
+#: ../UpdateManager/UpdateManager.py:848
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
 msgstr ""
 "No és possible instal·lar o desinstal·lar programari. Per a arreglar-ho, "
-"utilitzeu el gestor de paquets «Synaptic» o executeu «sudo apt-get install -"
-"f» en un terminal."
+"utilitzeu el gestor de paquets «Synaptic» o executeu «sudo apt-get install -f» "
+"en un terminal."
 
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:136
 msgid "Downloading Package Information"
@@ -1666,12 +1676,25 @@ msgstr ""
 msgid "Downloading changelog"
 msgstr ""
 
-#. FIXME: better string, but we are in string freeze
-#: ../UpdateManager/Core/MyCache.py:221 ../UpdateManager/Core/UpdateList.py:47
-msgid "Failed to detect distribution"
-msgstr "No s'ha pogut detectar la distribució"
+#: ../UpdateManager/Core/MyCache.py:108
+#, fuzzy, python-format
+msgid "Other updates (%s)"
+msgstr "Altres actualitzacions"
 
-#: ../UpdateManager/Core/MyCache.py:228
+#: ../UpdateManager/Core/MyCache.py:227
+#, python-format
+msgid ""
+"Changes for the versions:\n"
+"%s\n"
+"%s\n"
+"\n"
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:229
+msgid "This change is not coming from a source that supports changelogs."
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:237
 #, python-format
 msgid ""
 "The changelog does not contain any relevant changes.\n"
@@ -1680,7 +1703,7 @@ msgid ""
 "until the changes become available or try again later."
 msgstr ""
 
-#: ../UpdateManager/Core/MyCache.py:233
+#: ../UpdateManager/Core/MyCache.py:242
 #, python-format
 msgid ""
 "The list of changes is not available yet.\n"
@@ -1693,13 +1716,17 @@ msgstr ""
 "Utilitzeu http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "mentre els canvis no estiguin disponibles o torneu a provar-ho més tard."
 
-#: ../UpdateManager/Core/MyCache.py:239
+#: ../UpdateManager/Core/MyCache.py:248
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
 "S'ha produït un error en baixar la llista de canvis. \n"
 "Comproveu la vostra connexió a Internet."
+
+#: ../UpdateManager/Core/UpdateList.py:47
+msgid "Failed to detect distribution"
+msgstr "No s'ha pogut detectar la distribució"
 
 #: ../UpdateManager/Core/UpdateList.py:48
 #, python-format
@@ -1751,8 +1778,7 @@ msgstr ""
 
 #: ../data/glade/UpdateManager.glade.h:4
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr ""
-"<big><b>No s'han pogut instal·lar totes les actualitzacions</b></big>"
+msgstr "<big><b>No s'han pogut instal·lar totes les actualitzacions</b></big>"
 
 #: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Starting Update Manager</b></big>"
@@ -2058,8 +2084,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr ""
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 
 #~ msgid ""
@@ -2099,15 +2124,14 @@ msgstr ""
 #~ "l'Ubuntu\n"
 #~ "\n"
 
-#, python-format
 #~ msgid ""
-#~ "The upgrade aborts now. The upgrade needs a total of %s free space on disk "
-#~ "'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-#~ "your trash and remove temporary packages of former installations using 'sudo "
-#~ "apt-get clean'."
+#~ "The upgrade aborts now. The upgrade needs a total of %s free space on "
+#~ "disk '%s'. Please free at least an additional %s of disk space on '%s'. "
+#~ "Empty your trash and remove temporary packages of former installations "
+#~ "using 'sudo apt-get clean'."
 #~ msgstr ""
-#~ "L'actualització s'interromprà. Aquesta requereix %s d'espai lliure al disc "
-#~ "«%s». Hauríeu d'alliberar almenys %s d'espai de disc a «%s». Buideu la "
+#~ "L'actualització s'interromprà. Aquesta requereix %s d'espai lliure al "
+#~ "disc «%s». Hauríeu d'alliberar almenys %s d'espai de disc a «%s». Buideu la "
 #~ "vostra paperera i esborreu els paquets temporals utilitzant «sudo apt-get "
 #~ "clean»."
 
@@ -2115,8 +2139,8 @@ msgstr ""
 #~ "The upgrade aborts now. Please check your Internet connection or "
 #~ "installation media and try again. All files downloaded so far are kept."
 #~ msgstr ""
-#~ "L'actualització s'ha interromput. Comproveu la vostra connexió a Internet o "
-#~ "el suport d'instal·lació. Tots el fitxers baixats es mantindran."
+#~ "L'actualització s'ha interromput. Comproveu la vostra connexió a Internet "
+#~ "o el suport d'instal·lació. Tots el fitxers baixats es mantindran."
 
 #~ msgid ""
 #~ "The upgrade aborts now. Your system could be in an unusable state. A "
@@ -2126,49 +2150,47 @@ msgstr ""
 #~ "estat inutilitable. S'executarà una recuperació (dpkg --configure -a) "
 #~ "immediatament."
 
-#, python-format
 #~ msgid ""
 #~ "\n"
 #~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include the "
-#~ "files in /var/log/dist-upgrade/ in the bugreport.\n"
+#~ "Please report this bug against the 'update-manager' package and include "
+#~ "the files in /var/log/dist-upgrade/ in the bugreport.\n"
 #~ "%s"
 #~ msgstr ""
 #~ "\n"
 #~ "\n"
-#~ "Informeu d'aquest error del gestor d'actualitzacions (paquet update-manager) "
-#~ "i adjunteu els fitxers de /var/log/dist-upgrade/ en l'informe.\n"
+#~ "Informeu d'aquest error del gestor d'actualitzacions (paquet update-"
+#~ "manager) i adjunteu els fitxers de /var/log/dist-upgrade/ en l'informe.\n"
 #~ "%s"
 
 #~ msgid ""
 #~ "The upgrade aborts now. Please check your Internet connection or "
 #~ "installation media and try again. "
 #~ msgstr ""
-#~ "L'actualització s'ha interromput. Comproveu la vostra connexió a Internet o "
-#~ "el suport d'instal·lació i torneu a provar-ho "
+#~ "L'actualització s'ha interromput. Comproveu la vostra connexió a Internet "
+#~ "o el suport d'instal·lació i torneu a provar-ho "
 
 #~ msgid ""
 #~ "The upgrade is completed but there were errors during the ugprade process."
 #~ msgstr ""
-#~ "L'actualització s'ha completat però ha s'han produït errors durant el procés."
+#~ "L'actualització s'ha completat però ha s'han produït errors durant el "
+#~ "procés."
 
 #~ msgid ""
-#~ "Please report this as a bug (if you haven't already) and include the files "
-#~ "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-#~ "report. The upgrade aborts now.\n"
+#~ "Please report this as a bug (if you haven't already) and include the "
+#~ "files /var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in "
+#~ "your report. The upgrade aborts now.\n"
 #~ "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 #~ msgstr ""
-#~ "Informeu d'aquest problema (si encara no ho heu fet) i inclogueu els fitxers "
-#~ "/var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log en el vostre "
-#~ "informe. L'actualització s'ha interromput.\n"
-#~ "El vostre fitxer sources.list original s'ha desat a "
-#~ "/etc/apt/sources.list.distUpgrade."
+#~ "Informeu d'aquest problema (si encara no ho heu fet) i inclogueu els "
+#~ "fitxers /var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log en "
+#~ "el vostre informe. L'actualització s'ha interromput.\n"
+#~ "El vostre fitxer sources.list original s'ha desat a /etc/apt/sources.list."
+#~ "distUpgrade."
 
-#, python-format
 #~ msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
 #~ msgstr "%(str_days)s %(str_hours)s %(str_minutes)s"
 
-#, python-format
 #~ msgid ""
 #~ "This download will take about %s with a 1Mbit DSL connection and about %s "
 #~ "with a 56k modem"
@@ -2177,27 +2199,22 @@ msgstr ""
 #~ "aproximadament %s amb un mòdem de 56k"
 
 #~ msgid ""
-#~ "Please report this as a bug and include the files /var/log/dist-"
-#~ "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-#~ "upgrade aborts now.\n"
+#~ "Please report this as a bug and include the files /var/log/dist-upgrade/"
+#~ "main.log and /var/log/dist-upgrade/apt.log in your report. The upgrade "
+#~ "aborts now.\n"
 #~ "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 #~ msgstr ""
-#~ "Informeu d'aquest error i adjunteu els fitxers /var/log/dist-"
-#~ "upgrade/main.log i /var/log/dist-upgrade/apt.log. S'interromprà "
-#~ "l'actualització.\n"
-#~ "El vostre fitxer sources.list original s'ha desat a "
-#~ "/etc/apt/sources.list.distUpgrade."
+#~ "Informeu d'aquest error i adjunteu els fitxers /var/log/dist-upgrade/main."
+#~ "log i /var/log/dist-upgrade/apt.log. S'interromprà l'actualització.\n"
+#~ "El vostre fitxer sources.list original s'ha desat a /etc/apt/sources.list."
+#~ "distUpgrade."
 
 #~ msgid "Restart the system now [yN] "
 #~ msgstr "Reinicia el sistema ara [sN] "
 
-#~ msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
-#~ msgstr "<b><big>S'està actualitzant l'Ubuntu a la versió 8.10</big></b>"
-
 #~ msgid "The list of changes is not available"
 #~ msgstr "La llista de canvis encara no està disponible."
 
-#, python-format
 #~ msgid "You can install %s update."
 #~ msgid_plural "You can install %s updates."
 #~ msgstr[0] "Podeu instal·lar %s actualització"
@@ -2208,39 +2225,37 @@ msgstr ""
 
 #~ msgid ""
 #~ "Preparing the system for the upgrade failed. Please report this as a bug "
-#~ "against the 'update-manager' package and include the files in /var/log/dist-"
-#~ "upgrade/ in the bugreport."
+#~ "against the 'update-manager' package and include the files in /var/log/"
+#~ "dist-upgrade/ in the bugreport."
 #~ msgstr ""
-#~ "S'ha produït un error mentre es preparava el sistema per a l'actualització. "
-#~ "Informeu de l'error del gestor d'actualitzacions (update-manager) i adjunteu "
-#~ "els fitxers de /var/log/dist-upgrade/ en l'informe."
+#~ "S'ha produït un error mentre es preparava el sistema per a "
+#~ "l'actualització. Informeu de l'error del gestor d'actualitzacions (update-"
+#~ "manager) i adjunteu els fitxers de /var/log/dist-upgrade/ en l'informe."
 
 #~ msgid ""
-#~ "The system was unable to get the prerequisites for the upgrade. The upgrade "
-#~ "will abort now and restore the original system state.\n"
+#~ "The system was unable to get the prerequisites for the upgrade. The "
+#~ "upgrade will abort now and restore the original system state.\n"
 #~ "\n"
-#~ "Please report this as a bug against the 'update-manager' package and include "
-#~ "the files in /var/log/dist-upgrade/ in the bugreport."
+#~ "Please report this as a bug against the 'update-manager' package and "
+#~ "include the files in /var/log/dist-upgrade/ in the bugreport."
 #~ msgstr ""
-#~ "S'ha produït un error en obtenir els prerequisits per a l'actualització. El "
-#~ "procés es cancel·larà i el sistema tornarà a la configuració inicial. "
-#~ "Informeu de l'error del gestor d'actualitzacions (update-manager) i adjunteu "
-#~ "els fitxers de /var/log/dist-upgrade/ en l'informe."
+#~ "S'ha produït un error en obtenir els prerequisits per a l'actualització. "
+#~ "El procés es cancel·larà i el sistema tornarà a la configuració inicial. "
+#~ "Informeu de l'error del gestor d'actualitzacions (update-manager) i "
+#~ "adjunteu els fitxers de /var/log/dist-upgrade/ en l'informe."
 
-#, python-format
 #~ msgid ""
 #~ "After your package information was updated the essential package '%s' can "
 #~ "not be found anymore.\n"
-#~ "This indicates a serious error, please report this bug against the 'update-"
-#~ "manager' package and include the files in /var/log/dist-upgrade/ in the "
-#~ "bugreport."
+#~ "This indicates a serious error, please report this bug against the "
+#~ "'update-manager' package and include the files in /var/log/dist-upgrade/ "
+#~ "in the bugreport."
 #~ msgstr ""
 #~ "No s'ha trobat «%s» després d'actualitzar la informació dels paquets.\n"
 #~ "Això suposa un error greu; informeu d'aquest error del gestor "
-#~ "d'actualitzacions (update-manager) i adjunteu els fitxers de  /var/log/dist-"
-#~ "upgrade/ en l'informe."
+#~ "d'actualitzacions (update-manager) i adjunteu els fitxers de  /var/log/"
+#~ "dist-upgrade/ en l'informe."
 
-#, python-format
 #~ msgid ""
 #~ "The upgrade will continue but the '%s' package may be in a not working "
 #~ "state. Please consider submitting a bugreport about it."
@@ -2365,8 +2380,8 @@ msgstr ""
 #~ msgid ""
 #~ "The key you selected could not be removed. Please report this as a bug."
 #~ msgstr ""
-#~ "La clau que heu seleccionat no es pot esborrar. Notifiqueu-ho com a error de "
-#~ "programació."
+#~ "La clau que heu seleccionat no es pot esborrar. Notifiqueu-ho com a error "
+#~ "de programació."
 
 #~ msgid "<p>You have to download a total of %s. "
 #~ msgstr "<p>Heu de descarregar un total de %s. "
@@ -2394,13 +2409,13 @@ msgstr ""
 #~ msgid ""
 #~ "A unresolvable problem occurred while calculating the upgrade.\n"
 #~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include the "
-#~ "files in /var/log/dist-upgrade/ in the bugreport."
+#~ "Please report this bug against the 'update-manager' package and include "
+#~ "the files in /var/log/dist-upgrade/ in the bugreport."
 #~ msgstr ""
 #~ "S'ha produït un problema irresoluble en calcular l'actualització.\n"
 #~ "\n"
-#~ "Informeu de l'error, referent al paquet update-manager, i adjunteu tots els "
-#~ "fitxers de /var/log/dist-upgrade/ en l'informe."
+#~ "Informeu de l'error, referent al paquet update-manager, i adjunteu tots "
+#~ "els fitxers de /var/log/dist-upgrade/ en l'informe."
 
 #~ msgid "Fetching backport of '%s'"
 #~ msgstr "S'està obtenint el backport de '%s'"
@@ -2469,7 +2484,8 @@ msgstr ""
 #~ msgid "Configure the sources for installable software and updates"
 #~ msgstr "Configura les fonts de programari i d'actualitzacions"
 
-#~ msgid "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+#~ msgid ""
+#~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
 #~ msgstr ""
 #~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
 
@@ -2613,7 +2629,8 @@ msgstr ""
 #~ "_Descarrega les actualitzacions automàticament, però no les instal·lis"
 
 #~ msgid ""
-#~ "<b><big>The information about available software is out-of-date</big></b>\n"
+#~ "<b><big>The information about available software is out-of-date</big></"
+#~ "b>\n"
 #~ "\n"
 #~ "To install software and updates from newly added or changed sources, you "
 #~ "have to reload the information about available software.\n"
@@ -2628,11 +2645,11 @@ msgstr ""
 #~ "Necessiteu una connexió a Internet per poder continuar."
 
 #~ msgid ""
-#~ "<big><b>Enter the complete APT line of the repository that you want to add "
-#~ "as source</b></big>\n"
+#~ "<big><b>Enter the complete APT line of the repository that you want to "
+#~ "add as source</b></big>\n"
 #~ "\n"
-#~ "The APT line includes the type, location and components of a repository, for "
-#~ "example <i>\"deb http://ftp.debian.org sarge main\"</i>."
+#~ "The APT line includes the type, location and components of a repository, "
+#~ "for example <i>\"deb http://ftp.debian.org sarge main\"</i>."
 #~ msgstr ""
 #~ "<big><b>Introduïu la línia APT del dipòsit que voleu afegir</b></big>\n"
 #~ "\n"
@@ -2646,17 +2663,17 @@ msgstr ""
 #~ msgstr "Cap"
 
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the upgrade "
-#~ "was found.This cam happen if you run a internal mirror or if the mirror "
-#~ "information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the "
+#~ "upgrade was found.This cam happen if you run a internal mirror or if the "
+#~ "mirror information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
-#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
+#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'no' the update will cancel."
 #~ msgstr ""
-#~ "No s'ha trobat cap rèplica per a l'actualització en el vostre dipòsit. Això "
-#~ "pot passar si utilitzeu una rèplica interna o si la informació de la rèplica "
-#~ "no està actualitzada.\n"
+#~ "No s'ha trobat cap rèplica per a l'actualització en el vostre dipòsit. "
+#~ "Això pot passar si utilitzeu una rèplica interna o si la informació de la "
+#~ "rèplica no està actualitzada.\n"
 #~ "\n"
 #~ "Voleu reescriure el vostre fitxer 'sources.list'? Si trieu 'Sí' "
 #~ "s'actualitzaran totes les entrades de '%s' a '%s'.\n"
@@ -2682,9 +2699,9 @@ msgstr ""
 #~ msgstr "Actiu"
 
 #~ msgid ""
-#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop or edubuntu-"
-#~ "desktop package and it was not possible to detect which version of ubuntu "
-#~ "you are running.\n"
+#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop or "
+#~ "edubuntu-desktop package and it was not possible to detect which version "
+#~ "of ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
@@ -2697,43 +2714,43 @@ msgstr ""
 #~ msgid ""
 #~ "The upgrade can use the network to check the latest updates and to fetch "
 #~ "packages that are not on the current CD.\n"
-#~ "If you have fast or inexpensive network access you should answer 'Yes' here. "
-#~ "If networking is expensive for you choose 'No'."
+#~ "If you have fast or inexpensive network access you should answer 'Yes' "
+#~ "here. If networking is expensive for you choose 'No'."
 #~ msgstr ""
-#~ "Es pot utilitzar la xarxa per comprovar les darreres actualitzacions i per "
-#~ "recollir paquets que no es troben en el CD.\n"
-#~ "Si teniu una connexió de xarxa ràpida o barata trieu 'Si'. En cas contrari "
-#~ "trieu 'No'."
+#~ "Es pot utilitzar la xarxa per comprovar les darreres actualitzacions i "
+#~ "per recollir paquets que no es troben en el CD.\n"
+#~ "Si teniu una connexió de xarxa ràpida o barata trieu 'Si'. En cas "
+#~ "contrari trieu 'No'."
 
 #~ msgid ""
 #~ "Some third party entries in your sources.list were disabled. You can re-"
 #~ "enable them after the upgrade with the 'software-properties' tool or with "
 #~ "synaptic."
 #~ msgstr ""
-#~ "S'han desactivat algunes entrades de tercers al fitxer sources.list. Podeu "
-#~ "reactivar-los després de l'actualització de programari, des de l'eina "
-#~ "'propietats de programari' o des del Synaptic."
+#~ "S'han desactivat algunes entrades de tercers al fitxer sources.list. "
+#~ "Podeu reactivar-los després de l'actualització de programari, des de "
+#~ "l'eina 'propietats de programari' o des del Synaptic."
 
 #~ msgid ""
 #~ "The upgrade aborts now. Your system could be in an unusable state. A "
 #~ "recovery was run (dpkg --configure -a).\n"
 #~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include the "
-#~ "files in /var/log/dist-upgrade/ in the bugreport."
+#~ "Please report this bug against the 'update-manager' package and include "
+#~ "the files in /var/log/dist-upgrade/ in the bugreport."
 #~ msgstr ""
 #~ "L'actualització s'ha cancel·lat. El vostre sistema ha pogut quedar "
 #~ "inservible.  S'ha executat una recuperació del sistema (dpkg --configure -"
 #~ "a).\n"
 #~ "\n"
-#~ "Informeu de l'error, referent al paquet update-manager, i adjunteu tots els "
-#~ "fitxersde /var/log/dist-upgrade/ en l'informe."
+#~ "Informeu de l'error, referent al paquet update-manager, i adjunteu tots "
+#~ "els fitxersde /var/log/dist-upgrade/ en l'informe."
 
 #~ msgid ""
-#~ "Some problem occured during the clean-up. Please see the below message for "
-#~ "more information. "
+#~ "Some problem occured during the clean-up. Please see the below message "
+#~ "for more information. "
 #~ msgstr ""
-#~ "S'ha produït un error durant el procés de neteja. Vegeu el següent missatge "
-#~ "per tenir més informació. "
+#~ "S'ha produït un error durant el procés de neteja. Vegeu el següent "
+#~ "missatge per tenir més informació. "
 
 #~ msgid "<big><b>Starting update manager</b></big>"
 #~ msgstr "<b><big>S'està iniciant el gestor d'actualitzacions</big></b>"
@@ -2744,14 +2761,15 @@ msgstr ""
 #~ msgid ""
 #~ "Run a distribution upgrade, to install as many updates as possible. \n"
 #~ "\n"
-#~ "This can be caused by an uncompleted upgrade, unofficial software packages "
-#~ "or by running a development version."
+#~ "This can be caused by an uncompleted upgrade, unofficial software "
+#~ "packages or by running a development version."
 #~ msgstr ""
-#~ "Per instal·lar totes les actualitzacions possibles, feu una actualització de "
-#~ "distribució. \n"
+#~ "Per instal·lar totes les actualitzacions possibles, feu una actualització "
+#~ "de distribució. \n"
 #~ "\n"
-#~ "Això pot ser causat per una actualització no completada, per la instal·lació "
-#~ "de paquets no oficials o per la utilització d'una versió en desenvolupament."
+#~ "Això pot ser causat per una actualització no completada, per la "
+#~ "instal·lació de paquets no oficials o per la utilització d'una versió en "
+#~ "desenvolupament."
 
 #~ msgid "<b>CDROM/DVD</b>"
 #~ msgstr "<b>CDROM/DVD</b>"
@@ -2762,16 +2780,17 @@ msgstr ""
 #~ "often it was used will be collected and sent anonymously to the Ubuntu "
 #~ "project  on a weekly basis.\n"
 #~ "\n"
-#~ "The results are used to improve the support for popular applications and to "
-#~ "rank applications in the search results.</i>"
+#~ "The results are used to improve the support for popular applications and "
+#~ "to rank applications in the search results.</i>"
 #~ msgstr ""
 #~ "<i>Per millorar l'experiència d'usuari amb Ubuntu, podeu participar al "
 #~ "concurs de popularitat. Si ho feu, s'enviarà setmanalment i de manera "
 #~ "anònima una llista amb el programari que teniu instal·lat al projecte "
 #~ "Ubuntu.\n"
 #~ "\n"
-#~ "Els resultats s'utilitzaran per a millorar el suport de les aplicacions més "
-#~ "populars i per a mostrar resultats de cerques en funció del rànquing.</i>"
+#~ "Els resultats s'utilitzaran per a millorar el suport de les aplicacions "
+#~ "més populars i per a mostrar resultats de cerques en funció del rànquing."
+#~ "</i>"
 
 #~ msgid "Statistics"
 #~ msgstr "Estadístiques"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-04-07 08:37+0000\n"
+"POT-Creation-Date: 2009-06-22 10:11+0200\n"
 "PO-Revision-Date: 2009-04-06 16:45+0000\n"
 "Last-Translator: Mads Lundby <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
@@ -19,29 +19,29 @@ msgstr ""
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:233 ../UpdateManager/Core/utils.py:233
+#: ../DistUpgrade/utils.py:258 ../UpdateManager/Core/utils.py:258
 msgid "0 KB"
 msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:236 ../UpdateManager/Core/utils.py:236
+#: ../DistUpgrade/utils.py:261 ../UpdateManager/Core/utils.py:261
 msgid "1 KB"
 msgstr "1 KB"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:239 ../UpdateManager/Core/utils.py:239
+#: ../DistUpgrade/utils.py:264 ../UpdateManager/Core/utils.py:264
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KB"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:242 ../UpdateManager/Core/utils.py:242
+#: ../DistUpgrade/utils.py:267 ../UpdateManager/Core/utils.py:267
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:207 ../DistUpgrade/distro.py:422
+#: ../DistUpgrade/distro.py:208 ../DistUpgrade/distro.py:423
 #, python-format
 msgid "Server for %s"
 msgstr "Server for %s"
@@ -49,12 +49,12 @@ msgstr "Server for %s"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:225 ../DistUpgrade/distro.py:231
-#: ../DistUpgrade/distro.py:247
+#: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:248
 msgid "Main server"
 msgstr "Hovedserver"
 
-#: ../DistUpgrade/distro.py:251
+#: ../DistUpgrade/distro.py:252
 msgid "Custom servers"
 msgstr "Brugerdefinerede servere"
 
@@ -125,7 +125,7 @@ msgstr ""
 "program. Reparér dem venligst med synaptic eller apt-get før du fortsætter."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:564
+#: ../DistUpgrade/DistUpgradeCache.py:574
 #, python-format
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade:\n"
@@ -146,12 +146,11 @@ msgstr ""
 " * Bruger uofficielle software-pakker, der ikke leveres af Ubuntu\n"
 "\n"
 
-#: ../DistUpgrade/DistUpgradeCache.py:574
+#: ../DistUpgrade/DistUpgradeCache.py:584
 msgid "This is most likely a transient problem, please try again later."
-msgstr ""
-"Dette er højst sandsynligt et midlertidigt problem, prøv igen senere."
+msgstr "Dette er højst sandsynligt et midlertidigt problem, prøv igen senere."
 
-#: ../DistUpgrade/DistUpgradeCache.py:577
+#: ../DistUpgrade/DistUpgradeCache.py:587
 msgid ""
 "If none of this applies, then please report this bug against the 'update-"
 "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
@@ -161,16 +160,16 @@ msgstr ""
 "manager\"-pakken og inkludere filerne i /var/log/dist-upgrade/ i "
 "fejlrapporten."
 
-#: ../DistUpgrade/DistUpgradeCache.py:583
-#: ../UpdateManager/UpdateManager.py:727
+#: ../DistUpgrade/DistUpgradeCache.py:593
+#: ../UpdateManager/UpdateManager.py:728
 msgid "Could not calculate the upgrade"
 msgstr "Kunne ikke beregne opgraderingen"
 
-#: ../DistUpgrade/DistUpgradeCache.py:633
+#: ../DistUpgrade/DistUpgradeCache.py:643
 msgid "Error authenticating some packages"
 msgstr "Fejl ved godkendelse af nogle pakker"
 
-#: ../DistUpgrade/DistUpgradeCache.py:634
+#: ../DistUpgrade/DistUpgradeCache.py:644
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -180,7 +179,7 @@ msgstr ""
 "med netværket. Det anbefales, at du prøver igen senere. Se længere nede for "
 "en liste over pakker som ikke kunne godkendes."
 
-#: ../DistUpgrade/DistUpgradeCache.py:654
+#: ../DistUpgrade/DistUpgradeCache.py:664
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
@@ -189,22 +188,27 @@ msgstr ""
 "der ikke må fjernes."
 
 # Jeg synes ikke "væsentlige pakke", dækker betydningen godt nok.
-#: ../DistUpgrade/DistUpgradeCache.py:658
+#: ../DistUpgrade/DistUpgradeCache.py:668
 #, python-format
 msgid "The essential package '%s' is marked for removal."
 msgstr "Den essentielle pakke \"%s\" er markeret til fjernelse."
 
-#: ../DistUpgrade/DistUpgradeCache.py:745
+#: ../DistUpgrade/DistUpgradeCache.py:677
+#, python-format
+msgid "Trying to install blacklisted version '%s'"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:773
 #, python-format
 msgid "Can not mark '%s' for upgrade"
 msgstr "Kan ikke markere \"%s\" til opgradering"
 
-#: ../DistUpgrade/DistUpgradeCache.py:759
+#: ../DistUpgrade/DistUpgradeCache.py:787
 #, python-format
 msgid "Can't install '%s'"
 msgstr "Kan ikke installere \"%s\""
 
-#: ../DistUpgrade/DistUpgradeCache.py:760
+#: ../DistUpgrade/DistUpgradeCache.py:788
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -213,11 +217,11 @@ msgstr ""
 "som en fejl. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:768
+#: ../DistUpgrade/DistUpgradeCache.py:797
 msgid "Can't guess meta-package"
 msgstr "Kan ikke gætte meta-pakke"
 
-#: ../DistUpgrade/DistUpgradeCache.py:769
+#: ../DistUpgrade/DistUpgradeCache.py:798
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -236,11 +240,11 @@ msgstr ""
 msgid "Reading cache"
 msgstr "Læser cache-mellemlager"
 
-#: ../DistUpgrade/DistUpgradeController.py:178
+#: ../DistUpgrade/DistUpgradeController.py:181
 msgid "Unable to get exclusive lock"
 msgstr "Kan ikke opnå eksklusiv lås"
 
-#: ../DistUpgrade/DistUpgradeController.py:179
+#: ../DistUpgrade/DistUpgradeController.py:182
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -248,11 +252,11 @@ msgstr ""
 "Det skyldes sandsynligvis, at et andet pakkehåndterings-program (såsom apt-"
 "get eller aptitude) allerede kører. Luk venligst det program først."
 
-#: ../DistUpgrade/DistUpgradeController.py:232
+#: ../DistUpgrade/DistUpgradeController.py:235
 msgid "Upgrading over remote connection not supported"
 msgstr "Opgradering over fjernforbindelse er ikke understøttet"
 
-#: ../DistUpgrade/DistUpgradeController.py:233
+#: ../DistUpgrade/DistUpgradeController.py:236
 msgid ""
 "You are running the upgrade over a remote ssh connection with a frontend "
 "that does not support this. The upgrade will abort now. Please try without "
@@ -261,11 +265,11 @@ msgstr ""
 "Du kører opgraderingen over en ekstern ssh-forbindelse med en grænseflade, "
 "der ikke understøtter dette. Opgraderingen vil afbryde nu. Prøv uden ssh."
 
-#: ../DistUpgrade/DistUpgradeController.py:244
+#: ../DistUpgrade/DistUpgradeController.py:247
 msgid "Continue running under SSH?"
 msgstr "Forsæt med at køre over SSH?"
 
-#: ../DistUpgrade/DistUpgradeController.py:245
+#: ../DistUpgrade/DistUpgradeController.py:248
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -281,11 +285,11 @@ msgstr ""
 "Hvis du vil fortsætte, vil en ekstra ssh dæmon blive startet på port \"%s\"\n"
 "Vil du fortsætte?"
 
-#: ../DistUpgrade/DistUpgradeController.py:260
+#: ../DistUpgrade/DistUpgradeController.py:263
 msgid "Starting additional sshd"
 msgstr "Starter ekstra sshd"
 
-#: ../DistUpgrade/DistUpgradeController.py:261
+#: ../DistUpgrade/DistUpgradeController.py:264
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -296,34 +300,34 @@ msgstr ""
 "blive startet på port \"%s\". Hvis noget går galt med den kørende ssh, kan "
 "du stadig forbinde til den ekstra.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:331
-#: ../DistUpgrade/DistUpgradeController.py:376
+#: ../DistUpgrade/DistUpgradeController.py:334
+#: ../DistUpgrade/DistUpgradeController.py:379
 msgid "Can not upgrade"
 msgstr "Kan ikke opgradere"
 
-#: ../DistUpgrade/DistUpgradeController.py:332
+#: ../DistUpgrade/DistUpgradeController.py:335
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr ""
 "En opgradering fra \"%s\" til \"%s\" er ikke understøttet med dette værktøj."
 
-#: ../DistUpgrade/DistUpgradeController.py:341
+#: ../DistUpgrade/DistUpgradeController.py:344
 msgid "Sandbox setup failed"
 msgstr "Testopsætning mislykkedes"
 
-#: ../DistUpgrade/DistUpgradeController.py:342
+#: ../DistUpgrade/DistUpgradeController.py:345
 msgid "It was not possible to create the sandbox environment."
 msgstr "Det var ikke muligt at oprette testmiljøet."
 
-#: ../DistUpgrade/DistUpgradeController.py:348
+#: ../DistUpgrade/DistUpgradeController.py:351
 msgid "Sandbox mode"
 msgstr "Testtilstand"
 
-#: ../DistUpgrade/DistUpgradeController.py:349
+#: ../DistUpgrade/DistUpgradeController.py:352
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -334,18 +338,18 @@ msgstr ""
 "*Ingen* ændringer, skrevet til en systemkatalog fra nu af og indtil den "
 "næste genstart, vil være permanente."
 
-#: ../DistUpgrade/DistUpgradeController.py:377
+#: ../DistUpgrade/DistUpgradeController.py:380
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Din python-installation er korrupt. Ret venligst det symbolske link i "
-"\"/usr/bin/python\"."
+"Din python-installation er korrupt. Ret venligst det symbolske link i \"/usr/"
+"bin/python\"."
 
-#: ../DistUpgrade/DistUpgradeController.py:403
+#: ../DistUpgrade/DistUpgradeController.py:406
 msgid "Package 'debsig-verify' is installed"
 msgstr "Pakken \"debsig-verify\" er installeret"
 
-#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:407
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
@@ -355,11 +359,11 @@ msgstr ""
 "Fjern den først med synaptic eller \"apt-get remove debsig-verify\" og kør "
 "så opgraderingen igen."
 
-#: ../DistUpgrade/DistUpgradeController.py:414
+#: ../DistUpgrade/DistUpgradeController.py:417
 msgid "Include latest updates from the Internet?"
 msgstr "Inkludér de seneste opdateringer fra internettet?"
 
-#: ../DistUpgrade/DistUpgradeController.py:415
+#: ../DistUpgrade/DistUpgradeController.py:418
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -379,16 +383,16 @@ msgstr ""
 "de nyeste opdateringer snarest efter opgradering.\n"
 "Hvis du svarer \"nej\" her, benyttes netværket slet ikke."
 
-#: ../DistUpgrade/DistUpgradeController.py:626
+#: ../DistUpgrade/DistUpgradeController.py:641
 #, python-format
 msgid "disabled on upgrade to %s"
 msgstr "slået fra under opgradering til %s"
 
-#: ../DistUpgrade/DistUpgradeController.py:652
+#: ../DistUpgrade/DistUpgradeController.py:667
 msgid "No valid mirror found"
 msgstr "Ingen gyldige kilder fundet"
 
-#: ../DistUpgrade/DistUpgradeController.py:653
+#: ../DistUpgrade/DistUpgradeController.py:668
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -408,11 +412,11 @@ msgstr ""
 "Hvis du vælger \"Nej\", vil opdateringen blive annulleret."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:673
+#: ../DistUpgrade/DistUpgradeController.py:688
 msgid "Generate default sources?"
 msgstr "Generér standardkilder?"
 
-#: ../DistUpgrade/DistUpgradeController.py:674
+#: ../DistUpgrade/DistUpgradeController.py:689
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -426,11 +430,11 @@ msgstr ""
 "Bør standardlinjer for \"%s\" tilføjes? Hvis du vælger \"Nej\", vil "
 "opdateringen blive annulleret."
 
-#: ../DistUpgrade/DistUpgradeController.py:709
+#: ../DistUpgrade/DistUpgradeController.py:724
 msgid "Repository information invalid"
 msgstr "Arkivinformation ugyldig"
 
-#: ../DistUpgrade/DistUpgradeController.py:710
+#: ../DistUpgrade/DistUpgradeController.py:725
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -438,11 +442,11 @@ msgstr ""
 "Opgradering af arkivet resulterede i en ødelagt fil. Rapportér venligst "
 "dette som en fejl."
 
-#: ../DistUpgrade/DistUpgradeController.py:716
+#: ../DistUpgrade/DistUpgradeController.py:731
 msgid "Third party sources disabled"
 msgstr "Trediepartskilder er fravalgt"
 
-#: ../DistUpgrade/DistUpgradeController.py:717
+#: ../DistUpgrade/DistUpgradeController.py:732
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -452,13 +456,13 @@ msgstr ""
 "genaktivere dem efter opgraderingen med \"software-properties\"-værktøjet "
 "eller med synaptic."
 
-#: ../DistUpgrade/DistUpgradeController.py:758
+#: ../DistUpgrade/DistUpgradeController.py:772
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Pakke i inkonsistent tilstand"
 msgstr[1] "Pakker i inkonsistent tilstand"
 
-#: ../DistUpgrade/DistUpgradeController.py:761
+#: ../DistUpgrade/DistUpgradeController.py:775
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -477,11 +481,11 @@ msgstr[1] ""
 "fundet et tilhørende arkiv. Geninstallér venligst pakkerne manuelt eller "
 "fjern dem fra systemet."
 
-#: ../DistUpgrade/DistUpgradeController.py:809
+#: ../DistUpgrade/DistUpgradeController.py:823
 msgid "Error during update"
 msgstr "Fejl under opdatering"
 
-#: ../DistUpgrade/DistUpgradeController.py:810
+#: ../DistUpgrade/DistUpgradeController.py:824
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -490,12 +494,12 @@ msgstr ""
 "netværksproblem, kontrollér venligst din netværksforbindelse og prøv igen."
 
 #. print "on_button_install_clicked"
-#: ../DistUpgrade/DistUpgradeController.py:819
+#: ../DistUpgrade/DistUpgradeController.py:833
 #: ../UpdateManager/UpdateManager.py:563
 msgid "Not enough free disk space"
 msgstr "Der er ikke nok fri diskplads"
 
-#: ../DistUpgrade/DistUpgradeController.py:820
+#: ../DistUpgrade/DistUpgradeController.py:834
 #, python-format
 msgid ""
 "The upgrade is now aborted. The upgrade needs a total of %s free space on "
@@ -508,11 +512,11 @@ msgstr ""
 "Tøm din papirkurv og fjern midlertidige pakker fra tidligere installationer "
 "ved hjælp af \"sudo apt-get clean\"."
 
-#: ../DistUpgrade/DistUpgradeController.py:860
+#: ../DistUpgrade/DistUpgradeController.py:874
 msgid "Support for some applications ended"
 msgstr "Support stoppede for nogle programmer"
 
-#: ../DistUpgrade/DistUpgradeController.py:861
+#: ../DistUpgrade/DistUpgradeController.py:875
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -528,22 +532,22 @@ msgstr ""
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:870
-#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:884
+#: ../DistUpgrade/DistUpgradeController.py:1543
 msgid "Calculating the changes"
 msgstr "Udregner ændringerne"
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:885
+#: ../DistUpgrade/DistUpgradeController.py:899
 msgid "Do you want to start the upgrade?"
 msgstr "Vil du starte opgraderingen?"
 
-#: ../DistUpgrade/DistUpgradeController.py:937
-#: ../DistUpgrade/DistUpgradeController.py:1016
+#: ../DistUpgrade/DistUpgradeController.py:950
+#: ../DistUpgrade/DistUpgradeController.py:1037
 msgid "Could not download the upgrades"
 msgstr "Kunne ikke hente opgraderingerne"
 
-#: ../DistUpgrade/DistUpgradeController.py:938
+#: ../DistUpgrade/DistUpgradeController.py:951
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
@@ -553,24 +557,24 @@ msgstr ""
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
-#: ../DistUpgrade/DistUpgradeController.py:984
-#: ../DistUpgrade/DistUpgradeController.py:1107
+#: ../DistUpgrade/DistUpgradeController.py:1004
+#: ../DistUpgrade/DistUpgradeController.py:1127
 msgid "Error during commit"
 msgstr "Fejl under gennemførelse"
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:986
-#: ../DistUpgrade/DistUpgradeController.py:1146
+#: ../DistUpgrade/DistUpgradeController.py:1006
+#: ../DistUpgrade/DistUpgradeController.py:1166
 msgid "Restoring original system state"
 msgstr "Genskaber oprindelig systemtilstand"
 
-#: ../DistUpgrade/DistUpgradeController.py:987
-#: ../DistUpgrade/DistUpgradeController.py:1000
+#: ../DistUpgrade/DistUpgradeController.py:1007
+#: ../DistUpgrade/DistUpgradeController.py:1021
 msgid "Could not install the upgrades"
 msgstr "Kunne ikke installere opgraderingerne"
 
 #. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:991
+#: ../DistUpgrade/DistUpgradeController.py:1012
 msgid ""
 "The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
@@ -578,7 +582,7 @@ msgstr ""
 "Opgraderingen er nu afbrudt. Dit system kan være i en ubrugelig tilstand. En "
 "genskabelse vil nu blive kørt (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:996
+#: ../DistUpgrade/DistUpgradeController.py:1017
 #, python-format
 msgid ""
 "\n"
@@ -593,7 +597,7 @@ msgstr ""
 "filerne i /var/log/dist-upgrade/ i fejlrapporten.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:1017
+#: ../DistUpgrade/DistUpgradeController.py:1038
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
@@ -601,20 +605,20 @@ msgstr ""
 "Opgraderingen er nu afbrudt. Kontrollér din internetforbindelse eller dit "
 "installationsmedie og prøv igen. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1095
+#: ../DistUpgrade/DistUpgradeController.py:1115
 msgid "Remove obsolete packages?"
 msgstr "Fjern forældede pakker?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1096
+#: ../DistUpgrade/DistUpgradeController.py:1116
 #: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Behold"
 
-#: ../DistUpgrade/DistUpgradeController.py:1096
+#: ../DistUpgrade/DistUpgradeController.py:1116
 msgid "_Remove"
 msgstr "_Fjern"
 
-#: ../DistUpgrade/DistUpgradeController.py:1108
+#: ../DistUpgrade/DistUpgradeController.py:1128
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -624,41 +628,41 @@ msgstr ""
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1184
+#: ../DistUpgrade/DistUpgradeController.py:1204
 msgid "Required depends is not installed"
 msgstr "Påkrævede afhængigheder er ikke installeret"
 
-#: ../DistUpgrade/DistUpgradeController.py:1185
+#: ../DistUpgrade/DistUpgradeController.py:1205
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Den påkrævede afhængighed \"%s\" er ikke installeret. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1439
-#: ../DistUpgrade/DistUpgradeController.py:1506
+#: ../DistUpgrade/DistUpgradeController.py:1450
+#: ../DistUpgrade/DistUpgradeController.py:1517
 msgid "Checking package manager"
 msgstr "Kontrollerer pakkehåndtering"
 
-#: ../DistUpgrade/DistUpgradeController.py:1444
+#: ../DistUpgrade/DistUpgradeController.py:1455
 msgid "Preparing the upgrade failed"
 msgstr "Klargøring af opgraderingen fejlede"
 
-#: ../DistUpgrade/DistUpgradeController.py:1445
+#: ../DistUpgrade/DistUpgradeController.py:1456
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bug report."
 msgstr ""
 "Klargøring af systemet til opgraderingen mislykkedes. Du bedes rapportere "
-"dette som en fejl for \"update-manager\"-pakken og inkludere filerne i "
-"/var/log/dist-upgrade/ i fejlrapporten."
+"dette som en fejl for \"update-manager\"-pakken og inkludere filerne i /var/"
+"log/dist-upgrade/ i fejlrapporten."
 
-#: ../DistUpgrade/DistUpgradeController.py:1461
+#: ../DistUpgrade/DistUpgradeController.py:1472
 msgid "Getting upgrade prerequisites failed"
 msgstr "Hentning af opgraderingsforudsætninger fejlede"
 
-#: ../DistUpgrade/DistUpgradeController.py:1462
+#: ../DistUpgrade/DistUpgradeController.py:1473
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -673,15 +677,15 @@ msgstr ""
 "Du bedes rapportere dette som en fejl for \"update-manager\"-pakken og "
 "inkludere filerne i /var/log/dist-upgrade/ i fejlrapporten."
 
-#: ../DistUpgrade/DistUpgradeController.py:1492
+#: ../DistUpgrade/DistUpgradeController.py:1503
 msgid "Updating repository information"
 msgstr "Opdaterer arkivinformation"
 
-#: ../DistUpgrade/DistUpgradeController.py:1517
+#: ../DistUpgrade/DistUpgradeController.py:1531
 msgid "Invalid package information"
 msgstr "Ugyldig pakkeinformation"
 
-#: ../DistUpgrade/DistUpgradeController.py:1518
+#: ../DistUpgrade/DistUpgradeController.py:1532
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
@@ -696,47 +700,47 @@ msgstr ""
 "manager\"-pakken og inkludere filerne i /var/log/dist-upgrade/ i "
 "fejlrapporten."
 
-#: ../DistUpgrade/DistUpgradeController.py:1535
-#: ../DistUpgrade/DistUpgradeController.py:1583
+#: ../DistUpgrade/DistUpgradeController.py:1549
+#: ../DistUpgrade/DistUpgradeController.py:1597
 msgid "Fetching"
 msgstr "Henter"
 
-#: ../DistUpgrade/DistUpgradeController.py:1542
-#: ../DistUpgrade/DistUpgradeController.py:1587
+#: ../DistUpgrade/DistUpgradeController.py:1555
+#: ../DistUpgrade/DistUpgradeController.py:1601
 msgid "Upgrading"
 msgstr "Opgraderer"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1547
-#: ../DistUpgrade/DistUpgradeController.py:1589
-#: ../DistUpgrade/DistUpgradeController.py:1596
-#: ../DistUpgrade/DistUpgradeController.py:1601
+#: ../DistUpgrade/DistUpgradeController.py:1560
+#: ../DistUpgrade/DistUpgradeController.py:1603
+#: ../DistUpgrade/DistUpgradeController.py:1610
+#: ../DistUpgrade/DistUpgradeController.py:1615
 msgid "Upgrade complete"
 msgstr "Opgradering gennemført"
 
-#: ../DistUpgrade/DistUpgradeController.py:1548
-#: ../DistUpgrade/DistUpgradeController.py:1590
-#: ../DistUpgrade/DistUpgradeController.py:1597
+#: ../DistUpgrade/DistUpgradeController.py:1561
+#: ../DistUpgrade/DistUpgradeController.py:1604
+#: ../DistUpgrade/DistUpgradeController.py:1611
 msgid ""
 "The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
 "Opgraderingen er afsluttet, men der opstod fejl under opgraderingsprocessen."
 
-#: ../DistUpgrade/DistUpgradeController.py:1555
+#: ../DistUpgrade/DistUpgradeController.py:1568
 msgid "Searching for obsolete software"
 msgstr "Søger efter forældet software"
 
-#: ../DistUpgrade/DistUpgradeController.py:1560
+#: ../DistUpgrade/DistUpgradeController.py:1573
 msgid "System upgrade is complete."
 msgstr "Systemopgradering er fuldført."
 
-#: ../DistUpgrade/DistUpgradeController.py:1602
+#: ../DistUpgrade/DistUpgradeController.py:1616
 msgid "The partial upgrade was completed."
 msgstr "Den delvise opgradering er afsluttet."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:166
-#: ../DistUpgrade/DistUpgradeQuirks.py:235
-#: ../DistUpgrade/DistUpgradeQuirks.py:260
+#: ../DistUpgrade/DistUpgradeQuirks.py:144
+#: ../DistUpgrade/DistUpgradeQuirks.py:221
+#: ../DistUpgrade/DistUpgradeQuirks.py:246
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -744,7 +748,7 @@ msgstr ""
 "Opgradering kan reducere skrivebordseffekter samt ydeevne i spil og andre "
 "grafisk intensive programmer."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:170
+#: ../DistUpgrade/DistUpgradeQuirks.py:148
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
 "of this driver is available that works with your hardware in Ubuntu 9.04.\n"
@@ -757,8 +761,8 @@ msgstr ""
 "\n"
 "Ønsker du at fortsætte?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:239
-#: ../DistUpgrade/DistUpgradeQuirks.py:264
+#: ../DistUpgrade/DistUpgradeQuirks.py:225
+#: ../DistUpgrade/DistUpgradeQuirks.py:250
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
@@ -772,11 +776,11 @@ msgstr ""
 "\n"
 "Ønsker du at fortsætte?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:434
+#: ../DistUpgrade/DistUpgradeQuirks.py:420
 msgid "evms in use"
 msgstr "evms er i brug"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:435
+#: ../DistUpgrade/DistUpgradeQuirks.py:421
 msgid ""
 "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
 "software is no longer supported, please switch it off and run the upgrade "
@@ -786,16 +790,16 @@ msgstr ""
 "softwaren understøttes ikke længere. Slå den venligst fra og kør "
 "opgraderingen igen, når dette er gjort."
 
-#: ../DistUpgrade/DistUpgradeMain.py:38
+#: ../DistUpgrade/DistUpgradeMain.py:40
 msgid "Sandbox upgrade using aufs"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeMain.py:40
+#: ../DistUpgrade/DistUpgradeMain.py:42
 msgid "Use the given path to search for a cdrom with upgradable packages"
 msgstr ""
 "Brug den givne sti til at søge efter en cdrom med pakker der kan opgraderes"
 
-#: ../DistUpgrade/DistUpgradeMain.py:46
+#: ../DistUpgrade/DistUpgradeMain.py:48
 msgid ""
 "Use frontend. Currently available: \n"
 "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
@@ -803,15 +807,15 @@ msgstr ""
 "Brug brugerinterface. Tilgængelige i øjeblikket: \n"
 "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 
-#: ../DistUpgrade/DistUpgradeMain.py:49
+#: ../DistUpgrade/DistUpgradeMain.py:51
 msgid "*DEPRECATED* this option will be ignore"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeMain.py:52
+#: ../DistUpgrade/DistUpgradeMain.py:54
 msgid "Perform a partial upgrade only (no sources.list rewriting)"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeMain.py:54
+#: ../DistUpgrade/DistUpgradeMain.py:56
 msgid "Set datadir"
 msgstr ""
 
@@ -910,14 +914,14 @@ msgstr "En alvorlig fejl opstod"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:418
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Du bedes rapportere dette som en fejl (hvis ikke du allerede har gjort det) "
-"og inkludere filerne /var/log/dist-upgrade/main.log og /var/log/dist-"
-"upgrade/apt.log i din rapport. Opgraderingen er nu afbrudt.\n"
+"og inkludere filerne /var/log/dist-upgrade/main.log og /var/log/dist-upgrade/"
+"apt.log i din rapport. Opgraderingen er nu afbrudt.\n"
 "Din oprindelige sources.list blev gemt i /etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:433
@@ -943,19 +947,19 @@ msgid "<b>Downgrade %s</b>"
 msgstr "<b>Nedgradér %s</b>"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:586
-#: ../DistUpgrade/DistUpgradeViewKDE.py:750
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #, python-format
 msgid "Remove %s"
 msgstr "Fjern %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:591
-#: ../DistUpgrade/DistUpgradeViewKDE.py:752
+#: ../DistUpgrade/DistUpgradeViewKDE.py:755
 #, python-format
 msgid "Install %s"
 msgstr "Installér %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:593
-#: ../DistUpgrade/DistUpgradeViewKDE.py:754
+#: ../DistUpgrade/DistUpgradeViewKDE.py:757
 #, python-format
 msgid "Upgrade %s"
 msgstr "Opgradér %s"
@@ -974,55 +978,55 @@ msgstr "Vis forskel >>>"
 msgid "<<< Hide Difference"
 msgstr "<<< Skjul forskel"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:531
+#: ../DistUpgrade/DistUpgradeViewKDE.py:534
 msgid "Error"
 msgstr "Fejl"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:543
+#: ../DistUpgrade/DistUpgradeViewKDE.py:546
 msgid "&Cancel"
 msgstr "&Annullér"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:545
-#: ../DistUpgrade/DistUpgradeViewKDE.py:782
+#: ../DistUpgrade/DistUpgradeViewKDE.py:548
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 msgid "&Close"
 msgstr "&Luk"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:591
+#: ../DistUpgrade/DistUpgradeViewKDE.py:594
 msgid "Show Terminal >>>"
 msgstr "Vis terminal >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:594
+#: ../DistUpgrade/DistUpgradeViewKDE.py:597
 msgid "<<< Hide Terminal"
 msgstr "<<< Skjul terminal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:674
+#: ../DistUpgrade/DistUpgradeViewKDE.py:677
 msgid "Information"
 msgstr "Information"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:724
-#: ../DistUpgrade/DistUpgradeViewKDE.py:765
+#: ../DistUpgrade/DistUpgradeViewKDE.py:727
 #: ../DistUpgrade/DistUpgradeViewKDE.py:768
+#: ../DistUpgrade/DistUpgradeViewKDE.py:771
 #: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
 msgstr "Detaljer"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:778
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #: ../DistUpgrade/DistUpgradeViewText.py:225
 msgid "Restart required"
 msgstr "Genstart påkrævet"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:778
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr "<b><big>Genstart systemet for at fuldføre opgraderingen</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:781
+#: ../DistUpgrade/DistUpgradeViewKDE.py:784
 #: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
 msgstr "_Genstart nu"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:793
+#: ../DistUpgrade/DistUpgradeViewKDE.py:796
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1034,7 +1038,7 @@ msgstr ""
 "Systemet kan ende i en ubrugelig tilstand, hvis du annullerer opgraderingen. "
 "Du opfordres kraftigt til at genoptage opgraderingen."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:797
+#: ../DistUpgrade/DistUpgradeViewKDE.py:800
 msgid "Cancel Upgrade?"
 msgstr "Afbryd Opgradering?"
 
@@ -1070,10 +1074,10 @@ msgstr[1] "%li sekunder"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:77
 #, python-format
@@ -1084,10 +1088,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:92
 #, python-format
@@ -1111,50 +1115,50 @@ msgstr ""
 msgid "This download will take about %s with your connection. "
 msgstr "Denne overførsel vil tage omkring %s med din forbindelse. "
 
-#: ../DistUpgrade/DistUpgradeView.py:207 ../DistUpgrade/DistUpgrade.glade.h:14
+#: ../DistUpgrade/DistUpgradeView.py:182 ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Preparing to upgrade"
 msgstr "Gør klar til opgradering"
 
-#: ../DistUpgrade/DistUpgradeView.py:208
+#: ../DistUpgrade/DistUpgradeView.py:183
 msgid "Getting new software channels"
 msgstr "Indhenter nye softwarekanaler"
 
-#: ../DistUpgrade/DistUpgradeView.py:209 ../DistUpgrade/DistUpgrade.glade.h:12
+#: ../DistUpgrade/DistUpgradeView.py:184 ../DistUpgrade/DistUpgrade.glade.h:12
 msgid "Getting new packages"
 msgstr "Henter nye pakker"
 
-#: ../DistUpgrade/DistUpgradeView.py:210 ../DistUpgrade/DistUpgrade.glade.h:13
+#: ../DistUpgrade/DistUpgradeView.py:185 ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Installing the upgrades"
 msgstr "Installerer opgraderingerne"
 
-#: ../DistUpgrade/DistUpgradeView.py:211 ../DistUpgrade/DistUpgrade.glade.h:8
+#: ../DistUpgrade/DistUpgradeView.py:186 ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
 msgstr "Rydder op"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:284
+#: ../DistUpgrade/DistUpgradeView.py:259
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "%d pakke vil blive fjernet."
 msgstr[1] "%d pakker vil blive fjernet."
 
-#: ../DistUpgrade/DistUpgradeView.py:289
+#: ../DistUpgrade/DistUpgradeView.py:264
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "%d ny pakke vil blive installeret."
 msgstr[1] "%d nye pakker vil blive installeret."
 
-#: ../DistUpgrade/DistUpgradeView.py:295
+#: ../DistUpgrade/DistUpgradeView.py:270
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "%d pakke vil blive opgraderet."
 msgstr[1] "%d pakker vil blive opgraderet."
 
-#: ../DistUpgrade/DistUpgradeView.py:300
+#: ../DistUpgrade/DistUpgradeView.py:275
 #, python-format
 msgid ""
 "\n"
@@ -1165,7 +1169,7 @@ msgstr ""
 "\n"
 "Du skal hente i alt %s. "
 
-#: ../DistUpgrade/DistUpgradeView.py:304
+#: ../DistUpgrade/DistUpgradeView.py:279
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -1174,11 +1178,11 @@ msgstr ""
 "afbrydes senere. Når hentningen er færdig, kan processen ikke afbrydes."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:310 ../UpdateManager/UpdateManager.py:456
+#: ../DistUpgrade/DistUpgradeView.py:285 ../UpdateManager/UpdateManager.py:456
 msgid "Your system is up-to-date"
 msgstr "Dit system er opdateret"
 
-#: ../DistUpgrade/DistUpgradeView.py:311
+#: ../DistUpgrade/DistUpgradeView.py:286
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
@@ -1186,11 +1190,11 @@ msgstr ""
 "Der er ingen opgraderinger tilgængelige for dit system. Opgraderingen vil nu "
 "blive afbrudt."
 
-#: ../DistUpgrade/DistUpgradeView.py:324
+#: ../DistUpgrade/DistUpgradeView.py:299
 msgid "Reboot required"
 msgstr "Genstart af maskinen er påkrævet"
 
-#: ../DistUpgrade/DistUpgradeView.py:325
+#: ../DistUpgrade/DistUpgradeView.py:300
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
@@ -1299,9 +1303,9 @@ msgstr "Fejlmeddelelsen er \"%s\"."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:108
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Du bedes rapportere dette som en fejl og inkludere filerne /var/log/dist-"
@@ -1395,7 +1399,8 @@ msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Start opgraderingen?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:7
-msgid "<b><big>Upgrading Ubuntu to version 9.04</big></b>"
+#, fuzzy
+msgid "<b><big>Upgrading Ubuntu to version 9.10</big></b>"
 msgstr "<b><big>Opgraderer Ubuntu til 9.04-udgaven</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.glade.h:10
@@ -1615,16 +1620,16 @@ msgstr ""
 "plads på \"%s\". Tøm papirkurven og fjern midlertidige pakker fra tidligere "
 "installationer ved at bruge \"sudo apt-get clean\"."
 
-#: ../UpdateManager/UpdateManager.py:603
+#: ../UpdateManager/UpdateManager.py:604
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "Læser pakkeinformation"
 
-#: ../UpdateManager/UpdateManager.py:705
+#: ../UpdateManager/UpdateManager.py:706
 msgid "Could not initialize the package information"
 msgstr "Kunne ikke initialisere pakkeinformationen"
 
-#: ../UpdateManager/UpdateManager.py:706
+#: ../UpdateManager/UpdateManager.py:707
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1638,7 +1643,7 @@ msgstr ""
 "Rapportér venligst denne fejl til \"update-manager\"-pakken og inkludér "
 "følgende fejlmeddelelse:\n"
 
-#: ../UpdateManager/UpdateManager.py:728
+#: ../UpdateManager/UpdateManager.py:729
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1652,54 +1657,59 @@ msgstr ""
 "følgende fejlmeddelelse:"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:753
+#: ../UpdateManager/UpdateManager.py:754
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Størrelse: %s)"
 
-#: ../UpdateManager/UpdateManager.py:755
+#: ../UpdateManager/UpdateManager.py:756
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "Fra udgave %(old_version)s til %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:759
+#: ../UpdateManager/UpdateManager.py:760
 #, python-format
 msgid "Version %s"
 msgstr "Udgave %s"
 
-#: ../UpdateManager/UpdateManager.py:772
+#: ../UpdateManager/UpdateManager.py:773
 msgid "Your distribution is not supported anymore"
 msgstr "Din distribution understøttes ikke længere"
 
-#: ../UpdateManager/UpdateManager.py:773
+#: ../UpdateManager/UpdateManager.py:774
+#, fuzzy
 msgid ""
-"You will not get any further security fixes or critical updates. Upgrade to "
-"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
-"information on upgrading."
+"You will not get any further security fixes or critical updates. Please "
+"Upgrade to a later version of Ubuntu Linux."
 msgstr ""
 "Du vil ikke modtage yderligere sikkerhedsrettelser eller kritiske "
-"opdateringer. Opgradér til en senere udgave af Ubuntu Linux. Se "
-"http://www.ubuntu.com (engelsk) for mere information om opgradering."
+"opdateringer. Opgradér til en senere udgave af Ubuntu Linux. Se http://www."
+"ubuntu.com (engelsk) for mere information om opgradering."
 
-#: ../UpdateManager/UpdateManager.py:805
+#: ../UpdateManager/UpdateManager.py:781
+#, fuzzy
+msgid "Upgrade information"
+msgstr "Opdaterer arkivinformation"
+
+#: ../UpdateManager/UpdateManager.py:808
 #, python-format
 msgid "<b>New distribution release '%s' is available</b>"
 msgstr "<b>Ny distributionsudgivelse \"%s\" er tilgængelig</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:844
+#: ../UpdateManager/UpdateManager.py:847
 msgid "Software index is broken"
 msgstr "Softwareindeks er i stykker"
 
-#: ../UpdateManager/UpdateManager.py:845
+#: ../UpdateManager/UpdateManager.py:848
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
 msgstr ""
 "Det er umuligt at installere eller fjerne software. Brug venligst "
-"pakkehåndteringsprogrammet \"Synaptic\" eller kør \"sudo apt-get install -"
-"f\" i en terminal for at ordne dette problem først."
+"pakkehåndteringsprogrammet \"Synaptic\" eller kør \"sudo apt-get install -f"
+"\" i en terminal for at ordne dette problem først."
 
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:136
 msgid "Downloading Package Information"
@@ -1766,12 +1776,25 @@ msgstr ""
 msgid "Downloading changelog"
 msgstr "Henter listen med ændringer"
 
-#. FIXME: better string, but we are in string freeze
-#: ../UpdateManager/Core/MyCache.py:221 ../UpdateManager/Core/UpdateList.py:47
-msgid "Failed to detect distribution"
-msgstr "Kunne ikke fastslå distribution"
+#: ../UpdateManager/Core/MyCache.py:108
+#, fuzzy, python-format
+msgid "Other updates (%s)"
+msgstr "Andre opdateringer"
 
-#: ../UpdateManager/Core/MyCache.py:228
+#: ../UpdateManager/Core/MyCache.py:227
+#, python-format
+msgid ""
+"Changes for the versions:\n"
+"%s\n"
+"%s\n"
+"\n"
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:229
+msgid "This change is not coming from a source that supports changelogs."
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:237
 #, python-format
 msgid ""
 "The changelog does not contain any relevant changes.\n"
@@ -1784,7 +1807,7 @@ msgstr ""
 "Benyt venligst http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "indtil ændringerne bliver tilgængelige eller prøv igen senere."
 
-#: ../UpdateManager/Core/MyCache.py:233
+#: ../UpdateManager/Core/MyCache.py:242
 #, python-format
 msgid ""
 "The list of changes is not available yet.\n"
@@ -1797,13 +1820,17 @@ msgstr ""
 "Brug http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "indtil ændringerne bliver tilgængelige eller prøv igen senere."
 
-#: ../UpdateManager/Core/MyCache.py:239
+#: ../UpdateManager/Core/MyCache.py:248
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
 "Fejl ved hentning af ændringslisten.\n"
 "Kontrollér venligst din internetforbindelse."
+
+#: ../UpdateManager/Core/UpdateList.py:47
+msgid "Failed to detect distribution"
+msgstr "Kunne ikke fastslå distribution"
 
 #: ../UpdateManager/Core/UpdateList.py:48
 #, python-format
@@ -2102,8 +2129,8 @@ msgid ""
 "Do not output anything, just return %s if there is a new release and %s if "
 "there is none."
 msgstr ""
-"Giver ingen uddata, men returnerer blot %s, hvis der er en ny udgivelse og "
-"%s, hvis der ingen er."
+"Giver ingen uddata, men returnerer blot %s, hvis der er en ny udgivelse og %"
+"s, hvis der ingen er."
 
 #: ../check-new-release:46
 #, c-format
@@ -2163,8 +2190,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr ""
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 
 #~ msgid ""
@@ -2185,43 +2211,42 @@ msgstr ""
 #~ msgid "A essential package would have to be removed"
 #~ msgstr "Det ville være nødvendigt at fjerne en påkrævet pakke"
 
-#, python-format
 #~ msgid ""
-#~ "The upgrade aborts now. The upgrade needs a total of %s free space on disk "
-#~ "'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-#~ "your trash and remove temporary packages of former installations using 'sudo "
-#~ "apt-get clean'."
+#~ "The upgrade aborts now. The upgrade needs a total of %s free space on "
+#~ "disk '%s'. Please free at least an additional %s of disk space on '%s'. "
+#~ "Empty your trash and remove temporary packages of former installations "
+#~ "using 'sudo apt-get clean'."
 #~ msgstr ""
 #~ "Opgraderingen afbrydes nu. Opgraderingen skal bruge %s fri plads på disk "
-#~ "\"%s\". Frigør venligst yderligere %s diskplads på \"%s\". Tøm din papirkurv "
-#~ "og fjern midlertidige pakker fra tidligere installationer ved at køre \"sudo "
-#~ "apt-get clean\"."
+#~ "\"%s\". Frigør venligst yderligere %s diskplads på \"%s\". Tøm din "
+#~ "papirkurv og fjern midlertidige pakker fra tidligere installationer ved "
+#~ "at køre \"sudo apt-get clean\"."
 
 #~ msgid ""
 #~ "The upgrade aborts now. Your system could be in an unusable state. A "
 #~ "recovery will run now (dpkg --configure -a)."
 #~ msgstr ""
-#~ "Opgraderingen afbrydes nu. Dit system kan være i en ubrugelig tilstand. En "
-#~ "genskabelse blev kørt nu (dpkg --configure -a)."
+#~ "Opgraderingen afbrydes nu. Dit system kan være i en ubrugelig tilstand. "
+#~ "En genskabelse blev kørt nu (dpkg --configure -a)."
 
-#, python-format
 #~ msgid ""
 #~ "This download will take about %s with a 1Mbit DSL connection and about %s "
 #~ "with a 56k modem"
 #~ msgstr ""
-#~ "Denne hentning vil tage omkring %s med en 1 Mbit DSL-forbindelse og omkring "
-#~ "%s med et 56k modem"
+#~ "Denne hentning vil tage omkring %s med en 1 Mbit DSL-forbindelse og "
+#~ "omkring %s med et 56k modem"
 
 #~ msgid ""
-#~ "Please report this as a bug and include the files /var/log/dist-"
-#~ "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-#~ "upgrade aborts now.\n"
+#~ "Please report this as a bug and include the files /var/log/dist-upgrade/"
+#~ "main.log and /var/log/dist-upgrade/apt.log in your report. The upgrade "
+#~ "aborts now.\n"
 #~ "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 #~ msgstr ""
 #~ "Rapportér venligst dette som en fejl og inkludér filerne /var/log/dist-"
 #~ "upgrade/main.log og /var/log/dist-upgrade/apt.log in din rapport. "
 #~ "Opgraderingen afbrydes nu.\n"
-#~ "Din oprindelige sources.list blev gemt i /etc/apt/sources.list.distUpgrade."
+#~ "Din oprindelige sources.list blev gemt i /etc/apt/sources.list."
+#~ "distUpgrade."
 
 #~ msgid "Restart the system now [yN] "
 #~ msgstr "Genstart systemet nu [yN] "
@@ -2229,7 +2254,6 @@ msgstr ""
 #~ msgid "The list of changes is not available"
 #~ msgstr "Listen med ændringer er ikke tilgængelig"
 
-#, python-format
 #~ msgid "You can install %s update."
 #~ msgid_plural "You can install %s updates."
 #~ msgstr[0] "Du kan installere %s opdatering."
@@ -2238,7 +2262,6 @@ msgstr ""
 #~ msgid "<big><b>Keep your system up-to-date</b></big>"
 #~ msgstr "<big><b>Hold dit system opdateret</b></big>"
 
-#, python-format
 #~ msgid ""
 #~ "The upgrade will continue but the '%s' package may be in a not working "
 #~ "state. Please consider submitting a bugreport about it."
@@ -2277,21 +2300,22 @@ msgstr ""
 
 #~ msgid ""
 #~ "The upgrade process can automatically download the latest updates and "
-#~ "install them during the upgrade.  The upgrade will take longer, but when it "
-#~ "is complete, your system will be fully up to date.  You can choose not to do "
-#~ "this, but you should install the latest updates soon after upgrading."
+#~ "install them during the upgrade.  The upgrade will take longer, but when "
+#~ "it is complete, your system will be fully up to date.  You can choose not "
+#~ "to do this, but you should install the latest updates soon after "
+#~ "upgrading."
 #~ msgstr ""
 #~ "Opgraderingsprocessen kan automatisk downloade de seneste opdateringer og "
-#~ "installere dem under opgraderingen. Opgraderingen vil vare længere, men når "
-#~ "den er færdig vil dit system være fuldt opdateret. Du kan vælge ikke at gøre "
-#~ "dette, men du bør installere de seneste opdateringer kort efter "
+#~ "installere dem under opgraderingen. Opgraderingen vil vare længere, men "
+#~ "når den er færdig vil dit system være fuldt opdateret. Du kan vælge ikke "
+#~ "at gøre dette, men du bør installere de seneste opdateringer kort efter "
 #~ "opgraderingen."
 
 #~ msgid ""
 #~ "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
 #~ "\n"
-#~ "Should default entries for '%s' be added? If you select 'No' the update will "
-#~ "cancel."
+#~ "Should default entries for '%s' be added? If you select 'No' the update "
+#~ "will cancel."
 #~ msgstr ""
 #~ "Efter indlæsning af din \"sources.list\" blev der ikke fundet en gyldig "
 #~ "linje for \"%s\" fundet.\n"
@@ -2303,5 +2327,5 @@ msgstr ""
 #~ "The upgrade aborts now. Please check your internet connection or "
 #~ "installation media and try again. "
 #~ msgstr ""
-#~ "Opgraderingen afbryder nu. Tjek venligst din internetforbindelse eller dit "
-#~ "installationsmedie og prøv igen. "
+#~ "Opgraderingen afbryder nu. Tjek venligst din internetforbindelse eller "
+#~ "dit installationsmedie og prøv igen. "

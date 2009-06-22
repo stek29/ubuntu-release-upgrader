@@ -20,13 +20,6 @@ import copy
 
 
 
-class NoImageFoundException(Exception):
-    pass
-
-class PortInUseException(Exception):
-    pass
-
-
 class UpgradeTestBackendSSH(UpgradeTestBackend):
     " abstract backend that works with ssh "
 

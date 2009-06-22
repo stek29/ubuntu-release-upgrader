@@ -47,6 +47,8 @@ import copy
 class NoImageFoundException(Exception):
     pass
 
+class PortInUseException(Exception):
+    pass
 
 class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
     " qemu/kvm backend - need qemu >= 0.9.0"

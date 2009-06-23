@@ -86,6 +86,12 @@ def reapply(cache, pkgnames):
    for name in pkgnames:
       cache[name].markInstall(False)
 
+def contains_blacklisted_pkg(cache):
+   for pkg in cache:
+      if pkg.markedInstall and blacklisted(pkg.name):
+         return True
+   return False
+
 
 # ----------------------------------------------------------------
 
@@ -142,6 +148,11 @@ for comp in comps:
                   except SystemError, e:
                      print "Installing '%s' cause problems: %s" % (pkg.name, e)
                      pkg.markKeep()
+                  # check blacklist
+                  if contains_blacklisted_pkg(cache):
+                     clear(cache)
+                     reapply(cache, best)
+                     continue
                   new = set([p.name for p in cache if p.markedInstall])
                   #if not pkg.markedInstall or len(new) < len(current):
                   if not (pkg.isInstalled or pkg.markedInstall):

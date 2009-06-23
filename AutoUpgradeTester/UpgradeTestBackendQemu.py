@@ -269,11 +269,14 @@ iface eth0 inet static
             if os.path.exists(script):
                 self._runInImage(["mkdir","/upgrade-tester"])
                 self._copyToImage(script, "/upgrade-tester")
+                self._copyToImage(glob.glob(os.path.dirname(
+                            self.profile)+"/*.cfg"), "/upgrade-tester")
                 script_name = os.path.basename(script)
                 self._runInImage(["chmod","755",
                                   os.path.join("/upgrade-tester",script_name)])
-                print "running script: %s" % os.path.join("/tmp",script_name)
-                ret = self._runInImage([os.path.join("/upgrade-tester",script_name)])
+                print "running script: %s" % script_name
+                cmd = os.path.join("/upgrade-tester",script_name)
+                ret = self._runInImage(["cd /upgrade-tester; %s" % cmd])
                 print "PostBootstrapScript returned: %s" % ret
                 assert ret == 0, "PostBootstrapScript returned non-zero"
             else:

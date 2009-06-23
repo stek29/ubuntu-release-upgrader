@@ -428,6 +428,7 @@ iface eth0 inet static
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to image overrides" % self.profile
+            self._runInImage(["mkdir","-p","/etc/update-manager/release-upgrades.d"])
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
 
         # copy test repo sources.list (if needed)

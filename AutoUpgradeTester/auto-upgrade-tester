@@ -8,6 +8,7 @@
 from optparse import OptionParser
 import os
 import sys
+import time
 
 # check if we run from a bzr checkout
 if os.path.exists("./UpgradeTestBackend.py"):
@@ -26,9 +27,13 @@ class OutputThread(multiprocessing.Process):
         self.file = os.open(filename, os.O_RDONLY)
     def run(self):
         while True:
+            # the read() seems to not block for some reason
+            # but return "" ?!?
             s = os.read(self.file, 512)
             if s:
                 print s,
+            else:
+                time.sleep(0.1)
 
 # FIXME: move this into the generic backend code
 def login(backend):

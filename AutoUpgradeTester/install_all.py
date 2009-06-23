@@ -172,9 +172,9 @@ for comp in comps:
                      reapply(cache, best)
    i=0
 
-# make sure that the ubuntu base packages are installed
+# make sure that the ubuntu base packages are installed (and a bootloader)
 print len(troublemaker)
-for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:
+for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard", "grub"]:
     cache[pkg].markInstall()
 
 # make sure we don't install blacklisted stuff

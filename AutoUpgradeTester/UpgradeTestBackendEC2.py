@@ -98,6 +98,20 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         if self.instance:
             self.instance.stop()
 
+    def _enableRootLogin(self):
+        ret = subprocess.call(["ssh",
+            "-l","ubuntu",
+            "-p",self.ssh_port,
+            self.ec2hostname,
+            "-q","-q", # shut it up
+            "-i",self.ssh_key,
+            "-o", "StrictHostKeyChecking=no",
+            "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
+            "sudo",
+            "sed","-i","-e","'s,\(.*\)\(ssh-rsa.*\),\\2,'",
+            "/root/.ssh/authorized_keys"])
+        return (ret == 0)
+
     def _copyToImage(self, fromF, toF, recursive=False):
         cmd = ["scp",
                "-P",self.ssh_port,
@@ -222,6 +236,20 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         
         return True
 
+    def ping(self):
+       cmd = "/bin/true"
+       ret = subprocess.call(["ssh",
+           "-l","ubuntu",
+           "-p",self.ssh_port,
+           self.ec2hostname,
+           "-q","-q", # shut it up
+           "-i",self.ssh_key,
+           "-o", "StrictHostKeyChecking=no",
+           "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
+           cmd])
+       return ret
+
+
     def start_instance(self):
         print "Starting ec2 instance and wait until its availabe "
 
@@ -242,12 +270,21 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # now sping until ssh comes up in the instance
         for i in range(900):
             time.sleep(1)
-            if self._runInImage(["/bin/true"]) == 0:
+            if self.ping() == 0:
                 print "instance available via ssh ping"
                 break
         else:
             print "Could not connect to instance after 900s, exiting"
             return False
+        if (self.config.has_option("EC2","EnableRootLogin") and
+            self.config.getboolean("EC2","EnableRootLogin")):
+            print "Re-enabling root login..."
+            ret = self._enableRootLogin()
+            if ret:
+                print "Done!"
+            else:
+                print "Oops, failed to enable root login..."
+                print ret
         return True
     
     def reboot_instance(self):

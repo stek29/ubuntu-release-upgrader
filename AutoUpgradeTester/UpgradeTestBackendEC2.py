@@ -300,7 +300,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         time.sleep(5)
         while True:
             if self._runInImage(["/bin/true"]) == 0:
-                print "instance rebootet"
+                print "instance rebooted"
                 break
 
     def stop_instance(self):
@@ -407,7 +407,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # FIXME: add some tests here to see if the upgrade worked
         # this should include:
         # - new kernel is runing (run uname -r in target)
-        # - did it sucessfully rebootet
+        # - did it sucessfully rebooted
         # - is X runing
         # - generate diff of upgrade vs fresh install
         # ...

@@ -206,14 +206,18 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
+            if os.path.isabs(script):
+                script_path = script
+            else:
+                script_path = os.path.join(os.path.dirname(self.profile), script)
             print "have PostBootstrapScript: %s" % script
-            if os.path.exists(script):
+            if os.path.exists(script_path):
                 self._runInImage(["mkdir","/upgrade-tester"])
-                self._copyToImage(script, "/upgrade-tester")
+                self._copyToImage(script_path, "/upgrade-tester")
                 print "running script: %s" % os.path.join("/tmp",script)
                 self._runInImage([os.path.join("/upgrade-tester",script)])
             else:
-                print "WARNING: %s not found" % script
+                print "WARNING: %s not found" % script_path
 
         if self.config.getWithDefault("NonInteractive",
                                       "UpgradeFromDistOnBootstrap", False):

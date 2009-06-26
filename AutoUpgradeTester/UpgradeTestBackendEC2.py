@@ -73,6 +73,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
             print "file."
             sys.exit(1)
         self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
+        if (self.config.has_option("EC2","UbuntuOfficialAMI") and
+            self.config.getboolean("EC2","UbuntuOfficialAMI")):
+            self.ubuntu_official_ami = True
+        else:
+            self.ubuntu_official_ami = False
         
         try:
             self.security_groups = self.config.getlist("EC2","SecurityGroups")
@@ -98,6 +103,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         print "_cleanup(): stopping running instance"
         if self.instance:
             self.instance.stop()
+
+    def _enableRootLogin(self):
+        command = ["sudo", "sed", "-i", "-e", "'s,\(.*\)\(ssh-rsa.*\),\\2,'", "/root/.ssh/authorized_keys"]
+        ret = self._runInImageAsUser("ubuntu", command)
+        return (ret == 0)
 
     def _copyToImage(self, fromF, toF, recursive=False):
         cmd = ["scp",
@@ -133,16 +143,20 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         return ret
 
 
-    def _runInImage(self, command, **kwargs):
+    def _runInImageAsUser(self, user, command, **kwargs):
         ret = subprocess.call(["ssh",
-                               "-l","root",
-                               "-p",self.ssh_port,
-                               self.ec2hostname,
-                               "-q","-q", # shut it up
-                               "-i",self.ssh_key,
-                               "-o", "StrictHostKeyChecking=no",
-                               "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-                               ]+command, **kwargs)
+            "-l",user,
+            "-p",self.ssh_port,
+            self.ec2hostname,
+            "-q","-q", # shut it up
+            "-i",self.ssh_key,
+            "-o", "StrictHostKeyChecking=no",
+            "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
+            ]+command, **kwargs)
+        return ret
+        
+    def _runInImage(self, command, **kwargs):
+        ret = self._runInImageAsUser("root", command, **kwargs)
         return ret
 
 
@@ -192,14 +206,18 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
+            if os.path.isabs(script):
+                script_path = script
+            else:
+                script_path = os.path.join(os.path.dirname(self.profile), script)
             print "have PostBootstrapScript: %s" % script
-            if os.path.exists(script):
+            if os.path.exists(script_path):
                 self._runInImage(["mkdir","/upgrade-tester"])
-                self._copyToImage(script, "/upgrade-tester")
+                self._copyToImage(script_path, "/upgrade-tester")
                 print "running script: %s" % os.path.join("/tmp",script)
                 self._runInImage([os.path.join("/upgrade-tester",script)])
             else:
-                print "WARNING: %s not found" % script
+                print "WARNING: %s not found" % script_path
 
         if self.config.getWithDefault("NonInteractive",
                                       "UpgradeFromDistOnBootstrap", False):
@@ -223,6 +241,16 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         
         return True
 
+    def ping(self):
+        command = ["/bin/true"]
+        if self.ubuntu_official_ami:
+            user = "ubuntu"
+        else:
+            user = "root"
+        ret = self._runInImageAsUser(user, command)
+        return (ret == 0)
+
+
     def start_instance(self):
         print "Starting ec2 instance and wait until its availabe "
 
@@ -243,12 +271,21 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # now sping until ssh comes up in the instance
         for i in range(900):
             time.sleep(1)
-            if self._runInImage(["/bin/true"]) == 0:
+            if self.ping():
                 print "instance available via ssh ping"
                 break
         else:
             print "Could not connect to instance after 900s, exiting"
             return False
+        # re-enable root login if needed
+        if self.ubuntu_official_ami:
+            print "Re-enabling root login... ",
+            ret = self._enableRootLogin()
+            if ret:
+                print "Done!"
+            else:
+                print "Oops, failed to enable root login..."
+            assert (ret == True)
         return True
     
     def reboot_instance(self):
@@ -259,7 +296,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         time.sleep(5)
         while True:
             if self._runInImage(["/bin/true"]) == 0:
-                print "instance rebootet"
+                print "instance rebooted"
                 break
 
     def stop_instance(self):
@@ -333,7 +370,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
             self._copyToImage(test_repo, "/etc/apt/sources.list.d")
             sourcelist = self.getSourcesListFile()
-            apt_pkg.Config.Set("Dir::Etc::sourcelist", sourcelist.name)
+            apt_pkg.Config.Set("Dir::Etc", os.path.dirname(sourcelist.name))
+            apt_pkg.Config.Set("Dir::Etc::sourcelist", os.path.basename(sourcelist.name))
             sources = SourcesList(matcherPath=".")
             sources.load(test_repo)
             # add the uri to the list of valid mirros in the image
@@ -366,7 +404,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # FIXME: add some tests here to see if the upgrade worked
         # this should include:
         # - new kernel is runing (run uname -r in target)
-        # - did it sucessfully rebootet
+        # - did it sucessfully rebooted
         # - is X runing
         # - generate diff of upgrade vs fresh install
         # ...

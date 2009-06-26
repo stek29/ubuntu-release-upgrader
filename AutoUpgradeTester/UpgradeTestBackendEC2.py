@@ -73,6 +73,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
             print "file."
             sys.exit(1)
         self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
+        if (self.config.has_option("EC2","UbuntuOfficialAMI") and
+            self.config.getboolean("EC2","UbuntuOfficialAMI")):
+            self.ubuntu_official_ami = True
+        else:
+            self.ubuntu_official_ami = False
         
         try:
             self.security_groups = self.config.getlist("EC2","SecurityGroups")
@@ -237,9 +242,13 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         return True
 
     def ping(self):
-       command = ["/bin/true"]
-       ret = self._runInImageAsUser("ubuntu", command)
-       return (ret == 0)
+        command = ["/bin/true"]
+        if self.ubuntu_official_ami:
+            user = "ubuntu"
+        else:
+            user = "root"
+        ret = self._runInImageAsUser(user, command)
+        return (ret == 0)
 
 
     def start_instance(self):
@@ -268,15 +277,15 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         else:
             print "Could not connect to instance after 900s, exiting"
             return False
-        if (self.config.has_option("EC2","EnableRootLogin") and
-            self.config.getboolean("EC2","EnableRootLogin")):
-            print "Re-enabling root login..."
+        # re-enable root login if needed
+        if self.ubuntu_official_ami:
+            print "Re-enabling root login... ",
             ret = self._enableRootLogin()
             if ret:
                 print "Done!"
             else:
                 print "Oops, failed to enable root login..."
-                print ret
+            assert (ret == True)
         return True
     
     def reboot_instance(self):

@@ -100,17 +100,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
             self.instance.stop()
 
     def _enableRootLogin(self):
-        ret = subprocess.call(["ssh",
-            "-l","ubuntu",
-            "-p",self.ssh_port,
-            self.ec2hostname,
-            "-q","-q", # shut it up
-            "-i",self.ssh_key,
-            "-o", "StrictHostKeyChecking=no",
-            "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-            "sudo",
-            "sed","-i","-e","'s,\(.*\)\(ssh-rsa.*\),\\2,'",
-            "/root/.ssh/authorized_keys"])
+        command = ["sudo", "sed", "-i", "-e", "'s,\(.*\)\(ssh-rsa.*\),\\2,'", "/root/.ssh/authorized_keys"]
+        ret = self._runInImageAsUser("ubuntu", command)
         return (ret == 0)
 
     def _copyToImage(self, fromF, toF, recursive=False):
@@ -147,16 +138,20 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         return ret
 
 
-    def _runInImage(self, command, **kwargs):
+    def _runInImageAsUser(self, user, command, **kwargs):
         ret = subprocess.call(["ssh",
-                               "-l","root",
-                               "-p",self.ssh_port,
-                               self.ec2hostname,
-                               "-q","-q", # shut it up
-                               "-i",self.ssh_key,
-                               "-o", "StrictHostKeyChecking=no",
-                               "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-                               ]+command, **kwargs)
+            "-l",user,
+            "-p",self.ssh_port,
+            self.ec2hostname,
+            "-q","-q", # shut it up
+            "-i",self.ssh_key,
+            "-o", "StrictHostKeyChecking=no",
+            "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
+            ]+command, **kwargs)
+        return ret
+        
+    def _runInImage(self, command, **kwargs):
+        ret = self._runInImageAsUser("root", command, **kwargs)
         return ret
 
 
@@ -242,16 +237,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         return True
 
     def ping(self):
-       cmd = "/bin/true"
-       ret = subprocess.call(["ssh",
-           "-l","ubuntu",
-           "-p",self.ssh_port,
-           self.ec2hostname,
-           "-q","-q", # shut it up
-           "-i",self.ssh_key,
-           "-o", "StrictHostKeyChecking=no",
-           "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-           cmd])
+       command = ["/bin/true"]
+       ret = self._runInImageAsUser("ubuntu", command)
        return (ret == 0)
 
 

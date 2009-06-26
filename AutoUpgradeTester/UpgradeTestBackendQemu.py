@@ -16,6 +16,7 @@ import signal
 import crypt
 import tempfile
 import copy
+import apt_pkg
 
 from sourceslist import SourcesList
 
@@ -454,6 +455,8 @@ iface eth0 inet static
         if test_repo:
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
             self._copyToImage(test_repo, "/etc/apt/sources.list.d")
+            sourcelist = self.getSourcesListFile()
+            apt_pkg.Config.Set("Dir::Etc::sourcelist", sourcelist.name)
             sources = SourcesList(matcherPath=".")
             sources.load(test_repo)
             # add the uri to the list of valid mirros in the image

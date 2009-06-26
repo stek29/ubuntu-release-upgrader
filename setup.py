@@ -51,7 +51,7 @@ setup(name='update-manager',
                ],
       data_files=[
                   ('share/update-manager/glade',
-                   glob.glob("data/glade/*.glade")+
+                   glob.glob("data/glade/*.ui")+
                    glob.glob("DistUpgrade/*.glade")
                   ),
                   ('share/update-manager/',

@@ -99,6 +99,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         self.image = os.path.join(imagedir, "test-image.%s" % profilename)
         # make ssh login possible (localhost 54321) available
         self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
+        self.ssh_hostname = "localhost"
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
         # vnc port/display

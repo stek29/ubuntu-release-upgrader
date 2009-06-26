@@ -61,7 +61,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             cmd += fromF
         else:
             cmd.append(fromF)
-        cmd.append("root@localhost:%s" %  toF)
+        cmd.append("root@%s:%s" %  (self.ssh_hostname, toF))
         #print cmd
         ret = subprocess.call(cmd)
         return ret
@@ -74,7 +74,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",
                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
-               "root@localhost:%s" %  fromF,
+               "root@%s:%s" %  (self.ssh_hostname, fromF),
                toF
                ]
         #print cmd
@@ -90,7 +90,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
 #                               "-tt",
                                "-l","root",
                                "-p",self.ssh_port,
-                               "localhost",
+                               self.ssh_hostname,
                                "-q","-q", # shut it up
                                "-i",self.ssh_key,
                                "-o", "StrictHostKeyChecking=no",

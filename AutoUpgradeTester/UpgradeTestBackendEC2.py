@@ -88,7 +88,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
 
         # the public name of the instance, e.g. 
         #  ec2-174-129-152-83.compute-1.amazonaws.com
-        self.ec2hostname = ""
+        self.ssh_hostname = ""
         # the instance name (e.g. i-3325ad4)
         self.ec2instance = ""
         if (self.config.has_option("NonInteractive","RealReboot") and
@@ -186,7 +186,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
                 self.instance.update()
 
         print "It's up: hostname =", self.instance.dns_name
-        self.ec2hostname = self.instance.dns_name
+        self.ssh_hostname = self.instance.dns_name
         self.ec2instance = self.instance.id
 
         # now sping until ssh comes up in the instance
@@ -234,7 +234,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         print "Starting for upgrade"
 
         assert(self.ec2instance)
-        assert(self.ec2hostname)
+        assert(self.ssh_hostname)
 
         # copy the profile
         if os.path.exists(self.profile):

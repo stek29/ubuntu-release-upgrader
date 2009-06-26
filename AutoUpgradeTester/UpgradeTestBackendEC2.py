@@ -227,9 +227,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         upgrader_env = ""
 
         # clean from any leftover pyc files
-        for d in self.upgradefilesdir:        
-            for f in glob.glob("%s/*.pyc" %s):
-                os.unlink(f)
+        for f in glob.glob("%s/*.pyc" %  self.upgradefilesdir):
+            os.unlink(f)
 
         print "Starting for upgrade"
 

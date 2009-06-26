@@ -362,32 +362,7 @@ iface eth0 inet static
             print "qemu stopped"
 
 
-    def _runBzrCheckoutUpgrade(self):
-        # start the upgrader
-        print "running the upgrader now"
-
-        # this is to support direct copying of backport udebs into the 
-        # qemu image - useful for testing backports without having to
-        # push them into the archive
-        upgrader_args = ""
-        upgrader_env = ""
-
-        backports = self.config.getlist("NonInteractive", "PreRequistsFiles")
-        if backports:
-            self._runInImage(["mkdir -p /upgrade-tester/backports"])
-            for f in backports:
-                print "Copying %s" % os.path.basename(f)
-                self._copyToImage(f, "/upgrade-tester/backports/")
-                self._runInImage(["(cd /upgrade-tester/backports ; dpkg-deb -x %s . )" % os.path.basename(f)])
-            upgrader_args = " --have-prerequists"
-            upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
-
-        ret = self._runInImage(["(cd /upgrade-tester/ ; "
-                                "%s./dist-upgrade.py %s)" % (upgrader_env,
-                                                             upgrader_args)])
-        return ret
-
-    def upgrade(self):
+   def upgrade(self):
         print "upgrade()"
 
         # clean from any leftover pyc files

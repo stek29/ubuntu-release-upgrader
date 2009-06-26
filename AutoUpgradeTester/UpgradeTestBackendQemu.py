@@ -361,36 +361,6 @@ iface eth0 inet static
             self.qemu_pid = None
             print "qemu stopped"
 
-    def _copyUpgraderFilesFromBzrCheckout(self):
-        " copy upgrader files from a bzr checkout "
-        print "copy upgrader into image"
-        # copy the upgrade into target+/upgrader-tester/
-        files = []
-        self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
-        for f in glob.glob("%s/*" % self.upgradefilesdir):
-            if not os.path.isdir(f):
-                files.append(f)
-            elif os.path.islink(f):
-                print "Copying link '%s' to image " % f
-                self._copyToImage(f, "/upgrade-tester", recursive=True)
-        self._copyToImage(files, "/upgrade-tester")
-        # and any other cfg files
-        for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
-            if (os.path.isfile(f) and
-                not os.path.basename(f).startswith("DistUpgrade.cfg")):
-                print "Copying '%s' to image " % f
-                self._copyToImage(f, "/upgrade-tester")
-        # copy the patches
-        pd="%s/patches" %  self.upgradefilesdir
-        print "Copying '%s' to image" % pd
-        self._copyToImage(pd, "/upgrade-tester/", recursive=True)
-        # and prereq lists
-        prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
-        if prereq is not None:
-            prereq = os.path.join(os.path.dirname(self.profile),prereq)
-            print "Copying '%s' to image" % prereq
-            self._copyToImage(prereq, "/upgrade-tester")
-
 
     def _runBzrCheckoutUpgrade(self):
         # start the upgrader

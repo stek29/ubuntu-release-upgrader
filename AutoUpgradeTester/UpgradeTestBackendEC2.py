@@ -252,7 +252,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
            "-o", "StrictHostKeyChecking=no",
            "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
            cmd])
-       return ret
+       return (ret == 0)
 
 
     def start_instance(self):
@@ -275,7 +275,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackend):
         # now sping until ssh comes up in the instance
         for i in range(900):
             time.sleep(1)
-            if self.ping() == 0:
+            if self.ping():
                 print "instance available via ssh ping"
                 break
         else:

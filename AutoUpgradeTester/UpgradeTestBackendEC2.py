@@ -14,6 +14,7 @@ import glob
 import time
 import copy
 import atexit
+import apt_pkg
 
 from subprocess import Popen, PIPE
 from sourceslist import SourcesList

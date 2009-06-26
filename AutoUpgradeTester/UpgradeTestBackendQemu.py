@@ -16,6 +16,7 @@ import signal
 import crypt
 import tempfile
 import copy
+import apt_pkg
 
 from sourceslist import SourcesList
 

@@ -112,9 +112,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         # start the VM
         self.start_instance()
 
-        # prepare the sources.list
+        # prepare the sources.list (needed because a AMI may have any
+        # sources.list)
+        sources = self.getSourcesListFile()
         mirror = self.config.get("NonInteractive","Mirror")
-        ret = self._runInImage(["sed","-i","s#http://archive.ubuntu.com/ubuntu#%s#" % mirror, "/etc/apt/sources.list"]) 
+        ret = self._copyToImage(sources.name, "/etc/apt/sources.list")
         assert(ret == 0)
 
         # install some useful stuff

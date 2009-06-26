@@ -18,6 +18,7 @@ import crypt
 import tempfile
 import copy
 import atexit
+import apt_pkg
 
 # images created with http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 #  ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted --rootsize 20G
@@ -436,6 +437,8 @@ iface eth0 inet static
         if test_repo:
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
             self._copyToImage(test_repo, "/etc/apt/sources.list.d")
+            sourcelist = self.getSourcesListFile()
+            apt_pkg.Config.Set("Dir::Etc::sourcelist", sourcelist.name)
             sources = SourcesList(matcherPath=".")
             sources.load(test_repo)
             # add the uri to the list of valid mirros in the image

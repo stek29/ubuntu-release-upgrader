@@ -362,7 +362,7 @@ iface eth0 inet static
             print "qemu stopped"
 
 
-   def upgrade(self):
+    def upgrade(self):
         print "upgrade()"
 
         # clean from any leftover pyc files

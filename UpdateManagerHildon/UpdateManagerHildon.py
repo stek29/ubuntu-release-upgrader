@@ -83,8 +83,8 @@ class HildonInstallProgressAdapter(GtkInstallProgressAdapter):
 
 class UpdateManagerHildon(UpdateManager):
 
-  def __init__(self, datadir):
-      UpdateManager.__init__(self, datadir)
+  def __init__(self, datadir, options):
+      UpdateManager.__init__(self, datadir, options)
       self.program = hildon.Program()
       self.program.__init__()
 
@@ -95,7 +95,7 @@ class UpdateManagerHildon(UpdateManager):
       for widget in [ "window_main", "dialog_release_notes", "window_fetch", 
                       "dialog_manual_update", "dialog_cacheprogress", 
                       "dialog_dist_upgrade" ]:
-          self.glade.get_widget(widget).reparent(self.window)
+          self.builder.get_object(widget).reparent(self.window)
       self.view = None
 
   # FIXME: below is still too much duplicated code m'kay

@@ -75,6 +75,9 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
             print "file."
             sys.exit(1)
         self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
+        self.ubuntu_official_ami = False
+        if self.config.has_option("EC2","UbuntuOfficialAMI"):
+            self.ubuntu_official_ami = self.config.getboolean("EC2","UbuntuOfficialAMI")
         
         try:
             self.security_groups = self.config.getlist("EC2","SecurityGroups")
@@ -100,6 +103,13 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         print "_cleanup(): stopping running instance"
         if self.instance:
             self.instance.stop()
+
+    def _enableRootLogin(self):
+        command = ["sudo", 
+                   "sed", "-i", "-e", "'s,\(.*\)\(ssh-rsa.*\),\\2,'", 
+                   "/root/.ssh/authorized_keys"]
+        ret = self._runInImageAsUser("ubuntu", command)
+        return (ret == 0)
 
     def bootstrap(self, force=False):
         print "bootstrap()"
@@ -192,14 +202,27 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         self.ec2instance = self.instance.id
 
         # now sping until ssh comes up in the instance
+        if self.ubuntu_official_ami:
+            user = "ubuntu"
+        else:
+            user = "root"
         for i in range(900):
             time.sleep(1)
-            if self._runInImage(["/bin/true"]) == 0:
+            if self.ping(user):
                 print "instance available via ssh ping"
                 break
         else:
             print "Could not connect to instance after 900s, exiting"
             return False
+        # re-enable root login if needed
+        if self.ubuntu_official_ami:
+            print "Re-enabling root login... ",
+            ret = self._enableRootLogin()
+            if ret:
+                print "Done!"
+            else:
+                print "Oops, failed to enable root login..."
+            assert (ret == True)
         return True
     
     def reboot_instance(self):
@@ -285,7 +308,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         # FIXME: add some tests here to see if the upgrade worked
         # this should include:
         # - new kernel is runing (run uname -r in target)
-        # - did it sucessfully rebootet
+        # - did it sucessfully rebooted
         # - is X runing
         # - generate diff of upgrade vs fresh install
         # ...

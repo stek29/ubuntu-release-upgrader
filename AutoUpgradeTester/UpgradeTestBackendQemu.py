@@ -420,7 +420,7 @@ iface eth0 inet static
         # FIXME: add some tests here to see if the upgrade worked
         # this should include:
         # - new kernel is runing (run uname -r in target)
-        # - did it sucessfully rebootet
+        # - did it sucessfully rebooted
         # - is X runing
         # - generate diff of upgrade vs fresh install
         # ...

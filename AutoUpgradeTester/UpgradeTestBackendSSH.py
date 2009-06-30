@@ -44,6 +44,11 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         ret = self._runInImage(["/bin/sh"])
         self.stop()
 
+    def ping(self, user="root"):
+        " check if the instance is ready "
+        ret = self._runInImageAsUser(user, ["/bin/true"])
+        return (ret == 0)
+
     def _copyToImage(self, fromF, toF, recursive=False):
         "copy a file (or a list of files) to the given toF image location"
         cmd = ["scp",
@@ -83,12 +88,16 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
 
 
     def _runInImage(self, command, **kwargs):
+        ret = self._runInImageAsUser("root", command, **kwargs)
+        return ret
+
+    def _runInImageAsUser(self, user, command, **kwargs):
         "run a given command in the image"
         # ssh -l root -p 54321 localhost -i profile/server/ssh_key
         #     -o StrictHostKeyChecking=no
         ret = subprocess.call(["ssh",
 #                               "-tt",
-                               "-l","root",
+                               "-l", user,
                                "-p",self.ssh_port,
                                self.ssh_hostname,
                                "-q","-q", # shut it up

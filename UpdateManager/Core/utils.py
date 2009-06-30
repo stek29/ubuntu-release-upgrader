@@ -177,6 +177,22 @@ def init_proxy(gconfclient=None):
     urllib2.install_opener(opener)
     os.putenv("http_proxy",proxy)
 
+def on_battery():
+  """
+  Check a dbus signal to org.gnome.PowerManager to not suspend
+  the system, this is to support upgrades from pre-gutsy g-p-m
+  """
+  try:
+    import dbus
+    bus = dbus.Bus(dbus.Bus.TYPE_SYSTEM)
+    devobj = bus.get_object('org.freedesktop.DeviceKit.Power', 
+                            '/org/freedesktop/DeviceKit/Power')
+    dev = dbus.Interface(devobj, "org.freedesktop.DBus.Properties")
+    return dev.Get("org.freedesktop.DeviceKit.Power", "on_battery")
+  except Exception, e:
+    import sys
+    print >>sys.stderr, "on_battery returned error: ", e
+
 def _inhibit_sleep_old_interface():
   """
   Send a dbus signal to org.gnome.PowerManager to not suspend
@@ -267,4 +283,5 @@ def humanize_size(bytes):
         return locale.format(_("%.1f MB"), bytes / 1024 / 1024)
 
 if __name__ == "__main__":
-  print mirror_from_sources_list()
+  #print mirror_from_sources_list()
+  print on_battery()

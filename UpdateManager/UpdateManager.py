@@ -196,6 +196,13 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.progress._window.set_focus_on_map(False)
     # show the main window
     self.window_main.show()
+    # check and warn if on battery
+    if on_battery():
+        self.dialog_on_battery.set_transient_for(self.window_main)
+        res = self.dialog_on_battery.run()
+        self.dialog_on_battery.hide()
+        if res == gtk.RESPONSE_CLOSE:
+            sys.exit()
     # it can only the iconified *after* it is shown (even if the docs
     # claim otherwise)
     if options.no_focus_on_map:
@@ -536,22 +543,22 @@ class UpdateManager(SimpleGtkbuilderApp):
   #  self.help_viewer.run()
 
   def on_button_settings_clicked(self, widget):
-      #print "on_button_settings_clicked"
-      try:
-          apt_pkg.PkgSystemUnLock()
-      except SystemError:
-          pass
-      cmd = ["/usr/bin/gksu", 
-             "--desktop", "/usr/share/applications/software-properties.desktop", 
-             "--", "/usr/bin/software-properties-gtk","--open-tab","2",
-             "--toplevel", "%s" % self.window_main.window.xid ]
-      self.window_main.set_sensitive(False)
-      p = subprocess.Popen(cmd)
-      while p.poll() is None:
-          while gtk.events_pending():
-              gtk.main_iteration()
-          time.sleep(0.05)
-      self.fillstore()
+    #print "on_button_settings_clicked"
+    try:
+        apt_pkg.PkgSystemUnLock()
+    except SystemError:
+        pass
+    cmd = ["/usr/bin/gksu", 
+           "--desktop", "/usr/share/applications/software-properties.desktop", 
+           "--", "/usr/bin/software-properties-gtk","--open-tab","2",
+           "--toplevel", "%s" % self.window_main.window.xid ]
+    self.window_main.set_sensitive(False)
+    p = subprocess.Popen(cmd)
+    while p.poll() is None:
+        while gtk.events_pending():
+            gtk.main_iteration()
+        time.sleep(0.05)
+    self.fillstore()
 
   def on_button_install_clicked(self, widget):
     #print "on_button_install_clicked"

@@ -27,11 +27,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gtk.gdk
-import gtk.glade
-try:
-    import gconf
-except:
-    import fakegconf as gconf
+import gconf
 import gobject
 
 import warnings
@@ -76,7 +72,7 @@ from Core.MetaRelease import Dist
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
-from SimpleGladeApp import SimpleGladeApp
+from SimpleGtkbuilderApp import SimpleGtkbuilderApp
 from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
 
@@ -104,15 +100,14 @@ class UpdateManagerDbusControler(dbus.service.Object):
         self.parent.window_main.present()
         return True
 
-class UpdateManager(SimpleGladeApp):
+class UpdateManager(SimpleGtkbuilderApp):
 
   def __init__(self, datadir, options):
     self.setupDbus()
     gtk.window_set_default_icon_name("update-manager")
 
     self.datadir = datadir
-    SimpleGladeApp.__init__(self, datadir+"glade/UpdateManager.glade",
-                            None, domain="update-manager")
+    SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui")
 
     self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
     self.window_main.set_sensitive(False)

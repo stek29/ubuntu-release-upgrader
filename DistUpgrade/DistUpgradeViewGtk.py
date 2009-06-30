@@ -23,7 +23,6 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gtk.gdk
-import gtk.glade
 import vte
 import gobject
 import pango
@@ -39,7 +38,7 @@ import os
 from DistUpgradeApport import *
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
-from SimpleGladeApp import SimpleGladeApp, bindtextdomain
+from SimpleGtkbuilderApp import SimpleGtkbuilderApp
 
 import gettext
 from DistUpgradeGettext import gettext as _
@@ -334,7 +333,7 @@ class DistUpgradeVteTerminal(object):
       time.sleep(0.1)
     del self.finished
 
-class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
+class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
     " gtk frontend of the distUpgrade tool "
     def __init__(self, datadir=None, logdir=None):
         self.logdir = logdir
@@ -347,7 +346,6 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
 
         # FIXME: i18n must be somewhere relative do this dir
         try:
-          bindtextdomain("update-manager", localedir)
           gettext.textdomain("update-manager")
         except Exception, e:
           logging.warning("Error setting locales (%s)" % e)
@@ -358,8 +356,10 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         except gobject.GError, e:
           logging.debug("error setting default icon, ignoring (%s)" % e)
           pass
-        SimpleGladeApp.__init__(self, gladedir+"/DistUpgrade.glade",
-                                None, domain="update-manager")
+        SimpleGtkbuilderApp.__init__(self, gladedir+"/DistUpgrade.ui")
+        # terminal stuff
+        self.create_terminal()
+
         self.prev_step = 0 # keep a record of the latest step
         # we don't use this currently
         #self.window_main.set_keep_above(True)
@@ -389,9 +389,6 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         column.add_attribute(render, "markup", 0)
         self.treeview_details.append_column(column)
         self.treeview_details.set_model(self.details_list)
-        self.vscrollbar_terminal.set_adjustment(self._term.get_adjustment())
-        # work around bug in VteTerminal here
-        self._term.realize()
 
         # Use italic style in the status labels
         attrlist=pango.AttrList()
@@ -439,13 +436,19 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGladeApp):
         return not res
       return False
 
-    def create_terminal(self, arg1,arg2,arg3,arg4):
+    def create_terminal(self):
         " helper to create a vte terminal "
         self._term = vte.Terminal()
         self._term.connect("key-press-event", self._key_press_handler)
         self._term.set_font_from_string("monospace 10")
         self._term.connect("contents-changed", self._term_content_changed)
         self._terminal_lines = []
+        self.hbox_custom.pack_start(self._term)
+        self._term.realize()
+        self.vscrollbar_terminal = gtk.VScrollbar()
+        self.vscrollbar_terminal.show()
+        self.hbox_custom.pack_start(self.vscrollbar_terminal)
+        self.vscrollbar_terminal.set_adjustment(self._term.get_adjustment())
         try:
           self._terminal_log = open(os.path.join(self.logdir,"term.log"),"w")
         except Exception, e:

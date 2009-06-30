@@ -28,7 +28,6 @@ import pygtk
 import os
 pygtk.require('2.0')
 import gtk
-import gtk.glade
 import sys
 
 from UpdateManagerHildon.UpdateManagerHildon import UpdateManagerHildon
@@ -46,8 +45,6 @@ if __name__ == "__main__":
 
   gettext.bindtextdomain(APP, DIR)
   gettext.textdomain(APP)
-  gtk.glade.bindtextdomain(APP, DIR)
-  gtk.glade.textdomain(APP)
 
   # Begin parsing of options
   parser = OptionParser()
@@ -64,6 +61,13 @@ if __name__ == "__main__":
   parser.add_option ("-p","--proposed", action="store_true",
                      dest="use_proposed", default=False,
                      help=_("Try to run a dist-upgrade"))
+  parser.add_option ("--no-focus-on-map", action="store_true",
+                     dest="no_focus_on_map", default=False,
+                     # TRANSLATORS: this describes the "focus-on-map" gtk
+                     # property that controls if a new window takes the
+                     # input focus control when it is displayed for the
+                     # first time (see also the gtk devhelp page)
+                     help=_("Do not focus on map when starting"))
   parser.add_option ("--dist-upgrade","--dist-ugprade", action="store_true",
                      dest="dist_upgrade", default=False,
                      help=_("Try to run a dist-upgrade"))
@@ -87,5 +91,5 @@ if __name__ == "__main__":
     controler = DistUpgradeController(view, datadir=data_dir)
     controler.doPartialUpgrade()
   else:
-    app = UpdateManagerHildon(data_dir)
+    app = UpdateManagerHildon(data_dir, options)
     app.main(options)

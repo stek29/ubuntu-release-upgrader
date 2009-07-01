@@ -223,6 +223,9 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
             else:
                 print "Oops, failed to enable root login..."
             assert (ret == True)
+            # the official image seems to run a update on startup?!?
+            print "waiting for the official image to leave apt alone"
+            time.sleep(10)
         return True
     
     def reboot_instance(self):
@@ -263,6 +266,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         # copy the profile
         if os.path.exists(self.profile):
             print "Copying '%s' to image overrides" % self.profile
+            self._runInImage(["mkdir","-p","/etc/update-manager/release-upgrades.d"])
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
 
         # copy test repo sources.list (if needed)

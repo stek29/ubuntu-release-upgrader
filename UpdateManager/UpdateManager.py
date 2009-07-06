@@ -207,9 +207,12 @@ class UpdateManager(SimpleGtkbuilderApp):
     # claim otherwise)
     if options.no_focus_on_map:
         self.window_main.iconify()
+        self.window_main.stick()
         self.window_main.set_urgency_hint(True)
         self.window_main.connect("focus-in-event",
-                                 lambda w,e: (w.set_urgency_hint(False) and False))
+                                 lambda w,e: (w.unstick() and 
+                                              w.set_urgency_hint(False) and 
+                                              False))
 
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):

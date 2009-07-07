@@ -753,6 +753,8 @@ class UpdateManager(SimpleGtkbuilderApp):
                            origin.description, None, origin])
         for pkg in self.list.pkgs[origin]:
           name = xml.sax.saxutils.escape(pkg.name)
+          if not pkg.isInstalled:
+              name += _(" (New install)")
           summary = xml.sax.saxutils.escape(pkg.summary)
           contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           #TRANSLATORS: the b stands for Bytes

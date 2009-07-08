@@ -417,10 +417,11 @@ class UpdateManager(SimpleGtkbuilderApp):
   def refresh_updates_count(self):
       self.button_install.set_sensitive(self.cache.installCount)
       try:
+          inst_count = self.cache.installCount
           self.dl_size = self.cache.requiredDownload
-          # TRANSLATORS: b stands for Bytes
-          self.label_downsize.set_markup(_("Download size: %s") % \
-                                         humanize_size(self.dl_size))
+          t = _("%s selected. Download size: %s") % (inst_count,
+                                                       humanize_size(self.dl_size))
+          self.label_downsize.set_text(t)
       except SystemError, e:
           print "requiredDownload could not be calculated: %s" % e
           self.label_downsize.set_markup(_("Unknown download size"))
@@ -459,7 +460,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
       if num_updates == 0:
           text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
-          text_download = ""
+          self.label_downsize.set_text("")
           self.notebook_details.set_sensitive(False)
           self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
@@ -479,13 +480,11 @@ class UpdateManager(SimpleGtkbuilderApp):
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
               text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from the Administration menu later.")
-          text_download = _("Download size: %s") % humanize_size(self.dl_size)
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()
           self.treeview_update.set_cursor(1)
       self.label_header.set_markup(text_header)
-      self.label_downsize.set_markup(text_download)
       self.label_main_details.set_text(text_label_main)
 
   def activate_details(self, expander, data):

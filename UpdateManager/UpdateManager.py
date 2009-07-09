@@ -304,9 +304,6 @@ class UpdateManager(SimpleGtkbuilderApp):
       return
     long_desc = pkg.description
     self.notebook_details.set_sensitive(True)
-    # Skip the first line - it's a duplicate of the summary
-    i = long_desc.find("\n")
-    long_desc = long_desc[i+1:]
     # do some regular expression magic on the description
     # Add a newline before each bullet
     p = re.compile(r'^(\s|\t)*(\*|0|-)',re.MULTILINE)

@@ -97,6 +97,23 @@ def contains_blacklisted_pkg(cache):
 
 #apt_pkg.Config.Set("Dir::State::status","./empty")
 
+# debug stuff
+#apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
+#apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
+#apt_pkg.Config.Set("Debug::pkgDpkgPM","true")
+
+# Increase the maxsize limits here
+#
+# this code in apt that splits the argument list if its too long
+#  is problematic, because it may happen that
+# the argument list is split in a way that A depends on B
+# and they are in the same "--configure A B" run
+# - with the split they may now be configured in different
+#   runs 
+
+apt_pkg.Config.Set("Dpkg::MaxArgs",str(16*1024))
+apt_pkg.Config.Set("Dpkg::MaxArgBytes",str(64*1024))
+
 print "install_all.py"
 os.environ["DEBIAN_FRONTEND"] = "noninteractive"
 os.environ["APT_LISTCHANGES_FRONTEND"] = "none"

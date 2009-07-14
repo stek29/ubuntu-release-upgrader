@@ -461,7 +461,6 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.notebook_details.set_sensitive(False)
           self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
-          self.label_downsize.set_text=""
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")

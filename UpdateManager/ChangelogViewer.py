@@ -114,11 +114,13 @@ class ChangelogViewer(gtk.TextView):
         brak = [")","]",">"]
         punct = [",","!",":"]
         dot = ["."]+punct
+        dot_cr = [".\n"]
+
         # search items are start-str, list-of-end-strs, url-prefix
         # a lot of this search is "TEH SUCK"(tm) because of limitations
         # in iter.forward_search()
         # - i.e. no insensitive searching, no regexp
-        search_items = [ ("http://", ws+brak+punct, "http://"),
+        search_items = [ ("http://", ws+brak+punct+dot_cr, "http://"),
                          ("LP#", ws+brak+dot, MALONE),
                          ("LP: #", ws+brak+dot, MALONE),
                          ("lp: #", ws+brak+dot, MALONE),
@@ -156,6 +158,13 @@ class ChangelogViewer(gtk.TextView):
                         text =  match_end.get_text(match_tmp)
                         if text in end_list:
                             break
+                        # move one char futher to get two char
+                        # end-markers (and back later) LP: #396393
+                        match_tmp.forward_char()
+                        text =  match_end.get_text(match_tmp)
+                        if text in end_list:
+                            break
+                        match_tmp.backward_char()
                     else:
                         break
                     match_end = match_tmp.copy()
@@ -261,3 +270,22 @@ class ChangelogViewer(gtk.TextView):
             else:
                 self.get_window(gtk.TEXT_WINDOW_TEXT).\
                         set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+
+
+if __name__ == "__main__":
+    w = gtk.Window()
+    cv = ChangelogViewer()
+    changes = cv.get_buffer()
+    changes.create_tag("versiontag", weight=pango.WEIGHT_BOLD)
+    changes.set_text("""
+
+Version 6-14-0ubuntu1.9.04:
+
+  * New upstream version. LP: #382918.
+    Release notes at http://java.sun.com/javase/6/webnotes/ReleaseNotes.html.
+
+""")
+
+    w.add(cv)
+    w.show_all()
+    gtk.main()

@@ -23,9 +23,7 @@ import os
 import sys
 import re
 
-import tokenize
 import gtk
-
 
 # based on SimpleGladeApp
 class SimpleGtkbuilderApp:
@@ -35,7 +33,11 @@ class SimpleGtkbuilderApp:
         self.builder.add_from_file(path)
         self.builder.connect_signals(self)
         for o in self.builder.get_objects():
-            setattr(self, o.get_name(), o)
+            if issubclass(type(o), gtk.Buildable):
+                name = gtk.Buildable.get_name(o)
+                setattr(self, name, o)
+            else:
+                print >>sys.stderr, "WARNING: can not get name for '%s'" % o
 
     def run(self):
         """

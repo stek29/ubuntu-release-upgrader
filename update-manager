@@ -50,6 +50,9 @@ if __name__ == "__main__":
   parser.add_option ("-V", "--version", action="store_true",
                      dest="show_version", default=False,
                      help=_("Show version and exit"))
+  parser.add_option ("--data-dir", "", 
+                     default="/usr/share/update-manager/",
+                     help=_("Directory that contains the data files"))
   parser.add_option ("-c", "--check-dist-upgrades", action="store_true",
                      dest="check_dist_upgrades", default=False,
                      help=_("Check if a new distribution release is available"))
@@ -77,8 +80,9 @@ if __name__ == "__main__":
 
   (options, args) = parser.parse_args()
 
-  data_dir="/usr/share/update-manager/"
+  #data_dir="/usr/share/update-manager/"
   #data_dir="/tmp/xxx/share/update-manager/"
+  data_dir = options.data_dir
 
   if options.show_version:
     print "%s: version %s" % (os.path.basename(sys.argv[0]), VERSION)

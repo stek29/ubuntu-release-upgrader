@@ -50,6 +50,7 @@ class DistUpgradeQuirks(object):
         self._view = controller._view
         self.config = config
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.arch = Popen(["dpkg", "--print-architecture"], stdout=PIPE).communicate()[0]
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
 
     # the quirk function have the name:
@@ -131,6 +132,22 @@ class DistUpgradeQuirks(object):
         self._checkAdminGroup()
 
     # quirks when run when the initial apt-get update was run -------
+    def karmicPostInitialUpdate(self):
+        " quirks that are run before the upgrade to karmic "
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # we switched the supported CPU arches for armel to a minimal of ARMv6.
+        # upgrades on systems with CPUs not matching this minimum will break
+        # on karmic
+        if self.arch = "armel":
+            if not self._checkarmCPU():
+                res = self._view.error(_("no ARMv6 CPU"),
+                    _("Your system uses an ARM CPU that is older "
+                      "than the ARMv6 architecture. "
+                      "All packages in karmic were build with, "
+                      "optimizations requiring ARMv6 as the "
+                      "minimal architecture, i can not upgrade "
+                      "your system to karmic on your hardware."))
+                self.controller.abort()
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
     def jauntyPostInitialUpdate(self):
@@ -470,6 +487,20 @@ class DistUpgradeQuirks(object):
                                     "./theme-switch-helper.py", "--defaults"])
         return True
     # helpers
+
+    def _checkarmCPU(self):
+        """
+        parse /proc/cpuinfo and search for ARMv6 or greater
+        """
+        logging.debug("checking for ARM CPU version")
+        if not os.path.exists("/proc/cpuinfo"):
+            logging.debug("cannot open /proc/cpuinfo ?!?")
+            return False
+        with open("/proc/cpuinfo") as cpuinfo:
+            if re.search("^Processor\s*:\s*ARMv[45]", cpuinfo.read(), re.MULTILINE):
+                return False
+            return True
+
     def _checkAndInstallBroadcom(self):
         """
         check for the 'wl' kernel module and install bcmwl-kernel-source

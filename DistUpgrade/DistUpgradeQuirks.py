@@ -140,7 +140,7 @@ class DistUpgradeQuirks(object):
         # on karmic
         if self.arch == "armel":
             if not self._checkArmCPU():
-                res = self._view.error(_("no ARMv6 CPU"),
+                res = self._view.error(_("No ARMv6 CPU"),
                     _("Your system uses an ARM CPU that is older "
                       "than the ARMv6 architecture. "
                       "All packages in karmic were build with, "

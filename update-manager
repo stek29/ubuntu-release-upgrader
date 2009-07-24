@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
   #data_dir="/usr/share/update-manager/"
   #data_dir="/tmp/xxx/share/update-manager/"
-  data_dir = options.data_dir
+  data_dir = os.path.normpath(options.data_dir)+"/"
 
   if options.show_version:
     print "%s: version %s" % (os.path.basename(sys.argv[0]), VERSION)

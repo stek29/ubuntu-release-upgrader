@@ -30,6 +30,7 @@ setup(name='update-manager',
                              ['UpdateManager/fdsend/fdsend.c'])],
       packages=[
                 'UpdateManager',
+                'UpdateManager.backend',
                 'UpdateManager.Core',
                 'UpdateManagerHildon',
                 'UpdateManagerText',

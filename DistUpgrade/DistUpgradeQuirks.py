@@ -139,7 +139,7 @@ class DistUpgradeQuirks(object):
         # upgrades on systems with CPUs not matching this minimum will break
         # on karmic
         if self.arch == "armel":
-            if not self._checkarmCPU():
+            if not self._checkArmCPU():
                 res = self._view.error(_("no ARMv6 CPU"),
                     _("Your system uses an ARM CPU that is older "
                       "than the ARMv6 architecture. "
@@ -488,18 +488,18 @@ class DistUpgradeQuirks(object):
         return True
     # helpers
 
-    def _checkarmCPU(self):
+    def _checkArmCPU(self):
         """
         parse /proc/cpuinfo and search for ARMv6 or greater
         """
         logging.debug("checking for ARM CPU version")
         if not os.path.exists("/proc/cpuinfo"):
-            logging.debug("cannot open /proc/cpuinfo ?!?")
+            logging.error("cannot open /proc/cpuinfo ?!?")
             return False
-        with open("/proc/cpuinfo") as cpuinfo:
-            if re.search("^Processor\s*:\s*ARMv[45]", cpuinfo.read(), re.MULTILINE):
-                return False
-            return True
+        cpuinfo = open("/proc/cpuinfo")
+        if re.search("^Processor\s*:\s*ARMv[45]", cpuinfo.read(), re.MULTILINE):
+            return False
+        return True
 
     def _checkAndInstallBroadcom(self):
         """

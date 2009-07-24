@@ -60,6 +60,7 @@ import dbus.service
 import dbus.glib
 
 import GtkProgress
+import backend
 
 from gettext import gettext as _
 from gettext import ngettext
@@ -196,6 +197,9 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.progress._window.set_focus_on_map(False)
     # show the main window
     self.window_main.show()
+    # get the install backend
+    self.install_backend = backend.backend_factory(self.window_main)
+
     # check and warn if on battery
     if on_battery():
         self.dialog_on_battery.set_transient_for(self.window_main)
@@ -494,44 +498,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
 
-  def run_synaptic(self, id, action, lock):
-    try:
-      apt_pkg.PkgSystemUnLock()
-    except SystemError:
-      pass
-    cmd = ["/usr/bin/gksu", 
-           "--desktop", "/usr/share/applications/update-manager.desktop", 
-           "--", "/usr/sbin/synaptic", "--hide-main-window",  
-           "--non-interactive", "--parent-window-id", "%s" % (id) ]
-    if action == INSTALL:
-      # close when update was successful (its ok to use a Synaptic::
-      # option here, it will not get auto-saved, because synaptic does
-      # not save options in non-interactive mode)
-      if self.gconfclient.get_bool("/apps/update-manager/autoclose_install_window"):
-          cmd.append("-o")
-          cmd.append("Synaptic::closeZvt=true")
-      # custom progress strings
-      cmd.append("--progress-str")
-      cmd.append("%s" % _("Please wait, this can take some time."))
-      cmd.append("--finish-str")
-      cmd.append("%s" %  _("Update is complete"))
-      f = tempfile.NamedTemporaryFile()
-      for pkg in self.cache:
-          if pkg.markedInstall or pkg.markedUpgrade:
-              f.write("%s\tinstall\n" % pkg.name)
-      cmd.append("--set-selections-file")
-      cmd.append("%s" % f.name)
-      f.flush()
-      subprocess.call(cmd)
-      f.close()
-    elif action == UPDATE:
-      cmd.append("--update-at-startup")
-      subprocess.call(cmd)
-    else:
-      print "run_synaptic() called with unknown action"
-      sys.exit(1)
-    lock.release()
-
   def on_button_reload_clicked(self, widget):
     #print "on_button_reload_clicked"
     self.check_metarelease()
@@ -591,16 +557,13 @@ class UpdateManager(SimpleGtkbuilderApp):
     # set window to insensitive
     self.window_main.set_sensitive(False)
     self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-    lock = thread.allocate_lock()
-    lock.acquire()
-    t = thread.start_new_thread(self.run_synaptic,
-                                (self.window_main.window.xid,action,lock))
-    while lock.locked():
-      while gtk.events_pending():
-        gtk.main_iteration()
-      time.sleep(0.05)
-    while gtk.events_pending():
-      gtk.main_iteration()
+
+    # do it
+    if action == UPDATE:
+        self.install_backend.update()
+    elif action == INSTALL:
+        self.install_backend.commit(self.cache)
+
     s = _("Reading package information")
     self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
     self.fillstore()

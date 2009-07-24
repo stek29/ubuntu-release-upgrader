@@ -138,7 +138,7 @@ class DistUpgradeQuirks(object):
         # we switched the supported CPU arches for armel to a minimal of ARMv6.
         # upgrades on systems with CPUs not matching this minimum will break
         # on karmic
-        if self.arch = "armel":
+        if self.arch == "armel":
             if not self._checkarmCPU():
                 res = self._view.error(_("no ARMv6 CPU"),
                     _("Your system uses an ARM CPU that is older "

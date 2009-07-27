@@ -5,15 +5,19 @@
   <object class="GtkWindow" id="window_main">
     <property name="title" translatable="yes">Update Manager</property>
     <property name="default_height">600</property>
+    <signal name="state_changed" handler="on_window_main_size_allocate"/>
+    <signal name="size_allocate" handler="on_window_main_size_allocate"/>
     <child>
       <object class="GtkVBox" id="vbox_main">
         <property name="visible">True</property>
         <property name="border_width">6</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkVBox" id="vbox_updates">
             <property name="visible">True</property>
             <property name="border_width">6</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkHBox" id="hbox3">
@@ -31,8 +35,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkVBox" id="vbox15">
+                  <object class="GtkVBox" id="vbox_label_main">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label_header">
@@ -122,6 +127,7 @@
             <child>
               <object class="GtkVBox" id="vbox12">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow2">
@@ -294,6 +300,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkNotebook" id="notebook_details">
@@ -304,6 +311,7 @@
                           <object class="GtkVBox" id="vbox5">
                             <property name="visible">True</property>
                             <property name="border_width">6</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow_changes">
@@ -472,6 +480,7 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkScrolledWindow" id="scrolled_notes">
@@ -550,11 +559,13 @@
     <child>
       <object class="GtkVBox" id="vbox6">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkVBox" id="vbox7">
             <property name="visible">True</property>
             <property name="border_width">6</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel" id="label_fetch_summary">
@@ -572,6 +583,7 @@
             <child>
               <object class="GtkVBox" id="vbox8">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkProgressBar" id="progressbar_fetch">
@@ -608,6 +620,7 @@
                 <child>
                   <object class="GtkVBox" id="vbox9">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow6">
@@ -686,6 +699,7 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox4">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkHBox" id="hbox16">
@@ -708,6 +722,7 @@
             <child>
               <object class="GtkVBox" id="vbox17">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label27">
@@ -850,6 +865,7 @@ Your system does not check for updates automatically. You can configure this beh
       <object class="GtkVBox" id="vbox14">
         <property name="visible">True</property>
         <property name="border_width">6</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="label_cache_progress_title">
@@ -881,6 +897,7 @@ Your system does not check for updates automatically. You can configure this beh
         <child>
           <object class="GtkVBox" id="vbox16">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkProgressBar" id="progressbar_cache">
@@ -928,6 +945,7 @@ Your system does not check for updates automatically. You can configure this beh
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox5">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkHBox" id="hbox20">
@@ -950,6 +968,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkVBox" id="vbox18">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label30">

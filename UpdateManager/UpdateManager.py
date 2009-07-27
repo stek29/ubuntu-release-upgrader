@@ -189,6 +189,9 @@ class UpdateManager(SimpleGtkbuilderApp):
                                               self.progressbar_cache,
                                               self.label_cache,
                                               self.window_main)
+
+    #set minimum size to prevent the headline label blocking the resize process
+    self.window_main.set_size_request(500,-1) 
     # restore state
     self.restore_state()
     # deal with no-focus-on-map
@@ -621,11 +624,26 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.setBusy(False)
 
   def on_treeview_update_row_activated(self, treeview, path, column, *args):
-      """
-      If an update row was activated (by pressing space), toggle the 
-      install check box
-      """
-      self.toggled(None, path)
+    """
+    If an update row was activated (by pressing space), toggle the 
+    install check box
+    """
+    self.toggled(None, path)
+
+  def on_window_main_size_allocate(self,arg1,arg2):
+    """ 
+    recalculates headline labels on window resize to work around
+    problems with gtk word wrapping 
+    (http://bugzilla.gnome.org/show_bug.cgi?id=101968)
+    """
+    # this number is based on border width 
+    # (2xmain_border_with + icon width + 2xicon_border_with)
+    #     2*18 + 48 + 2*12 
+    border_space = 96
+    width, height = self.window_main.get_size()
+    #print "on_window_main_size_allocate", width, height
+    self.label_main_details.set_size_request(width - border_space ,-1)
+    self.label_header.set_size_request(width - border_space,-1)
 
   def exit(self):
     """ exit the application, save the state """

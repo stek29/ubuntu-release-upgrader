@@ -637,7 +637,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     (http://bugzilla.gnome.org/show_bug.cgi?id=101968)
     """
     # this number is based on border width 
-    # (2xmain_border_with + icon width + 2xicon_border_with)
+    # (2*main_border_with + icon width + 2*icon_border_with)
     #     2*18 + 48 + 2*12 
     border_space = 96
     width, height = self.window_main.get_size()

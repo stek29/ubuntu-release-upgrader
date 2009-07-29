@@ -667,7 +667,7 @@ class DistUpgradeController(object):
             res = self._view.askYesNoQuestion(_("No valid mirror found"),
                              _("While scanning your repository "
                                "information no mirror entry for "
-                               "the upgrade was found."
+                               "the upgrade was found. "
                                "This can happen if you run a internal "
                                "mirror or if the mirror information is "
                                "out of date.\n\n"
@@ -675,7 +675,7 @@ class DistUpgradeController(object):
                                "'sources.list' file anyway? If you choose "
                                "'Yes' here it will update all '%s' to '%s' "
                                "entries.\n"
-                               "If you select 'no' the update will cancel."
+                               "If you select 'No' the upgrade will cancel."
                                ) % (self.fromDist, self.toDist))
             if res:
                 # re-init the sources and try again
@@ -689,7 +689,7 @@ class DistUpgradeController(object):
                     secon = _("After scanning your 'sources.list' no "
                               "valid entry for '%s' was found.\n\n"
                               "Should default entries for '%s' be "
-                              "added? If you select 'No', the update "
+                              "added? If you select 'No', the upgrade "
                               "will cancel.") % (self.fromDist, self.toDist)
                     if not self._view.askYesNoQuestion(prim, secon):
                         self.abort()
@@ -1527,7 +1527,7 @@ class DistUpgradeController(object):
                 #        but we need to be careful to not duplicate them
                 #        (i.e. the error here could be something else than
                 #        missing sources entries but network errors etc)
-                logging.error("No '%s' available/downloadalbe after sources.list rewrite+update" % pkg) 
+                logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg) 
                 self._view.error(_("Invalid package information"),
                                  _("After your package information was "
                                    "updated the essential package '%s' can "

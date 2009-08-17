@@ -4,7 +4,6 @@
 import gobject
 import gtk
 
-from aptdaemon import policykit
 from aptdaemon import client
 from aptdaemon.enums import *
 from aptdaemon.gtkwidgets import (AptErrorDialog, 
@@ -27,9 +26,6 @@ class InstallBackendAptdaemon(InstallBackend):
                     add.append(pkg.name)
                 elif pkg.markedUpgrade:
                     upgrade.append(pkg.name)
-        if add:
-            policykit.obtain_authorization(policykit.PK_ACTION_INSTALL_PACKAGES,
-                                           self.window_main.window.xid)
         # parameter order: install, reinstall, remove, purge, upgrade
         t = self.ac.commit_packages(add, [], [], [], upgrade,
                                     exit_handler=self._on_exit)
@@ -41,8 +37,6 @@ class InstallBackendAptdaemon(InstallBackend):
     def update(self):
         """Run a update to refresh the package list"""
         self.ac = client.AptClient()
-        policykit.obtain_authorization(policykit.PK_ACTION_UPDATE_CACHE,
-                                       self.window_main.window.xid)
         t = self.ac.update_cache(exit_handler=self._on_exit)
         dia = AptProgressDialog(t, parent=self.window_main, terminal=False)
         dia.run()

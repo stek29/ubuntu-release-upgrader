@@ -453,7 +453,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
         #about.addAuthor("Michael Vogt", None,"michael.vogt@ubuntu.com")
         #KCmdLineArgs.init(["./dist-upgrade.py"],about)
 
-        #self.app = KApplication()
+        # we test for DISPLAY here, QApplication does not throw a 
+        # exception when run without DISPLAY but dies instead
+        if not "DISPLAY" in os.environ:
+            raise Exception, "No DISPLAY in os.environ found"
         self.app = QApplication(["update-manager"])
 
         if os.path.exists("/usr/share/icons/oxygen/48x48/apps/system-software-update.png"):

@@ -46,7 +46,6 @@ from DistUpgradeGettext import gettext as _
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
-
 class GtkCdromProgressAdapter(apt.progress.CdromProgress):
     """ Report the cdrom add progress
         Subclass this class to implement cdrom add progress reporting
@@ -343,6 +342,9 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         else:
           localedir="/usr/share/locale/update-manager"
           gladedir=os.path.join(datadir, "glade")
+
+	# check if we have a display etc
+	gtk.init_check()
 
         # FIXME: i18n must be somewhere relative do this dir
         try:

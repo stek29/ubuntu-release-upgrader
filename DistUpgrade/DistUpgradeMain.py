@@ -92,15 +92,16 @@ def setup_view(options, config, logdir):
         try:
             view_modul = __import__(requested_view)
             view_class = getattr(view_modul, requested_view)
+            instance = view_class(logdir=logdir)
             break
-        except (ImportError, AttributeError, TypeError), e:
+        except Exception, e:
             logging.warning("can't import view '%s' (%s)" % (requested_view,e))
             print "can't load %s (%s)" % (requested_view, e)
     else:
         logging.error("No view can be imported, aborting")
         print "No view can be imported, aborting"
         sys.exit(1)
-    return view_class(logdir=logdir)
+    return instance
 
 def main():
     " main method "

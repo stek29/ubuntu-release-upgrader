@@ -48,7 +48,7 @@ class PackageCruft(computerjanitor.Cruft):
         return self._pkg.name
 
     def get_description(self):
-        return "%s\n\n%s" % (self._description, self._pkg.summary)
+        return u"%s\n\n%s" % (self._description, self._pkg.summary)
 
     def get_disk_usage(self):
         return self._pkg.installedSize

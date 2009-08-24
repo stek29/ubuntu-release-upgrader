@@ -933,11 +933,16 @@ class DistUpgradeController(object):
         # POSSIBLE workaround: keep the list-dir locked so that 
         #          no apt-get update can run outside from the release
         #          upgrader 
+        user_canceled = False
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.GetPackageManager(self.cache._depcache)
                 fetcher = apt_pkg.GetAcquire(fprogress)
                 res = self.cache._fetchArchives(fetcher, pm)
+            except apt.cache.FetchCancelledException, e:
+                logging.info("user canceled")
+                user_canceled = True
+                break
             except IOError, e:
                 # fetch failed, will be retried
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
@@ -946,13 +951,19 @@ class DistUpgradeController(object):
             return True
         
         # maximum fetch-retries reached without a successful commit
-        logging.error("giving up on fetching after maximum retries")
-        self._view.error(_("Could not download the upgrades"),
-                         _("The upgrade is now aborted. Please check your "
-                           "Internet connection or "
-                           "installation media and try again. All files "
-                           "downloaded so far are kept."),
-                           "%s" % e)
+        if user_canceled:
+            self._view.information(_("Upgrade canceled"),
+                                   _("The upgrade cancels now and the original "
+                                     "system state is restored. You can resume "
+                                     "the upgrade at a later time."))
+        else:
+            logging.error("giving up on fetching after maximum retries")
+            self._view.error(_("Could not download the upgrades"),
+                             _("The upgrade is now aborted. Please check your "
+                               "Internet connection or "
+                               "installation media and try again. All files "
+                               "downloaded so far are kept."),
+                             "%s" % e)
         # abort here because we want our sources.list back
         self._enableAptCronJob()
         self.abort()

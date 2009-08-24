@@ -38,4 +38,4 @@ class Kdelibs4devToKdelibs5devPlugin(computerjanitor.Plugin):
                 yield computerjanitor.MissingPackageCruft(cache[top],
                         _("When upgrading, if kdelibs4-dev is installed, "
                           "kdelibs5-dev needs to be installed. See "
-                          "bugs.launchpad.net, bug ##279621 for details."))
+                          "bugs.launchpad.net, bug #279621 for details."))

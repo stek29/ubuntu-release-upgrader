@@ -203,24 +203,33 @@ class UpdateManager(SimpleGtkbuilderApp):
     # get the install backend
     self.install_backend = backend.backend_factory(self.window_main)
 
-    # check and warn if on battery
-    if on_battery():
-        self.dialog_on_battery.set_transient_for(self.window_main)
-        res = self.dialog_on_battery.run()
-        self.dialog_on_battery.hide()
-        if res == gtk.RESPONSE_CLOSE:
-            sys.exit()
     # it can only the iconified *after* it is shown (even if the docs
     # claim otherwise)
     if options.no_focus_on_map:
         self.window_main.iconify()
         self.window_main.stick()
         self.window_main.set_urgency_hint(True)
-        self.window_main.connect("focus-in-event",
-                                 lambda w,e: (w.unstick() and 
-                                              w.set_urgency_hint(False) and 
-                                              False))
+        self.initial_focus_id = self.window_main.connect(
+            "focus-in-event", self.on_initial_focus_in)
+    else:
+        self.warn_on_battery()
 
+  def on_initial_focus_in(self, widget, event):
+      """callback run on initial focus-in (if started unmapped)"""
+      widget.unstick()
+      widget.set_urgency_hint(False)
+      self.window_main.disconnect(self.initial_focus_id)
+      self.warn_on_battery()
+      return False
+
+  def warn_on_battery(self):
+      """check and warn if on battery"""
+      if on_battery():
+          self.dialog_on_battery.set_transient_for(self.window_main)
+          res = self.dialog_on_battery.run()
+          self.dialog_on_battery.hide()
+          if res == gtk.RESPONSE_CLOSE:
+              sys.exit()
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
     pkg = model.get_value(iter, LIST_PKG)

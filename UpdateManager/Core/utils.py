@@ -192,6 +192,7 @@ def on_battery():
   except Exception, e:
     import sys
     print >>sys.stderr, "on_battery returned error: ", e
+    return False
 
 def _inhibit_sleep_old_interface():
   """

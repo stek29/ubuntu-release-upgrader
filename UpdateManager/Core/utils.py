@@ -29,8 +29,11 @@ import subprocess
 from stat import *
 
 def lsmod():
-  " return list of loaded modules "
+  " return list of loaded modules (or [] if lsmod is not found) "
   modules=[]
+  # FIXME raise?
+  if not os.path.exists("/sbin/lsmod"):
+    return []
   p=subprocess.Popen(["/sbin/lsmod"], stdout=subprocess.PIPE)
   lines=p.communicate()[0].split("\n")
   # remove heading line: "Modules Size Used by"

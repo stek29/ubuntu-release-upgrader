@@ -200,8 +200,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         #self.expander_terminal.set_expanded(True)
         self.parent.dialog_error.set_transient_for(self.parent.window_main)
         summary = _("Could not install '%s'") % pkg
-        msg = _("The upgrade will continue but the '%s' package may be "
-                "in a not working state. Please consider submitting a "
+        msg = _("The upgrade will continue but the '%s' package may not "
+                "be in a working state. Please consider submitting a "
                 "bug report about it.") % pkg
         markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
         self.parent.dialog_error.realize()

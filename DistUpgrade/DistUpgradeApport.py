@@ -44,6 +44,7 @@ def apport_pkgfailure(pkg, errormsg):
             p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
             p.stdin.write("ErrorMessage: %s\n" % errormsg)
             p.stdin.close()
+            p.wait()
         except Exception, e:
             logging.warning("Failed to run apport (%s)" % e)
             return False

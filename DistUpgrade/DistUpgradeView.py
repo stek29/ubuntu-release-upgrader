@@ -142,7 +142,7 @@ class InstallProgress(apt.progress.InstallProgress):
       res = pm.DoInstall(self.writefd)
       os._exit(res)
     self.child_pid = pid
-    res = self.waitChild()
+    res = os.WEXITSTATUS(self.waitChild())
     # check if we want to sync the changes back, *only* do that
     # if res is positive
     if (res == 0 and

@@ -19,6 +19,9 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+import warnings
+warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
+
 from DistUpgradeController import DistUpgradeController
 from DistUpgradeConfigParser import DistUpgradeConfig
 import logging

@@ -275,8 +275,10 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.progress.set_text(" ")
 
     def child_exited(self, term, pid, status):
-        self.apt_status = os.WEXITSTATUS(status)
+        # we need to capture the full status here (not only the WEXITSTATUS)
+        self.apt_status = status
         self.finished = True
+        print self.apt_status
 
     def waitChild(self):
         while not self.finished:

@@ -139,7 +139,11 @@ class InstallProgress(apt.progress.InstallProgress):
       # child, ignore sigpipe, there are broken scripts out there
       # like etckeeper (LP: #283642)
       signal.signal(signal.SIGPIPE,signal.SIG_IGN) 
-      res = pm.DoInstall(self.writefd)
+      try:
+        res = pm.DoInstall(self.writefd)
+      except Exception, e:
+        print "Exception during pm.DoInstall(): ", e
+        os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid
     res = os.WEXITSTATUS(self.waitChild())
@@ -150,7 +154,7 @@ class InstallProgress(apt.progress.InstallProgress):
       logging.info("doing rsync commit of the update")
       if not doAufsChrootRsync(os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
         logging.error("FATAL ERROR: doAufsChrootRsync() returned FALSE")
-        return False
+        return pm.ResultFailed
     return res
   
   def error(self, pkg, errormsg):

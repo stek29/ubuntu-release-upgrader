@@ -343,12 +343,16 @@ class MyCache(apt.Cache):
             if not (self[pkg].markedInstall or self[pkg].markedUpgrade):
                 logging.error("Installing/upgrading '%s' failed" % pkg)
                 #raise (SystemError, "Installing '%s' failed" % pkg)
+                return False
+        return True
     def markUpgrade(self, pkg, reason=""):
         logging.debug("Upgrading '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg) and self[pkg].isInstalled:
             self[pkg].markUpgrade()
             if not self[pkg].markedUpgrade:
                 logging.error("Upgrading '%s' failed" % pkg)
+                return False
+        return True
     def markRemove(self, pkg, reason=""):
         logging.debug("Removing '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
@@ -497,14 +501,24 @@ class MyCache(apt.Cache):
         dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
         if "WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
-            flavour = "generic"
-        kernel = "linux-image-%s" % flavour
-        if not self.has_key(kernel):
-            logging.warning("No kernel: '%s'" % kernel)
-            return False
-        if not (self[kernel].isInstalled or self[kernel].markedInstall):
-            logging.debug("Selecting new kernel '%s'" % kernel)
-            self[kernel].markInstall()
+        # use base-installer to get the kernel we want
+        kernels = Popen(["./get_kernel_list.sh"],stdout=PIPE).communicate()[0]
+        for kernel in map(string.strip, kernels.split("\n")):
+            logging.debug("get_kernel_list.sh returns: %s" % kernel)
+            if not self.has_key(kernel):
+                logging.debug("%s not available in cache" % kernel)
+                continue
+            # check if installed
+            if self[kernel].isInstalled:
+                logging.debug("%s kernel already installed" % kernel)
+                if self[kernel].isUpgradable and not self[kernel].markedUpgrade:
+                    self.markUpgrade(kernel, "Upgrading kernel from base-installer")
+                break
+            # install 
+            if not (self[kernel].isInstalled or 
+                    self[kernel].markedInstall):
+                if self.markInstall(kernel, "Selecting new kernel from base-installer"):
+                    break
         return True
 
     def checkPriority(self):

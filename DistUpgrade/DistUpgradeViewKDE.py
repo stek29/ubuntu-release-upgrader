@@ -408,7 +408,8 @@ class KDEInstallProgressAdapter(InstallProgress):
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
             if pid == self.child_pid:
                 break
-        return os.WEXITSTATUS(res)
+        # we need the full status here (not just WEXITSTATUS)
+        return res
 
 # inherit from the class created in window_main.ui
 # to add the handler for closing the window

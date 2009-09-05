@@ -762,7 +762,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def dist_no_longer_supported(self, meta_release):
     msg = "<big><b>%s</b></big>\n\n%s" % \
-          (_("Your distribution is not supported anymore"),
+          (_("Your Ubuntu release is not supported anymore"),
 	   _("You will not get any further security fixes or critical "
              "updates. "
              "Please Upgrade to a later version of Ubuntu Linux."))
@@ -797,7 +797,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       
   def new_dist_available(self, meta_release, upgradable_to):
     self.frame_new_release.show()
-    self.label_new_release.set_markup(_("<b>New distribution release '%s' is available</b>") % upgradable_to.version)
+    self.label_new_release.set_markup(_("<b>New Ubuntu release '%s' is available</b>") % upgradable_to.version)
     self.new_dist = upgradable_to
     
 

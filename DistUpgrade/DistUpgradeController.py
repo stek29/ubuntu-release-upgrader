@@ -229,7 +229,7 @@ class DistUpgradeController(object):
         """
         pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
         if (not os.path.exists(pidfile) and self._isRemoteLogin()):
-            # check if the frontend supports ssh ugprades (see lp: #322482)
+            # check if the frontend supports ssh upgrades (see lp: #322482)
             if not self._viewSupportsSSH():
                 logging.error("upgrade over ssh not alllowed")
                 self._view.error(_("Upgrading over remote connection not supported"),

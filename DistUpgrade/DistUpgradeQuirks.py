@@ -143,9 +143,9 @@ class DistUpgradeQuirks(object):
                 res = self._view.error(_("No ARMv6 CPU"),
                     _("Your system uses an ARM CPU that is older "
                       "than the ARMv6 architecture. "
-                      "All packages in karmic were build with, "
+                      "All packages in karmic were built with "
                       "optimizations requiring ARMv6 as the "
-                      "minimal architecture, i can not upgrade "
+                      "minimal architecture. I can not upgrade "
                       "your system to karmic on your hardware."))
                 self.controller.abort()
 

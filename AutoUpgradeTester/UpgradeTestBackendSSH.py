@@ -109,7 +109,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
 
 
     def installPackages(self, pkgs):
-        " install additional pkgs (list) into the vm before the ugprade "
+        " install additional pkgs (list) into the vm before the upgrade "
         if not pkgs:
             return True
         self.start()

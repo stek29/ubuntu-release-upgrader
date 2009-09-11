@@ -4,6 +4,10 @@ set -e
 
 # update demotions
 (cd utils && ./demotions.py jaunty karmic > demotions.cfg)
+
+# update base-installer
+(cd utils && ./update-base-installer.sh)
+
 # cleanup
 rm -rf utils/apt/lists
 (cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)

@@ -38,10 +38,6 @@ fi
 cp /usr/share/jockey/modaliases/nvidia-* modaliases
 cp /usr/share/jockey/modaliases/fglrx* modaliases
 
-# get the base-installer from bzr but remove the debian/ dir
-bzr co --lightweight lp:~ubuntu-core-dev/base-installer/ubuntu base-installer
-rm -rf base-installer/debian
-
 # create the tarball, copy links in place 
 tar -c -h -z -v --exclude=$DIST.tar.gz --exclude=$0 -X build-exclude.txt -f $DIST.tar.gz  ./*
 

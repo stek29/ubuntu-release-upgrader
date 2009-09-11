@@ -19,6 +19,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA
 
+import logging
 import os
 import sys
 import re
@@ -37,7 +38,7 @@ class SimpleGtkbuilderApp:
                 name = gtk.Buildable.get_name(o)
                 setattr(self, name, o)
             else:
-                print >>sys.stderr, "WARNING: can not get name for '%s'" % o
+                logging.debug("WARNING: can not get name for '%s'" % o)
 
     def run(self):
         """

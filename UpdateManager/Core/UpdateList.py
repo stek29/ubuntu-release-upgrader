@@ -19,6 +19,9 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+import warnings
+warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
+
 from gettext import gettext as _
 from gettext import ngettext
 import os

@@ -31,7 +31,7 @@ import gconf
 import gobject
 
 import warnings
-warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
+warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
 import apt
 import apt_pkg
 

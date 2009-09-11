@@ -138,6 +138,10 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                 not os.path.basename(f).startswith("DistUpgrade.cfg")):
                 print "Copying '%s' to image " % f
                 self._copyToImage(f, "/upgrade-tester")
+        # base-installer
+        bi="%s/base-installer" %  self.upgradefilesdir
+        print "Copying '%s' to image" % bi
+        self._copyToImage(bi, "/upgrade-tester/", recursive=True)
         # copy the patches
         pd="%s/patches" %  self.upgradefilesdir
         print "Copying '%s' to image" % pd

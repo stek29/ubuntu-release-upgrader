@@ -1,4 +1,10 @@
 #!/bin/sh
+#
+# Include the latest base-installer version into the DistUpgrader/
+# directory (this is used for the kernel selection)
+#
+
+set -e
 
 DIST="$(lsb_release -c -s)"
 BASEDIR=./apt
@@ -10,7 +16,7 @@ APT_OPTS="\
    -o Dir::State::Status=./apt/status \
 "
 
-# cleanup first
+# cleanup base-installer first
 rm -rf base-installer*
 
 # create dirs
@@ -26,8 +32,9 @@ apt-get $APT_OPTS update
 
 # get the latest base-installer
 apt-get $APT_OPTS source base-installer
-# 
-mv base-installer-* base-installer
-# FIXME: extract base-installer version info ?
-rm -rf base-installer/debian/
-mv base-installer ../DistUpgrade
+
+# move kernel/ lib into place
+mkdir -p ../DistUpgrade/base-installer
+mv base-installer-*/kernel ../DistUpgrade/base-installer/
+head base-installer-*/debian/changelog > ../DistUpgrade/base-installer/VERSION
+

@@ -1,10 +1,10 @@
-update-manager (1:0.125) UNRELEASED; urgency=low
+update-manager (1:0.125) karmic; urgency=low
 
   [ Michael Vogt ]
   * integrate base-installer as a sub-component into the
     release upgrader and use the base-installer/kernel/*.sh
     functionality to ensure we select the most appropriate
-    kernel on upgrade
+    kernel on upgrade (LP: #353545)
   * integrate automatic updates to base-installer into the
     pre-build.sh bzr hook
   * UpdateManager/Core/UpdateList.py, UpdateManager/UpdateManager.py:
@@ -13,6 +13,7 @@ update-manager (1:0.125) UNRELEASED; urgency=low
     - use logging instead of sys.stderr
   * data/glade/UpdateManager.ui:
     - set explicit translation domain
+  * integrate base-installer component into auto-upgrade-tester
   
   [ Steve Langasek ]
   * Refresh .pot file (and .po files) so that new UI strings are available

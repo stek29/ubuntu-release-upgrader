@@ -301,8 +301,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         
 
   def on_treeview_update_cursor_changed(self, widget):
-    tuple = widget.get_cursor()
-    path = tuple[0]
+    path = widget.get_cursor()[0]
     # check if we have a path at all
     if path == None:
       return
@@ -366,6 +365,14 @@ class UpdateManager(SimpleGtkbuilderApp):
         # download finished (or canceld, or time-out)
         button.hide()
         button.disconnect(id);
+    # check if we still are in the right pkg (the download may have taken
+    # some time and the user may have clicked on a new pkg)
+    path  = widget.get_cursor()[0]
+    if path == None:
+      return
+    now_name = widget.get_model()[path][LIST_NAME]
+    if name != now_name:
+        return
     # display NEWS.Debian first, then the changelog
     changes = ""
     srcpkg = self.cache[name].sourcePackageName

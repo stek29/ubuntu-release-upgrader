@@ -266,8 +266,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
           return False
         summary = _("Could not install '%s'") % pkg
-        msg = _("The upgrade will continue but the '%s' package may be "
-                "in a not working state. Please consider submitting a "
+        msg = _("The upgrade will continue but the '%s' package may not "
+                "be in a working state. Please consider submitting a "
                 "bug report about it.") % pkg
         msg = "<big><b>%s</b></big><br />%s" % (summary, msg)
 

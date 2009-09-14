@@ -747,7 +747,7 @@ class DistUpgradeQuirks(object):
                 md5(open(path).read()).hexdigest() == md5sum):
                 logging.info("applying '%s'" % f)
                 # dry-run first, then patch if ok
-                cmd = ["sed","-f", patchdir+"/"+f, path]
+                cmd = ["sed","-n", "-f", patchdir+"/"+f, path]
                 logging.debug("runing '%s'" % cmd)
                 res = call(cmd)
                 if res == 0:

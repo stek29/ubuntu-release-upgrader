@@ -487,6 +487,28 @@ class MyCache(apt.Cache):
             logging.error("NvidiaDetection returned a error: %s" % e)
         return False
 
+    def _getKernelFromBaseInstaller(self):
+        """ use the get_kernel_list.sh script (that uses base-installer)
+            to figure out what kernel is most suitable for the system
+        """
+        kernels = Popen(["./get_kernel_list.sh"],stdout=PIPE).communicate()[0]
+        for kernel in map(string.strip, kernels.split("\n")):
+            logging.debug("get_kernel_list.sh returns: %s" % kernel)
+            if not self.has_key(kernel):
+                logging.debug("%s not available in cache" % kernel)
+                continue
+            # check if installed
+            if self[kernel].isInstalled:
+                logging.debug("%s kernel already installed" % kernel)
+                if self[kernel].isUpgradable and not self[kernel].markedUpgrade:
+                    self.markUpgrade(kernel, "Upgrading kernel from base-installer")
+                return
+            # install 
+            if not (self[kernel].isInstalled or 
+                    self[kernel].markedInstall):
+                if self.markInstall(kernel, "Selecting new kernel from base-installer"):
+                    return
+
     def checkForKernel(self):
         """ check for the running kernel and try to ensure that we have
             an updated version
@@ -502,23 +524,8 @@ class MyCache(apt.Cache):
         if "WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
         # use base-installer to get the kernel we want
-        kernels = Popen(["./get_kernel_list.sh"],stdout=PIPE).communicate()[0]
-        for kernel in map(string.strip, kernels.split("\n")):
-            logging.debug("get_kernel_list.sh returns: %s" % kernel)
-            if not self.has_key(kernel):
-                logging.debug("%s not available in cache" % kernel)
-                continue
-            # check if installed
-            if self[kernel].isInstalled:
-                logging.debug("%s kernel already installed" % kernel)
-                if self[kernel].isUpgradable and not self[kernel].markedUpgrade:
-                    self.markUpgrade(kernel, "Upgrading kernel from base-installer")
-                break
-            # install 
-            if not (self[kernel].isInstalled or 
-                    self[kernel].markedInstall):
-                if self.markInstall(kernel, "Selecting new kernel from base-installer"):
-                    break
+        if os.path.exists("./get_kernel_list.sh"):
+            self._getKernelFromBaseInstaller()
         return True
 
     def checkPriority(self):

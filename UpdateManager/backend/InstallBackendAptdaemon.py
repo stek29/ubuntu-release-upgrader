@@ -4,6 +4,7 @@
 import gobject
 import gtk
 
+import dbus
 from aptdaemon import client
 from aptdaemon.enums import *
 from aptdaemon.gtkwidgets import (AptErrorDialog, 
@@ -30,7 +31,13 @@ class InstallBackendAptdaemon(InstallBackend):
         t = self.ac.commit_packages(add, [], [], [], upgrade,
                                     exit_handler=self._on_exit)
         dia = AptProgressDialog(t, parent=self.window_main)
-        dia.run()
+        try:
+            dia.run()
+        except dbus.exceptions.DBusException, e:
+            if e._dbus_error_name == "org.freedesktop.PolicyKit.Error.NotAuthorized":
+                pass
+            else:
+                raise
         dia.hide()
         self._show_messages(t)
 
@@ -39,7 +46,13 @@ class InstallBackendAptdaemon(InstallBackend):
         self.ac = client.AptClient()
         t = self.ac.update_cache(exit_handler=self._on_exit)
         dia = AptProgressDialog(t, parent=self.window_main, terminal=False)
-        dia.run()
+        try:
+            dia.run()
+        except dbus.exceptions.DBusException, e:
+            if e._dbus_error_name == "org.freedesktop.PolicyKit.Error.NotAuthorized":
+                pass
+            else:
+                raise
         dia.hide()
         self._show_messages(t)
 

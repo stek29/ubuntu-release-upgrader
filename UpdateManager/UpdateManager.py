@@ -228,7 +228,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.dialog_on_battery.set_transient_for(self.window_main)
           res = self.dialog_on_battery.run()
           self.dialog_on_battery.hide()
-          if res == gtk.RESPONSE_CLOSE:
+          if res != gtk.RESPONSE_YES:
               sys.exit()
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):

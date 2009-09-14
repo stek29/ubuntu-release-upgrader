@@ -9,13 +9,16 @@ update-manager (1:0.125.1) UNRELEASEDkarmic; urgency=low
   [ Michael Vogt ]
   * DistUpgrade/DistUpgrade.ui:
     - remove unused "destroy_event" handler (LP: #428842)
+    - remove unused handler to avoid RunTime warning
   * DistUpgrade/DistUpgradeQuirks.py:
     - make ARMv6 error message clearer (LP: #409523)
   * UpdateManager/Core/MetaRelease.py:
     - more robustness for invalid configuration of the meta-release
       file (LP: #428558)
     - more robustness if the server sends invalid meta-release data
-
+  * UpdateManager/GtkProgress.py:
+    - make button_cancel click event work
+    - add sensible default width
 
  -- Josh Holland <jrh@joshh.co.uk>  Sun, 06 Sep 2009 11:34:11 +0100
 

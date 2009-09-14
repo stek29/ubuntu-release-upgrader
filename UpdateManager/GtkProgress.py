@@ -86,6 +86,10 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         # FIXME: find a more elegant way, this sucks
         self.summary = parent.label_fetch_summary
         self.status = parent.label_fetch_status
+        # we need to connect the signal manual here, it won't work
+        # from the main window auto-connect
+        parent.button_fetch_cancel.connect(
+            "clicked", self.on_button_fetch_cancel_clicked)
         self.progress = parent.progressbar_fetch
         self.window_fetch = parent.window_fetch
         self.window_fetch.set_transient_for(parent.window_main)
@@ -126,3 +130,26 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         while gtk.events_pending():
             gtk.main_iteration()
         return self._continue
+
+if __name__ == "__main__":
+    import apt
+    import apt_pkg
+    from SimpleGtkbuilderApp import SimpleGtkbuilderApp
+
+    class MockParent(SimpleGtkbuilderApp):
+        """Mock parent for the fetcher that just loads the UI file"""
+        def __init__(self):
+            SimpleGtkbuilderApp.__init__(self, "../data/glade/UpdateManager.ui")
+
+    # create mock parent and fetcher
+    parent = MockParent()
+    fetch_progress = GtkFetchProgress(parent, "summary", "long detailed description")
+
+    # generate a dist-upgrade (to feed data to the fetcher) and get it
+    cache = apt.Cache()
+    cache.upgrade()
+    pm = apt_pkg.GetPackageManager(cache._depcache)
+    fetcher = apt_pkg.GetAcquire(fetch_progress)
+    cache._fetchArchives(fetcher, pm)
+    
+    

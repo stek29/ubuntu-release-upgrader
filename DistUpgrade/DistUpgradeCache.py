@@ -1037,6 +1037,7 @@ class MyCache(apt.Cache):
                             ("/usr", self.additionalRequiredSpace),
                             ("/usr", 50*1024*1024),
                             ("/boot", space_in_boot), 
+                            ("/tmp", 5*1024*1024),   # /tmp for dkms LP: #427035
                             ("/", 10*1024*1024),     # small safety buffer /
                             (aufs_rw_dir, required_for_aufs),
                            ]:

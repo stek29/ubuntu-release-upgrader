@@ -1,3 +1,15 @@
+update-manager (1:0.125.2) UNRELEASEDkarmic; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - add check for 5Mb safety buffer in /tmp, this ensures that
+      dkms can run and ensure we do not run when /tmp is mounted
+      in overflow mode (LP: #427035)
+  * data/glade/UpdateManager.ui:
+    - remove dialog title for the battery warning and fix button
+      order (thanks to Matthew Paul Thomas)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 14 Sep 2009 13:24:14 +0200
+
 update-manager (1:0.125.1) karmic; urgency=low
 
   [ Josh Holland ]

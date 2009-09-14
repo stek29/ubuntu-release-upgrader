@@ -523,9 +523,11 @@ class MyCache(apt.Cache):
         dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
         if "WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
-        # use base-installer to get the kernel we want
+        # use base-installer to get the kernel we want (if it exists)
         if os.path.exists("./get_kernel_list.sh"):
             self._getKernelFromBaseInstaller()
+        else:
+            logging.debug("skipping ./get_kernel_list.sh: not found")
         return True
 
     def checkPriority(self):

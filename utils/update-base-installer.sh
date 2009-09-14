@@ -36,5 +36,7 @@ apt-get $APT_OPTS source base-installer
 # move kernel/ lib into place
 mkdir -p ../DistUpgrade/base-installer
 mv base-installer-*/kernel ../DistUpgrade/base-installer/
-head base-installer-*/debian/changelog > ../DistUpgrade/base-installer/VERSION
+# get changelog subset
+head -n 500 base-installer-*/debian/changelog > ../DistUpgrade/base-installer/VERSION
+
 

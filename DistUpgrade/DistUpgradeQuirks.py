@@ -145,8 +145,9 @@ class DistUpgradeQuirks(object):
                       "than the ARMv6 architecture. "
                       "All packages in karmic were built with "
                       "optimizations requiring ARMv6 as the "
-                      "minimal architecture. I can not upgrade "
-                      "your system to karmic on your hardware."))
+                      "minimal architecture. It is not possible to "
+                      "upgrade your system to a new Ubuntu release "
+                      "with this hardware."))
                 self.controller.abort()
 
     # fglrx is broken in intrepid (no support for xserver 1.5)

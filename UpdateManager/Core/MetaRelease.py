@@ -19,16 +19,17 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import thread
-import urllib2
+import apt_pkg
+import ConfigParser
 import httplib
+import rfc822
 import os
 import string
-import apt_pkg
-import time
 import sys
-import rfc822
-from ConfigParser import ConfigParser
+import time
+import thread
+import urllib2
+
 from subprocess import Popen,PIPE
 
 from utils import *
@@ -73,9 +74,14 @@ class MetaReleaseCore(object):
         self.METARELEASE_URI_PROPOSED_POSTFIX = "-development"
 
         # check the meta-release config first
-        parser = ConfigParser()
+        parser = ConfigParser.ConfigParser()
         if os.path.exists(self.CONF_METARELEASE):
-            parser.read(self.CONF_METARELEASE)
+            try:
+                parser.read(self.CONF_METARELEASE)
+            except ConfigParser.Error, e:
+                sys.stderr.write("ERROR: failed to read '%s':\n%s" % (
+                        self.CONF_METARELEASE, e))
+                return
             # make changing the metarelease file and the location
             # for the files easy
             if parser.has_section("METARELEASE"):
@@ -90,9 +96,14 @@ class MetaReleaseCore(object):
                         setattr(self, "%s_%s" % (sec, k), parser.get(sec, k))
 
         # check the config file first to figure if we want lts upgrades only
-        parser = ConfigParser()
+        parser = ConfigParser.ConfigParser()
         if os.path.exists(self.CONF):
-            parser.read(self.CONF)
+            try:
+                parser.read(self.CONF)
+            except ConfigParser.Error, e:
+                sys.stderr.write("ERROR: failed to read '%s':\n%s" % (
+                        self.CONF, e))
+                return
             # now check which specific url to use
             if parser.has_option("DEFAULT","Prompt"):
                 type = parser.get("DEFAULT","Prompt").lower()

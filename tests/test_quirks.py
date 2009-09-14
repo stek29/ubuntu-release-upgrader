@@ -36,5 +36,14 @@ class testQuirks(unittest.TestCase):
         self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse") == True)
         self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-without-sse") == False)
 
+    def test_patch(self):
+        q = DistUpgradeQuirks(MockController(), MockConfig)
+        shutil.copy("./patchdir/foo.orig", "./patchdir/foo")
+        q._applyPatches(patchdir="./patchdir")
+        self.assertFalse("Hello" in open("./patchdir/foo").read())
+        self.assertTrue("Hello" in open("./patchdir/foo.orig").read())
+
 if __name__ == "__main__":
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
     unittest.main()

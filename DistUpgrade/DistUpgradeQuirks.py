@@ -728,26 +728,30 @@ class DistUpgradeQuirks(object):
             return
         if not ("PATH" in os.environ and
                 [p for p in os.environ["PATH"].split(":")
-                 if os.path.exists(os.path.join(p,"patch"))]):
-            logging.debug("no binary 'patch' found in PATH")
+                 if os.path.exists(os.path.join(p,"sed"))]):
+            logging.debug("no binary 'sed' found in PATH")
             return
         for f in os.listdir(patchdir):
             # skip, not a patch file, they all end with .$md5sum
             if not "." in f:
+                logging.debug("skipping '%s' (no '.')" % f)
                 continue
             logging.debug("check if patch '%s' needs to be applied" % f)
-            (encoded_path, md5sum) = string.split(f, ".", 1)
+            (encoded_path, md5sum) = string.rsplit(f, ".", 1)
             # FIXME: this is not clever and needs quoting support for
             #        filenames with "_" in the name
             path = encoded_path.replace("_","/")
+            logging.debug("target for '%s' is '%s' -> '%s'" % (
+                    f, encoded_path, path))
             if (os.path.exists(path) and
                 md5(open(path).read()).hexdigest() == md5sum):
                 logging.info("applying '%s'" % f)
                 # dry-run first, then patch if ok
-                res = call(["patch","--dry-run","-s","-p0","-i",
-                            patchdir+"/"+f])
+                cmd = ["sed","-f", patchdir+"/"+f, path]
+                logging.debug("runing '%s'" % cmd)
+                res = call(cmd)
                 if res == 0:
-                    res = call(["patch","-p0","-s","-i",patchdir+"/"+f])
+                    res = call(["sed","-i","-f", patchdir+"/"+f, path])
                     logging.info("applied '%s' with %i status" % (f,res))
                 else:
                     logging.warning("dry run failed, ignoring patch '%s'" % f)

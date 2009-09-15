@@ -741,8 +741,8 @@ class DistUpgradeQuirks(object):
             # FIXME: this is not clever and needs quoting support for
             #        filenames with "_" in the name
             path = encoded_path.replace("_","/")
-            logging.debug("target for '%s' is '%s' -> '%s'" % (
-                    f, encoded_path, path))
+            #logging.debug("target for '%s' is '%s' -> '%s'" % (
+            #        f, encoded_path, path))
             if (os.path.exists(path) and
                 md5(open(path).read()).hexdigest() == md5sum):
                 logging.info("applying '%s'" % f)

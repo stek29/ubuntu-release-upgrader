@@ -159,6 +159,8 @@ class DistUpgradeQuirks(object):
         # that fglrx used to support got dropped
         if (self._checkVideoDriver("fglrx") and 
             not self._supportInModaliases("fglrx")):
+             # TRANSLATORS: this string is not displayed in the 9.10 upgrade
+             #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
              res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
                                          "effects, and performance in games "
                                          "and other graphically intensive "
@@ -168,7 +170,7 @@ class DistUpgradeQuirks(object):
                                          "No version of this driver is "
                                          "available that works with your "
                                          "hardware in Ubuntu "
-                                         "9.04.\n\nDo you want to continue?"))
+                                         "10.04.\n\nDo you want to continue?"))
              if res == False:
                  self.controller.abort()
              # if the user wants to continue we remove the fglrx driver
@@ -236,6 +238,8 @@ class DistUpgradeQuirks(object):
                 cache[pkgname].markedInstall and
                 self._checkVideoDriver("nvidia")):
                 logging.debug("found %s video driver" % pkgname)
+                # TRANSLATORS: this string is not displayed in the 9.10 upgrade
+                #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
                 res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
                                         "effects, and performance in games "
                                         "and other graphically intensive "
@@ -246,7 +250,7 @@ class DistUpgradeQuirks(object):
                                         "No version of this driver is "
                                         "available that works with your "
                                         "video card in Ubuntu "
-                                        "8.10.\n\nDo you want to continue?"))
+                                        "10.04.\n\nDo you want to continue?"))
                 if res == False:
                     self.controller.abort()
                 # if the user continue, do not install the broken driver
@@ -261,6 +265,8 @@ class DistUpgradeQuirks(object):
                 logging.debug("found %s video driver" % pkgname)
                 if not self._cpuHasSSESupport():
                     logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
+                    # TRANSLATORS: this string is not displayed in the 9.10 upgrade
+                    #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
                     res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
                                         "effects, and performance in games "
                                         "and other graphically intensive "
@@ -271,7 +277,7 @@ class DistUpgradeQuirks(object):
                                         "No version of this driver is "
                                         "available that works with your "
                                         "video card in Ubuntu "
-                                        "8.10.\n\nDo you want to continue?"))
+                                        "10.04.\n\nDo you want to continue?"))
                     if res == False:
                         self.controller.abort()
                     # if the user continue, do not install the broken driver

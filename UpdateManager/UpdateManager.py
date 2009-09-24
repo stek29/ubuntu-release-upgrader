@@ -108,7 +108,14 @@ class UpdateManager(SimpleGtkbuilderApp):
     gtk.window_set_default_icon_name("update-manager")
 
     self.datadir = datadir
-    SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui")
+    SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui",
+                                 "update-manager")
+    gettext.bindtextdomain("update-manager", "/usr/share/locale")
+    gettext.textdomain("update-manager")
+    try:
+        locale.setlocale(locale.LC_ALL, "")
+    except:
+        logging.exception("setlocale failed")
 
     self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
     self.window_main.set_sensitive(False)

@@ -245,7 +245,7 @@ class DistUpgradeFetcherCore(object):
                   
             return
         if not self.verifyDistUprader():
-            self.error(_("Verfication failed"),
+            self.error(_("Verification failed"),
                   _("Verifying the upgrade failed.  There may be a problem "
                     "with the network or with the server. "))
             self.cleanup()

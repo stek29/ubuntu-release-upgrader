@@ -17,6 +17,11 @@ from InstallBackend import InstallBackend
 class InstallBackendAptdaemon(InstallBackend):
     """The abstract backend that can install/remove packages"""
 
+    def _get_icon(self):
+        theme = gtk.icon_theme_get_default ()
+        icon = theme.load_icon("update-manager", 16, 0)
+        return icon
+
     def commit(self, cache):
         """Commit a list of package adds and removes"""
         self.ac = client.AptClient()
@@ -31,6 +36,7 @@ class InstallBackendAptdaemon(InstallBackend):
         t = self.ac.commit_packages(add, [], [], [], upgrade,
                                     exit_handler=self._on_exit)
         dia = AptProgressDialog(t, parent=self.window_main)
+        dia.set_icon(self._get_icon())
         try:
             dia.run()
         except dbus.exceptions.DBusException, e:
@@ -46,6 +52,7 @@ class InstallBackendAptdaemon(InstallBackend):
         self.ac = client.AptClient()
         t = self.ac.update_cache(exit_handler=self._on_exit)
         dia = AptProgressDialog(t, parent=self.window_main, terminal=False)
+        dia.set_icon(self._get_icon())
         try:
             dia.run()
         except dbus.exceptions.DBusException, e:

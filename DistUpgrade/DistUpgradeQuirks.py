@@ -469,6 +469,7 @@ class DistUpgradeQuirks(object):
         self._removeOldApportCrashes()
         self._removeBadMaintainerScripts()
         self._killUpdateNotifier()
+        self._killKBluetooth()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
         # hal/NM triggers problem, if the old (intrepid) hal gets
@@ -524,6 +525,11 @@ class DistUpgradeQuirks(object):
         if os.path.exists("/usr/bin/killall"):
             logging.debug("killing update-notifier")
             subprocess.call(["killall","-q","update-notifier"])
+    def _killUpdateNotifier(self):
+        """killall kblueplugd kbluetooth (riddel requested it)"""
+        if os.path.exists("/usr/bin/killall"):
+            logging.debug("killing kblueplugd kbluetooth")
+            subprocess.call(["killall", "-q", "kblueplugd", "kbluetooth"])
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

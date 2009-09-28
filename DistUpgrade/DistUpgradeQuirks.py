@@ -528,8 +528,8 @@ class DistUpgradeQuirks(object):
     def _killUpdateNotifier(self):
         """killall kblueplugd kbluetooth (riddel requested it)"""
         if os.path.exists("/usr/bin/killall"):
-            logging.debug("killing kblueplugd kbluetooth")
-            subprocess.call(["killall", "-q", "kblueplugd", "kbluetooth"])
+            logging.debug("killing kblueplugd kbluetooth4")
+            subprocess.call(["killall", "-q", "kblueplugd", "kbluetooth4"])
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

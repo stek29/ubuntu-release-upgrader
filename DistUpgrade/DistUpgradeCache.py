@@ -362,24 +362,24 @@ class MyCache(apt.Cache):
         if self.has_key(pkg):
             self._depcache.MarkDelete(self[pkg]._pkg,True)
 
+    def _keepInstalled(self, pkgname, reason):
+        if (self.has_key(pkgname)
+            and self[pkgname].isInstalled
+            and self[pkgname].markedDelete):
+            self.markInstall(pkgname, reason)
+
     def keepInstalledRule(self):
         """ run after the dist-upgrade to ensure that certain
             packages are kept installed """
-        def keepInstalled(self, pkgname, reason):
-            if (self.has_key(pkgname)
-                and self[pkgname].isInstalled
-                and self[pkgname].markedDelete):
-                self.markInstall(pkgname, reason)
-                
         # first the global list
         for pkgname in self.config.getlist("Distro","KeepInstalledPkgs"):
-            keepInstalled(self, pkgname, "Distro KeepInstalledPkgs rule")
+            self._keepInstalled(pkgname, "Distro KeepInstalledPkgs rule")
         # the the per-metapkg rules
         for key in self.metapkgs:
             if self.has_key(key) and (self[key].isInstalled or
                                       self[key].markedInstall):
                 for pkgname in self.config.getlist(key,"KeepInstalledPkgs"):
-                    keepInstalled(self, pkgname, "%s KeepInstalledPkgs rule" % key)
+                    self._keepInstalled(pkgname, "%s KeepInstalledPkgs rule" % key)
 
         # only enforce section if we have a network. Otherwise we run
         # into CD upgrade issues for installed language packs etc
@@ -389,14 +389,14 @@ class MyCache(apt.Cache):
             for section in self.config.getlist("Distro","KeepInstalledSection"):
                 for pkg in self:
                     if pkg.markedDelete and pkg.section == section:
-                        keepInstalled(self, pkg.name, "Distro KeepInstalledSection rule: %s" % section)
+                        self._keepInstalled(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
                 if self.has_key(key) and (self[key].isInstalled or
                                           self[key].markedInstall):
                     for section in self.config.getlist(key,"KeepInstalledSection"):
                         for pkg in self:
                             if pkg.markedDelete and pkg.section == section:
-                                keepInstalled(self, pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
+                                self._keepInstalled(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
         
 
     def postUpgradeRule(self):
@@ -581,6 +581,7 @@ class MyCache(apt.Cache):
             self.postUpgradeRule()
 
             # install missing meta-packages (if not in server upgrade mode)
+            self._keepBaseMetaPkgsInstalled(view)
             if not serverMode:
                 # if this fails, a system error is raised
                 self._installMetaPkgs(view)
@@ -760,6 +761,10 @@ class MyCache(apt.Cache):
                             pkg.markInstall()
         return True
     
+    def _keepBaseMetaPkgsInstalled(self, view):
+        for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
+            self._keepInstalled(pkg, "base meta package keep installed rule")
+
     def _installMetaPkgs(self, view):
 
         def metaPkgInstalled():

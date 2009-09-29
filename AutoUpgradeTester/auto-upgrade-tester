@@ -43,7 +43,6 @@ def login(backend):
 def flushBuffer(fd):
     sys.stdout.flush()
     sys.stderr.flush()
-    os.fsync(fd)
 
 def createBackend(backend_name, profile):
     try:
@@ -85,6 +84,9 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
                 return False
         if not backend.upgrade():
             print "FAILED: upgrade for '%s'" % profile
+            print "Failure logs can be found here:"
+            for n in ["main.log", "apt.log"]:
+                print "%s/%s" % (backend.resultdir, n)
             flushBuffer(fd)
             return False
         if not backend.test():
@@ -98,6 +100,9 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         flushBuffer(fd)
         return False
     finally:
+        print "Logs can be found here:"
+        for n in ["main.log", "apt.log"]:
+            print "%s/%s" % (backend.resultdir, n)
         out.terminate()
         out.join()
     return True

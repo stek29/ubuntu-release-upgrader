@@ -103,6 +103,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                                "-q","-q", # shut it up
                                "-i",self.ssh_key,
                                "-o", "StrictHostKeyChecking=no",
+                               "-o", "BatchMode=yes",
                                "-o", "UserKnownHostsFile=%s" % os.path.dirname(self.profile)+"/known_hosts",
                                ]+command, **kwargs)
         return ret

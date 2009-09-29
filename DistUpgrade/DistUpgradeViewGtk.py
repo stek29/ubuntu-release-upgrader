@@ -359,7 +359,9 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         except gobject.GError, e:
           logging.debug("error setting default icon, ignoring (%s)" % e)
           pass
-        SimpleGtkbuilderApp.__init__(self, gladedir+"/DistUpgrade.ui")
+        SimpleGtkbuilderApp.__init__(self, 
+                                     gladedir+"/DistUpgrade.ui", 
+                                     "update-manager")
         # terminal stuff
         self.create_terminal()
 

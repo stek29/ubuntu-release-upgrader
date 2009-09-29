@@ -525,7 +525,7 @@ class DistUpgradeQuirks(object):
         if os.path.exists("/usr/bin/killall"):
             logging.debug("killing update-notifier")
             subprocess.call(["killall","-q","update-notifier"])
-    def _killUpdateNotifier(self):
+    def _killKBluetooth(self):
         """killall kblueplugd kbluetooth (riddel requested it)"""
         if os.path.exists("/usr/bin/killall"):
             logging.debug("killing kblueplugd kbluetooth4")

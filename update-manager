@@ -44,6 +44,10 @@ if __name__ == "__main__":
 
   gettext.bindtextdomain(APP, DIR)
   gettext.textdomain(APP)
+  try:
+    locale.setlocale(locale.LC_ALL, "")
+  except:
+    pass
 
   # Begin parsing of options
   parser = OptionParser()

@@ -200,6 +200,7 @@ class DistUpgradeQuirks(object):
         # check if "wl" module is loaded and if so, install
         # bcmwl-kernel-source (this is needed for lts->lts as well)
         self._checkAndInstallBroadcom()
+        self._dealWithLanguageSupportTransition()
 
     def jauntyPostDistUpgradeCache(self):
         """ 
@@ -508,6 +509,24 @@ class DistUpgradeQuirks(object):
         if re.search("^Processor\s*:\s*ARMv[45]", cpuinfo.read(), re.MULTILINE):
             return False
         return True
+
+    def _dealWithLanguageSupportTransition(self):
+        """
+        In karmic the language-support-translations-* metapackages
+        are gone and the direct dependencies will get marked for
+        auto removal - mark them as manual instead
+        """
+        logging.debug("langauge-support-translations-* transition")
+        for pkg in self.controller.cache:
+            depcache = self.controller.cache._depcache
+            if (pkg.name.startswith("language-support-translations") and
+                pkg.isInstalled):
+                for dp in pkg.dependendies:
+                    if dp.isInstalled and depcache.IsAutoInstalled(dp._pkg):
+                        logging.debug("marking '%s' manual installed" % pkg.name)
+                        autoInstDeps = False
+                        fromUser = True
+                        depcache.MarkInstall(dp._pkg, autoInstDeps, FromUser)
 
     def _checkAndInstallBroadcom(self):
         """

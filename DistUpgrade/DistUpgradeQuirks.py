@@ -516,7 +516,7 @@ class DistUpgradeQuirks(object):
         are gone and the direct dependencies will get marked for
         auto removal - mark them as manual instead
         """
-        logging.debug("langauge-support-translations-* transition")
+        logging.debug("language-support-translations-* transition")
         for pkg in self.controller.cache:
             depcache = self.controller.cache._depcache
             if (pkg.name.startswith("language-support-translations") and

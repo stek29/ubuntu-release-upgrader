@@ -29,7 +29,7 @@ class OutputThread(multiprocessing.Process):
         while True:
             # the read() seems to not block for some reason
             # but return "" ?!?
-            s = os.read(self.file, 512)
+            s = os.read(self.file, 1024)
             if s:
                 print s,
             else:
@@ -39,10 +39,6 @@ class OutputThread(multiprocessing.Process):
 def login(backend):
     backend.bootstrap()
     backend.login()
-
-def flushBuffer(fd):
-    sys.stdout.flush()
-    sys.stderr.flush()
 
 def createBackend(backend_name, profile):
     try:
@@ -67,16 +63,15 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
     out = OutputThread(outfile)
     if not quiet:
         out.start()
+    old_stdout = os.dup(1)
+    old_stderr = os.dup(2)
     os.dup2(fd, 1)
     os.dup2(fd, 2)
-    #fd2 = os.open("/dev/null",os.O_RDONLY)
-    #os.dup2(fd2,0)
     print "%s log started" % datetime.datetime.now()
     try:
         # init the chroot
         if not backend.bootstrap():
             print "FAILED: bootstrap for '%s'" % profile
-            flushBuffer(fd)
             return False
         if add_pkgs:
             if not backend.installPackages(add_pkgs):
@@ -87,7 +82,6 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
             print "Failure logs can be found here:"
             for n in ["main.log", "apt.log"]:
                 print "%s/%s" % (backend.resultdir, n)
-            flushBuffer(fd)
             return False
         if not backend.test():
             print "FAILED: test for '%s'" % profile
@@ -97,12 +91,14 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         import traceback
         traceback.print_exc()
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
-        flushBuffer(fd)
         return False
     finally:
+        # print out result details
         print "Logs can be found here:"
         for n in ["main.log", "apt.log"]:
             print "%s/%s" % (backend.resultdir, n)
+        # give the output time to settle
+        time.sleep(2)
         out.terminate()
         out.join()
     return True

@@ -521,12 +521,14 @@ class DistUpgradeQuirks(object):
             depcache = self.controller.cache._depcache
             if (pkg.name.startswith("language-support-translations") and
                 pkg.isInstalled):
-                for dp in pkg.dependendies:
-                    if dp.isInstalled and depcache.IsAutoInstalled(dp._pkg):
-                        logging.debug("marking '%s' manual installed" % pkg.name)
-                        autoInstDeps = False
-                        fromUser = True
-                        depcache.MarkInstall(dp._pkg, autoInstDeps, FromUser)
+                for dp_or in pkg.installedDependencies:
+                    for dpname in dp_or.or_dependencies:
+                        dp = self.controller.cache[dpname.name]
+                        if dp.isInstalled and depcache.IsAutoInstalled(dp._pkg):
+                            logging.debug("marking '%s' manual installed" % dp.name)
+                            autoInstDeps = False
+                            fromUser = True
+                            depcache.MarkInstall(dp._pkg, autoInstDeps, fromUser)
 
     def _checkAndInstallBroadcom(self):
         """

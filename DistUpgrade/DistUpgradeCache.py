@@ -491,7 +491,8 @@ class MyCache(apt.Cache):
         """ use the get_kernel_list.sh script (that uses base-installer)
             to figure out what kernel is most suitable for the system
         """
-        kernels = Popen(["./get_kernel_list.sh"],stdout=PIPE).communicate()[0]
+        kernels = Popen(["/bin/sh", "./get_kernel_list.sh"],
+                        stdout=PIPE).communicate()[0]
         for kernel in map(string.strip, kernels.split("\n")):
             logging.debug("get_kernel_list.sh returns: %s" % kernel)
             if not self.has_key(kernel):

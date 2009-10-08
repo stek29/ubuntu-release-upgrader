@@ -487,14 +487,23 @@ class MyCache(apt.Cache):
             logging.error("NvidiaDetection returned a error: %s" % e)
         return False
 
-    def _getKernelFromBaseInstaller(self):
+
+    def getKernelsFromBaseInstaller(self):
+        """get the list of recommended kernels from base-installer"""
+        kernels = Popen(["/bin/sh", "./get_kernel_list.sh"],
+                        stdout=PIPE).communicate()[0]
+        kernels = filter(lambda x : len(x) > 0,
+                         map(string.strip, kernels.split("\n")))
+        logging.debug("./get_kernel_list.sh returns: %s" % kernels)
+        return kernels
+
+    def _selectKernelFromBaseInstaller(self):
         """ use the get_kernel_list.sh script (that uses base-installer)
             to figure out what kernel is most suitable for the system
         """
-        kernels = Popen(["/bin/sh", "./get_kernel_list.sh"],
-                        stdout=PIPE).communicate()[0]
-        for kernel in map(string.strip, kernels.split("\n")):
-            logging.debug("get_kernel_list.sh returns: %s" % kernel)
+        # check if we have a kernel from that list installed first
+        kernels = self.getKernelsFromBaseInstaller()
+        for kernel in kernels:
             if not self.has_key(kernel):
                 logging.debug("%s not available in cache" % kernel)
                 continue
@@ -503,12 +512,11 @@ class MyCache(apt.Cache):
                 logging.debug("%s kernel already installed" % kernel)
                 if self[kernel].isUpgradable and not self[kernel].markedUpgrade:
                     self.markUpgrade(kernel, "Upgrading kernel from base-installer")
+                return 
+        # if we have not found a kernel yet, use the first one that installs
+        for kernel in kernels:
+            if self.markInstall(kernel, "Selecting new kernel from base-installer"):
                 return
-            # install 
-            if not (self[kernel].isInstalled or 
-                    self[kernel].markedInstall):
-                if self.markInstall(kernel, "Selecting new kernel from base-installer"):
-                    return
 
     def checkForKernel(self):
         """ check for the running kernel and try to ensure that we have
@@ -526,7 +534,7 @@ class MyCache(apt.Cache):
             logging.debug("UP kernel on SMP system!?!")
         # use base-installer to get the kernel we want (if it exists)
         if os.path.exists("./get_kernel_list.sh"):
-            self._getKernelFromBaseInstaller()
+            self._selectKernelFromBaseInstaller()
         else:
             logging.debug("skipping ./get_kernel_list.sh: not found")
         return True

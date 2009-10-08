@@ -9,12 +9,15 @@ update-manager (1:0.125.7) UNRELEASED; urgency=low
       (LP: #439296)
     - convert PASS value from 1 to 0 for ntfs entries in
       /etc/fstab (LP: #441242) and add tests for it
+    - put 386 to generic transition code here and decouple from
+      the kernel selection
   * DistUpgrade/DistUpgrade.cfg.hardy:
     - add ability to upgrade from hardy to karmic (as asked for
       by Jonathan Riddell)
   * DistUpgrade/DistUpgradeCache.py:
     - workaround issues with kdesu when it drop the permission bits
       in a tmpdir (thanks to Jonathan Riddell)
+    - fix base-installer kernel selection (LP: #441629)
   * po/ 
     - updated from launchpad (required as during a release upgrade
       we can't use langpacks)
@@ -141,7 +144,7 @@ update-manager (1:0.125) karmic; urgency=low
   * integrate base-installer as a sub-component into the
     release upgrader and use the base-installer/kernel/*.sh
     functionality to ensure we select the most appropriate
-    kernel on upgrade (LP: #353545)
+    kernel on upgrade (LP: #353534)
   * integrate automatic updates to base-installer into the
     pre-build.sh bzr hook
   * UpdateManager/Core/UpdateList.py, UpdateManager/UpdateManager.py:

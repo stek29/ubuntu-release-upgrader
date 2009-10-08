@@ -197,6 +197,9 @@ class DistUpgradeQuirks(object):
         self.feistyPostDistUpgradeCache()
         self.edgyPostDistUpgradeCache()
 
+    def from_hardyPostDistUpgradeCache(self):
+        self._kernel386TransitionCheck()
+
     def karmicPostDistUpgradeCache(self):
         """ 
         this function works around quirks in the 
@@ -206,6 +209,7 @@ class DistUpgradeQuirks(object):
         # bcmwl-kernel-source (this is needed for lts->lts as well)
         self._checkAndInstallBroadcom()
         self._dealWithLanguageSupportTransition()
+        self._kernel386TransitionCheck()
 
     def jauntyPostDistUpgradeCache(self):
         """ 
@@ -863,5 +867,26 @@ class DistUpgradeQuirks(object):
         logging.debug("checking for %s support in modaliases but none found" % xorgdrivername)
         return False
                     
+
+    def _kernel386TransitionCheck(self):
+        """ test if the current kernel is 386 and if the system is 
+            capable of using a generic one instead (#353534)
+        """
+        logging.debug("_kernel386TransitionCheck")
+        # we test first if one of 386 is installed
+        # if so, check if the system could also work with -generic
+        # (we get that from base-installer) and try to installed
+        #  that)
+        for pkgname in ["linux-386", "linux-image-386"]:
+            if (self.controller.cache.has_key(pkgname) and
+                self.controller.cache[pkgname].isInstalled):
+                working_kernels = self.controller.cache.getKernelsFromBaseInstaller()
+                upgrade_to = ["linux-generic", "linux-image-generic"]
+                for pkgname in upgrade_to:
+                    if pkgname in working_kernels:
+                        logging.debug("386 kernel installed, but generic kernel  will work on this machine")
+                        if self.controller.cache.markInstall(pkgname, "386 -> generic transition"):
+                            return
+        
 
 

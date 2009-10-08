@@ -480,6 +480,7 @@ class DistUpgradeQuirks(object):
         self._removeBadMaintainerScripts()
         self._killUpdateNotifier()
         self._killKBluetooth()
+        self._killScreensaver()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
         # hal/NM triggers problem, if the old (intrepid) hal gets
@@ -560,6 +561,11 @@ class DistUpgradeQuirks(object):
         if os.path.exists("/usr/bin/killall"):
             logging.debug("killing kblueplugd kbluetooth4")
             subprocess.call(["killall", "-q", "kblueplugd", "kbluetooth4"])
+    def _killScreensaver(self):
+        """killall gnome-screensaver """
+        if os.path.exists("/usr/bin/killall"):
+            logging.debug("killing gnome-screensaver")
+            subprocess.call(["killall", "-q", "gnome-screensaver"])
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

@@ -131,6 +131,11 @@ class DistUpgradeQuirks(object):
         self._rewriteFstab()
         self._checkAdminGroup()
 
+    def karmicPostUpgrade(self):
+        """ this function works around quirks in the jaunty->karmic upgrade """
+        logging.debug("running Controller.karmicPostUpgrade handler")
+        self._ntfsFstabFixup()
+
     # quirks when run when the initial apt-get update was run -------
     def karmicPostInitialUpdate(self):
         " quirks that are run before the upgrade to karmic "
@@ -660,6 +665,43 @@ class DistUpgradeQuirks(object):
             os.rename("/etc/fstab.intrepid","/etc/fstab")
         return True
         
+    def _ntfsFstabFixup(self, fstab="/etc/fstab"):
+        """change PASS 1 to 0 for ntfs entries (#441242)"""
+        logging.debug("_ntfsFstabFixup")
+        replaced = False
+        lines = []
+        for line in open(fstab):
+            line = line.strip()
+            if line == '' or line.startswith("#"):
+                lines.append(line)
+                continue
+            try:
+                (device, mount_point, fstype, options, fdump, fpass) = line.split()
+            except Exception, e:
+                logging.error("can't parse line '%s'" % line)
+                lines.append(line)
+                continue
+            if ("ntfs" in fstype and fpass == "1"):
+                logging.debug("changing PASS for ntfs to 0 for '%s' " % line)
+                if line[-1] == "1":
+                    line = line[:-1] + "0"
+                else:
+                    logging.error("unexpected value in line")
+                logging.debug("replaced line is '%s' " % line)
+                replaced=True
+            lines.append(line)
+        # we have converted a line
+        if replaced:
+            suffix = ".jaunty"
+            logging.debug("writing new /etc/fstab")
+            f=open(fstab + suffix, "w")
+            f.write("\n".join(lines))
+            # add final newline (see LP: #279093)
+            f.write("\n")
+            f.close()
+            os.rename(fstab+suffix, fstab)
+        return True
+        
 
     def _rewriteFstab(self):
         " convert /dev/{hd?,scd0} to /dev/cdrom for the feisty upgrade "
@@ -804,6 +846,7 @@ class DistUpgradeQuirks(object):
                 if line:
                     lspci.add(line.split()[2])
         for filename in os.listdir(modaliasesdir):
+            #logging.debug("modalias file '%s'" % filename)
             for line in open(os.path.join(modaliasesdir,filename)):
                 line = line.strip()
                 if line == "" or line.startswith("#"):

@@ -1,6 +1,7 @@
 # (c) 2005-2009 Canonical, GPL
 #
 
+import apt_pkg
 import gobject
 import gtk
 
@@ -24,6 +25,10 @@ class InstallBackendAptdaemon(InstallBackend):
 
     def commit(self, cache):
         """Commit a list of package adds and removes"""
+        try:
+            apt_pkg.PkgSystemUnLock()
+        except SystemError:
+            pass
         self.ac = client.AptClient()
         add = []
         upgrade = []
@@ -49,6 +54,10 @@ class InstallBackendAptdaemon(InstallBackend):
 
     def update(self):
         """Run a update to refresh the package list"""
+        try:
+            apt_pkg.PkgSystemUnLock()
+        except SystemError:
+            pass
         self.ac = client.AptClient()
         t = self.ac.update_cache(exit_handler=self._on_exit)
         dia = AptProgressDialog(t, parent=self.window_main, terminal=False)

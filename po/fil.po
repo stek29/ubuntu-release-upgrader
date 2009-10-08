@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-09-06 13:39-0700\n"
-"PO-Revision-Date: 2008-12-20 15:54+0000\n"
-"Last-Translator: Ronipe Gutierrez <Unknown>\n"
+"POT-Creation-Date: 2009-10-03 11:14+0000\n"
+"PO-Revision-Date: 2009-10-06 01:18+0000\n"
+"Last-Translator: Michael Vogt <michael.vogt@ubuntu.com>\n"
 "Language-Team: Filipino <fil@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2009-04-08 12:12+0000\n"
+"X-Launchpad-Export-Date: 2009-10-08 06:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
@@ -52,7 +52,7 @@ msgstr "MGA TAGASALIN: Ang %s ay isang bansa"
 #: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
 #: ../DistUpgrade/distro.py:248
 msgid "Main server"
-msgstr "Punong Server"
+msgstr "Pangunahing Server"
 
 #: ../DistUpgrade/distro.py:252
 msgid "Custom servers"
@@ -60,13 +60,15 @@ msgstr "Sariling servers"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:131
 msgid "Could not calculate sources.list entry"
-msgstr ""
+msgstr "Hindi makalkula ang nakatala sa sources.list"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:234
 msgid ""
 "Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
 "wrong architecture?"
 msgstr ""
+"Walang paketeng natagpuan, maaaring hindi ito Ubuntu Disc o ang arkitektura "
+"nito ay mali?"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:277
 msgid "Failed to add the CD"
@@ -90,8 +92,8 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeCache.py:130
 msgid "Remove package in bad state"
 msgid_plural "Remove packages in bad state"
-msgstr[0] "Alisin ang package na masama ang lagay"
-msgstr[1] "Alisin ang mga package na masama ang lagay"
+msgstr[0] "Alisin ang pakete na nasa masamang kalagayan"
+msgstr[1] "Alisin ang mga pakete na nasa masamang kalagayan"
 
 #: ../DistUpgrade/DistUpgradeCache.py:133
 #, python-format
@@ -104,7 +106,13 @@ msgid_plural ""
 "but no archives can be found for them. Do you want to remove these packages "
 "now to continue?"
 msgstr[0] ""
+"Ang paketeng '%s' ay na sa hindi magandang kalagayan at kinakailangan muling "
+"i-install, ngunit walang matagpuang archive para dito. Nais mo bang "
+"tanggalin ang paketeng ito upang makapagpatuloy?"
 msgstr[1] ""
+"Ang mga paketeng '%s' ay na sa hindi magandang kalagayan at kinakailangan "
+"muling i-install, ngunit walang matagpuang archive para sa kanila. Nais mo "
+"bang tanggalin ang mga paketeng ito upang makapagpatuloy?"
 
 #: ../DistUpgrade/DistUpgradeCache.py:330
 msgid "Broken packages"
@@ -120,7 +128,7 @@ msgstr ""
 "bago tumuloy."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:588
+#: ../DistUpgrade/DistUpgradeCache.py:598
 #, python-format
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade:\n"
@@ -132,30 +140,41 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
+"May isang di-malunasang problemang lumitaw habang kinakalkula ang upgrade:\n"
+"%s\n"
+"\n"
+" Mga maaaring kadahilanan:\n"
+" * Pag-upgrade sa isang di pa nailalabas na bersyon ng Ubuntu\n"
+" * Ginagamit ang di pa nailalabas na bersyon ng Ubuntu\n"
+" * Hindi opisyal na paketeng software na di mula sa Ubuntu\n"
+"\n"
 
-#: ../DistUpgrade/DistUpgradeCache.py:598
+#: ../DistUpgrade/DistUpgradeCache.py:608
 msgid "This is most likely a transient problem, please try again later."
 msgstr ""
 "Malamang sa malamang, ito ay isang mapaparam na suliraning. Mangyaring "
 "pakisubukan muli mamaya."
 
-#: ../DistUpgrade/DistUpgradeCache.py:601
+#: ../DistUpgrade/DistUpgradeCache.py:611
 msgid ""
 "If none of this applies, then please report this bug against the 'update-"
 "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
 "report."
 msgstr ""
+"Kung wala dito ang kadahilanan, magpadala lamang ng isang bug report laban "
+"sa 'update-manager' at isama ang mga file sa loob ng /var/log/dist-upgrade "
+"sa inyong bug report."
 
-#: ../DistUpgrade/DistUpgradeCache.py:607
-#: ../UpdateManager/UpdateManager.py:718
+#: ../DistUpgrade/DistUpgradeCache.py:617
+#: ../UpdateManager/UpdateManager.py:732
 msgid "Could not calculate the upgrade"
 msgstr "Hindi makalkula ang upgrade"
 
-#: ../DistUpgrade/DistUpgradeCache.py:657
+#: ../DistUpgrade/DistUpgradeCache.py:667
 msgid "Error authenticating some packages"
 msgstr "May problema sa pagkilala sa ibang mga package"
 
-#: ../DistUpgrade/DistUpgradeCache.py:658
+#: ../DistUpgrade/DistUpgradeCache.py:668
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -165,33 +184,35 @@ msgstr ""
 "problema sa network. Maaari kayong sumubok muli mamaya. Ang mga sumusunod ay "
 "ang mga package na hindi makilala."
 
-#: ../DistUpgrade/DistUpgradeCache.py:678
+#: ../DistUpgrade/DistUpgradeCache.py:688
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
 msgstr ""
+"Ang paketeng '%s' ay namarkahan upang matanggal ngunit ito ay na sa talaan "
+"ng mga paketeng hindi maaaring tanggalin."
 
-#: ../DistUpgrade/DistUpgradeCache.py:682
+#: ../DistUpgrade/DistUpgradeCache.py:692
 #, python-format
 msgid "The essential package '%s' is marked for removal."
-msgstr ""
+msgstr "Ang mahalagang paketeng '%s' ay namarkahan upang matanggal."
 
-#: ../DistUpgrade/DistUpgradeCache.py:691
+#: ../DistUpgrade/DistUpgradeCache.py:701
 #, python-format
 msgid "Trying to install blacklisted version '%s'"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:787
+#: ../DistUpgrade/DistUpgradeCache.py:801
 #, python-format
 msgid "Can not mark '%s' for upgrade"
-msgstr ""
+msgstr "Hindi mamarkahan ang '%s' para sa pag-upgrade."
 
-#: ../DistUpgrade/DistUpgradeCache.py:801
+#: ../DistUpgrade/DistUpgradeCache.py:815
 #, python-format
 msgid "Can't install '%s'"
 msgstr "Hindi ma-install ang '%s'"
 
-#: ../DistUpgrade/DistUpgradeCache.py:802
+#: ../DistUpgrade/DistUpgradeCache.py:816
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -200,11 +221,11 @@ msgstr ""
 "bilang isang bug. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:811
+#: ../DistUpgrade/DistUpgradeCache.py:825
 msgid "Can't guess meta-package"
 msgstr "Hindi mahulaan ang meta-package"
 
-#: ../DistUpgrade/DistUpgradeCache.py:812
+#: ../DistUpgrade/DistUpgradeCache.py:826
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -237,7 +258,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeController.py:235
 msgid "Upgrading over remote connection not supported"
-msgstr ""
+msgstr "Walang suporta para sa pag-upgrade mula sa isang remote connection"
 
 #: ../DistUpgrade/DistUpgradeController.py:236
 msgid ""
@@ -245,6 +266,9 @@ msgid ""
 "that does not support this. The upgrade will abort now. Please try without "
 "ssh."
 msgstr ""
+"Pinatatakbo niyo ang upgrade mula sa isang remote ssh connection na may "
+"hindi sinusuportahang frontend. Ititigil na ang upgrade sa ngayon. "
+"Pakisubkuan ito nang walang ssh."
 
 #: ../DistUpgrade/DistUpgradeController.py:247
 msgid "Continue running under SSH?"
@@ -279,6 +303,9 @@ msgid ""
 "started on port '%s'. If anything goes wrong with the running ssh you can "
 "still connect to the additional one.\n"
 msgstr ""
+"Upang mapadali ang recovery kung sakaling mabigo ang upgrade, may isang "
+"karagdagang sshd na bubuksan sa port '%s'. Kung may mangyayari mang hindi "
+"maganda sa tumatakbong ssh, maaari niyong gamitin ang bagong idinagdag.\n"
 
 #: ../DistUpgrade/DistUpgradeController.py:334
 #: ../DistUpgrade/DistUpgradeController.py:379
@@ -289,28 +316,35 @@ msgstr "Hindi makapag-upgrade"
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr ""
+"Ang pag-upgrade mula '%s' patungong '%s' ay hindi sinusuportahan ng "
+"kagamitang ito."
 
 #: ../DistUpgrade/DistUpgradeController.py:344
 msgid "Sandbox setup failed"
-msgstr ""
+msgstr "Nagbigo ang pagsasaayos ng Sandbox"
 
 #: ../DistUpgrade/DistUpgradeController.py:345
 msgid "It was not possible to create the sandbox environment."
-msgstr ""
+msgstr "Hindi naging posible ang paggawa ng sandbox environment."
 
 #: ../DistUpgrade/DistUpgradeController.py:351
 msgid "Sandbox mode"
-msgstr ""
+msgstr "Sandbox mode"
 
 #: ../DistUpgrade/DistUpgradeController.py:352
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to '%"
-"s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to "
+"'%s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
 msgstr ""
+"Ang upgrade na ito ay tumatakbo sa sandbox (pagsusubok) mode. Lahat ng mga "
+"pagbabago ay isusulat sa '%s' at mawawala ang mga ito sa susunod na reboot.\n"
+"\n"
+"*Walang* permanenteng pagbabago ang isusulat sa anumang systemdir mula "
+"ngayon hanggang sa susunod na reboot."
 
 #: ../DistUpgrade/DistUpgradeController.py:380
 msgid ""
@@ -348,6 +382,14 @@ msgid ""
 "latest updates soon after upgrading.\n"
 "If you answer 'no' here, the network is not used at all."
 msgstr ""
+"Maaring gamitin ng upgrade system ang internet upang mag-isa nitong makuha "
+"ang mga pinakabagong update at ma-install ang mga ito habang tumatakbo ang "
+"upgrade. Kung mayroon kayong network connection, ito ay aming ipinapayo.\n"
+"\n"
+"Magtatagal ang upgrade ngunit kapag ito ay natapos, makukuha ninyo ang "
+"pinakabagong sistema. Maaarin ninyo itong huwag gawin ngunit ipinapayo na i-"
+"install ninyo ang mga pinakabagong update sa lalong madaling panahon.\n"
+"Kung 'hindi' ang inyong pipiliin, ang network ay hindi gagamitin."
 
 #: ../DistUpgrade/DistUpgradeController.py:641
 #, python-format
@@ -359,7 +401,7 @@ msgid "No valid mirror found"
 msgstr "Walang mirror na natagpuan"
 
 #: ../DistUpgrade/DistUpgradeController.py:668
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
 "was found. This can happen if you run a internal mirror or if the mirror "
@@ -369,13 +411,6 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
-"Habang sinusuri ang inyong repository information walang mirror entry para "
-"sa upgrade ang natagpuan. Maaari itong mangyari kung kayo'y nagpapatakbo ng "
-"isang internal mirror o kung ang mirror information ay luma na.\n"
-"\n"
-"Gusto niyo pa bang palitan ang 'sources.list'? Kung 'Oo' ang pipiliin para "
-"dito, Palitan lahat ng entry na '%s' ng '%s'.\n"
-"Kung 'hindi' ang pipiliin, hindi itutuloy ang update."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:688
@@ -445,10 +480,13 @@ msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
+"Isang problema ang nangyari habang naga-update. Ito ay karaniwang uri ng "
+"problema sa network, mangyaring tiyakin ang iyong koneskyon sa network at "
+"subukan muli."
 
 #. print "on_button_install_clicked"
 #: ../DistUpgrade/DistUpgradeController.py:833
-#: ../UpdateManager/UpdateManager.py:541
+#: ../UpdateManager/UpdateManager.py:555
 msgid "Not enough free disk space"
 msgstr "Kulang sa libreng disk space"
 
@@ -460,6 +498,10 @@ msgid ""
 "Empty your trash and remove temporary packages of former installations using "
 "'sudo apt-get clean'."
 msgstr ""
+"Ang upgrade ay itinigil na. Ang upgrade ay nangangailangan ng '%s' libreng "
+"espasyo sa disk '%s'. Maglaan lamang ng karagdagang '%s' sa '%s'. Alisin ang "
+"laman ng inyong basurahan at magtanggal ng mga paketeng pansamantala na "
+"ginamit para sa mga lumang pag-install, gamitin ang 'sudo apt-get clean'."
 
 #: ../DistUpgrade/DistUpgradeController.py:874
 msgid "Support for some applications ended"
@@ -486,7 +528,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:884
 #: ../DistUpgrade/DistUpgradeController.py:1554
 msgid "Calculating the changes"
-msgstr ""
+msgstr "Kinakalkula ang mga pagbabago"
 
 #. ask the user if he wants to do the changes
 #: ../DistUpgrade/DistUpgradeController.py:899
@@ -494,9 +536,8 @@ msgid "Do you want to start the upgrade?"
 msgstr "Simulan na ba ang upgrade?"
 
 #: ../DistUpgrade/DistUpgradeController.py:955
-#, fuzzy
 msgid "Upgrade canceled"
-msgstr "Tapos na ang upgrade"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeController.py:956
 msgid ""
@@ -514,6 +555,9 @@ msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
+"Ang upgrade ay itinigil na. Suriin lamang ang inyong Internet connection o "
+"installation media at subukang muli. Ang mga nakuha nang file ay "
+"pananatiliin."
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
@@ -526,7 +570,7 @@ msgstr "Error during commit"
 #: ../DistUpgrade/DistUpgradeController.py:1017
 #: ../DistUpgrade/DistUpgradeController.py:1177
 msgid "Restoring original system state"
-msgstr "Ibinabalik sa original system state"
+msgstr "Ibinabalik sa orihinal na kalagayan ng sistema"
 
 #: ../DistUpgrade/DistUpgradeController.py:1018
 #: ../DistUpgrade/DistUpgradeController.py:1032
@@ -539,6 +583,9 @@ msgid ""
 "The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
+"Ang upgrade ay itinigil na. Ang inyong sistema ay maaaring na sa di maayos "
+"na kalagayan. Sa ngayon, isang recovery ang patatakbuhin (dpkg --configure -"
+"a)."
 
 #: ../DistUpgrade/DistUpgradeController.py:1028
 #, python-format
@@ -549,12 +596,19 @@ msgid ""
 "files in /var/log/dist-upgrade/ in the bug report.\n"
 "%s"
 msgstr ""
+"\n"
+"\n"
+"Magpadala lamang ng bug report laban sa paketeng 'update-manager' at isama "
+"ang mga file sa /var/log/dist-upgrade/ sa inyong bug report.\n"
+"%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1049
 msgid ""
 "The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
+"Ang upgrade ay itinigil na. Suriin lamang ang inyong Internet connection o "
+"installation media at subukang muli. "
 
 #: ../DistUpgrade/DistUpgradeController.py:1126
 msgid "Remove obsolete packages?"
@@ -574,6 +628,8 @@ msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
 msgstr ""
+"May isang problemang lumitaw sa panahon ng paglilinis. Mangyaring tingnan "
+"ang mensahe sa ibaba para sa karagdagang impormasyon. "
 
 #. FIXME: instead of error out, fetch and install it
 #. here
@@ -603,10 +659,13 @@ msgid ""
 "against the 'update-manager' package and include the files in /var/log/dist-"
 "upgrade/ in the bug report."
 msgstr ""
+"Nabigong ihanda ang sistema para sa upgrade. Magpadala lamang ng bug report "
+"laban sa paketeng 'update-manager' at isama ang mga file sa /var/log/dist-"
+"upgrade/ sa inyong bug report."
 
 #: ../DistUpgrade/DistUpgradeController.py:1483
 msgid "Getting upgrade prerequisites failed"
-msgstr ""
+msgstr "Nabigong kunin ang mga pangangailangan para sa pag-upgrade"
 
 #: ../DistUpgrade/DistUpgradeController.py:1484
 msgid ""
@@ -616,6 +675,12 @@ msgid ""
 "Please report this as a bug against the 'update-manager' package and include "
 "the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
+"Nabigo ang sistemang kunin ang mga pangangailangan para sa pag-upgrade. "
+"Ititigil na ang upgrade ngayon at ibabalik ang sistema sa kaniyang "
+"panimulang kalagayan.\n"
+"\n"
+"Magpadala lamang ng bug report laban sa paketeng 'update-manager' at isama "
+"ang mga file sa /var/log/dist-upgrade/ sa inyong bug report."
 
 #: ../DistUpgrade/DistUpgradeController.py:1514
 msgid "Updating repository information"
@@ -659,6 +724,8 @@ msgstr "Tapos na ang upgrade"
 msgid ""
 "The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
+"Ang pag-upgrade ay nakumpleto ngunit mayroong mga pagkakamaling lumabas "
+"habang ito ay isinasagawa."
 
 #: ../DistUpgrade/DistUpgradeController.py:1579
 msgid "Searching for obsolete software"
@@ -670,7 +737,7 @@ msgstr "Tapos na ang System upgrade."
 
 #: ../DistUpgrade/DistUpgradeController.py:1627
 msgid "The partial upgrade was completed."
-msgstr ""
+msgstr "Ang bahagyang upgrade ay tapos na."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:143
 msgid "No ARMv6 CPU"
@@ -679,51 +746,58 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeQuirks.py:144
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
-"packages in karmic were build with, optimizations requiring ARMv6 as the "
-"minimal architecture, i can not upgrade your system to karmic on your "
-"hardware."
+"packages in karmic were built with optimizations requiring ARMv6 as the "
+"minimal architecture. It is not possible to upgrade your system to a new "
+"Ubuntu release with this hardware."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:161
-#: ../DistUpgrade/DistUpgradeQuirks.py:238
-#: ../DistUpgrade/DistUpgradeQuirks.py:263
+#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
+#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:243
+#: ../DistUpgrade/DistUpgradeQuirks.py:270
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
 msgstr ""
+"Maaaring mabawasan ng pag-upgrade ang desktop effects, at mapabagal ang mga "
+"laro at mga programang madaming graphic."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 9.04.\n"
+"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:242
-#: ../DistUpgrade/DistUpgradeQuirks.py:267
+#: ../DistUpgrade/DistUpgradeQuirks.py:247
+#: ../DistUpgrade/DistUpgradeQuirks.py:274
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
-"Ubuntu 8.10.\n"
+"Ubuntu 10.04.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:437
+#: ../DistUpgrade/DistUpgradeQuirks.py:444
 msgid "evms in use"
-msgstr ""
+msgstr "Kasalukuyang ginagamit ang evms"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:438
+#: ../DistUpgrade/DistUpgradeQuirks.py:445
 msgid ""
 "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
 "software is no longer supported, please switch it off and run the upgrade "
 "again when this is done."
 msgstr ""
+"Ginagamit ng inyong sistema ang 'evms' volume manager sa /proc/mounts. Ang "
+"software na 'evms' ay hindi na sinusuportahan, pakipatay lamang ito at "
+"muling simulan ang upgrade."
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
-msgstr ""
+msgstr "Sandbox upgrade gamit ang aufs"
 
 #: ../DistUpgrade/DistUpgradeMain.py:45
 msgid "Use the given path to search for a cdrom with upgradable packages"
@@ -770,7 +844,7 @@ msgstr "Ang pagkuha ay tapos na"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:216
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
-msgstr ""
+msgstr "Kinukuha ang file %li ng %li sa bilis na %sB/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:138
 #: ../DistUpgrade/DistUpgradeViewGtk.py:273
@@ -810,7 +884,7 @@ msgstr "Hindi ma-install ang '%s'"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:269
 #, python-format
 msgid ""
-"The upgrade will continue but the '%s' package may be in a not working "
+"The upgrade will continue but the '%s' package may not be in a working "
 "state. Please consider submitting a bug report about it."
 msgstr ""
 
@@ -839,54 +913,56 @@ msgstr ""
 msgid "The 'diff' command was not found"
 msgstr "Ang 'diff' command ay hindi natagpuan"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:417
+#: ../DistUpgrade/DistUpgradeViewGtk.py:419
 #: ../DistUpgrade/DistUpgradeViewText.py:107
 msgid "A fatal error occurred"
 msgstr "Isang fatal error ang nangyari"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:418
+#: ../DistUpgrade/DistUpgradeViewGtk.py:420
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:433
+#: ../DistUpgrade/DistUpgradeViewGtk.py:435
 msgid "Ctrl-c pressed"
-msgstr ""
+msgstr "Pinindot ang Ctrl-c"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:434
+#: ../DistUpgrade/DistUpgradeViewGtk.py:436
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
 msgstr ""
+"Patitigilin nito ang operasyon at maaari itong ikasira ng niyong sistema. "
+"Gusto niyo ba talagang gawin ito?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk.py:576
+#: ../DistUpgrade/DistUpgradeViewGtk.py:578
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "Para maiwasan ang pagkawala ng data, isara ang mga nakabukas na application "
 "at mga dokumento."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:590
+#: ../DistUpgrade/DistUpgradeViewGtk.py:592
 #, python-format
 msgid "<b>Downgrade %s</b>"
-msgstr ""
+msgstr "<b>Downgrade %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:592
+#: ../DistUpgrade/DistUpgradeViewGtk.py:594
 #: ../DistUpgrade/DistUpgradeViewKDE.py:757
 #, python-format
 msgid "Remove %s"
 msgstr "Tanggalin %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:597
+#: ../DistUpgrade/DistUpgradeViewGtk.py:599
 #: ../DistUpgrade/DistUpgradeViewKDE.py:759
 #, python-format
 msgid "Install %s"
 msgstr "Install %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:599
+#: ../DistUpgrade/DistUpgradeViewGtk.py:601
 #: ../DistUpgrade/DistUpgradeViewKDE.py:761
 #, python-format
 msgid "Upgrade %s"
@@ -900,24 +976,24 @@ msgstr "Pagpapalit ng Media"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:321
 msgid "Show Difference >>>"
-msgstr ""
+msgstr "Ipakita ang Pagkakaiba >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:324
 msgid "<<< Hide Difference"
-msgstr ""
+msgstr "<<< Itago ang Pagkakaiba"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:538
 msgid "Error"
-msgstr ""
+msgstr "Pagkakamali"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:550
 msgid "&Cancel"
-msgstr ""
+msgstr "&Itigil"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:552
 #: ../DistUpgrade/DistUpgradeViewKDE.py:789
 msgid "&Close"
-msgstr ""
+msgstr "&Isara"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:598
 msgid "Show Terminal >>>"
@@ -940,7 +1016,7 @@ msgstr "Mga detalye"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:785
 #: ../DistUpgrade/DistUpgradeViewText.py:225
 msgid "Restart required"
-msgstr ""
+msgstr "Kinakailangang mag-restart"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:785 ../DistUpgrade/DistUpgrade.ui.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
@@ -958,6 +1034,10 @@ msgid ""
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly advised to resume the upgrade."
 msgstr ""
+"<b><big>Ihinto ang tumatakbong upgrade?</big></b>\n"
+"\n"
+"Maaaring masira ang sistema kung ihihinto ang upgrade. Ipinapayong "
+"ipagpatuloy lamang ang upgrade."
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:804
 msgid "Cancel Upgrade?"
@@ -967,57 +1047,57 @@ msgstr "Itigil ang Upgrade?"
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li araw"
+msgstr[1] "%li araw"
 
 #: ../DistUpgrade/DistUpgradeView.py:61
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li oras"
+msgstr[1] "%li oras"
 
 #: ../DistUpgrade/DistUpgradeView.py:63
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li sandali"
+msgstr[1] "%li sandali"
 
 #: ../DistUpgrade/DistUpgradeView.py:64
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li saglit"
+msgstr[1] "%li saglit"
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:77
 #, python-format
 msgid "%(str_days)s %(str_hours)s"
-msgstr ""
+msgstr "%(str_days)s %(str_hours)s"
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:92
 #, python-format
 msgid "%(str_hours)s %(str_minutes)s"
-msgstr ""
+msgstr "%(str_hours)s %(str_minutes)s"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
@@ -1027,24 +1107,27 @@ msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem."
 msgstr ""
+"Ang download na ito ay magtatagal ng mga %s gamit ang 1Mbit DSL at mga %s "
+"gamit ang 56k modem."
 
 #. if we have a estimated speed, use it
 #: ../DistUpgrade/DistUpgradeView.py:117
 #, python-format
 msgid "This download will take about %s with your connection. "
 msgstr ""
+"Ang download na ito ay magtatagal ng mga %s gamit ang inyong koneksyon. "
 
 #: ../DistUpgrade/DistUpgradeView.py:186 ../DistUpgrade/DistUpgrade.ui.h:14
 msgid "Preparing to upgrade"
-msgstr ""
+msgstr "Naghahanda sa pag-upgrade"
 
 #: ../DistUpgrade/DistUpgradeView.py:187
 msgid "Getting new software channels"
-msgstr ""
+msgstr "Kinukuha ang mga bagong software channel"
 
 #: ../DistUpgrade/DistUpgradeView.py:188 ../DistUpgrade/DistUpgrade.ui.h:12
 msgid "Getting new packages"
-msgstr ""
+msgstr "Kinukuha ang mga bagong pakete"
 
 #: ../DistUpgrade/DistUpgradeView.py:189 ../DistUpgrade/DistUpgrade.ui.h:13
 msgid "Installing the upgrades"
@@ -1093,9 +1176,11 @@ msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
 msgstr ""
+"Ang pagkuha at pag-install ng upgrade ay maaaring umabot ng ilang oras. "
+"Hindi na ito maihihinto kapag natapos na ang pag-download."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:289 ../UpdateManager/UpdateManager.py:475
+#: ../DistUpgrade/DistUpgradeView.py:289 ../UpdateManager/UpdateManager.py:489
 msgid "Your system is up-to-date"
 msgstr "Ang sistema ninyo ay up-to-date"
 
@@ -1103,7 +1188,8 @@ msgstr "Ang sistema ninyo ay up-to-date"
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
-msgstr "Wala pang upgrade na para sa inyong sistema. Ititigil na ang upgrade."
+msgstr ""
+"Wala pang upgrade na para sa inyong sistema. Ititigil na ang upgrade."
 
 #: ../DistUpgrade/DistUpgradeView.py:303
 msgid "Reboot required"
@@ -1166,8 +1252,8 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:248
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
-msgid "Verfication failed"
-msgstr "Nabigo ang verification"
+msgid "Verification failed"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:249
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
@@ -1196,7 +1282,7 @@ msgstr ""
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:263
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:269
 msgid "Can not run the upgrade"
-msgstr ""
+msgstr "Hindi mapatakbo ang upgrade"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:264
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:264
@@ -1209,19 +1295,19 @@ msgstr ""
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:270
 #, python-format
 msgid "The error message is '%s'."
-msgstr ""
+msgstr "Ang mensahe ng pagkakamali ay '%s'."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:108
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewText.py:132
 msgid "Aborting"
-msgstr ""
+msgstr "Itinitigil"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:137
 msgid "Demoted:\n"
@@ -1231,56 +1317,58 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewText.py:191
 #: ../DistUpgrade/DistUpgradeViewText.py:198
 msgid "Continue [yN] "
-msgstr ""
+msgstr "Magpatuloy [yN] "
 
 #: ../DistUpgrade/DistUpgradeViewText.py:169
 #: ../DistUpgrade/DistUpgradeViewText.py:191
 msgid "Details [d]"
-msgstr ""
+msgstr "Mga detalye [d]"
 
 #. TRANSLATORS: the "y" is "yes"
 #. TRANSLATORS: first letter of a positive (yes) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:173
 #: ../DistUpgrade/DistUpgradeViewText.py:201
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:176
 #: ../DistUpgrade/DistUpgradeViewText.py:208
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #. TRANSLATORS: the "d" is "details"
 #: ../DistUpgrade/DistUpgradeViewText.py:179
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:183
 #, python-format
 msgid "Remove: %s\n"
-msgstr ""
+msgstr "Tanggalin: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:186
 #, python-format
 msgid "Install: %s\n"
-msgstr ""
+msgstr "I-install: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:189
 #, python-format
 msgid "Upgrade: %s\n"
-msgstr ""
+msgstr "I-upgrade: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:205
 msgid "Continue [Yn] "
-msgstr ""
+msgstr "Magpatuloy [Yn] "
 
 #: ../DistUpgrade/DistUpgradeViewText.py:226
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
 msgstr ""
+"Upang matapos ang upgrade, kinakailangang mag-restart.\n"
+"Magre-restart ang sistema kung pipiliin ang 'y'."
 
 #: ../DistUpgrade/DistUpgrade.ui.h:1
 msgid "    "
@@ -1316,7 +1404,7 @@ msgstr "Pag-upgrade ng Distribution"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:15
 msgid "Restarting the computer"
-msgstr ""
+msgstr "Inire-restart ang computer"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:16
 msgid "Setting new software channels"
@@ -1330,7 +1418,7 @@ msgstr "Terminal"
 msgid "_Cancel Upgrade"
 msgstr "_Itigil ang Upgrade"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:19 ../data/glade/UpdateManager.ui.h:25
+#: ../DistUpgrade/DistUpgrade.ui.h:19
 msgid "_Continue"
 msgstr "_Ipagpatuloy"
 
@@ -1381,10 +1469,10 @@ msgstr "Suriin ang inyong internet connection."
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:62
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:85
 msgid "Upgrade"
-msgstr ""
+msgstr "Upgrade"
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:89
-#: ../data/glade/UpdateManager.ui.h:11
+#: ../data/glade/UpdateManager.ui.h:12
 msgid "Release Notes"
 msgstr "Release Notes"
 
@@ -1392,87 +1480,93 @@ msgstr "Release Notes"
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:141
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:143
 msgid "Downloading additional package files..."
-msgstr ""
+msgstr "Kumukuha ng mga karagdagang file ng mga pakete..."
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:141
 #, python-format
 msgid "File %s of %s at %sB/s"
-msgstr ""
+msgstr "File %s ng %s sa bilis na %sB/s"
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:143
 #, python-format
 msgid "File %s of %s"
-msgstr ""
+msgstr "File %s ng %s"
 
 #: ../UpdateManager/ChangelogViewer.py:70
 msgid "Open Link in Browser"
-msgstr ""
+msgstr "Buksan ang Link sa Browser"
 
 #: ../UpdateManager/ChangelogViewer.py:72
 msgid "Copy Link to Clipboard"
-msgstr ""
+msgstr "Kopyahin ang Link tungo sa Clipboard"
 
-#: ../UpdateManager/GtkProgress.py:111
+#: ../UpdateManager/GtkProgress.py:115
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr "Idina-download ang file %(current)li ng %(total)li sa %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:116
+#: ../UpdateManager/GtkProgress.py:120
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "Idina-download ang file %(current)li ng %(total)li"
 
-#: ../UpdateManager/UpdateManager.py:295
+#: ../UpdateManager/UpdateManager.py:302
 #, python-format
 msgid "Version %s: \n"
 msgstr "Bersyon %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:353
+#: ../UpdateManager/UpdateManager.py:359
 msgid "Downloading list of changes..."
 msgstr "Kinukuha ang listahan ng mga pagbabago"
 
-#: ../UpdateManager/UpdateManager.py:385
+#: ../UpdateManager/UpdateManager.py:399
 msgid "_Uncheck All"
 msgstr "_Tanggalin Ang Lahat Ng Marka"
 
-#: ../UpdateManager/UpdateManager.py:391
+#: ../UpdateManager/UpdateManager.py:405
 msgid "_Check All"
 msgstr "_Markahan Lahat"
 
-#: ../UpdateManager/UpdateManager.py:435
-#, fuzzy, python-format
+#: ../UpdateManager/UpdateManager.py:449
+#, python-format
 msgid "%s selected. Download size: %s"
-msgstr "Laki ng download: %s"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:440
+#: ../UpdateManager/UpdateManager.py:454
 msgid "Unknown download size"
 msgstr "Hindi-malamang laki ng download"
 
-#: ../UpdateManager/UpdateManager.py:448
+#: ../UpdateManager/UpdateManager.py:462
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:457
+#: ../UpdateManager/UpdateManager.py:471
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
 msgstr[0] ""
+"Ang impormasyon tungkol sa pakete ay binago %s araw na ang nakararaan."
 msgstr[1] ""
+"Ang impormasyon tungkol sa pakete ay binago %s araw na ang nakararaan."
 
-#: ../UpdateManager/UpdateManager.py:461
+#: ../UpdateManager/UpdateManager.py:475
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
 msgstr[0] ""
+"Ang impormasyon tungkol sa pakete ay binago %s oras na ang nakararaan."
 msgstr[1] ""
+"Ang impormasyon tungkol sa pakete ay binago %s oras na ang nakararaan."
 
-#: ../UpdateManager/UpdateManager.py:465
+#: ../UpdateManager/UpdateManager.py:479
 msgid "The package information was last updated less than one hour ago."
 msgstr ""
+"Ang impormasyon tungkol sa pakete ay binago wala pang isang oras na "
+"nakararaan."
 
-#: ../UpdateManager/UpdateManager.py:473 ../data/glade/UpdateManager.ui.h:21
+#: ../UpdateManager/UpdateManager.py:487 ../data/glade/UpdateManager.ui.h:22
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
@@ -1480,28 +1574,28 @@ msgstr ""
 "Ang software updates ay nagtatama ng mga error, nagtatanggal ng mga security "
 "vulnerability at nagbibigay ng mga bagong katangian."
 
-#: ../UpdateManager/UpdateManager.py:489
+#: ../UpdateManager/UpdateManager.py:503
 msgid "Welcome to Ubuntu"
-msgstr ""
+msgstr "Maligayang pagdating sa Ubuntu"
 
-#: ../UpdateManager/UpdateManager.py:490
+#: ../UpdateManager/UpdateManager.py:504
 msgid ""
 "These software updates have been issued since Ubuntu was released. If you "
 "don't want to install them now, choose \"Update Manager\" from the "
 "Administration Menu later."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:493
+#: ../UpdateManager/UpdateManager.py:507
 msgid "Software updates are available for this computer"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:494
+#: ../UpdateManager/UpdateManager.py:508
 msgid ""
 "If you don't want to install them now, choose \"Update Manager\" from the "
 "Administration menu later."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:542
+#: ../UpdateManager/UpdateManager.py:556
 #, python-format
 msgid ""
 "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -1509,16 +1603,16 @@ msgid ""
 "temporary packages of former installations using 'sudo apt-get clean'."
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:579
+#: ../UpdateManager/UpdateManager.py:593
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:696
+#: ../UpdateManager/UpdateManager.py:710
 msgid "Could not initialize the package information"
 msgstr "Hindi ma-initialize ang package information"
 
-#: ../UpdateManager/UpdateManager.py:697
+#: ../UpdateManager/UpdateManager.py:711
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1527,7 +1621,7 @@ msgid ""
 "following error message:\n"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:719
+#: ../UpdateManager/UpdateManager.py:733
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1535,56 +1629,51 @@ msgid ""
 "following error message:"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:742
+#: ../UpdateManager/UpdateManager.py:756
 msgid " (New install)"
 msgstr ""
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:746
+#: ../UpdateManager/UpdateManager.py:760
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Laki: %s)"
 
-#: ../UpdateManager/UpdateManager.py:748
+#: ../UpdateManager/UpdateManager.py:762
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "Galing sa bersyon %(old_version)s tungong %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:752
+#: ../UpdateManager/UpdateManager.py:766
 #, python-format
 msgid "Version %s"
 msgstr "Bersyon %s"
 
-#: ../UpdateManager/UpdateManager.py:765
-msgid "Your distribution is not supported anymore"
-msgstr "Ang inyong distribution ay hindi na sinusuportahan"
+#: ../UpdateManager/UpdateManager.py:779
+msgid "Your Ubuntu release is not supported anymore"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:766
-#, fuzzy
+#: ../UpdateManager/UpdateManager.py:780
 msgid ""
 "You will not get any further security fixes or critical updates. Please "
 "Upgrade to a later version of Ubuntu Linux."
 msgstr ""
-"Hind na kayo makakatanggap ng karagdagang security update o critical update. "
-"Mag-upgrade sa isang mas bagong bersyon ng Ubuntu Linux. Bumisita sa http://"
-"www.ubuntu.com para sa karagdagang impormasyon tungkol sa pag-upgrade."
 
-#: ../UpdateManager/UpdateManager.py:773
-#, fuzzy
+#: ../UpdateManager/UpdateManager.py:787
 msgid "Upgrade information"
-msgstr "Ina-update ang repository information"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:800
+#: ../UpdateManager/UpdateManager.py:814
 #, python-format
-msgid "<b>New distribution release '%s' is available</b>"
-msgstr "<b>Ang bagong distribution release '%s' ay maaari nang makuha</b>"
+msgid "<b>New Ubuntu release '%s' is available</b>"
+msgstr ""
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:839
+#: ../UpdateManager/UpdateManager.py:853
 msgid "Software index is broken"
 msgstr "Ang software index ay sira"
 
-#: ../UpdateManager/UpdateManager.py:840
+#: ../UpdateManager/UpdateManager.py:854
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1603,6 +1692,8 @@ msgid ""
 "The repositories are being checked for new, removed, or updated software "
 "packages"
 msgstr ""
+"Ang mga repository ay sinusuri para sa mga paketeng sofware na bago, "
+"tinanggal na, o na-update."
 
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:145
 msgid "Downloading Package Updates"
@@ -1619,15 +1710,15 @@ msgstr ""
 
 #: ../UpdateManagerText/UpdateManagerText.py:26
 msgid "Cancel"
-msgstr ""
+msgstr "Itigil"
 
 #: ../UpdateManagerText/UpdateManagerText.py:27
 msgid "Install"
-msgstr ""
+msgstr "I-install"
 
 #: ../UpdateManagerText/UpdateManagerText.py:45
 msgid "Building Updates List"
-msgstr ""
+msgstr "Ginagawa ang Talaan ng mga Update"
 
 #: ../UpdateManagerText/UpdateManagerText.py:48
 msgid ""
@@ -1645,12 +1736,12 @@ msgstr ""
 
 #: ../UpdateManagerText/UpdateManagerText.py:117
 msgid "Downloading changelog"
-msgstr ""
+msgstr "Kinukuha ang changelog"
 
 #: ../UpdateManager/Core/MyCache.py:108
-#, fuzzy, python-format
+#, python-format
 msgid "Other updates (%s)"
-msgstr "Iba pang mga update"
+msgstr ""
 
 #: ../UpdateManager/Core/MyCache.py:227
 #, python-format
@@ -1691,42 +1782,42 @@ msgstr ""
 "Nabigo ang pagkuha sa listahan ng mga pagbabago. \n"
 "Suriin ang inyong internet connection."
 
-#: ../UpdateManager/Core/UpdateList.py:47
+#: ../UpdateManager/Core/UpdateList.py:50
 msgid "Failed to detect distribution"
-msgstr ""
+msgstr "Nabigong alamin ang distribusyon."
 
-#: ../UpdateManager/Core/UpdateList.py:48
+#: ../UpdateManager/Core/UpdateList.py:51
 #, python-format
 msgid "A error '%s' occurred while checking what system you are using."
 msgstr ""
 
-#: ../UpdateManager/Core/UpdateList.py:59
+#: ../UpdateManager/Core/UpdateList.py:62
 msgid "Important security updates"
 msgstr "Mga mahahalagang security update"
 
-#: ../UpdateManager/Core/UpdateList.py:60
+#: ../UpdateManager/Core/UpdateList.py:63
 msgid "Recommended updates"
 msgstr "Mga inirerekomendang update"
 
-#: ../UpdateManager/Core/UpdateList.py:61
+#: ../UpdateManager/Core/UpdateList.py:64
 msgid "Proposed updates"
 msgstr "Mga iminumungkahing update"
 
-#: ../UpdateManager/Core/UpdateList.py:62
+#: ../UpdateManager/Core/UpdateList.py:65
 msgid "Backports"
 msgstr "Mga backport"
 
-#: ../UpdateManager/Core/UpdateList.py:63
+#: ../UpdateManager/Core/UpdateList.py:66
 msgid "Distribution updates"
 msgstr "Mga update para sa distribution"
 
-#: ../UpdateManager/Core/UpdateList.py:68
+#: ../UpdateManager/Core/UpdateList.py:71
 msgid "Other updates"
 msgstr "Iba pang mga update"
 
-#: ../UpdateManager/Core/UpdateList.py:77
+#: ../UpdateManager/Core/UpdateList.py:80
 msgid "Previous selected"
-msgstr ""
+msgstr "Nahuling pinili"
 
 #: ../data/glade/UpdateManager.ui.h:1
 msgid ""
@@ -1741,9 +1832,8 @@ msgid "<big><b>Not all updates can be installed</b></big>"
 msgstr "<big><b>Hindi mai-install ang lahat ng update</b></big>"
 
 #: ../data/glade/UpdateManager.ui.h:5
-#, fuzzy
 msgid "<big><b>Running on battery</b></big>"
-msgstr "<big><b>Binubuksan ang Update Manager</b></big>"
+msgstr ""
 
 #: ../data/glade/UpdateManager.ui.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
@@ -1758,14 +1848,18 @@ msgid "Chec_k"
 msgstr "Chec_k"
 
 #: ../data/glade/UpdateManager.ui.h:9
+msgid "Co_ntinue"
+msgstr ""
+
+#: ../data/glade/UpdateManager.ui.h:10
 msgid "Description"
 msgstr "Paglalarawan"
 
-#: ../data/glade/UpdateManager.ui.h:10
+#: ../data/glade/UpdateManager.ui.h:11
 msgid "Description of update"
 msgstr "Pagsasalarawan ng update"
 
-#: ../data/glade/UpdateManager.ui.h:12
+#: ../data/glade/UpdateManager.ui.h:13
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
@@ -1776,24 +1870,24 @@ msgid ""
 " &#x25E6; Normal changes of a pre-release version of Ubuntu"
 msgstr ""
 
-#: ../data/glade/UpdateManager.ui.h:19
-msgid "Settings&#x2026;"
+#: ../data/glade/UpdateManager.ui.h:20
+msgid "Settings..."
 msgstr ""
 
-#: ../data/glade/UpdateManager.ui.h:20
+#: ../data/glade/UpdateManager.ui.h:21
 msgid "Show progress of individual files"
 msgstr ""
 
-#: ../data/glade/UpdateManager.ui.h:22
+#: ../data/glade/UpdateManager.ui.h:23
 msgid "U_pgrade"
 msgstr "U_pgrade"
 
-#: ../data/glade/UpdateManager.ui.h:23 ../data/update-manager.desktop.in.h:3
+#: ../data/glade/UpdateManager.ui.h:24 ../data/update-manager.desktop.in.h:3
 #: ../data/update-manager-hildon.desktop.in.h:3
 msgid "Update Manager"
 msgstr "Update Manager"
 
-#: ../data/glade/UpdateManager.ui.h:24
+#: ../data/glade/UpdateManager.ui.h:25
 msgid "Your system is running on battery. Are you sure you want to continue?"
 msgstr ""
 
@@ -1900,39 +1994,39 @@ msgid ""
 "available and offer to upgrade (if possible)."
 msgstr ""
 
-#: ../update-manager:52
+#: ../update-manager:56
 msgid "Show version and exit"
 msgstr ""
 
-#: ../update-manager:55
+#: ../update-manager:59
 msgid "Directory that contains the data files"
 msgstr ""
 
-#: ../update-manager:58
-msgid "Check if a new distribution release is available"
-msgstr "Tignan kung may bagong distribution release nang makukuha"
+#: ../update-manager:62
+msgid "Check if a new Ubuntu release is available"
+msgstr ""
 
-#: ../update-manager:61 ../do-release-upgrade:23 ../check-new-release:24
+#: ../update-manager:65 ../do-release-upgrade:23 ../check-new-release:24
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "Tignan kung ang pag-upgrade sa pinakabagong devel release ay maaari"
 
-#: ../update-manager:65
+#: ../update-manager:69
 msgid "Upgrade using the latest proposed version of the release upgrader"
 msgstr ""
 
-#: ../update-manager:72
+#: ../update-manager:76
 msgid "Do not focus on map when starting"
 msgstr ""
 
-#: ../update-manager:75
+#: ../update-manager:79
 msgid "Try to run a dist-upgrade"
 msgstr "Subukang magpatakbo ng dist-upgrade"
 
-#: ../update-manager:79 ../do-release-upgrade:39
+#: ../update-manager:83 ../do-release-upgrade:39
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr ""
 
-#: ../update-manager:99
+#: ../update-manager:103
 msgid "Running partial upgrade"
 msgstr "Tumatakbong bahagiang upgrade"
 
@@ -1991,12 +2085,12 @@ msgstr ""
 
 #: ../Janitor/computerjanitor/missing_package_cruft.py:33
 msgid "Install missing package."
-msgstr ""
+msgstr "Ini-install ang nawawalang pakete."
 
 #: ../Janitor/computerjanitor/missing_package_cruft.py:42
 #, python-format
 msgid "Package %s should be installed."
-msgstr ""
+msgstr "Ang paketeng %s ay dapat i-install."
 
 #. pragma: no cover
 #: ../Janitor/plugins/dpkg_status_plugin.py:36
@@ -2025,144 +2119,38 @@ msgid "%s needs to be marked as manually installed."
 msgstr ""
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid ""
+"Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
+"Tanggalin ang lilo sapagka't naka-install ang grub. (Tignan ang bug #314004 "
+"para sa karagdagang impormasyon.)"
 
-#~ msgid "Check the software channels for new updates"
-#~ msgstr "Suriin ang mga software channel para sa mga bagong update"
+#~ msgid "Check if a new distribution release is available"
+#~ msgstr "Tignan kung may bagong distribution release nang makukuha"
 
 #~ msgid "Upgrade to the latest version of Ubuntu"
 #~ msgstr "Mag-upgrade sa pinakabagong bersyon ng Ubuntu"
 
-#~ msgid "The upgrade tool will guide you through the upgrade process."
-#~ msgstr "Ang upgrade tool ay maggagabay sa inyo sa upgrade process."
+#~ msgid "Check the software channels for new updates"
+#~ msgstr "Suriin ang mga software channel para sa mga bagong update"
 
-#~ msgid "Can't upgrade required meta-packages"
-#~ msgstr "Hindi ma-upgrade ang mga meta-package"
+#, python-format
+#~ msgid "<b>New distribution release '%s' is available</b>"
+#~ msgstr "<b>Ang bagong distribution release '%s' ay maaari nang makuha</b>"
 
-#~ msgid "A essential package would have to be removed"
-#~ msgstr "Isang pangunahing package ang kinakailangang tanggalin"
+#~ msgid "Your distribution is not supported anymore"
+#~ msgstr "Ang inyong distribution ay hindi na sinusuportahan"
 
-#~ msgid ""
-#~ "The upgrade aborts now. Your system could be in an unusable state. A "
-#~ "recovery will run now (dpkg --configure -a)."
-#~ msgstr ""
-#~ "Ititigil na ang upgrade. Ang sistema ninyo ay maaaring na sa isang hindi "
-#~ "mapapakinabangang kalagayan. Isang pagbawi ang papatakbuhin (dpkg -"
-#~ "configure -a)."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include "
-#~ "the files in /var/log/dist-upgrade/ in the bugreport.\n"
-#~ "%s"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Paki-report ito bilang bug laban sa 'update-manager' package at isama ang "
-#~ "files sa /var/log/dist-upgrade/ sa inyong bugreport.\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "This download will take about %s with a 1Mbit DSL connection and about %s "
-#~ "with a 56k modem"
-#~ msgstr ""
-#~ "Ang download na ito ay tatagal ng mga %s gamit ang isang 1Mbit DSL "
-#~ "connection at mga %s gamit ang isang 56k na modem"
-
-#~ msgid "The list of changes is not available"
-#~ msgstr "Ang listahan ng mga pagbabago ay hindi makuha"
-
-#~ msgid "<big><b>Keep your system up-to-date</b></big>"
-#~ msgstr "<big><b>Panatilihing up-to-date ang inyong sistema</b></big>"
-
-#~ msgid ""
-#~ "Preparing the system for the upgrade failed. Please report this as a bug "
-#~ "against the 'update-manager' package and include the files in /var/log/"
-#~ "dist-upgrade/ in the bugreport."
-#~ msgstr ""
-#~ "Nabigo sa paghahanda ng upgrade para sa sistema. Paki-report ito bilang "
-#~ "bug laban sa 'update-manager' package at isama ang files sa /var/log/dist-"
-#~ "upgrade/ sa inyong bugreport."
-
-#~ msgid ""
-#~ "After your package information was updated the essential package '%s' can "
-#~ "not be found anymore.\n"
-#~ "This indicates a serious error, please report this bug against the "
-#~ "'update-manager' package and include the files in /var/log/dist-upgrade/ "
-#~ "in the bugreport."
-#~ msgstr ""
-#~ "Matapos i-update ang inyong package information, ang pangunahing package "
-#~ "'%s' ay hindi na matagpuan.\n"
-#~ "Ito ay nagpapahiwatig ng isang matinding problema, paki-report ang bug na "
-#~ "ito laban sa 'update-manager' package at isama ang files sa /var/log/dist-"
-#~ "upgrade/ sa inyong bugreport."
-
-#~ msgid ""
-#~ "The upgrade will continue but the '%s' package may be in a not working "
-#~ "state. Please consider submitting a bugreport about it."
-#~ msgstr ""
-#~ "Pipagpapatuloy ang upgrade ngunit ang '%s' package ay maaaring hindi "
-#~ "mapapakinabangan. Maari lamang magpadala ng isang bugreport ukol dito."
-
-#~ msgid "Downloading the upgrade tool"
-#~ msgstr "Idina-download ang upgrade tool"
-
-#~ msgid "Fetching file %li of %li at %sb/s"
-#~ msgstr "Kinukuha ang file %li ng %li sa %sb/s"
-
-#~ msgid "%li days %li hours %li minutes"
-#~ msgstr "%li araw %li oras %li sandali"
-
-#~ msgid "_Check"
-#~ msgstr "_Markahan"
-
-#~ msgid "Checking for updates"
-#~ msgstr "Naghahanap ng mga update"
-
-#~ msgid ""
-#~ "Use special upgrade mode. Available:\n"
-#~ "desktop, server"
-#~ msgstr ""
-#~ "Gamitin ang special upgrade mode. Maaaring gamitin:\n"
-#~ "desktop, server"
-
-#~ msgid ""
-#~ "The list of changes is not available yet.\n"
-#~ "Please try again later."
-#~ msgstr ""
-#~ "Ang listahan ng mga pagbabago ay hindi pa makuha.\n"
-#~ "Subukan ulit mamaya."
-
-#~ msgid "_Skip This Step"
-#~ msgstr "_Laktawan ang hakbang na ito"
-
-#~ msgid "Asking for confirmation"
-#~ msgstr "Humihingi ng pahintulot"
-
-#~ msgid "<b>Remove %s</b>"
-#~ msgstr "<b>Tanggalin %s</b>"
-
-#~ msgid "<p>You have to download a total of %s. "
-#~ msgstr "<p>Ang kinakailangang ninyong i-download ay may kabuuhang %s. "
-
-#~ msgid "System Update Tool"
-#~ msgstr "System Update Tool"
-
-#~ msgid "Fetching the upgrades"
-#~ msgstr "Kinukuha ang mga upgrade"
+#~ msgid "Verfication failed"
+#~ msgstr "Nabigo ang verification"
 
 #~ msgid ""
 #~ "A unresolvable problem occurred while calculating the upgrade.\n"
 #~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include "
-#~ "the files in /var/log/dist-upgrade/ in the bugreport."
+#~ "Please report this bug against the 'update-manager' package and include the "
+#~ "files in /var/log/dist-upgrade/ in the bugreport."
 #~ msgstr ""
 #~ "May problemang nangyari habang kinakalkula ang upgrade.\n"
 #~ "\n"
-#~ "Paki-report lamang po itong bug na ito laban sa 'update-manager' package "
-#~ "at isama ang files sa /var/log/dist-upgrade sa inyong bugreport."
-
-#~ msgid "Run in a special upgrade mode"
-#~ msgstr "Tumakbo sa isang special upgrade mode"
+#~ "Paki-report lamang po itong bug na ito laban sa 'update-manager' package at "
+#~ "isama ang files sa /var/log/dist-upgrade sa inyong bugreport."

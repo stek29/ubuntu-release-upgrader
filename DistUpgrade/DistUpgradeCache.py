@@ -154,6 +154,8 @@ class MyCache(apt.Cache):
         " init logging, create log file"
         logdir = self.config.getWithDefault("Files","LogDir",
                                             "/var/log/dist-upgrade")
+        if not os.path.exists(logdir):
+            os.makedirs(logdir)
         apt_pkg.Config.Set("Dir::Log",logdir)
         apt_pkg.Config.Set("Dir::Log::Terminal","apt-term.log")
         self.logfd = os.open(os.path.join(logdir,"apt.log"),

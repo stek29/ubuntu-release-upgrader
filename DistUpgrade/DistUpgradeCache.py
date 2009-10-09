@@ -1000,7 +1000,7 @@ class MyCache(apt.Cache):
             if not os.path.exists(aufs_rw_dir):
                 os.makedirs(aufs_rw_dir)
         logging.debug("cache aufs_rw_dir: %s" % aufs_rw_dir)
-        for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home"]:
+        for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home","/tmp/"]:
             d = os.path.realpath(d)
             fs_id = make_fs_id(d)
             st = os.statvfs(d)

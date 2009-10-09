@@ -143,6 +143,7 @@ class InstallProgress(apt.progress.InstallProgress):
         res = pm.DoInstall(self.writefd)
       except Exception, e:
         print "Exception during pm.DoInstall(): ", e
+        logging.exception("Exception during pm.DoInstall()")
         os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid

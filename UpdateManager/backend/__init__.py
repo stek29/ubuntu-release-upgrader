@@ -2,7 +2,14 @@ import os.path
 
 def backend_factory(*args, **kwargs):
     " get a matching backend "
-    # try the aptdaemon interface first
+
+    # try synaptic
+    if os.path.exists("/usr/sbin/synaptic"):
+        import InstallBackendSynaptic
+        return InstallBackendSynaptic.InstallBackendSynaptic(*args, **kwargs)
+
+
+    # try the aptdaemon
     if os.path.exists("/usr/sbin/aptd"):
         # check if the gtkwidgets are installed as well
         try:
@@ -12,11 +19,7 @@ def backend_factory(*args, **kwargs):
         except ImportError, e:
             pass
 
-    # then synaptic
-    if os.path.exists("/usr/sbin/synaptic"):
-        import InstallBackendSynaptic
-        return InstallBackendSynaptic.InstallBackendSynaptic(*args, **kwargs)
-    else:
-        raise Exception("No working backend found, please try installing synaptic or aptdaemon")
+    # nothing found, raise
+    raise Exception("No working backend found, please try installing synaptic or aptdaemon")
 
     

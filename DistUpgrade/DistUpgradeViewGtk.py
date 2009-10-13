@@ -472,7 +472,10 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
           new_lines.append(line)
           if not line in self._terminal_lines:
             self._terminal_log.write(line+"\n")
-            self._terminal_log.flush()
+            try:
+              self._terminal_log.flush()
+            except IOError, e:
+              logging.exception("flush()")
         self._terminal_lines = new_lines
     def getFetchProgress(self):
         return self._fetchProgress

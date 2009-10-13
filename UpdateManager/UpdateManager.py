@@ -29,6 +29,7 @@ import gtk
 import gtk.gdk
 import gconf
 import gobject
+import glib
 
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
@@ -512,6 +513,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.treeview_update.set_cursor(1)
       self.label_header.set_markup(text_header)
       self.label_main_details.set_text(text_label_main)
+      return True
 
   def activate_details(self, expander, data):
     expanded = self.expander_details.get_expanded()
@@ -921,5 +923,8 @@ class UpdateManager(SimpleGtkbuilderApp):
       gtk.main_iteration()
 
     self.fillstore()
+    # add timer to ensure we update the information when the 
+    # last package count update was performed
+    glib.timeout_add_seconds(10, self.update_count)
     self.check_auto_update()
     gtk.main()

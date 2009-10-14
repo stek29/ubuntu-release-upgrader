@@ -480,6 +480,18 @@ class UpdateManager(SimpleGtkbuilderApp):
           return _("The package information was last updated less than one hour ago.")
       return None
 
+  def update_last_updated_text(self):
+      """timer that updates the last updated text """
+      #print "update_last_updated_text"
+      num_updates = self.cache.installCount
+      if num_updates == 0:
+          if self._get_last_apt_get_update_text() is not None:
+              text_label_main = self._get_last_apt_get_update_text()
+              self.label_main_details.set_text(text_label_main)
+          return True
+      # stop the timer if there are upgrades now
+      return False
+
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to
          the number of available updates"""
@@ -497,6 +509,9 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.textview_descr.get_buffer().set_text("")
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
+          # add timer to ensure we update the information when the 
+          # last package count update was performed
+          glib.timeout_add_seconds(10, self.update_last_updated_text)
       else:
           # show different text on first run (UX team suggestion)
           firstrun = self.gconfclient.get_bool("/apps/update-manager/first_run")
@@ -923,8 +938,5 @@ class UpdateManager(SimpleGtkbuilderApp):
       gtk.main_iteration()
 
     self.fillstore()
-    # add timer to ensure we update the information when the 
-    # last package count update was performed
-    glib.timeout_add_seconds(10, self.update_count)
     self.check_auto_update()
     gtk.main()

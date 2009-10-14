@@ -1,10 +1,12 @@
+import os
 import os.path
 
 def backend_factory(*args, **kwargs):
     " get a matching backend "
 
     # try synaptic
-    if os.path.exists("/usr/sbin/synaptic"):
+    if (os.path.exists("/usr/sbin/synaptic") and 
+        not "UPDATE_MANAGER_FORCE_BACKEND_APTDAEMON" in os.environ):
         import InstallBackendSynaptic
         return InstallBackendSynaptic.InstallBackendSynaptic(*args, **kwargs)
 

@@ -3,13 +3,15 @@
 set -e
 
 # update demotions
-(cd utils && ./demotions.py jaunty karmic > demotions.cfg)
+(cd utils && ./demotions.py jaunty karmic > demoted.cfg)
+# when this gets enabled, make sure to add symlink in DistUpgrade
+#(cd utils && ./demotions.py hardy karmic > demoted.cfg.hardy)
 
 # update base-installer
 (cd utils && ./update-base-installer.sh)
 
 # cleanup
-rm -rf utils/apt/lists
+rm -rf utils/apt/lists utils/apt/*.bin
 (cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
 
 # run the test-suit

@@ -39,4 +39,5 @@ mv base-installer-*/kernel ../DistUpgrade/base-installer/
 # get changelog subset
 head -n 500 base-installer-*/debian/changelog > ../DistUpgrade/base-installer/VERSION
 
-
+# cleanup
+rm -rf base-installer-* base-installer_*

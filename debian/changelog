@@ -8,6 +8,10 @@ update-manager (1:0.126.4) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgrade.cfg:
     - remove mysql-server rule, this is now done in the above 
       quirks handler
+  * DistUpgrade/DistUpgradeController.py:
+    - do not do list cleanup so that cancel restores all of the
+      previous state. the cleanup will be done later by the apt
+      cron job
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 15 Oct 2009 22:51:33 +0200
 

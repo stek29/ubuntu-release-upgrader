@@ -144,6 +144,10 @@ class DistUpgradeController(object):
         apt_pkg.Config.Set("Acquire::http::Timeout","20")
         apt_pkg.Config.Set("Acquire::ftp::Timeout","20")
 
+        # no list cleanup here otherwise a "cancel" in the upgrade
+        # will not restore the full state (lists will be missing)
+        apt_pkg.Config.Set("Apt::Get::List-Cleanup", "false")
+
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add

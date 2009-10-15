@@ -198,8 +198,8 @@ class DistUpgradeController(object):
         out = subprocess.Popen(["who","-m","--ips"],stdout=subprocess.PIPE).communicate()[0]
         logging.debug("who -m --ips: '%s'" % out)
         # FIXME: what about IPv6 ?
-        # do regexp search for a IP at the end
-        if re.match("^[\w]+.*[\s]+(\d+\.\d+\.\d+\.\d+)$", out):
+        # do regexp search for a IP 
+        if re.search("(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$", out):
             return True
         return False
 

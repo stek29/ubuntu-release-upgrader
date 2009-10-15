@@ -515,21 +515,23 @@ class DistUpgradeQuirks(object):
         if it is (LP: #450837)
         """
         logging.debug("_mysqlClusterCheck")
-        # taken from the mysql-server-5.1.preinst
-        ret = subprocess.call([
-                "egrep", "-q", "-i", "-r",
-                "^[^#]*ndb.connectstring|^[:space:]*\[[:space:]*ndb_mgmd", 
-                "/etc/mysql/"])
-        logging.debug("egrep returned %s" % ret)
-        # if clustering is used, do not upgrade to 5.1, remove mysql-server
-        # metapackage and upgrade the 5.0 packages
-        if ret == 0:
-            logging.debug("mysql clustering in use, do not upgrade to 5.1")
-            self.controller.cache.markRemove("mysql-server", "_mysqlClusterCheck")
-            self.controller.cache.markRemove("mysql-cleint", "_mysqlClusterCheck")
-            self.controller.cache.markUpgrade("mysql-server-5.0", "_mysqlClusterCheck")
-            self.controller.cache.markUpgrade("mysql-server-core-5.0", "_mysqlClusterCheck")
-            self.controller.cache.markUpgrade("mysql-client-5.0", "_mysqlClusterCheck")
+        if (self.controller.cache.has_key("mysql-server") and
+            self.controller.cache["mysql-server"].isInstalled):
+            # taken from the mysql-server-5.1.preinst
+            ret = subprocess.call([
+                    "egrep", "-q", "-i", "-r",
+                    "^[^#]*ndb.connectstring|^[:space:]*\[[:space:]*ndb_mgmd", 
+                    "/etc/mysql/"])
+            logging.debug("egrep returned %s" % ret)
+            # if clustering is used, do not upgrade to 5.1 and 
+            # remove mysql-{server,client}
+            # metapackage and upgrade the 5.0 packages
+            if ret == 0:
+                logging.debug("mysql clustering in use, do not upgrade to 5.1")
+                for pkg in ("mysql-server", "mysql-client"):
+                    self.controller.cache.markRemove(pkg, "clustering in use")
+            else:
+                self.controller.cache.markUpgrade("mysql-server", "no clustering in use")
 
     def _checkArmCPU(self):
         """

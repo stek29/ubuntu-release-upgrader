@@ -526,10 +526,10 @@ class DistUpgradeQuirks(object):
         if ret == 0:
             logging.debug("mysql clustering in use, do not upgrade to 5.1")
             self.controller.cache.markRemove("mysql-server", "_mysqlClusterCheck")
-            self.controller.cache.markRemove("mysql-cleint", "_mysqlClusterCheck"
-            self.controller.cache.markUpgrade("mysql-server-5.0", "_mysqlClusterCheck"
-            self.controller.cache.markUpgrade("mysql-server-core-5.0", "_mysqlClusterCheck"
-            self.controller.cache.markUpgrade("mysql-client-5.0", "_mysqlClusterCheck"
+            self.controller.cache.markRemove("mysql-cleint", "_mysqlClusterCheck")
+            self.controller.cache.markUpgrade("mysql-server-5.0", "_mysqlClusterCheck")
+            self.controller.cache.markUpgrade("mysql-server-core-5.0", "_mysqlClusterCheck")
+            self.controller.cache.markUpgrade("mysql-client-5.0", "_mysqlClusterCheck")
 
     def _checkArmCPU(self):
         """

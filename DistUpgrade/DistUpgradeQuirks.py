@@ -210,6 +210,7 @@ class DistUpgradeQuirks(object):
         self._checkAndInstallBroadcom()
         self._dealWithLanguageSupportTransition()
         self._kernel386TransitionCheck()
+        self._mysqlClusterCheck()
 
     def jauntyPostDistUpgradeCache(self):
         """ 
@@ -507,6 +508,28 @@ class DistUpgradeQuirks(object):
                                     "./theme-switch-helper.py", "--defaults"])
         return True
     # helpers
+
+    def _mysqlClusterCheck(self):
+        """
+        check if ndb clustering is used and do not upgrade mysql
+        if it is (LP: #450837)
+        """
+        logging.debug("_mysqlClusterCheck")
+        # taken from the mysql-server-5.1.preinst
+        ret = subprocess.call([
+                "egrep", "-q", "-i", "-r",
+                "^[^#]*ndb.connectstring|^[:space:]*\[[:space:]*ndb_mgmd", 
+                "/etc/mysql/"])
+        logging.debug("egrep returned %s" % ret)
+        # if clustering is used, do not upgrade to 5.1, remove mysql-server
+        # metapackage and upgrade the 5.0 packages
+        if ret == 0:
+            logging.debug("mysql clustering in use, do not upgrade to 5.1")
+            self.controller.cache.markRemove("mysql-server", "_mysqlClusterCheck")
+            self.controller.cache.markRemove("mysql-cleint", "_mysqlClusterCheck"
+            self.controller.cache.markUpgrade("mysql-server-5.0", "_mysqlClusterCheck"
+            self.controller.cache.markUpgrade("mysql-server-core-5.0", "_mysqlClusterCheck"
+            self.controller.cache.markUpgrade("mysql-client-5.0", "_mysqlClusterCheck"
 
     def _checkArmCPU(self):
         """

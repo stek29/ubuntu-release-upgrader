@@ -197,16 +197,9 @@ class DistUpgradeController(object):
         # sudo cleans out SSH_ environment
         out = subprocess.Popen(["who","-m","--ips"],stdout=subprocess.PIPE).communicate()[0]
         logging.debug("who -m --ips: '%s'" % out)
-        # the host is in ()
-        if not "(" in out:
-            return False
-        # if we have a () parse it
-        ip = out.strip().rsplit('(')[1]
-        ip = ip.strip(')')
-        # if we have a ip here and it does not start with a
-        # ":" we have a remote login
         # FIXME: what about IPv6 ?
-        if not ip.startswith(":"):
+        # do regexp search for a IP at the end
+        if re.match("^[\w]+.*[\s]+(\d+\.\d+\.\d+\.\d+)$", out):
             return True
         return False
 

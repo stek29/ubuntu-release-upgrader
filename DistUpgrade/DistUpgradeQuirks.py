@@ -135,6 +135,7 @@ class DistUpgradeQuirks(object):
         """ this function works around quirks in the jaunty->karmic upgrade """
         logging.debug("running Controller.karmicPostUpgrade handler")
         self._ntfsFstabFixup()
+        self._checkLanguageSupport()
 
     # quirks when run when the initial apt-get update was run -------
     def karmicPostInitialUpdate(self):
@@ -565,6 +566,28 @@ class DistUpgradeQuirks(object):
                             autoInstDeps = False
                             fromUser = True
                             depcache.MarkInstall(dp._pkg, autoInstDeps, fromUser)
+                            
+    def _checkLanguageSupport(self):
+        """
+        check if the language support is fully installed and if
+        not generate a update-notifier note on next login
+        """
+        if not os.path.exists("/usr/bin/check-language-support"):
+            logging.debug("no check-language-support available")
+            return
+        p = subprocess.Popen(["check-language-support"],stdout=subprocess.PIPE)
+        for pkgname in p.communicate()[0].split():
+            if (self.controller.cache.has_key(pkgname) and
+                not self.controller.cache[pkgname].isInstalled):
+                logging.debug("language support package '%s' missing" % pkgname)
+                # check if kde/gnome and copy language-selector note
+                base = "/usr/share/language-support/"
+                target = "/var/lib/update-notifier/user.d"
+                for p in ("incomplete-language-support-gnome.note",
+                          "incomplete-language-support-qt.note"):
+                    if os.path.exists(os.path.join(base,p)):
+                        shutil.copy(os.path.join(base,p), target)
+                        return
 
     def _checkAndInstallBroadcom(self):
         """

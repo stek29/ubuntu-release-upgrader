@@ -531,6 +531,14 @@ class DistUpgradeQuirks(object):
                 logging.debug("mysql clustering in use, do not upgrade to 5.1")
                 for pkg in ("mysql-server", "mysql-client"):
                     self.controller.cache.markRemove(pkg, "clustering in use")
+                    # mark mysql-{server,client}-5.0 as manual install (#453513)
+                    depcache = self.controller.cache._depcache
+                    for pkg in ["mysql-server-5.0", "mysql-client-5.0"]:
+                        if pkg.isInstalled and depcache.IsAutoInstalled(pkg._pkg):
+                            logging.debug("marking '%s' manual installed" % pkg.name)
+                            autoInstDeps = False
+                            fromUser = True
+                            depcache.MarkInstall(pkg._pkg, autoInstDeps, fromUser)
             else:
                 self.controller.cache.markUpgrade("mysql-server", "no clustering in use")
 

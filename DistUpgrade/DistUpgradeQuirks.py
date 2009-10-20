@@ -159,14 +159,18 @@ class DistUpgradeQuirks(object):
         try:
             os.kill(1, 0)
         except:
-            logging.warn("no init")
-            res = self._view.error(
-                _("Running under a vserver"),
-                _("Your system does not have a running init "
-                  "daemon. This usually means you are running "
-                  "under a vserver. This configuration is not supported "
-                  "in Ubuntu 9.10."))
-            self.controller.abort()
+            logging.warn("no init found")
+            res = self._view.askYesNoQuestion(
+                _("No init available"),
+                _("Your system appears to be a virtualised environment "
+                  "without an init daemon, e.g. Linux-VServer. "
+                  "Ubuntu 9.10 cannot function within this type of "
+                  "environment, requiring an update to your virtual "
+                  "machine configuration first.\n\n"
+                  "Are you sure you want to continue?"))
+            if res == False:
+                self.controller.abort()
+            self._view.processEvents()
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
     def jauntyPostInitialUpdate(self):

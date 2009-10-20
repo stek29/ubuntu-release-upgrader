@@ -28,6 +28,7 @@ import os
 import apt_pkg 
 import signal
 import glob
+import select
 
 from DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
 from DistUpgradeApport import *
@@ -126,6 +127,30 @@ class InstallProgress(apt.progress.InstallProgress):
   def __init__(self):
     apt.progress.InstallProgress.__init__(self)
     self.master_fd = None
+
+  def waitChild(self):
+      """Wait for child progress to exit.
+
+      The return values is the full status returned from os.waitpid()
+      (not only the return code).
+      """
+      while True:
+          try:
+              select.select([self.statusfd], [], [], self.selectTimeout)
+          except select.error, (errno_, errstr):
+              if errno_ != errno.EINTR:
+                  raise
+          self.updateInterface()
+          try:
+              (pid, res) = os.waitpid(self.child_pid, os.WNOHANG)
+              if pid == self.child_pid:
+                  break
+          except OSError, (errno_, errstr):
+              if errno_ != errno.EINTR:
+                  raise
+              if errno_ == errno.ECHILD:
+                  break
+      return res
 
   def run(self, pm):
     pid = self.fork()

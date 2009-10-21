@@ -821,7 +821,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkProgress.GtkFetchProgress(self))
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkProgress.GtkFetchProgress(self, _("Downloading the release upgrade tool")))
       if self.options.sandbox:
           fetcher.run_options.append("--sandbox")
       fetcher.run()

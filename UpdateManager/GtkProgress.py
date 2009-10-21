@@ -139,17 +139,21 @@ if __name__ == "__main__":
     class MockParent(SimpleGtkbuilderApp):
         """Mock parent for the fetcher that just loads the UI file"""
         def __init__(self):
-            SimpleGtkbuilderApp.__init__(self, "../data/glade/UpdateManager.ui")
+            SimpleGtkbuilderApp.__init__(self, "../data/glade/UpdateManager.ui", "update-manager")
 
     # create mock parent and fetcher
     parent = MockParent()
     fetch_progress = GtkFetchProgress(parent, "summary", "long detailed description")
+    #fetch_progress = GtkFetchProgress(parent)
 
-    # generate a dist-upgrade (to feed data to the fetcher) and get it
+    # download lists
     cache = apt.Cache()
+    res = cache.update(fetch_progress)
+    # generate a dist-upgrade (to feed data to the fetcher) and get it
     cache.upgrade()
     pm = apt_pkg.GetPackageManager(cache._depcache)
     fetcher = apt_pkg.GetAcquire(fetch_progress)
-    cache._fetchArchives(fetcher, pm)
+    res = cache._fetchArchives(fetcher, pm)
+    print res
     
     

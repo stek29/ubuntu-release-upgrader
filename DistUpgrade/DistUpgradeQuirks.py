@@ -155,6 +155,22 @@ class DistUpgradeQuirks(object):
                       "upgrade your system to a new Ubuntu release "
                       "with this hardware."))
                 self.controller.abort()
+        # verver test (LP: #454783), see if there is a init around
+        try:
+            os.kill(1, 0)
+        except:
+            logging.warn("no init found")
+            res = self._view.askYesNoQuestion(
+                _("No init available"),
+                _("Your system appears to be a virtualised environment "
+                  "without an init daemon, e.g. Linux-VServer. "
+                  "Ubuntu 9.10 cannot function within this type of "
+                  "environment, requiring an update to your virtual "
+                  "machine configuration first.\n\n"
+                  "Are you sure you want to continue?"))
+            if res == False:
+                self.controller.abort()
+            self._view.processEvents()
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
     def jauntyPostInitialUpdate(self):
@@ -531,6 +547,14 @@ class DistUpgradeQuirks(object):
                 logging.debug("mysql clustering in use, do not upgrade to 5.1")
                 for pkg in ("mysql-server", "mysql-client"):
                     self.controller.cache.markRemove(pkg, "clustering in use")
+                    # mark mysql-{server,client}-5.0 as manual install (#453513)
+                    depcache = self.controller.cache._depcache
+                    for pkg in ["mysql-server-5.0", "mysql-client-5.0"]:
+                        if pkg.isInstalled and depcache.IsAutoInstalled(pkg._pkg):
+                            logging.debug("marking '%s' manual installed" % pkg.name)
+                            autoInstDeps = False
+                            fromUser = True
+                            depcache.MarkInstall(pkg._pkg, autoInstDeps, fromUser)
             else:
                 self.controller.cache.markUpgrade("mysql-server", "no clustering in use")
 

@@ -193,8 +193,8 @@ def on_battery():
     dev = dbus.Interface(devobj, "org.freedesktop.DBus.Properties")
     return dev.Get("org.freedesktop.DeviceKit.Power", "on_battery")
   except Exception, e:
-    import sys
-    print >>sys.stderr, "on_battery returned error: ", e
+    #import sys
+    #print >>sys.stderr, "on_battery returned error: ", e
     return False
 
 def _inhibit_sleep_old_interface():

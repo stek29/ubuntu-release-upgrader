@@ -96,7 +96,7 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         self.window_fetch.realize()
         self.window_fetch.window.set_functions(gtk.gdk.FUNC_MOVE)
         # set summary
-        if self.summary != "":
+        if summary != "":
             self.summary.set_markup("<big><b>%s</b></big> \n\n%s" %
                                     (summary, descr))
     def start(self):

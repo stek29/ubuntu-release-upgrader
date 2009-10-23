@@ -7,41 +7,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-10-09 08:51+0000\n"
-"PO-Revision-Date: 2009-10-08 22:09+0000\n"
-"Last-Translator: Laur Mõtus <vprints@gmail.com>\n"
+"POT-Creation-Date: 2008-10-13 20:43+0000\n"
+"PO-Revision-Date: 2008-10-14 05:41+0000\n"
+"Last-Translator: margus723 <margus723@hot.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-10-13 20:36+0000\n"
+"X-Launchpad-Export-Date: 2008-10-16 09:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:278 ../UpdateManager/Core/utils.py:278
+#: ../DistUpgrade/utils.py:134 ../UpdateManager/Common/utils.py:134
 msgid "0 KB"
 msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:281 ../UpdateManager/Core/utils.py:281
+#: ../DistUpgrade/utils.py:137 ../UpdateManager/Common/utils.py:137
 msgid "1 KB"
 msgstr "1 KB"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:284 ../UpdateManager/Core/utils.py:284
+#: ../DistUpgrade/utils.py:140 ../UpdateManager/Common/utils.py:140
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KB"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:287 ../UpdateManager/Core/utils.py:287
+#: ../DistUpgrade/utils.py:143 ../UpdateManager/Common/utils.py:143
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:208 ../DistUpgrade/distro.py:423
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
 #, python-format
 msgid "Server for %s"
 msgstr "Server %s jaoks"
@@ -49,76 +49,63 @@ msgstr "Server %s jaoks"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
-#: ../DistUpgrade/distro.py:248
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
 msgid "Main server"
 msgstr "Põhiserver"
 
-#: ../DistUpgrade/distro.py:252
+#: ../DistUpgrade/distro.py:235
 msgid "Custom servers"
 msgstr "Kohandatud serverid"
 
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:131
-msgid "Could not calculate sources.list entry"
-msgstr "Sources.list kirjet pole võimalik tõlgendada"
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr "Antud teelt otsitakse CD'd uuendatavate pakkidega"
 
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:234
+#: ../DistUpgrade/dist-upgrade.py:21
 msgid ""
-"Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
-"wrong architecture?"
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 msgstr ""
-"Ühtegi pakifaili ei leitud. Võib-olla ei ole see Ubuntu plaat või on valele "
-"protsessoriarhitektuurile?"
+"Liidese kasutamine. Hetkel saadaval: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:277
-msgid "Failed to add the CD"
-msgstr "CD lisamine nurjus"
-
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:278
-#, python-format
-msgid ""
-"There was a error adding the CD, the upgrade will abort. Please report this "
-"as a bug if this is a valid Ubuntu CD.\n"
-"\n"
-"The error message was:\n"
-"'%s'"
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid "*DEPRECATED* this option will be ignore"
 msgstr ""
-"CD lisamisel tekkis viga, uuendamine katkeb. Palun teata sellest kui veast, "
-"kui tegemist on õige Ubuntu CDga.\n"
-"\n"
-"Veateade oli:\n"
-"'%s'"
 
-#: ../DistUpgrade/DistUpgradeCache.py:130
+#: ../DistUpgrade/dist-upgrade.py:27
+msgid "Perform a partial upgrade only (no sources.list rewriting)"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:29
+msgid "Set datadir"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:101
 msgid "Remove package in bad state"
 msgid_plural "Remove packages in bad state"
-msgstr[0] "Eemalda halvas seisus pakk"
-msgstr[1] "Eemalda halvas seisus pakid"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:133
+#: ../DistUpgrade/DistUpgradeCache.py:104
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
 "but no archive can be found for it. Do you want to remove this package now "
 "to continue?"
 msgid_plural ""
-"The packages '%s' are in an inconsistent state and need to be reinstalled, "
+"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
 "but no archives can be found for them. Do you want to remove these packages "
 "now to continue?"
 msgstr[0] ""
-"Paketi '%s' paigaldus sisaldab vasturääkivusi ning see tuleks uuesti "
-"paigaldada, kuid selle arhiivi ei leitud. Kas eemaldada see pakett praegu ja "
-"jätkata?"
 msgstr[1] ""
-"Pakettide '%s' paigaldus sisaldab vasturääkivusi ning need tuleks uuesti "
-"paigaldada, kuid nende arhiive ei leitud. Kas eemaldada need paketid praegu "
-"ja jätkata?"
 
-#: ../DistUpgrade/DistUpgradeCache.py:332
+#: ../DistUpgrade/DistUpgradeCache.py:299
 msgid "Broken packages"
 msgstr "Katkised paketid"
 
-#: ../DistUpgrade/DistUpgradeCache.py:333
+#: ../DistUpgrade/DistUpgradeCache.py:300
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
@@ -126,12 +113,18 @@ msgstr ""
 "Sinu süsteem sisaldab katkiseid pakette, mida pole võimalik antud tarkvaraga "
 "parandada. Palun paranda need synaptic'u või apt-get'i abil enne jätkamist."
 
+#: ../DistUpgrade/DistUpgradeCache.py:521
+msgid "Can't upgrade required meta-packages"
+msgstr "Nõutud metapakettide uuendamine pole võimalik"
+
+#: ../DistUpgrade/DistUpgradeCache.py:525
+msgid "A essential package would have to be removed"
+msgstr "Hädavajalik pakett tuleks eemaldada"
+
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:609
-#, python-format
+#: ../DistUpgrade/DistUpgradeCache.py:532
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
+"An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -139,38 +132,29 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
-"Uuendamise rehkendamisel esines lahendamatu viga:\n"
-"%s\n"
-"\n"
-" Selle võis põhjustada:\n"
-" * uuendamine Ubuntu eelväljalaske versioonile\n"
-" * Ubuntu eelväljalaske versiooni kasutamine\n"
-" * mitteametlike pakkide kasutamine, mida ei jaga Ubuntu\n"
-"\n"
 
-#: ../DistUpgrade/DistUpgradeCache.py:619
+#: ../DistUpgrade/DistUpgradeCache.py:542
 msgid "This is most likely a transient problem, please try again later."
-msgstr "See on üsna tõenäoliselt mööduv probleem, proovi hiljem uuesti."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:622
+#: ../DistUpgrade/DistUpgradeCache.py:545
 msgid ""
 "If none of this applies, then please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
-"report."
+"manager' package and include the files in /var/log/dist-upgrade/ in the "
+"bugreport."
 msgstr ""
-"Kui ükski neist ei vasta tõele, raporteeri veast 'update-manager' paki kohta "
-"ning pane vearaportisse kõik failid kaustast /var/log/dist-upgrade/."
 
-#: ../DistUpgrade/DistUpgradeCache.py:628
-#: ../UpdateManager/UpdateManager.py:732
+#: ../DistUpgrade/DistUpgradeCache.py:550
+#: ../UpdateManager/UpdateManager.py:906
 msgid "Could not calculate the upgrade"
-msgstr "Uuenduse rehkendamine polnud võimalik"
+msgstr "Uuenduse arvutamine polnud võimalik"
 
-#: ../DistUpgrade/DistUpgradeCache.py:678
+#. FIXME: maybe ask a question here? instead of failing?
+#: ../DistUpgrade/DistUpgradeCache.py:597
 msgid "Error authenticating some packages"
 msgstr "Viga mõnede pakettide usaldusväärsuse kinnitamisel"
 
-#: ../DistUpgrade/DistUpgradeCache.py:679
+#: ../DistUpgrade/DistUpgradeCache.py:598
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -180,35 +164,12 @@ msgstr ""
 "mööduv võrguprobleem, nii et võid hiljem uuesti proovida. All järgneb "
 "kontrollimata pakettide nimekiri."
 
-#: ../DistUpgrade/DistUpgradeCache.py:699
-#, python-format
-msgid ""
-"The package '%s' is marked for removal but it is in the removal blacklist."
-msgstr ""
-"Eemaldamiseks on märgistatud pakett '%s', mis on aga eemaldamise mustas "
-"nimekirjas."
-
-#: ../DistUpgrade/DistUpgradeCache.py:703
-#, python-format
-msgid "The essential package '%s' is marked for removal."
-msgstr "Oluline pakett '%s' on märgistatud eemaldamiseks."
-
-#: ../DistUpgrade/DistUpgradeCache.py:712
-#, python-format
-msgid "Trying to install blacklisted version '%s'"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:812
-#, python-format
-msgid "Can not mark '%s' for upgrade"
-msgstr "'%s' märgistamine uuenduseks pole võimalik."
-
-#: ../DistUpgrade/DistUpgradeCache.py:826
+#: ../DistUpgrade/DistUpgradeCache.py:710
 #, python-format
 msgid "Can't install '%s'"
 msgstr "Paketi '%s' paigaldamine pole võimalik"
 
-#: ../DistUpgrade/DistUpgradeCache.py:827
+#: ../DistUpgrade/DistUpgradeCache.py:711
 msgid ""
 "It was impossible to install a required package. Please report this as a "
 "bug. "
@@ -216,11 +177,11 @@ msgstr ""
 "Vajaliku paketi paigaldamine polnud võimalik. Palun teata sellest kui veast. "
 
 #. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:836
+#: ../DistUpgrade/DistUpgradeCache.py:719
 msgid "Can't guess meta-package"
 msgstr "Meta-paketi arvamine pole võimalik"
 
-#: ../DistUpgrade/DistUpgradeCache.py:837
+#: ../DistUpgrade/DistUpgradeCache.py:720
 msgid ""
 "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
 "desktop or edubuntu-desktop package and it was not possible to detect which "
@@ -229,20 +190,39 @@ msgid ""
 "before proceeding."
 msgstr ""
 "Sinu süsteemis pole paketti 'ubuntu-desktop', 'kubuntu-desktop', 'xubuntu-"
-"desktop' ega 'edubuntu-desktop' ja polnud võimalik tuvastada, millist Ubuntu "
+"desktop' või 'edubuntu-desktop' ja polnud võimalik tuvastada, millist Ubuntu "
 "versiooni sa kasutad.\n"
-"Enne jätkamist paigalda synaptic'u või apt-get'i abil mõni ülalnimetatud "
+"Enne jätkamist paigalda synaptic'u või apt-get'iabil mõni ülalnimetatud "
 "pakettidest."
 
-#: ../DistUpgrade/DistUpgradeController.py:85
+#: ../DistUpgrade/DistUpgradeController.py:96
+msgid "Failed to add the CD"
+msgstr "CD lisamine ebaõnnestus"
+
+#: ../DistUpgrade/DistUpgradeController.py:97
+#, python-format
+msgid ""
+"There was a error adding the CD, the upgrade will abort. Please report this "
+"as a bug if this is a valid Ubuntu CD.\n"
+"\n"
+"The error message was:\n"
+"'%s'"
+msgstr ""
+"CD lisamisel tekkis viga, uuendamine katkeb. Palun teata sellest kui veast "
+"kui tegemist on kehtiva Ubuntu CDga.\n"
+"\n"
+"Veateade oli:\n"
+"'%s'"
+
+#: ../DistUpgrade/DistUpgradeController.py:129
 msgid "Reading cache"
 msgstr "Vahemälu lugemine"
 
-#: ../DistUpgrade/DistUpgradeController.py:181
+#: ../DistUpgrade/DistUpgradeController.py:216
 msgid "Unable to get exclusive lock"
 msgstr "Lukustamine ebaõnnestus"
 
-#: ../DistUpgrade/DistUpgradeController.py:182
+#: ../DistUpgrade/DistUpgradeController.py:217
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -250,25 +230,11 @@ msgstr ""
 "Tavaliselt tähendab see, et teine paketihaldur (nt apt-get või aptitude) "
 "töötab. Palun sulge esmalt see teine rakendus."
 
-#: ../DistUpgrade/DistUpgradeController.py:235
-msgid "Upgrading over remote connection not supported"
-msgstr "Kaugühenduse kaudu uuendamine ei ole toetatud."
-
-#: ../DistUpgrade/DistUpgradeController.py:236
-msgid ""
-"You are running the upgrade over a remote ssh connection with a frontend "
-"that does not support this. The upgrade will abort now. Please try without "
-"ssh."
-msgstr ""
-"Üritasid uuendada ssh kaugühenduse kaudu kasutajaliidesega, mis sellist "
-"uuendamist ei toeta. Uuendamine katkestatakse. Palun proovi uuesti ilma ssh-"
-"ta."
-
-#: ../DistUpgrade/DistUpgradeController.py:247
+#: ../DistUpgrade/DistUpgradeController.py:237
 msgid "Continue running under SSH?"
-msgstr "Kas jätkata SSH all?"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:248
+#: ../DistUpgrade/DistUpgradeController.py:238
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -278,89 +244,51 @@ msgid ""
 "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"See seanss tundub töötama SSH all. Praegu ei soovitata uuendamist teostada "
-"üle SSH, kuna nurjumise korral on taastamine keerulisem.\n"
-"\n"
-"Kui sa jätkad käivitatakse SSH lisadeemon pordil '%s'.\n"
-"Kas tahad siiski jätkata?"
 
-#: ../DistUpgrade/DistUpgradeController.py:263
+#: ../DistUpgrade/DistUpgradeController.py:253
 msgid "Starting additional sshd"
 msgstr "Täiendava sshd käivitamine"
 
-#: ../DistUpgrade/DistUpgradeController.py:264
+#: ../DistUpgrade/DistUpgradeController.py:254
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
 "started on port '%s'. If anything goes wrong with the running ssh you can "
 "still connect to the additional one.\n"
 msgstr ""
-"Et teha nurjumise korral taastamine lihtsamaks, käivitatakse lisaks veel üks "
-"sshd pordil '%s'. Kui miski peaks viltu minema esimese ssh-ga, saad ikka "
-"ühenduda teise külge.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:334
-#: ../DistUpgrade/DistUpgradeController.py:379
+#: ../DistUpgrade/DistUpgradeController.py:322
+#: ../DistUpgrade/DistUpgradeController.py:345
 msgid "Can not upgrade"
 msgstr "Uuendamine pole võimalik"
 
-#: ../DistUpgrade/DistUpgradeController.py:335
+#: ../DistUpgrade/DistUpgradeController.py:323
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
-msgstr "See tööriist ei toeta uuendamist '%s'-lt '%s'-le."
-
-#: ../DistUpgrade/DistUpgradeController.py:344
-msgid "Sandbox setup failed"
-msgstr "Liivakasti ülesseadmine nurjus"
-
-#: ../DistUpgrade/DistUpgradeController.py:345
-msgid "It was not possible to create the sandbox environment."
-msgstr "Liivakastikeskkonna loomine ei olnud võimalik."
-
-#: ../DistUpgrade/DistUpgradeController.py:351
-msgid "Sandbox mode"
-msgstr "Liivakastirežiim"
-
-#: ../DistUpgrade/DistUpgradeController.py:352
-#, python-format
-msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
-"\n"
-"*No* changes written to a systemdir from now until the next reboot are "
-"permanent."
 msgstr ""
-"See uuendus toimub liivakastirežiimis (testi-). Kõik muudatused kirjutatakse "
-"'%s'-le ning kaovad järgmisel taaskäivitusel.\n"
-"\n"
-"*Mitte ükski* muudatus, mis alates praegusest hetkest kuni järgmise "
-"taaskäivituseni kirjutatakse süsteemikausta, pole püsiv."
 
-#: ../DistUpgrade/DistUpgradeController.py:380
+#: ../DistUpgrade/DistUpgradeController.py:346
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 "Sinu python'i paigaldus on vigane. Palun paranda nimeviide '/usr/bin/python'."
 
-#: ../DistUpgrade/DistUpgradeController.py:406
+#: ../DistUpgrade/DistUpgradeController.py:372
 msgid "Package 'debsig-verify' is installed"
-msgstr "Pakk 'debsig-verify' on paigaldatud"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:407
+#: ../DistUpgrade/DistUpgradeController.py:373
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
 "run the upgrade again."
 msgstr ""
-"Uuendamine ei saa jätkuda, kui see pakett on paigaldatud.\n"
-"Palun eemalda see kõigepealt synaptikuga või käsuga 'apt-get remove debsig-"
-"verify' ning käivita uuendus uuesti."
 
-#: ../DistUpgrade/DistUpgradeController.py:417
+#: ../DistUpgrade/DistUpgradeController.py:383
 msgid "Include latest updates from the Internet?"
-msgstr "Kas kaasata värskeimad uuendused internetist?"
+msgstr "Kas lisada värskeimad uuendused Internetist?"
 
-#: ../DistUpgrade/DistUpgradeController.py:418
+#: ../DistUpgrade/DistUpgradeController.py:384
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -371,66 +299,59 @@ msgid ""
 "latest updates soon after upgrading.\n"
 "If you answer 'no' here, the network is not used at all."
 msgstr ""
-"Uuendussüsteem võib internetist automaatselt alla laadida uuendused ning "
-"uuendamise käigus need paigaldada. Kui sul on netiühendus on see on "
-"tungivalt soovitatud.\n"
-"\n"
-"Uuendamiseks nii kulub kauem aega, aga kui see lõpeb, on su süsteem täiesti "
-"ajakohane. Sa võid seda ka mitte teha, kuid siis peaksid värskeimad "
-"uuendused paigaldama varsti pärast uuendust.\n"
-"Kui sa vastad siin eitavalt, ei kasutata internetti üldse."
 
-#: ../DistUpgrade/DistUpgradeController.py:641
-#, python-format
-msgid "disabled on upgrade to %s"
-msgstr "keelatud %s-le uuendamisel"
-
-#: ../DistUpgrade/DistUpgradeController.py:667
+#: ../DistUpgrade/DistUpgradeController.py:555
 msgid "No valid mirror found"
 msgstr "Ühtegi sobivat peeglit ei leitud"
 
-#: ../DistUpgrade/DistUpgradeController.py:668
+#: ../DistUpgrade/DistUpgradeController.py:556
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found.This can happen if you run a internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
 "here it will update all '%s' to '%s' entries.\n"
-"If you select 'No' the upgrade will cancel."
+"If you select 'no' the update will cancel."
 msgstr ""
+"Tarkvara-allikate uurimisel ei leitud kirjeid uuenduse peeglite kohta. See "
+"võib juhtuda, kui kasutad sisemist peeglit või kui peegliteave on aegunud.\n"
+"\n"
+"Kas kirjutada 'sources.list' ikkagi ümber? Kui valid \"Jah\", asendatakse "
+"kõik kirjed '%s' kirjetega '%s'.\n"
+"Kui valid \"Ei\", siis loobutakse uuendamisest."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:688
+#: ../DistUpgrade/DistUpgradeController.py:576
 msgid "Generate default sources?"
 msgstr "Kas genereerida vaikimisi allikad?"
 
-#: ../DistUpgrade/DistUpgradeController.py:689
+#: ../DistUpgrade/DistUpgradeController.py:577
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
 "\n"
-"Should default entries for '%s' be added? If you select 'No', the upgrade "
+"Should default entries for '%s' be added? If you select 'No', the update "
 "will cancel."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:724
+#: ../DistUpgrade/DistUpgradeController.py:611
 msgid "Repository information invalid"
 msgstr "Varamu informatsioon vigane"
 
-#: ../DistUpgrade/DistUpgradeController.py:725
+#: ../DistUpgrade/DistUpgradeController.py:612
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
 msgstr ""
 "Varamuandmete uuendamisel loodi vigane fail. Palun teata sellest kui veast."
 
-#: ../DistUpgrade/DistUpgradeController.py:731
+#: ../DistUpgrade/DistUpgradeController.py:618
 msgid "Third party sources disabled"
 msgstr "Kolmandate osapoolte allikad keelatud"
 
-#: ../DistUpgrade/DistUpgradeController.py:732
+#: ../DistUpgrade/DistUpgradeController.py:619
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -440,13 +361,13 @@ msgstr ""
 "võid need jälle lubada, kasutades tööriista 'software-properties' või oma "
 "paketihaldurit."
 
-#: ../DistUpgrade/DistUpgradeController.py:772
+#: ../DistUpgrade/DistUpgradeController.py:659
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
-msgstr[0] "Vasturääkivustega pakid"
-msgstr[1] "Vasturääkivustega paketid"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeController.py:775
+#: ../DistUpgrade/DistUpgradeController.py:662
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -454,52 +375,42 @@ msgid ""
 "remove it from the system."
 msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archive can be found for them. Please reinstall the packages manually "
-"or remove them from the system."
+"but no archive can be found for it.Please reinstall the packages manually or "
+"remove them from the system."
 msgstr[0] ""
-"Paketi '%s' olek sisaldab vasturääkivusi ning see tuleb uuesti paigaldada, "
-"kuid arhiivi ei leitud. Palun paigalda see käsitsi uuesti või eemalda "
-"süsteemist."
 msgstr[1] ""
-"Pakettide '%s' olekud sisaldavad vasturääkivusi ning need tuleb uuesti "
-"paigaldada, kuid arhiive ei leitud. Palun paigalda need käsitsi uuesti või "
-"eemalda süsteemist."
 
-#: ../DistUpgrade/DistUpgradeController.py:823
+#: ../DistUpgrade/DistUpgradeController.py:710
 msgid "Error during update"
 msgstr "Viga uuendamisel"
 
-#: ../DistUpgrade/DistUpgradeController.py:824
+#: ../DistUpgrade/DistUpgradeController.py:711
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
-"Uuendamisel esines viga. Tavaliselt on selleks võrguprobleem, kontrolli "
-"netiühendust ja proovi uuesti."
 
-#. print "on_button_install_clicked"
-#: ../DistUpgrade/DistUpgradeController.py:833
-#: ../UpdateManager/UpdateManager.py:555
+#: ../DistUpgrade/DistUpgradeController.py:720
 msgid "Not enough free disk space"
-msgstr "Kõvakettal pole piisavalt vaba ruumi"
+msgstr "Kõvakettal pole piisavalt vaba ruumi."
 
-#: ../DistUpgrade/DistUpgradeController.py:834
+#: ../DistUpgrade/DistUpgradeController.py:721
 #, python-format
 msgid ""
-"The upgrade is now aborted. The upgrade needs a total of %s free space on "
-"disk '%s'. Please free at least an additional %s of disk space on '%s'. "
-"Empty your trash and remove temporary packages of former installations using "
-"'sudo apt-get clean'."
+"The upgrade aborts now. The upgrade needs a total of %s free space on disk "
+"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
+"your trash and remove temporary packages of former installations using 'sudo "
+"apt-get clean'."
 msgstr ""
-"Uuendamine katkestatakse. Uuendamise jaoks on vaja %s vaba ruumi kettal "
-"'%s'. Vabasta veel vähemalt %s kettal '%s'. Tühjenda prügikast ja eemalda "
-"eelmiste paigalduste ajutised pakid käsuga 'sudo apt-get clean'."
+"Uuendamine katkeb praegu. Uuendamiseks on vaja kokku %s vaba ruumi kettal "
+"'%s'. Palun vabasta vähemalt %s kettal '%s' - nt tühjenda prügikast ja "
+"eemalda käsuga 'sudo apt-get clean' varasemate paigaldamiste ajutised failid."
 
-#: ../DistUpgrade/DistUpgradeController.py:874
+#: ../DistUpgrade/DistUpgradeController.py:832
 msgid "Support for some applications ended"
 msgstr "Mõnede rakenduste tugi on lõppenud"
 
-#: ../DistUpgrade/DistUpgradeController.py:875
+#: ../DistUpgrade/DistUpgradeController.py:833
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -507,338 +418,251 @@ msgid ""
 "If you have not enabled community maintained software (universe), these "
 "packages will be suggested for removal at the end of the upgrade."
 msgstr ""
-"Canonical Ltd. ei paku enam tuge järgnevatele tarkvarapakettidele. Sellest "
-"hoolimata pakub ikka veel abi kogukond.\n"
-"\n"
-"Kui sul ei ole kogukonna hallatud tarkvara (universe) lubatud, on soovitatav "
-"eemaldada need pakid uuenduse lõppedes."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:884
-#: ../DistUpgrade/DistUpgradeController.py:1554
+#: ../DistUpgrade/DistUpgradeController.py:842
+#: ../DistUpgrade/DistUpgradeController.py:1469
 msgid "Calculating the changes"
-msgstr "Muudatuste rehkendamine"
+msgstr ""
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:899
+#: ../DistUpgrade/DistUpgradeController.py:857
 msgid "Do you want to start the upgrade?"
 msgstr "Kas alustada uuendamist?"
 
-#: ../DistUpgrade/DistUpgradeController.py:955
-msgid "Upgrade canceled"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:956
-msgid ""
-"The upgrade cancels now and the original system state is restored. You can "
-"resume the upgrade at a later time."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeController.py:961
-#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgradeController.py:921
+#: ../DistUpgrade/DistUpgradeController.py:976
 msgid "Could not download the upgrades"
 msgstr "Uuenduste allalaadimine polnud võimalik"
 
-#: ../DistUpgrade/DistUpgradeController.py:962
+#: ../DistUpgrade/DistUpgradeController.py:922
 msgid ""
-"The upgrade is now aborted. Please check your Internet connection or "
+"The upgrade aborts now. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
-"Uuendamine katkestatakse nüüd. Kontrolli internetiühendust või "
-"paigaldusmeediumi ja proovi uuesti. Kõik senini alla laaditud failid "
-"säilivad."
 
-#. FIXME: strings are not good, but we are in string freeze
-#. currently
-#: ../DistUpgrade/DistUpgradeController.py:1015
-#: ../DistUpgrade/DistUpgradeController.py:1138
-msgid "Error during commit"
-msgstr "Soorituse ajal esines viga"
-
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1017
-#: ../DistUpgrade/DistUpgradeController.py:1177
-msgid "Restoring original system state"
-msgstr "Süsteemi algse oleku taastamine"
-
-#: ../DistUpgrade/DistUpgradeController.py:1018
-#: ../DistUpgrade/DistUpgradeController.py:1032
-msgid "Could not install the upgrades"
-msgstr "Uuenduste paigaldamine polnud võimalik"
-
-#. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:1023
+#. invoke the frontend now
+#: ../DistUpgrade/DistUpgradeController.py:951
 msgid ""
-"The upgrade is now aborted. Your system could be in an unusable state. A "
+"The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"Uuendamine on katkenud. Süsteem ei pruugi olla kasutatav. Nüüd käivitatakse "
-"taastamine (dpkg --configure -a)."
+"Uuendamine katkeb praegu. Süsteem võib olla kasutuskõlmatu. Kohe "
+"käivitatakse taastamine (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:1028
+#: ../DistUpgrade/DistUpgradeController.py:956
 #, python-format
 msgid ""
 "\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
-"files in /var/log/dist-upgrade/ in the bug report.\n"
+"files in /var/log/dist-upgrade/ in the bugreport.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Palun raporteeri sellest 'update-manager' paki veast ja pane raportiga kaasa "
-"kõik failid /var/log/dist-upgrade/ kaustast.\n"
+"Palun teata sellest kui veast paketis 'update-manager' ja lisa kataloogis "
+"/var/log/dist-upgrade/ olevad failid.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:1049
+#: ../DistUpgrade/DistUpgradeController.py:960
+msgid "Could not install the upgrades"
+msgstr "Uuenduste paigaldamine polnud võimalik"
+
+#: ../DistUpgrade/DistUpgradeController.py:977
 msgid ""
-"The upgrade is now aborted. Please check your Internet connection or "
+"The upgrade aborts now. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
-"Uuendamine on katkenud. Kontrolli internetiühendust või paigaldusmeediumi ja "
-"proovi uuesti. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1126
+#: ../DistUpgrade/DistUpgradeController.py:1047
 msgid "Remove obsolete packages?"
 msgstr "Kas eemaldada iganenud paketid?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1127
-#: ../DistUpgrade/DistUpgrade.ui.h:20
+#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Hoia alles"
 
-#: ../DistUpgrade/DistUpgradeController.py:1127
+#: ../DistUpgrade/DistUpgradeController.py:1048
 msgid "_Remove"
 msgstr "_Eemalda"
 
-#: ../DistUpgrade/DistUpgradeController.py:1139
+#: ../DistUpgrade/DistUpgradeController.py:1059
+msgid "Error during commit"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1060
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
-msgstr "Puhastamise käigus esines viga. Täpsem info alumises teates. "
+msgstr ""
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:1090
+msgid "Restoring original system state"
+msgstr "Süsteemi algse oleku taastamine"
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1215
+#: ../DistUpgrade/DistUpgradeController.py:1128
 msgid "Required depends is not installed"
 msgstr "Vajalik sõltuvus pole paigaldatud"
 
-#: ../DistUpgrade/DistUpgradeController.py:1216
+#: ../DistUpgrade/DistUpgradeController.py:1129
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Vajalik sõltuvus '%s' pole paigaldatud. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1461
-#: ../DistUpgrade/DistUpgradeController.py:1528
+#: ../DistUpgrade/DistUpgradeController.py:1379
+#: ../DistUpgrade/DistUpgradeController.py:1446
 msgid "Checking package manager"
 msgstr "Paketihalduri kontrollimine"
 
-#: ../DistUpgrade/DistUpgradeController.py:1466
+#: ../DistUpgrade/DistUpgradeController.py:1384
 msgid "Preparing the upgrade failed"
 msgstr "Uuendamise ettevalmistamine ebaõnnestus"
 
-#: ../DistUpgrade/DistUpgradeController.py:1467
+#: ../DistUpgrade/DistUpgradeController.py:1385
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
-"upgrade/ in the bug report."
+"upgrade/ in the bugreport."
 msgstr ""
-"Süsteemi ettevalmistamine uuenduseks nurjus. Palun raporteeri sellest kui "
-"'update-manager' paketi veast ning pane vearaportiga kaasa kõik failid "
-"/var/log/dist-upgrade/ kasutast."
+"Süsteemi ettevalmistamine uuendamiseks ebaõnnestus. Palun teata sellest kui "
+"veast paketis 'update-manager' ja lisa kataloogis /var/log/dist-upgrade/ "
+"olevad failid."
 
-#: ../DistUpgrade/DistUpgradeController.py:1483
+#: ../DistUpgrade/DistUpgradeController.py:1401
 msgid "Getting upgrade prerequisites failed"
 msgstr "Uuendamise eelduste hankimine ebaõnnestus"
 
-#: ../DistUpgrade/DistUpgradeController.py:1484
+#: ../DistUpgrade/DistUpgradeController.py:1402
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
 "\n"
 "Please report this as a bug against the 'update-manager' package and include "
-"the files in /var/log/dist-upgrade/ in the bug report."
+"the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
-"Süsteem ei suutnud täita uuenduse eeldusi. Uuendamine katkeb, taastatakse "
-"süsteemi esialgne olek.\n"
+"Süsteemil polnud võimalik uuendamise eeldusi hankida. Uuendamine katkeb ja "
+"taastatakse süsteemi algne olek.\n"
 "\n"
-"Palun raporteeri sellest kui 'update-manager' paketi veast ning pane "
-"vearaportiga kaasa kõik failid /var/log/dist-upgrade/ kasutast."
+"Palun teata sellest kui veast paketis 'update-manager' ja lisa kataloogis "
+"/var/log/dist-upgrade/ olevad failid."
 
-#: ../DistUpgrade/DistUpgradeController.py:1514
+#: ../DistUpgrade/DistUpgradeController.py:1432
 msgid "Updating repository information"
 msgstr "Varamuinfo uuendamine"
 
-#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1457
 msgid "Invalid package information"
 msgstr "Vigane paketiinfo"
 
-#: ../DistUpgrade/DistUpgradeController.py:1543
+#: ../DistUpgrade/DistUpgradeController.py:1458
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
 "not be found anymore.\n"
 "This indicates a serious error, please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
-"report."
+"manager' package and include the files in /var/log/dist-upgrade/ in the "
+"bugreport."
 msgstr ""
 "Pärast paketiinfo uuendamist ei leita enam hädavajalikku paketti '%s'.\n"
-"See viitab tõsisele veale. Palun raporteeri sellest kui 'update-manager' "
-"paketi veast ning pane vearaportiga kaasa kõik failid /var/log/dist-upgrade/ "
-"kasutast."
+"See tähendab tõsist viga, palun teata sellest paketi 'update-manager' kohta "
+"ja lisa veateatele kataloogis /var/log/dist-upgrade/ olevad failid."
 
-#: ../DistUpgrade/DistUpgradeController.py:1560
-#: ../DistUpgrade/DistUpgradeController.py:1608
+#: ../DistUpgrade/DistUpgradeController.py:1475
+#: ../DistUpgrade/DistUpgradeController.py:1523
 msgid "Fetching"
 msgstr "Allalaadimine"
 
-#: ../DistUpgrade/DistUpgradeController.py:1566
-#: ../DistUpgrade/DistUpgradeController.py:1612
+#: ../DistUpgrade/DistUpgradeController.py:1482
+#: ../DistUpgrade/DistUpgradeController.py:1527
 msgid "Upgrading"
 msgstr "Uuendamine"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1571
-#: ../DistUpgrade/DistUpgradeController.py:1614
-#: ../DistUpgrade/DistUpgradeController.py:1621
-#: ../DistUpgrade/DistUpgradeController.py:1626
+#: ../DistUpgrade/DistUpgradeController.py:1487
+#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:1536
+#: ../DistUpgrade/DistUpgradeController.py:1541
 msgid "Upgrade complete"
 msgstr "Uuendamine valmis"
 
-#: ../DistUpgrade/DistUpgradeController.py:1572
-#: ../DistUpgrade/DistUpgradeController.py:1615
-#: ../DistUpgrade/DistUpgradeController.py:1622
+#: ../DistUpgrade/DistUpgradeController.py:1488
+#: ../DistUpgrade/DistUpgradeController.py:1530
+#: ../DistUpgrade/DistUpgradeController.py:1537
 msgid ""
-"The upgrade is completed but there were errors during the upgrade process."
-msgstr "Uuendamine on valmis, aga uuendamise käigus esines vigu."
+"The upgrade is completed but there were errors during the ugprade process."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1579
+#: ../DistUpgrade/DistUpgradeController.py:1495
 msgid "Searching for obsolete software"
 msgstr "Aegunud tarkvara otsimine"
 
-#: ../DistUpgrade/DistUpgradeController.py:1584
+#: ../DistUpgrade/DistUpgradeController.py:1500
 msgid "System upgrade is complete."
 msgstr "Süsteemi uuendamine on valmis."
 
-#: ../DistUpgrade/DistUpgradeController.py:1627
+#: ../DistUpgrade/DistUpgradeController.py:1542
 msgid "The partial upgrade was completed."
-msgstr "Osaline uuendamine on valmis."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:148
-msgid "No ARMv6 CPU"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
-msgid ""
-"Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
-"packages in karmic were built with optimizations requiring ARMv6 as the "
-"minimal architecture. It is not possible to upgrade your system to a new "
-"Ubuntu release with this hardware."
-msgstr ""
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:169
-#: ../DistUpgrade/DistUpgradeQuirks.py:253
-#: ../DistUpgrade/DistUpgradeQuirks.py:280
+#: ../DistUpgrade/DistUpgradeQuirks.py:98
+#: ../DistUpgrade/DistUpgradeQuirks.py:150
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
 msgstr ""
-"Uuendamine võib vähendada töölauaefekte ja mängude ning teiste "
-"graafikamahukate rakenduste jõudlust."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:173
+#: ../DistUpgrade/DistUpgradeQuirks.py:102
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
+"of this driver is available that works with Ubuntu 8.10.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:257
-#: ../DistUpgrade/DistUpgradeQuirks.py:284
+#: ../DistUpgrade/DistUpgradeQuirks.py:154
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
+"Ubuntu 8.10.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:454
-msgid "evms in use"
-msgstr "evms on kasutusel"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:455
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Sinu süsteem kasutab 'evms' köitehaldurit kohas /proc/mounts. 'Evms' "
-"tarkvara pole enam toetatud, lülita see välja ja käivita uuendamine uuesti."
-
-#: ../DistUpgrade/DistUpgradeMain.py:43
-msgid "Sandbox upgrade using aufs"
-msgstr "Liivakastiuuendus kasutades aufs-i"
-
-#: ../DistUpgrade/DistUpgradeMain.py:45
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr "Antud teelt otsitakse CD'd uuendatavate pakkidega"
-
-#: ../DistUpgrade/DistUpgradeMain.py:51
-msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-msgstr ""
-"Liidese kasutamine. Hetkel saadaval: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-
-#: ../DistUpgrade/DistUpgradeMain.py:54
-msgid "*DEPRECATED* this option will be ignore"
-msgstr "*AEGUNUD* seda valikut ignoreeritakse"
-
-#: ../DistUpgrade/DistUpgradeMain.py:57
-msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr ""
-"Soorita ainult osaline uuendamine (faili sources.list ei kirjutata üle)"
-
-#: ../DistUpgrade/DistUpgradeMain.py:59
-msgid "Set datadir"
-msgstr "Määra andmekaust (datadir)"
-
 #. print "mediaChange %s %s" % (medium, drive)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:106
+#: ../DistUpgrade/DistUpgradeViewGtk.py:108
 #: ../DistUpgrade/DistUpgradeViewKDE.py:190
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:148
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
-msgstr "Palun sisesta '%s' seadmesse '%s'"
+msgstr "Palun sisesta '%s' draivi '%s'"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:125
+#: ../DistUpgrade/DistUpgradeViewGtk.py:127
 #: ../DistUpgrade/DistUpgradeViewKDE.py:203
 msgid "Fetching is complete"
 msgstr "Allalaadimine on valmis"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:137
+#: ../DistUpgrade/DistUpgradeViewGtk.py:139
 #: ../DistUpgrade/DistUpgradeViewKDE.py:216
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
-msgstr "%li. faili %li-st allalaadimine kiirusel %sB/s"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:138
-#: ../DistUpgrade/DistUpgradeViewGtk.py:273
+#: ../DistUpgrade/DistUpgradeViewGtk.py:140
+#: ../DistUpgrade/DistUpgradeViewGtk.py:275
 #: ../DistUpgrade/DistUpgradeViewKDE.py:217
-#: ../DistUpgrade/DistUpgradeViewKDE.py:357
+#: ../DistUpgrade/DistUpgradeViewKDE.py:356
 #, python-format
 msgid "About %s remaining"
 msgstr "Umbes %s jäänud"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:140
+#: ../DistUpgrade/DistUpgradeViewGtk.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 #, python-format
 msgid "Fetching file %li of %li"
@@ -847,33 +671,35 @@ msgstr "%li. faili allalaadimine %li-st"
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
-#: ../DistUpgrade/DistUpgradeViewGtk.py:172
+#: ../DistUpgrade/DistUpgradeViewGtk.py:174
 #: ../DistUpgrade/DistUpgradeViewKDE.py:253
 msgid "Applying changes"
 msgstr "Muudatuste rakendamine"
 
 #. we do not report followup errors from earlier failures
-#: ../DistUpgrade/DistUpgradeViewGtk.py:197
+#: ../DistUpgrade/DistUpgradeViewGtk.py:199
 #: ../DistUpgrade/DistUpgradeViewKDE.py:266
 msgid "dependency problems - leaving unconfigured"
-msgstr "sõltuvusprobleemid - jäetakse seadistamata"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:202
+#: ../DistUpgrade/DistUpgradeViewGtk.py:204
 #: ../DistUpgrade/DistUpgradeViewKDE.py:268
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Paketi '%s' paigaldamine pole võimalik"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:203
+#: ../DistUpgrade/DistUpgradeViewGtk.py:205
 #: ../DistUpgrade/DistUpgradeViewKDE.py:269
 #, python-format
 msgid ""
-"The upgrade will continue but the '%s' package may not be in a working "
-"state. Please consider submitting a bug report about it."
+"The upgrade will continue but the '%s' package may be in a not working "
+"state. Please consider submitting a bugreport about it."
 msgstr ""
+"Uuendamine jätkub, kuid pakett '%s' ei pruugi töökorras olla. Palun kaalu "
+"selle kohta veateate edastamist."
 
 #. self.expander.set_expanded(True)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:219
+#: ../DistUpgrade/DistUpgradeViewGtk.py:221
 #: ../DistUpgrade/DistUpgradeViewKDE.py:290
 #, python-format
 msgid ""
@@ -883,81 +709,71 @@ msgstr ""
 "Kas asendada muudetud seadistusfail\n"
 "'%s'?"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:220
+#: ../DistUpgrade/DistUpgradeViewGtk.py:222
 #: ../DistUpgrade/DistUpgradeViewKDE.py:291
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
 msgstr ""
-"Kui asendad selle seadistusfaili uuema versiooniga, kaotad kõik sellesse "
-"tehtud muudatused."
+"Kui asendad selle uuema versiooniga, kaotad kõik sellesse tehtud muudatused."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:233
+#: ../DistUpgrade/DistUpgradeViewGtk.py:235
 #: ../DistUpgrade/DistUpgradeViewKDE.py:309
 msgid "The 'diff' command was not found"
 msgstr "Käsku 'diff' ei leitud"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:419
-#: ../DistUpgrade/DistUpgradeViewText.py:107
+#: ../DistUpgrade/DistUpgradeViewGtk.py:417
+#: ../DistUpgrade/DistUpgradeViewText.py:110
 msgid "A fatal error occurred"
-msgstr "Esines saatuslik viga"
+msgstr "Tekkis saatuslik viga"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:420
+#: ../DistUpgrade/DistUpgradeViewGtk.py:418
 msgid ""
 "Please report this as a bug (if you haven't already) and include the files "
 "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-"report. The upgrade is now aborted.\n"
+"report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Palun raporteeri sellest kui veast (kui sa pole seda veel teinud) ja pane "
-"raportiga kaasa failid /var/log/dist-upgrade/main.log ja /var/log/dist-"
-"upgrade/apt.log. Uuendamine katkeb.\n"
-"Sinu esialgne sourves.list fail salvestati nimega "
-"/etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:435
+#: ../DistUpgrade/DistUpgradeViewGtk.py:433
 msgid "Ctrl-c pressed"
-msgstr "Vajutati Ctrl-c"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:436
+#: ../DistUpgrade/DistUpgradeViewGtk.py:434
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
 msgstr ""
-"See katkestab tegevuse ja võib jätta süsteemi katkisesse olekusse. Kas oled "
-"kindel, et sa tahad seda teha?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk.py:578
+#: ../DistUpgrade/DistUpgradeViewGtk.py:570
 msgid "To prevent data loss close all open applications and documents."
 msgstr "Andmekao vältimiseks sulge kõik avatud rakendused ja dokumendid."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:592
+#: ../DistUpgrade/DistUpgradeViewGtk.py:584
 #, python-format
 msgid "<b>Downgrade %s</b>"
 msgstr "<b>Versiooni alandamine: %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:594
-#: ../DistUpgrade/DistUpgradeViewKDE.py:757
+#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewKDE.py:749
 #, python-format
 msgid "Remove %s"
 msgstr "%s eemaldamine"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:599
-#: ../DistUpgrade/DistUpgradeViewKDE.py:759
+#: ../DistUpgrade/DistUpgradeViewGtk.py:591
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
 #, python-format
 msgid "Install %s"
 msgstr "%s paigaldus"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:601
-#: ../DistUpgrade/DistUpgradeViewKDE.py:761
+#: ../DistUpgrade/DistUpgradeViewGtk.py:593
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #, python-format
 msgid "Upgrade %s"
 msgstr "%s uuendamine"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
 #: ../DistUpgrade/DistUpgradeViewKDE.py:191
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:150
 msgid "Media Change"
 msgstr "Meedia muutmine"
 
@@ -969,95 +785,94 @@ msgstr "Erinevuse näitamine >>>"
 msgid "<<< Hide Difference"
 msgstr "<<< Erinevuse peitmine"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:538
+#: ../DistUpgrade/DistUpgradeViewKDE.py:530
 msgid "Error"
-msgstr "Viga"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:550
+#: ../DistUpgrade/DistUpgradeViewKDE.py:542
 msgid "&Cancel"
-msgstr "&Loobu"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:552
-#: ../DistUpgrade/DistUpgradeViewKDE.py:789
+#: ../DistUpgrade/DistUpgradeViewKDE.py:544
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 msgid "&Close"
-msgstr "&Sulge"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:598
+#: ../DistUpgrade/DistUpgradeViewKDE.py:590
 msgid "Show Terminal >>>"
 msgstr "Terminali näitamine >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:601
+#: ../DistUpgrade/DistUpgradeViewKDE.py:593
 msgid "<<< Hide Terminal"
 msgstr "<<< Terminali peitmine"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:681
+#: ../DistUpgrade/DistUpgradeViewKDE.py:673
 msgid "Information"
-msgstr "Teave"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:731
-#: ../DistUpgrade/DistUpgradeViewKDE.py:772
-#: ../DistUpgrade/DistUpgradeViewKDE.py:775 ../DistUpgrade/DistUpgrade.ui.h:9
+#: ../DistUpgrade/DistUpgradeViewKDE.py:723
+#: ../DistUpgrade/DistUpgradeViewKDE.py:764
+#: ../DistUpgrade/DistUpgradeViewKDE.py:767
+#: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
 msgstr "Üksikasjad"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:785
-#: ../DistUpgrade/DistUpgradeViewText.py:225
+#: ../DistUpgrade/DistUpgradeViewKDE.py:777
+#: ../DistUpgrade/DistUpgradeViewText.py:222
 msgid "Restart required"
 msgstr "Vajalik taaskäivitus"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:785 ../DistUpgrade/DistUpgrade.ui.h:5
+#: ../DistUpgrade/DistUpgradeViewKDE.py:777
+#: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr ""
 "<b><big>Uuendamise lõpuleviimiseks palun taaskäivita süsteem</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788 ../DistUpgrade/DistUpgrade.ui.h:23
+#: ../DistUpgrade/DistUpgradeViewKDE.py:780
+#: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
 msgstr "_Taaskäivita kohe"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:800
+#: ../DistUpgrade/DistUpgradeViewKDE.py:792
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly advised to resume the upgrade."
 msgstr ""
-"<b><big>Kas katkestada pooleliolev uuendus?</big></b>\n"
-"\n"
-"Uuenduse katkestamisega võib süsteem jääda mittekasutatavaks. Tungivalt "
-"soovitatav on uuendamist jätkata."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:804
+#: ../DistUpgrade/DistUpgradeViewKDE.py:796
 msgid "Cancel Upgrade?"
 msgstr "Kas katkestada uuendamine?"
 
-#: ../DistUpgrade/DistUpgradeView.py:59
+#: ../DistUpgrade/DistUpgradeView.py:56
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
-msgstr[0] "%li päev"
-msgstr[1] "%li päeva"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeView.py:61
+#: ../DistUpgrade/DistUpgradeView.py:58
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
-msgstr[0] "%li tund"
-msgstr[1] "%li tundi"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeView.py:63
+#: ../DistUpgrade/DistUpgradeView.py:60
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
-msgstr[0] "%li minut"
-msgstr[1] "%li minutit"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeView.py:64
+#: ../DistUpgrade/DistUpgradeView.py:61
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
-msgstr[0] "%li sekund"
-msgstr[1] "%li sekundit"
+msgstr[0] ""
+msgstr[1] ""
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
@@ -1068,10 +883,10 @@ msgstr[1] "%li sekundit"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:77
+#: ../DistUpgrade/DistUpgradeView.py:74
 #, python-format
-msgid "%(str_days)s %(str_hours)s"
-msgstr "%(str_days)s %(str_hours)s"
+msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
+msgstr ""
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -1082,72 +897,72 @@ msgstr "%(str_days)s %(str_hours)s"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:92
+#: ../DistUpgrade/DistUpgradeView.py:85
 #, python-format
 msgid "%(str_hours)s %(str_minutes)s"
-msgstr "%(str_hours)s %(str_minutes)s"
+msgstr ""
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
-#: ../DistUpgrade/DistUpgradeView.py:113
+#: ../DistUpgrade/DistUpgradeView.py:106
 #, python-format
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
-"with a 56k modem."
+"with a 56k modem"
 msgstr ""
-"See allalaadimine võtab umbes %s 1Mbit DSL ühendusega ja umbes %s 56k "
-"modemiga."
+"Allalaadimiseks kulub umbes %s 1 Mbit/s DSL-ühendusega ja umbes %s 56 kbit/s "
+"modemiühendusega."
 
 #. if we have a estimated speed, use it
-#: ../DistUpgrade/DistUpgradeView.py:117
+#: ../DistUpgrade/DistUpgradeView.py:110
 #, python-format
 msgid "This download will take about %s with your connection. "
-msgstr "Allalaadimine võtab sinu ühendusega aega umbes %s. "
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeView.py:186 ../DistUpgrade/DistUpgrade.ui.h:14
+#: ../DistUpgrade/DistUpgradeView.py:176 ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Preparing to upgrade"
-msgstr "Uuenduse ettevalmistamine"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeView.py:187
+#: ../DistUpgrade/DistUpgradeView.py:177
 msgid "Getting new software channels"
-msgstr "Uute tarkvarakanalite hankimine"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeView.py:188 ../DistUpgrade/DistUpgrade.ui.h:12
+#: ../DistUpgrade/DistUpgradeView.py:178 ../DistUpgrade/DistUpgrade.glade.h:12
 msgid "Getting new packages"
-msgstr "Uute pakettide hankimine"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeView.py:189 ../DistUpgrade/DistUpgrade.ui.h:13
+#: ../DistUpgrade/DistUpgradeView.py:179 ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Installing the upgrades"
 msgstr "Uuenduste paigaldamine"
 
-#: ../DistUpgrade/DistUpgradeView.py:190 ../DistUpgrade/DistUpgrade.ui.h:8
+#: ../DistUpgrade/DistUpgradeView.py:180 ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
 msgstr "Puhastamine"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:263
+#: ../DistUpgrade/DistUpgradeView.py:253
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "%d pakett eemaldatakse."
 msgstr[1] "%d paketti eemaldatakse."
 
-#: ../DistUpgrade/DistUpgradeView.py:268
+#: ../DistUpgrade/DistUpgradeView.py:258
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "Paigaldatakse %d uus pakett."
 msgstr[1] "Paigaldatakse %d uut paketti."
 
-#: ../DistUpgrade/DistUpgradeView.py:274
+#: ../DistUpgrade/DistUpgradeView.py:264
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "%d pakett uuendatakse."
 msgstr[1] "%d paketti uuendatakse."
 
-#: ../DistUpgrade/DistUpgradeView.py:279
+#: ../DistUpgrade/DistUpgradeView.py:269
 #, python-format
 msgid ""
 "\n"
@@ -1158,77 +973,75 @@ msgstr ""
 "\n"
 "Alla tuleb laadida kokku %s. "
 
-#: ../DistUpgrade/DistUpgradeView.py:283
+#: ../DistUpgrade/DistUpgradeView.py:273
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
 msgstr ""
-"Uuenduse allalaadimine ja paigaldamine võib võtta mitu tundi. Kui "
-"allalaadimine on lõppenud, pole protsessi enam võimalik katkestada."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:289 ../UpdateManager/UpdateManager.py:489
+#: ../DistUpgrade/DistUpgradeView.py:279 ../UpdateManager/UpdateManager.py:672
 msgid "Your system is up-to-date"
-msgstr "Süsteem on värske"
+msgstr "Süsteem on värske."
 
-#: ../DistUpgrade/DistUpgradeView.py:290
+#: ../DistUpgrade/DistUpgradeView.py:280
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
 msgstr ""
 "Sinu süsteemile pole ühtegi uuendust saadaval. Uuendamisest loobutakse."
 
-#: ../DistUpgrade/DistUpgradeView.py:303
+#: ../DistUpgrade/DistUpgradeView.py:293
 msgid "Reboot required"
 msgstr "Vajalik taaskäivitus"
 
-#: ../DistUpgrade/DistUpgradeView.py:304
+#: ../DistUpgrade/DistUpgradeView.py:294
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
-"Uuendamine on valmis ja vaja on süsteem taaskäivitada. Kas teha seda kohe?"
+"uuendamine on valmis ja vaja on süsteem taaskäivitada. Kas teha seda kohe?"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:134
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:134
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
 msgid "Could not run the upgrade tool"
 msgstr "Uuendamistööriista käivitamine polnud võimalik"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
-"Tõenäoliselt on tegemist veaga uuendustööriistas. Palun raporteeri veast."
+"Tõenäoliselt on tegemist veaga uuendustööriistas. Palun edasta veateade."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:204
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:204
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
 msgid "Upgrade tool signature"
 msgstr "Uuendustööriista signatuur"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
 msgid "Upgrade tool"
 msgstr "Uuendustööriist"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:237
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:237
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
 msgid "Failed to fetch"
 msgstr "Allalaadimine ebaõnnestus"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:238
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:238
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
 msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "Uuenduse allalaadimine ebaõnnestus. See võib olla võrguprobleem. "
+msgstr "Uuenduse allalaadimine ebaõnnestus. Võrguga võib probleeme olla. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:242
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:242
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
 msgid "Failed to extract"
 msgstr "Lahtipakkimine ebaõnnestus"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:243
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:243
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -1236,138 +1049,129 @@ msgstr ""
 "Uuenduse lahtipakkimine ebaõnnestus. Võrgu või serveriga võib probleeme "
 "olla. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:248
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
-msgid "Verification failed"
-msgstr ""
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
+msgid "Verfication failed"
+msgstr "Kinnitamise viga"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:249
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
 msgstr ""
-"Uuenduse ehtsuse kontroll ebaõnnestus. See võib olla võrgu- või "
-"serveriprobleem. "
+"Uuenduse verifitseerimine ebaõnnesstus.  Võrgu või serveriga võib probleeme "
+"olla. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:254
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:254
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
 msgid "Authentication failed"
 msgstr "Autentimine ebaõnnestus"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:255
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:255
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
 msgstr ""
-"Uuenduse autentimine ebaõnnestus. See võib olla võrgu- või serveriprobleem. "
+"Uuenduse autentimine ebaõnnestus. Võrgu või serveriga võib probleeme olla. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:263
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:269
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:263
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:269
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
 msgid "Can not run the upgrade"
-msgstr "Uuendamist pole võimalik käivitada"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:264
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:264
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
 msgid ""
 "This usually is caused by a system were /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
 msgstr ""
-"Selle põhjus on tavaliselt süsteem, kus /tmp on haagitud noexec võtmega. "
-"Haagi see ilma noexec võtmeta ja käivita uuesti uuendus."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:270
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:270
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
 #, python-format
 msgid "The error message is '%s'."
-msgstr "Veateade on '%s'."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewText.py:108
+#: ../DistUpgrade/DistUpgradeViewText.py:111
 msgid ""
 "Please report this as a bug and include the files /var/log/dist-"
 "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Palun raporteeri sellest kui veast ning pane vearaportiga kaasa failid "
-"/var/log/dist-upgrade/main.log ja /var/log/dist-upgrade/apt.log. Uuendamine "
-"katkeb.\n"
-"Sinu esialgne sources.list fail salvestati nimega "
-"/etc/apt/sources.list.distUpgrade."
+"Palun teata sellest kui veast ja lisa failid /var/log/dist-upgrade/main.log "
+"ja /var/log/dist-upgrade/apt.log. Uuendamine katkeb.\n"
+"Algne sources.list on salvestatud asukohta /etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:132
+#: ../DistUpgrade/DistUpgradeViewText.py:135
 msgid "Aborting"
 msgstr "Katkestamine"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:137
+#: ../DistUpgrade/DistUpgradeViewText.py:140
 msgid "Demoted:\n"
-msgstr "Degradeeritud:\n"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewText.py:169
-#: ../DistUpgrade/DistUpgradeViewText.py:191
-#: ../DistUpgrade/DistUpgradeViewText.py:198
+#: ../DistUpgrade/DistUpgradeViewText.py:172
+#: ../DistUpgrade/DistUpgradeViewText.py:194
+#: ../DistUpgrade/DistUpgradeViewText.py:201
 msgid "Continue [yN] "
 msgstr "Kas jätkata? [y/N] "
 
-#: ../DistUpgrade/DistUpgradeViewText.py:169
-#: ../DistUpgrade/DistUpgradeViewText.py:191
+#: ../DistUpgrade/DistUpgradeViewText.py:172
+#: ../DistUpgrade/DistUpgradeViewText.py:194
 msgid "Details [d]"
 msgstr "Üksikasjad [d]"
 
 #. TRANSLATORS: the "y" is "yes"
-#. TRANSLATORS: first letter of a positive (yes) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:173
-#: ../DistUpgrade/DistUpgradeViewText.py:201
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#: ../DistUpgrade/DistUpgradeViewText.py:205
 msgid "y"
 msgstr "y"
 
 #. TRANSLATORS: the "n" is "no"
-#. TRANSLATORS: first letter of a negative (no) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:176
-#: ../DistUpgrade/DistUpgradeViewText.py:208
+#: ../DistUpgrade/DistUpgradeViewText.py:179
 msgid "n"
 msgstr "n"
 
 #. TRANSLATORS: the "d" is "details"
-#: ../DistUpgrade/DistUpgradeViewText.py:179
+#: ../DistUpgrade/DistUpgradeViewText.py:182
 msgid "d"
 msgstr "d"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:183
+#: ../DistUpgrade/DistUpgradeViewText.py:186
 #, python-format
 msgid "Remove: %s\n"
 msgstr "Eemaldatakse: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:186
+#: ../DistUpgrade/DistUpgradeViewText.py:189
 #, python-format
 msgid "Install: %s\n"
 msgstr "Paigaldatakse: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:189
+#: ../DistUpgrade/DistUpgradeViewText.py:192
 #, python-format
 msgid "Upgrade: %s\n"
 msgstr "Uuendatakse: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:205
-msgid "Continue [Yn] "
-msgstr "Kas jätkata? [Yn] "
-
-#: ../DistUpgrade/DistUpgradeViewText.py:226
+#: ../DistUpgrade/DistUpgradeViewText.py:223
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
 msgstr ""
-"Uuenduse lõpetamiseks on vajalik taaskäivitus.\n"
-"Kui sa valid 'y', siis süsteem taaskäivitub."
 
-#: ../DistUpgrade/DistUpgrade.ui.h:1
+#: ../DistUpgrade/DistUpgradeViewText.py:227
+msgid "Restart the system now [yN] "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
 
-#: ../DistUpgrade/DistUpgrade.ui.h:2
+#: ../DistUpgrade/DistUpgrade.glade.h:2
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1379,183 +1183,195 @@ msgstr ""
 "Kui uuendamise katkestad, võib süsteem olla kasutuskõlbmatu. On tungivalt "
 "soovitatav uuendamist jätkata."
 
-#: ../DistUpgrade/DistUpgrade.ui.h:6
+#: ../DistUpgrade/DistUpgrade.glade.h:6
 msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Kas alustada uuendamist?</big></b>"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:7
-msgid "<b><big>Upgrading Ubuntu to version 9.10</big></b>"
+#: ../DistUpgrade/DistUpgrade.glade.h:7
+msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgrade.ui.h:10
+#: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
 msgstr "Erinevus failide vahel"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:11
+#: ../DistUpgrade/DistUpgrade.glade.h:11
 msgid "Distribution Upgrade"
 msgstr "Distributsiooniuuendus"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:15
+#: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Restarting the computer"
-msgstr "Arvuti taaskäivitamine"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgrade.ui.h:16
+#: ../DistUpgrade/DistUpgrade.glade.h:16
 msgid "Setting new software channels"
-msgstr "Uute tarkvarakanalite seadistamine"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgrade.ui.h:17
+#: ../DistUpgrade/DistUpgrade.glade.h:17
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:18
+#: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
 msgstr "_Katkesta uuendamine"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:19
+#: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
 msgstr "_Jätka"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:21
+#: ../DistUpgrade/DistUpgrade.glade.h:21
 msgid "_Replace"
 msgstr "_Asenda"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:22
+#: ../DistUpgrade/DistUpgrade.glade.h:22
 msgid "_Report Bug"
 msgstr "_Teata veast"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:24
+#: ../DistUpgrade/DistUpgrade.glade.h:24
 msgid "_Resume Upgrade"
-msgstr "_Jätka uuendamist"
+msgstr "_Taasta uuendamine"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:25
+#: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
 msgstr "_Alusta uuendamist"
 
-#: ../UpdateManager/backend/InstallBackendSynaptic.py:42
-msgid "Please wait, this can take some time."
-msgstr "Palun oota, läheb natuke aega."
-
-#: ../UpdateManager/backend/InstallBackendSynaptic.py:44
-msgid "Update is complete"
-msgstr "Uuendamine on valmis"
-
-#: ../UpdateManager/DistUpgradeFetcher.py:85
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:103
+#: ../UpdateManager/DistUpgradeFetcher.py:81
 msgid "Could not find the release notes"
 msgstr "Väljalaskemärkmeid ei leitud"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:86
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:104
+#: ../UpdateManager/DistUpgradeFetcher.py:82
 msgid "The server may be overloaded. "
 msgstr "Server võib olla ülekoormatud. "
 
-#: ../UpdateManager/DistUpgradeFetcher.py:96
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:108
+#: ../UpdateManager/DistUpgradeFetcher.py:92
 msgid "Could not download the release notes"
 msgstr "Väljalaskemärkmete allalaadimine polnud võimalik"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:97
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:109
+#: ../UpdateManager/DistUpgradeFetcher.py:93
 msgid "Please check your internet connection."
 msgstr "Palun kontrolli oma võrguühendust."
 
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:62
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:85
-msgid "Upgrade"
-msgstr "Uuendamine"
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:89
-#: ../data/glade/UpdateManager.ui.h:12
-msgid "Release Notes"
-msgstr "Väljalaskemärkmed"
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:128
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
-msgid "Downloading additional package files..."
-msgstr "Lisa paketifailide allalaadimine..."
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
-#, python-format
-msgid "File %s of %s at %sB/s"
-msgstr "%s. fail %s-st kiirusel %sB/s"
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
-#, python-format
-msgid "File %s of %s"
-msgstr "%s. fail %s-st"
-
-#: ../UpdateManager/ChangelogViewer.py:70
-msgid "Open Link in Browser"
-msgstr "Ava link veebilehitsejas"
-
-#: ../UpdateManager/ChangelogViewer.py:72
-msgid "Copy Link to Clipboard"
-msgstr "Kopeeri link"
-
-#: ../UpdateManager/GtkProgress.py:115
+#: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr "%(current)li. faili allalaadimine %(total)li-st kiirusel %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:120
+#: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "%(current)li. faili allalaadimine %(total)li-st"
 
+#: ../UpdateManager/UpdateManager.py:252
+msgid "The list of changes is not available"
+msgstr "Muudatuste nimekiri pole saadaval"
+
+#: ../UpdateManager/UpdateManager.py:260
+#, python-format
+msgid ""
+"The list of changes is not available yet.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:268
+msgid ""
+"Failed to download the list of changes. \n"
+"Please check your Internet connection."
+msgstr ""
+"Muudatuste nimekirja allalaadimine ebaõnnestus. \n"
+"Palun kontrolli oma võrguühendust."
+
+#: ../UpdateManager/UpdateManager.py:290
+msgid "Failed to detect distribution"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:291
+#, python-format
+msgid "A error '%s' occurred while checking what system you are using."
+msgstr ""
+
 #: ../UpdateManager/UpdateManager.py:302
+msgid "Important security updates"
+msgstr "Tähtsad turvauuendused"
+
+#: ../UpdateManager/UpdateManager.py:303
+msgid "Recommended updates"
+msgstr "Soovitatavad uuendused"
+
+#: ../UpdateManager/UpdateManager.py:304
+msgid "Proposed updates"
+msgstr "Pakutud uuendused"
+
+#: ../UpdateManager/UpdateManager.py:305
+msgid "Backports"
+msgstr "Backport'id"
+
+#: ../UpdateManager/UpdateManager.py:306
+msgid "Distribution updates"
+msgstr "Distributsiooniuuendused"
+
+#: ../UpdateManager/UpdateManager.py:311
+msgid "Other updates"
+msgstr "Muud uuendused"
+
+#: ../UpdateManager/UpdateManager.py:320
+msgid "Previous selected"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:495
 #, python-format
 msgid "Version %s: \n"
 msgstr "Versioon %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:359
+#: ../UpdateManager/UpdateManager.py:556
 msgid "Downloading list of changes..."
 msgstr "Kõikide muudatuste allalaadimine.."
 
-#: ../UpdateManager/UpdateManager.py:399
+#: ../UpdateManager/UpdateManager.py:583
 msgid "_Uncheck All"
 msgstr "Ära vali _midagi"
 
-#: ../UpdateManager/UpdateManager.py:405
+#: ../UpdateManager/UpdateManager.py:589
 msgid "_Check All"
 msgstr "_Vali kõik"
 
-#: ../UpdateManager/UpdateManager.py:449
+#. TRANSLATORS: b stands for Bytes
+#: ../UpdateManager/UpdateManager.py:633 ../UpdateManager/UpdateManager.py:689
 #, python-format
-msgid "%s selected. Download size: %s"
-msgstr ""
+msgid "Download size: %s"
+msgstr "Allalaadimise suurus: %s"
 
-#: ../UpdateManager/UpdateManager.py:454
+#: ../UpdateManager/UpdateManager.py:637
 msgid "Unknown download size"
 msgstr "Teadmata allalaadimise suurus"
 
-#: ../UpdateManager/UpdateManager.py:462
+#: ../UpdateManager/UpdateManager.py:645
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
 msgstr ""
-"See on teadmata, kuna paketiteavet uuendati hiljem. Teabe uuendamiseks "
-"klõpsa nupul 'Kontrolli'."
 
-#: ../UpdateManager/UpdateManager.py:471
+#: ../UpdateManager/UpdateManager.py:654
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
-msgstr[0] "Paketiloendit uuendati eile."
-msgstr[1] "Paketiloendit uuendati %s päeva tagasi."
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:475
+#: ../UpdateManager/UpdateManager.py:658
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
-msgstr[0] "Paketiloendit uuendati tunni aja eest."
-msgstr[1] "Paketiloendit uuendati %s tundi tagasi."
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:479
+#: ../UpdateManager/UpdateManager.py:662
 msgid "The package information was last updated less than one hour ago."
-msgstr "Paketiloendit uuendati vähem kui tund aega tagasi."
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:487 ../data/glade/UpdateManager.ui.h:22
+#: ../UpdateManager/UpdateManager.py:670
+#: ../data/glade/UpdateManager.glade.h:21
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
@@ -1563,53 +1379,30 @@ msgstr ""
 "Tarkvarauuendused parandavad vigu, kõrvaldavad turvaauke ja lisavad uusi "
 "funktsioone."
 
-#: ../UpdateManager/UpdateManager.py:503
-msgid "Welcome to Ubuntu"
-msgstr "Tere tulemast Ubuntusse"
-
-#: ../UpdateManager/UpdateManager.py:504
-msgid ""
-"These software updates have been issued since Ubuntu was released. If you "
-"don't want to install them now, choose \"Update Manager\" from the "
-"Administration Menu later."
-msgstr ""
-"Need tarkvarauuendused on välja antud pärast Ubuntu väljalaset. Kui sa ei "
-"taha neid praegu paigaldada, saad seda hiljem teha Administeerimise menüüst "
-"\"Uuendamishaldur\" valides."
-
-#: ../UpdateManager/UpdateManager.py:507
-msgid "Software updates are available for this computer"
-msgstr "Selle arvuti tarkvarale on saadaval uuendusi"
-
-#: ../UpdateManager/UpdateManager.py:508
-msgid ""
-"If you don't want to install them now, choose \"Update Manager\" from the "
-"Administration menu later."
-msgstr ""
-"Kui sa ei taha neid praegu paigaldada, võid seda teha hiljem valides "
-"administreerimise menüüst \"Uuendamishalduri\"."
-
-#: ../UpdateManager/UpdateManager.py:556
+#: ../UpdateManager/UpdateManager.py:685
 #, python-format
-msgid ""
-"The upgrade needs a total of %s free space on disk '%s'. Please free at "
-"least an additional %s of disk space on '%s'. Empty your trash and remove "
-"temporary packages of former installations using 'sudo apt-get clean'."
-msgstr ""
-"Uuendamise jaoks on kokku vaja %s vaba ruumi kettal '%s' . Vabasta vähemalt "
-"%s vaba ruumi seadmel '%s'. Tühjenda prügikast ja eemalda eelmiste "
-"paigalduste ajutised pakid käsuga 'sudo apt-get clean'."
+msgid "You can install %s update."
+msgid_plural "You can install %s updates."
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:593
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:114
+#: ../UpdateManager/UpdateManager.py:727
+msgid "Please wait, this can take some time."
+msgstr "Palun oota, läheb natuke aega."
+
+#: ../UpdateManager/UpdateManager.py:729
+msgid "Update is complete"
+msgstr "Uuendamine on valmis"
+
+#: ../UpdateManager/UpdateManager.py:781
 msgid "Reading package information"
-msgstr "Paketiloendi lugemine"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:710
+#: ../UpdateManager/UpdateManager.py:884
 msgid "Could not initialize the package information"
-msgstr "Paketiloendi lähtestamine polnud võimalik"
+msgstr "Paketiinfo initsialiseerimine polnud võimalik"
 
-#: ../UpdateManager/UpdateManager.py:711
+#: ../UpdateManager/UpdateManager.py:885
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1617,68 +1410,64 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
-"Paketiinfo lähtestamisel esines lahendamatu viga.\n"
-"\n"
-"Palun raporteeri sellest kui paki 'update-manager' veast ning lisa raportile "
-"järgnev teade:\n"
 
-#: ../UpdateManager/UpdateManager.py:733
+#: ../UpdateManager/UpdateManager.py:907
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
 msgstr ""
-"Uuenduse rehkendamisel esines lahendamatu viga.\n"
-"\n"
-"Palun raporteeri sellest kui paki 'update-manager' veast ning lisa raportile "
-"järgnev teade:"
-
-#: ../UpdateManager/UpdateManager.py:756
-msgid " (New install)"
-msgstr ""
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:760
+#: ../UpdateManager/UpdateManager.py:932
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Suurus: %s)"
 
-#: ../UpdateManager/UpdateManager.py:762
+#: ../UpdateManager/UpdateManager.py:934
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr "Versioonilt %(old_version)s versioonile %(new_version)s"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:766
+#: ../UpdateManager/UpdateManager.py:938
 #, python-format
 msgid "Version %s"
-msgstr "Versioon %s"
-
-#: ../UpdateManager/UpdateManager.py:779
-msgid "Your Ubuntu release is not supported anymore"
 msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:780
+#: ../UpdateManager/UpdateManager.py:951
+msgid "Your distribution is not supported anymore"
+msgstr "Sinu distributsiooni enam ei toetata"
+
+#: ../UpdateManager/UpdateManager.py:952
 msgid ""
-"You will not get any further security fixes or critical updates. Please "
-"Upgrade to a later version of Ubuntu Linux."
+"You will not get any further security fixes or critical updates. Upgrade to "
+"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
+"information on upgrading."
 msgstr ""
+"Sa ei saa enam turvaparandusi ega kriitilisi uuendusi. Uuenda Ubuntu Linuxi "
+"värskemale versioonile. Lisateavet uuendamise kohta leiad aadressilt "
+"http://www.ubuntu.com."
 
-#: ../UpdateManager/UpdateManager.py:787
-msgid "Upgrade information"
-msgstr ""
+#: ../UpdateManager/UpdateManager.py:978
+msgid "Downloading the upgrade tool"
+msgstr "Uuendamistööriista allalaadimine"
 
-#: ../UpdateManager/UpdateManager.py:814
+#: ../UpdateManager/UpdateManager.py:980
+msgid "The upgrade tool will guide you through the upgrade process."
+msgstr "Uuendamistööriist juhib sind läbi uuendamisprotsessi"
+
+#: ../UpdateManager/UpdateManager.py:988
 #, python-format
-msgid "<b>New Ubuntu release '%s' is available</b>"
-msgstr ""
+msgid "<b>New distribution release '%s' is available</b>"
+msgstr "<b>Uus distributsiooni väljalase '%s' on saadaval</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:853
+#: ../UpdateManager/UpdateManager.py:1031
 msgid "Software index is broken"
 msgstr "Tarkvaraindeks on katki"
 
-#: ../UpdateManager/UpdateManager.py:854
+#: ../UpdateManager/UpdateManager.py:1032
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1688,49 +1477,53 @@ msgstr ""
 "kasuta palun paketihaldur Synaptic'ut või terminalis käsku \"sudo apt-get "
 "install -f\"."
 
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:136
-msgid "Downloading Package Information"
-msgstr "Paketiloendi allalaadimine"
-
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:137
+#: ../data/glade/UpdateManager.glade.h:1
 msgid ""
-"The repositories are being checked for new, removed, or updated software "
-"packages"
+"<b><big>You must check for updates manually</big></b>\n"
+"\n"
+"Your system does not check for updates automatically. You can configure this "
+"behavior in <i>Software Sources</i> on the <i>Updates</i> tab."
 msgstr ""
-"Praegu otsitakse tarkvaraallikatest uusi, eeamldatud või uuendatud "
-"tarkvarapakette."
 
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:145
-msgid "Downloading Package Updates"
-msgstr "Paketiuuenduste allalaadimine"
+#: ../data/glade/UpdateManager.glade.h:4
+msgid "<big><b>Keep your system up-to-date</b></big>"
+msgstr "<big><b>Hoia oma süsteem värske</b></big>"
 
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:146
+#: ../data/glade/UpdateManager.glade.h:5
+msgid "<big><b>Not all updates can be installed</b></big>"
+msgstr "<big><b>Mitte kõiki uuendusi ei saa paigaldada</b></big>"
+
+#: ../data/glade/UpdateManager.glade.h:6
+msgid "<big><b>Starting Update Manager</b></big>"
+msgstr "<big><b>Uuendamishalduri käivitamine</b></big>"
+
+#: ../data/glade/UpdateManager.glade.h:7
+msgid "Changes"
+msgstr "Muudatused"
+
+#: ../data/glade/UpdateManager.glade.h:8
+msgid "Chec_k"
+msgstr "_Kontrolli"
+
+#: ../data/glade/UpdateManager.glade.h:9
+msgid "Check the software channels for new updates"
+msgstr "Otsi tarkvaraallikatest uuendusi"
+
+#: ../data/glade/UpdateManager.glade.h:10
+msgid "Description"
+msgstr "Kirjeldus"
+
+#: ../data/glade/UpdateManager.glade.h:11
+msgid "Description of update"
+msgstr "Uuenduse kirjeldus"
+
+#: ../data/glade/UpdateManager.glade.h:12
+msgid "Release Notes"
+msgstr "Väljalaskemärkmed"
+
+#: ../data/glade/UpdateManager.glade.h:13
 msgid ""
-"The selected package updates are being downloaded and installed on the system"
-msgstr "Valitud paketiuuenduse laaditakse alla ja paigaldatakse süsteemi"
-
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:152
-msgid "run_synaptic called with unknown action"
-msgstr "run_synaptic käivitati tundmatu tegevusega"
-
-#: ../UpdateManagerText/UpdateManagerText.py:26
-msgid "Cancel"
-msgstr "Katkesta"
-
-#: ../UpdateManagerText/UpdateManagerText.py:27
-msgid "Install"
-msgstr "Paigalda"
-
-#: ../UpdateManagerText/UpdateManagerText.py:45
-msgid "Building Updates List"
-msgstr "Uuenduste loendi koostamine"
-
-#: ../UpdateManagerText/UpdateManagerText.py:48
-msgid ""
-"\n"
-"A normal upgrade can not be calculated, please run: \n"
-"  sudo apt-get dist-upgrade\n"
-"\n"
+"Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
 "This can be caused by:\n"
 " ◦ A previous upgrade which didn't complete\n"
@@ -1738,229 +1531,61 @@ msgid ""
 " ◦ Unofficial software packages not provided by Ubuntu\n"
 " ◦ Normal changes of a pre-release version of Ubuntu"
 msgstr ""
-"\n"
-"Tavalist uuendust pole võimalik rehkendada, käivita \n"
-"  sudo apt-get dist-upgrade\n"
-"\n"
-"\n"
-"Seda võib põhjustada:\n"
-" ◦ Eelmine pooleli jäänud uuendus\n"
-" ◦ Tõrked paigaldatud tarkvaraga\n"
-" ◦ Mitteametlikud pakid, mida ei jaga Ubuntu\n"
-" ◦ Ubuntu eelväljalaske tavapärased muutused"
 
-#: ../UpdateManagerText/UpdateManagerText.py:117
-msgid "Downloading changelog"
-msgstr "Muudatuste logi allalaadimine"
-
-#: ../UpdateManager/Core/MyCache.py:108
-#, python-format
-msgid "Other updates (%s)"
-msgstr ""
-
-#: ../UpdateManager/Core/MyCache.py:227
-#, python-format
-msgid ""
-"Changes for the versions:\n"
-"%s\n"
-"%s\n"
-"\n"
-msgstr ""
-
-#: ../UpdateManager/Core/MyCache.py:229
-msgid "This change is not coming from a source that supports changelogs."
-msgstr ""
-
-#: ../UpdateManager/Core/MyCache.py:237
-#, python-format
-msgid ""
-"The changelog does not contain any relevant changes.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-"Muudatuste logi ei sisalda mingeid asjakohaseid muudatusi.\n"
-"\n"
-"Senikaua, kuni muudatused logisse ilmuvad, oota natukene \n"
-"või vaata http://launchpad.net/ubuntu/+source/%s/%s/+changelog"
-
-#: ../UpdateManager/Core/MyCache.py:242
-#, python-format
-msgid ""
-"The list of changes is not available yet.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-"Muudatuste logi pole veel saadaval.\n"
-"\n"
-"Senikaua, kuni muudatused logisse ilmuvad, oota natukene \n"
-"või vaata http://launchpad.net/ubuntu/+source/%s/%s/+changelog"
-
-#: ../UpdateManager/Core/MyCache.py:248
-msgid ""
-"Failed to download the list of changes. \n"
-"Please check your Internet connection."
-msgstr ""
-"Muudatuste loendi allalaadimine nurjus. \n"
-"Palun kontrolli oma võrguühendust."
-
-#: ../UpdateManager/Core/UpdateList.py:50
-msgid "Failed to detect distribution"
-msgstr "Distributsiooni tuvastamine nurjus"
-
-#: ../UpdateManager/Core/UpdateList.py:51
-#, python-format
-msgid "A error '%s' occurred while checking what system you are using."
-msgstr "Sinu kasutatava süsteemi kindlakstegemisel esines viga '%s'."
-
-#: ../UpdateManager/Core/UpdateList.py:62
-msgid "Important security updates"
-msgstr "Tähtsad turvauuendused"
-
-#: ../UpdateManager/Core/UpdateList.py:63
-msgid "Recommended updates"
-msgstr "Soovitatavad uuendused"
-
-#: ../UpdateManager/Core/UpdateList.py:64
-msgid "Proposed updates"
-msgstr "Pakutud uuendused"
-
-#: ../UpdateManager/Core/UpdateList.py:65
-msgid "Backports"
-msgstr "Backport'id"
-
-#: ../UpdateManager/Core/UpdateList.py:66
-msgid "Distribution updates"
-msgstr "Distributsiooniuuendused"
-
-#: ../UpdateManager/Core/UpdateList.py:71
-msgid "Other updates"
-msgstr "Muud uuendused"
-
-#: ../UpdateManager/Core/UpdateList.py:80
-msgid "Previous selected"
-msgstr "Eelmine valitud"
-
-#: ../data/glade/UpdateManager.ui.h:1
-msgid ""
-"<b><big>You must check for updates manually</big></b>\n"
-"\n"
-"Your system does not check for updates automatically. You can configure this "
-"behavior in <i>Software Sources</i> on the <i>Updates</i> tab."
-msgstr ""
-"<b><big>Sul tuleb uuendusi käsitsi kontrollida</big></b>\n"
-"\n"
-"Sinu süsteem ei kontrolli ise uuenduste saadavust. Seda saab muuta "
-"<i>Tarkvaraallikatest</i>, mis asub <i>Uuenduste</i> sakil."
-
-#: ../data/glade/UpdateManager.ui.h:4
-msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr "<big><b>Mitte kõiki uuendusi ei saa paigaldada</b></big>"
-
-#: ../data/glade/UpdateManager.ui.h:5
-msgid "<big><b>Running on battery</b></big>"
-msgstr ""
-
-#: ../data/glade/UpdateManager.ui.h:6
-msgid "<big><b>Starting Update Manager</b></big>"
-msgstr "<big><b>Uuendamishalduri käivitamine</b></big>"
-
-#: ../data/glade/UpdateManager.ui.h:7
-msgid "Changes"
-msgstr "Muudatused"
-
-#: ../data/glade/UpdateManager.ui.h:8
-msgid "Chec_k"
-msgstr "_Kontrolli"
-
-#: ../data/glade/UpdateManager.ui.h:9
-msgid "Co_ntinue"
-msgstr ""
-
-#: ../data/glade/UpdateManager.ui.h:10
-msgid "Description"
-msgstr "Kirjeldus"
-
-#: ../data/glade/UpdateManager.ui.h:11
-msgid "Description of update"
-msgstr "Uuenduse kirjeldus"
-
-#: ../data/glade/UpdateManager.ui.h:13
-msgid ""
-"Run a partial upgrade, to install as many updates as possible. \n"
-"\n"
-"This can be caused by:\n"
-" &#x25E6; A previous upgrade which didn't complete\n"
-" &#x25E6; Problems with some of the installed software\n"
-" &#x25E6; Unofficial software packages not provided by Ubuntu\n"
-" &#x25E6; Normal changes of a pre-release version of Ubuntu"
-msgstr ""
-
-#: ../data/glade/UpdateManager.ui.h:20
-msgid "Settings..."
-msgstr ""
-
-#: ../data/glade/UpdateManager.ui.h:21
+#: ../data/glade/UpdateManager.glade.h:20
 msgid "Show progress of individual files"
-msgstr "Failide edenemise näitamine eraldi"
+msgstr ""
 
-#: ../data/glade/UpdateManager.ui.h:23
+#: ../data/glade/UpdateManager.glade.h:22
 msgid "U_pgrade"
 msgstr "_Uuenda"
 
-#: ../data/glade/UpdateManager.ui.h:24 ../data/update-manager.desktop.in.h:3
-#: ../data/update-manager-hildon.desktop.in.h:3
+#: ../data/glade/UpdateManager.glade.h:23
+#: ../data/update-manager.desktop.in.h:3
 msgid "Update Manager"
 msgstr "Uuendamishaldur"
 
-#: ../data/glade/UpdateManager.ui.h:25
-msgid "Your system is running on battery. Are you sure you want to continue?"
-msgstr ""
+#: ../data/glade/UpdateManager.glade.h:24
+msgid "Upgrade to the latest version of Ubuntu"
+msgstr "Ubuntu viimaste versioonide uuendamine"
 
-#: ../data/glade/UpdateManager.ui.h:26
+#: ../data/glade/UpdateManager.glade.h:25
 msgid "_Hide this information in the future"
 msgstr "_Peida tulevikus see info"
 
-#: ../data/glade/UpdateManager.ui.h:27
+#: ../data/glade/UpdateManager.glade.h:26
 msgid "_Install Updates"
 msgstr "_Paigalda uuendused"
 
-#: ../data/glade/UpdateManager.ui.h:28
+#: ../data/glade/UpdateManager.glade.h:27
 msgid "_Partial Upgrade"
 msgstr "Uuenda _osaliselt"
 
-#: ../data/glade/UpdateManager.ui.h:29
+#: ../data/glade/UpdateManager.glade.h:28
 msgid "_Upgrade"
 msgstr "_Uuenda"
 
-#: ../data/glade/UpdateManager.ui.h:30
+#: ../data/glade/UpdateManager.glade.h:29
 msgid "updates"
 msgstr "uuendused"
 
 #: ../data/update-manager.desktop.in.h:1
-#: ../data/update-manager-hildon.desktop.in.h:1
 msgid "Show and install available updates"
 msgstr "Näita ja paigalda saadaolevad uuendused"
 
 #: ../data/update-manager.desktop.in.h:2
-#: ../data/update-manager-hildon.desktop.in.h:2
 msgid "Software Updates"
-msgstr "Tarkvara uuendused"
+msgstr ""
 
 #: ../data/update-manager.schemas.in.h:1
 msgid "*deprecated* Check for new distribution releases"
-msgstr "*aegunud* Kontrolli uusi distributsiooni väljalaskeid"
+msgstr ""
 
 #: ../data/update-manager.schemas.in.h:2
 msgid "Auto close the install window after successful install"
-msgstr "See aken sulgub ise pärast edukat paigaldust"
+msgstr ""
 
 #: ../data/update-manager.schemas.in.h:3
-msgid "First run welcome message"
-msgstr "Esmakäivituse tervitusteade"
-
-#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If automatic checking for updates is disabled, you have to reload the "
 "channel list manually. This option allows to hide the reminder shown in this "
@@ -1970,102 +1595,79 @@ msgstr ""
 "nimekirja ise uuesti laadima. See valik võimaldab peita sel juhul näidatava "
 "meeldetuletuse."
 
-#: ../data/update-manager.schemas.in.h:5
-msgid "If this key is set a first run welcome message will be presented."
-msgstr "Kui see võti on märgitud, näidatakse esmakäivituse tervitusteadet."
-
-#: ../data/update-manager.schemas.in.h:6
+#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If this key is set the install window will be automatically closed on "
 "successful installation."
 msgstr ""
-"Kui see võti on märgitud, sulgub paigaldusaken pärast edukat paigaldust ise."
 
-#: ../data/update-manager.schemas.in.h:7
+#: ../data/update-manager.schemas.in.h:5
 msgid ""
 "If this key is set the main update list window will show version information "
 "(from version to version)."
 msgstr ""
-"Kui see võti on märgitud, kuvatakse uuenduste peaaknas versiooniteavet "
-"(milliselt millisele versioonile)."
 
-#: ../data/update-manager.schemas.in.h:8
+#: ../data/update-manager.schemas.in.h:6
 msgid "Remind to reload the channel list"
 msgstr "Tuletatakse meelde, et kanalite nimekiri on vaja uuesti laadida"
 
-#: ../data/update-manager.schemas.in.h:9
+#: ../data/update-manager.schemas.in.h:7
 msgid "Show details of an update"
 msgstr "Uuenduste üksikasjade näitamine"
 
-#: ../data/update-manager.schemas.in.h:10
+#: ../data/update-manager.schemas.in.h:8
 msgid "Show version in update list"
-msgstr "Uuendamise loendis näidatakse versiooninumbrit"
+msgstr ""
 
-#: ../data/update-manager.schemas.in.h:11
+#: ../data/update-manager.schemas.in.h:9
 msgid "Stores the size of the update-manager dialog"
 msgstr "update-manager'i dialoogiakna suurus salvestatakse"
 
-#: ../data/update-manager.schemas.in.h:12
+#: ../data/update-manager.schemas.in.h:10
 msgid ""
 "Stores the state of the expander that contains the list of changes and the "
 "description"
 msgstr "Salvestab sätteid, mis sisaldavad muudatusi ja kirjeldusi"
 
-#: ../data/update-manager.schemas.in.h:13
+#: ../data/update-manager.schemas.in.h:11
 msgid "The window size"
 msgstr "Akna suurus"
 
-#: ../data/update-manager.schemas.in.h:14
+#: ../data/update-manager.schemas.in.h:12
 msgid ""
 "This key is deprecated in favor of the file /etc/update-manager/release-"
 "upgrades Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
-"See võti on aegunud, seda asendab fail /etc/update-manager/release-upgrades. "
-"Kontrollib automaatselt, kas selle distributsiooni uus väljalase on saadaval "
-"ning pakub uuendamist (kui võimalik)."
 
-#: ../update-manager:56
+#: ../update-manager:55
 msgid "Show version and exit"
 msgstr "Näitab versiooni ja väljub"
 
-#: ../update-manager:59
-msgid "Directory that contains the data files"
-msgstr ""
+#: ../update-manager:58
+msgid "Check if a new distribution release is available"
+msgstr "Kontrollib, kas distributsioonist on saadaval uus väljalase"
 
-#: ../update-manager:62
-msgid "Check if a new Ubuntu release is available"
-msgstr ""
-
-#: ../update-manager:65 ../do-release-upgrade:23 ../check-new-release:24
+#: ../update-manager:61 ../do-release-upgrade:23
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "Kontrollib, kas viimasele arendusväljalaskele uuendamine on võimalik"
 
-#: ../update-manager:69
+#: ../update-manager:65
 msgid "Upgrade using the latest proposed version of the release upgrader"
-msgstr "Uuendab kasutades väljalaskeuuendaja pakutud viimasele versioonile"
+msgstr ""
 
-#: ../update-manager:76
-msgid "Do not focus on map when starting"
-msgstr "Käivitumisel ei ole fookus kaardil"
-
-#: ../update-manager:79
+#: ../update-manager:68
 msgid "Try to run a dist-upgrade"
 msgstr "Üritatab käivitada dist-upgrade"
 
-#: ../update-manager:83 ../do-release-upgrade:39
-msgid "Test upgrade with a sandbox aufs overlay"
-msgstr "Testuuendus aufs-liivakastis"
-
-#: ../update-manager:103
+#: ../update-manager:87
 msgid "Running partial upgrade"
 msgstr "Osalise uuendamise käivitamine"
 
-#: ../do-release-upgrade:27 ../check-new-release:28
+#: ../do-release-upgrade:27
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
-"Proovib uuendada viimasele versioonile kasutades $distro-proposed uuendajat"
 
 #: ../do-release-upgrade:31
 msgid ""
@@ -2073,106 +1675,92 @@ msgid ""
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
 "for server systems are supported."
 msgstr ""
-"Käivitub erilises uuendusrežiimis.\n"
-"Praegu on toetatud 'desktop' tavalistele töölauaarvutitele ja 'server' "
-"serversisüsteemide jaoks."
 
 #: ../do-release-upgrade:37
 msgid "Run the specified frontend"
 msgstr "Käivita määratud liides"
 
-#: ../do-release-upgrade:43
+#: ../do-release-upgrade:41
 msgid "Checking for a new ubuntu release"
 msgstr "Uue Ubuntu väljalaske kontrollimine"
 
-#: ../do-release-upgrade:50
+#: ../do-release-upgrade:48
 msgid "No new release found"
 msgstr "Uut väljalaset ei leitud"
 
-#: ../check-new-release:32
-#, c-format
-msgid ""
-"Do not output anything, just return %s if there is a new release and %s if "
-"there is none."
-msgstr ""
-"Ära väljasta midagi, lihtsalt tagasta %s, kui on uus väljalase ja %s kui "
-"seda pole."
-
-#: ../check-new-release:46
-#, c-format
-msgid "New release '%s' available."
-msgstr "Uus väljalase '%s' on saadaval."
-
-#: ../check-new-release:47
-msgid "Run 'do-release-upgrade' to upgrade to it."
-msgstr "Sellele uuendamiseks käivita 'do-release-upgrade'."
-
-#: ../Janitor/computerjanitor/exc.py:30
-#, python-format
-msgid "Unimplemented method: %s"
-msgstr "Teostamata meetod: %s"
-
-#: ../Janitor/computerjanitor/file_cruft.py:46
-msgid "A file on disk"
-msgstr "Fail kettal"
-
-#: ../Janitor/computerjanitor/package_cruft.py:45
-msgid ".deb package"
-msgstr ".deb pakett"
-
-#: ../Janitor/computerjanitor/missing_package_cruft.py:33
-msgid "Install missing package."
-msgstr "Puuduva paki paigaldamine."
-
-#: ../Janitor/computerjanitor/missing_package_cruft.py:42
-#, python-format
-msgid "Package %s should be installed."
-msgstr "Tuleks paigaldada pakett %s."
-
-#. pragma: no cover
-#: ../Janitor/plugins/dpkg_status_plugin.py:36
-#, python-format
-msgid "%i obsolete entries in the status file"
-msgstr "Olekufailis on %i aegunud kirjet"
-
-#: ../Janitor/plugins/dpkg_status_plugin.py:39
-msgid "Obsolete entries in dpkg status"
-msgstr "Dpkg olekus on aegunud kirjeid"
-
-#. pragma: no cover
-#: ../Janitor/plugins/dpkg_status_plugin.py:42
-msgid "Obsolete dpkg status entries"
-msgstr "Dpkg olekukirjed on aegunud"
-
-#: ../Janitor/plugins/kdelibs4to5_plugin.py:39
-msgid ""
-"When upgrading, if kdelibs4-dev is installed, kdelibs5-dev needs to be "
-"installed. See bugs.launchpad.net, bug #279621 for details."
-msgstr ""
-
-#: ../Janitor/plugins/langpack_manual_plugin.py:34
-#, python-format
-msgid "%s needs to be marked as manually installed."
-msgstr "%s tuleb märkida käsitsipaigalduseks."
-
-#: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
-msgstr ""
-"Eemalda lilo, kuna ka grub on paigaldatud. (Vaata vearaportit #314004)"
-
-#~ msgid "Check if a new distribution release is available"
-#~ msgstr "Kontrollib, kas distributsioonist on saadaval uus väljalase"
-
-#~ msgid "Upgrade to the latest version of Ubuntu"
-#~ msgstr "Ubuntu viimaste versioonide uuendamine"
-
-#~ msgid "Check the software channels for new updates"
-#~ msgstr "Otsi tarkvaraallikatest uuendusi"
+#~ msgid ""
+#~ "Use special upgrade mode. Available:\n"
+#~ "desktop, server"
+#~ msgstr ""
+#~ "Spetsiaalne uuenduslaad. Saadaval:\n"
+#~ "töölaud, server"
 
 #, python-format
-#~ msgid "<b>New distribution release '%s' is available</b>"
-#~ msgstr "<b>Uus distributsiooni väljalase '%s' on saadaval</b>"
+#~ msgid "Fetching file %li of %li at %sb/s"
+#~ msgstr "%li. faili allalaadimine %li-st kiirusel %sb/s"
 
-#~ msgid "Your distribution is not supported anymore"
-#~ msgstr "Sinu distributsiooni enam ei toetata"
+#, python-format
+#~ msgid "%li days %li hours %li minutes"
+#~ msgstr "%li päeva %li tundi %li minutit"
+
+#~ msgid ""
+#~ "The list of changes is not available yet.\n"
+#~ "Please try again later."
+#~ msgstr ""
+#~ "Muudatuste nimekiri pole veel saadaval.\n"
+#~ "Proovi hiljem uuesti."
+
+#~ msgid "_Check"
+#~ msgstr "_Kontrolli"
+
+#~ msgid "Daily"
+#~ msgstr "Iga päev"
+
+#~ msgid "Every two days"
+#~ msgstr "Iga kahe päeva tagant"
+
+#~ msgid "Weekly"
+#~ msgstr "Iga nädal"
+
+#~ msgid "Every two weeks"
+#~ msgstr "Iga kahe nädala tagant"
+
+#~ msgid "After one week"
+#~ msgstr "Peale ühte nädalat"
+
+#~ msgid "After two weeks"
+#~ msgstr "Peale kahte nädalat"
+
+#~ msgid "After one month"
+#~ msgstr "Peale ühte kuud"
+
+#~ msgid "Import key"
+#~ msgstr "Sissetoomisvõti"
+
+#~ msgid "Error importing selected file"
+#~ msgstr "Valitud faili sissetoomisel ilmes viga"
+
+#~ msgid "Error removing the key"
+#~ msgstr "Võtme eemaldamisel tekkis viga"
+
+#~ msgid ""
+#~ "The key you selected could not be removed. Please report this as a bug."
+#~ msgstr "Valitud võtit pole võimalik eemaldada"
+
+#~ msgid "_Skip This Step"
+#~ msgstr "_Jäta see samm vahele"
+
+#~ msgid "Every %s days"
+#~ msgstr "Iga %s päeva tagant"
+
+#~ msgid "After %s days"
+#~ msgstr "Peale %s päeva"
+
+#~ msgid "Please enter a name for the disc"
+#~ msgstr "Palun sisesta kettale nimi"
+
+#~ msgid "Please insert a disc in the drive:"
+#~ msgstr "Palun sisesta ketas masinasse:"
+
+#~ msgid "The selected file may not be a GPG key file or it might be corrupt."
+#~ msgstr "Valitud fail pole GPG võtmefail või see on rikutud."

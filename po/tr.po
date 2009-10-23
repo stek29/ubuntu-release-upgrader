@@ -7,41 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2009-10-09 08:51+0000\n"
-"PO-Revision-Date: 2009-10-08 18:56+0000\n"
-"Last-Translator: Efe Çiftci <efeciftci@gmail.com>\n"
+"POT-Creation-Date: 2008-10-13 20:43+0000\n"
+"PO-Revision-Date: 2008-10-14 06:02+0000\n"
+"Last-Translator: Launchpad Translations Administrators "
+"<rosetta@launchpad.net>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2009-10-13 20:36+0000\n"
+"X-Launchpad-Export-Date: 2008-10-16 09:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:278 ../UpdateManager/Core/utils.py:278
+#: ../DistUpgrade/utils.py:134 ../UpdateManager/Common/utils.py:134
 msgid "0 KB"
 msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:281 ../UpdateManager/Core/utils.py:281
+#: ../DistUpgrade/utils.py:137 ../UpdateManager/Common/utils.py:137
 msgid "1 KB"
 msgstr "1 KB"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:284 ../UpdateManager/Core/utils.py:284
+#: ../DistUpgrade/utils.py:140 ../UpdateManager/Common/utils.py:140
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KB"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:287 ../UpdateManager/Core/utils.py:287
+#: ../DistUpgrade/utils.py:143 ../UpdateManager/Common/utils.py:143
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:208 ../DistUpgrade/distro.py:423
+#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
 #, python-format
 msgid "Server for %s"
 msgstr "%s sunucusu"
@@ -49,32 +50,161 @@ msgstr "%s sunucusu"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
-#: ../DistUpgrade/distro.py:248
+#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
+#: ../DistUpgrade/distro.py:232
 msgid "Main server"
 msgstr "Ana sunucu"
 
-#: ../DistUpgrade/distro.py:252
+#: ../DistUpgrade/distro.py:235
 msgid "Custom servers"
 msgstr "Özel sunucular"
 
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:131
-msgid "Could not calculate sources.list entry"
-msgstr "'sources.list' girişi hesaplanamadı"
-
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:234
-msgid ""
-"Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
-"wrong architecture?"
+#: ../DistUpgrade/dist-upgrade.py:15
+msgid "Use the given path to search for a cdrom with upgradable packages"
 msgstr ""
-"Hiçbir paket dosyasının yeri belirlenemedi, belki de bu bir Ubuntu Diski "
-"değildir ya da yanlış bir mimaridir?"
+"Yükseltilebilir paketler içeren bir cdrom'u aramak için verilen yolu kullan"
 
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:277
+#: ../DistUpgrade/dist-upgrade.py:21
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"Önyüzü kullan. Şu anda kullanılabilir olanlar: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/dist-upgrade.py:24
+msgid "*DEPRECATED* this option will be ignore"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:27
+msgid "Perform a partial upgrade only (no sources.list rewriting)"
+msgstr ""
+
+#: ../DistUpgrade/dist-upgrade.py:29
+msgid "Set datadir"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:101
+msgid "Remove package in bad state"
+msgid_plural "Remove packages in bad state"
+msgstr[0] "Kötü durumdaki paket(ler)i kaldır"
+
+#: ../DistUpgrade/DistUpgradeCache.py:104
+#, python-format
+msgid ""
+"The package '%s' is in an inconsistent state and needs to be reinstalled, "
+"but no archive can be found for it. Do you want to remove this package now "
+"to continue?"
+msgid_plural ""
+"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
+"but no archives can be found for them. Do you want to remove these packages "
+"now to continue?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:299
+msgid "Broken packages"
+msgstr "Bozuk paketler"
+
+#: ../DistUpgrade/DistUpgradeCache.py:300
+msgid ""
+"Your system contains broken packages that couldn't be fixed with this "
+"software. Please fix them first using synaptic or apt-get before proceeding."
+msgstr ""
+"Sisteminiz bu yazılım ile düzeltilemeyen bozuk paketler içeriyor. Devam "
+"etmeden önce lütfen bunları synaptic veya apt-get kullanarak düzeltin."
+
+#: ../DistUpgrade/DistUpgradeCache.py:521
+msgid "Can't upgrade required meta-packages"
+msgstr "Gerekli meta-paketler güncelleştirilemiyor"
+
+#: ../DistUpgrade/DistUpgradeCache.py:525
+msgid "A essential package would have to be removed"
+msgstr "Önemli bir paketin kaldırılması gerekiyor"
+
+#. FIXME: change the text to something more useful
+#: ../DistUpgrade/DistUpgradeCache.py:532
+msgid ""
+"An unresolvable problem occurred while calculating the upgrade.\n"
+"\n"
+" This can be caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+" * Running the current pre-release version of Ubuntu\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+"\n"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:542
+msgid "This is most likely a transient problem, please try again later."
+msgstr ""
+"Bu geçici bir sorun gibi görünüyor, lütfen daha sonra tekrar deneyin."
+
+#: ../DistUpgrade/DistUpgradeCache.py:545
+msgid ""
+"If none of this applies, then please report this bug against the 'update-"
+"manager' package and include the files in /var/log/dist-upgrade/ in the "
+"bugreport."
+msgstr ""
+"Eğer bunların hiçbiri uygulanamazsa, lütfen 'update-manager' paketi için bu "
+"hatayı bildirin ve /var/log/dist-upgrade/ içindeki dosyaları da hata "
+"raporuna dahil edin."
+
+#: ../DistUpgrade/DistUpgradeCache.py:550
+#: ../UpdateManager/UpdateManager.py:906
+msgid "Could not calculate the upgrade"
+msgstr "Yükseltme hesaplanamadı"
+
+#. FIXME: maybe ask a question here? instead of failing?
+#: ../DistUpgrade/DistUpgradeCache.py:597
+msgid "Error authenticating some packages"
+msgstr "Bazı paketlerin doğrulamasında hata"
+
+#: ../DistUpgrade/DistUpgradeCache.py:598
+msgid ""
+"It was not possible to authenticate some packages. This may be a transient "
+"network problem. You may want to try again later. See below for a list of "
+"unauthenticated packages."
+msgstr ""
+"Bazı paketler doğrulanamadı. Bu geçici bir ağ sorunu olabilir. Daha sonra "
+"yeniden deneyebilirsiniz. Doğrulanmamış paketlerin listesi için aşağıya "
+"bakın."
+
+#: ../DistUpgrade/DistUpgradeCache.py:710
+#, python-format
+msgid "Can't install '%s'"
+msgstr "\"%s\" yüklenemiyor"
+
+#: ../DistUpgrade/DistUpgradeCache.py:711
+msgid ""
+"It was impossible to install a required package. Please report this as a "
+"bug. "
+msgstr ""
+"Gerekli bir paketin yüklenmesi mümkün değil. Lütfen bunu bir hata olarak "
+"bildirin. "
+
+#. FIXME: provide a list
+#: ../DistUpgrade/DistUpgradeCache.py:719
+msgid "Can't guess meta-package"
+msgstr "Meta-paket kestirilemedi"
+
+#: ../DistUpgrade/DistUpgradeCache.py:720
+msgid ""
+"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop or edubuntu-desktop package and it was not possible to detect which "
+"version of Ubuntu you are running.\n"
+" Please install one of the packages above first using synaptic or apt-get "
+"before proceeding."
+msgstr ""
+"Sisteminiz bir ubuntu-masaüstü, kubuntu-masaüstü veya edubuntu-masaüstü "
+"paketi içermiyor ve hangi ubuntu sürümünü kullandığınız tespit edilemedi.\n"
+" Lütfen devam etmeden önce, synaptic veya apt-get kullanarak yukarıdaki "
+"paketlerden birini kurun."
+
+#: ../DistUpgrade/DistUpgradeController.py:96
 msgid "Failed to add the CD"
 msgstr "CD eklemede hata"
 
-#: ../DistUpgrade/DistUpgradeAptCdrom.py:278
+#: ../DistUpgrade/DistUpgradeController.py:97
 #, python-format
 msgid ""
 "There was a error adding the CD, the upgrade will abort. Please report this "
@@ -89,184 +219,28 @@ msgstr ""
 "Hata iletisi:\n"
 "'%s'"
 
-#: ../DistUpgrade/DistUpgradeCache.py:130
-msgid "Remove package in bad state"
-msgid_plural "Remove packages in bad state"
-msgstr[0] "Kötü durumdaki paket(ler)i kaldır"
-
-#: ../DistUpgrade/DistUpgradeCache.py:133
-#, python-format
-msgid ""
-"The package '%s' is in an inconsistent state and needs to be reinstalled, "
-"but no archive can be found for it. Do you want to remove this package now "
-"to continue?"
-msgid_plural ""
-"The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archives can be found for them. Do you want to remove these packages "
-"now to continue?"
-msgstr[0] ""
-"'%s' paketi tutarsız durumda ve tekrar kurulmalı, fakat bunun için herhangi "
-"bir arşiv bulunamadı. Devam etmek için bu paketi kaldırmak ister misiniz?"
-
-#: ../DistUpgrade/DistUpgradeCache.py:332
-msgid "Broken packages"
-msgstr "Bozuk paketler"
-
-#: ../DistUpgrade/DistUpgradeCache.py:333
-msgid ""
-"Your system contains broken packages that couldn't be fixed with this "
-"software. Please fix them first using synaptic or apt-get before proceeding."
-msgstr ""
-"Sisteminiz bu yazılım ile düzeltilemeyen bozuk paketler içeriyor. Devam "
-"etmeden önce lütfen bunları synaptic veya apt-get kullanarak düzeltin."
-
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:609
-#, python-format
-msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
-"\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
-" * Unofficial software packages not provided by Ubuntu\n"
-"\n"
-msgstr ""
-"Yükseltme hesaplanırken çözülemeyen bir hata meydana geldi:\n"
-"%s\n"
-"\n"
-" Neden olabilecekler:\n"
-" * Ubuntu'yu bir önsürüme yükseltmek\n"
-" * Ubuntu'nun mevcut önsürümünü çalıştırmak\n"
-" *  Ubuntu tarafından sağlanmamış resmi olmayan yazılım paketleri\n"
-"\n"
-
-#: ../DistUpgrade/DistUpgradeCache.py:619
-msgid "This is most likely a transient problem, please try again later."
-msgstr ""
-"Bu geçici bir sorun gibi görünüyor, lütfen daha sonra tekrar deneyin."
-
-#: ../DistUpgrade/DistUpgradeCache.py:622
-msgid ""
-"If none of this applies, then please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
-"report."
-msgstr ""
-"Eğer bunların hiçbiri olmazsa, lütfen /var/log/dist-upgrade/ dizinindeki "
-"dosyaları da dahil ederek bu yanlışı 'update-manager' paketi aleyhinde "
-"raporlayınız."
-
-#: ../DistUpgrade/DistUpgradeCache.py:628
-#: ../UpdateManager/UpdateManager.py:732
-msgid "Could not calculate the upgrade"
-msgstr "Yükseltme hesaplanamadı"
-
-#: ../DistUpgrade/DistUpgradeCache.py:678
-msgid "Error authenticating some packages"
-msgstr "Bazı paketlerin doğrulamasında hata"
-
-#: ../DistUpgrade/DistUpgradeCache.py:679
-msgid ""
-"It was not possible to authenticate some packages. This may be a transient "
-"network problem. You may want to try again later. See below for a list of "
-"unauthenticated packages."
-msgstr ""
-"Bazı paketler doğrulanamadı. Bu geçici bir ağ sorunu olabilir. Daha sonra "
-"yeniden deneyebilirsiniz. Doğrulanmamış paketlerin listesi için aşağıya "
-"bakın."
-
-#: ../DistUpgrade/DistUpgradeCache.py:699
-#, python-format
-msgid ""
-"The package '%s' is marked for removal but it is in the removal blacklist."
-msgstr ""
-"'%s' paketi kaldırılması için işaretlenmiş ancak paket kaldırma kara listesi "
-"içinde."
-
-#: ../DistUpgrade/DistUpgradeCache.py:703
-#, python-format
-msgid "The essential package '%s' is marked for removal."
-msgstr "Temel '%s' paketi kaldırılma için işaretlenmiş."
-
-#: ../DistUpgrade/DistUpgradeCache.py:712
-#, python-format
-msgid "Trying to install blacklisted version '%s'"
-msgstr "Kara listede olan '%s' sürümü yüklenmeye çalışılıyor"
-
-#: ../DistUpgrade/DistUpgradeCache.py:812
-#, python-format
-msgid "Can not mark '%s' for upgrade"
-msgstr "Yükseltme için '%s' işaretlenemez"
-
-#: ../DistUpgrade/DistUpgradeCache.py:826
-#, python-format
-msgid "Can't install '%s'"
-msgstr "\"%s\" yüklenemiyor"
-
-#: ../DistUpgrade/DistUpgradeCache.py:827
-msgid ""
-"It was impossible to install a required package. Please report this as a "
-"bug. "
-msgstr ""
-"Gerekli bir paketin yüklenmesi mümkün değil. Lütfen bunu bir hata olarak "
-"bildirin. "
-
-#. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:836
-msgid "Can't guess meta-package"
-msgstr "Meta-paket kestirilemedi"
-
-#: ../DistUpgrade/DistUpgradeCache.py:837
-msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
-" Please install one of the packages above first using synaptic or apt-get "
-"before proceeding."
-msgstr ""
-"Sisteminiz bir ubuntu-desktop, kubuntu-desktop, xubuntu-desktop veya "
-"edubuntu-desktop paketi içermiyor ve hangi ubuntu sürümünü kullandığınız "
-"tespit edilemedi.\n"
-" Lütfen devam etmeden önce, synaptic veya apt-get kullanarak yukarıdaki "
-"paketlerden birini kurun."
-
-#: ../DistUpgrade/DistUpgradeController.py:85
+#: ../DistUpgrade/DistUpgradeController.py:129
 msgid "Reading cache"
 msgstr "Önbellek okunuyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:181
+#: ../DistUpgrade/DistUpgradeController.py:216
 msgid "Unable to get exclusive lock"
 msgstr "Veritabanı kilitlenemiyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:182
+#: ../DistUpgrade/DistUpgradeController.py:217
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
 msgstr ""
 "Bu, genelde apt-get ya da aptitude gibi başka bir paket yönetimi "
-"uygulamasının çalıştığı anlamına gelir. Lütfen öncelikle o uygulamayı "
+"uygulamasının çalıştığı anlamına gelir. Lütfen öncelikle bu uygulamayı "
 "kapatın."
 
-#: ../DistUpgrade/DistUpgradeController.py:235
-msgid "Upgrading over remote connection not supported"
-msgstr "Uzaktan bağlantı ile yükseltme desteklenmiyor"
-
-#: ../DistUpgrade/DistUpgradeController.py:236
-msgid ""
-"You are running the upgrade over a remote ssh connection with a frontend "
-"that does not support this. The upgrade will abort now. Please try without "
-"ssh."
-msgstr ""
-"Güncelleştirmeyi desteklemeyen uzak bir ssh bağlantısı arayüzü üzerinden "
-"güncelleştirmeyi çalıştırıyorsunuz. Güncelleştirme durdurulacaktır. Lütfen "
-"ssh olmadan deneyiniz."
-
-#: ../DistUpgrade/DistUpgradeController.py:247
+#: ../DistUpgrade/DistUpgradeController.py:237
 msgid "Continue running under SSH?"
 msgstr "SSH altında çalışmaya devam edilsin mi?"
 
-#: ../DistUpgrade/DistUpgradeController.py:248
+#: ../DistUpgrade/DistUpgradeController.py:238
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -283,72 +257,40 @@ msgstr ""
 "noktasından başlatılacak.\n"
 "Devam etmek ister misiniz?"
 
-#: ../DistUpgrade/DistUpgradeController.py:263
+#: ../DistUpgrade/DistUpgradeController.py:253
 msgid "Starting additional sshd"
 msgstr "Yeni bir sshd başlatılıyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:264
+#: ../DistUpgrade/DistUpgradeController.py:254
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
 "started on port '%s'. If anything goes wrong with the running ssh you can "
 "still connect to the additional one.\n"
 msgstr ""
-"Hata durumunda düzeltme daha kolay olsun diye ek bir sshd '%s' kapısında "
-"başlatılacak. Eğer çalışmakta olan ssh ile ilgili herhangi bir sorun "
-"oluşursa ek birine bağlanabilirsiniz.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:334
-#: ../DistUpgrade/DistUpgradeController.py:379
+#: ../DistUpgrade/DistUpgradeController.py:322
+#: ../DistUpgrade/DistUpgradeController.py:345
 msgid "Can not upgrade"
 msgstr "Yükseltilemiyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:335
+#: ../DistUpgrade/DistUpgradeController.py:323
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr ""
-"Bu araçla, '%s' sürümünden '%s' sürümüne bir yükseltme desteklenmiyor."
 
-#: ../DistUpgrade/DistUpgradeController.py:344
-msgid "Sandbox setup failed"
-msgstr "Çalışma dizini kurulumu başarısız"
-
-#: ../DistUpgrade/DistUpgradeController.py:345
-msgid "It was not possible to create the sandbox environment."
-msgstr "Çalışma dizini ortamı oluşturmak mümkün değil."
-
-#: ../DistUpgrade/DistUpgradeController.py:351
-msgid "Sandbox mode"
-msgstr "Çalışma dizini kipi"
-
-#: ../DistUpgrade/DistUpgradeController.py:352
-#, python-format
-msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
-"\n"
-"*No* changes written to a systemdir from now until the next reboot are "
-"permanent."
-msgstr ""
-"Bu yükseltme çalışma dizini (sınama) kipinde çalıştırılıyor. Tüm "
-"değişiklikler '%s' içine yazılıyor ve sonraki yeniden yüklemede "
-"kaybedilecek.\n"
-"\n"
-"*No* yazılmayı, sonraki yeniden yükleme kalıcı olana kadar bir sistem "
-"dizinine değiştirir."
-
-#: ../DistUpgrade/DistUpgradeController.py:380
+#: ../DistUpgrade/DistUpgradeController.py:346
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 "Python kurulumunuzda hata var. Lütfen '/usr/bin/python' sembolik bağını "
 "onarın."
 
-#: ../DistUpgrade/DistUpgradeController.py:406
+#: ../DistUpgrade/DistUpgradeController.py:372
 msgid "Package 'debsig-verify' is installed"
 msgstr "'debsig-verify' paketi kuruldu"
 
-#: ../DistUpgrade/DistUpgradeController.py:407
+#: ../DistUpgrade/DistUpgradeController.py:373
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
@@ -358,11 +300,11 @@ msgstr ""
 "Lütfen önce synaptic veya 'apt-get remove debsig-verify' ile paketi kaldırın "
 "ve güncellemeyi tekrar çalıştırın."
 
-#: ../DistUpgrade/DistUpgradeController.py:417
+#: ../DistUpgrade/DistUpgradeController.py:383
 msgid "Include latest updates from the Internet?"
 msgstr "İnternetteki en son güncellemeler de eklensin mi?"
 
-#: ../DistUpgrade/DistUpgradeController.py:418
+#: ../DistUpgrade/DistUpgradeController.py:384
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -373,65 +315,49 @@ msgid ""
 "latest updates soon after upgrading.\n"
 "If you answer 'no' here, the network is not used at all."
 msgstr ""
-"Güncelleme sistemi interneti kullanarak en son güncellemeleri otomatik "
-"olarak indirebilir ve yükseltme sırasında güncellemeleri kurabilir. Eğer bir "
-"ağ bağlantınız varsa şiddetle önerilir.\n"
-"\n"
-"Güncelleme uzun sürebilir fakat tamamlandığında sisteminiz tamamıyla güncel "
-"olacak. Güncelleştirmeleri şu anda yapmayabilirsiniz ama güncelleştirmeyi "
-"sisteminizi yükselttikten hemen sonra yapmanız tavsiye edilir.\n"
-"Eğer cevabınız 'hayır' ise , ağ bağlantısı kullanılmadan devam edilecek."
 
-#: ../DistUpgrade/DistUpgradeController.py:641
-#, python-format
-msgid "disabled on upgrade to %s"
-msgstr "%s güncelleştirilmesi iptal edildi."
-
-#: ../DistUpgrade/DistUpgradeController.py:667
+#: ../DistUpgrade/DistUpgradeController.py:555
 msgid "No valid mirror found"
 msgstr "Geçerli yansı bulunamadı"
 
-#: ../DistUpgrade/DistUpgradeController.py:668
+#: ../DistUpgrade/DistUpgradeController.py:556
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found.This can happen if you run a internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
 "here it will update all '%s' to '%s' entries.\n"
-"If you select 'No' the upgrade will cancel."
+"If you select 'no' the update will cancel."
 msgstr ""
-"Paket deposu bilgileriniz taranırken yükseltme için hiç bir yansı bilgisi "
-"bulunamadı. Bu durum, iç yansı kullanıyorsanız veya yansı bilgisi "
-"güncelliğini yitirmişse oluşabilir.\n"
-"'sources.list' dosyanızı yeniden yazmak istiyor musunuz? Eğer 'Evet' "
-"seçerseniz, tüm '%s' girdileri '%s' olarak güncellenecek.\n"
-"Eğer 'Hayır' seçerseniz yükseltme iptal edilecek."
+"Depo bilgileriniz taranırken güncelleme için yansı girdisi bulunamadı. Bu, "
+"içsel bir yansı çalıştırdığınız ya da yansı bilgisi güncel olmadığı için "
+"gerçekleşmiş olabilir.\n"
+"\n"
+"'sources.list' dosyanızı yeniden oluşturmak istiyor musunuz? Eğer burada "
+"'Evet'i seçersiniz '%s'den '%s'e kadar olan girdiler güncellenecek.\n"
+"'Hayır'ı seçerseniz güncellemeden vazgeçilecek."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:688
+#: ../DistUpgrade/DistUpgradeController.py:576
 msgid "Generate default sources?"
 msgstr "Öntanımlı depolar oluşturulsun mu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:689
+#: ../DistUpgrade/DistUpgradeController.py:577
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
 "\n"
-"Should default entries for '%s' be added? If you select 'No', the upgrade "
+"Should default entries for '%s' be added? If you select 'No', the update "
 "will cancel."
 msgstr ""
-"'sources.list' dosyanız tarandıktan sonra '%s' için geçerli bir kayıt "
-"bulunamadı.\n"
-"'%s' için öntanımlı kayıtlar eklensin mi? Eğer 'Hayır' seçerseniz, yükseltme "
-"iptal edilecek."
 
-#: ../DistUpgrade/DistUpgradeController.py:724
+#: ../DistUpgrade/DistUpgradeController.py:611
 msgid "Repository information invalid"
 msgstr "Depo bilgisi geçersiz"
 
-#: ../DistUpgrade/DistUpgradeController.py:725
+#: ../DistUpgrade/DistUpgradeController.py:612
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -439,11 +365,11 @@ msgstr ""
 "Depo bilgisini güncelleme işlemi geçersiz bir dosya oluşturdu. Lütfen bu "
 "hatayı bildirin."
 
-#: ../DistUpgrade/DistUpgradeController.py:731
+#: ../DistUpgrade/DistUpgradeController.py:618
 msgid "Third party sources disabled"
 msgstr "Üçüncü taraf kaynaklar devre dışı bırakıldı"
 
-#: ../DistUpgrade/DistUpgradeController.py:732
+#: ../DistUpgrade/DistUpgradeController.py:619
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -453,12 +379,12 @@ msgstr ""
 "Yükseltmenin ardından bu girdileri 'Yazılım Kaynakları' aracını ya da paket "
 "yöneticinizi kullanarak yeniden etkinleştirebilirsiniz."
 
-#: ../DistUpgrade/DistUpgradeController.py:772
+#: ../DistUpgrade/DistUpgradeController.py:659
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Paket tutarsız durumda"
 
-#: ../DistUpgrade/DistUpgradeController.py:775
+#: ../DistUpgrade/DistUpgradeController.py:662
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -466,18 +392,16 @@ msgid ""
 "remove it from the system."
 msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archive can be found for them. Please reinstall the packages manually "
-"or remove them from the system."
+"but no archive can be found for it.Please reinstall the packages manually or "
+"remove them from the system."
 msgstr[0] ""
-"'%s' paketi tutarsız durumda ve tekrar kurulmalı, fakat bunun için herhangi "
-"bir arşiv bulunamadı. Lütfen paketi elle tekrar kurun ya da sistemden "
-"kaldırın."
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeController.py:823
+#: ../DistUpgrade/DistUpgradeController.py:710
 msgid "Error during update"
 msgstr "Güncelleme sırasında hata"
 
-#: ../DistUpgrade/DistUpgradeController.py:824
+#: ../DistUpgrade/DistUpgradeController.py:711
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -485,30 +409,28 @@ msgstr ""
 "Güncelleştirme sırasında bir hata oluştu. Bu genellikle bir ağ sorunudur, "
 "lütfen ağ bağlantınızı denetleyin ve tekrar deneyin."
 
-#. print "on_button_install_clicked"
-#: ../DistUpgrade/DistUpgradeController.py:833
-#: ../UpdateManager/UpdateManager.py:555
+#: ../DistUpgrade/DistUpgradeController.py:720
 msgid "Not enough free disk space"
 msgstr "Yeterince boş disk alanı yok"
 
-#: ../DistUpgrade/DistUpgradeController.py:834
+#: ../DistUpgrade/DistUpgradeController.py:721
 #, python-format
 msgid ""
-"The upgrade is now aborted. The upgrade needs a total of %s free space on "
-"disk '%s'. Please free at least an additional %s of disk space on '%s'. "
-"Empty your trash and remove temporary packages of former installations using "
-"'sudo apt-get clean'."
+"The upgrade aborts now. The upgrade needs a total of %s free space on disk "
+"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
+"your trash and remove temporary packages of former installations using 'sudo "
+"apt-get clean'."
 msgstr ""
-"Yükseltme iptal edildi. Yükseltme işlemi '%s' diskinde toplam %s boş alana "
-"ihtiyaç duyuyor. Lütfen '%s' diskinizde en az %s daha alan boşaltın. Çöp "
-"kutunuzu temizleyin ve 'sudo apt-get clean' komutunu kullanarak daha önceki "
-"kurulumların geçici paket dosyalarını silin."
+"Yükseltme sonlandırılıyor. Yükseltme, toplam %s disk alanına %s biriminde "
+"gereksinim duyuyor. Lütfen en az %s disk alanını %s biriminde boşaltın. "
+"Çöpünüzü boşaltın ve 'sudo apt-get clean' komutunu kullanarak eski "
+"kurulumların geçici paketlerini kaldırın."
 
-#: ../DistUpgrade/DistUpgradeController.py:874
+#: ../DistUpgrade/DistUpgradeController.py:832
 msgid "Support for some applications ended"
 msgstr "Bazı uygulamalar için destek sona erdi"
 
-#: ../DistUpgrade/DistUpgradeController.py:875
+#: ../DistUpgrade/DistUpgradeController.py:833
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
@@ -525,106 +447,83 @@ msgstr ""
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:884
-#: ../DistUpgrade/DistUpgradeController.py:1554
+#: ../DistUpgrade/DistUpgradeController.py:842
+#: ../DistUpgrade/DistUpgradeController.py:1469
 msgid "Calculating the changes"
 msgstr "Değişiklikler hesaplanıyor."
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:899
+#: ../DistUpgrade/DistUpgradeController.py:857
 msgid "Do you want to start the upgrade?"
 msgstr "Yükseltmeyi başlatmak istiyor musunuz?"
 
-#: ../DistUpgrade/DistUpgradeController.py:955
-msgid "Upgrade canceled"
-msgstr "Yükseltme iptal edildi"
-
-#: ../DistUpgrade/DistUpgradeController.py:956
-msgid ""
-"The upgrade cancels now and the original system state is restored. You can "
-"resume the upgrade at a later time."
-msgstr ""
-"Yükseltme şimdi iptal ediliyor ve özgün sistem durumu geri yükleniyor. "
-"Yükseltmeye daha sonra devam edebilirsiniz."
-
-#: ../DistUpgrade/DistUpgradeController.py:961
-#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgradeController.py:921
+#: ../DistUpgrade/DistUpgradeController.py:976
 msgid "Could not download the upgrades"
 msgstr "Yükseltmeler indirilemedi"
 
-#: ../DistUpgrade/DistUpgradeController.py:962
+#: ../DistUpgrade/DistUpgradeController.py:922
 msgid ""
-"The upgrade is now aborted. Please check your Internet connection or "
+"The upgrade aborts now. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
-"Yükseltme iptal edildi. Lütfen internet bağlantınızı ya da kurulum "
-"aygıtınızı kontrol edin ve tekrar deneyin. Şimdiye dek indirilen dosyalar "
-"korunmaktadır."
 
-#. FIXME: strings are not good, but we are in string freeze
-#. currently
-#: ../DistUpgrade/DistUpgradeController.py:1015
-#: ../DistUpgrade/DistUpgradeController.py:1138
-msgid "Error during commit"
-msgstr "İşlem sırasında hata oluştu"
-
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1017
-#: ../DistUpgrade/DistUpgradeController.py:1177
-msgid "Restoring original system state"
-msgstr "Özgün sistem durumuna geri dönülüyor"
-
-#: ../DistUpgrade/DistUpgradeController.py:1018
-#: ../DistUpgrade/DistUpgradeController.py:1032
-msgid "Could not install the upgrades"
-msgstr "Yükseltmeler kurulamadı"
-
-#. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:1023
+#. invoke the frontend now
+#: ../DistUpgrade/DistUpgradeController.py:951
 msgid ""
-"The upgrade is now aborted. Your system could be in an unusable state. A "
+"The upgrade aborts now. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"Yükseltme iptal edildi. Sisteminiz kullanılamaz bir durumda olabilir. Şimdi "
-"bir kurtarma işlemi çalıştırılacak (dpkg --configure -a)."
+"Yükseltmeden şimdi iptal ediliyor. Sisteminiz kararsız bir durumda olabilir. "
+"Bir kurtarma işlemi gerçekleştirildi. (dpkg --configure -a).\n"
+"\n"
+"Lütfen 'update-manager' paketi için bu hatayı bildirin. Hata bildirimine "
+"/var/log/dist-upgrade/ konumundaki dosyaları da ekleyin."
 
-#: ../DistUpgrade/DistUpgradeController.py:1028
+#: ../DistUpgrade/DistUpgradeController.py:956
 #, python-format
 msgid ""
 "\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
-"files in /var/log/dist-upgrade/ in the bug report.\n"
+"files in /var/log/dist-upgrade/ in the bugreport.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Lütfen /var/log/dist-upgrade/ dizinindeki dosyaları da dahil ederek bu "
-"yanlışı 'update-manager' paketi aleyhinde raporlayınız.\n"
+"Yükseltme iptal ediliyor. Lütfen 'update-manager' paketi için bu hatayı "
+"bildirin. Hata bildiriminize /var/log/dist-upgrade/ konumundaki dosyaları da "
+"ekleyin.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:1049
+#: ../DistUpgrade/DistUpgradeController.py:960
+msgid "Could not install the upgrades"
+msgstr "Yükseltmeler kurulamadı"
+
+#: ../DistUpgrade/DistUpgradeController.py:977
 msgid ""
-"The upgrade is now aborted. Please check your Internet connection or "
+"The upgrade aborts now. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
-"Yükseltme iptal edildi. Lütfen internet bağlantınızı ya da kurulum "
-"aygıtınızı kontrol edin ve tekrar deneyin. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1126
+#: ../DistUpgrade/DistUpgradeController.py:1047
 msgid "Remove obsolete packages?"
 msgstr "Kullanılmayan paketler kaldırılsın mı?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1127
-#: ../DistUpgrade/DistUpgrade.ui.h:20
+#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgrade.glade.h:20
 msgid "_Keep"
 msgstr "_Koru"
 
-#: ../DistUpgrade/DistUpgradeController.py:1127
+#: ../DistUpgrade/DistUpgradeController.py:1048
 msgid "_Remove"
 msgstr "_Kaldır"
 
-#: ../DistUpgrade/DistUpgradeController.py:1139
+#: ../DistUpgrade/DistUpgradeController.py:1059
+msgid "Error during commit"
+msgstr "İşlem sırasında hata oluştu"
+
+#: ../DistUpgrade/DistUpgradeController.py:1060
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -632,243 +531,172 @@ msgstr ""
 "Temizlik sırasında bazı sorunlar oluştu. Daha fazla bilgi için lütfen "
 "aşağıdaki iletiye bakın. "
 
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:1090
+msgid "Restoring original system state"
+msgstr "Özgün sistem durumuna geri dönülüyor"
+
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1215
+#: ../DistUpgrade/DistUpgradeController.py:1128
 msgid "Required depends is not installed"
 msgstr "Gerekli bağımlılıklar kurulu değil"
 
-#: ../DistUpgrade/DistUpgradeController.py:1216
+#: ../DistUpgrade/DistUpgradeController.py:1129
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Gerekli bağımlılık '%s' kurulu değil. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1461
-#: ../DistUpgrade/DistUpgradeController.py:1528
+#: ../DistUpgrade/DistUpgradeController.py:1379
+#: ../DistUpgrade/DistUpgradeController.py:1446
 msgid "Checking package manager"
 msgstr "Paket yöneticisi denetleniyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:1466
+#: ../DistUpgrade/DistUpgradeController.py:1384
 msgid "Preparing the upgrade failed"
 msgstr "Yükseltme işlemine hazırlanma başarısız oldu"
 
-#: ../DistUpgrade/DistUpgradeController.py:1467
+#: ../DistUpgrade/DistUpgradeController.py:1385
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
-"upgrade/ in the bug report."
+"upgrade/ in the bugreport."
 msgstr ""
-"Yükseltme için sistemin hazırlanması başarısız. Lütfen /var/log/dist-"
-"upgrade/ dizinindeki dosyaları da dahil ederek bu yanlışı 'update-manager' "
-"paketi aleyhinde raporlayınız."
+"Sistemi yükseltme için hazırlamada hata oluştu. Lütfen 'update-manager' "
+"paketi için bu hatayı bildirin ve /var/log/dist-upgrade/ konumundaki "
+"dosyaları hata raporuna ekleyin."
 
-#: ../DistUpgrade/DistUpgradeController.py:1483
+#: ../DistUpgrade/DistUpgradeController.py:1401
 msgid "Getting upgrade prerequisites failed"
 msgstr "Güncelleme önkoşullarının alınması başarısız"
 
-#: ../DistUpgrade/DistUpgradeController.py:1484
+#: ../DistUpgrade/DistUpgradeController.py:1402
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
 "\n"
 "Please report this as a bug against the 'update-manager' package and include "
-"the files in /var/log/dist-upgrade/ in the bug report."
+"the files in /var/log/dist-upgrade/ in the bugreport."
 msgstr ""
-"Sistem, yükseltme için gerekli şartları oluşturmadı. Yükseltme iptal "
-"edilecek ve sistem orjinal durumuna geri döndürülecek.\n"
+"Sistem güncelleme önkoşullarını alamadı. Güncelleme şimdi yarıda kesilecek "
+"ve özgün sistem durumu geri getirilecek.\n"
 "\n"
-"Lütfen /var/log/dist-upgrade/ adresindeki dosyaları da dahil ederek bu "
-"hatayı 'update-manager' paketi aleyhinde raporlayınız."
+"Lütfen bunu 'update-manager' paketinin bir hatası olarak rapor edin ve "
+"/var/log/dist-upgrade/ dizini içerisindeki dosyaları hata raporuna ekleyin."
 
-#: ../DistUpgrade/DistUpgradeController.py:1514
+#: ../DistUpgrade/DistUpgradeController.py:1432
 msgid "Updating repository information"
 msgstr "Depo bilgileri güncelleniyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1457
 msgid "Invalid package information"
 msgstr "Geçersiz paket bilgisi"
 
-#: ../DistUpgrade/DistUpgradeController.py:1543
+#: ../DistUpgrade/DistUpgradeController.py:1458
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
 "not be found anymore.\n"
 "This indicates a serious error, please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
-"report."
+"manager' package and include the files in /var/log/dist-upgrade/ in the "
+"bugreport."
 msgstr ""
-"Paket bilginiz güncellendikten sonra asıl paketiniz olan '%s' artık "
-"bulunamayabilir.\n"
-"Bu ciddi bir hata olduğunu gösteriyor, lütfen /var/log/dist-upgrade/ "
-"dizinindeki dosyaları da dahil ederek bu yanlışı 'update-manager' paketi "
-"aleyhinde raporlayınız."
+"Paket bilgileriniz güncellendikten sonra temel bir paket olan '%s' artık "
+"bulunamıyor.\n"
+"Bu durum önemli bir hata olabilir, lütfen 'update-manager' paketi için bu "
+"hatayı bildirin. Hata bildiriminize /var/log/dist-upgrade/ konumundaki "
+"dosyaları da ekleyin."
 
-#: ../DistUpgrade/DistUpgradeController.py:1560
-#: ../DistUpgrade/DistUpgradeController.py:1608
+#: ../DistUpgrade/DistUpgradeController.py:1475
+#: ../DistUpgrade/DistUpgradeController.py:1523
 msgid "Fetching"
 msgstr "İndiriliyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:1566
-#: ../DistUpgrade/DistUpgradeController.py:1612
+#: ../DistUpgrade/DistUpgradeController.py:1482
+#: ../DistUpgrade/DistUpgradeController.py:1527
 msgid "Upgrading"
 msgstr "Yükseltiliyor"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1571
-#: ../DistUpgrade/DistUpgradeController.py:1614
-#: ../DistUpgrade/DistUpgradeController.py:1621
-#: ../DistUpgrade/DistUpgradeController.py:1626
+#: ../DistUpgrade/DistUpgradeController.py:1487
+#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:1536
+#: ../DistUpgrade/DistUpgradeController.py:1541
 msgid "Upgrade complete"
 msgstr "Yükseltme tamamlandı"
 
-#: ../DistUpgrade/DistUpgradeController.py:1572
-#: ../DistUpgrade/DistUpgradeController.py:1615
-#: ../DistUpgrade/DistUpgradeController.py:1622
+#: ../DistUpgrade/DistUpgradeController.py:1488
+#: ../DistUpgrade/DistUpgradeController.py:1530
+#: ../DistUpgrade/DistUpgradeController.py:1537
 msgid ""
-"The upgrade is completed but there were errors during the upgrade process."
+"The upgrade is completed but there were errors during the ugprade process."
 msgstr ""
-"Güncelleme tamamlandı fakat güncelleme işlemi sırasında hatalar oluştu."
 
-#: ../DistUpgrade/DistUpgradeController.py:1579
+#: ../DistUpgrade/DistUpgradeController.py:1495
 msgid "Searching for obsolete software"
 msgstr "Kullanılmayan yazılımlar aranıyor"
 
-#: ../DistUpgrade/DistUpgradeController.py:1584
+#: ../DistUpgrade/DistUpgradeController.py:1500
 msgid "System upgrade is complete."
 msgstr "Sistem yükseltmesi tamamlandı."
 
-#: ../DistUpgrade/DistUpgradeController.py:1627
+#: ../DistUpgrade/DistUpgradeController.py:1542
 msgid "The partial upgrade was completed."
-msgstr "Kısmi yükseltme tamamlandı."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:148
-msgid "No ARMv6 CPU"
-msgstr "ARMv6 İşlemci Yok"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
-msgid ""
-"Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
-"packages in karmic were built with optimizations requiring ARMv6 as the "
-"minimal architecture. It is not possible to upgrade your system to a new "
-"Ubuntu release with this hardware."
 msgstr ""
-"Sisteminiz, ARMv6 mimarisinden daha eski bir ARM işlemci kullanıyor. "
-"Karmic'teki tüm paketler, en az ARMv6 mimarisini gerektirecek iyileştirmeler "
-"ile oluşturulmuştur. Bu donanım ile, sisteminizi yeni bir Ubuntu sürümüne "
-"yükseltmek mümkün değil."
 
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:169
-#: ../DistUpgrade/DistUpgradeQuirks.py:253
-#: ../DistUpgrade/DistUpgradeQuirks.py:280
+#: ../DistUpgrade/DistUpgradeQuirks.py:98
+#: ../DistUpgrade/DistUpgradeQuirks.py:150
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
 msgstr ""
-"Yükseltme masaüstü efektlerini, oyunların ve diğer grafik yoğun "
-"uygulamaların başarımını düşürebilir."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:173
+#: ../DistUpgrade/DistUpgradeQuirks.py:102
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
+"of this driver is available that works with Ubuntu 8.10.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Bu bilgisayarda şu an AMD 'fglrx' görüntü sürücüsü kullanılıyor. Bu "
-"sürücünün Ubuntu 10.04'te donanımınızla çalışacak olan bir sürümü yok.\n"
-"\n"
-"Devam etmek istiyor musunuz?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:257
-#: ../DistUpgrade/DistUpgradeQuirks.py:284
+#: ../DistUpgrade/DistUpgradeQuirks.py:154
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
+"Ubuntu 8.10.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Bu bilgisayarda şu an NVIDIA 'nvidia' görüntü sürücüsü kullanılıyor. Bu "
-"sürücünün Ubuntu 10.04'te donanımınızla çalışacak olan bir sürümü yok.\n"
-"\n"
-"Devam etmek istiyor musunuz?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:454
-msgid "evms in use"
-msgstr "evms kullanımda"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:455
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Sisteminiz /proc/mounts içindeki 'evms' birim yöneticisini kullanıyor. "
-"'evms' yazılımı artık desteklenmiyor, lütfen 'evms'yi kapattıktan sonra, bu "
-"bittiğinde yükseltmeyi yeniden çalıştırın."
-
-#: ../DistUpgrade/DistUpgradeMain.py:43
-msgid "Sandbox upgrade using aufs"
-msgstr "Çalışma dizini yükseltmesi 'aufs' kullanıyor"
-
-#: ../DistUpgrade/DistUpgradeMain.py:45
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
-"Yükseltilebilir paketler içeren bir cdrom'u aramak için verilen yolu kullan"
-
-#: ../DistUpgrade/DistUpgradeMain.py:51
-msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-msgstr ""
-"Önyüzü kullan. Şu anda kullanılabilir olanlar: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
-
-#: ../DistUpgrade/DistUpgradeMain.py:54
-msgid "*DEPRECATED* this option will be ignore"
-msgstr "*İTİRAZ* bu seçenek görmezden gelinecek"
-
-#: ../DistUpgrade/DistUpgradeMain.py:57
-msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr ""
-"Yalnızca kısmi bir yükseltmee gerçekleştir ('sources.list' yeniden yazılmaz)"
-
-#: ../DistUpgrade/DistUpgradeMain.py:59
-msgid "Set datadir"
-msgstr "Veri dizinini ayarla"
 
 #. print "mediaChange %s %s" % (medium, drive)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:106
+#: ../DistUpgrade/DistUpgradeViewGtk.py:108
 #: ../DistUpgrade/DistUpgradeViewKDE.py:190
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:148
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Lütfen \"%2s\" sürücüsüne \"%1s\" takın"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:125
+#: ../DistUpgrade/DistUpgradeViewGtk.py:127
 #: ../DistUpgrade/DistUpgradeViewKDE.py:203
 msgid "Fetching is complete"
 msgstr "Getirme tamamlandı"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:137
+#: ../DistUpgrade/DistUpgradeViewGtk.py:139
 #: ../DistUpgrade/DistUpgradeViewKDE.py:216
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
-msgstr "%li / %li dosya %sB/s hızla alınıyor"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:138
-#: ../DistUpgrade/DistUpgradeViewGtk.py:273
+#: ../DistUpgrade/DistUpgradeViewGtk.py:140
+#: ../DistUpgrade/DistUpgradeViewGtk.py:275
 #: ../DistUpgrade/DistUpgradeViewKDE.py:217
-#: ../DistUpgrade/DistUpgradeViewKDE.py:357
+#: ../DistUpgrade/DistUpgradeViewKDE.py:356
 #, python-format
 msgid "About %s remaining"
 msgstr "Yaklaşık %s kaldı"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:140
+#: ../DistUpgrade/DistUpgradeViewGtk.py:142
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 #, python-format
 msgid "Fetching file %li of %li"
@@ -877,35 +705,35 @@ msgstr "Dosyalar inidiriliyor. İnen: %li  Toplam: %li"
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
-#: ../DistUpgrade/DistUpgradeViewGtk.py:172
+#: ../DistUpgrade/DistUpgradeViewGtk.py:174
 #: ../DistUpgrade/DistUpgradeViewKDE.py:253
 msgid "Applying changes"
 msgstr "Değişiklikler uygulanıyor"
 
 #. we do not report followup errors from earlier failures
-#: ../DistUpgrade/DistUpgradeViewGtk.py:197
+#: ../DistUpgrade/DistUpgradeViewGtk.py:199
 #: ../DistUpgrade/DistUpgradeViewKDE.py:266
 msgid "dependency problems - leaving unconfigured"
-msgstr "bağımlılık sorunları - yapılandırılmadan çıkılıyor."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:202
+#: ../DistUpgrade/DistUpgradeViewGtk.py:204
 #: ../DistUpgrade/DistUpgradeViewKDE.py:268
 #, python-format
 msgid "Could not install '%s'"
 msgstr "\"%s\" kurulamadı"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:203
+#: ../DistUpgrade/DistUpgradeViewGtk.py:205
 #: ../DistUpgrade/DistUpgradeViewKDE.py:269
 #, python-format
 msgid ""
-"The upgrade will continue but the '%s' package may not be in a working "
-"state. Please consider submitting a bug report about it."
+"The upgrade will continue but the '%s' package may be in a not working "
+"state. Please consider submitting a bugreport about it."
 msgstr ""
-"Yükseltme devam edecek fakat '%s' paketi çalışır durumda olmayabilir. Lütfen "
-"bununla ilgili bir hata raporlayın."
+"Yükseltme devam edecek ama '%s' paketi çalışan bir konumda olmayabilir. "
+"Lütfen bununla ilgili bir hata raporu göndermeyi dikkate alın."
 
 #. self.expander.set_expanded(True)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:219
+#: ../DistUpgrade/DistUpgradeViewGtk.py:221
 #: ../DistUpgrade/DistUpgradeViewKDE.py:290
 #, python-format
 msgid ""
@@ -915,7 +743,7 @@ msgstr ""
 "Özelleştirilmiş yapılandırma dosyası\n"
 "'%s' değiştirilsin mi?"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:220
+#: ../DistUpgrade/DistUpgradeViewGtk.py:222
 #: ../DistUpgrade/DistUpgradeViewKDE.py:291
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
@@ -924,72 +752,64 @@ msgstr ""
 "Eğer bu yapılandırma dosyasını yeni sürümüyle değiştirecekseniz bu dosyaya "
 "yapmış olduğunuz değişiklikleri kaybedeceksiniz."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:233
+#: ../DistUpgrade/DistUpgradeViewGtk.py:235
 #: ../DistUpgrade/DistUpgradeViewKDE.py:309
 msgid "The 'diff' command was not found"
 msgstr "\"diff\" komutu bulunamadı"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:419
-#: ../DistUpgrade/DistUpgradeViewText.py:107
+#: ../DistUpgrade/DistUpgradeViewGtk.py:417
+#: ../DistUpgrade/DistUpgradeViewText.py:110
 msgid "A fatal error occurred"
 msgstr "Ölümcül bir hata oluştu"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:420
+#: ../DistUpgrade/DistUpgradeViewGtk.py:418
 msgid ""
 "Please report this as a bug (if you haven't already) and include the files "
 "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-"report. The upgrade is now aborted.\n"
+"report. The upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Lütfen bunu bir yanlış olarak (eğer yapmamışsanız) raporlayınız ve "
-"raporunuza /var/log/dist-upgrade/main.log ve /var/log/dist-upgrade/apt.log "
-"dosyalarını da dahil edin. Yükseltme şu an durduruldu.\n"
-"Özgün kaynak listeniz /etc/apt/sources.list.distUpgrade içine kaydedildi."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:435
+#: ../DistUpgrade/DistUpgradeViewGtk.py:433
 msgid "Ctrl-c pressed"
-msgstr "Ctrl-c basıldı"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:436
+#: ../DistUpgrade/DistUpgradeViewGtk.py:434
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
 msgstr ""
-"Bu, işlemi durduracak ve sistemi bozuk bir durumda bırakabilir. Bunu yapmak "
-"istediğinizden emin misiniz?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk.py:578
+#: ../DistUpgrade/DistUpgradeViewGtk.py:570
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "Veri kaybını önlemek için açık olan tüm uygulamaları ve belgeleri kapatın."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:592
+#: ../DistUpgrade/DistUpgradeViewGtk.py:584
 #, python-format
 msgid "<b>Downgrade %s</b>"
 msgstr "<b>Sürümü düşür: %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:594
-#: ../DistUpgrade/DistUpgradeViewKDE.py:757
+#: ../DistUpgrade/DistUpgradeViewGtk.py:586
+#: ../DistUpgrade/DistUpgradeViewKDE.py:749
 #, python-format
 msgid "Remove %s"
 msgstr "_Kaldır %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:599
-#: ../DistUpgrade/DistUpgradeViewKDE.py:759
+#: ../DistUpgrade/DistUpgradeViewGtk.py:591
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
 #, python-format
 msgid "Install %s"
 msgstr "%s paketini kur"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:601
-#: ../DistUpgrade/DistUpgradeViewKDE.py:761
+#: ../DistUpgrade/DistUpgradeViewGtk.py:593
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #, python-format
 msgid "Upgrade %s"
 msgstr "%s paketini yükselt"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
 #: ../DistUpgrade/DistUpgradeViewKDE.py:191
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:150
 msgid "Media Change"
 msgstr "Ortam Değişimi"
 
@@ -1001,90 +821,94 @@ msgstr "Farkı Göster >>>"
 msgid "<<< Hide Difference"
 msgstr "<<< Farkı Gizle"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:538
+#: ../DistUpgrade/DistUpgradeViewKDE.py:530
 msgid "Error"
-msgstr "Hata"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:550
+#: ../DistUpgrade/DistUpgradeViewKDE.py:542
 msgid "&Cancel"
-msgstr "&Vazgeç"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:552
-#: ../DistUpgrade/DistUpgradeViewKDE.py:789
+#: ../DistUpgrade/DistUpgradeViewKDE.py:544
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 msgid "&Close"
-msgstr "&Kapat"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:598
+#: ../DistUpgrade/DistUpgradeViewKDE.py:590
 msgid "Show Terminal >>>"
 msgstr "Uçbirimi Göster >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:601
+#: ../DistUpgrade/DistUpgradeViewKDE.py:593
 msgid "<<< Hide Terminal"
 msgstr "<<< Uçbirimi Gizle"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:681
+#: ../DistUpgrade/DistUpgradeViewKDE.py:673
 msgid "Information"
-msgstr "Bilgi"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:731
-#: ../DistUpgrade/DistUpgradeViewKDE.py:772
-#: ../DistUpgrade/DistUpgradeViewKDE.py:775 ../DistUpgrade/DistUpgrade.ui.h:9
+#: ../DistUpgrade/DistUpgradeViewKDE.py:723
+#: ../DistUpgrade/DistUpgradeViewKDE.py:764
+#: ../DistUpgrade/DistUpgradeViewKDE.py:767
+#: ../DistUpgrade/DistUpgrade.glade.h:9
 msgid "Details"
 msgstr "Ayrıntılar"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:785
-#: ../DistUpgrade/DistUpgradeViewText.py:225
+#: ../DistUpgrade/DistUpgradeViewKDE.py:777
+#: ../DistUpgrade/DistUpgradeViewText.py:222
 msgid "Restart required"
 msgstr "Yeniden başlatma gerekiyor"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:785 ../DistUpgrade/DistUpgrade.ui.h:5
+#: ../DistUpgrade/DistUpgradeViewKDE.py:777
+#: ../DistUpgrade/DistUpgrade.glade.h:5
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr ""
 "<b><big>Yükseltmeyi tamamlamak için sistemi yeniden başlatın</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788 ../DistUpgrade/DistUpgrade.ui.h:23
+#: ../DistUpgrade/DistUpgradeViewKDE.py:780
+#: ../DistUpgrade/DistUpgrade.glade.h:23
 msgid "_Restart Now"
 msgstr "Şimdi _Yeniden Başlat"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:800
+#: ../DistUpgrade/DistUpgradeViewKDE.py:792
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly advised to resume the upgrade."
 msgstr ""
-"<b><big>Devam eden yükseltmeden vazgeçmek mi istiyorsunuz ?</big></b>\n"
-"Yükseltmeden vazgeçerseniz sistem kulanılamaz duruma gelebilir. Israrla "
-"yükseltmeye devam etmenizi öneriyoruz."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:804
+#: ../DistUpgrade/DistUpgradeViewKDE.py:796
 msgid "Cancel Upgrade?"
 msgstr "Yükseltmeden Vazgeçilsin mi?"
 
-#: ../DistUpgrade/DistUpgradeView.py:59
+#: ../DistUpgrade/DistUpgradeView.py:56
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
-msgstr[0] "%li gün"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeView.py:61
+#: ../DistUpgrade/DistUpgradeView.py:58
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
-msgstr[0] "%li saat"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeView.py:63
+#: ../DistUpgrade/DistUpgradeView.py:60
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
-msgstr[0] "%li dakika"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeView.py:64
+#: ../DistUpgrade/DistUpgradeView.py:61
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
-msgstr[0] "%li saniye"
+msgstr[0] ""
+msgstr[1] ""
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
@@ -1095,10 +919,10 @@ msgstr[0] "%li saniye"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:77
+#: ../DistUpgrade/DistUpgradeView.py:74
 #, python-format
-msgid "%(str_days)s %(str_hours)s"
-msgstr "%(str_days)s %(str_hours)s"
+msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
+msgstr ""
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -1109,70 +933,70 @@ msgstr "%(str_days)s %(str_hours)s"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:92
+#: ../DistUpgrade/DistUpgradeView.py:85
 #, python-format
 msgid "%(str_hours)s %(str_minutes)s"
-msgstr "%(str_hours)s %(str_minutes)s"
+msgstr ""
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
-#: ../DistUpgrade/DistUpgradeView.py:113
+#: ../DistUpgrade/DistUpgradeView.py:106
 #, python-format
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
-"with a 56k modem."
+"with a 56k modem"
 msgstr ""
-"Bu indirme işlemi 1Mbit DSL bağlantısıyla yaklaşık %s ve 56k bir modemle "
+"Bu indirme işlemi 1Mbit DSL bağlantısıyla yaklaşık %s ve 56k modemle ise "
 "yaklaşık %s sürecektir."
 
 #. if we have a estimated speed, use it
-#: ../DistUpgrade/DistUpgradeView.py:117
+#: ../DistUpgrade/DistUpgradeView.py:110
 #, python-format
 msgid "This download will take about %s with your connection. "
 msgstr ""
 "Bu indirme işlemi sizin bağlantınızla yaklaşık olarak %s kadar sürecektir. "
 
-#: ../DistUpgrade/DistUpgradeView.py:186 ../DistUpgrade/DistUpgrade.ui.h:14
+#: ../DistUpgrade/DistUpgradeView.py:176 ../DistUpgrade/DistUpgrade.glade.h:14
 msgid "Preparing to upgrade"
 msgstr "Yükseltmeye hazırlanıyor"
 
-#: ../DistUpgrade/DistUpgradeView.py:187
+#: ../DistUpgrade/DistUpgradeView.py:177
 msgid "Getting new software channels"
 msgstr "Yeni yazılım kanalları alınıyor"
 
-#: ../DistUpgrade/DistUpgradeView.py:188 ../DistUpgrade/DistUpgrade.ui.h:12
+#: ../DistUpgrade/DistUpgradeView.py:178 ../DistUpgrade/DistUpgrade.glade.h:12
 msgid "Getting new packages"
 msgstr "Yeni paketler alınıyor"
 
-#: ../DistUpgrade/DistUpgradeView.py:189 ../DistUpgrade/DistUpgrade.ui.h:13
+#: ../DistUpgrade/DistUpgradeView.py:179 ../DistUpgrade/DistUpgrade.glade.h:13
 msgid "Installing the upgrades"
 msgstr "Yükseltmeler yükleniyor"
 
-#: ../DistUpgrade/DistUpgradeView.py:190 ../DistUpgrade/DistUpgrade.ui.h:8
+#: ../DistUpgrade/DistUpgradeView.py:180 ../DistUpgrade/DistUpgrade.glade.h:8
 msgid "Cleaning up"
 msgstr "Temizlik yapılıyor"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:263
+#: ../DistUpgrade/DistUpgradeView.py:253
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "%d paket kaldırılacak."
 
-#: ../DistUpgrade/DistUpgradeView.py:268
+#: ../DistUpgrade/DistUpgradeView.py:258
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "%d yeni paket kurulacak."
 
-#: ../DistUpgrade/DistUpgradeView.py:274
+#: ../DistUpgrade/DistUpgradeView.py:264
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "%d paket yükseltilecek."
 
-#: ../DistUpgrade/DistUpgradeView.py:279
+#: ../DistUpgrade/DistUpgradeView.py:269
 #, python-format
 msgid ""
 "\n"
@@ -1183,7 +1007,7 @@ msgstr ""
 "\n"
 "Toplam %s indirmeniz gerekmektedir. "
 
-#: ../DistUpgrade/DistUpgradeView.py:283
+#: ../DistUpgrade/DistUpgradeView.py:273
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -1192,11 +1016,11 @@ msgstr ""
 "sonra işlem iptal edilemez."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:289 ../UpdateManager/UpdateManager.py:489
+#: ../DistUpgrade/DistUpgradeView.py:279 ../UpdateManager/UpdateManager.py:672
 msgid "Your system is up-to-date"
 msgstr "Sisteminiz güncel"
 
-#: ../DistUpgrade/DistUpgradeView.py:290
+#: ../DistUpgrade/DistUpgradeView.py:280
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
@@ -1204,82 +1028,82 @@ msgstr ""
 "Sisteminiz için olası herhangi bir yükseltme yok. Yükseltme işlemi şimdi "
 "iptal edilecek."
 
-#: ../DistUpgrade/DistUpgradeView.py:303
+#: ../DistUpgrade/DistUpgradeView.py:293
 msgid "Reboot required"
 msgstr "Sistemi yeniden başlatmanız gerekiyor"
 
-#: ../DistUpgrade/DistUpgradeView.py:304
+#: ../DistUpgrade/DistUpgradeView.py:294
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
 "Yükseltme tamamlandı. Sistemi yeniden başlatmanız gerekiyor. Bunu şimdi "
 "yapmak ister misiniz?"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:134
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:134
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
 msgid "Could not run the upgrade tool"
 msgstr "Yükseltme aracı çalıştırılamadı."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
 "Bu muhtemelen yükseltme aracındaki bir hata. Lütfen bu hatayı bildirin."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:204
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:204
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
 msgid "Upgrade tool signature"
 msgstr "Yükseltme aracı imzası"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
 msgid "Upgrade tool"
 msgstr "Yükseltme aracı"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:237
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:237
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
 msgid "Failed to fetch"
 msgstr "Getirme başarısız"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:238
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:238
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr "Yükseltme indirilemedi. Ağda bir sorun olabilir. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:242
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:242
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
 msgid "Failed to extract"
 msgstr "Çıkarılamadı"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:243
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:243
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
 msgstr "Yükseltme açılamadı. Ağda ya da sunucunuda bir sorun olabilir. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:248
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
-msgid "Verification failed"
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
+msgid "Verfication failed"
 msgstr "Doğrulama başarısız oldu"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:249
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
 msgstr "Yükseltme onaylanamadı. Ağda ya da sunucuda bir sorun olabilir. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:254
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:254
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
 msgid "Authentication failed"
 msgstr "Kimlik denetimi başarısız oldu"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:255
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:255
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -1287,99 +1111,89 @@ msgstr ""
 "Yükseltme için kimlik doğrulama başarısız oldu. Ağda veya sunucuda bir sorun "
 "olabilir. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:263
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:269
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:263
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:269
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
 msgid "Can not run the upgrade"
-msgstr "Yükseltme çalıştırılamıyor"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:264
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:264
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
 msgid ""
 "This usually is caused by a system were /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
 msgstr ""
-"Bu genellikle /tmp dizini 'noexec' olarak bağlı sistemlerden "
-"kaynaklanmaktadır. Lütfen 'noexec' olmadan bağlayıp yükseltmeyi yeniden "
-"çalıştırın."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:270
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:270
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
 #, python-format
 msgid "The error message is '%s'."
-msgstr "Hata iletisi, '%s'."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeViewText.py:108
+#: ../DistUpgrade/DistUpgradeViewText.py:111
 msgid ""
 "Please report this as a bug and include the files /var/log/dist-"
 "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"upgrade aborts now.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Lütfen bunu bir yanlış olarak raporlayınız ve raporunuza /var/log/dist-"
-"upgrade/main.log ve /var/log/dist-upgrade/apt.log içindeki dosyaları da "
-"dahil edin. Yükseltme şu an durduruldu.\n"
-"Özgün kaynak listeniz /etc/apt/sources.list.distUpgrade içine kaydedildi."
+"Lütfen bu hatayı bildirin. Hata bildiriminize /var/log/dist-upgrade/ "
+"konumundaki dosyaları da ekleyin. Yükseltme şimdi iptal ediliyor.\n"
+"Asıl sources.list dosyanız /etc/apt/sources.list.distUpgrade olarak "
+"kaydedildi."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:132
+#: ../DistUpgrade/DistUpgradeViewText.py:135
 msgid "Aborting"
 msgstr "Vazgeçiliyor"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:137
+#: ../DistUpgrade/DistUpgradeViewText.py:140
 msgid "Demoted:\n"
 msgstr "Kaldırıldı:\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:169
-#: ../DistUpgrade/DistUpgradeViewText.py:191
-#: ../DistUpgrade/DistUpgradeViewText.py:198
+#: ../DistUpgrade/DistUpgradeViewText.py:172
+#: ../DistUpgrade/DistUpgradeViewText.py:194
+#: ../DistUpgrade/DistUpgradeViewText.py:201
 msgid "Continue [yN] "
 msgstr "Devam [eH] "
 
-#: ../DistUpgrade/DistUpgradeViewText.py:169
-#: ../DistUpgrade/DistUpgradeViewText.py:191
+#: ../DistUpgrade/DistUpgradeViewText.py:172
+#: ../DistUpgrade/DistUpgradeViewText.py:194
 msgid "Details [d]"
 msgstr "Ayrıntılar [a]"
 
 #. TRANSLATORS: the "y" is "yes"
-#. TRANSLATORS: first letter of a positive (yes) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:173
-#: ../DistUpgrade/DistUpgradeViewText.py:201
+#: ../DistUpgrade/DistUpgradeViewText.py:176
+#: ../DistUpgrade/DistUpgradeViewText.py:205
 msgid "y"
 msgstr "e"
 
 #. TRANSLATORS: the "n" is "no"
-#. TRANSLATORS: first letter of a negative (no) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:176
-#: ../DistUpgrade/DistUpgradeViewText.py:208
+#: ../DistUpgrade/DistUpgradeViewText.py:179
 msgid "n"
 msgstr "h"
 
 #. TRANSLATORS: the "d" is "details"
-#: ../DistUpgrade/DistUpgradeViewText.py:179
+#: ../DistUpgrade/DistUpgradeViewText.py:182
 msgid "d"
 msgstr "a"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:183
+#: ../DistUpgrade/DistUpgradeViewText.py:186
 #, python-format
 msgid "Remove: %s\n"
 msgstr "Kaldır %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:186
+#: ../DistUpgrade/DistUpgradeViewText.py:189
 #, python-format
 msgid "Install: %s\n"
 msgstr "Kur: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:189
+#: ../DistUpgrade/DistUpgradeViewText.py:192
 #, python-format
 msgid "Upgrade: %s\n"
 msgstr "Yükselt: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:205
-msgid "Continue [Yn] "
-msgstr "Devam [Yn] "
-
-#: ../DistUpgrade/DistUpgradeViewText.py:226
+#: ../DistUpgrade/DistUpgradeViewText.py:223
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
@@ -1387,11 +1201,15 @@ msgstr ""
 "Güncellemeyi tamamlamak için yeniden başlatınız.\n"
 "Eğer 'y' tuşuna basarsanız yeniden başlatılacaktır."
 
-#: ../DistUpgrade/DistUpgrade.ui.h:1
+#: ../DistUpgrade/DistUpgradeViewText.py:227
+msgid "Restart the system now [yN] "
+msgstr "Sistemi şimdi yeniden başlat [yN] "
+
+#: ../DistUpgrade/DistUpgrade.glade.h:1
 msgid "    "
 msgstr "    "
 
-#: ../DistUpgrade/DistUpgrade.ui.h:2
+#: ../DistUpgrade/DistUpgrade.glade.h:2
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1403,158 +1221,171 @@ msgstr ""
 "Yükseltmeyi iptal ederseniz, sistem, kullanılamaz bir konumda kalabilir. "
 "Yükseltmeyi devam ettirmeniz şiddetle önerilir."
 
-#: ../DistUpgrade/DistUpgrade.ui.h:6
+#: ../DistUpgrade/DistUpgrade.glade.h:6
 msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Yükseltme başlatılsın mı?</big></b>"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:7
-msgid "<b><big>Upgrading Ubuntu to version 9.10</big></b>"
-msgstr "<b><big>Ubuntu 9.10 sürümüne yükseltiliyor</big></b>"
+#: ../DistUpgrade/DistUpgrade.glade.h:7
+msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
+msgstr ""
 
-#: ../DistUpgrade/DistUpgrade.ui.h:10
+#: ../DistUpgrade/DistUpgrade.glade.h:10
 msgid "Difference between the files"
 msgstr "Dosyalar arasındaki fark"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:11
+#: ../DistUpgrade/DistUpgrade.glade.h:11
 msgid "Distribution Upgrade"
 msgstr "Dağıtım Yükseltimi"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:15
+#: ../DistUpgrade/DistUpgrade.glade.h:15
 msgid "Restarting the computer"
 msgstr "Bilgisayar yeniden başlatılıyor"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:16
+#: ../DistUpgrade/DistUpgrade.glade.h:16
 msgid "Setting new software channels"
 msgstr "Yeni yazılım kanalları ayarlanıyor"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:17
+#: ../DistUpgrade/DistUpgrade.glade.h:17
 msgid "Terminal"
 msgstr "Uçbirim"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:18
+#: ../DistUpgrade/DistUpgrade.glade.h:18
 msgid "_Cancel Upgrade"
 msgstr "_Yükseltmeyi İptal Et"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:19
+#: ../DistUpgrade/DistUpgrade.glade.h:19
 msgid "_Continue"
 msgstr "_Devam"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:21
+#: ../DistUpgrade/DistUpgrade.glade.h:21
 msgid "_Replace"
 msgstr "_Değiştir"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:22
+#: ../DistUpgrade/DistUpgrade.glade.h:22
 msgid "_Report Bug"
 msgstr "_Hata Bildir"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:24
+#: ../DistUpgrade/DistUpgrade.glade.h:24
 msgid "_Resume Upgrade"
 msgstr "Yükseltmeye _Devam Et"
 
-#: ../DistUpgrade/DistUpgrade.ui.h:25
+#: ../DistUpgrade/DistUpgrade.glade.h:25
 msgid "_Start Upgrade"
 msgstr "_Yükseltmeye Başla"
 
-#: ../UpdateManager/backend/InstallBackendSynaptic.py:42
-msgid "Please wait, this can take some time."
-msgstr "Lütfen bekleyin, bu işlem biraz zaman alabilir."
-
-#: ../UpdateManager/backend/InstallBackendSynaptic.py:44
-msgid "Update is complete"
-msgstr "Güncelleme tamamlandı"
-
-#: ../UpdateManager/DistUpgradeFetcher.py:85
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:103
+#: ../UpdateManager/DistUpgradeFetcher.py:81
 msgid "Could not find the release notes"
 msgstr "Yayım notları bulunamadı"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:86
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:104
+#: ../UpdateManager/DistUpgradeFetcher.py:82
 msgid "The server may be overloaded. "
 msgstr "Sunucu aşırı yüklenmiş olabilir. "
 
-#: ../UpdateManager/DistUpgradeFetcher.py:96
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:108
+#: ../UpdateManager/DistUpgradeFetcher.py:92
 msgid "Could not download the release notes"
 msgstr "Yayım notları indirilemedi"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:97
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:109
+#: ../UpdateManager/DistUpgradeFetcher.py:93
 msgid "Please check your internet connection."
 msgstr "Lütfen internet bağlantınızı denetleyin."
 
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:62
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:85
-msgid "Upgrade"
-msgstr "Yükselt"
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:89
-#: ../data/glade/UpdateManager.ui.h:12
-msgid "Release Notes"
-msgstr "Sürüm Notları"
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:128
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
-msgid "Downloading additional package files..."
-msgstr "Ek paket dosyaları indiriliyor..."
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
-#, python-format
-msgid "File %s of %s at %sB/s"
-msgstr "Dosya %s / %s, %sB/s hızla"
-
-#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
-#, python-format
-msgid "File %s of %s"
-msgstr "Dosya %s / %s"
-
-#: ../UpdateManager/ChangelogViewer.py:70
-msgid "Open Link in Browser"
-msgstr "Bağlantıyı Tarayıcıda Aç"
-
-#: ../UpdateManager/ChangelogViewer.py:72
-msgid "Copy Link to Clipboard"
-msgstr "Bağlantıyı Panoya Kopyala"
-
-#: ../UpdateManager/GtkProgress.py:115
+#: ../UpdateManager/GtkProgress.py:108
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr ""
 "İndirilen dosya: %(current)li  / %(total)li   İndirme hızı: %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:120
+#: ../UpdateManager/GtkProgress.py:113
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "İndirilen dosya: %(current)li  / %(total)li"
 
+#: ../UpdateManager/UpdateManager.py:252
+msgid "The list of changes is not available"
+msgstr "Değişiklikler listesi erişilebilir değil"
+
+#: ../UpdateManager/UpdateManager.py:260
+#, python-format
+msgid ""
+"The list of changes is not available yet.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:268
+msgid ""
+"Failed to download the list of changes. \n"
+"Please check your Internet connection."
+msgstr ""
+"Değişiklik listesini indirme başarısız oldu. \n"
+"Lütfen İnternet bağlantınızı denetleyin."
+
+#: ../UpdateManager/UpdateManager.py:290
+msgid "Failed to detect distribution"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:291
+#, python-format
+msgid "A error '%s' occurred while checking what system you are using."
+msgstr ""
+
 #: ../UpdateManager/UpdateManager.py:302
+msgid "Important security updates"
+msgstr "Önemli güvenlik güncelleştirmeleri"
+
+#: ../UpdateManager/UpdateManager.py:303
+msgid "Recommended updates"
+msgstr "Önerilen güncellemeler"
+
+#: ../UpdateManager/UpdateManager.py:304
+msgid "Proposed updates"
+msgstr "Teklif edilen güncellemeler"
+
+#: ../UpdateManager/UpdateManager.py:305
+msgid "Backports"
+msgstr "Geritaşınmış yazılımlar (Backports)"
+
+#: ../UpdateManager/UpdateManager.py:306
+msgid "Distribution updates"
+msgstr "Dağıtım güncelleştirmeleri"
+
+#: ../UpdateManager/UpdateManager.py:311
+msgid "Other updates"
+msgstr "Diğer güncellemeler"
+
+#: ../UpdateManager/UpdateManager.py:320
+msgid "Previous selected"
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:495
 #, python-format
 msgid "Version %s: \n"
 msgstr "Sürüm %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:359
+#: ../UpdateManager/UpdateManager.py:556
 msgid "Downloading list of changes..."
 msgstr "Değişiklik listesi indiriliyor..."
 
-#: ../UpdateManager/UpdateManager.py:399
+#: ../UpdateManager/UpdateManager.py:583
 msgid "_Uncheck All"
 msgstr "Hiç_birini Seçme"
 
-#: ../UpdateManager/UpdateManager.py:405
+#: ../UpdateManager/UpdateManager.py:589
 msgid "_Check All"
 msgstr "_Hepsini Seç"
 
-#: ../UpdateManager/UpdateManager.py:449
+#. TRANSLATORS: b stands for Bytes
+#: ../UpdateManager/UpdateManager.py:633 ../UpdateManager/UpdateManager.py:689
 #, python-format
-msgid "%s selected. Download size: %s"
-msgstr "%s seçildi. İndirme boyutu: %s"
+msgid "Download size: %s"
+msgstr "İndirme boyutu: %s"
 
-#: ../UpdateManager/UpdateManager.py:454
+#: ../UpdateManager/UpdateManager.py:637
 msgid "Unknown download size"
 msgstr "Bilinmeyen indirme boyutu"
 
-#: ../UpdateManager/UpdateManager.py:462
+#: ../UpdateManager/UpdateManager.py:645
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
@@ -1562,23 +1393,26 @@ msgstr ""
 "Paket bilgisinin en son ne zaman güncellendiği bilinmiyor. Lütfen bilgiyi "
 "güncellemek için 'Kontrol' düğmesine basmayı deneyiniz."
 
-#: ../UpdateManager/UpdateManager.py:471
+#: ../UpdateManager/UpdateManager.py:654
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
-msgstr[0] "Paket bilgisi %s gün önce güncellendi."
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:475
+#: ../UpdateManager/UpdateManager.py:658
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
-msgstr[0] "Paket bilgisi %s saat önce güncellendi."
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:479
+#: ../UpdateManager/UpdateManager.py:662
 msgid "The package information was last updated less than one hour ago."
 msgstr "Paket bilgisi güncellendiğinden beri bir saatten az geçti."
 
-#: ../UpdateManager/UpdateManager.py:487 ../data/glade/UpdateManager.ui.h:22
+#: ../UpdateManager/UpdateManager.py:670
+#: ../data/glade/UpdateManager.glade.h:21
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
@@ -1586,53 +1420,29 @@ msgstr ""
 "Yazılım güncellemeleri hataları düzeltir, güvenlik açıklarını giderir ve "
 "yeni özellikler sunar."
 
-#: ../UpdateManager/UpdateManager.py:503
-msgid "Welcome to Ubuntu"
-msgstr "Ubuntu'ya Hoşgeldiniz"
-
-#: ../UpdateManager/UpdateManager.py:504
-msgid ""
-"These software updates have been issued since Ubuntu was released. If you "
-"don't want to install them now, choose \"Update Manager\" from the "
-"Administration Menu later."
-msgstr ""
-"Bu yazılım güncellemeleri Ubuntu yayınlandığından beri duyurulmuştur. Eğer "
-"şimdi kurmak istemiyorsanız daha sonra Yönetim menüsünden \"Güncelleme "
-"yöneticisi\"ni seçiniz."
-
-#: ../UpdateManager/UpdateManager.py:507
-msgid "Software updates are available for this computer"
-msgstr "Bu bilgisayar için yazılım güncellemeleri mevcut"
-
-#: ../UpdateManager/UpdateManager.py:508
-msgid ""
-"If you don't want to install them now, choose \"Update Manager\" from the "
-"Administration menu later."
-msgstr ""
-"Eğer bunları şimdi kurmak istemiyorsanız , daha sonra Yönetim menüsünden "
-"\"Güncelleme Yöneticisi\" ni başlatınız."
-
-#: ../UpdateManager/UpdateManager.py:556
+#: ../UpdateManager/UpdateManager.py:685
 #, python-format
-msgid ""
-"The upgrade needs a total of %s free space on disk '%s'. Please free at "
-"least an additional %s of disk space on '%s'. Empty your trash and remove "
-"temporary packages of former installations using 'sudo apt-get clean'."
-msgstr ""
-"Yükseltme toplam %s boş alana '%s' diski üzerinde ihtiyaç duyuyor. Lütfen ek "
-"olarak %s boş alanı '%s' üzerinde oluşturun. Çöpünüzü boşaltın ve 'sudo apt-"
-"get clean' kullanarak önceki yüklemelerin geçici paketlerini kaldırın."
+msgid "You can install %s update."
+msgid_plural "You can install %s updates."
+msgstr[0] "%s güncelleme kurabilirsiniz"
 
-#: ../UpdateManager/UpdateManager.py:593
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:114
+#: ../UpdateManager/UpdateManager.py:727
+msgid "Please wait, this can take some time."
+msgstr "Lütfen bekleyin, bu işlem biraz zaman alabilir."
+
+#: ../UpdateManager/UpdateManager.py:729
+msgid "Update is complete"
+msgstr "Güncelleme tamamlandı"
+
+#: ../UpdateManager/UpdateManager.py:781
 msgid "Reading package information"
 msgstr "Paket bilgisi okunuyor"
 
-#: ../UpdateManager/UpdateManager.py:710
+#: ../UpdateManager/UpdateManager.py:884
 msgid "Could not initialize the package information"
 msgstr "Paket bilgisi başlangıç durumuna getirilemedi"
 
-#: ../UpdateManager/UpdateManager.py:711
+#: ../UpdateManager/UpdateManager.py:885
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1640,70 +1450,65 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
-"Paket bilgisini ilklenirken çözülemeyen bir problem ortaya çıktı.\n"
-"\n"
-"Lütfen bu yanlışı 'update-manager' paketi hatası olarak izleyen hata "
-"iletisiyla beraber gönderin:\n"
 
-#: ../UpdateManager/UpdateManager.py:733
+#: ../UpdateManager/UpdateManager.py:907
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
 msgstr ""
-"Yükseltme hesaplanırken çözülemeyen bir problem ortaya çıktı.\n"
-"\n"
-"Lütfen bu yanlışı 'update-manager' paketi hatası olarak izleyen hata "
-"iletisiyle beraber gönderin:"
-
-#: ../UpdateManager/UpdateManager.py:756
-msgid " (New install)"
-msgstr " (Yeni kurulum)"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:760
+#: ../UpdateManager/UpdateManager.py:932
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Boyut:%s)"
 
-#: ../UpdateManager/UpdateManager.py:762
+#: ../UpdateManager/UpdateManager.py:934
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "%(old_version)s sürümünden %(new_version)s sürümüne"
 
-#: ../UpdateManager/UpdateManager.py:766
+#: ../UpdateManager/UpdateManager.py:938
 #, python-format
 msgid "Version %s"
 msgstr "Sürüm %s"
 
-#: ../UpdateManager/UpdateManager.py:779
-msgid "Your Ubuntu release is not supported anymore"
-msgstr "Ubuntu sürümünüz artık desteklenmiyor"
+#: ../UpdateManager/UpdateManager.py:951
+msgid "Your distribution is not supported anymore"
+msgstr "Kullandığınız dağıtım artık desteklenmiyor"
 
-#: ../UpdateManager/UpdateManager.py:780
+#: ../UpdateManager/UpdateManager.py:952
 msgid ""
-"You will not get any further security fixes or critical updates. Please "
-"Upgrade to a later version of Ubuntu Linux."
+"You will not get any further security fixes or critical updates. Upgrade to "
+"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
+"information on upgrading."
 msgstr ""
-"Artık daha fazla güvenlik yaması veya kritik güncelleme almayacaksınız. "
-"Lütfen daha güncel bir Ubuntu Linux sürümüne geçiş yapın."
+"Bundan sonra güvenlik düzeltmelerini ya da kritik güncellemeleri "
+"alamayacaksınız. İşletim sisteminizi Ubuntu Linux'un son sürümüne yükseltin. "
+"Daha fazla bilgi ve yükseltme için http://www.ubuntu.com adresini ziyaret "
+"edin."
 
-#: ../UpdateManager/UpdateManager.py:787
-msgid "Upgrade information"
-msgstr "Yükseltme bilgisi"
+#: ../UpdateManager/UpdateManager.py:978
+msgid "Downloading the upgrade tool"
+msgstr "Yükseltme aracı indiriliyor"
 
-#: ../UpdateManager/UpdateManager.py:814
+#: ../UpdateManager/UpdateManager.py:980
+msgid "The upgrade tool will guide you through the upgrade process."
+msgstr "Yükseltme aracı size yükseltme işlemi boyunca rehberlik edecek."
+
+#: ../UpdateManager/UpdateManager.py:988
 #, python-format
-msgid "<b>New Ubuntu release '%s' is available</b>"
-msgstr "<b>Yeni Ubuntu sürümü '%s' var</b>"
+msgid "<b>New distribution release '%s' is available</b>"
+msgstr "<b>Yeni dağıtım sürümü '%s' ulaşılabilir</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:853
+#: ../UpdateManager/UpdateManager.py:1031
 msgid "Software index is broken"
 msgstr "Yazılım dizini bozulmuş"
 
-#: ../UpdateManager/UpdateManager.py:854
+#: ../UpdateManager/UpdateManager.py:1032
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1713,167 +1518,7 @@ msgstr ""
 "durumu düzeltmek için öncelikle \"Synaptic\" paket yöneticisini kullanın ya "
 "da uçbirim penceresine \"sudo apt-get install -f\" komutunu yazıp çalıştırın."
 
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:136
-msgid "Downloading Package Information"
-msgstr "Paket Bilgisi İndiriliyor"
-
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:137
-msgid ""
-"The repositories are being checked for new, removed, or updated software "
-"packages"
-msgstr ""
-"Depolar yeni, silinmiş veya güncellenmiş yazılım paketleri için sınanıyor"
-
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:145
-msgid "Downloading Package Updates"
-msgstr "Paket Güncellemeleri İndiriliyor"
-
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:146
-msgid ""
-"The selected package updates are being downloaded and installed on the system"
-msgstr "Seçilmiş paket güncellemeleri indirildi ve sisteme yüklendi"
-
-#: ../UpdateManagerHildon/UpdateManagerHildon.py:152
-msgid "run_synaptic called with unknown action"
-msgstr "run_synaptic bilinmeyen bir eylemle çağırıldı"
-
-#: ../UpdateManagerText/UpdateManagerText.py:26
-msgid "Cancel"
-msgstr "Vazgeç"
-
-#: ../UpdateManagerText/UpdateManagerText.py:27
-msgid "Install"
-msgstr "Yükle"
-
-#: ../UpdateManagerText/UpdateManagerText.py:45
-msgid "Building Updates List"
-msgstr "Güncelleme Listesi Yapılıyor"
-
-#: ../UpdateManagerText/UpdateManagerText.py:48
-msgid ""
-"\n"
-"A normal upgrade can not be calculated, please run: \n"
-"  sudo apt-get dist-upgrade\n"
-"\n"
-"\n"
-"This can be caused by:\n"
-" ◦ A previous upgrade which didn't complete\n"
-" ◦ Problems with some of the installed software\n"
-" ◦ Unofficial software packages not provided by Ubuntu\n"
-" ◦ Normal changes of a pre-release version of Ubuntu"
-msgstr ""
-"\n"
-"Normal bir yükseltme hesaplanamadı, lütfen çalıştırın: \n"
-"  sudo apt-get dist-upgrade\n"
-"\n"
-"\n"
-"Buna neden olabilecekler:\n"
-" ◦ Önceki bir tamamlanmamış yükseltme\n"
-" ◦ Yüklenmiş yazılım ile olan sorunlar\n"
-" ◦ Ubuntu tarafından sağlanmamış resmi olmayan yazılım paketleri\n"
-" ◦ Bir Ubuntu önsürümünün normal değişiklikleri"
-
-#: ../UpdateManagerText/UpdateManagerText.py:117
-msgid "Downloading changelog"
-msgstr "Değişiklik günlüğü indiriliyor"
-
-#: ../UpdateManager/Core/MyCache.py:108
-#, python-format
-msgid "Other updates (%s)"
-msgstr "Diğer güncellemeler (%s)"
-
-#: ../UpdateManager/Core/MyCache.py:227
-#, python-format
-msgid ""
-"Changes for the versions:\n"
-"%s\n"
-"%s\n"
-"\n"
-msgstr ""
-"Sürümlerde değişenler:\n"
-"%s\n"
-"%s\n"
-"\n"
-
-#: ../UpdateManager/Core/MyCache.py:229
-msgid "This change is not coming from a source that supports changelogs."
-msgstr ""
-"Bu değişiklik, değişim günlüklerini desteklemeyen bir kaynaktan geliyor."
-
-#: ../UpdateManager/Core/MyCache.py:237
-#, python-format
-msgid ""
-"The changelog does not contain any relevant changes.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-"Değişiklik günlüğü hiçbir ilgili değişikliği içermiyor.\n"
-"\n"
-"Lütfen daha sonra yeniden deneyin ya da değişiklikler kullanılabilir olmadan "
-"önce\n"
-"http://launchpad.net/ubuntu/+source/%s/%s/+changelog adresini kullanın."
-
-#: ../UpdateManager/Core/MyCache.py:242
-#, python-format
-msgid ""
-"The list of changes is not available yet.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-"Değişikliklerin listesi henüz mevcut değil.\n"
-"\n"
-"Değişiklikler kullanılabilir oluncaya kadar "
-"http://launchpad.net/ubuntu/+source/%s/%s/+changelog \n"
-"adresini  kullanın ya da daha sonra yeniden deneyin."
-
-#: ../UpdateManager/Core/MyCache.py:248
-msgid ""
-"Failed to download the list of changes. \n"
-"Please check your Internet connection."
-msgstr ""
-"Değişiklik listesini indirme başarısız oldu. \n"
-"Lütfen İnternet bağlantınızı denetleyin."
-
-#: ../UpdateManager/Core/UpdateList.py:50
-msgid "Failed to detect distribution"
-msgstr "Dağıtım belirleme başarısız oldu"
-
-#: ../UpdateManager/Core/UpdateList.py:51
-#, python-format
-msgid "A error '%s' occurred while checking what system you are using."
-msgstr "Hangi sistemi kullandığınız belirlenirken bir '%s' hatası oluştu."
-
-#: ../UpdateManager/Core/UpdateList.py:62
-msgid "Important security updates"
-msgstr "Önemli güvenlik güncelleştirmeleri"
-
-#: ../UpdateManager/Core/UpdateList.py:63
-msgid "Recommended updates"
-msgstr "Önerilen güncellemeler"
-
-#: ../UpdateManager/Core/UpdateList.py:64
-msgid "Proposed updates"
-msgstr "Teklif edilen güncellemeler"
-
-#: ../UpdateManager/Core/UpdateList.py:65
-msgid "Backports"
-msgstr "Geritaşınmış yazılımlar (Backports)"
-
-#: ../UpdateManager/Core/UpdateList.py:66
-msgid "Distribution updates"
-msgstr "Dağıtım güncelleştirmeleri"
-
-#: ../UpdateManager/Core/UpdateList.py:71
-msgid "Other updates"
-msgstr "Diğer güncellemeler"
-
-#: ../UpdateManager/Core/UpdateList.py:80
-msgid "Previous selected"
-msgstr "Önceki seçildi"
-
-#: ../data/glade/UpdateManager.ui.h:1
+#: ../data/glade/UpdateManager.glade.h:1
 msgid ""
 "<b><big>You must check for updates manually</big></b>\n"
 "\n"
@@ -1886,106 +1531,102 @@ msgstr ""
 "<i>Güncellemeler</i> sekmesinden <i>Yazılım Kaynakları</i> seçeneğinden "
 "ayarlayabilirsiniz."
 
-#: ../data/glade/UpdateManager.ui.h:4
+#: ../data/glade/UpdateManager.glade.h:4
+msgid "<big><b>Keep your system up-to-date</b></big>"
+msgstr "<big><b>Sisteminizi güncel tutun</b></big>"
+
+#: ../data/glade/UpdateManager.glade.h:5
 msgid "<big><b>Not all updates can be installed</b></big>"
 msgstr "<big><b>Güncellemelerin tümü kurulamıyor</b></big>"
 
-#: ../data/glade/UpdateManager.ui.h:5
-msgid "<big><b>Running on battery</b></big>"
-msgstr "<big><b>Pilden çalışıyor</b></big>"
-
-#: ../data/glade/UpdateManager.ui.h:6
+#: ../data/glade/UpdateManager.glade.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
 msgstr "<b><big>Güncelleştirme Yöneticisi Başlatılıyor</big></b>"
 
-#: ../data/glade/UpdateManager.ui.h:7
+#: ../data/glade/UpdateManager.glade.h:7
 msgid "Changes"
 msgstr "Değişiklikler"
 
-#: ../data/glade/UpdateManager.ui.h:8
+#: ../data/glade/UpdateManager.glade.h:8
 msgid "Chec_k"
 msgstr "_Denetle"
 
-#: ../data/glade/UpdateManager.ui.h:9
-msgid "Co_ntinue"
-msgstr "D_evam et"
+#: ../data/glade/UpdateManager.glade.h:9
+msgid "Check the software channels for new updates"
+msgstr "Yeni güncellemeler için yazılım kanallarını denetle"
 
-#: ../data/glade/UpdateManager.ui.h:10
+#: ../data/glade/UpdateManager.glade.h:10
 msgid "Description"
 msgstr "Tanım"
 
-#: ../data/glade/UpdateManager.ui.h:11
+#: ../data/glade/UpdateManager.glade.h:11
 msgid "Description of update"
 msgstr "Güncelleme tanımı"
 
-#: ../data/glade/UpdateManager.ui.h:13
+#: ../data/glade/UpdateManager.glade.h:12
+msgid "Release Notes"
+msgstr "Sürüm Notları"
+
+#: ../data/glade/UpdateManager.glade.h:13
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
 "This can be caused by:\n"
-" &#x25E6; A previous upgrade which didn't complete\n"
-" &#x25E6; Problems with some of the installed software\n"
-" &#x25E6; Unofficial software packages not provided by Ubuntu\n"
-" &#x25E6; Normal changes of a pre-release version of Ubuntu"
+" ◦ A previous upgrade which didn't complete\n"
+" ◦ Problems with some of the installed software\n"
+" ◦ Unofficial software packages not provided by Ubuntu\n"
+" ◦ Normal changes of a pre-release version of Ubuntu"
 msgstr ""
-"Mümkün olduğunca çok güncelleme kurmak için kısmi bir yükseltme "
-"gerçekleştir. \n"
+"Olası tüm güncellemeleri kurmak için kısmi yükseltme gerçekleştirin.\n"
 "\n"
-"Şu sebepler yüzünden olmuş olabilir:\n"
-" &#x25E6; Tamamlanmamış önceki bir yükseltme\n"
-" &#x25E6; Bazı kurulu yazılımlardaki sorunlar\n"
-" &#x25E6; Ubuntu tarafından sunulmayan gayri resmi yazılım paketleri\n"
-" &#x25E6; Ubuntu'nun yayın öncesi bir sürümünün olağan değişiklikleri"
+"Bunun nedeni:\n"
+" ◦ Bir önceki tamamlanmamış güncelleme\n"
+" ◦ Bazı kurulu yazılımlarla ilgili problemler\n"
+" ◦ Ubuntu tarafından sağlanmayan resmi olmayan yazılım paketleri\n"
+" ◦ Ubuntu'nun önsürümlerindeki olağan değişiklikler olabilir"
 
-#: ../data/glade/UpdateManager.ui.h:20
-msgid "Settings..."
-msgstr "Ayarlar..."
-
-#: ../data/glade/UpdateManager.ui.h:21
+#: ../data/glade/UpdateManager.glade.h:20
 msgid "Show progress of individual files"
 msgstr "Tekil dosyaların ilerleyişini göster"
 
-#: ../data/glade/UpdateManager.ui.h:23
+#: ../data/glade/UpdateManager.glade.h:22
 msgid "U_pgrade"
 msgstr "_Yükselt"
 
-#: ../data/glade/UpdateManager.ui.h:24 ../data/update-manager.desktop.in.h:3
-#: ../data/update-manager-hildon.desktop.in.h:3
+#: ../data/glade/UpdateManager.glade.h:23
+#: ../data/update-manager.desktop.in.h:3
 msgid "Update Manager"
 msgstr "Güncelleme Yöneticisi"
 
-#: ../data/glade/UpdateManager.ui.h:25
-msgid "Your system is running on battery. Are you sure you want to continue?"
-msgstr ""
-"Sisteminiz pilden çalışıyor. Devam etmek istediğinizden emin misiniz?"
+#: ../data/glade/UpdateManager.glade.h:24
+msgid "Upgrade to the latest version of Ubuntu"
+msgstr "Ubuntu'nun son sürümüne yükselt"
 
-#: ../data/glade/UpdateManager.ui.h:26
+#: ../data/glade/UpdateManager.glade.h:25
 msgid "_Hide this information in the future"
 msgstr "_Bu bilgiyi gelecekte sakla"
 
-#: ../data/glade/UpdateManager.ui.h:27
+#: ../data/glade/UpdateManager.glade.h:26
 msgid "_Install Updates"
 msgstr "Güncellemeleri _Yükle"
 
-#: ../data/glade/UpdateManager.ui.h:28
+#: ../data/glade/UpdateManager.glade.h:27
 msgid "_Partial Upgrade"
 msgstr "_Kısmi Yükseltme"
 
-#: ../data/glade/UpdateManager.ui.h:29
+#: ../data/glade/UpdateManager.glade.h:28
 msgid "_Upgrade"
 msgstr "_Yükselt"
 
-#: ../data/glade/UpdateManager.ui.h:30
+#: ../data/glade/UpdateManager.glade.h:29
 msgid "updates"
 msgstr "güncellemeler"
 
 #: ../data/update-manager.desktop.in.h:1
-#: ../data/update-manager-hildon.desktop.in.h:1
 msgid "Show and install available updates"
 msgstr "Bulunan güncelleştirmeleri göster ve kur"
 
 #: ../data/update-manager.desktop.in.h:2
-#: ../data/update-manager-hildon.desktop.in.h:2
 msgid "Software Updates"
 msgstr "Yazılım Güncellemeleri"
 
@@ -1998,10 +1639,6 @@ msgid "Auto close the install window after successful install"
 msgstr "Başarılı kurulumdan sonra yükleme penceresini otomatik kapat"
 
 #: ../data/update-manager.schemas.in.h:3
-msgid "First run welcome message"
-msgstr "Önce hoşgeldin mesajını çalıştır"
-
-#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If automatic checking for updates is disabled, you have to reload the "
 "channel list manually. This option allows to hide the reminder shown in this "
@@ -2011,13 +1648,7 @@ msgstr ""
 "listesini elle yeniden yüklemelisiniz. Bu seçenek bu durumda gösterilen "
 "anımsatıcıyı saklamanıza olanak sağlar."
 
-#: ../data/update-manager.schemas.in.h:5
-msgid "If this key is set a first run welcome message will be presented."
-msgstr ""
-"Eğer bu seçenek seçildiyse ilk çalıştırmada bir hoşgeldiniz mesajı "
-"sunulacaktır."
-
-#: ../data/update-manager.schemas.in.h:6
+#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If this key is set the install window will be automatically closed on "
 "successful installation."
@@ -2025,31 +1656,29 @@ msgstr ""
 "Bu anahtar seçilirse, kurulum penceresi başarılı kurulum sonrası otomatik "
 "olarak kapatılacaktır."
 
-#: ../data/update-manager.schemas.in.h:7
+#: ../data/update-manager.schemas.in.h:5
 msgid ""
 "If this key is set the main update list window will show version information "
 "(from version to version)."
 msgstr ""
-"Bu tuş ana güncelleme listesinde seçiliyken, pencere sürüm bilgisini "
-"gösterir (sürümden sürüme)"
 
-#: ../data/update-manager.schemas.in.h:8
+#: ../data/update-manager.schemas.in.h:6
 msgid "Remind to reload the channel list"
 msgstr "Kanal listesini yeniden yüklemeyi hatırlat."
 
-#: ../data/update-manager.schemas.in.h:9
+#: ../data/update-manager.schemas.in.h:7
 msgid "Show details of an update"
 msgstr "Bir güncellemenin ayrıntılarını göster"
 
-#: ../data/update-manager.schemas.in.h:10
+#: ../data/update-manager.schemas.in.h:8
 msgid "Show version in update list"
-msgstr "Güncelleme listesinde sürümü göster"
+msgstr ""
 
-#: ../data/update-manager.schemas.in.h:11
+#: ../data/update-manager.schemas.in.h:9
 msgid "Stores the size of the update-manager dialog"
 msgstr "Güncelleme yöneticisi penceresinin boyutunu saklar"
 
-#: ../data/update-manager.schemas.in.h:12
+#: ../data/update-manager.schemas.in.h:10
 msgid ""
 "Stores the state of the expander that contains the list of changes and the "
 "description"
@@ -2057,11 +1686,11 @@ msgstr ""
 "Değişikliklerin ve açıklamaların listesini içeren açılır bölümün durumunu "
 "saklar"
 
-#: ../data/update-manager.schemas.in.h:13
+#: ../data/update-manager.schemas.in.h:11
 msgid "The window size"
 msgstr "Pencere boyutu"
 
-#: ../data/update-manager.schemas.in.h:14
+#: ../data/update-manager.schemas.in.h:12
 msgid ""
 "This key is deprecated in favor of the file /etc/update-manager/release-"
 "upgrades Check automatically if a new version of the current distribution is "
@@ -2071,43 +1700,31 @@ msgstr ""
 "onaylanmadı. Mevcut dağıtımın yeni bir sürümünün olup olmadığını otomatik "
 "olarak kontrol edin ve (eğer mümkünse) güncellemeyi önerin."
 
-#: ../update-manager:56
+#: ../update-manager:55
 msgid "Show version and exit"
 msgstr "Sürümü göster ve çık"
 
-#: ../update-manager:59
-msgid "Directory that contains the data files"
-msgstr "Veri dosyalarını içeren dizin"
+#: ../update-manager:58
+msgid "Check if a new distribution release is available"
+msgstr "Yeni dağıtım sürümlerini denetle"
 
-#: ../update-manager:62
-msgid "Check if a new Ubuntu release is available"
-msgstr "Yeni bir Ubuntu sürümü olup olmadığını denetle"
-
-#: ../update-manager:65 ../do-release-upgrade:23 ../check-new-release:24
+#: ../update-manager:61 ../do-release-upgrade:23
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "En son geliştirme sürümüne yükseltme olasılığını denetle"
 
-#: ../update-manager:69
+#: ../update-manager:65
 msgid "Upgrade using the latest proposed version of the release upgrader"
-msgstr "Yayım yükselticisinde en son önerilen sürümü kullanarak yükselt"
+msgstr ""
 
-#: ../update-manager:76
-msgid "Do not focus on map when starting"
-msgstr "Başlatılırken haritaya odaklanma"
-
-#: ../update-manager:79
+#: ../update-manager:68
 msgid "Try to run a dist-upgrade"
 msgstr "Dağıtım yükseltmeyi dene"
 
-#: ../update-manager:83 ../do-release-upgrade:39
-msgid "Test upgrade with a sandbox aufs overlay"
-msgstr "Yükseltmeyi, bir çalışma dizini 'aufs' yer paylaşımıyla sına"
-
-#: ../update-manager:103
+#: ../update-manager:87
 msgid "Running partial upgrade"
 msgstr "_Yükseltmeye başla"
 
-#: ../do-release-upgrade:27 ../check-new-release:28
+#: ../do-release-upgrade:27
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
@@ -2128,141 +1745,156 @@ msgstr ""
 msgid "Run the specified frontend"
 msgstr "Belirlenmiş önyüzü çalıştır"
 
-#: ../do-release-upgrade:43
+#: ../do-release-upgrade:41
 msgid "Checking for a new ubuntu release"
 msgstr "Yeni Ubuntu sürümleri denetleniyor"
 
-#: ../do-release-upgrade:50
+#: ../do-release-upgrade:48
 msgid "No new release found"
 msgstr "Hiçbir yeni sürüm bulunmadı"
 
-#: ../check-new-release:32
-#, c-format
-msgid ""
-"Do not output anything, just return %s if there is a new release and %s if "
-"there is none."
-msgstr ""
-"Hiçbir çıktı üretme, eğer yeni bir sürüm varsa %s döndür yoksa %s döndür."
-
-#: ../check-new-release:46
-#, c-format
-msgid "New release '%s' available."
-msgstr "Yeni sürüm çıktı ('%s')."
-
-#: ../check-new-release:47
-msgid "Run 'do-release-upgrade' to upgrade to it."
-msgstr "Yükseltmek için 'do-release-upgrade' çalıştırın."
-
-#: ../Janitor/computerjanitor/exc.py:30
-#, python-format
-msgid "Unimplemented method: %s"
-msgstr "Gerçekleştirilmemiş metot: %s"
-
-#: ../Janitor/computerjanitor/file_cruft.py:46
-msgid "A file on disk"
-msgstr "Sürücüdeki bir dosya"
-
-#: ../Janitor/computerjanitor/package_cruft.py:45
-msgid ".deb package"
-msgstr ".deb paketi"
-
-#: ../Janitor/computerjanitor/missing_package_cruft.py:33
-msgid "Install missing package."
-msgstr "Eksik paketi yükle."
-
-#: ../Janitor/computerjanitor/missing_package_cruft.py:42
-#, python-format
-msgid "Package %s should be installed."
-msgstr "%s paketi yüklenmeli."
-
-#. pragma: no cover
-#: ../Janitor/plugins/dpkg_status_plugin.py:36
-#, python-format
-msgid "%i obsolete entries in the status file"
-msgstr "Durum dosyasında %i eski girdisi"
-
-#: ../Janitor/plugins/dpkg_status_plugin.py:39
-msgid "Obsolete entries in dpkg status"
-msgstr "dpks durumunda eski girdiler mevcut"
-
-#. pragma: no cover
-#: ../Janitor/plugins/dpkg_status_plugin.py:42
-msgid "Obsolete dpkg status entries"
-msgstr "Eski dpkg durum girdileri"
-
-#: ../Janitor/plugins/kdelibs4to5_plugin.py:39
-msgid ""
-"When upgrading, if kdelibs4-dev is installed, kdelibs5-dev needs to be "
-"installed. See bugs.launchpad.net, bug #279621 for details."
-msgstr ""
-"Güncelleme sırasında eğer kdelibs4-dev paketi kuruluysa, kdelibs5-dev "
-"paketinin de kurulması gerekir. Daha fazla bilgi için bugs.launchpad.net "
-"adresindeki #279621 numaralı hata kaydına bakın."
-
-#: ../Janitor/plugins/langpack_manual_plugin.py:34
-#, python-format
-msgid "%s needs to be marked as manually installed."
-msgstr "%s paketi, elle yüklendi şeklinde imlenmesi gerekiyor."
-
-#: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
-msgstr ""
-"Ayrıca grub yüklendikten sonra 'lilo'yu kaldır.(Ayrıntılar için #314004 "
-"yanlışına bakın.)"
-
-#~ msgid "Check if a new distribution release is available"
-#~ msgstr "Yeni dağıtım sürümlerini denetle"
-
-#~ msgid "Upgrade to the latest version of Ubuntu"
-#~ msgstr "Ubuntu'nun son sürümüne yükselt"
-
-#~ msgid "Check the software channels for new updates"
-#~ msgstr "Yeni güncellemeler için yazılım kanallarını denetle"
+#~ msgid ""
+#~ "Use special upgrade mode. Available:\n"
+#~ "desktop, server"
+#~ msgstr ""
+#~ "Özel yükseltme kipini kullan. Seçenekler:\n"
+#~ "masaüstü, sunucu"
 
 #, python-format
-#~ msgid "<b>New distribution release '%s' is available</b>"
-#~ msgstr "<b>Yeni dağıtım sürümü '%s' ulaşılabilir</b>"
+#~ msgid "Fetching file %li of %li at %sb/s"
+#~ msgstr "Dosyalar getiriliyor. İnen: %li  Toplam: %li  Hız: %s/s"
 
-#~ msgid "Your distribution is not supported anymore"
-#~ msgstr "Kullandığınız dağıtım artık desteklenmiyor"
-
-#~ msgid "Verfication failed"
-#~ msgstr "Doğrulama başarısız oldu"
+#, python-format
+#~ msgid "%li days %li hours %li minutes"
+#~ msgstr "%li gün %li saat %li dakika"
 
 #~ msgid ""
-#~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-#~ "version of this driver is available that works with your video card in "
-#~ "Ubuntu 8.10.\n"
-#~ "\n"
-#~ "Do you want to continue?"
+#~ "The list of changes is not available yet.\n"
+#~ "Please try again later."
 #~ msgstr ""
-#~ "Bilgisayarınız şu an NVIDIA 'nvidia' grafik sürücüsünü kullanıyor. Ubuntu "
-#~ "8.10'da donanımınız ile çalışabilir bir sürücü sürümü yok.\n"
-#~ "\n"
-#~ "Devam etmek istiyor musunuz ?"
+#~ "Değişiklik listesi henüz mevcut değil.\n"
+#~ "Lütfen daha sonra yeniden deneyin."
+
+#~ msgid "_Check"
+#~ msgstr "_Denetle"
+
+#~ msgid "Daily"
+#~ msgstr "Günlük"
+
+#~ msgid "Every two days"
+#~ msgstr "Her iki günde bir"
+
+#~ msgid "Weekly"
+#~ msgstr "Haftalık"
+
+#~ msgid "Every two weeks"
+#~ msgstr "Her iki haftada bir"
+
+#~ msgid "After one week"
+#~ msgstr "Bir hafta sonra"
+
+#~ msgid "After two weeks"
+#~ msgstr "İki hafta sonra"
+
+#~ msgid "After one month"
+#~ msgstr "Bir ay sonra"
+
+#~ msgid "Import key"
+#~ msgstr "Anahtar aktar"
+
+#~ msgid "Error importing selected file"
+#~ msgstr "Seçili dosyayı aktarmada hata"
+
+#~ msgid "Error removing the key"
+#~ msgstr "Anahtar kaldırmada hata"
 
 #~ msgid ""
-#~ "This computer is currently using the AMD 'fglrx' graphics driver. No version "
-#~ "of this driver is available that works with your hardware in Ubuntu 9.04.\n"
-#~ "\n"
-#~ "Do you want to continue?"
+#~ "The key you selected could not be removed. Please report this as a bug."
 #~ msgstr ""
-#~ "Bilgisayarınız şu an AMD 'fglrx' grafik sürücüsünü kullanıyor. Ubuntu "
-#~ "9.04'te donanımınız ile çalışabilir bir sürücü sürümü yok.\n"
-#~ "\n"
-#~ "Devam etmek istiyor musunuz?"
+#~ "Seçtiğiniz anahtar kaldırılamadı. Lütfen bunu bir hata olarak iletin."
 
-#, python-format
+#~ msgid "_Skip This Step"
+#~ msgstr "Bu Adımı _Atla"
+
+#~ msgid "Checking for updates"
+#~ msgstr "Güncellemeler denetleniyor"
+
+#~ msgid "Every %s days"
+#~ msgstr "Her %s günde bir"
+
+#~ msgid "After %s days"
+#~ msgstr "%s gün sonra"
+
+#~ msgid "Please enter a name for the disc"
+#~ msgstr "Lütfen disk için bir ad girin"
+
+#~ msgid "Please insert a disc in the drive:"
+#~ msgstr "Lütfen sürücüye bir disk yerleştirin:"
+
+#~ msgid "<b>Internet updates</b>"
+#~ msgstr "<b>İnternet güncellemeleri</b>"
+
+#~ msgid "Authentication"
+#~ msgstr "Kimlik Denetimi"
+
+#~ msgid "Internet Updates"
+#~ msgstr "İnternet Güncellemeleri"
+
+#~ msgid "_Check for updates automatically:"
+#~ msgstr "Güncellemeleri kendiliğinden denetle"
+
+#~ msgid "_Import Key File"
+#~ msgstr "İçe Anahtar Dosyası _Aktar"
+
+#~ msgid "<b>Comment:</b>"
+#~ msgstr "<b>Yorum:</b>"
+
+#~ msgid "<b>URI:</b>"
+#~ msgstr "<b>URI:</b>"
+
 #~ msgid ""
-#~ "The upgrade will continue but the '%s' package may be in a not working "
-#~ "state. Please consider submitting a bug report about it."
+#~ "Binary\n"
+#~ "Source"
 #~ msgstr ""
-#~ "Yükseltme devam edecek ama '%s' paketi çalışır durumda olmayabilir. Lütfen "
-#~ "bunun hakkında bir hata raporu göndermeyi dikkate alın."
+#~ "İkili\n"
+#~ "Kaynak"
 
-#~ msgid "Settings…"
-#~ msgstr "Ayarlar..."
+#~ msgid "Scanning CD-ROM"
+#~ msgstr "CD-ROM taranıyor"
+
+#~ msgid "_Reload"
+#~ msgstr "_Yenile"
+
+#~ msgid "Officially supported"
+#~ msgstr "Resmi olarak desteklenenler"
+
+#~ msgid "Restricted copyright"
+#~ msgstr "Sınırlı telif hakkı"
+
+#~ msgid "     "
+#~ msgstr "     "
+
+#~ msgid "System Update Tool"
+#~ msgstr "Sistem Güncelleme Aracı"
+
+#~ msgid "Asking for confirmation"
+#~ msgstr "Onay isteniyor"
+
+#~ msgid "Fetching the upgrades"
+#~ msgstr "Yükseltmeler alınıyor"
+
+#~ msgid "<b>Remove %s</b>"
+#~ msgstr "<b>Şunu kaldır: %s</b>"
+
+#~ msgid "Fetch data from the network for the upgrade?"
+#~ msgstr "Yükseltme için gerekli veriler ağdan indirilsin mi?"
+
+#~ msgid "<p>You have to download a total of %s. "
+#~ msgstr "Toplam %s indirmeniz gerekmektedir. "
+
+#~ msgid "The selected file may not be a GPG key file or it might be corrupt."
+#~ msgstr ""
+#~ "Seçili dosya bir GPG anahtar dosyası olmayabilir veya bozuk olabilir."
 
 #~ msgid ""
 #~ "A unresolvable problem occurred while calculating the upgrade.\n"
@@ -2275,6 +1907,221 @@ msgstr ""
 #~ "Lütfen bu hatayı 'update-manager' için bildirin, hata raporuna /var/log/dist-"
 #~ "upgrade/ konumundaki dosyaları da ekleyin."
 
+#~ msgid "Fetching backport of '%s'"
+#~ msgstr "Geritaşınmış '%s' getiriliyor"
+
+#~ msgid "changes"
+#~ msgstr "değişiklikler"
+
+#~ msgid "Software Channel"
+#~ msgstr "Yazılım Kanalı"
+
+#~ msgid "(Source Code)"
+#~ msgstr "(Kaynak Kodu)"
+
+#~ msgid "Source Code"
+#~ msgstr "Kaynak Kod"
+
+#~ msgid "<b>Automatic updates</b>"
+#~ msgstr "<b>Kendiliğinden güncelleme</b>"
+
+#~ msgid "<b>Internet</b>"
+#~ msgstr "<b>İnternet</b>"
+
+#~ msgid "Add Cdrom"
+#~ msgstr "Cdrom ekle"
+
+#~ msgid "D_elete downloaded software files:"
+#~ msgstr "İndirilmiş yazılım dosyalarını _sil:"
+
+#~ msgid "Download from:"
+#~ msgstr "İndirme adresi:"
+
+#~ msgid "Import the public key from a trusted software provider"
+#~ msgstr "Güvenilen bir yazılm sağlayıcısından açık anahtarı içe aktar"
+
+#~ msgid ""
+#~ "Only security updates from the official Ubuntu servers will be installed "
+#~ "automatically"
+#~ msgstr ""
+#~ "Güvenlik güncellemeleri sadece resmi Ubuntu sunucularından otomatik olarak "
+#~ "kurulacaktır"
+
+#~ msgid "Restore _Defaults"
+#~ msgstr "_Öntanımlılara Dön"
+
+#~ msgid "Restore the default keys of your distribution"
+#~ msgstr "Dağıtımınızın öntanımlı anahtarlarını geriye döndürün"
+
+#~ msgid "Software Sources"
+#~ msgstr "Yazılım Kaynakları"
+
+#~ msgid "Source code"
+#~ msgstr "Kaynak kod"
+
+#~ msgid "_Download updates automatically, but do not install them"
+#~ msgstr "Güncellemeleri _kendiliğinden indir ancak kurma"
+
+#~ msgid "_Install security updates without confirmation"
+#~ msgstr "Güvenlik güncellemelerini _onaylatmadan kur"
+
+#~ msgid ""
+#~ "<b><big>The information about available software is out-of-date</big></b>\n"
+#~ "\n"
+#~ "To install software and updates from newly added or changed sources, you "
+#~ "have to reload the information about available software.\n"
+#~ "\n"
+#~ "You need a working internet connection to continue."
+#~ msgstr ""
+#~ "<b><big>Mevcut yazılım bilgileri güncel değil</big></b>\n"
+#~ "\n"
+#~ "Yeni eklenmiş ya da değişmiş kaynaklardan yazılım ve güncellemeler kurmak "
+#~ "için mevcut yazılım bilgilerini tekrar yüklemeniz gerekmektedir.\n"
+#~ "\n"
+#~ "Devam etmek için çalışır durumda bir internet bağlantısı gerekmektedir."
+
+#~ msgid "<b>Components:</b>"
+#~ msgstr "<b>Bileşenler:</b>"
+
+#~ msgid "<b>Distribution:</b>"
+#~ msgstr "<b>Dağıtım:</b>"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>Tür:</b>"
+
+#~ msgid "APT line:"
+#~ msgstr "APT satırı"
+
+#~ msgid "Edit Source"
+#~ msgstr "Kaynak Düzenleme"
+
+#~ msgid "_Add Source"
+#~ msgstr "Kaynak _Ekle"
+
+#~ msgid "Configure the sources for installable software and updates"
+#~ msgstr "Kurulabilir yazılım ve güncellemeler için kaynakları yapılandır"
+
+#~ msgid "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+#~ msgstr ""
+#~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+
+#~ msgid "Ubuntu 6.10 'Edgy Eft'"
+#~ msgstr "Ubuntu 6.10 'Edgy Eft'"
+
+#~ msgid "Community maintained"
+#~ msgstr "Topluluk tarafından sağlanan"
+
+#~ msgid "Restricted software"
+#~ msgstr "Kısıtlı yazılımlar"
+
+#~ msgid "Cdrom with Ubuntu 6.10 'Edgy Eft'"
+#~ msgstr "Ubuntu 6.10 'Edgy Eft' Cdrom'u"
+
+#~ msgid "Ubuntu 6.06 LTS 'Dapper Drake'"
+#~ msgstr "Ubuntu 6.06 LTS 'Dapper Drake'"
+
+#~ msgid "Canonical supported Open Source software"
+#~ msgstr "Canonical Açık Kaynak yazılımı destekledi"
+
+#~ msgid "Community maintained (universe)"
+#~ msgstr "Topluluk tarafından sağlanan (universe)"
+
+#~ msgid "Community maintained Open Source software"
+#~ msgstr "Topluluk tarafından sağlanan Açık Kaynaklı yazılımlar"
+
+#~ msgid "Non-free drivers"
+#~ msgstr "Özgür olmayan sürücüler"
+
+#~ msgid "Restricted software (Multiverse)"
+#~ msgstr "Kısıtlı yazılımlar (Multiverse)"
+
+#~ msgid "Cdrom with Ubuntu 6.06 LTS 'Dapper Drake'"
+#~ msgstr "Ubuntu 6.06 LTS 'Dapper Drake' Cdrom'u"
+
+#~ msgid "Ubuntu 5.10 'Breezy Badger'"
+#~ msgstr "Ubuntu 5.10 'Breezy Badger'"
+
+#~ msgid "Cdrom with Ubuntu 5.10 'Breezy Badger'"
+#~ msgstr "Ubuntu 5.10 'Breezy Badger' Cdrom'u"
+
+#~ msgid "Ubuntu 5.10 Security Updates"
+#~ msgstr "Ubuntu 5.10 Güvenlik Güncellemeleri"
+
+#~ msgid "Ubuntu 5.10 Updates"
+#~ msgstr "Ubuntu 5.10 Güvenlik Güncelleştirmeleri"
+
+#~ msgid "Ubuntu 5.10 Backports"
+#~ msgstr "Ubuntu 5.10 Geritaşınmış Yazılımlar (Backports)"
+
+#~ msgid "Ubuntu 5.04 'Hoary Hedgehog'"
+#~ msgstr "Ubuntu 5.04 'Hoary Hedgehog"
+
+#~ msgid "Cdrom with Ubuntu 5.04 'Hoary Hedgehog'"
+#~ msgstr "Ubuntu 5.04 'Hoary Hedgehog' Cdrom'u"
+
+#~ msgid "Ubuntu 5.04 Security Updates"
+#~ msgstr "Ubuntu 5.04 Güvenlik Güncellemeleri"
+
+#~ msgid "Ubuntu 5.04 Updates"
+#~ msgstr "Ubuntu 5.04 Güncellemeleri"
+
+#~ msgid "Ubuntu 5.04 Backports"
+#~ msgstr "Ubuntu 5.04 Geritaşınmış Yazılımlar (Backports)"
+
+#~ msgid "Ubuntu 4.10 'Warty Warthog'"
+#~ msgstr "Ubuntu 4.10 'Warty Warthog'"
+
+#~ msgid "Community maintained (Universe)"
+#~ msgstr "Topluluk tarafından sağlanan (Universe)"
+
+#~ msgid "Non-free (Multiverse)"
+#~ msgstr "Özgür olmayan (Multiverse)"
+
+#~ msgid "Cdrom with Ubuntu 4.10 'Warty Warthog'"
+#~ msgstr "Ubuntu 4.10 'Warty Warthog' Cdrom'u"
+
+#~ msgid "No longer officially supported"
+#~ msgstr "Artık resmi olarak desteklenmiyor"
+
+#~ msgid "Ubuntu 4.10 Security Updates"
+#~ msgstr "Ubuntu 4.10 Güvenlik Güncellemeleri"
+
+#~ msgid "Ubuntu 4.10 Updates"
+#~ msgstr "Ubuntu 4.10 Güncellemeleri"
+
+#~ msgid "Ubuntu 4.10 Backports"
+#~ msgstr "Ubuntu 4.10 Geritaşınmış Yazılımlar (Backports)"
+
+#~ msgid "http://packages.debian.org/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+#~ msgstr "http://packages.debian.org/changelogs/pool/%s/%s/%s/%s_%s/changelog"
+
+#~ msgid "Debian 3.1 \"Sarge\""
+#~ msgstr "Debian 3.1 \"Sarge\""
+
+#~ msgid "http://security.debian.org/"
+#~ msgstr "http://security.debian.org/"
+
+#~ msgid "Debian 3.1 \"Sarge\" Security Updates"
+#~ msgstr "Debian 3.1 \"Sarge\" Güvenlik Güncellemeleri"
+
+#~ msgid "Debian \"Etch\" (testing)"
+#~ msgstr "Debian \"Etch\" (test)"
+
+#~ msgid "http://http.us.debian.org/debian/"
+#~ msgstr "http://http.us.debian.org/debian/"
+
+#~ msgid "Debian \"Sid\" (unstable)"
+#~ msgstr "Debian \"Sid\" (kararsız)"
+
+#~ msgid "DFSG-compatible Software with Non-Free Dependencies"
+#~ msgstr "Özgür Olmayan Bağımlılığı Bulunan DFSG Uyumlu Yazılım"
+
+#~ msgid "Non-DFSG-compatible Software"
+#~ msgstr "DFSG Uyumlu Olmayan Yazılım"
+
+#~ msgid "Your system has already been upgraded."
+#~ msgstr "Sisteminiz zaten yükseltilmiş."
+
 #~ msgid ""
 #~ "<span weight=\"bold\" size=\"x-large\">Upgrading to Ubuntu 6.10</span>"
 #~ msgstr ""
@@ -2282,3 +2129,90 @@ msgstr ""
 
 #~ msgid "Important security updates of Ubuntu"
 #~ msgstr "Ubuntu için önemli güvenlik güncellemeleri"
+
+#~ msgid "The upgrade aborts now. Please report this bug."
+#~ msgstr "Yükseltme şimdi iptal edilecek. Lütfen bu hatayı bildirin."
+
+#~ msgid "_Add Channel"
+#~ msgid_plural "_Add Channels"
+#~ msgstr[0] "Kanal _ekle"
+
+#~ msgid "_Custom"
+#~ msgstr "_Özel"
+
+#~ msgid "Ubuntu 6.06 LTS Security Updates"
+#~ msgstr "Ubuntu 6.06 LTS Güvenlik Güncelleştirmeleri"
+
+#~ msgid "Run in a special upgrade mode"
+#~ msgstr "Özel bir yükseltme kipinde yürüt"
+
+#~ msgid "None"
+#~ msgstr "Hiçbiri"
+
+#~ msgid "%s updates"
+#~ msgstr "%s güncellemeleri"
+
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "Nearest server"
+#~ msgstr "En yakın sunucu"
+
+#~ msgid "Active"
+#~ msgstr "Etkin"
+
+#~ msgid ""
+#~ "The upgrade can use the network to check the latest updates and to fetch "
+#~ "packages that are not on the current CD.\n"
+#~ "If you have fast or inexpensive network access you should answer 'Yes' here. "
+#~ "If networking is expensive for you choose 'No'."
+#~ msgstr ""
+#~ "Yükseltme, ağı kullanarak en sün güncellemeleri denetleyebilir ve mevcut "
+#~ "CD'de olmayan paketleri indirebilir.\n"
+#~ "Eğer ağa erişiminiz hızlıysa ya da pahalı değilse 'Evet'i seçmelisiniz. Aksi "
+#~ "halde 'Hayır'ı seçin."
+
+#~ msgid "Changes and description of the update"
+#~ msgstr "Değişiklikler ve güncelleme açıklaması"
+
+#~ msgid "<b>CDROM/DVD</b>"
+#~ msgstr "<b>CDROM/DVD</b>"
+
+#~ msgid ""
+#~ "<i>To improve the user experience of Ubuntu please take part in the "
+#~ "popularity contest. If you do so the list of installed software and how "
+#~ "often it was used will be collected and sent anonymously to the Ubuntu "
+#~ "project  on a weekly basis.\n"
+#~ "\n"
+#~ "The results are used to improve the support for popular applications and to "
+#~ "rank applications in the search results.</i>"
+#~ msgstr ""
+#~ "<i>Kullanıcıların Ubuntu deneyimini iyileştirmek için lütfen sevilen "
+#~ "uygulamalar yarışmasına katılın. Eğer katılırsanız, herhangi kişisel bir "
+#~ "bilgi içermeyecek şekilde kurulu olan yazılımlar ve bunların kullanım "
+#~ "sıklığı haftalık olarak Ubuntu projesine bildirilecektir.\n"
+#~ "\n"
+#~ "Sonuçlar sevilen olan uygulamalara verilen desteğin geliştirilmesinde ve "
+#~ "arama sonuçlarındaki sıralamanın belirlenmesinde kullanılacaktır.</i>"
+
+#~ msgid "Statistics"
+#~ msgstr "İstatistikler"
+
+#~ msgid "Submit statistical information"
+#~ msgstr "İstatistiki Bilgileri Bildir"
+
+#~ msgid "Third Party"
+#~ msgstr "Üçüncü Taraf"
+
+#~ msgid "Proprietary drivers for devices"
+#~ msgstr "Aygıtlar için açık kaynaklı olmayan sürücüler"
+
+#~ msgid "Proprietary drivers for devices "
+#~ msgstr "Aygıtlar için lisanslı sürücüler "
+
+#~ msgid "Software restricted by copyright or legal issues"
+#~ msgstr ""
+#~ "Yazılım telif haklarıyla veya yasal sorunlar sebebiyle kısıtlanmıştır"
+
+#~ msgid "Backported updates"
+#~ msgstr "Geritaşınmış (backported) güncellemeler"

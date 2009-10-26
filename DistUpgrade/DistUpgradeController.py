@@ -275,7 +275,8 @@ class DistUpgradeController(object):
         # check if we run from a LTS 
         forceLTS=False
         if (self.release == "dapper" or
-            self.release == "hardy"):
+            self.release == "hardy" or
+            self.release == "lucid"):
             forceLTS=True
         m = MetaReleaseCore(useDevelopmentRelease=False,
                             forceLTS=forceLTS)

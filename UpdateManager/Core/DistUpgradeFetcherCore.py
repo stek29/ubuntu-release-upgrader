@@ -216,7 +216,6 @@ class DistUpgradeFetcherCore(object):
         return False
 
     def runDistUpgrader(self):
-        #print "runing: %s" % script
         args = [self.script]+self.run_options
         if os.getuid() != 0:
             os.execv("/usr/bin/sudo",["sudo"]+args)
@@ -257,7 +256,13 @@ class DistUpgradeFetcherCore(object):
             self.cleanup()
             return
         try:
-          self.runDistUpgrader()
+            # check if we can execute, if we run it via sudo we will
+            # not know otherwise, sudo/gksu will not raise a exception
+            if not os.access(self.script, os.X_OK):
+                ex = OSError("Can not execute '%s'" % self.script)
+                ex.errno = 13
+                raise ex
+            self.runDistUpgrader()
         except OSError, e:
           if e.errno == 13:
             self.error(_("Can not run the upgrade"),

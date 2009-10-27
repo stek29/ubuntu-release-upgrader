@@ -277,7 +277,7 @@ class DistUpgradeController(object):
         if (self.release == "dapper" or
             self.release == "hardy"):
             forceLTS=True
-        m = MetaReleaseCore(useDevelopmentRelease=True,
+        m = MetaReleaseCore(useDevelopmentRelease=False,
                             forceLTS=forceLTS)
         # this will timeout eventually
         while m.downloading:

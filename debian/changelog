@@ -11,6 +11,32 @@ update-manager (1:0.127) UNRELEASED; urgency=low
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 21 Oct 2009 09:40:42 +0200
 
+update-manager (1:0.126.7) karmic-proposed; urgency=low
+
+  * po/*.po:
+    - update translations from LP (LP: #460547)
+  * UpdateManager/Core/DistUpgradeFetcherCore.py:
+    - check if running on a system with noexec /tmp and give a propper
+      error message (LP: #461744)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - add missing locale.bindtextdomain() (LP: #460547)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 28 Oct 2009 14:11:41 +0100
+
+update-manager (1:0.126.6) karmic; urgency=low
+
+  * debian/control:
+    - updated to point the karmic branch
+  * UpdateManager/GtkProgress.py:
+    - fix small cosmetic problem with the release-upgrader
+      download window size
+  * DistUpgrade/xorg_fix_proprietary.py:
+    - if xorg.conf is zero size, remove it (LP: # 439551)
+  * change unicode "&#x25E6;" to "*" to make translations
+    work (LP: #344693) and unfuzzy translations
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 23 Oct 2009 14:06:21 +0200
+
 update-manager (1:0.126.5) karmic; urgency=low
 
   * DistUpgrade/DistUpgradeQuirks.py:

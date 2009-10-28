@@ -123,6 +123,13 @@ if __name__ == "__main__":
         logging.info("No xorg.conf, exiting")
         sys.exit(0)
         
+    # remove empty xorg.conf to help xorg and its auto probing logic
+    # (LP: #439551)
+    if os.path.getsize(XORG_CONF) == 0:
+        logging.info("xorg.conf is zero size, removing")
+        os.remove(XORG_CONF)
+        sys.exit(0)
+
     #make a backup of the xorg.conf
     backup = XORG_CONF + ".dist-upgrade-" + time.strftime("%Y%m%d%H%M")
     logging.debug("creating backup '%s'" % backup)

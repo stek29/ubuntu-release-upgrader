@@ -27,6 +27,7 @@ import vte
 import gobject
 import pango
 import sys
+import locale
 import logging
 import time
 import subprocess
@@ -341,14 +342,14 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
           localedir=os.path.join(os.getcwd(),"mo")
           gladedir=os.getcwd()
         else:
-          localedir="/usr/share/locale/update-manager"
+          localedir="/usr/share/locale/"
           gladedir=os.path.join(datadir, "glade")
 
 	# check if we have a display etc
 	gtk.init_check()
 
-        # FIXME: i18n must be somewhere relative do this dir
         try:
+          locale.bindtextdomain("update-manager",localedir)
           gettext.textdomain("update-manager")
         except Exception, e:
           logging.warning("Error setting locales (%s)" % e)

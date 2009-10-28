@@ -378,7 +378,7 @@ iface eth0 inet static
             self._runInImage(["mkdir","-p","/etc/update-manager/release-upgrades.d"])
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
 
-        # copy test repo sources.list (if needed)
+        # copy test repo sources.list (if needed) 
         test_repo = self.config.getWithDefault("NonInteractive","AddRepo","")
         if test_repo:
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
@@ -390,11 +390,14 @@ iface eth0 inet static
             sources = SourcesList(matcherPath=".")
             sources.load(test_repo)
             # add the uri to the list of valid mirros in the image
+            self._runInImage(["mkdir","-p","/upgrade-tester"])
+            self._runInImage(["echo -e '[Sources]\nValidMirrors=/upgrade-tester/new_mirrors.cfg' > /etc/update-manager/release-upgrades.d/new_mirrors.cfg"])
             for entry in sources.list:
                 if (not (entry.invalid or entry.disabled) and
                     entry.type == "deb"):
                     print "adding %s to mirrors" % entry.uri
-                    self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
+                    self._runInImage(["echo '%s' >> /upgrade-tester/new_mirrors.cfg" % entry.uri])
+                    
 
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader

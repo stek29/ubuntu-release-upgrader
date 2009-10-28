@@ -17,13 +17,8 @@ done
 # cdromupgrade script
 sed -i s/^CODENAME=.*/CODENAME=$DIST/ cdromupgrade
 
-# update po
+# update po and copy the mo files
 (cd ../po; make update-po)
-
-# update demotions
-#(cd ../utils/ ; ./demotions.py )
-
-# copy the mo files
 cp -r ../po/mo .
 
 # make symlink

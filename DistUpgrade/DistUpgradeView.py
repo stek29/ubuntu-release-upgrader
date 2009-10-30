@@ -101,6 +101,20 @@ class FetchProgress(apt.progress.FetchProgress):
     #print "init FetchProgress in DistUpgradeView"
     apt.progress.FetchProgress.__init__(self)
     self.est_speed = 0
+  def start(self):
+    self.release_file_download_error = False
+  def updateStatus(self, uri, descr, shortDescr, status):
+    # FIXME: workaround issue in libapt/python-apt that does not 
+    #        raise a exception if *all* files fails to download
+    if status == self.dlFailed:
+      logging.warn("updateStatus: dlFailed on '%s' " % uri)
+      if uri.endswith("Release.gpg") or uri.endswith("Release"):
+        # only care about failures from network, not gpg, bzip, those
+        # are different issues
+        for net in ["http","ftp","mirror"]:
+          if uri.startswith(net):
+            self.release_file_download_error = True
+            break
   def pulse(self):
     apt.progress.FetchProgress.pulse(self)
     if self.currentCPS > self.est_speed:

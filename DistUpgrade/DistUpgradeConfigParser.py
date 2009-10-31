@@ -24,6 +24,12 @@ class DistUpgradeConfig(ConfigParser):
         self.read(self.config_files)
     def getWithDefault(self, section, option, default):
         try:
+            if type(default) == bool:
+                return self.getboolean(section, option)
+            elif type(default) == float:
+                return self.getfloat(section, option)
+            elif type(default) == int:
+                return self.getint(section, option)
             return self.get(section, option, raw=True)
         except (NoSectionError, NoOptionError),e:
             return default
@@ -47,7 +53,8 @@ class DistUpgradeConfig(ConfigParser):
 
 
 if __name__ == "__main__":
-    c = DistUpgradeConfig()
+    c = DistUpgradeConfig(".")
     print c.getlist("Distro","MetaPkgs")
     print c.getlist("Distro","ForcedPurges")
     print c.getListFromFile("Sources","ValidMirrors")
+    print c.getWithDefault("Distro","EnableApport", True)

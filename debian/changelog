@@ -8,6 +8,10 @@ update-manager (1:0.127) UNRELEASED; urgency=low
     - fix missing BaseMetaPackages
   * AutoUpgradeTester/UpgradeTestBackendQemu.py:
     - fix AddRepo code
+  * DistUpgrade/DistUpgradeConfigParser.py:
+    - fix getWithDefault() to use the correct get{int,float,boolean}
+      function based on the type of the default (LP: #465619)
+      Thanks to Brian Murray for spotting this bug
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 21 Oct 2009 09:40:42 +0200
 

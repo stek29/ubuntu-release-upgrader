@@ -117,6 +117,7 @@ class GtkFetchProgressAdapter(FetchProgress):
         return False
     def start(self):
         #logging.debug("start")
+        FetchProgress.start(self)
         self.progress.set_fraction(0)
         self.status.show()
         self.button_cancel.show()

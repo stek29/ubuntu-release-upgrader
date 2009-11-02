@@ -194,6 +194,7 @@ class KDEFetchProgressAdapter(FetchProgress):
       return False
 
     def start(self):
+        FetchProgress.start(self)
         #self.progress.show()
         self.progress.setValue(0)
         self.status.show()

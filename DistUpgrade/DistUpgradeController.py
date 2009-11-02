@@ -246,7 +246,7 @@ class DistUpgradeController(object):
                   "It is not recommended to perform a upgrade "
                   "over ssh currently because in case of failure "
                 "it is harder to recover.\n\n"
-                  "If you continue, a additional ssh daemon will be "
+                  "If you continue, an additional ssh daemon will be "
                   "started at port '%s'.\n"
                   "Do you want to continue?") % port)
             # abort

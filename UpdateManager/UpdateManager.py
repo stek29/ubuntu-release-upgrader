@@ -45,6 +45,7 @@ import os.path
 import stat
 import re
 import locale
+import logging
 import tempfile
 import pango
 import subprocess

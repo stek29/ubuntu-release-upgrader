@@ -20,13 +20,16 @@
 #  USA
 
 from gettext import gettext as _
+from stat import *
+
+import apt_pkg
 import locale
+import re
 import os
 import os.path
-import apt_pkg
-import urllib2
 import subprocess
-from stat import *
+import sys
+import urllib2
 
 def lsmod():
   " return list of loaded modules (or [] if lsmod is not found) "
@@ -177,7 +180,8 @@ def init_proxy(gconfclient=None):
   # if we have a proxy, set it
   if proxy:
     # basic verification
-    if not proxy.startswith("http://"):
+    if not re.match("http://\w+", proxy):
+      print >> sys.stderr, "proxy '%s' looks invalid" % proxy
       return
     proxy_support = urllib2.ProxyHandler({"http":proxy})
     opener = urllib2.build_opener(proxy_support)

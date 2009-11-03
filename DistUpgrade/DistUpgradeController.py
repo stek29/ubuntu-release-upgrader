@@ -233,7 +233,10 @@ class DistUpgradeController(object):
                                  _("You are running the upgrade over a "
                                    "remote ssh connection with a frontend "
                                    "that does "
-                                   "not support this. The upgrade will "
+                                   "not support this. Please try a text "
+                                   "mode upgrade with 'do-release-upgrade'."
+                                   "\n\n"
+                                   "The upgrade will "
                                    "abort now. Please try without ssh.")
                                  )
                 sys.exit(1)

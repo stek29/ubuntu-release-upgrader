@@ -100,6 +100,10 @@ def url_downloadable(uri, debug_func=None):
   (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
   if scheme == "http":
     import httplib
+    proxy = os.getenv("http_proxy")
+    if (proxy):
+      path = scheme + netloc + path
+      netloc = proxy
     try:
       c = httplib.HTTPConnection(netloc)
       c.request("HEAD", path)

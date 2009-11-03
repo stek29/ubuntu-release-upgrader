@@ -3,9 +3,9 @@
 set -e
 
 # update demotions
-(cd utils && ./demotions.py jaunty karmic > demoted.cfg)
+(cd utils && ./demotions.py karmic lucid > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
-(cd utils && ./demotions.py hardy karmic > demoted.cfg.hardy)
+(cd utils && ./demotions.py hardy lucid > demoted.cfg.hardy)
 
 # update base-installer
 (cd utils && ./update-base-installer.sh)

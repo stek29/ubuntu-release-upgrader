@@ -23,6 +23,7 @@ from string import Template
 import os
 import apt_pkg
 import apt
+import logging
 import tarfile
 import socket
 import urlparse

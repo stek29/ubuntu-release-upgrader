@@ -448,8 +448,8 @@ class UpdateManager(SimpleGtkbuilderApp):
       try:
           inst_count = self.cache.installCount
           self.dl_size = self.cache.requiredDownload
-          t = _("%s selected. Download size: %s") % (inst_count,
-                                                       humanize_size(self.dl_size))
+          t = _("Download size: %s\n%s selected.") % (
+                                                      humanize_size(self.dl_size),inst_count)
           self.label_downsize.set_text(t)
       except SystemError, e:
           print "requiredDownload could not be calculated: %s" % e

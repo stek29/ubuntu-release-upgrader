@@ -141,7 +141,8 @@ class MetaReleaseCore(object):
         try:
             open(self.METARELEASE_FILE,"a")
         except IOError, e:
-            path = os.path.expanduser("~/.update-manager-core/")
+            cacheDir = os.getenv('XDG_CACHE_HOME', os.path.expanduser('~/.cache'))
+            path = os.path.join(cacheDir, 'update-manager-core')
             if not os.path.exists(path):
 		try:
                     os.mkdir(path)

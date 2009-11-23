@@ -625,14 +625,12 @@ class UpdateManager(SimpleGtkbuilderApp):
     if action == UPDATE:
         self.install_backend.update()
     elif action == INSTALL:
-        #has_reboot = os.path.exists(REBOOT_REQUIRED_FILE)
+        has_reboot = os.path.exists(REBOOT_REQUIRED_FILE)
         # do it
         self.install_backend.commit(self.cache)
         # check if there is a new reboot required notification
-        #if not has_reboot and os.path.exists(REBOOT_REQUIRED_FILE):
-        if os.path.exists(REBOOT_REQUIRED_FILE):
+        if not has_reboot and os.path.exists(REBOOT_REQUIRED_FILE):
             self.show_reboot_required_dialog()
-
     s = _("Reading package information")
     self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
     self.fillstore()

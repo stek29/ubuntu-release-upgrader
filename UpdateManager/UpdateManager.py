@@ -90,6 +90,8 @@ from MetaReleaseGObject import MetaRelease
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
 
+# file that signals if we need to reboot
+REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
 class UpdateManagerDbusControler(dbus.service.Object):
     """ this is a helper to provide the UpdateManagerIFace """
@@ -235,6 +237,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       """check and warn if on battery"""
       if on_battery():
           self.dialog_on_battery.set_transient_for(self.window_main)
+          self.dialog_on_battery.set_title("")
           res = self.dialog_on_battery.run()
           self.dialog_on_battery.hide()
           if res != gtk.RESPONSE_YES:
@@ -589,6 +592,22 @@ class UpdateManager(SimpleGtkbuilderApp):
         return
     self.invoke_manager(INSTALL)
     
+  def show_reboot_required_dialog(self):
+    self.dialog_reboot.set_transient_for(self.window_main)
+    self.dialog_reboot.set_title("")
+    res = self.dialog_reboot.run()
+    self.dialog_reboot.hide()
+    if res == gtk.RESPONSE_OK:
+      try:
+          bus = dbus.SessionBus()
+          proxy_obj = bus.get_object("org.gnome.SessionManager",
+				     "/org/gnome/SessionManager")
+          iface = dbus.Interface(proxy_obj, "org.gnome.SessionManager")
+          iface.RequestReboot()
+          # FIXME: try sesion restart with hal?
+      except dbus.DBusException, e:
+          pass
+
   def invoke_manager(self, action):
     # check first if no other package manager is runing
 
@@ -606,7 +625,13 @@ class UpdateManager(SimpleGtkbuilderApp):
     if action == UPDATE:
         self.install_backend.update()
     elif action == INSTALL:
+        #has_reboot = os.path.exists(REBOOT_REQUIRED_FILE)
+        # do it
         self.install_backend.commit(self.cache)
+        # check if there is a new reboot required notification
+        #if not has_reboot and os.path.exists(REBOOT_REQUIRED_FILE):
+        if os.path.exists(REBOOT_REQUIRED_FILE):
+            self.show_reboot_required_dialog()
 
     s = _("Reading package information")
     self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
@@ -894,6 +919,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       update_days = apt_pkg.Config.FindI("APT::Periodic::Update-Package-Lists")
       if update_days < 1:
           self.dialog_manual_update.set_transient_for(self.window_main)
+          self.dialog_manual_update.set_title("")
           res = self.dialog_manual_update.run()
           self.dialog_manual_update.hide()
           if res == gtk.RESPONSE_YES:
@@ -907,6 +933,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def ask_run_partial_upgrade(self):
       self.dialog_dist_upgrade.set_transient_for(self.window_main)
+      self.dialog_dist_upgrade.set_title("")
       res = self.dialog_dist_upgrade.run()
       self.dialog_dist_upgrade.hide()
       if res == gtk.RESPONSE_YES:

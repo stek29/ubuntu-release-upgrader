@@ -16,6 +16,7 @@ for k in glob.glob("/boot/vmlinuz-*"):
         print "WARNING: there is a kernel version '%s' installed higher than the running kernel" % (ver, current_kernelver)
         sys.exit(1)
 
+print "kernel versions: %s" % ", ".join(vers)
 if len(vers) < 2:
     print "WARNING: only one kernel version found '%s'" % vers
     print "expected at least two (new + previous)"

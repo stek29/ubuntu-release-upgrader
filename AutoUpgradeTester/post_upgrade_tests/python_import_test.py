@@ -2,6 +2,9 @@
 
 import logging
 import os
+import subprocess
+import sys
+
 
 PYTHONVER="python2.6"
 BASEPATH="/usr/lib/%s/dist-packages/" % PYTHONVER
@@ -11,12 +14,16 @@ blacklist = ["speechd_config", "PAMmodule.so"]
 
 def try_import(module):
     logging.info("Importing %s" % module)
-    try:
-        m = __import__(module)
-        del m
-    except:
-        logging.exception("import %s failed" % module)
-        return False
+    # a simple __import__(module) does not work, the problem
+    # is that module import have funny side-effects (like
+    # "import uno; import pyatspi" will fail, but importing
+    # them individually is fine
+    cmd = ["python", "-c","import %s" % module]
+    logging.debug("cmd: '%s'" % cmd)
+    ret = subprocess.call(cmd)
+    if ret != 0:
+        print "WARNING: failed to import '%s'" % module
+        sys.exit(1)
     return True
             
 if __name__ == "__main__":

@@ -9,8 +9,12 @@ import sys
 PYTHONVER="python2.6"
 BASEPATH="/usr/lib/%s/dist-packages/" % PYTHONVER
 
-# stuff that we know does not work
-blacklist = ["speechd_config", "PAMmodule.so"]
+# stuff that we know does not work when doing a simple "import"
+blacklist = ["speechd_config", 
+             "PAMmodule.so", 
+             "aomodule.so",
+             "plannerui.so"
+             ]
 
 def try_import(module):
     logging.info("Importing %s" % module)
@@ -23,7 +27,7 @@ def try_import(module):
     ret = subprocess.call(cmd)
     if ret != 0:
         print "WARNING: failed to import '%s'" % module
-        sys.exit(1)
+        return False
     return True
             
 if __name__ == "__main__":
@@ -31,7 +35,11 @@ if __name__ == "__main__":
 
     res = True
     for f in os.listdir(BASEPATH):
-        if f.endswith(".egg-info") or f.startswith("_") or f in blacklist:
+        # ignore a bunch of modules that 
+        if (f.endswith(".egg-info") or 
+            f.startswith("_") or 
+            f.endswith("_d.so") or
+            f in blacklist):
             continue
         logging.debug("looking at '%s'" % f)
         if os.path.isdir(BASEPATH+f) and os.path.exists(BASEPATH+f+"/__init__.py"):

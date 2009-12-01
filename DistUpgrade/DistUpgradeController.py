@@ -1040,6 +1040,18 @@ class DistUpgradeController(object):
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
                 currentRetry += 1
                 continue
+            except OSError, e:
+                logging.exception("cache.commit()")
+                # deal gracefully with:
+                #  OSError: [Errno 12] Cannot allocate memory
+                if e.errno == 12:
+                    self._enableAptCronJob()
+                    msg = _("Error during commit")
+                    msg += "\n'%s'\n" % str(e)
+                    msg += _("Restoring original system state")
+                    self._view.error(_("Could not install the upgrades"), msg)
+                    # abort() exits cleanly
+                    self.abort()
             # no exception, so all was fine, we are done
             self._enableAptCronJob()
             return True

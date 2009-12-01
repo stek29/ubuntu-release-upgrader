@@ -416,27 +416,7 @@ iface eth0 inet static
         # stop the machine
         print "Shuting down the VM"
         self.stop()
-
         return (ret == 0)
-
-    def test(self):
-        # FIXME: add some tests here to see if the upgrade worked
-        # this should include:
-        # - new kernel is runing (run uname -r in target)
-        # - did it sucessfully rebooted
-        # - is X runing
-        # - generate diff of upgrade vs fresh install
-        # ...
-        #self.genDiff()
-        self.start()
-        self._copyFromImage("/var/crash/*.crash", self.resultdir)
-        crashfiles = glob.glob(self.resultdir+"/*.crash")
-        self.stop()
-        if len(crashfiles) > 0:
-            print "WARNING: crash files detected on the upgrade"
-            print crashfiles
-            return False
-        return True
         
 
 if __name__ == "__main__":

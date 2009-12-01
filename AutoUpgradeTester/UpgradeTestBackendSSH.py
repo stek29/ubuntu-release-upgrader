@@ -5,19 +5,20 @@ from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgrade.sourceslist import SourcesList
 
 import ConfigParser
-import subprocess
-import os
-import sys
-import os.path
-import shutil
-import glob
-import time
-import signal
-import signal
-import crypt
-import tempfile
-import copy
 
+import crypt
+import copy
+import glob
+import logging
+import os
+import os.path
+import signal
+import signal
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
 
 
 class UpgradeTestBackendSSH(UpgradeTestBackend):
@@ -180,3 +181,30 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         return ret
 
  
+    def test(self):
+        # - generate diff of upgrade vs fresh install
+        # ...
+        #self.genDiff()
+        self.start()
+        # check for crashes
+        self._copyFromImage("/var/crash/*.crash", self.resultdir)
+        crashfiles = glob.glob(self.resultdir+"/*.crash")
+
+        # run stuff in post_upgrade_tests dir
+        for script in glob.glob(self.post_upgrade_tests_dir+"*"):
+            if not os.access(script, os.X_OK):
+                continue
+            logging.info("running '%s' post_upgrade_test" % script)
+            self._copyToImage(script, "/tmp/")
+            ret = self._runInImage(["/tmp/%s" % os.path.basename(script)])
+            if ret != 0:
+                print "WARNING: post_upgrade_test '%s' failed" % script
+                return False
+
+        self.stop()
+        if len(crashfiles) > 0:
+            print "WARNING: crash files detected on the upgrade"
+            print crashfiles
+            return False
+        return True
+        

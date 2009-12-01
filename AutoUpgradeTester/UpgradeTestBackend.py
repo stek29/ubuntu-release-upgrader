@@ -42,6 +42,11 @@ class UpgradeTestBackend(object):
         profiledir = os.path.normpath(profiledir)
         profile = os.path.join(os.path.abspath(profiledir), "DistUpgrade.cfg")
         self.upgradefilesdir = "./DistUpgrade"
+
+        if os.path.exists("./post_upgrade_tests/"):
+            self.post_upgrade_tests_dir = "./post_upgrade_tests/"
+        else:
+            self.post_upgrade_tests_dir = "/usr/share/auto-upgrade-tester/post_upgrade_tests/"
         # init the rest
         if os.path.exists(profile):
             self.profile = os.path.abspath(profile)

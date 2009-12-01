@@ -5,8 +5,12 @@
 # see also 
 # http://www.faqts.com/knowledge_base/entry/versions/index.phtml?aid=4419
 
-from optparse import OptionParser
+import datetime
+import glob
+import logging
+import multiprocessing
 import os
+import shutil
 import sys
 import time
 
@@ -14,11 +18,7 @@ import time
 if os.path.exists("./UpgradeTestBackend.py"):
     sys.path.insert(0, "../")
 
-import glob
-import shutil
-import datetime
-import multiprocessing
-
+from optparse import OptionParser
 from AutoUpgradeTester.UpgradeTestBackend import UpgradeTestBackend
 
 class OutputThread(multiprocessing.Process):
@@ -104,6 +104,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
     return True
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
 
     parser = OptionParser()
     parser.add_option("--additinoal", "--additional-pkgs", dest="add_pkgs", 
@@ -116,6 +117,9 @@ if __name__ == "__main__":
                       default=False,
                       action="store_true",
                       help="only bootstrap the image")
+    parser.add_option("--tests-only", "", default=False,
+                      action="store_true",
+                      help="only run post_upgrade_tests in the image")
     parser.add_option("-l", "--login", dest="login", default=False,
                       action="store_true",
                       help="log into the a profile")
@@ -171,6 +175,9 @@ if __name__ == "__main__":
             elif options.bootstrap_only:
                 backend = createBackend(options.backend, profile)
                 backend.bootstrap(force=True)
+            elif options.tests_only:
+                backend = createBackend(options.backend, profile)
+                backend.test()
             elif options.gen_diff:
                 backend = createBackend(options.backend, profile)
                 backend.genDiff()

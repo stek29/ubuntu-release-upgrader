@@ -60,7 +60,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         self.logdir = logdir
         self.install_run_number = 0
         try:
-            if self.config.getboolean("NonInteractive","ForceOverwrite"):
+            if self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
                 apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
         except (NoSectionError, NoOptionError), e:
             pass

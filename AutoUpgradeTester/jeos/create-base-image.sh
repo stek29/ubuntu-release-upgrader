@@ -23,6 +23,11 @@ if [ ! -e ssh-key ]; then
     ssh-keygen -N '' -f ssh-key
 fi
 
+KERNEL=generic
+if [ "$1" = "dapper" ]; then
+	KERNEL=386
+fi
+
 # create the image
-ubuntu-vm-builder kvm $1 --kernel-flavour generic --ssh-key $(pwd)/ssh-key.pub \
+ubuntu-vm-builder kvm $1 --kernel-flavour $KERNEL --ssh-key $(pwd)/ssh-key.pub \
     --components main,restricted --rootsize 80000 --arch i386

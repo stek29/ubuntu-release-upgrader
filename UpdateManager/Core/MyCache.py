@@ -44,6 +44,10 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         # raise if we have packages in reqreinst state
         # and let the caller deal with that (runs partial upgrade)
         assert len(self.reqReinstallPkgs) == 0
+        # check if the dpkg journal is ok (we need to do that here
+        # too because libapt will only do it when it tries to lock
+        # the packaging system)
+        assert(not self._dpkgJournalDirty())
         # init the regular cache
         self._initDepCache()
         self.all_changes = {}
@@ -53,6 +57,18 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             self.saveDistUpgrade()
         assert (self._depcache.BrokenCount == 0 and 
                 self._depcache.DelCount == 0)
+
+    def _dpkgJournalDirty(self):
+        """
+        test if the dpkg journal is dirty
+        (similar to debSystem::CheckUpdates)
+        """
+        d = os.path.dirname(
+            apt_pkg.Config.FindFile("Dir::State::status"))+"/updates"
+        for f in os.listdir(d):
+            if re.match("[0-9]+", f):
+                return True
+        return False
 
     def _initDepCache(self):
         #apt_pkg.Config.Set("Debug::pkgPolicy","1")

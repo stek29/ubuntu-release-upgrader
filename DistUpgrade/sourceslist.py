@@ -1,1 +1,1 @@
-/usr/lib/python2.5/site-packages/aptsources/sourceslist.py
+/usr/share/pyshared/aptsources/sourceslist.py

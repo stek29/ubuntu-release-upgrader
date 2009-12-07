@@ -1,1 +1,1 @@
-/usr/lib/python2.5/site-packages/aptsources/distro.py
+/usr/share/pyshared/aptsources/distro.py

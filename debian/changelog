@@ -1,16 +1,17 @@
-update-manager (1:0.132) UNRELEASED; urgency=low
+update-manager (1:0.131.1) UNRELEASED; urgency=low
 
   * DistUpgrade/DistUpgradeViewNonInteractive.py:
     - use getWithDefault() for "NonInteractive","ForceOverwrite"
       (thanks to Free Ekanayaka)
+  * UpdateManager/Core/MyCache.py:
+    - detect dirty dpkg journal and enter recovery mode in this
+      case (thanks to Maco for reporting)
   * DistUpgrade/DistUpgrade.cfg:
     - remove kvm-source on upgrade
   * debian/update-manager-core.links:
     - use "91-release-upgrade" instead of "91-release_upgrade" to
       make run-parts happy
-  * UpdateManager/Core/MyCache.py:
-    - detect dirty dpkg journal and enter recovery mode in this
-      case (thanks to Maco for reporting)
+  * fix FTBFS
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 03 Dec 2009 10:01:31 +0100
 

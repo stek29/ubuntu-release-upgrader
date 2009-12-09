@@ -3,6 +3,7 @@
 import apt_pkg
 import glob
 import os
+import sys
 
 current_kernelver = os.uname()[2]
 

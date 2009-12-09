@@ -12,8 +12,6 @@ import glob
 import logging
 import os
 import os.path
-import signal
-import signal
 import shutil
 import subprocess
 import sys
@@ -191,6 +189,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         crashfiles = glob.glob(self.resultdir+"/*.crash")
 
         # run stuff in post_upgrade_tests dir
+        ok = True
         for script in glob.glob(self.post_upgrade_tests_dir+"*"):
             if not os.access(script, os.X_OK):
                 continue
@@ -199,12 +198,12 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             ret = self._runInImage(["/tmp/%s" % os.path.basename(script)])
             if ret != 0:
                 print "WARNING: post_upgrade_test '%s' failed" % script
-                return False
+                ok = False
 
         self.stop()
         if len(crashfiles) > 0:
             print "WARNING: crash files detected on the upgrade"
             print crashfiles
             return False
-        return True
+        return ok
         

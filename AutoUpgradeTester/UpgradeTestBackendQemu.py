@@ -116,7 +116,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         if subprocess.call("netstat -t -l -n |grep 0.0.0.0:%s" % self.ssh_port,
                            shell=True) == 0:
             raise PortInUseException, "the port is already in use (another upgrade tester is running?)"
-
         # register exit handler to ensure that we quit kvm on exit
         atexit.register(self.stop)
 
@@ -356,7 +355,9 @@ iface eth0 inet static
         # FIXME: add watchdog here too
         #        if the qemu process does not stop in sensible time,
         #        try to umount all FS and then kill it 
+        print "stop"
         if self.qemu_pid:
+            print "stop pid: ", self.qemu_pid
             self._runInImage(["/sbin/reboot"])
             print "waiting for qemu to shutdown"
             self.qemu_pid.wait()

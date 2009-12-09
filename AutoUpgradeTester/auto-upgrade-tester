@@ -73,20 +73,20 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         # init the chroot
         if not backend.bootstrap():
             print "FAILED: bootstrap for '%s'" % profile
-            return False
+            raise "Failed to bootstrap '%s'" % profile
         if add_pkgs:
             if not backend.installPackages(add_pkgs):
                 print "FAILED: installPacakges '%s'" % add_pkgs
-                return False
+                raise Exception, "Failed to install packages '%s'" % add_pkgs
         if not backend.upgrade():
             print "FAILED: upgrade for '%s'" % profile
             print "Failure logs can be found here:"
             for n in ["main.log", "apt.log"]:
                 print "%s/%s" % (backend.resultdir, n)
-            return False
+            raise Exception, "Failed to upgrade %s" % profile
         if not backend.test():
             print "FAILED: test for '%s'" % profile
-            return False
+            raise Exception, "Failed in post upgrade test %s" % profile
         print "profile: %s worked" % profile
     except Exception, e:
         import traceback
@@ -98,11 +98,15 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         print "Logs can be found here:"
         for n in ["main.log", "apt.log"]:
             print "%s/%s" % (backend.resultdir, n)
-        # give the output time to settle
+        # give the output time to settle and kill the daemon
         time.sleep(2)
         if out.is_alive():
             out.terminate()
         out.join()
+    # close and restore file descriptors
+    os.close(fd)
+    os.dup2(old_stdout, 1)
+    os.dup2(old_stderr, 2)
     return True
 
 if __name__ == "__main__":

@@ -12,7 +12,6 @@ SupportSSH=DistUpgradeViewText,DistUpgradeViewNonInteractive
 # the meta-pkgs we support
 MetaPkgs=ubuntu-desktop, kubuntu-desktop, edubuntu-desktop, xubuntu-desktop, ubuntustudio-desktop, ichthux-desktop, mythbuntu-desktop, kubuntu-kde4-desktop
 BaseMetaPkgs=ubuntu-minimal, ubuntu-standard
-PostUpgradePurge=xorg-common, libgl1-mesa, ltsp-client, ltspfsd, python2.3
 Demotions=demoted.cfg.hardy
 RemoveEssentialOk=sysvinit, sysvutils
 RemovalBlacklistFile=removal_blacklist.cfg
@@ -20,13 +19,12 @@ RemovalBlacklistFile=removal_blacklist.cfg
 KeepInstalledPkgs=gnumeric, hpijs
 KeepInstalledSection=translations
 RemoveObsoletes=yes
-ForcedObsoletes=esound, esound-common, slocate, ksplash-engine-moodin, powernowd
-# example rule
-#PostUpgrade{Install,Remove,Purge}=evms
-#PostUpgradePurge=kdm-kde4
+ForcedObsoletes=ksplash-engine-moodin, powernowd, laptop-mode-tools
 # libflashsupport is now oboselete and causes problems so we remove it
 # early
-PostUpgradeRemove=libflashsupport
+PostUpgradePurge=ltsp-client, ltspfsd, linux-restricted-modules-common
+PostUpgradeRemove=libflashsupport, slocate
+#PostUpgradeInstall=apt
 PostInstallScripts=./xorg_fix_proprietary.py
 EnableApport=yes
 

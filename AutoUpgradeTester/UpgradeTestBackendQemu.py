@@ -332,10 +332,12 @@ iface eth0 inet static
         if self.qemu_pid != None:
             print "already runing"
             return True
-        if self.virtio:
-            drive = ["-drive", "file=%s,if=virtio,boot=on" % self.image]
-        else:
-            drive = ["-hda", self.image]
+        # mvo: disabled for now, hardy->lucid does not work well with it
+        #      (random hangs)
+        #if self.virtio:
+        #    drive = ["-drive", "file=%s,if=virtio,boot=on" % self.image]
+        #else:
+        drive = ["-hda", self.image]
         # build cmd
         cmd = [self.qemu_binary]+drive+self.qemu_options
         print "Starting %s" % cmd

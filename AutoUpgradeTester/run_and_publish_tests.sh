@@ -3,8 +3,8 @@
 
 RESULTDIR=/var/cache/auto-upgrade-tester/result/
 
-#PROFILES="server ubuntu lts-server lts-ubuntu kubuntu"
-PROFILES="lts-server server"
+PROFILES="server ubuntu lts-server lts-ubuntu kubuntu"
+#PROFILES="lts-server server"
 #PROFILES="server"
 
 #UPGRADE_TESTER_ARGS="--tests-only"

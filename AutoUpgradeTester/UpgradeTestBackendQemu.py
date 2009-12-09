@@ -83,10 +83,10 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
                 raise NoImageFoundException
         # check if we want virtio here and default to yes
         try:
-            virtio = self.config.getboolean("KVM","Virtio")
+            self.virtio = self.config.getboolean("KVM","Virtio")
         except ConfigParser.NoOptionError,e:
-            virtio = True
-        if virtio:
+            self.virtio = True
+        if self.virtio:
             self.qemu_options.extend(["-net","nic,model=virtio"])
             self.qemu_options.extend(["-net","user"])
         # swapimage
@@ -330,15 +330,17 @@ iface eth0 inet static
         #self.qemu_pid.stdin.write("cont\n")
 
     def start(self):
-        print "Starting %s %s %s" % (self.qemu_binary, self.qemu_options, self.image)
         if self.qemu_pid != None:
             print "already runing"
             return True
-        self.qemu_pid = subprocess.Popen([self.qemu_binary,
-                                          "-hda", self.image,
-                                          ]+self.qemu_options,
-                                         stdin=subprocess.PIPE)
-        
+        if self.virtio:
+            drive = ["-drive", "file=%s,if=virtio,boot=on" % self.image]
+        else:
+            drive = ["-hda", self.image]
+        # build cmd
+        cmd = [self.qemu_binary]+drive+self.qemu_options
+        print "Starting %s" % cmd
+        self.qemu_pid = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         # spin here until ssh has come up and we can login
         for i in range(900):
             time.sleep(1)

@@ -102,7 +102,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         time.sleep(2)
         if out.is_alive():
             out.terminate()
-        out.join()
+            out.join()
     # close and restore file descriptors
     os.close(fd)
     os.dup2(old_stdout, 1)

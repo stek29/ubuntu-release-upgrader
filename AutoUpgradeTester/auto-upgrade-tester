@@ -92,7 +92,6 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         import traceback
         traceback.print_exc()
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
-        return False
     finally:
         # print out result details
         print "Logs can be found here:"
@@ -189,8 +188,13 @@ if __name__ == "__main__":
                 backend.genDiff()
             else:
                 print "Testing '%s'" % profile
-                res &= testUpgrade(options.backend, profile, 
-                                   add_pkgs, options.quiet)
+                current_res = testUpgrade(options.backend, profile, 
+                                          add_pkgs, options.quiet)
+                if current_res:
+                    print "Profile '%s' worked" % profile
+                else:
+                    print "Profile '%s' FAILED" % profile
+                res &= current_res
         except Exception, e:
             print "ERROR: exception caught '%s' " % e
             import traceback

@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# -------------------------------------------------------------- config
+# link to the ssh key to publish the results
+SSHKEY="-oIdentityFile=link-to-ssh-key"
+PUBLISH="mvo@people.ubuntu.com"
+#PUBLISH=""
 
 RESULTDIR=/var/cache/auto-upgrade-tester/result/
 
@@ -9,6 +14,8 @@ PROFILES="server ubuntu lts-server lts-ubuntu kubuntu"
 
 #UPGRADE_TESTER_ARGS="--tests-only"
 UPGRADE_TESTER_ARGS="--quiet"
+
+# ------------------------------------------------------------- main()
 
 cat > index.html <<EOF
 <?xml version="1.0" encoding="ascii"?>
@@ -25,8 +32,10 @@ table { width:90%; }
 <body>
 <h1>Automatic upgrade tester test results</h1>
 
+<p>Upgrade test started $(date +"%F %T")</p>
+
 <table border="1">
-<tr><th>Profile</th><th>Result</th><th>Date</th><th>Runtime</th><th>Full Logs</th></tr>
+<tr><th>Profile</th><th>Result</th><th>Date Finished</th><th>Runtime</th><th>Full Logs</th></tr>
 EOF
 
 FAIL=""
@@ -47,7 +56,7 @@ cd automatic-upgrade-testing
 cd $p
 put /var/cache/auto-upgrade-tester/result/$p/*
 EOF
-    sudo -u $SUDO_USER sftp -b sftp-upload mvo@people.ubuntu.com
+    sftp $SSKEY -b sftp-upload $PUBLISH
 done
 
 echo "</table>" >> index.html
@@ -59,7 +68,7 @@ cd public_html
 cd automatic-upgrade-testing
 put index.html
 EOF
-sudo -u $SUDO_USER sftp -b sftp-upload mvo@people.ubuntu.com
+sftp $SSHKEY -b sftp-upload $PUBLISH
 
 echo "Tested: $PROFILES"
 echo "Failed: $FAIL"

@@ -69,6 +69,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
     os.dup2(fd, 1)
     os.dup2(fd, 2)
     print "%s log started" % datetime.datetime.now()
+    result = True
     try:
         # init the chroot
         if not backend.bootstrap():
@@ -92,6 +93,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         import traceback
         traceback.print_exc()
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
+        result = False
     finally:
         # print out result details
         print "Logs can be found here:"
@@ -106,7 +108,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
     os.close(fd)
     os.dup2(old_stdout, 1)
     os.dup2(old_stderr, 2)
-    return True
+    return result
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

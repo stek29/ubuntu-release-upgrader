@@ -25,7 +25,8 @@ cat > index.html <<EOF
 <head>
   <title>Auto upgrade tester</title>
 <style type="text/css">
-.error { background-color:#FFFF00 }
+.error { background-color:#FFFF00; }
+.aright { text-align:right; }
 table { width:90%; }
 </style>
 </head>
@@ -48,7 +49,7 @@ for p in $PROFILES; do
      	FAIL="$FAIL $p"
         echo "<td class=\"error\">FAILED</td>" >> index.html
     fi
-    echo "<td>$(date +"%F %T")</td><td>$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
+    echo "<td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>b" >> index.html
     cat > sftp-upload <<EOF
 cd public_html
 cd automatic-upgrade-testing

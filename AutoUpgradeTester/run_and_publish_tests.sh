@@ -10,7 +10,7 @@ RESULTDIR=/var/cache/auto-upgrade-tester/result/
 
 PROFILES="server ubuntu lts-server lts-ubuntu kubuntu"
 #PROFILES="lts-server server"
-#PROFILES="lts-ubuntu"
+#PROFILES="server"
 
 #UPGRADE_TESTER_ARGS="--tests-only"
 UPGRADE_TESTER_ARGS="--quiet"
@@ -57,7 +57,7 @@ cd automatic-upgrade-testing
 cd $p
 put /var/cache/auto-upgrade-tester/result/$p/*
 EOF
-    sftp $SSKEY -b sftp-upload $PUBLISH
+    sftp $SSHKEY -b sftp-upload $PUBLISH
 done
 
 echo "<p>Upgrade test finished $(date +"%F %T")</p>" >> index.html

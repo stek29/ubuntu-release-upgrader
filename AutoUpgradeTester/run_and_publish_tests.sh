@@ -49,7 +49,7 @@ for p in $PROFILES; do
      	FAIL="$FAIL $p"
         echo "<td class=\"error\">FAILED</td>" >> index.html
     fi
-    echo "<td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>b" >> index.html
+    echo "<td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
     cat > sftp-upload <<EOF
 cd public_html
 cd automatic-upgrade-testing
@@ -57,7 +57,7 @@ cd automatic-upgrade-testing
 cd $p
 put /var/cache/auto-upgrade-tester/result/$p/*
 EOF
-    sftp $SSHKEY -b sftp-upload $PUBLISH
+    sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
 done
 
 echo "<p>Upgrade test finished $(date +"%F %T")</p>" >> index.html
@@ -71,7 +71,9 @@ cd public_html
 cd automatic-upgrade-testing
 put index.html
 EOF
-sftp $SSHKEY -b sftp-upload $PUBLISH
+sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
 
 echo "Tested: $PROFILES"
-echo "Failed: $FAIL"
+if [ -n "$FAIL" ]; then
+    echo "Failed: $FAIL"
+fi

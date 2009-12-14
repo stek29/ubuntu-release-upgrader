@@ -626,13 +626,25 @@ class UpdateManager(SimpleGtkbuilderApp):
     # set window to insensitive
     self.window_main.set_sensitive(False)
     self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-
+#
     # do it
     if action == UPDATE:
         self.install_backend.update()
     elif action == INSTALL:
+        # If the progress dialog should be closed automatically afterwards
+        gconfclient =  gconf.client_get_default()
+        close_on_done = gconfclient.get_bool("/apps/update-manager/"
+                                             "autoclose_install_window")
+        # Get the packages which should be installed and update
+        pkgs_install = []
+        pkgs_upgrade = []
+        for pkg in self.cache:
+            if pkg.markedInstall:
+                pkgs_install.append(pkg.name)
+            elif pkg.markedUpgrade:
+                pkgs_upgrade.append(pkg.name)
         self.reboot_required = os.path.exists(REBOOT_REQUIRED_FILE)
-        self.install_backend.commit(self.cache)
+        self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
   def _on_backend_done(self, backend, action):
     # check if there is a new reboot required notification

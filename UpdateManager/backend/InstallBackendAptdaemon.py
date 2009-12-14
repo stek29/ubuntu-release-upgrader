@@ -3,7 +3,6 @@
 
 from aptdaemon import client, enums
 from aptdaemon.gtkwidgets import AptProgressDialog
-import gtk
 
 from InstallBackend import InstallBackend
 

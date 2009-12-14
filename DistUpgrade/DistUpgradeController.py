@@ -39,7 +39,6 @@ from stat import *
 from utils import country_mirror, url_downloadable, check_and_fix_xbit
 from string import Template
 
-
 import DistUpgradeView
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeFetcherCore import country_mirror
@@ -57,6 +56,7 @@ import gettext
 from DistUpgradeCache import *
 from DistUpgradeApport import *
 
+REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
 class NoBackportsFoundException(Exception):
     pass
@@ -1636,8 +1636,14 @@ class DistUpgradeController(object):
                                      "were errors during the upgrade "
                                      "process."))
             return False
-        self._view.information(_("Upgrade complete"),
-                               _("The partial upgrade was completed."))
+
+        if os.path.exists(REBOOT_REQUIRED_FILE):
+            # we can not talk to session management here, we run as root
+            if self._view.confirmRestart():
+                p = subprocess.Popen("/sbin/reboot")
+        else:
+            self._view.information(_("Upgrade complete"),
+                                   _("The partial upgrade was completed."))
         return True
 
 

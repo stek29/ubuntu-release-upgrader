@@ -18,9 +18,6 @@ from InstallBackend import InstallBackend
 
 class InstallBackendSynaptic(InstallBackend):
     """ Install backend based on synaptic """
-    
-    # synaptic actions
-    (INSTALL, UPDATE) = range(2)
 
     def _run_synaptic(self, action=INSTALL, cache=None):
         try:

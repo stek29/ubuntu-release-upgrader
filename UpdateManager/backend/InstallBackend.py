@@ -9,6 +9,8 @@ class InstallBackend(gobject.GObject):
     __gsignals__ = {"action-done": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, (gobject.TYPE_INT,))}
 
+    (INSTALL, UPDATE) = range(2)
+
     def __init__(self, window_main):
         """init backend
         takes a gtk main window as parameter

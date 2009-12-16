@@ -591,6 +591,7 @@ class DistUpgradeController(object):
                 if (entry.disabled or
                     entry.type == "deb-src" or
                     "/security.ubuntu.com" in entry.uri or
+                    "%s-security" % self.fromDist in entry.dist or
                     "/archive.canonical.com" in entry.uri):
                     validTo = False
                 if entry.dist in toDists:

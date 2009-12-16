@@ -214,6 +214,13 @@ class DumbTerminal(object):
         import subprocess
         subprocess.call(cmd)
 
+class DummyHtmlView(object):
+    def open(self, url):
+        pass
+    def show(self):
+      pass
+    def hide(self):
+      pass
 
 (STEP_PREPARE,
  STEP_MODIFY_SOURCES,
@@ -245,6 +252,8 @@ class DistUpgradeView(object):
         return InstallProgress()
     def getTerminal(self):
         return DumbTerminal()
+    def getHtmlView(self):
+        return DummyHtmlView()
     def updateStatus(self, msg):
         """ update the current status of the distUpgrade based
             on the current view

@@ -27,6 +27,7 @@ import apt_pkg
 import sys
 import os
 import subprocess
+import locale
 import logging
 import re
 import statvfs
@@ -920,6 +921,15 @@ class DistUpgradeController(object):
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
         iprogress = self._view.getInstallProgress(self.cache)
+        # start slideshow
+        url = self.config.getWithDefault("Distro","SlideshowUrl",None)
+        if url:
+            try:
+                lang = locale.getdefaultlocale()[0].split('_')[0]
+            except:
+                logging.exception("getdefaultlocale")
+                lang = "en"
+            self._view.getHtmlView().open("%s#locale=%s" % (url, lang))
         # retry the fetching in case of errors
         maxRetries = self.config.getint("Network","MaxRetries")
         # FIXME: we get errors like 

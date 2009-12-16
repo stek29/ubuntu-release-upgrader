@@ -44,6 +44,8 @@ from SimpleGtkbuilderApp import SimpleGtkbuilderApp
 import gettext
 from DistUpgradeGettext import gettext as _
 
+gobject.threads_init()
+
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
@@ -335,6 +337,21 @@ class DistUpgradeVteTerminal(object):
       time.sleep(0.1)
     del self.finished
 
+class HtmlView(object):
+  def __init__(self, webkit_view):
+    self._webkit_view = webkit_view
+  def open(self, url):
+    if not self._webkit_view:
+      return
+    self._webkit_view.open(url)
+    self._webkit_view.connect("load-finished", self._on_load_finished)
+  def show(self):
+    self._webkit_view.show()
+  def hide(self):
+    self._webkit_view.hide()
+  def _on_load_finished(self, view, frame):
+    view.show()
+
 class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
     " gtk frontend of the distUpgrade tool "
     def __init__(self, datadir=None, logdir=None):
@@ -381,7 +398,13 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         except gobject.GError, e:
           logging.debug("svg pixbuf loader failed (%s)" % e)
           pass
-        
+        try:
+          import webkit
+          self._webkit_view = webkit.WebView()
+          self.vbox_main.pack_end(self._webkit_view)
+        except:
+          logging.exception("html widget")
+          self._webkit_view = None
         self.window_main.realize()
         self.window_main.window.set_functions(gtk.gdk.FUNC_MOVE)
         self._opCacheProgress = GtkOpProgress(self.progressbar_cache)
@@ -396,7 +419,6 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         column.add_attribute(render, "markup", 0)
         self.treeview_details.append_column(column)
         self.treeview_details.set_model(self.details_list)
-
         # Use italic style in the status labels
         attrlist=pango.AttrList()
         #attr = pango.AttrStyle(pango.STYLE_ITALIC, 0, -1)
@@ -430,6 +452,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
 
     def getTerminal(self):
         return DistUpgradeVteTerminal(self, self._term)
+    def getHtmlView(self):
+        return HtmlView(self._webkit_view)
 
     def _key_press_handler(self, widget, keyev):
       # user pressed ctrl-c

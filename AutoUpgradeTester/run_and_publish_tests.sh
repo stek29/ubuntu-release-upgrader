@@ -8,7 +8,7 @@ PUBLISH="mvo@people.ubuntu.com"
 
 RESULTDIR=/var/cache/auto-upgrade-tester/result/
 
-PROFILES="dapper-hardy-lucid-server dapper-hardy-lucid-ubuntu server ubuntu lts-server lts-ubuntu kubuntu"
+PROFILES="dapper-hardy-lucid-server dapper-hardy-lucid-ubuntu server ubuntu lts-server lts-ubuntu kubuntu main-all lts-main-all"
 #PROFILES="lts-server server"
 #PROFILES="server"
 
@@ -77,3 +77,4 @@ echo "Tested: $PROFILES"
 if [ -n "$FAIL" ]; then
     echo "Failed: $FAIL"
 fi
+

@@ -354,15 +354,24 @@ iface eth0 inet static
 
     def stop(self):
         " we stop because we run with -no-reboot"
-        # FIXME: add watchdog here too
-        #        if the qemu process does not stop in sensible time,
-        #        try to umount all FS and then kill it 
         print "stop"
         if self.qemu_pid:
             print "stop pid: ", self.qemu_pid
             self._runInImage(["/sbin/reboot"])
             print "waiting for qemu to shutdown"
-            self.qemu_pid.wait()
+            for i in range(600):
+                if self.qemu_pid.poll() is not None:
+                    print "poll() returned"
+                    break
+                time.sleep(1)
+            else:
+                print "Not stopped after 600s, killing "
+                try:
+                    os.kill(int(self.qemu_pid.pid), 15)
+                    time.sleep(10)
+                    os.kill(int(self.qemu_pid.pid), 9)
+                except Exception, e:
+                    print "FAILED to kill %s '%s'" % (self.qemu_pid, e)
             self.qemu_pid = None
             print "qemu stopped"
 

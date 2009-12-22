@@ -277,6 +277,8 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(eta))
           else:
             self.progress.set_text(" ")
+          if self.parent._webkit_view:
+            self.parent._webkit_view.execute_script('progress("%s")' % percent)
 
     def child_exited(self, term, pid, status):
         # we need to capture the full status here (not only the WEXITSTATUS)

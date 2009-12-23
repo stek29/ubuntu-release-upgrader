@@ -415,11 +415,15 @@ iface eth0 inet static
 
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader
+        cmd_prefix=""
+        if not self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
+            print "Disabling ForceOverwrite"
+            cmd_prefix = ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]
         if os.path.exists(self.upgradefilesdir):
             self._copyUpgraderFilesFromBzrCheckout()
-            ret = self._runBzrCheckoutUpgrade()
+            ret = self._runBzrCheckoutUpgrade(cmd_prefix)
         else:
-            ret = self._runInImage(["do-release-upgrade","-d",
+            ret = self._runInImage(cmd_prefix+["do-release-upgrade","-d",
                                     "-f","DistUpgradeViewNonInteractive"])
         print "dist-upgrade.py returned: %i" % ret
 

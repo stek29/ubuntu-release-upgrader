@@ -153,7 +153,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             print "Copying '%s' to image" % prereq
             self._copyToImage(prereq, "/upgrade-tester")
 
-    def _runBzrCheckoutUpgrade(self):
+    def _runBzrCheckoutUpgrade(self, cmd_prefix):
         # start the upgrader
         print "running the upgrader now"
 
@@ -173,7 +173,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             upgrader_args = " --have-prerequists"
             upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
 
-        ret = self._runInImage(["(cd /upgrade-tester/ ; "
+        ret = self._runInImage(cmd_prefix+["(cd /upgrade-tester/ ; "
                                 "%s./dist-upgrade.py %s)" % (upgrader_env,
                                                              upgrader_args)])
         return ret

@@ -41,9 +41,16 @@ if __name__ == "__main__":
 
   while m.downloading:
     time.sleep(0.5)
-  if m.new_dist is not None:
-    if not options.quiet:
-      print _("New release '%s' available.") % m.new_dist.name
-      print _("Run 'do-release-upgrade' to upgrade to it.")
+
+  # handle quiet first
+  if options.quiet:
+    if m.new_dist is not None:
       sys.exit(RELEASE_AVAILABLE)
-  sys.exit(NO_RELEASE_AVAILABLE)
+    sys.exit(NO_RELEASE_AVAILABLE)    
+
+  # not quiet, just print
+  if m.new_dist is not None:
+    print _("New release '%s' available.") % m.new_dist.name
+    print _("Run 'do-release-upgrade' to upgrade to it.")
+      
+

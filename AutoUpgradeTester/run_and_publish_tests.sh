@@ -40,6 +40,7 @@ table { width:90%; }
 EOF
 
 FAIL=""
+DATE=$(date +"%F-%T")
 for p in $PROFILES; do
     echo "Testing $p"
     echo -n "<tr><td>$p</td>" >> index.html
@@ -53,6 +54,8 @@ for p in $PROFILES; do
     cat > sftp-upload <<EOF
 cd public_html
 cd automatic-upgrade-testing
+-mkdir $DATE
+cd $DATE
 -mkdir $p
 cd $p
 put /var/cache/auto-upgrade-tester/result/$p/*
@@ -69,7 +72,11 @@ echo "</body>" >> index.html
 cat > sftp-upload <<EOF
 cd public_html
 cd automatic-upgrade-testing
+cd $DATE
 put index.html
+cd ..
+-rm current
+symlink $DATE current
 EOF
 sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
 

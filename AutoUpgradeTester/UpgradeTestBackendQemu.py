@@ -431,6 +431,9 @@ iface eth0 inet static
         print "coyping the result"
         self._copyFromImage("/var/log/dist-upgrade/*",self.resultdir)
 
+        # give the ssh output extra time
+        time.sleep(10)
+
         # stop the machine
         print "Shuting down the VM"
         self.stop()

@@ -236,7 +236,10 @@ class MetaReleaseCore(object):
         req.add_header("Cache-Control", "No-Cache")
         req.add_header("Pragma", "no-cache")
         if os.access(self.METARELEASE_FILE, os.W_OK):
-            lastmodified = os.stat(self.METARELEASE_FILE).st_mtime
+            try:
+                lastmodified = os.stat(self.METARELEASE_FILE).st_mtime
+            except OSError, e:
+                pass
         if lastmodified > 0:
             req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
         try:

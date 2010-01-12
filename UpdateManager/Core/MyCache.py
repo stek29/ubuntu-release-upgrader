@@ -226,7 +226,10 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def get_news_and_changelog(self, name, lock):
         self.get_news(name)
         self.get_changelog(name)
-        lock.release()        
+        try:
+            lock.release()        
+        except:
+            pass
     
     def get_news(self, name):
         " get the NEWS.Debian file from the changelogs location "

@@ -72,6 +72,7 @@ from Core.utils import *
 from Core.UpdateList import UpdateList
 from Core.MyCache import MyCache, NotEnoughFreeSpaceError
 from Core.MetaRelease import Dist
+from SafeGConfClient import SafeGConfClient
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
@@ -183,18 +184,13 @@ class UpdateManager(SimpleGtkbuilderApp):
     if not os.path.exists("/usr/bin/software-properties-gtk"):
         self.button_settings.set_sensitive(False)
 
-    self.gconfclient = gconf.client_get_default()
+    self.gconfclient = SafeGConfClient()
     init_proxy(self.gconfclient)
     # init show version
-    try:
-        self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
-    except gobject.GError, e:
-        self.show_versions = False
+    self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
     # keep track when we run (for update-notifier)
-    try:
-        self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
-    except gobject.GError, e:
-        print "Error setting launch_time: ", e
+    self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
+
     # get progress object
     self.progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
                                               self.progressbar_cache,
@@ -718,12 +714,8 @@ class UpdateManager(SimpleGtkbuilderApp):
   def save_state(self):
     """ save the state  (window-size for now) """
     (x,y) = self.window_main.get_size()
-    try:
-        self.gconfclient.set_pair("/apps/update-manager/window_size",
-                                  gconf.VALUE_INT, gconf.VALUE_INT, x, y)
-    except gobject.GError, e:
-        print "Could not save the configuration to gconf: %s" % e
-        pass
+    self.gconfclient.set_pair("/apps/update-manager/window_size",
+                              gconf.VALUE_INT, gconf.VALUE_INT, x, y)
 
   def restore_state(self):
     """ restore the state (window-size for now) """
@@ -943,7 +935,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def check_metarelease(self):
       " check for new meta-release information "
-      gconfclient = gconf.client_get_default()
+      gconfclient = SafeGConfClient()
       self.meta = MetaRelease(self.options.devel_release,
                               self.options.use_proposed)
       self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)

@@ -31,6 +31,25 @@ import subprocess
 import sys
 import urllib2
 
+# helpers inspired after textwrap - unfortunately
+# we can not use textwrap directly because it break
+# packagenames with "-" in them into new lines
+def wrap(t, width=70, subsequent_indent=""):
+    out = ""
+    for s in t.split():
+        if (len(out)-out.rfind("\n")) + len(s) > width:
+            out += "\n" + subsequent_indent
+        out += s + " "
+    return out
+    
+def twrap(s, **kwargs):
+    msg = ""
+    paras = s.split("\n")
+    for par in paras:
+        s = wrap(par, **kwargs)
+        msg += s+"\n"
+    return msg
+
 def lsmod():
   " return list of loaded modules (or [] if lsmod is not found) "
   modules=[]

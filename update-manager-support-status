@@ -8,6 +8,7 @@ import subprocess
 import sys
 
 from apt.utils import *
+from UpdateManager.Core.utils import twrap
 
 CODENAME = subprocess.Popen(["lsb_release","-c","-s"],
                             stdout=subprocess.PIPE).communicate()[0].strip()
@@ -94,5 +95,11 @@ for (time, tset) in supported_by_time.iteritems():
 print
 print "You have %s packages that can not/no-longer be downloaded" % len(no_candidate)
 print "You have %s packages that are unsupported" % len(unsupported)
-    
+
+print
+print "No longer downloadable:"
+print twrap(" ".join(sorted(no_candidate)))
+
+print "Unsupported: "    
+print twrap(" ".join(sorted(unsupported)))
 

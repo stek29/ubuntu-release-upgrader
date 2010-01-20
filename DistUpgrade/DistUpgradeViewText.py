@@ -31,26 +31,7 @@ import apt.progress
 
 import gettext
 from DistUpgradeGettext import gettext as _
-#from textwrap import fill, wrap
-
-# helpers inspired after textwrap - unfortunately
-# we can not use textwrap directly because it break
-# packagenames with "-" in them into new lines
-def wrap(t, width=70, subsequent_indent=""):
-    out = ""
-    for s in t.split():
-        if (len(out)-out.rfind("\n")) + len(s) > width:
-            out += "\n" + subsequent_indent
-        out += s + " "
-    return out
-    
-def twrap(s, **kwargs):
-    msg = ""
-    paras = s.split("\n")
-    for par in paras:
-        s = wrap(par, **kwargs)
-        msg += s+"\n"
-    return msg
+from utils import wrap, twrap
 
 class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
     def __init__(self):

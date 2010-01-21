@@ -44,6 +44,7 @@ setup(name='update-manager',
                   },
       scripts=[
                'update-manager', 
+               'update-manager-support-status', 
                'update-manager-text', 
                "do-release-upgrade", 
                "update-manager-hildon",

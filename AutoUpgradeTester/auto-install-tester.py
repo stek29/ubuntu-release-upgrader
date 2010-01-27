@@ -33,16 +33,15 @@ if __name__ == "__main__":
 
     parser = OptionParser()
     parser.add_option("-p", "--profile", dest="profile", 
-                      default="profile/ubuntu/DistUpgrade.cfg",
-                      help="write report to FILE")
+                      default="profile/auto-install-tester/",
+                      help="base profile dir")
 
     (options, args) = parser.parse_args()
-    basedir = os.path.abspath(os.path.dirname(options.profile))
-    aptbasedir = os.path.join(basedir,"auto-install-test")
-    profile = os.path.join(basedir, "DistUpgrade.cfg")
 
     # create backend
     apt_pkg.Config.Set("APT::Architecture","i386")
+    basedir = os.path.abspath(os.path.dirname(options.profile))
+    aptbasedir = os.path.join(basedir,"auto-install-test")
 
 
     # create apt dirs if needed
@@ -54,7 +53,7 @@ if __name__ == "__main__":
             os.makedirs(os.path.join(aptbasedir,d))
 
 
-    backend = UpgradeTestBackendQemu(profile, profile)
+    backend = UpgradeTestBackendQemu(options.profile)
     backend.bootstrap()
 
     # copy status file
@@ -87,6 +86,7 @@ if __name__ == "__main__":
 
     # setup dirs
     resultdir = os.path.join(basedir,"result")
+    print "Using resultdir: '%s'" % resultdir
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
 
     # set with package that have been tested successfully

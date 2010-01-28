@@ -22,6 +22,7 @@
 import apt_pkg
 import ConfigParser
 import httplib
+import logging
 import rfc822
 import os
 import string
@@ -265,7 +266,7 @@ class MetaReleaseCore(object):
                 pass
             uri.close()
         except (urllib2.URLError, httplib.BadStatusLine), e:
-            print e
+            self._debug("result of meta-release download: '%s'" % e)
             if os.path.exists(self.METARELEASE_FILE):
                 self.metarelease_information=open(self.METARELEASE_FILE,"r")
         # now check the information we have

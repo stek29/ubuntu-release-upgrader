@@ -1551,6 +1551,10 @@ class DistUpgradeController(object):
         # then open the cache (again)
         self._view.updateStatus(_("Checking package manager"))
         self.openCache()
+        # re-check server mode because we got new packages (it may happen
+        # that the system had no sources.list entries and therefore no
+        # desktop file information)
+        self.serverMode = self.cache.needServerMode()
         # now check if we still have some key packages available/downloadable
         # after the update - if not something went seriously wrong
         # (this happend e.g. during the intrepid->jaunty upgrade for some

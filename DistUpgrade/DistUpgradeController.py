@@ -864,13 +864,7 @@ class DistUpgradeController(object):
     def askDistUpgrade(self):
         # check what packages got demoted and ask the user
         # if those shall be removed
-        demotions = set()
-        demotions_file = self.config.get("Distro","Demotions")
-        if os.path.exists(demotions_file):
-            map(lambda pkgname: demotions.add(pkgname.strip()),
-                filter(lambda line: not line.startswith("#"),
-                       open(demotions_file).readlines()))
-        self.installed_demotions = [pkg.name for pkg in self.cache if pkg.isInstalled and pkg.name in demotions]
+        self.installed_demotions = self.cache.get_installed_demoted_packages()
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
             logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))

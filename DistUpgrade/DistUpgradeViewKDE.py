@@ -756,6 +756,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.changesDialogue.treeview_details.header().hide()
         for rm in self.toRemove:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )
+        for rm in self.toRemoveAuto:
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove (was auto installed) %s") % rm]) )
         for inst in self.toInstall:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Install %s") % inst]) )
         for up in self.toUpgrade:

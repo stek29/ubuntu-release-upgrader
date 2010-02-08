@@ -287,19 +287,28 @@ class DistUpgradeView(object):
         self.toInstall = []
         self.toUpgrade = []
         self.toRemove = []
+        self.toRemoveAuto = []
         self.toDowngrade = []
         for pkg in changes:
-            if pkg.markedInstall: self.toInstall.append(pkg.name)
-            elif pkg.markedUpgrade: self.toUpgrade.append(pkg.name)
-            elif pkg.markedDelete: self.toRemove.append(pkg.name)
-            elif pkg.markedDowngrade: self.toDowngrade.append(pkg.name)
+            if pkg.markedInstall: 
+              self.toInstall.append(pkg.name)
+            elif pkg.markedUpgrade: 
+              self.toUpgrade.append(pkg.name)
+            elif pkg.markedDelete:
+              if pkg._pcache._depcache.IsAutoInstalled(pkg._pkg):
+                self.toRemoveAuto.append(pkg.name)
+              else:
+                self.toRemove.append(pkg.name)
+            elif pkg.markedDowngrade: 
+              self.toDowngrade.append(pkg.name)
         # sort it
         self.toInstall.sort()
         self.toUpgrade.sort()
         self.toRemove.sort()
+        self.toRemoveAuto.sort()
         self.toDowngrade.sort()
         # no re-installs 
-        assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toDowngrade) == len(changes))
+        assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toRemoveAuto)+len(self.toDowngrade) == len(changes))
         # now build the message (the same for all frontends)
         msg = "\n"
         pkgs_remove = len(self.toRemove)

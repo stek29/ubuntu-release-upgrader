@@ -626,6 +626,9 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
             if removal_bold:
               s = "<b>%s</b>" % s
             self.details_list.append([s])
+        for rm in self.toRemoveAuto:
+            s = _("Remove (was auto installed) %s") % rm
+            self.details_list.append([s])
         for inst in self.toInstall:
             self.details_list.append([_("Install %s") % inst])
         for up in self.toUpgrade:

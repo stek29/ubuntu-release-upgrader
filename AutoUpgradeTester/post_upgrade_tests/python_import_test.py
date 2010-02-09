@@ -13,7 +13,9 @@ BASEPATH="/usr/lib/%s/dist-packages/" % PYTHONVER
 blacklist = ["speechd_config", 
              "PAMmodule.so", 
              "aomodule.so",
-             "plannerui.so"
+             "plannerui.so",
+             # needs a KeyringDaemon
+             "desktopcouch",
              ]
 
 def try_import(module):

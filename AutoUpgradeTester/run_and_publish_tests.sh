@@ -59,6 +59,7 @@ cd $DATE
 -mkdir $p
 cd $p
 put /var/cache/auto-upgrade-tester/result/$p/*
+chmod 644 *
 EOF
     sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
 done

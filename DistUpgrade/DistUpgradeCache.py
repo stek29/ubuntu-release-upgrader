@@ -932,6 +932,10 @@ class MyCache(apt.Cache):
         return unused_dependencies
 
     def get_installed_demoted_packages(self):
+        """ return list of installed and demoted packages 
+
+            If a demoted package is a automatic install it will be skipped
+        """
         demotions = set()
         demotions_file = self.config.get("Distro","Demotions")
         if os.path.exists(demotions_file):
@@ -946,7 +950,7 @@ class MyCache(apt.Cache):
             if not pkg.isInstalled or self._depcache.IsAutoInstalled(pkg._pkg):
                 continue
             installed_demotions.add(pkg.name)
-        return installed_demotions
+        return list(installed_demotions)
 
     def _getForeignPkgs(self, allowed_origin, fromDist, toDist):
         """ get all packages that are installed from a foreign repo

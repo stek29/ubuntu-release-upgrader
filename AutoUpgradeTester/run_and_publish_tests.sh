@@ -15,8 +15,51 @@ PROFILES="dapper-hardy-lucid-server dapper-hardy-lucid-ubuntu server ubuntu lts-
 #UPGRADE_TESTER_ARGS="--tests-only"
 UPGRADE_TESTER_ARGS="--quiet"
 
-# ------------------------------------------------------------- main()
+upload_files() {
+    profile=$1
+    SSHKEY=$2
+    PUBLISH=$3
+    DATE=$4
+    cat > sftp-upload <<EOF
+cd public_html
+cd automatic-upgrade-testing
+-mkdir $DATE
+cd $DATE
+-mkdir $profile
+cd $profile
+put /var/cache/auto-upgrade-tester/result/$profile/*
+chmod 644 *
+EOF
+    sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
+}
 
+upload_index_html() {
+    SSHKEY=$1
+    PUBLISH=$2
+    DATE=$3
+    # upload index
+    cat > sftp-upload <<EOF
+cd public_html
+cd automatic-upgrade-testing
+cd $DATE
+put index.html
+EOF
+    sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
+}
+
+upload_ssh_key() {
+    SSHKEY=$1
+    PUBLISH=$2
+    cat > sftp-upload <<EOF
+cd public_html
+-rm current
+symlink $DATE current
+EOF
+    sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
+}
+
+generate_index_html_head() {
+    DATE=$1
 cat > index.html <<EOF
 <?xml version="1.0" encoding="ascii"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -33,14 +76,18 @@ table { width:90%; }
 <body>
 <h1>Automatic upgrade tester test results</h1>
 
-<p>Upgrade test started $(date +"%F %T")</p>
+<p>Upgrade test started $DATE</p>
 
 <table border="1">
 <tr><th>Profile</th><th>Result</th><th>Date Finished</th><th>Runtime</th><th>Full Logs</th></tr>
 EOF
+}
 
-FAIL=""
+# ------------------------------------------------------------- main()
+
 DATE=$(date +"%F-%T")
+FAIL=""
+generate_index_html_head $DATE
 for p in $PROFILES; do
     echo "Testing $p"
     echo -n "<tr><td>$p</td>" >> index.html
@@ -51,17 +98,8 @@ for p in $PROFILES; do
         echo "<td class=\"error\">FAILED</td>" >> index.html
     fi
     echo "<td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
-    cat > sftp-upload <<EOF
-cd public_html
-cd automatic-upgrade-testing
--mkdir $DATE
-cd $DATE
--mkdir $p
-cd $p
-put /var/cache/auto-upgrade-tester/result/$p/*
-chmod 644 *
-EOF
-    sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
+    upload_files $p $SSHKEY $PUBLISH $DATE
+    upload_index_html $SSHKEY $PUBLISH $DATE
 done
 
 echo "<p>Upgrade test finished $(date +"%F %T")</p>" >> index.html
@@ -69,17 +107,9 @@ echo "<p>Upgrade test finished $(date +"%F %T")</p>" >> index.html
 echo "</table>" >> index.html
 echo "</body>" >> index.html
 
-# upload index
-cat > sftp-upload <<EOF
-cd public_html
-cd automatic-upgrade-testing
-cd $DATE
-put index.html
-cd ..
--rm current
-symlink $DATE current
-EOF
-sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
+# upload final index
+upload_index_html $SSHKEY $PUBLISH $DATE
+update_current_symlink $SSHKEY $PUBLISH
 
 echo "Tested: $PROFILES"
 if [ -n "$FAIL" ]; then

@@ -10,13 +10,22 @@ import logging
 import sys
 import time
 
+import UpdateManager.GtkProgress
+
 from gettext import gettext as _
 from optparse import OptionParser
 
 from DistUpgrade.utils import init_proxy
+
+from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
 
 gobject.threads_init()
+
+class DistUpgradeFetcher(DistUpgradeFetcherGtk):
+    def showReleaseNotes(self):
+      # nothing to do
+      return True
 
 class CheckNewReleaseGtk(object):
 
@@ -48,6 +57,8 @@ class CheckNewReleaseGtk(object):
     vbox.pack_start(label, expand=False, fill=False, padding=12)
     import webkit
     self.webkit_view = webkit.WebView()
+    settings = self.webkit_view.get_settings()
+    settings.set_property("enable-plugins", False)
     scroll = gtk.ScrolledWindow()
     scroll.add(self.webkit_view)
     vbox.pack_start(scroll)
@@ -67,12 +78,21 @@ class CheckNewReleaseGtk(object):
 
   def on_button_upgrade_now_clicked(self, button):
     print "upgrade now"
+    # FIXME: add inline fetch progress
+    import apt.progress
+    progress = apt.progress.TextFetchProgress()
+    fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
+                                 parent=self,
+                                 progress=progress)
+    res = fetcher.run()
 
   def on_button_ask_me_later_clicked(self, button):
     print "ask me later"
+    gtk.main_quit()
 
   def on_button_do_not_upgrade_clicked(self, button):
     print "don't upgrade"
+    gtk.main_quit()
 
   def show_uri(self, uri):
     self.webkit_view.open(uri)

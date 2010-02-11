@@ -49,7 +49,7 @@ class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
 # the initrd/vmlinuz/abi space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 15*1024*1024
+KERNEL_INITRD_SIZE = 18*1024*1024
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:

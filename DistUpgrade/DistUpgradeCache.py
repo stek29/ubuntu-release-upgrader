@@ -881,6 +881,12 @@ class MyCache(apt.Cache):
         except ConfigParser.NoOptionError, e:
             purge = False
 
+        # - performance -
+        # no need to check for rdepends when auto-removable, 
+        # it does not have any (other than other auto-removable ones)
+        if self[pkgname].isAutoRemovable:
+            return True
+
         # this is a delete candidate, only actually delete,
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well

@@ -68,7 +68,10 @@ if __name__ == "__main__":
     parser.add_option("", "--show-all",
                       action="store_true", default=False,
                       help=_("Show all packages with their status"))
-    
+    parser.add_option("", "--list",
+                      action="store_true", default=False,
+                      help=_("Show all packages in a list"))
+
     (options, args) = parser.parse_args()
 
     # packages that are not downloadable
@@ -126,7 +129,6 @@ if __name__ == "__main__":
             options.show_all):
         print
         print "Run with --show-unsupported, --show-supported or --show-all to see more details"
-        sys.exit(0)
 
     if options.show_unsupported or options.show_all:
         print
@@ -140,3 +142,13 @@ if __name__ == "__main__":
         for (time, tset) in supported_by_time.iteritems():
             print "Supported until %s:" % time
             print twrap(" ".join(sorted(tset)))
+
+    if options.list:
+        pkg = max(cache, key=lambda pkg: pkg.isInstalled and len(pkg.name))
+        field_width = len(pkg.name)
+        format_str = "%-"+str(field_width)+"s  %s"
+        for pkg in sorted(cache, cmp=lambda a,b: cmp(a.name, b.name)):
+            if pkg.isInstalled:
+                support =  supported_time_for_pkgname.get(pkg.name, _("Unsupported"))
+                print format_str % (pkg.name, support)
+                

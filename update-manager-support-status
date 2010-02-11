@@ -67,10 +67,14 @@ supported_time_for_pkgname = {}
 # dict with supporttime : set of packagenames
 supported_by_time = {}
 
+# total count, for statistics
+total = 0
+
 # analyize
 cache = apt.Cache()
 for pkg in cache:
     if pkg.isInstalled:
+        total += 1
         if not pkg.candidate or not pkg.candidate.downloadable:
             no_candidate.add(pkg.name)
             continue
@@ -91,10 +95,10 @@ for pkg in cache:
 print "Support status summary of '%s':" % os.uname()[1]
 print
 for (time, tset) in supported_by_time.iteritems():
-    print "You have %s packages supported until %s" % (len(tset), time)
+    print "You have %s packages (%.1f%%) supported until %s" % (len(tset), len(tset) * 100.0 / total, time)
 print
-print "You have %s packages that can not/no-longer be downloaded" % len(no_candidate)
-print "You have %s packages that are unsupported" % len(unsupported)
+print "You have %s packages (%.1f%%) that can not/no-longer be downloaded" % (len(no_candidate), len(no_candidate) * 100.0 / total)
+print "You have %s packages (%.1f%%) that are unsupported" % (len(unsupported), len(unsupported) * 100.0 / total)
 
 print
 print "No longer downloadable:"

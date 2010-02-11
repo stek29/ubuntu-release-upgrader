@@ -45,9 +45,9 @@ class MetaRelease(MetaReleaseCore,gobject.GObject):
 
         }
 
-    def __init__(self, useDevelopmentRelase=False, useProposed=False):
+    def __init__(self, useDevelopmentRelease=False, useProposed=False):
         gobject.GObject.__init__(self)
-        MetaReleaseCore.__init__(self, useDevelopmentRelase, useProposed)
+        MetaReleaseCore.__init__(self, useDevelopmentRelease, useProposed)
         # in the gtk space to test if the download already finished
         # this is needed because gtk is not thread-safe
         gobject.timeout_add(1000, self.check)

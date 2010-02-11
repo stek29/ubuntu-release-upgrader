@@ -42,6 +42,7 @@ class Dist(object):
         self.date = date
         self.supported = supported
         self.releaseNotesURI = None
+        self.releaseNotesHtmlUri = None
         self.upgradeTool = None
         self.upgradeToolSig = None
 
@@ -193,6 +194,8 @@ class MetaReleaseCore(object):
                 dist = Dist(name, version, date,supported)
                 if index_tag.Section.has_key("ReleaseNotes"):
                     dist.releaseNotesURI = index_tag.Section["ReleaseNotes"]
+                if index_tag.Section.has_key("ReleaseNotesHtml"):
+                    dist.releaseNotesHtmlUri = index_tag.Section["ReleaseNotesHtml"]
                 if index_tag.Section.has_key("UpgradeTool"):
                     dist.upgradeTool =  index_tag.Section["UpgradeTool"]
                 if index_tag.Section.has_key("UpgradeToolSignature"):

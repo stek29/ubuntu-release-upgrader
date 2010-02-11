@@ -1,0 +1,109 @@
+#!/usr/bin/python
+
+import warnings
+warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
+import apt
+import gobject
+import glib
+import gtk
+import logging
+import sys
+import time
+
+from gettext import gettext as _
+from optparse import OptionParser
+
+from DistUpgrade.utils import init_proxy
+from UpdateManager.MetaReleaseGObject import MetaRelease
+
+gobject.threads_init()
+
+class CheckNewReleaseGtk(object):
+
+  # the timeout until we give up
+  FETCH_TIMEOUT = 10
+
+  def __init__(self, options):
+    self.new_dist = None
+    m = MetaRelease(useDevelopmentRelease=options.devel_release,
+                    useProposed=options.proposed_release)
+    m.connect("new-dist-available", self.new_dist_available)
+    glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
+
+  def new_dist_available(self, meta_release, new_dist):
+    self.new_dist = new_dist
+    self.build_ui()
+    html_uri = new_dist.releaseNotesHtmlUri
+    self.show_uri(html_uri)
+  
+  def build_ui(self):
+    self.window_main = gtk.Window()
+    self.window_main.set_size_request(700,400)
+    vbox = gtk.VBox()
+    vbox.set_spacing(12)
+    self.window_main.add(vbox)
+    s = _("A new version of Ubuntu is available. Would you like to upgrade?")
+    label = gtk.Label()
+    label.set_markup("<big>%s</big>" % s)
+    vbox.pack_start(label, expand=False, fill=False, padding=12)
+    import webkit
+    self.webkit_view = webkit.WebView()
+    scroll = gtk.ScrolledWindow()
+    scroll.add(self.webkit_view)
+    vbox.pack_start(scroll)
+    button_hbox = gtk.HBox()
+    button_hbox.set_spacing(18)
+    button = gtk.Button(label=_("Yes, upgrade now"))
+    button.connect("clicked", self.on_button_upgrade_now_clicked)
+    button_hbox.pack_end(button, expand=False, fill=False)
+    button = gtk.Button(label=_("Ask me later"))
+    button.connect("clicked", self.on_button_ask_me_later_clicked)
+    button_hbox.pack_end(button, expand=False, fill=False)
+    button = gtk.Button(label=_("Don't upgrade"))
+    button.connect("clicked", self.on_button_do_not_upgrade_clicked)
+    button_hbox.pack_end(button, expand=False, fill=False)
+
+    vbox.pack_start(button_hbox, expand=False, fill=False)
+
+  def on_button_upgrade_now_clicked(self, button):
+    print "upgrade now"
+
+  def on_button_ask_me_later_clicked(self, button):
+    print "ask me later"
+
+  def on_button_do_not_upgrade_clicked(self, button):
+    print "don't upgrade"
+
+  def show_uri(self, uri):
+    self.webkit_view.open(uri)
+    self.webkit_view.connect("load-finished", self._on_load_finished)
+
+  def _on_load_finished(self, view, frame):
+    self.window_main.show_all()
+
+
+  def timeout(self):
+    if self.new_dist is None:
+      logging.warn("timeout reached, exiting")
+      gtk.main_quit()
+
+if __name__ == "__main__":
+
+  init_proxy()
+
+  parser = OptionParser()
+  parser.add_option ("-d", "--devel-release", action="store_true",
+                     dest="devel_release", default=False,
+                     help=_("Check if upgrading to the latest devel release "
+                          "is possible"))
+  parser.add_option ("-p", "--proposed", action="store_true",
+                     dest="proposed_release", default=False,
+                     help=_("Try upgrading to the latest release using "
+                            "the upgrader from $distro-proposed"))
+  (options, args) = parser.parse_args()
+
+  # create object
+  cnr = CheckNewReleaseGtk(options)
+ 
+  gtk.main()
+

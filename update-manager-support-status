@@ -8,6 +8,8 @@ import subprocess
 import sys
 
 from apt.utils import *
+from gettext import gettext as _
+from optparse import OptionParser
 from UpdateManager.Core.utils import twrap
 
 CODENAME = subprocess.Popen(["lsb_release","-c","-s"],
@@ -55,55 +57,86 @@ def get_maintenance_status(cache, pkgname, supported_tag):
         (False, "%(support_end_month_str)s %(support_end_year)s (%(support_tag)s)" % d)
     return (True, "%(support_end_month_str)s %(support_end_year)s (%(support_tag)s)" % d)
             
+if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option("", "--show-unsupported",
+                      action="store_true", default=False,
+                      help=_("Show unsupported packages on this machine"))
+    parser.add_option("", "--show-supported",
+                      action="store_true", default=False,
+                      help=_("Show supported packages on this machine"))
+    parser.add_option("", "--show-all",
+                      action="store_true", default=False,
+                      help=_("Show all packages with their status"))
+    
+    (options, args) = parser.parse_args()
 
-# packages that are not downloadable
-no_candidate = set()
+    # packages that are not downloadable
+    no_candidate = set()
 
-# packages that we have no support information
-unsupported = set()
+    # packages that we have no support information
+    unsupported = set()
 
-# dict with pkgname : support time
-supported_time_for_pkgname = {}
-# dict with supporttime : set of packagenames
-supported_by_time = {}
+    # dict with pkgname : support time
+    supported_time_for_pkgname = {}
 
-# total count, for statistics
-total = 0
+    # dict with supporttime : set of packagenames
+    supported_by_time = {}
 
-# analyize
-cache = apt.Cache()
-for pkg in cache:
-    if pkg.isInstalled:
-        total += 1
-        if not pkg.candidate or not pkg.candidate.downloadable:
-            no_candidate.add(pkg.name)
-            continue
-        if not "Supported" in pkg.candidate.record:
-            unsupported.add(pkg.name)
-            continue
-        # get support time
-        support_tag = pkg.candidate.record["Supported"]
-        (still_supported, support_str) = get_maintenance_status(cache, pkg.name, support_tag)
-        if not still_supported:
-            unsupported.add(pkg.name)
-            continue
-        supported_time_for_pkgname[pkg.name] = support_tag
-        if not support_str in supported_by_time:
-            supported_by_time[support_str] = set()
-        supported_by_time[support_str].add(pkg.name)
+    # total count, for statistics
+    total = 0
 
-print "Support status summary of '%s':" % os.uname()[1]
-print
-for (time, tset) in supported_by_time.iteritems():
-    print "You have %s packages (%.1f%%) supported until %s" % (len(tset), len(tset) * 100.0 / total, time)
-print
-print "You have %s packages (%.1f%%) that can not/no-longer be downloaded" % (len(no_candidate), len(no_candidate) * 100.0 / total)
-print "You have %s packages (%.1f%%) that are unsupported" % (len(unsupported), len(unsupported) * 100.0 / total)
+    # analyize
+    cache = apt.Cache()
+    for pkg in cache:
+        if pkg.isInstalled:
+            total += 1
+            if not pkg.candidate or not pkg.candidate.downloadable:
+                no_candidate.add(pkg.name)
+                continue
+            if not "Supported" in pkg.candidate.record:
+                unsupported.add(pkg.name)
+                continue
+            # get support time
+            support_tag = pkg.candidate.record["Supported"]
+            (still_supported, support_str) = get_maintenance_status(cache, pkg.name, support_tag)
+            if not still_supported:
+                unsupported.add(pkg.name)
+                continue
+            supported_time_for_pkgname[pkg.name] = support_tag
+            if not support_str in supported_by_time:
+                supported_by_time[support_str] = set()
+            supported_by_time[support_str].add(pkg.name)
 
-print
-print "No longer downloadable:"
-print twrap(" ".join(sorted(no_candidate)))
+    # output
+    print "Support status summary of '%s':" % os.uname()[1]
+    print
+    for (time, tset) in supported_by_time.iteritems():
+        print "You have %s packages (%.1f%%) supported until %s" % (
+            len(tset), len(tset) * 100.0 / total, time)
+    print
 
-print "Unsupported: "    
-print twrap(" ".join(sorted(unsupported)))
+    print "You have %s packages (%.1f%%) that can not/no-longer be downloaded" % (
+        len(no_candidate), len(no_candidate) * 100.0 / total)
+    print "You have %s packages (%.1f%%) that are unsupported" % (
+        len(unsupported), len(unsupported) * 100.0 / total)
 
+    if not (options.show_unsupported or
+            options.show_supported or
+            options.show_all):
+        print
+        print "Run with --show-unsupported, --show-supported or --show-all to see more details"
+        sys.exit(0)
+
+    if options.show_unsupported or options.show_all:
+        print
+        print "No longer downloadable:"
+        print twrap(" ".join(sorted(no_candidate)))
+        
+        print "Unsupported: "    
+        print twrap(" ".join(sorted(unsupported)))
+    
+    if options.show_supported or options.show_all:
+        for (time, tset) in supported_by_time.iteritems():
+            print "Supported until %s:" % time
+            print twrap(" ".join(sorted(tset)))

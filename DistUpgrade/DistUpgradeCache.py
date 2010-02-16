@@ -265,6 +265,11 @@ class MyCache(apt.Cache):
             return False
         return ver.Downloadable
     
+    def pkgAutoRemovable(pkg):
+        """ check if the pkg is auto-removable """
+        return (pkg.isInstalled and 
+                self._depcache.IsGarbage(pkg._pkg))
+
     def fixBroken(self):
         """ try to fix broken dependencies on the system, may throw
             SystemError when it can't"""
@@ -884,7 +889,7 @@ class MyCache(apt.Cache):
         # - performance -
         # no need to check for rdepends when auto-removable, 
         # it does not have any (other than other auto-removable ones)
-        if self[pkgname].isAutoRemovable:
+        if self.pkgAutoRemovable(pkg):
             return True
 
         # this is a delete candidate, only actually delete,

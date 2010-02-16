@@ -47,7 +47,7 @@ EOF
     sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
 }
 
-upload_ssh_key() {
+update_current_symlink() {
     SSHKEY=$1
     PUBLISH=$2
     cat > sftp-upload <<EOF

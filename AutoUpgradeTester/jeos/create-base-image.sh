@@ -30,4 +30,4 @@ fi
 
 # create the image
 ubuntu-vm-builder kvm $1 --kernel-flavour $KERNEL --ssh-key $(pwd)/ssh-key.pub \
-    --components main,restricted --rootsize 80000 --arch i386
+    --components main,restricted --rootsize 80000 --arch i386 --dest ubuntu-$1

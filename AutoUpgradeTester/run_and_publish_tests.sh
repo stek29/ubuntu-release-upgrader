@@ -52,6 +52,7 @@ update_current_symlink() {
     PUBLISH=$2
     cat > sftp-upload <<EOF
 cd public_html
+cd automatic-upgrade-testing
 -rm current
 symlink $DATE current
 EOF

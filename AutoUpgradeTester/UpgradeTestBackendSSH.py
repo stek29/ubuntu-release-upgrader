@@ -187,7 +187,6 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         # check for crashes
         self._copyFromImage("/var/crash/*.crash", self.resultdir)
         crashfiles = glob.glob(self.resultdir+"/*.crash")
-
         # run stuff in post_upgrade_tests dir
         ok = True
         for script in glob.glob(self.post_upgrade_tests_dir+"*"):
@@ -199,6 +198,9 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             if ret != 0:
                 print "WARNING: post_upgrade_test '%s' failed" % script
                 ok = False
+
+        # check for conffiles (the copy is done via a post upgrade script)
+        self._copyFromImage("/tmp/*.dpkg-dist", self.resultdir)
 
         self.stop()
         if len(crashfiles) > 0:

@@ -167,6 +167,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         # looks like we have a race here *sometimes*
         time.sleep(5)
 	try:
+          # ask for a diff first
+          os.write(self.master_fd,"d\n")
           # don't overwrite
 	  os.write(self.master_fd,"n\n")
  	except Exception, e:
@@ -253,6 +255,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         logging.debug("doing a pty.fork()")
         # some maintainer scripts fail without
         os.environ["TERM"] = "dumb"
+        # unset PAGER so that we can do "diff" in the dpkg prompt
+        os.environ["PAGER"] = "true"
         (self.pid, self.master_fd) = pty.fork()
         if self.pid != 0:
             logging.debug("pid is: %s" % self.pid)

@@ -1,11 +1,21 @@
 update-manager (1:0.132.1) UNRELEASED; urgency=low
 
+  [ Michael Vogt ]
   * rename update-manager-support-status to ubuntu-support-status
   * check-new-release-gtk:
     - add gtk tool for release notification that is designed to be
       run from update-notifier (desktop-lucid-update-upgrade-requirements)
   * DistUpgrade/DistUpgradeCache.py:
     - fix crash in cleanup code
+
+  [ Dustin Kirkland ]
+  * debian/91-release-upgrade, debian/update-manager-core.install,
+    debian/update-manager-core.cron.daily:
+    - some users are complaining of long login times due to the release
+      check requiring network connectivity; this information clearly doesn't
+      change as frequently as the user logging in, so run this instead as a
+      daily cronjob, caching the output to /var/lib and printing it only if
+      cache file contains data, LP: #522452
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 11 Feb 2010 15:40:00 +0100
 

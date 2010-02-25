@@ -247,7 +247,12 @@ class MetaReleaseCore(object):
         if lastmodified > 0:
             req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
         try:
-            uri=urllib2.urlopen(req, timeout=20)
+            # need try/except for hardy, can be removed afterwards
+            try:
+                uri=urllib2.urlopen(req, timeout=20)
+            # hardy does not have timeout yet
+            except TypeError:
+                uri=urllib2.urlopen(req)
             # sometime there is a root owned meta-relase file
             # there, try to remove it so that we get it
             # with proper permissions

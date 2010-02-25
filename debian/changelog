@@ -1,4 +1,4 @@
-update-manager (1:0.132.1) lucid; urgency=low
+update-manager (1:0.132.1) UNRELEASED; urgency=low
 
   * rename update-manager-support-status to ubuntu-support-status
   * check-new-release-gtk:
@@ -6,6 +6,12 @@ update-manager (1:0.132.1) lucid; urgency=low
       run from update-notifier (desktop-lucid-update-upgrade-requirements)
   * DistUpgrade/DistUpgradeCache.py:
     - fix crash in cleanup code
+    - fix crash when /home is missing (LP: #463506)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - remove old code that moved to python-apt
+  * DistUpgrade/DistUpgradeController.py:
+    - if universe is not enabled, explain that the demoted packages
+      will be suggested for removal in the cleanup stage
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 17 Feb 2010 23:44:00 +0100
 

@@ -1043,6 +1043,7 @@ class MyCache(apt.Cache):
                 st = os.statvfs(d)
                 free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
             else:
+                logging.warn("directory '%s' does not exists" % d)
                 free = 0
             if fs_id in mnt_map:
                 logging.debug("Dir %s mounted on %s" % (d,mnt_map[fs_id]))

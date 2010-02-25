@@ -516,7 +516,7 @@ class DistUpgradeController(object):
         foundToDist = False
         # collect information on what components (main,universe) are enabled for what distro (sub)version
         # e.g. found_components = { 'hardy':set("main","restricted"), 'hardy-updates':set("main") }
-        found_components = {}
+        self.found_components = {}
         for entry in self.sources.list[:]:
 
             # ignore invalid records or disabled ones
@@ -628,14 +628,14 @@ class DistUpgradeController(object):
                           "%s-security" % self.toDist]:
                     # create entry if needed, ignore disabled
                     # entries and deb-src
-                    found_components.setdefault(d,set())
+                    self.found_components.setdefault(d,set())
                     if (not entry.disabled and entry.dist == d and
                         entry.type == "deb"):
                         for comp in entry.comps:
                             # only sync components we know about
                             if not comp in sync_components:
                                 continue
-                            found_components[d].add(comp)
+                            self.found_components[d].add(comp)
                     
             # disable anything that is not from a official mirror
             if not validMirror:
@@ -654,12 +654,12 @@ class DistUpgradeController(object):
                 entry.uri.startswith("cdrom:") or entry.dist == self.toDist):
                 continue
             # now check for "$dist-updates" and "$dist-security" and add any inconsistencies
-            if found_components.has_key(entry.dist):
+            if self.found_components.has_key(entry.dist):
                 # add the delta between "hardy" comps and "hardy-updates" comps once
                 logging.info("fixing components inconsistency from '%s'" % entry)
-                entry.comps.extend(list(found_components[self.toDist]-found_components[entry.dist]))
+                entry.comps.extend(list(self.found_components[self.toDist]-self.found_components[entry.dist]))
                 logging.info("to new entry '%s'" % entry)
-                del found_components[entry.dist]
+                del self.found_components[entry.dist]
         return foundToDist
 
     def updateSourcesList(self):
@@ -868,15 +868,24 @@ class DistUpgradeController(object):
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
             logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
+            logging.debug("found: %s" % self.found_components)
+            text = _("Canonical Ltd. no longer provides "
+                     "support for the following software "
+                     "packages. You can still get support "
+                     "from the community.")
+            # if universe is not there, explain that we will ask for removal
+            # of the packages later
+            if not "universe" in self.found_components[self.toDist]:
+                text =  _("Canonical Ltd. no longer provides "
+                          "support for the following software "
+                          "packages. You can still get support "
+                          "from the community.\n\n"
+                          "These packages will be suggested for "
+                          "removal at the end of the upgrade because "
+                          "you have not enabled the community maintained "
+                          "software channel (universe).")
             self._view.showDemotions(_("Support for some applications ended"),
-                                   _("Canonical Ltd. no longer provides "
-                                     "support for the following software "
-                                     "packages. You can still get support "
-                                     "from the community.\n\n"
-                                     "If you have not enabled community "
-                                     "maintained software (universe), "
-                                     "these packages will be suggested for "
-                                     "removal at the end of the upgrade."),
+                                     text,
                                      self.installed_demotions)
             self._view.updateStatus(_("Calculating the changes"))
         # FIXME: integrate this into main upgrade dialog!?!

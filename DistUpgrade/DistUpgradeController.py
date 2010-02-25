@@ -655,11 +655,12 @@ class DistUpgradeController(object):
                 continue
             # now check for "$dist-updates" and "$dist-security" and add any inconsistencies
             if self.found_components.has_key(entry.dist):
-                # add the delta between "hardy" comps and "hardy-updates" comps once
-                logging.info("fixing components inconsistency from '%s'" % entry)
-                entry.comps.extend(list(self.found_components[self.toDist]-self.found_components[entry.dist]))
-                logging.info("to new entry '%s'" % entry)
-                del self.found_components[entry.dist]
+                component_diff = self.found_components[self.toDist]-self.found_components[entry.dist]
+                if component_diff:
+                    logging.info("fixing components inconsistency from '%s'" % entry)
+                    entry.comps.extend(list(component_diff))
+                    logging.info("to new entry '%s'" % entry)
+                    del self.found_components[entry.dist]
         return foundToDist
 
     def updateSourcesList(self):

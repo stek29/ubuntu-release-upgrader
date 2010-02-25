@@ -294,12 +294,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.label_status.set_text("")
     
     def updateInterface(self):
-        try:
-          InstallProgress.updateInterface(self)
-        except ValueError, e:
-          logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
-          # reset self.read so that it can continue reading and does not loop
-	  self.read = ""
+        InstallProgress.updateInterface(self)
         # check if we haven't started yet with packages, pulse then
         if self.start_time == 0.0:
           self.progress.pulse()

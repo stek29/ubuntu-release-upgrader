@@ -1039,8 +1039,11 @@ class MyCache(apt.Cache):
         for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home","/tmp/"]:
             d = os.path.realpath(d)
             fs_id = make_fs_id(d)
-            st = os.statvfs(d)
-            free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
+            if os.path.exists(d):
+                st = os.statvfs(d)
+                free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
+            else:
+                free = 0
             if fs_id in mnt_map:
                 logging.debug("Dir %s mounted on %s" % (d,mnt_map[fs_id]))
                 fs_free[d] = fs_free[mnt_map[fs_id]]

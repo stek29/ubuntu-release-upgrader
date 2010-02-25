@@ -1,1 +1,1 @@
-/usr/share/pyshared/aptsources/sourceslist.py
+/usr/lib/python2.6/dist-packages/aptsources/sourceslist.py

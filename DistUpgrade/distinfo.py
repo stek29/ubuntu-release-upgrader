@@ -1,1 +1,1 @@
-/usr/share/pyshared/aptsources/distinfo.py
+/usr/lib/python2.6/dist-packages/aptsources/distinfo.py

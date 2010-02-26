@@ -56,7 +56,7 @@ if __name__ == "__main__":
     backend = UpgradeTestBackendQemu(options.profile)
     backend.bootstrap()
 
-    # copy status file
+    # copy status file from image to aptbasedir
     backend.start()
     print "copy status file"
     backend._copyFromImage("/var/lib/dpkg/status",
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     backend._runInImage(["apt-get","update"])
 
     # setup dirs
-    resultdir = os.path.join(basedir,"result")
+    resultdir = backend.config.get("NonInteractive", "ResultDir")
     print "Using resultdir: '%s'" % resultdir
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
 

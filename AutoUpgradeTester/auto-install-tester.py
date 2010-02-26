@@ -85,7 +85,7 @@ if __name__ == "__main__":
     backend._runInImage(["apt-get","update"])
 
     # setup dirs
-    resultdir = backend.config.get("NonInteractive", "ResultDir")
+    resultdir = backend.resultdir
     print "Using resultdir: '%s'" % resultdir
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
 
@@ -132,7 +132,7 @@ if __name__ == "__main__":
             failures.write("%s markInstall()\n " % pkg.name)
             continue
         
-        statusfile.write("%s\n" % pkg.name)
+        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidateVersion))
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log
             # is more meaningful

@@ -23,12 +23,16 @@ from UpdateManager.SimpleGtkbuilderApp import SimpleGtkbuilderApp
 
 gobject.threads_init()
 
+# overwrite default upgrade fetcher and make it not show the
+# release notes by default
 class DistUpgradeFetcher(DistUpgradeFetcherGtk):
     def showReleaseNotes(self):
       # nothing to do
       return True
 
+
 class CheckNewReleaseGtk(SimpleGtkbuilderApp):
+  """ Gtk verson of the release notes check/download """
 
   # the timeout until we give up
   FETCH_TIMEOUT = 10
@@ -40,6 +44,10 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
                     useProposed=options.proposed_release)
     m.connect("new-dist-available", self.new_dist_available)
     glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
+    # testing only
+    if options.test_uri:
+        self.build_ui()
+        self.show_uri(options.test_uri)
 
   def new_dist_available(self, meta_release, new_dist):
     self.new_dist = new_dist
@@ -105,6 +113,7 @@ if __name__ == "__main__":
                             "the upgrader from $distro-proposed"))
   # mostly useful for development
   parser.add_option ("", "--datadir", default="/usr/share/update-manager")
+  parser.add_option ("", "--test-uri")
   (options, args) = parser.parse_args()
 
   # create object

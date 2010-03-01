@@ -212,10 +212,10 @@ class MetaReleaseCore(object):
             #sys.stderr.write("current dist not found in meta-release file\n")
             return False
 
-        # then see what we can upgrade to (only upgrade to supported dists)
+        # then see what we can upgrade to 
         upgradable_to = ""
         for dist in dists:
-            if dist.date > current_dist.date and dist.supported == True: 
+            if dist.date > current_dist.date:
                 upgradable_to = dist
                 self._debug("new dist: %s" % upgradable_to)
                 break

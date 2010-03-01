@@ -19,6 +19,7 @@ from DistUpgrade.utils import init_proxy
 
 from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
+from UpdateManager.SimpleGtkbuilderApp import SimpleGtkbuilderApp
 
 gobject.threads_init()
 
@@ -27,12 +28,13 @@ class DistUpgradeFetcher(DistUpgradeFetcherGtk):
       # nothing to do
       return True
 
-class CheckNewReleaseGtk(object):
+class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   # the timeout until we give up
   FETCH_TIMEOUT = 10
 
   def __init__(self, options):
+    SimpleGtkbuilderApp.__init__(self, options.datadir+"glade/UpgradePromptDialog.ui", "update-manager")
     self.new_dist = None
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)
@@ -46,35 +48,14 @@ class CheckNewReleaseGtk(object):
     self.show_uri(html_uri)
   
   def build_ui(self):
-    self.window_main = gtk.Window()
-    self.window_main.set_size_request(700,400)
-    vbox = gtk.VBox()
-    vbox.set_spacing(12)
-    self.window_main.add(vbox)
-    s = _("A new version of Ubuntu is available. Would you like to upgrade?")
-    label = gtk.Label()
-    label.set_markup("<big>%s</big>" % s)
-    vbox.pack_start(label, expand=False, fill=False, padding=12)
     import webkit
     self.webkit_view = webkit.WebView()
+    self.webkit_view.show()
     settings = self.webkit_view.get_settings()
     settings.set_property("enable-plugins", False)
-    scroll = gtk.ScrolledWindow()
-    scroll.add(self.webkit_view)
-    vbox.pack_start(scroll)
-    button_hbox = gtk.HBox()
-    button_hbox.set_spacing(18)
-    button = gtk.Button(label=_("Yes, upgrade now"))
-    button.connect("clicked", self.on_button_upgrade_now_clicked)
-    button_hbox.pack_end(button, expand=False, fill=False)
-    button = gtk.Button(label=_("Ask me later"))
-    button.connect("clicked", self.on_button_ask_me_later_clicked)
-    button_hbox.pack_end(button, expand=False, fill=False)
-    button = gtk.Button(label=_("Don't upgrade"))
-    button.connect("clicked", self.on_button_do_not_upgrade_clicked)
-    button_hbox.pack_end(button, expand=False, fill=False)
-
-    vbox.pack_start(button_hbox, expand=False, fill=False)
+    # FIXME: do we want to have it in a gtk.ScrolledWindow ?
+    #self.alignment_webkit_view.add(self.webkit_view)
+    self.scrolledwindow_webkit_view.add(self.webkit_view)
 
   def on_button_upgrade_now_clicked(self, button):
     print "upgrade now"
@@ -90,9 +71,12 @@ class CheckNewReleaseGtk(object):
     print "ask me later"
     gtk.main_quit()
 
-  def on_button_do_not_upgrade_clicked(self, button):
+  def on_button_dont_upgrade_clicked(self, button):
     print "don't upgrade"
     gtk.main_quit()
+
+  def on_linkbutton_release_notes_clicked(self, linkbutton):
+    print "STUB: show release notes"
 
   def show_uri(self, uri):
     self.webkit_view.open(uri)
@@ -100,7 +84,6 @@ class CheckNewReleaseGtk(object):
 
   def _on_load_finished(self, view, frame):
     self.window_main.show_all()
-
 
   def timeout(self):
     if self.new_dist is None:
@@ -120,6 +103,8 @@ if __name__ == "__main__":
                      dest="proposed_release", default=False,
                      help=_("Try upgrading to the latest release using "
                             "the upgrader from $distro-proposed"))
+  # mostly useful for development
+  parser.add_option ("", "--datadir", default="/usr/share/update-manager")
   (options, args) = parser.parse_args()
 
   # create object

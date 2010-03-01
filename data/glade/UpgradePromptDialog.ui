@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="window_main">
+    <property name="title" translatable="yes">Ubuntu 10.10 Upgrade Available</property>
+    <property name="resizable">False</property>
+    <property name="window_position">center</property>
+    <signal name="delete_event" handler="window_delete_event_cb"/>
+    <child>
+      <object class="GtkVBox" id="vbox1">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkAlignment" id="alignment2">
+            <property name="visible">True</property>
+            <property name="top_padding">20</property>
+            <property name="bottom_padding">20</property>
+            <property name="left_padding">20</property>
+            <property name="right_padding">20</property>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;A new version of Ubuntu is available. Would you like to upgrade?&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkAlignment" id="alignment_webkit_view">
+            <property name="visible">True</property>
+            <property name="left_padding">20</property>
+            <property name="right_padding">20</property>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow_webkit_view">
+                <property name="width_request">600</property>
+                <property name="height_request">340</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkAlignment" id="alignment1">
+            <property name="visible">True</property>
+            <property name="top_padding">20</property>
+            <property name="bottom_padding">20</property>
+            <property name="left_padding">20</property>
+            <property name="right_padding">20</property>
+            <child>
+              <object class="GtkHBox" id="hbox1">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkLinkButton" id="linkbutton_release_notes">
+                    <property name="label" translatable="yes">Release Notes</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <property name="uri">http://glade.gnome.org</property>
+                    <signal name="clicked" handler="on_linkbutton_release_notes_clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHButtonBox" id="hbuttonbox1">
+                    <property name="visible">True</property>
+                    <property name="spacing">8</property>
+                    <property name="layout_style">end</property>
+                    <child>
+                      <object class="GtkButton" id="button_dont_upgrade">
+                        <property name="label" translatable="yes">Don't Upgrade</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_dont_upgrade_clicked"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_ask_me_later">
+                        <property name="label" translatable="yes">Ask Me Later</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_button_ask_me_later_clicked"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_upgrade_now">
+                        <property name="label" translatable="yes">Yes, Upgrade Now</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="has_focus">True</property>
+                        <property name="is_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="has_default">True</property>
+                        <property name="receives_default">False</property>
+                        <signal name="clicked" handler="on_button_upgrade_now_clicked"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

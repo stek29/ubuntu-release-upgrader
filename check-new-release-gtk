@@ -43,11 +43,13 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)
     m.connect("new-dist-available", self.new_dist_available)
-    glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
-    # testing only
+    # useful for testing
     if options.test_uri:
         self.build_ui()
         self.show_uri(options.test_uri)
+    else:
+        glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
+
 
   def new_dist_available(self, meta_release, new_dist):
     self.new_dist = new_dist

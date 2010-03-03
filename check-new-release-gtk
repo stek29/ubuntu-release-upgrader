@@ -91,9 +91,12 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_dont_upgrade_clicked(self, button):
     #print "don't upgrade"
-    client = gconf.client_get_default()
-    client.set_string("/apps/update-manager/check_new_release_ignore",
-                      self.new_dist.name)
+    s = _("You have declined the upgrade to Ubuntu %s") % self.new_dist.version
+    self.dialog_really_do_not_upgrade.set_markup("<b>%s</b>" % s)
+    if self.dialog_really_do_not_upgrade.run() == gtk.RESPONSE_OK:
+        client = gconf.client_get_default()
+        client.set_string("/apps/update-manager/check_new_release_ignore",
+                          self.new_dist.name)
     gtk.main_quit()
 
   def on_linkbutton_release_notes_clicked(self, linkbutton):

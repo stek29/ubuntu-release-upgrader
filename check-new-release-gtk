@@ -3,6 +3,7 @@
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
+import gconf
 import gobject
 import glib
 import gtk
@@ -53,6 +54,11 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def new_dist_available(self, meta_release, new_dist):
     self.new_dist = new_dist
+    client = gconf.client_get_default()
+    ignore_dist = client.get_string("/apps/update-manager/check_new_release_ignore")
+    if ignore_dist == new_dist.name:
+        print "%s is on the ignore list" % new_dist.name
+        gtk.main_quit()
     self.build_ui()
     self.window_main.set_title("Ubuntu %s Upgrade Available" % new_dist.version)
     self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
@@ -84,7 +90,10 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):
-    print "don't upgrade"
+    #print "don't upgrade"
+    client = gconf.client_get_default()
+    client.set_string("/apps/update-manager/check_new_release_ignore",
+                      self.new_dist.name)
     gtk.main_quit()
 
   def on_linkbutton_release_notes_clicked(self, linkbutton):

@@ -38,7 +38,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   FETCH_TIMEOUT = 10
 
   def __init__(self, options):
-    SimpleGtkbuilderApp.__init__(self, options.datadir+"glade/UpgradePromptDialog.ui", "update-manager")
+    SimpleGtkbuilderApp.__init__(self, options.datadir+"/glade/UpgradePromptDialog.ui", "update-manager")
     self.new_dist = None
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)
@@ -54,6 +54,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def new_dist_available(self, meta_release, new_dist):
     self.new_dist = new_dist
     self.build_ui()
+    self.window_main.set_title("Ubuntu %s Upgrade Available" % new_dist.version)
+    self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
     html_uri = new_dist.releaseNotesHtmlUri
     self.show_uri(html_uri)
   
@@ -86,7 +88,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     gtk.main_quit()
 
   def on_linkbutton_release_notes_clicked(self, linkbutton):
-    print "STUB: show release notes"
+    # gtk will do the right thing if uri is set
+    pass
 
   def show_uri(self, uri):
     self.webkit_view.open(uri)

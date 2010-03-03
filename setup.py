@@ -49,6 +49,7 @@ setup(name='update-manager',
                "do-release-upgrade", 
                "update-manager-hildon",
                "check-new-release",
+               "check-new-release-gtk",
                "AutoUpgradeTester/auto-upgrade-tester",
                ],
       data_files=[

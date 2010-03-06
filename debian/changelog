@@ -1,5 +1,6 @@
-update-manager (1:0.132.2) UNRELEASED; urgency=low
+update-manager (1:0.132.2ubuntu1) UNRELEASED; urgency=low
 
+  [ Michael Vogt ]
   * UpdateManager/Core/MetaRelease.py:
     - allow upgrade from unsupported version to unsupported version
   * DistUpgrade/removal_blacklist.cfg:
@@ -7,7 +8,16 @@ update-manager (1:0.132.2) UNRELEASED; urgency=low
   * check-new-release-gtk:
     - fixes in the gtk release upgrade check
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 01 Mar 2010 15:10:53 +0100
+  [ Dustin Kirkland ]
+  * debian/91-release-upgrade, debian/update-manager-core.install,
+    - some users are complaining of long login times due to the release
+      check requiring network connectivity; this information clearly doesn't
+      change as frequently as the user logging in, so maintain a cache file
+      in /var/lib, display it if it's populated, but otherwise, update it in
+      the background if its either missing or the file is older than a day
+      old, LP: #522452
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 05 Mar 2010 18:57:34 -0600
 
 update-manager (1:0.132.1) lucid; urgency=low
 

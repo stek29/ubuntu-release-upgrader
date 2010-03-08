@@ -276,6 +276,7 @@ class MetaReleaseCore(object):
         except (urllib2.URLError, httplib.BadStatusLine), e:
             self._debug("result of meta-release download: '%s'" % e)
             if os.path.exists(self.METARELEASE_FILE):
+                self._debug("reading file '%s'" % self.METARELEASE_FILE)
                 self.metarelease_information=open(self.METARELEASE_FILE,"r")
         # now check the information we have
         if self.metarelease_information != None:

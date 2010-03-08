@@ -13,6 +13,9 @@ import sys
 import urllib2
 from DistUpgrade.utils import init_proxy
 
+RELEASE_AVAILABLE=0
+NO_RELEASE_AVAILABLE=1
+
 if __name__ == "__main__":
 
   init_proxy()
@@ -37,6 +40,10 @@ if __name__ == "__main__":
                      help=_("Run the specified frontend"))
   parser.add_option ("-s","--sandbox", action="store_true", default=False,
                      help=_("Test upgrade with a sandbox aufs overlay"))
+  parser.add_option ("-c", "--check-dist-upgrades", action="store_true",
+           dest="check_dist_upgrades", default=False,
+           help=_("Check only if a new distribution release is available and report the result via the exit code"))
+
 
   (options, args) = parser.parse_args()
 
@@ -47,9 +54,15 @@ if __name__ == "__main__":
   while m.downloading:
 	  time.sleep(0.5)
   if m.new_dist is None:
-	  print _("No new release found")
-	  sys.exit(1)
+        print _("No new release found")
+        sys.exit(NO_RELEASE_AVAILABLE)
+
   # we have a new dist
+  if options.check_dist_upgrades:
+        print _("New release '%s' available.") % m.new_dist.name
+        print _("Run 'do-release-upgrade' to upgrade to it.")
+        sys.exit(RELEASE_AVAILABLE)
+
   progress = apt.progress.TextFetchProgress()
   fetcher = DistUpgradeFetcherCore(new_dist=m.new_dist,
 				   progress=progress)

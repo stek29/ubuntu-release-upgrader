@@ -4,12 +4,16 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 
+from DistUpgrade.DistUpgradeVersion import VERSION
+
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
 from UpdateManager.Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from optparse import OptionParser
 from gettext import gettext as _
-import time
+
+import os
 import sys
+import time
 import urllib2
 from DistUpgrade.utils import init_proxy
 
@@ -21,6 +25,9 @@ if __name__ == "__main__":
   init_proxy()
 
   parser = OptionParser()
+  parser.add_option ("-V", "--version", action="store_true",
+                     dest="show_version", default=False,
+                     help=_("Show version and exit"))
   parser.add_option ("-d", "--devel-release", action="store_true",
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
@@ -46,6 +53,10 @@ if __name__ == "__main__":
 
 
   (options, args) = parser.parse_args()
+
+  if options.show_version:
+    print "%s: version %s" % (os.path.basename(sys.argv[0]), VERSION)
+    sys.exit(0)
 
   print _("Checking for a new ubuntu release")
   m = MetaReleaseCore(useDevelopmentRelease=options.devel_release,

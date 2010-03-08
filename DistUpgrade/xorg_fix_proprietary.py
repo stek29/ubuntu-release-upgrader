@@ -14,7 +14,11 @@ import shutil
 import subprocess
 import apt_pkg
 
+# main xorg.conf
 XORG_CONF="/etc/X11/xorg.conf"
+
+# really old and most likely obsolete conf
+OBSOLETE_XORG_CONF="/etc/X11/XF86Config-4"
 
 def remove_input_devices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
     logging.debug("remove_input_devices")
@@ -114,10 +118,16 @@ if __name__ == "__main__":
 
     # setup logging
     logging.basicConfig(level=logging.DEBUG,
-                        filename="/var/log/dist-upgrade/xorg_fix_intrepid.log",
+                        filename="/var/log/dist-upgrade/xorg_fixup.log",
                         filemode='w')
     
     logging.info("%s running" % sys.argv[0])
+
+    if os.path.exists(OBSOLETE_XORG_CONF):
+        old = OBSOLETE_XORG_CONF
+        new =  OBSOLETE_XORG_CONF+".obsolete"
+        logging.info("renaming obsolete %s -> %s" % (old, new))
+        os.rename(old, new)
 
     if not os.path.exists(XORG_CONF):
         logging.info("No xorg.conf, exiting")

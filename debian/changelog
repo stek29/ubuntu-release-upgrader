@@ -23,6 +23,21 @@ update-manager (1:0.132.2ubuntu1) UNRELEASED; urgency=low
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 05 Mar 2010 18:57:34 -0600
 
+update-manager (1:0.132.2) UNRELEASED; urgency=low
+
+  * UpdateManager/Core/MetaRelease.py:
+    - allow upgrade from unsupported version to unsupported version
+  * DistUpgrade/removal_blacklist.cfg:
+    - allow removal of update-manager-kde
+  * check-new-release-gtk:
+    - fixes in the gtk release upgrade check
+  * DistUpgrade/xorg_fix_proprietary.py:
+    - if /etc/X11/XF86Config-4 is found on upgrade, rename it to
+      "XF86Config-4.obsolete"
+    - write log to "/var/log/dist-upgrade/xorg_fixup.log"
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 03 Mar 2010 22:45:22 +0100
+
 update-manager (1:0.132.1) lucid; urgency=low
 
   * rename update-manager-support-status to ubuntu-support-status
@@ -1018,7 +1033,6 @@ update-manager (1:0.100) jaunty; urgency=low
   * merged aufs branch (disabled by default but useful for testing)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 10 Mar 2009 20:25:55 +0100
-
 
 update-manager (1:0.99) jaunty; urgency=low
 
@@ -3692,7 +3706,7 @@ update-manager (0.42.2ubuntu5) dapper; urgency=low
     language pack support for them. (Similarly to cdbs' gnome.mk)
 
  -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 23 Feb 2006 18:42:04 +0100
-  
+
 update-manager (0.42.2ubuntu4) dapper; urgency=low
 
   * removed some of the gnome dependencies (gconf still in)

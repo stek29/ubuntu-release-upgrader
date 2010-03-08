@@ -7,6 +7,18 @@ update-manager (1:0.132.2ubuntu1) UNRELEASED; urgency=low
     - allow removal of update-manager-kde
   * check-new-release-gtk:
     - fixes in the gtk release upgrade check
+  * DistUpgrade/xorg_fix_proprietary.py:
+    - if /etc/X11/XF86Config-4 is found on upgrade, rename it to
+      "XF86Config-4.obsolete"
+    - write log to "/var/log/dist-upgrade/xorg_fixup.log"
+  * do-release-upgrade, check-new-release:
+    - implemented "check-releae-upgrade" as symlink to do-release-upgrade
+      and automatically run with "--check-dist-upgrade-only" when called
+      as c-r-u
+    - add --quiet option to do-release-upgrade
+  * debian/update-manager-core.links:
+    - install /usr/lib/update-manager/check-new-release as symlink to
+      do-release-upgrade -c
 
   [ Wesley Schwengle ]
   * Check for release upgrade is now also possible with do-release-upgrade
@@ -26,21 +38,6 @@ update-manager (1:0.132.2ubuntu1) UNRELEASED; urgency=low
   * Do not allow for the removal of update-manager-kde, we do want it after all
 
  -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 08 Mar 2010 18:34:40 +0000
-
-update-manager (1:0.132.2) UNRELEASED; urgency=low
-
-  * UpdateManager/Core/MetaRelease.py:
-    - allow upgrade from unsupported version to unsupported version
-  * DistUpgrade/removal_blacklist.cfg:
-    - allow removal of update-manager-kde
-  * check-new-release-gtk:
-    - fixes in the gtk release upgrade check
-  * DistUpgrade/xorg_fix_proprietary.py:
-    - if /etc/X11/XF86Config-4 is found on upgrade, rename it to
-      "XF86Config-4.obsolete"
-    - write log to "/var/log/dist-upgrade/xorg_fixup.log"
-
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 03 Mar 2010 22:45:22 +0100
 
 update-manager (1:0.132.1) lucid; urgency=low
 

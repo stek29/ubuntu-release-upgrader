@@ -7,41 +7,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2008-10-13 20:43+0000\n"
-"PO-Revision-Date: 2008-10-13 18:05+0000\n"
+"POT-Creation-Date: 2010-03-08 23:43+0000\n"
+"PO-Revision-Date: 2010-02-25 23:32+0000\n"
 "Last-Translator: Andy Apdhani <imtheface@ubuntu.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2008-10-16 09:56+0000\n"
+"X-Launchpad-Export-Date: 2010-03-09 08:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:134 ../UpdateManager/Common/utils.py:134
+#: ../DistUpgrade/utils.py:305 ../UpdateManager/Core/utils.py:305
 msgid "0 KB"
 msgstr "0 KB"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:137 ../UpdateManager/Common/utils.py:137
+#: ../DistUpgrade/utils.py:308 ../UpdateManager/Core/utils.py:308
 msgid "1 KB"
 msgstr "1 KB"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:140 ../UpdateManager/Common/utils.py:140
+#: ../DistUpgrade/utils.py:311 ../UpdateManager/Core/utils.py:311
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KB"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:143 ../UpdateManager/Common/utils.py:143
+#: ../DistUpgrade/utils.py:314 ../UpdateManager/Core/utils.py:314
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#: ../DistUpgrade/distro.py:208 ../DistUpgrade/distro.py:423
 #, python-format
 msgid "Server for %s"
 msgstr "Server untuk %s"
@@ -49,163 +49,32 @@ msgstr "Server untuk %s"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
-#: ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:248
 msgid "Main server"
 msgstr "Server utama"
 
-#: ../DistUpgrade/distro.py:235
+#: ../DistUpgrade/distro.py:252
 msgid "Custom servers"
 msgstr "Server custom"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
-"Pakai path yang diberikan untuk mencari cdrom dengan paket-paket yang dapat "
-"ditingkatkan versinya"
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:131
+msgid "Could not calculate sources.list entry"
+msgstr "Tidak dapat mengkalkulasi masukan sources.list"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:234
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
+"wrong architecture?"
 msgstr ""
-"Gunakan frontend. Kini tersedia: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"Tidak dapat menemukan berkas paket apapun, mungkin ini bukan Disk Ubuntu "
+"atau arsitektur yang salah?"
 
-#: ../DistUpgrade/dist-upgrade.py:24
-msgid "*DEPRECATED* this option will be ignore"
-msgstr "*DEPRECATED* pilihan ini akan diabaikan"
-
-#: ../DistUpgrade/dist-upgrade.py:27
-msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr ""
-"Melakukan pemutakhiran sebagian (tidak perlu menulis ulang sources.list)"
-
-#: ../DistUpgrade/dist-upgrade.py:29
-msgid "Set datadir"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:101
-msgid "Remove package in bad state"
-msgid_plural "Remove packages in bad state"
-msgstr[0] "Hapus paket yg dlm kondisi buruk"
-
-#: ../DistUpgrade/DistUpgradeCache.py:104
-#, python-format
-msgid ""
-"The package '%s' is in an inconsistent state and needs to be reinstalled, "
-"but no archive can be found for it. Do you want to remove this package now "
-"to continue?"
-msgid_plural ""
-"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
-"but no archives can be found for them. Do you want to remove these packages "
-"now to continue?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:299
-msgid "Broken packages"
-msgstr "Paket rusak"
-
-#: ../DistUpgrade/DistUpgradeCache.py:300
-msgid ""
-"Your system contains broken packages that couldn't be fixed with this "
-"software. Please fix them first using synaptic or apt-get before proceeding."
-msgstr ""
-"Sistem anda mengandung paket rusak yang tidak dapat diperbaiki dengan "
-"perangkat lunak ini. Silakan perbaiki terlebih dahulu dengan menggunakan "
-"synaptic atau apt-get sebelum melanjutkan hal ini."
-
-#: ../DistUpgrade/DistUpgradeCache.py:521
-msgid "Can't upgrade required meta-packages"
-msgstr "Tidak dapat memutakhirkan paket-meta yang dibutuhkan"
-
-#: ../DistUpgrade/DistUpgradeCache.py:525
-msgid "A essential package would have to be removed"
-msgstr "Sebuah paket esensial akan harus dihapus"
-
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:532
-msgid ""
-"An unresolvable problem occurred while calculating the upgrade.\n"
-"\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
-" * Unofficial software packages not provided by Ubuntu\n"
-"\n"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeCache.py:542
-msgid "This is most likely a transient problem, please try again later."
-msgstr "Ini sepertinya masalah sementara saja, coba lagi nanti."
-
-#: ../DistUpgrade/DistUpgradeCache.py:545
-msgid ""
-"If none of this applies, then please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
-msgstr ""
-"Silakan laporkan ini sebagai bug atas paket 'update-manager' dan sertakan "
-"berkas di /var/log/dist-upgrade/ dalam bugreport."
-
-#: ../DistUpgrade/DistUpgradeCache.py:550
-#: ../UpdateManager/UpdateManager.py:906
-msgid "Could not calculate the upgrade"
-msgstr "Tidak dapat menghitung peningkatan versi"
-
-#. FIXME: maybe ask a question here? instead of failing?
-#: ../DistUpgrade/DistUpgradeCache.py:597
-msgid "Error authenticating some packages"
-msgstr "Kesalahan membuktikan keabsahan beberapa paket"
-
-#: ../DistUpgrade/DistUpgradeCache.py:598
-msgid ""
-"It was not possible to authenticate some packages. This may be a transient "
-"network problem. You may want to try again later. See below for a list of "
-"unauthenticated packages."
-msgstr ""
-"Tidak memungkinkan untuk membuktikan keabsahan dari beberapa paket. Ini "
-"mungkin karena masalah pada jaringan. Anda dapat mencobanya beberapa saat "
-"lagi. Lihat senarai dari paket yang belum terbukti keabsahannya dibawah ini."
-
-#: ../DistUpgrade/DistUpgradeCache.py:710
-#, python-format
-msgid "Can't install '%s'"
-msgstr "Tidak dapat memasang '%s'"
-
-#: ../DistUpgrade/DistUpgradeCache.py:711
-msgid ""
-"It was impossible to install a required package. Please report this as a "
-"bug. "
-msgstr ""
-"Tidak memungkinkan untuk memasang paket yang dibutuhkan. Silakan laporkan "
-"ini sebagai bug. "
-
-#. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:719
-msgid "Can't guess meta-package"
-msgstr "Tidak dapat menebak paket-meta"
-
-#: ../DistUpgrade/DistUpgradeCache.py:720
-msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
-" Please install one of the packages above first using synaptic or apt-get "
-"before proceeding."
-msgstr ""
-"Sistem anda tidak mengandung paket ubuntu-desktop, kubuntu-desktop atau "
-"edubuntu-desktop dan tidak memungkinkan untuk mendeteksi versi ubuntu yang "
-"anda jalankan.\n"
-" Silakan pasang terlebih dahulu salah satu paket di atas dengan menggunakan "
-"synaptic atau apt-get sebelum melanjutkan."
-
-#: ../DistUpgrade/DistUpgradeController.py:96
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:277
 msgid "Failed to add the CD"
 msgstr "Gagal untuk menambahkan CD"
 
-#: ../DistUpgrade/DistUpgradeController.py:97
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:278
 #, python-format
 msgid ""
 "There was a error adding the CD, the upgrade will abort. Please report this "
@@ -220,15 +89,161 @@ msgstr ""
 "Pesan kesalahan adalah: \n"
 "'%s'"
 
-#: ../DistUpgrade/DistUpgradeController.py:129
+#: ../DistUpgrade/DistUpgradeCache.py:130
+msgid "Remove package in bad state"
+msgid_plural "Remove packages in bad state"
+msgstr[0] "Hapus paket yang kondisinya buruk"
+
+#: ../DistUpgrade/DistUpgradeCache.py:133
+#, python-format
+msgid ""
+"The package '%s' is in an inconsistent state and needs to be reinstalled, "
+"but no archive can be found for it. Do you want to remove this package now "
+"to continue?"
+msgid_plural ""
+"The packages '%s' are in an inconsistent state and need to be reinstalled, "
+"but no archives can be found for them. Do you want to remove these packages "
+"now to continue?"
+msgstr[0] ""
+msgstr[1] ""
+
+#. FIXME: not ideal error message, but we just reuse a
+#. existing one here to avoid a new string
+#: ../DistUpgrade/DistUpgradeCache.py:231
+msgid "The server may be overloaded"
+msgstr "Server mungkin kelebihan beban"
+
+#: ../DistUpgrade/DistUpgradeCache.py:341
+msgid "Broken packages"
+msgstr "Paket rusak"
+
+#: ../DistUpgrade/DistUpgradeCache.py:342
+msgid ""
+"Your system contains broken packages that couldn't be fixed with this "
+"software. Please fix them first using synaptic or apt-get before proceeding."
+msgstr ""
+"Sistem anda mengandung paket rusak yang tidak dapat diperbaiki dengan "
+"perangkat lunak ini. Silakan perbaiki terlebih dahulu dengan menggunakan "
+"synaptic atau apt-get sebelum melanjutkan hal ini."
+
+#. FIXME: change the text to something more useful
+#: ../DistUpgrade/DistUpgradeCache.py:618
+#, python-format
+msgid ""
+"An unresolvable problem occurred while calculating the upgrade:\n"
+"%s\n"
+"\n"
+" This can be caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+" * Running the current pre-release version of Ubuntu\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+"\n"
+msgstr ""
+"Sebuah masalah yang tidak terselesaikan terjadi ketika mengkalkulasi proses "
+"pemutakhiran:\n"
+"%s\n"
+"\n"
+" Hal ini bisa disebabkan oleh:\n"
+" * Proses pemutakhiran ke sebuah versi Ubuntu pra-rilis\n"
+" * Menjalankan versi Ubuntu pra-rilis\n"
+" * Perangkat lunak yang tidak secara resmi disediakan oleh Ubuntu\n"
+"\n"
+
+#: ../DistUpgrade/DistUpgradeCache.py:628
+msgid "This is most likely a transient problem, please try again later."
+msgstr "Ini sepertinya masalah sementara saja, coba lagi nanti."
+
+#: ../DistUpgrade/DistUpgradeCache.py:631
+msgid ""
+"If none of this applies, then please report this bug against the 'update-"
+"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+"report."
+msgstr ""
+"Jika tidak ada sesuatu yang berlaku, silakan laporkan bug ini tentang "
+"'update-manager' paket dan tolong masukkan file yang berada di direktori "
+"/var/log/dist-upgrade/ dalam laporannya."
+
+#: ../DistUpgrade/DistUpgradeCache.py:637
+#: ../UpdateManager/UpdateManager.py:765
+msgid "Could not calculate the upgrade"
+msgstr "Tidak dapat menghitung peningkatan versi"
+
+#: ../DistUpgrade/DistUpgradeCache.py:687
+msgid "Error authenticating some packages"
+msgstr "Kesalahan membuktikan keabsahan beberapa paket"
+
+#: ../DistUpgrade/DistUpgradeCache.py:688
+msgid ""
+"It was not possible to authenticate some packages. This may be a transient "
+"network problem. You may want to try again later. See below for a list of "
+"unauthenticated packages."
+msgstr ""
+"Tidak memungkinkan untuk membuktikan keabsahan dari beberapa paket. Ini "
+"mungkin karena masalah pada jaringan. Anda dapat mencobanya beberapa saat "
+"lagi. Lihat senarai dari paket yang belum terbukti keabsahannya dibawah ini."
+
+#: ../DistUpgrade/DistUpgradeCache.py:708
+#, python-format
+msgid ""
+"The package '%s' is marked for removal but it is in the removal blacklist."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:712
+#, python-format
+msgid "The essential package '%s' is marked for removal."
+msgstr "Paket penting '%s' ditandai untuk dibuang"
+
+#: ../DistUpgrade/DistUpgradeCache.py:721
+#, python-format
+msgid "Trying to install blacklisted version '%s'"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:821
+#, python-format
+msgid "Can not mark '%s' for upgrade"
+msgstr "Tidak dapat menandai '%s' untuk upgrade"
+
+#: ../DistUpgrade/DistUpgradeCache.py:835
+#, python-format
+msgid "Can't install '%s'"
+msgstr "Tidak dapat memasang '%s'"
+
+#: ../DistUpgrade/DistUpgradeCache.py:836
+msgid ""
+"It was impossible to install a required package. Please report this as a "
+"bug. "
+msgstr ""
+"Tidak memungkinkan untuk memasang paket yang dibutuhkan. Silakan laporkan "
+"ini sebagai bug. "
+
+#. FIXME: provide a list
+#: ../DistUpgrade/DistUpgradeCache.py:845
+msgid "Can't guess meta-package"
+msgstr "Tidak dapat menebak paket-meta"
+
+#: ../DistUpgrade/DistUpgradeCache.py:846
+msgid ""
+"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop or edubuntu-desktop package and it was not possible to detect which "
+"version of Ubuntu you are running.\n"
+" Please install one of the packages above first using synaptic or apt-get "
+"before proceeding."
+msgstr ""
+"Sistem anda tidak mengandung paket ubuntu-desktop, kubuntu-desktop atau "
+"edubuntu-desktop dan tidak memungkinkan untuk mendeteksi versi ubuntu yang "
+"anda jalankan.\n"
+" Silakan pasang terlebih dahulu salah satu paket di atas dengan menggunakan "
+"synaptic atau apt-get sebelum melanjutkan."
+
+#: ../DistUpgrade/DistUpgradeController.py:86
 msgid "Reading cache"
 msgstr "Membaca cache"
 
-#: ../DistUpgrade/DistUpgradeController.py:216
+#: ../DistUpgrade/DistUpgradeController.py:186
 msgid "Unable to get exclusive lock"
 msgstr "Tidak bisa memperoleh penguncian eksklusif"
 
-#: ../DistUpgrade/DistUpgradeController.py:217
+#: ../DistUpgrade/DistUpgradeController.py:187
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -237,32 +252,39 @@ msgstr ""
 "berjalan (seperti apt-get atau aptitude). Harap tutup aplikasi tersebut "
 "terlebih dahulu."
 
-#: ../DistUpgrade/DistUpgradeController.py:237
+#: ../DistUpgrade/DistUpgradeController.py:233
+msgid "Upgrading over remote connection not supported"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:234
+msgid ""
+"You are running the upgrade over a remote ssh connection with a frontend "
+"that does not support this. Please try a text mode upgrade with 'do-release-"
+"upgrade'.\n"
+"\n"
+"The upgrade will abort now. Please try without ssh."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:248
 msgid "Continue running under SSH?"
 msgstr "Lanjutkan menjalankan di bawah SSH?"
 
-#: ../DistUpgrade/DistUpgradeController.py:238
+#: ../DistUpgrade/DistUpgradeController.py:249
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
 "perform a upgrade over ssh currently because in case of failure it is harder "
 "to recover.\n"
 "\n"
-"If you continue, a additional ssh daemon will be started at port '%s'.\n"
+"If you continue, an additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"Sesi ini sepertinya berjalan di bawah ssh. Saat ini tidak disarankan untuk "
-"melakukan peningkatan versi lewat ssh karena apabila terjadi kegagalan lebih "
-"sulit untuk diperbaiki.\n"
-"\n"
-"Bila anda teruskan, daemon ssh tambahan akan dimulai pada port '%s'.\n"
-"Apakah anda mau terus?"
 
-#: ../DistUpgrade/DistUpgradeController.py:253
+#: ../DistUpgrade/DistUpgradeController.py:264
 msgid "Starting additional sshd"
 msgstr "Memulai sshd tambahan"
 
-#: ../DistUpgrade/DistUpgradeController.py:254
+#: ../DistUpgrade/DistUpgradeController.py:265
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -270,27 +292,49 @@ msgid ""
 "still connect to the additional one.\n"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:322
-#: ../DistUpgrade/DistUpgradeController.py:345
+#: ../DistUpgrade/DistUpgradeController.py:336
+#: ../DistUpgrade/DistUpgradeController.py:381
 msgid "Can not upgrade"
 msgstr "Tidak dapat meningkatkan versi"
 
-#: ../DistUpgrade/DistUpgradeController.py:323
+#: ../DistUpgrade/DistUpgradeController.py:337
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "Naik tingkat dari '%s' ke '%s' tidak didukung oleh perkakas ini."
 
 #: ../DistUpgrade/DistUpgradeController.py:346
+msgid "Sandbox setup failed"
+msgstr "Pengaturan Sandbox gagal"
+
+#: ../DistUpgrade/DistUpgradeController.py:347
+msgid "It was not possible to create the sandbox environment."
+msgstr "Tidak bisa menciptakan lingkungan Sandbox"
+
+#: ../DistUpgrade/DistUpgradeController.py:353
+msgid "Sandbox mode"
+msgstr "Modus Sandbox"
+
+#: ../DistUpgrade/DistUpgradeController.py:354
+#, python-format
+msgid ""
+"This upgrade is running in sandbox (test) mode. All changes are written to "
+"'%s' and will be lost on the next reboot.\n"
+"\n"
+"*No* changes written to a systemdir from now until the next reboot are "
+"permanent."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:382
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 "Instalasi python anda rusak. Silahkan perbaiki symlink '/usr/bin/python'."
 
-#: ../DistUpgrade/DistUpgradeController.py:372
+#: ../DistUpgrade/DistUpgradeController.py:408
 msgid "Package 'debsig-verify' is installed"
 msgstr "Paket 'debsig-verify' dipasang"
 
-#: ../DistUpgrade/DistUpgradeController.py:373
+#: ../DistUpgrade/DistUpgradeController.py:409
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
@@ -300,11 +344,11 @@ msgstr ""
 "Silahkan menghapusnya dengan menjalankan terlebih dahulu synaptic atau 'apt-"
 "get remove debsig-verify' dan jalankan peningkatan lagi."
 
-#: ../DistUpgrade/DistUpgradeController.py:383
+#: ../DistUpgrade/DistUpgradeController.py:419
 msgid "Include latest updates from the Internet?"
 msgstr "Ikutkan juga pembaruan terakhir dari Internet?"
 
-#: ../DistUpgrade/DistUpgradeController.py:384
+#: ../DistUpgrade/DistUpgradeController.py:420
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -316,48 +360,53 @@ msgid ""
 "If you answer 'no' here, the network is not used at all."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:555
+#: ../DistUpgrade/DistUpgradeController.py:644
+#, python-format
+msgid "disabled on upgrade to %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:671
 msgid "No valid mirror found"
 msgstr "Tidak menemukan mirror yang valid"
 
-#: ../DistUpgrade/DistUpgradeController.py:556
+#: ../DistUpgrade/DistUpgradeController.py:672
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found.This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run a internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
 "here it will update all '%s' to '%s' entries.\n"
-"If you select 'no' the update will cancel."
+"If you select 'No' the upgrade will cancel."
 msgstr ""
-"Ketika memindai informasi repositori anda, tidak ditemukan entri mirror "
-"untuk peningkatan versi. Ini dapat terjadi jika anda menjalankan mirror "
-"internal atau jika informasi mirror sudah kedaluarsa.\n"
+"Ketika memindai informasi repositori anda tidak ditemukan entri bagi "
+"peningkatan. Ini dapat terjadi bila anda menjalankan mirror internal atau "
+"bila informasi mirror usang.\n"
 "\n"
-"Apakah anda ingin menulis ulang berkas 'sources.list' anda? Jika anda pilih "
-"'Ya' disini, berkas akan memutakhirkan semua entri '%s' ke '%s'.\n"
-"Jika anda pilih 'tidak' pemutakhiran akan dibatalkan."
+"Apakah anda ingin tetap menulis ulang berkas 'sources.list' anda? Bila anda "
+"memilih 'Ya' di sini maka semua entri '%s' akan diperbarui menjadi '%s'.\n"
+"Bila anda memilih 'Tidak' peningkatan akan dibatalkan."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:576
+#: ../DistUpgrade/DistUpgradeController.py:692
 msgid "Generate default sources?"
 msgstr "Membuat sumber baku?"
 
-#: ../DistUpgrade/DistUpgradeController.py:577
+#: ../DistUpgrade/DistUpgradeController.py:693
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
 "\n"
-"Should default entries for '%s' be added? If you select 'No', the update "
+"Should default entries for '%s' be added? If you select 'No', the upgrade "
 "will cancel."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:611
+#: ../DistUpgrade/DistUpgradeController.py:728
 msgid "Repository information invalid"
 msgstr "Informasi gudang tidak valid"
 
-#: ../DistUpgrade/DistUpgradeController.py:612
+#: ../DistUpgrade/DistUpgradeController.py:729
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -365,11 +414,11 @@ msgstr ""
 "Meng-upgrade informasi gudang berakhir di dalam berkas yang tidak benar. "
 "Silakan laporkan ini sebagai bug."
 
-#: ../DistUpgrade/DistUpgradeController.py:618
+#: ../DistUpgrade/DistUpgradeController.py:735
 msgid "Third party sources disabled"
 msgstr "Sumber dari pihak ketiga dilumpukan"
 
-#: ../DistUpgrade/DistUpgradeController.py:619
+#: ../DistUpgrade/DistUpgradeController.py:736
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -379,12 +428,12 @@ msgstr ""
 "dapat mengaktifkan kembali setelah peningkatan versi dengan alat 'software-"
 "properties' atau pengelola paket anda."
 
-#: ../DistUpgrade/DistUpgradeController.py:659
+#: ../DistUpgrade/DistUpgradeController.py:776
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Paket dalam keadaan tidak konsisten"
 
-#: ../DistUpgrade/DistUpgradeController.py:662
+#: ../DistUpgrade/DistUpgradeController.py:779
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -392,16 +441,16 @@ msgid ""
 "remove it from the system."
 msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archive can be found for it.Please reinstall the packages manually or "
-"remove them from the system."
+"but no archive can be found for them. Please reinstall the packages manually "
+"or remove them from the system."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../DistUpgrade/DistUpgradeController.py:710
+#: ../DistUpgrade/DistUpgradeController.py:827
 msgid "Error during update"
 msgstr "Kesalahan pada waktu pemutakhiran"
 
-#: ../DistUpgrade/DistUpgradeController.py:711
+#: ../DistUpgrade/DistUpgradeController.py:828
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -409,116 +458,145 @@ msgstr ""
 "Terjadi masalah pada waktu pemutakhiran. Ini biasanya karena masalah "
 "jaringan, silakan periksa koneksi jaringan anda dan ulangi."
 
-#: ../DistUpgrade/DistUpgradeController.py:720
+#. print "on_button_install_clicked"
+#: ../DistUpgrade/DistUpgradeController.py:837
+#: ../UpdateManager/UpdateManager.py:572
 msgid "Not enough free disk space"
 msgstr "Kapasitas cakram tidak mencukupi"
 
-#: ../DistUpgrade/DistUpgradeController.py:721
+#: ../DistUpgrade/DistUpgradeController.py:838
 #, python-format
 msgid ""
-"The upgrade aborts now. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
+"The upgrade is now aborted. The upgrade needs a total of %s free space on "
+"disk '%s'. Please free at least an additional %s of disk space on '%s'. "
+"Empty your trash and remove temporary packages of former installations using "
+"'sudo apt-get clean'."
 msgstr ""
-"Upgrade dibatalkan sekarang. Upgrade memerlukan sejumlah total ruang bebas "
-"%s pada cakram '%s'. Silakan sediakan setidaknya %s dari ruang cakram pada "
-"%s. Kosongkan sampah anda dan hapus paket sementara dari instalasi terdahulu "
-"dengan menggunakan 'sudo apt-get clean'."
+"Pemutakhiran dibatalkan. Pemutakhiran memerlukan total %s ruang bebas di "
+"disk '%s'. Silakan membebaskan %s ruang disk di '%s'. Membuang Trash anda "
+"dan menghapus file-file temp dari instalasi dahulu melalui 'sudo apt-get "
+"clean'."
 
-#: ../DistUpgrade/DistUpgradeController.py:832
-msgid "Support for some applications ended"
-msgstr "Dukungan untuk beberapa aplikasi telah berakhir"
+#: ../DistUpgrade/DistUpgradeController.py:873
+msgid ""
+"Canonical Ltd. no longer provides support for the following software "
+"packages. You can still get support from the community."
+msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:833
+#: ../DistUpgrade/DistUpgradeController.py:880
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
 "\n"
-"If you have not enabled community maintained software (universe), these "
-"packages will be suggested for removal at the end of the upgrade."
+"These packages will be suggested for removal at the end of the upgrade "
+"because you have not enabled the community maintained software channel "
+"(universe)."
 msgstr ""
-"Paket terinstal ini tidak lagi mendapat sokongan resmi dari Canonical Ltd, "
-"dan sekarang hanya disokong melalui komunitas ('universe').\n"
-"\n"
-"Jika anda tidak mengaktifkan komponen 'universe' paket ini akan diajurkan "
-"untuk penghapusan dalam langkah selanjutnya."
+
+#: ../DistUpgrade/DistUpgradeController.py:888
+msgid "Support for some applications ended"
+msgstr "Dukungan untuk beberapa aplikasi telah berakhir"
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:842
-#: ../DistUpgrade/DistUpgradeController.py:1469
+#: ../DistUpgrade/DistUpgradeController.py:891
+#: ../DistUpgrade/DistUpgradeController.py:1586
 msgid "Calculating the changes"
 msgstr "Menghitung perubahan"
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:857
+#: ../DistUpgrade/DistUpgradeController.py:906
 msgid "Do you want to start the upgrade?"
 msgstr "Apakah anda ingin memulai pemutakhiran?"
 
-#: ../DistUpgrade/DistUpgradeController.py:921
-#: ../DistUpgrade/DistUpgradeController.py:976
+#: ../DistUpgrade/DistUpgradeController.py:971
+msgid "Upgrade canceled"
+msgstr "Peningkatan dibatalkan"
+
+#: ../DistUpgrade/DistUpgradeController.py:972
+msgid ""
+"The upgrade cancels now and the original system state is restored. You can "
+"resume the upgrade at a later time."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:977
+#: ../DistUpgrade/DistUpgradeController.py:1076
 msgid "Could not download the upgrades"
 msgstr "Tidak dapat mengunduh pemutakhiran"
 
-#: ../DistUpgrade/DistUpgradeController.py:922
+#: ../DistUpgrade/DistUpgradeController.py:978
 msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
+"The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
 
-#. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeController.py:951
+#. FIXME: strings are not good, but we are in string freeze
+#. currently
+#: ../DistUpgrade/DistUpgradeController.py:1031
+#: ../DistUpgrade/DistUpgradeController.py:1064
+#: ../DistUpgrade/DistUpgradeController.py:1166
+msgid "Error during commit"
+msgstr "Kesalahan pada waktu commit"
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:1033
+#: ../DistUpgrade/DistUpgradeController.py:1066
+#: ../DistUpgrade/DistUpgradeController.py:1205
+msgid "Restoring original system state"
+msgstr "Sistem dikembalikan ke keadaan awal"
+
+#: ../DistUpgrade/DistUpgradeController.py:1034
+#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgradeController.py:1067
+msgid "Could not install the upgrades"
+msgstr "Tidak dapat menginstal pemutakhiran"
+
+#. invoke the frontend now and show a error message
+#: ../DistUpgrade/DistUpgradeController.py:1039
 msgid ""
-"The upgrade aborts now. Your system could be in an unusable state. A "
+"The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"Peningkatan versi dibatalkan sekarang. Sistem anda mungkin tidak dapat "
-"digunakan. Perbaikan akan dijalankan sekarang (dpkg --configure -a)."
+"Pemutakhiran dibatalkan sekarang. Sistem anda mungkin berada dalam kondisi "
+"yang tidak dapat digunakan. Pemulihan akan dijalankan sekarang."
 
-#: ../DistUpgrade/DistUpgradeController.py:956
+#: ../DistUpgrade/DistUpgradeController.py:1044
 #, python-format
 msgid ""
 "\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
-"files in /var/log/dist-upgrade/ in the bugreport.\n"
+"files in /var/log/dist-upgrade/ in the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Silakan laporkan ini sebagai bug atas paket 'update-manager' dan sertakan "
-"berkas di /var/log/dist-upgrade/ dalam bugreport.\n"
+"Mohon laporkan bug ini atas paket 'update-manager' dan sertakan berkas-"
+"berkas di /var/log/dist-upgrade/ pada laporan bug.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:960
-msgid "Could not install the upgrades"
-msgstr "Tidak dapat menginstal pemutakhiran"
-
-#: ../DistUpgrade/DistUpgradeController.py:977
+#: ../DistUpgrade/DistUpgradeController.py:1077
 msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
+"The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
+"Pemutakhiran dibatalkan. Silakan periksa koneksi Internet atau media "
+"instalasi Anda kemudian coba sekali lagi. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1047
+#: ../DistUpgrade/DistUpgradeController.py:1154
 msgid "Remove obsolete packages?"
 msgstr "Hapus paket usang?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1048
-#: ../DistUpgrade/DistUpgrade.glade.h:20
+#: ../DistUpgrade/DistUpgradeController.py:1155
+#: ../DistUpgrade/DistUpgrade.ui.h:22
 msgid "_Keep"
 msgstr "_Simpan"
 
-#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgradeController.py:1155
 msgid "_Remove"
 msgstr "_Hapus"
 
-#: ../DistUpgrade/DistUpgradeController.py:1059
-msgid "Error during commit"
-msgstr "Kesalahan pada waktu commit"
-
-#: ../DistUpgrade/DistUpgradeController.py:1060
+#: ../DistUpgrade/DistUpgradeController.py:1167
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -526,173 +604,244 @@ msgstr ""
 "Kesalahan terjadi selama pembersihan. Silakan lihat pesan di bawah untuk "
 "informasi lebih lanjut. "
 
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1090
-msgid "Restoring original system state"
-msgstr "Sistem dikembalikan ke keadaan awal"
-
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1128
+#: ../DistUpgrade/DistUpgradeController.py:1243
 msgid "Required depends is not installed"
 msgstr "Dependensi yang dibutuhkan belum terpasang."
 
-#: ../DistUpgrade/DistUpgradeController.py:1129
+#: ../DistUpgrade/DistUpgradeController.py:1244
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Dependensi yang dibutuhkan '%s' belum terpasang. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1379
-#: ../DistUpgrade/DistUpgradeController.py:1446
+#: ../DistUpgrade/DistUpgradeController.py:1489
+#: ../DistUpgrade/DistUpgradeController.py:1556
 msgid "Checking package manager"
 msgstr "Memeriksa manajer paket"
 
-#: ../DistUpgrade/DistUpgradeController.py:1384
+#: ../DistUpgrade/DistUpgradeController.py:1494
 msgid "Preparing the upgrade failed"
 msgstr "Persiapan peningkatan versi gagal"
 
-#: ../DistUpgrade/DistUpgradeController.py:1385
+#: ../DistUpgrade/DistUpgradeController.py:1495
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
-"upgrade/ in the bugreport."
+"upgrade/ in the bug report."
 msgstr ""
-"Persiapan meningkatkan versi sistem gagal. Silakan laporkan ini sebagai bug "
-"atas paket 'update-manager' dan sertakan berkas di /var/log/dist-upgrade/ "
-"dalam bugreport."
+"Persiapan pemutakhiran sistem gagal. Silakan laporkan hal ini sebagai kutu "
+"terhadap paket 'update-manager' dan sertakan berkas-berkas yang ada pada "
+"/var/log/dist-upgrade/ ke dalam laporan kutu."
 
-#: ../DistUpgrade/DistUpgradeController.py:1401
+#: ../DistUpgrade/DistUpgradeController.py:1511
 msgid "Getting upgrade prerequisites failed"
 msgstr "Gagal mendapatkan persiapan upgrade"
 
-#: ../DistUpgrade/DistUpgradeController.py:1402
+#: ../DistUpgrade/DistUpgradeController.py:1512
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
 "\n"
 "Please report this as a bug against the 'update-manager' package and include "
-"the files in /var/log/dist-upgrade/ in the bugreport."
+"the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
-"Sistem tak dapat memperoleh prasyarat naik tingkat. Naik tingkat akan "
-"dibatalkan sekarang dan mengembalikan kondisi sistem asli.\n"
+"Sistem tidak dapat memperoleh kebutuhan-kebutuhan untuk melakukan "
+"pemutakhiran. Proses pemutakhiran akan dibatalkan sekarang dan sistem Anda "
+"akan kembali ke kondisi sebelumnya.\n"
 "\n"
-"Silahkan melapor kutu ini soal paket 'update-manager' dan ikut sertakan "
-"berkas-berkas dlm /var/log/dist-upgrade/ dalam laporan kutu."
+"Silakan laporkan hal ini sebagai kutu terhadap paket 'update-manager' dan "
+"sertakan berkas-berkas yang ada pada /var/log/dist-upgrade/ ke dalam laporan "
+"kutu."
 
-#: ../DistUpgrade/DistUpgradeController.py:1432
+#: ../DistUpgrade/DistUpgradeController.py:1542
 msgid "Updating repository information"
 msgstr "Memutakhirkan informasi gudang"
 
-#: ../DistUpgrade/DistUpgradeController.py:1457
+#: ../DistUpgrade/DistUpgradeController.py:1574
 msgid "Invalid package information"
 msgstr "Informasi paket tidak valid"
 
-#: ../DistUpgrade/DistUpgradeController.py:1458
+#: ../DistUpgrade/DistUpgradeController.py:1575
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
 "not be found anymore.\n"
 "This indicates a serious error, please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
+"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+"report."
 msgstr ""
-"Setelah informasi paket anda dimutakhirkan paket penting '%s' tidak dapat "
-"ditemukan lagi.\n"
-"Ini mengindikasikan adanya kesalahan serius, silakan laporkan ini sebagai "
-"bug atas paket 'update-manager' dan sertakan berkas di /var/log/dist-"
-"upgrade/ dalam bugreport."
+"Setelah informasi paket Anda dimutakhirkan paket dasar '%s' tidak dapat "
+"ditemukan.\n"
+"Hal ini menunjukkan kesalahan yang serius, laporkan perihal ini dan "
+"lampirkan berkas /var/log/dist-upgrade/ ke dalam laporan kutu."
 
-#: ../DistUpgrade/DistUpgradeController.py:1475
-#: ../DistUpgrade/DistUpgradeController.py:1523
+#: ../DistUpgrade/DistUpgradeController.py:1592
+#: ../DistUpgrade/DistUpgradeController.py:1640
 msgid "Fetching"
 msgstr "Menjemput"
 
-#: ../DistUpgrade/DistUpgradeController.py:1482
-#: ../DistUpgrade/DistUpgradeController.py:1527
+#: ../DistUpgrade/DistUpgradeController.py:1598
+#: ../DistUpgrade/DistUpgradeController.py:1644
 msgid "Upgrading"
 msgstr "Meng-upgrade"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1487
-#: ../DistUpgrade/DistUpgradeController.py:1529
-#: ../DistUpgrade/DistUpgradeController.py:1536
-#: ../DistUpgrade/DistUpgradeController.py:1541
+#: ../DistUpgrade/DistUpgradeController.py:1603
+#: ../DistUpgrade/DistUpgradeController.py:1646
+#: ../DistUpgrade/DistUpgradeController.py:1653
+#: ../DistUpgrade/DistUpgradeController.py:1664
 msgid "Upgrade complete"
 msgstr "Peningkatan versi selesai"
 
-#: ../DistUpgrade/DistUpgradeController.py:1488
-#: ../DistUpgrade/DistUpgradeController.py:1530
-#: ../DistUpgrade/DistUpgradeController.py:1537
+#: ../DistUpgrade/DistUpgradeController.py:1604
+#: ../DistUpgrade/DistUpgradeController.py:1647
+#: ../DistUpgrade/DistUpgradeController.py:1654
 msgid ""
-"The upgrade is completed but there were errors during the ugprade process."
+"The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
+"Pemutakhiran telah selesai tetapi ada beberapa kesalahan selama proses "
+"pemutakhiran"
 
-#: ../DistUpgrade/DistUpgradeController.py:1495
+#: ../DistUpgrade/DistUpgradeController.py:1611
 msgid "Searching for obsolete software"
 msgstr "Mencari perangkat lunak usang"
 
-#: ../DistUpgrade/DistUpgradeController.py:1500
+#: ../DistUpgrade/DistUpgradeController.py:1616
 msgid "System upgrade is complete."
 msgstr "Upgrade sistem telah selesai."
 
-#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1665
 msgid "The partial upgrade was completed."
+msgstr "Pemutakhiran parsial selesai."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:149
+msgid "No ARMv6 CPU"
+msgstr "CPU ARMv6 tidak ada"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:150
+msgid ""
+"Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
+"packages in karmic were built with optimizations requiring ARMv6 as the "
+"minimal architecture. It is not possible to upgrade your system to a new "
+"Ubuntu release with this hardware."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:98
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+msgid "No init available"
+msgstr "Tidak ada 'init' yang tersedia"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:165
+msgid ""
+"Your system appears to be a virtualised environment without an init daemon, "
+"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"environment, requiring an update to your virtual machine configuration "
+"first.\n"
+"\n"
+"Are you sure you want to continue?"
+msgstr ""
+
+#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
+#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
+#: ../DistUpgrade/DistUpgradeQuirks.py:186
+#: ../DistUpgrade/DistUpgradeQuirks.py:271
+#: ../DistUpgrade/DistUpgradeQuirks.py:298
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:102
+#: ../DistUpgrade/DistUpgradeQuirks.py:190
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with Ubuntu 8.10.\n"
+"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:154
+#: ../DistUpgrade/DistUpgradeQuirks.py:275
+#: ../DistUpgrade/DistUpgradeQuirks.py:302
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
-"Ubuntu 8.10.\n"
+"Ubuntu 10.04.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:472
+msgid "evms in use"
+msgstr "evms sedang dipakai"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:473
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeMain.py:43
+msgid "Sandbox upgrade using aufs"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeMain.py:45
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr ""
+"Pakai path yang diberikan untuk mencari cdrom dengan paket-paket yang dapat "
+"ditingkatkan versinya"
+
+#: ../DistUpgrade/DistUpgradeMain.py:51
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"Gunakan frontend. Kini tersedia: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/DistUpgradeMain.py:54
+msgid "*DEPRECATED* this option will be ignore"
+msgstr "*DEPRECATED* pilihan ini akan diabaikan"
+
+#: ../DistUpgrade/DistUpgradeMain.py:57
+msgid "Perform a partial upgrade only (no sources.list rewriting)"
+msgstr ""
+"Melakukan pemutakhiran sebagian (tidak perlu menulis ulang sources.list)"
+
+#: ../DistUpgrade/DistUpgradeMain.py:59
+msgid "Set datadir"
+msgstr "Tentukan datadir"
+
 #. print "mediaChange %s %s" % (medium, drive)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:108
+#: ../DistUpgrade/DistUpgradeViewGtk.py:109
 #: ../DistUpgrade/DistUpgradeViewKDE.py:190
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:148
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Silakan masukkan '%s' ke dalam penggerak '%s'"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:127
-#: ../DistUpgrade/DistUpgradeViewKDE.py:203
+#: ../DistUpgrade/DistUpgradeViewGtk.py:129
+#: ../DistUpgrade/DistUpgradeViewKDE.py:204
 msgid "Fetching is complete"
 msgstr "Pengunduhan selesai"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewKDE.py:216
+#: ../DistUpgrade/DistUpgradeViewGtk.py:141
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
-msgstr ""
+msgstr "Mengambil berkas %li dari %li pada %sB/s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:140
-#: ../DistUpgrade/DistUpgradeViewGtk.py:275
-#: ../DistUpgrade/DistUpgradeViewKDE.py:217
-#: ../DistUpgrade/DistUpgradeViewKDE.py:356
+#: ../DistUpgrade/DistUpgradeViewGtk.py:142
+#: ../DistUpgrade/DistUpgradeViewGtk.py:277
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
+#: ../DistUpgrade/DistUpgradeViewKDE.py:358
 #, python-format
 msgid "About %s remaining"
 msgstr "Tersisa sekitar %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:142
-#: ../DistUpgrade/DistUpgradeViewKDE.py:219
+#: ../DistUpgrade/DistUpgradeViewGtk.py:144
+#: ../DistUpgrade/DistUpgradeViewKDE.py:220
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Mengunduh berkas %li dari %li"
@@ -700,36 +849,36 @@ msgstr "Mengunduh berkas %li dari %li"
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
-#: ../DistUpgrade/DistUpgradeViewGtk.py:174
-#: ../DistUpgrade/DistUpgradeViewKDE.py:253
+#: ../DistUpgrade/DistUpgradeViewGtk.py:176
+#: ../DistUpgrade/DistUpgradeViewKDE.py:254
 msgid "Applying changes"
 msgstr "Sahkan perubahan"
 
 #. we do not report followup errors from earlier failures
-#: ../DistUpgrade/DistUpgradeViewGtk.py:199
-#: ../DistUpgrade/DistUpgradeViewKDE.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:201
+#: ../DistUpgrade/DistUpgradeViewKDE.py:267
 msgid "dependency problems - leaving unconfigured"
-msgstr ""
+msgstr "masalah ketergantungan - dibiarkan tidak terkonfigurasi"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:204
-#: ../DistUpgrade/DistUpgradeViewKDE.py:268
+#: ../DistUpgrade/DistUpgradeViewGtk.py:206
+#: ../DistUpgrade/DistUpgradeViewKDE.py:269
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Tidak dapat instal '%s'"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:205
-#: ../DistUpgrade/DistUpgradeViewKDE.py:269
+#: ../DistUpgrade/DistUpgradeViewGtk.py:207
+#: ../DistUpgrade/DistUpgradeViewKDE.py:270
 #, python-format
 msgid ""
-"The upgrade will continue but the '%s' package may be in a not working "
-"state. Please consider submitting a bugreport about it."
+"The upgrade will continue but the '%s' package may not be in a working "
+"state. Please consider submitting a bug report about it."
 msgstr ""
-"Proses upgrade akan dilanjutkan tetapi paket '%s' mungkin berada dalam "
-"keadaan tidak bekerja. Mohon untuk mengirimkan laporan bug tentang hal ini"
+"Peningkatan akan dilanjutkan tapi paket '%s' mungkin tidak dalam keadaan "
+"bekerja. Silakan pertimbangkan mengirim laporan kutu tentangnya."
 
 #. self.expander.set_expanded(True)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:221
-#: ../DistUpgrade/DistUpgradeViewKDE.py:290
+#: ../DistUpgrade/DistUpgradeViewGtk.py:223
+#: ../DistUpgrade/DistUpgradeViewKDE.py:291
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -738,8 +887,8 @@ msgstr ""
 "Menimpa berkas konfigurasi yang telah diubah\n"
 "'%s'?"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:291
+#: ../DistUpgrade/DistUpgradeViewGtk.py:224
+#: ../DistUpgrade/DistUpgradeViewKDE.py:292
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -748,162 +897,174 @@ msgstr ""
 "konfigurasi apabila anda memilih untuk menimpanya dengan versi yang lebih "
 "baru."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:235
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewGtk.py:237
+#: ../DistUpgrade/DistUpgradeViewKDE.py:310
 msgid "The 'diff' command was not found"
 msgstr "Perintah 'diff' tidak dapat ditemukan"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:417
-#: ../DistUpgrade/DistUpgradeViewText.py:110
+#: ../DistUpgrade/DistUpgradeViewGtk.py:440
+#: ../DistUpgrade/DistUpgradeViewText.py:88
 msgid "A fatal error occurred"
 msgstr "Terjadi kesalahan fatal"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:418
+#: ../DistUpgrade/DistUpgradeViewGtk.py:441
 msgid ""
 "Please report this as a bug (if you haven't already) and include the files "
 "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-"report. The upgrade aborts now.\n"
+"report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
+"Silakan laporkan hal ini sebagai kutu (jika Anda belum pernah melakukannya) "
+"dan lampirkan juga berkas /var/log/dist-upgrade/main.log dan /var/log/dist-"
+"upgrade/apt.log dalam laporan Anda. Pemutakhiran dibatalkan sekarang.\n"
+"berkas sources.list Anda disimpan di /etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:433
+#: ../DistUpgrade/DistUpgradeViewGtk.py:458
 msgid "Ctrl-c pressed"
-msgstr ""
+msgstr "Ctrl-c ditekan"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:434
+#: ../DistUpgrade/DistUpgradeViewGtk.py:459
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
 msgstr ""
+"Ini akan membatalkan operasi dan dapat membiarkan sistem dalam keadaan "
+"rusak. Apakah Anda yakin ingin melakukannya?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:604
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "Untuk mencegah kehilangan data silakan tutup seluruh aplikasi dan dokumen."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:584
+#: ../DistUpgrade/DistUpgradeViewGtk.py:618
 #, python-format
 msgid "<b>Downgrade %s</b>"
 msgstr "<b>Turun-tingkat %s</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
-#: ../DistUpgrade/DistUpgradeViewKDE.py:749
+#: ../DistUpgrade/DistUpgradeViewGtk.py:620
+#: ../DistUpgrade/DistUpgradeViewKDE.py:758
 #, python-format
 msgid "Remove %s"
 msgstr "Hapus %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:591
-#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#: ../DistUpgrade/DistUpgradeViewGtk.py:625
+#: ../DistUpgrade/DistUpgradeViewKDE.py:760
+#, python-format
+msgid "Remove (was auto installed) %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:628
+#: ../DistUpgrade/DistUpgradeViewKDE.py:762
 #, python-format
 msgid "Install %s"
 msgstr "Instal %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:593
-#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewGtk.py:630
+#: ../DistUpgrade/DistUpgradeViewKDE.py:764
 #, python-format
 msgid "Upgrade %s"
 msgstr "Upgrade %s"
 
+#. change = QMessageBox.question(None, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
 #: ../DistUpgrade/DistUpgradeViewKDE.py:191
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:150
 msgid "Media Change"
 msgstr "Perubahan Media"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:321
+#: ../DistUpgrade/DistUpgradeViewKDE.py:322
 msgid "Show Difference >>>"
 msgstr "Tunjukkan Perbedaan >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:324
+#: ../DistUpgrade/DistUpgradeViewKDE.py:325
 msgid "<<< Hide Difference"
 msgstr "<<< Sembunyikan Perbedaan"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:530
+#: ../DistUpgrade/DistUpgradeViewKDE.py:539
 msgid "Error"
-msgstr ""
+msgstr "Kesalahan"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:542
+#: ../DistUpgrade/DistUpgradeViewKDE.py:551
 msgid "&Cancel"
-msgstr ""
+msgstr "&Batal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:544
-#: ../DistUpgrade/DistUpgradeViewKDE.py:781
+#: ../DistUpgrade/DistUpgradeViewKDE.py:553
+#: ../DistUpgrade/DistUpgradeViewKDE.py:792
 msgid "&Close"
-msgstr ""
+msgstr "&Tutup"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:590
+#: ../DistUpgrade/DistUpgradeViewKDE.py:599
 msgid "Show Terminal >>>"
 msgstr "Tampilkan Terminal >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:593
+#: ../DistUpgrade/DistUpgradeViewKDE.py:602
 msgid "<<< Hide Terminal"
 msgstr "<<< Sembunyikan Terminal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:673
+#: ../DistUpgrade/DistUpgradeViewKDE.py:682
 msgid "Information"
-msgstr ""
+msgstr "Informasi"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:723
-#: ../DistUpgrade/DistUpgradeViewKDE.py:764
-#: ../DistUpgrade/DistUpgradeViewKDE.py:767
-#: ../DistUpgrade/DistUpgrade.glade.h:9
+#: ../DistUpgrade/DistUpgradeViewKDE.py:732
+#: ../DistUpgrade/DistUpgradeViewKDE.py:775
+#: ../DistUpgrade/DistUpgradeViewKDE.py:778 ../DistUpgrade/DistUpgrade.ui.h:11
 msgid "Details"
 msgstr "Rincian"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:777
-#: ../DistUpgrade/DistUpgradeViewText.py:222
+#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewText.py:206
 msgid "Restart required"
 msgstr "Diperlukan reboot"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:777
-#: ../DistUpgrade/DistUpgrade.glade.h:5
+#: ../DistUpgrade/DistUpgradeViewKDE.py:788
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr "<b><big>Mulai ulang sistem untuk menyelesaikan upgrade</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:780
-#: ../DistUpgrade/DistUpgrade.glade.h:23
+#: ../DistUpgrade/DistUpgradeViewKDE.py:791 ../DistUpgrade/DistUpgrade.ui.h:25
+#: ../data/glade/UpdateManager.ui.h:31
 msgid "_Restart Now"
 msgstr "_Mulai Ulang Sekarang"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly advised to resume the upgrade."
 msgstr ""
+"<b><big>Batalkan pemutakhiran yang sedang berjalan?</big></b>\n"
+"\n"
+"Sistem bisa berada dalam kondisi tidak dapat digunakan jika anda membatalkan "
+"pemutakhiran. Anda sangat disarankan untuk melanjutkan pemutakhiran."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:807
 msgid "Cancel Upgrade?"
 msgstr "Batalkan Peningkatan Versi?"
 
-#: ../DistUpgrade/DistUpgradeView.py:56
+#: ../DistUpgrade/DistUpgradeView.py:60
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li hari"
 
-#: ../DistUpgrade/DistUpgradeView.py:58
+#: ../DistUpgrade/DistUpgradeView.py:62
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li jam"
 
-#: ../DistUpgrade/DistUpgradeView.py:60
+#: ../DistUpgrade/DistUpgradeView.py:64
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li menit"
 
-#: ../DistUpgrade/DistUpgradeView.py:61
+#: ../DistUpgrade/DistUpgradeView.py:65
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%li detik"
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
@@ -914,10 +1075,10 @@ msgstr[1] ""
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:74
+#: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
-msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
-msgstr ""
+msgid "%(str_days)s %(str_hours)s"
+msgstr "%(str_days)s %(str_hours)s"
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -928,69 +1089,69 @@ msgstr ""
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:85
+#: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
 msgid "%(str_hours)s %(str_minutes)s"
-msgstr ""
+msgstr "%(str_hours)s %(str_minutes)s"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
-#: ../DistUpgrade/DistUpgradeView.py:106
+#: ../DistUpgrade/DistUpgradeView.py:128
 #, python-format
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
-"with a 56k modem"
+"with a 56k modem."
 msgstr ""
-"Pengunduhan ini akan memakan waktu sekitar %s dengan koneksi DSL 1 Mbit dan "
-"sekitar %s dengan modem 56k"
+"Proses pengunduhan ini akan memakan waktu sekitar %s dengan koneksi DSL "
+"1Mbit dan sekitar %s dengan modem 56k."
 
 #. if we have a estimated speed, use it
-#: ../DistUpgrade/DistUpgradeView.py:110
+#: ../DistUpgrade/DistUpgradeView.py:132
 #, python-format
 msgid "This download will take about %s with your connection. "
 msgstr "Pengunduhan akan mengambil sekitar %s koneksi Anda. "
 
-#: ../DistUpgrade/DistUpgradeView.py:176 ../DistUpgrade/DistUpgrade.glade.h:14
+#: ../DistUpgrade/DistUpgradeView.py:233 ../DistUpgrade/DistUpgrade.ui.h:16
 msgid "Preparing to upgrade"
 msgstr "Persiapan untuk naik tingkat"
 
-#: ../DistUpgrade/DistUpgradeView.py:177
+#: ../DistUpgrade/DistUpgradeView.py:234
 msgid "Getting new software channels"
 msgstr "Sedang mendapatkan kanal-2 perangkat lunak baru"
 
-#: ../DistUpgrade/DistUpgradeView.py:178 ../DistUpgrade/DistUpgrade.glade.h:12
+#: ../DistUpgrade/DistUpgradeView.py:235 ../DistUpgrade/DistUpgrade.ui.h:14
 msgid "Getting new packages"
 msgstr "Sedang mendapatkan paket-2 baru"
 
-#: ../DistUpgrade/DistUpgradeView.py:179 ../DistUpgrade/DistUpgrade.glade.h:13
+#: ../DistUpgrade/DistUpgradeView.py:236 ../DistUpgrade/DistUpgrade.ui.h:15
 msgid "Installing the upgrades"
 msgstr "Memasang upgrade"
 
-#: ../DistUpgrade/DistUpgradeView.py:180 ../DistUpgrade/DistUpgrade.glade.h:8
+#: ../DistUpgrade/DistUpgradeView.py:237 ../DistUpgrade/DistUpgrade.ui.h:10
 msgid "Cleaning up"
 msgstr "Membersihkan"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:253
+#: ../DistUpgrade/DistUpgradeView.py:321
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
 msgstr[0] "%d paket akan dihapus."
 
-#: ../DistUpgrade/DistUpgradeView.py:258
+#: ../DistUpgrade/DistUpgradeView.py:326
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
 msgstr[0] "%d paket baru akan dipasang."
 
-#: ../DistUpgrade/DistUpgradeView.py:264
+#: ../DistUpgrade/DistUpgradeView.py:332
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
 msgstr[0] "%d paket akan diupgrade."
 
-#: ../DistUpgrade/DistUpgradeView.py:269
+#: ../DistUpgrade/DistUpgradeView.py:337
 #, python-format
 msgid ""
 "\n"
@@ -1001,7 +1162,7 @@ msgstr ""
 "\n"
 "Anda harus mengunduh sebanyak %s. "
 
-#: ../DistUpgrade/DistUpgradeView.py:273
+#: ../DistUpgrade/DistUpgradeView.py:341
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -1010,11 +1171,11 @@ msgstr ""
 "dan tidak dapat dibatalkan setelahnya."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:279 ../UpdateManager/UpdateManager.py:672
+#: ../DistUpgrade/DistUpgradeView.py:347 ../UpdateManager/UpdateManager.py:502
 msgid "Your system is up-to-date"
 msgstr "Sistem anda telah up-to-date"
 
-#: ../DistUpgrade/DistUpgradeView.py:280
+#: ../DistUpgrade/DistUpgradeView.py:348
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
@@ -1022,58 +1183,58 @@ msgstr ""
 "Tidak ada peningkatan versi yang tersedia untuk sistem anda. Proses "
 "peningkatan versi akan dibatalkan."
 
-#: ../DistUpgrade/DistUpgradeView.py:293
+#: ../DistUpgrade/DistUpgradeView.py:361
 msgid "Reboot required"
 msgstr "Diperlukan reboot"
 
-#: ../DistUpgrade/DistUpgradeView.py:294
+#: ../DistUpgrade/DistUpgradeView.py:362
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
 "Upgrade telah selesai dan sistem harus direboot. Apakah anda ingin melakukan "
 "ini sekarang"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:136
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:136
 msgid "Could not run the upgrade tool"
 msgstr "Tidak dapat menjalankan alat upgrade"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:136
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:136
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
 "Sepertinya ada bug dalam peralatan upgrade. Silakan laporkan ini sebagai bug"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:205
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:205
 msgid "Upgrade tool signature"
 msgstr "Tanda tangan peralatan upgrade"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
 msgid "Upgrade tool"
 msgstr "Peralatan upgrade"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:237
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:237
 msgid "Failed to fetch"
 msgstr "Gagal untuk fetch"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:238
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:238
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr "Gagal meng-fetch upgrade. Terjadi masalah pada jaringan. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:242
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:242
 msgid "Failed to extract"
 msgstr "Gagal mengekstrak"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:243
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:243
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -1081,26 +1242,26 @@ msgstr ""
 "Gagal mengekstrak upgrade. Mungkin terjadi masalah dengan jaringan atau "
 "dengan server. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
-msgid "Verfication failed"
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:248
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
+msgid "Verification failed"
 msgstr "Verifikasi gagal"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:249
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
 msgstr ""
 "Pemeriksaan peningkatan gagal. Mungkin ada masalah jaringan atau server. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:254
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:254
 msgid "Authentication failed"
 msgstr "Otentikasi gagal"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:255
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:255
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -1108,90 +1269,89 @@ msgstr ""
 "Otentikasi upgrade gagal. Mungkin terjadi masalah dengan jaringan atau "
 "dengan server. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:269
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:275
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:269
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:275
 msgid "Can not run the upgrade"
-msgstr ""
+msgstr "Tak dapat menjalankan pemutakhiran"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
-msgid ""
-"This usually is caused by a system were /tmp is mounted noexec. Please "
-"remount without noexec and run the upgrade again."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:276
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:276
 #, python-format
 msgid "The error message is '%s'."
-msgstr ""
+msgstr "Pesan kesalahannya adalah '%s'."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:111
+#: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
 "Please report this as a bug and include the files /var/log/dist-"
 "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade aborts now.\n"
+"upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Silakan laporkan ini sebagai bug dan sertakan berkas /var/log/dist-"
-"upgrade/main.log dan /var/log/dist-upgrade/apt.log dalam laporan anda. "
-"Upgrade akan dibatalkan sekarang.\n"
-"Berkas sources.list asli anda disimpan dalam "
-"/etc/apt/sources.list.distUpgrade."
+"Silakan laporkan hal ini sebagai kutu dan lampirkan juga berkas "
+"/var/log/dist-upgrade/main.log dan /var/log/dist-upgrade/apt.log dalam "
+"laporan Anda. Pemutakhiran dibatalkan sekarang.\n"
+"berkas sources.list Anda disimpan di /etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:135
+#: ../DistUpgrade/DistUpgradeViewText.py:113
 msgid "Aborting"
 msgstr "Membatalkan"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:140
+#: ../DistUpgrade/DistUpgradeViewText.py:118
 msgid "Demoted:\n"
 msgstr "Turun tingkat:\n"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:150
 #: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
-#: ../DistUpgrade/DistUpgradeViewText.py:201
+#: ../DistUpgrade/DistUpgradeViewText.py:179
 msgid "Continue [yN] "
 msgstr "Lanjutkan [yT] "
 
+#: ../DistUpgrade/DistUpgradeViewText.py:150
 #: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
 msgid "Details [d]"
 msgstr "Rincian [d]"
 
 #. TRANSLATORS: the "y" is "yes"
-#: ../DistUpgrade/DistUpgradeViewText.py:176
-#: ../DistUpgrade/DistUpgradeViewText.py:205
+#. TRANSLATORS: first letter of a positive (yes) answer
+#: ../DistUpgrade/DistUpgradeViewText.py:154
+#: ../DistUpgrade/DistUpgradeViewText.py:182
 msgid "y"
 msgstr "y"
 
 #. TRANSLATORS: the "n" is "no"
-#: ../DistUpgrade/DistUpgradeViewText.py:179
+#. TRANSLATORS: first letter of a negative (no) answer
+#: ../DistUpgrade/DistUpgradeViewText.py:157
+#: ../DistUpgrade/DistUpgradeViewText.py:189
 msgid "n"
 msgstr "t"
 
 #. TRANSLATORS: the "d" is "details"
-#: ../DistUpgrade/DistUpgradeViewText.py:182
+#: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "d"
 msgstr "d"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:186
+#: ../DistUpgrade/DistUpgradeViewText.py:164
 #, python-format
 msgid "Remove: %s\n"
 msgstr "Hapus: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:189
+#: ../DistUpgrade/DistUpgradeViewText.py:167
 #, python-format
 msgid "Install: %s\n"
 msgstr "Pasang: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:192
+#: ../DistUpgrade/DistUpgradeViewText.py:170
 #, python-format
 msgid "Upgrade: %s\n"
 msgstr "Upgrade: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:223
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "Continue [Yn] "
+msgstr "Lanjutkan [Yn] "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:207
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
@@ -1199,15 +1359,11 @@ msgstr ""
 "Untuk menyelesaikan penaiktingkatan, perlu restart.\n"
 "Jika Anda memilih 'y' sistem akan di-restart."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:227
-msgid "Restart the system now [yN] "
-msgstr "Memulai ulang sistem sekarang [yN] "
-
-#: ../DistUpgrade/DistUpgrade.glade.h:1
+#: ../DistUpgrade/DistUpgrade.ui.h:1
 msgid "    "
 msgstr "    "
 
-#: ../DistUpgrade/DistUpgrade.glade.h:2
+#: ../DistUpgrade/DistUpgrade.ui.h:2
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1219,170 +1375,166 @@ msgstr ""
 "Jika anda membatalkan upgrade sistem dapat menjadi tidak bisa digunakan. "
 "Anda disarankan untuk melanjutkan upgrade."
 
-#: ../DistUpgrade/DistUpgrade.glade.h:6
+#: ../DistUpgrade/DistUpgrade.ui.h:5
+msgid ""
+"<b><big>Restart the system to complete the upgrade</big></b>\n"
+"\n"
+"Please save your work before continuing."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgrade.ui.h:8
 msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Mulai upgrade?</big></b>"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:7
-msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
+#: ../DistUpgrade/DistUpgrade.ui.h:9
+msgid "<b><big>Upgrading Ubuntu to version 10.04 LTS</big></b>"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgrade.glade.h:10
+#: ../DistUpgrade/DistUpgrade.ui.h:12
 msgid "Difference between the files"
 msgstr "Perbedaan diantara berkas"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:11
+#: ../DistUpgrade/DistUpgrade.ui.h:13
 msgid "Distribution Upgrade"
 msgstr "Upgrade Distribusi"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:15
+#: ../DistUpgrade/DistUpgrade.ui.h:17
 msgid "Restarting the computer"
 msgstr "Sedang memulai ulang komputer"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:16
+#: ../DistUpgrade/DistUpgrade.ui.h:18
 msgid "Setting new software channels"
 msgstr "Sedang mengisi kanal-2 perangkat lunak baru"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:17
+#: ../DistUpgrade/DistUpgrade.ui.h:19
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:18
+#: ../DistUpgrade/DistUpgrade.ui.h:20
 msgid "_Cancel Upgrade"
 msgstr "Batalkan Peningkatan Versi"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:19
+#: ../DistUpgrade/DistUpgrade.ui.h:21
 msgid "_Continue"
 msgstr "_Lanjut"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:21
+#: ../DistUpgrade/DistUpgrade.ui.h:23
 msgid "_Replace"
 msgstr "_Ganti"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:22
+#: ../DistUpgrade/DistUpgrade.ui.h:24
 msgid "_Report Bug"
 msgstr "_Laporkan Bug"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:24
+#: ../DistUpgrade/DistUpgrade.ui.h:26
 msgid "_Resume Upgrade"
 msgstr "_Lanjutkan Upgrade"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:25
+#: ../DistUpgrade/DistUpgrade.ui.h:27
 msgid "_Start Upgrade"
 msgstr "Mulai Peningkatan Versi"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:81
+#: ../UpdateManager/backend/InstallBackendSynaptic.py:42
+msgid "Please wait, this can take some time."
+msgstr "Silakan tunggu, hal ini membutuhkan beberapa waktu."
+
+#: ../UpdateManager/backend/InstallBackendSynaptic.py:44
+msgid "Update is complete"
+msgstr "Pemutakhiran selesai"
+
+#: ../UpdateManager/DistUpgradeFetcher.py:85
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:103
 msgid "Could not find the release notes"
 msgstr "Tidak dapat menemukan catatan luncuran"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:82
+#: ../UpdateManager/DistUpgradeFetcher.py:86
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:104
 msgid "The server may be overloaded. "
 msgstr "Server mungkin kelebihan muatan "
 
-#: ../UpdateManager/DistUpgradeFetcher.py:92
+#: ../UpdateManager/DistUpgradeFetcher.py:96
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:108
 msgid "Could not download the release notes"
 msgstr "Tidak dapat mengunduh catatan luncuran"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:93
+#: ../UpdateManager/DistUpgradeFetcher.py:97
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:109
 msgid "Please check your internet connection."
 msgstr "Silakan periksa koneksi internet anda."
 
-#: ../UpdateManager/GtkProgress.py:108
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:62
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:85
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:89
+#: ../data/glade/UpdateManager.ui.h:12
+msgid "Release Notes"
+msgstr "Catatan Luncuran"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:128
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
+msgid "Downloading additional package files..."
+msgstr "Mengunduh berkas paket tambahan..."
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
+#, python-format
+msgid "File %s of %s at %sB/s"
+msgstr "Berkas %s dari %s pada %sB/s"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
+#, python-format
+msgid "File %s of %s"
+msgstr "Berkas %s dari %s"
+
+#: ../UpdateManager/ChangelogViewer.py:70
+msgid "Open Link in Browser"
+msgstr "Buka Tautan pada Penjelajah."
+
+#: ../UpdateManager/ChangelogViewer.py:72
+msgid "Copy Link to Clipboard"
+msgstr "Salin Tautan ke Clipboard"
+
+#: ../UpdateManager/GtkProgress.py:115
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr "Mengunduh berkas %(current)li dari %(total)li dengan %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:113
+#: ../UpdateManager/GtkProgress.py:120
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "Mengunduh berkas %(current)li dari %(total)li"
 
-#: ../UpdateManager/UpdateManager.py:252
-msgid "The list of changes is not available"
-msgstr "Senarai dari perubahan belum tersedia."
-
-#: ../UpdateManager/UpdateManager.py:260
-#, python-format
-msgid ""
-"The list of changes is not available yet.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:268
-msgid ""
-"Failed to download the list of changes. \n"
-"Please check your Internet connection."
-msgstr ""
-"Gagal mengunduh senarai dari perubahan. \n"
-"Silakan periksa koneksi Internet anda."
-
-#: ../UpdateManager/UpdateManager.py:290
-msgid "Failed to detect distribution"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:291
-#, python-format
-msgid "A error '%s' occurred while checking what system you are using."
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:302
-msgid "Important security updates"
-msgstr "Pemutakhiran keamanan yang penting"
-
 #: ../UpdateManager/UpdateManager.py:303
-msgid "Recommended updates"
-msgstr "Pembaruan yang disarankan"
-
-#: ../UpdateManager/UpdateManager.py:304
-msgid "Proposed updates"
-msgstr "Pemutakhiran yang disarankan"
-
-#: ../UpdateManager/UpdateManager.py:305
-msgid "Backports"
-msgstr "Backports"
-
-#: ../UpdateManager/UpdateManager.py:306
-msgid "Distribution updates"
-msgstr "Pemutakhiran distribusi"
-
-#: ../UpdateManager/UpdateManager.py:311
-msgid "Other updates"
-msgstr "Pemutakhiran lain"
-
-#: ../UpdateManager/UpdateManager.py:320
-msgid "Previous selected"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:495
 #, python-format
 msgid "Version %s: \n"
 msgstr "Versi %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:556
+#: ../UpdateManager/UpdateManager.py:360
 msgid "Downloading list of changes..."
 msgstr "Mengunduh senarai dari perubahan..."
 
-#: ../UpdateManager/UpdateManager.py:583
+#: ../UpdateManager/UpdateManager.py:400
 msgid "_Uncheck All"
 msgstr "Batalkan Semua Pilihan"
 
-#: ../UpdateManager/UpdateManager.py:589
+#: ../UpdateManager/UpdateManager.py:406
 msgid "_Check All"
 msgstr "_Periksa Semua"
 
-#. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:633 ../UpdateManager/UpdateManager.py:689
+#: ../UpdateManager/UpdateManager.py:450
 #, python-format
-msgid "Download size: %s"
-msgstr "Ukuran unduh: %s"
+msgid ""
+"Download size: %s\n"
+"%s selected."
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:637
+#: ../UpdateManager/UpdateManager.py:455
 msgid "Unknown download size"
 msgstr "Ukuran unduh tak diketahui"
 
-#: ../UpdateManager/UpdateManager.py:645
+#: ../UpdateManager/UpdateManager.py:463
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
@@ -1390,26 +1542,25 @@ msgstr ""
 "Tak diketahui kapan informasi paket terakhir diperbarui. Silahkan coba klik "
 "pd tombol 'Periksa' untuk memperbarui informasi."
 
-#: ../UpdateManager/UpdateManager.py:654
+#: ../UpdateManager/UpdateManager.py:472
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:658
+#: ../UpdateManager/UpdateManager.py:476
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../UpdateManager/UpdateManager.py:662
+#: ../UpdateManager/UpdateManager.py:480
 msgid "The package information was last updated less than one hour ago."
 msgstr "Informasi paket terakhir diperbarui kurang dari sejam yg lalu."
 
-#: ../UpdateManager/UpdateManager.py:670
-#: ../data/glade/UpdateManager.glade.h:21
+#: ../UpdateManager/UpdateManager.py:500 ../data/glade/UpdateManager.ui.h:23
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
@@ -1417,94 +1568,102 @@ msgstr ""
 "Pemutakhiran perangkat lunak dapat memperbaiki masalah, menghilangkan "
 "kerentanan pada keamanan dan menyediakan fitur baru."
 
-#: ../UpdateManager/UpdateManager.py:685
+#: ../UpdateManager/UpdateManager.py:519
+msgid "Welcome to Ubuntu"
+msgstr "Selamat datang di Ubuntu"
+
+#: ../UpdateManager/UpdateManager.py:520
+msgid ""
+"These software updates have been issued since Ubuntu was released. If you "
+"don't want to install them now, choose \"Update Manager\" from the "
+"Administration Menu later."
+msgstr ""
+
+#: ../UpdateManager/UpdateManager.py:523
+msgid "Software updates are available for this computer"
+msgstr "Pemutakhiran perangkat lunak untuk komputer ini telah tersedia"
+
+#: ../UpdateManager/UpdateManager.py:524
+msgid ""
+"If you don't want to install them now, choose \"Update Manager\" from the "
+"Administration menu later."
+msgstr ""
+"Jika Anda tidak ingin memasang mereka sekarang, Anda dapat melakukannya lain "
+"kali dengan memilih \"Update Manager\" dari menu Administrasi."
+
+#: ../UpdateManager/UpdateManager.py:573
 #, python-format
-msgid "You can install %s update."
-msgid_plural "You can install %s updates."
-msgstr[0] "Anda dapat menginstal pemutakhiran %s"
+msgid ""
+"The upgrade needs a total of %s free space on disk '%s'. Please free at "
+"least an additional %s of disk space on '%s'. Empty your trash and remove "
+"temporary packages of former installations using 'sudo apt-get clean'."
+msgstr ""
+"Proses upgrade membutuhkan %s tempat bebas pada disk '%s'. Tolong bebaskan "
+"paling tidak tambahan sebesar %s tempat disk pada '%s'. Kosongkan tempat "
+"sampah dan hapus paket temporer dari proses instalasi sebelumnya dengan "
+"menggunakan 'sudo apt-get clean'."
 
-#: ../UpdateManager/UpdateManager.py:727
-msgid "Please wait, this can take some time."
-msgstr "Silakan tunggu, hal ini membutuhkan beberapa waktu."
-
-#: ../UpdateManager/UpdateManager.py:729
-msgid "Update is complete"
-msgstr "Pemutakhiran selesai"
-
-#: ../UpdateManager/UpdateManager.py:781
+#: ../UpdateManager/UpdateManager.py:630
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "Sedang membaca informasi paket"
 
-#: ../UpdateManager/UpdateManager.py:884
+#: ../UpdateManager/UpdateManager.py:743
 msgid "Could not initialize the package information"
 msgstr "Tidak dapat menginisialisasi informasi paket"
 
-#: ../UpdateManager/UpdateManager.py:885
-msgid ""
-"An unresolvable problem occurred while initializing the package "
-"information.\n"
-"\n"
-"Please report this bug against the 'update-manager' package and include the "
-"following error message:\n"
-msgstr ""
-
-#: ../UpdateManager/UpdateManager.py:907
-msgid ""
-"An unresolvable problem occurred while calculating the upgrade.\n"
-"\n"
-"Please report this bug against the 'update-manager' package and include the "
-"following error message:"
-msgstr ""
+#: ../UpdateManager/UpdateManager.py:789
+msgid " (New install)"
+msgstr " (Pemasangan baru)"
 
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:932
+#: ../UpdateManager/UpdateManager.py:793
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Ukuran: %s)"
 
-#: ../UpdateManager/UpdateManager.py:934
+#: ../UpdateManager/UpdateManager.py:795
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr ""
+msgstr "Dari versi %(old_version)s ke %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:938
+#: ../UpdateManager/UpdateManager.py:799
 #, python-format
 msgid "Version %s"
 msgstr "Versi %s"
 
-#: ../UpdateManager/UpdateManager.py:951
-msgid "Your distribution is not supported anymore"
-msgstr "Distribusi anda tidak disokong lagi"
+#: ../UpdateManager/UpdateManager.py:812
+msgid "Your Ubuntu release is not supported anymore"
+msgstr "Rilis Ubuntu Anda tak didukung lagi"
 
-#: ../UpdateManager/UpdateManager.py:952
+#: ../UpdateManager/UpdateManager.py:813
 msgid ""
-"You will not get any further security fixes or critical updates. Upgrade to "
-"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
-"information on upgrading."
+"You will not get any further security fixes or critical updates. Please "
+"Upgrade to a later version of Ubuntu Linux."
 msgstr ""
-"Anda tidak akan mendapatkan perbaikan keamanan atau pemutakhiran penting "
-"lebih lanjut. Upgrade ke versi berikut dari Ubuntu Linux. Lihat "
-"http://www.ubuntu.com untuk informasi lebih lanjut."
+"Anda tidak akan memperoleh lagi perbaikan keamanan atau pembaruan kritis. "
+"Silahkan tingkatkan ke Ubuntu Linux versi lebih baru."
 
-#: ../UpdateManager/UpdateManager.py:978
-msgid "Downloading the upgrade tool"
-msgstr "Mengunduh peralatan upgrade"
+#: ../UpdateManager/UpdateManager.py:820
+msgid "Upgrade information"
+msgstr "Informasi peningkatan"
 
-#: ../UpdateManager/UpdateManager.py:980
-msgid "The upgrade tool will guide you through the upgrade process."
-msgstr "Peralatan upgrade akan memandu anda untuk melalui proses upgrade."
+#. print "on_button_dist_upgrade_clicked"
+#: ../UpdateManager/UpdateManager.py:840
+msgid "Downloading the release upgrade tool"
+msgstr ""
 
-#: ../UpdateManager/UpdateManager.py:988
+#: ../UpdateManager/UpdateManager.py:847
 #, python-format
-msgid "<b>New distribution release '%s' is available</b>"
-msgstr "<b>Luncuran distribusi baru '%s' telah tersedia</b>"
+msgid "<b>New Ubuntu release '%s' is available</b>"
+msgstr "<b>Rilis baru Ubuntu '%s' tersedia</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:1031
+#: ../UpdateManager/UpdateManager.py:886
 msgid "Software index is broken"
 msgstr "Indeks perangkat lunak telah rusak"
 
-#: ../UpdateManager/UpdateManager.py:1032
+#: ../UpdateManager/UpdateManager.py:887
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1514,7 +1673,160 @@ msgstr ""
 "Silakan gunakan manajer paket \"Synaptic\" atau jalankan \"sudo apt-get "
 "install -f\" dalam terminal untuk memperbaiki persoalan ini."
 
-#: ../data/glade/UpdateManager.glade.h:1
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:136
+msgid "Downloading Package Information"
+msgstr "Mengunduh Informasi Paket"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:137
+msgid ""
+"The repositories are being checked for new, removed, or updated software "
+"packages"
+msgstr ""
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:145
+msgid "Downloading Package Updates"
+msgstr "Mengunduh Paket Baru"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:146
+msgid ""
+"The selected package updates are being downloaded and installed on the system"
+msgstr "Paket baru yang dipilih sedang diunduh dan dipasang pada sistem"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:152
+msgid "run_synaptic called with unknown action"
+msgstr ""
+
+#: ../UpdateManagerText/UpdateManagerText.py:26
+msgid "Cancel"
+msgstr "Batal"
+
+#: ../UpdateManagerText/UpdateManagerText.py:27
+msgid "Install"
+msgstr "Pasang"
+
+#: ../UpdateManagerText/UpdateManagerText.py:45
+msgid "Building Updates List"
+msgstr "Membangun Daftar Pemutakhiran"
+
+#: ../UpdateManagerText/UpdateManagerText.py:48
+msgid ""
+"\n"
+"A normal upgrade can not be calculated, please run: \n"
+"  sudo apt-get dist-upgrade\n"
+"\n"
+"\n"
+"This can be caused by:\n"
+" * A previous upgrade which didn't complete\n"
+" * Problems with some of the installed software\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+" * Normal changes of a pre-release version of Ubuntu"
+msgstr ""
+"\n"
+"Proses upgrade normal tidak dapat dikalkulasi, silahkan jalankan: \n"
+"  sudo apt-get dist-upgrade\n"
+"\n"
+"\n"
+"Hal ini dapat disebabkan oleh:\n"
+" * Proses upgrade sebelumnya tidak selesai\n"
+" * Masalah dengan beberapa perangkat lunak yang dipasang\n"
+" * Perangkat lunak yang tidak secara resmi disediakan oleh Ubuntu\n"
+" * Perubahan normal pada sebuah versi pre-release Ubuntu"
+
+#: ../UpdateManagerText/UpdateManagerText.py:117
+msgid "Downloading changelog"
+msgstr "Mengunduh log perubahan"
+
+#: ../UpdateManager/Core/MyCache.py:124
+#, python-format
+msgid "Other updates (%s)"
+msgstr "Pembaruan lainnya (%s)"
+
+#: ../UpdateManager/Core/MyCache.py:246
+#, python-format
+msgid ""
+"Changes for the versions:\n"
+"%s\n"
+"%s\n"
+"\n"
+msgstr ""
+"Perubahan-perubahan untuk versi:\n"
+"%s\n"
+"%s\n"
+"\n"
+
+#: ../UpdateManager/Core/MyCache.py:248
+msgid "This change is not coming from a source that supports changelogs."
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:256
+#, python-format
+msgid ""
+"The changelog does not contain any relevant changes.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+
+#: ../UpdateManager/Core/MyCache.py:261
+#, python-format
+msgid ""
+"The list of changes is not available yet.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+"Daftar perubahan belum tersedia.\n"
+"\n"
+"Silakan gunakan http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"sampai perubahan tersedia atau coba lagi nanti."
+
+#: ../UpdateManager/Core/MyCache.py:267
+msgid ""
+"Failed to download the list of changes. \n"
+"Please check your Internet connection."
+msgstr ""
+"Gagal mengunduh senarai dari perubahan. \n"
+"Silakan periksa koneksi Internet anda."
+
+#: ../UpdateManager/Core/UpdateList.py:50
+msgid "Failed to detect distribution"
+msgstr "Gagal mendeteksi distribusi"
+
+#: ../UpdateManager/Core/UpdateList.py:51
+#, python-format
+msgid "A error '%s' occurred while checking what system you are using."
+msgstr ""
+"Kesalahan '%s' terjadi ketika memeriksa sistem apa yang anda gunakan."
+
+#: ../UpdateManager/Core/UpdateList.py:62
+msgid "Important security updates"
+msgstr "Pemutakhiran keamanan yang penting"
+
+#: ../UpdateManager/Core/UpdateList.py:63
+msgid "Recommended updates"
+msgstr "Pembaruan yang disarankan"
+
+#: ../UpdateManager/Core/UpdateList.py:64
+msgid "Proposed updates"
+msgstr "Pemutakhiran yang disarankan"
+
+#: ../UpdateManager/Core/UpdateList.py:65
+msgid "Backports"
+msgstr "Backports"
+
+#: ../UpdateManager/Core/UpdateList.py:66
+msgid "Distribution updates"
+msgstr "Pemutakhiran distribusi"
+
+#: ../UpdateManager/Core/UpdateList.py:71
+msgid "Other updates"
+msgstr "Pemutakhiran lain"
+
+#: ../UpdateManager/Core/UpdateList.py:80
+msgid "Previous selected"
+msgstr "Terpilih sebelumnya"
+
+#: ../data/glade/UpdateManager.ui.h:1
 msgid ""
 "<b><big>You must check for updates manually</big></b>\n"
 "\n"
@@ -1526,118 +1838,129 @@ msgstr ""
 "Sistem anda tidak diatur untuk pemutakhiran secara otomatis. Anda dapat "
 "mengatur ini di <i>Sumber Perangkat Lunak</i> pd tab <i>Pemutakhiran</i>."
 
-#: ../data/glade/UpdateManager.glade.h:4
-msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr "<big><b>Memelihara sistem anda up-to-date</b></big>"
-
-#: ../data/glade/UpdateManager.glade.h:5
+#: ../data/glade/UpdateManager.ui.h:4
 msgid "<big><b>Not all updates can be installed</b></big>"
 msgstr ""
-"<big><b>Tidak semua pemutakhiran dapat dipasang</b></big>\n"
-"\n"
+"<big><b>Tidak semua pemutakhiran dapat dipasang</b></big>\r\n"
+"\r\n"
 "%s"
 
-#: ../data/glade/UpdateManager.glade.h:6
+#: ../data/glade/UpdateManager.ui.h:5
+msgid "<big><b>Running on battery</b></big>"
+msgstr "<big><b>Memakai baterai</b></big>"
+
+#: ../data/glade/UpdateManager.ui.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
 msgstr "<b><big>Memulai Pengelola Pemutakhiran</big></b>"
 
-#: ../data/glade/UpdateManager.glade.h:7
+#: ../data/glade/UpdateManager.ui.h:7
 msgid "Changes"
 msgstr "Perubahan"
 
-#: ../data/glade/UpdateManager.glade.h:8
+#: ../data/glade/UpdateManager.ui.h:8
 msgid "Chec_k"
 msgstr "Peri_ksa"
 
-#: ../data/glade/UpdateManager.glade.h:9
-msgid "Check the software channels for new updates"
-msgstr "Periksa kanal perangkal lunak untuk pemutakhiran terbaru"
+#: ../data/glade/UpdateManager.ui.h:9
+msgid "Co_ntinue"
+msgstr "La_njutkan"
 
-#: ../data/glade/UpdateManager.glade.h:10
+#: ../data/glade/UpdateManager.ui.h:10
 msgid "Description"
 msgstr "Deskripsi"
 
-#: ../data/glade/UpdateManager.glade.h:11
+#: ../data/glade/UpdateManager.ui.h:11
 msgid "Description of update"
 msgstr "Penjelasan tentang pemutakhiran"
 
-#: ../data/glade/UpdateManager.glade.h:12
-msgid "Release Notes"
-msgstr "Catatan Luncuran"
+#: ../data/glade/UpdateManager.ui.h:13
+msgid "Restart _Later"
+msgstr ""
 
-#: ../data/glade/UpdateManager.glade.h:13
+#: ../data/glade/UpdateManager.ui.h:14
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
 "This can be caused by:\n"
-" ◦ A previous upgrade which didn't complete\n"
-" ◦ Problems with some of the installed software\n"
-" ◦ Unofficial software packages not provided by Ubuntu\n"
-" ◦ Normal changes of a pre-release version of Ubuntu"
+" * A previous upgrade which didn't complete\n"
+" * Problems with some of the installed software\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+" * Normal changes of a pre-release version of Ubuntu"
 msgstr ""
-"Menjalankan penaiktingkatan sebagian, untuk memasang pemutakhiran sebanyak "
-"mungkin. \n"
+"Jalankan peningkatan sebagian, untuk memasang sebanyak mungkin. \n"
 "\n"
-"Hal ini dapat disebabkan oleh:\n"
-" ◦ Peningkatan versi sebelumnya yang tidak selesai\n"
-" ◦ Masalah dg sebagian perangkat lunak yg telah terinstal\n"
-" ◦ Paket perangkat lunak tak resmi yang tidak disediakan oleh Ubuntu\n"
-" ◦ Perubahan normal dari versi pra-rilis Ubuntu"
+"Ini dapat disebabkan oleh:\n"
+" * Peningkatan sebelumnya yang tak lengkap\n"
+" * Masalah dengan beberapa perangkat lunak terpasang\n"
+" * Paket perangkat lunak tak resmi yang bukan disediakan oleh Ubuntu\n"
+" * Perubahan normal dari versi prarilis Ubuntu"
 
-#: ../data/glade/UpdateManager.glade.h:20
+#: ../data/glade/UpdateManager.ui.h:21
+msgid "Settings..."
+msgstr "Pengaturan..."
+
+#: ../data/glade/UpdateManager.ui.h:22
 msgid "Show progress of individual files"
-msgstr "Tampilkan kemajuan dari berkas tunggal"
+msgstr "Tampilkan kemajuan masing-masing berkas"
 
-#: ../data/glade/UpdateManager.glade.h:22
+#: ../data/glade/UpdateManager.ui.h:24
+msgid ""
+"The computer needs to restart to finish installing updates. Please save your "
+"work before continuing."
+msgstr ""
+
+#: ../data/glade/UpdateManager.ui.h:25
 msgid "U_pgrade"
 msgstr "U_pgrade"
 
-#: ../data/glade/UpdateManager.glade.h:23
-#: ../data/update-manager.desktop.in.h:3
+#: ../data/glade/UpdateManager.ui.h:26 ../data/update-manager.desktop.in.h:3
+#: ../data/update-manager-hildon.desktop.in.h:3
 msgid "Update Manager"
 msgstr "Manajer Pemutakhiran"
 
-#: ../data/glade/UpdateManager.glade.h:24
-msgid "Upgrade to the latest version of Ubuntu"
-msgstr "Upgrade ke versi Ubuntu terakhir"
+#: ../data/glade/UpdateManager.ui.h:27
+msgid "Your system is running on battery. Are you sure you want to continue?"
+msgstr "Sistem Anda sedang memakai baterai. Anda yakin ingin melanjutkan?"
 
-#: ../data/glade/UpdateManager.glade.h:25
+#: ../data/glade/UpdateManager.ui.h:28
 msgid "_Hide this information in the future"
 msgstr "_Sembunyikan informasi ini di masa depan"
 
-#: ../data/glade/UpdateManager.glade.h:26
+#: ../data/glade/UpdateManager.ui.h:29
 msgid "_Install Updates"
 msgstr "_Instal Update"
 
-#: ../data/glade/UpdateManager.glade.h:27
+#: ../data/glade/UpdateManager.ui.h:30
 msgid "_Partial Upgrade"
 msgstr "Peningkatan Versi Sebagian"
 
-#: ../data/glade/UpdateManager.glade.h:28
+#: ../data/glade/UpdateManager.ui.h:32
 msgid "_Upgrade"
 msgstr "Tingkatkan"
 
-#: ../data/glade/UpdateManager.glade.h:29
+#: ../data/glade/UpdateManager.ui.h:33
 msgid "updates"
 msgstr "pembaruan"
 
 #: ../data/update-manager.desktop.in.h:1
+#: ../data/update-manager-hildon.desktop.in.h:1
 msgid "Show and install available updates"
 msgstr "Tampilkan dan instal pemutakhiran yang tersedia"
 
 #: ../data/update-manager.desktop.in.h:2
+#: ../data/update-manager-hildon.desktop.in.h:2
 msgid "Software Updates"
 msgstr "Perangkat Lunak Mutakhir"
 
-#: ../data/update-manager.schemas.in.h:1
-msgid "*deprecated* Check for new distribution releases"
-msgstr ""
-
 #: ../data/update-manager.schemas.in.h:2
 msgid "Auto close the install window after successful install"
-msgstr ""
+msgstr "Tutup jendela instalasi secara otomatis setelah instalasi berhasil"
 
 #: ../data/update-manager.schemas.in.h:3
+msgid "First run welcome message"
+msgstr "Pesan selamat datang untuk penggunaan yang pertama kali"
+
+#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If automatic checking for updates is disabled, you have to reload the "
 "channel list manually. This option allows to hide the reminder shown in this "
@@ -1647,85 +1970,101 @@ msgstr ""
 "memuat ulang senarai kanal secara manual. Opsi ini mengizinkan untuk "
 "menyembunyikan pengingat yang ada pada kasus ini."
 
-#: ../data/update-manager.schemas.in.h:4
+#: ../data/update-manager.schemas.in.h:5
+msgid "If this key is set a first run welcome message will be presented."
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:6
 msgid ""
 "If this key is set the install window will be automatically closed on "
 "successful installation."
 msgstr ""
 
-#: ../data/update-manager.schemas.in.h:5
+#: ../data/update-manager.schemas.in.h:7
 msgid ""
 "If this key is set the main update list window will show version information "
 "(from version to version)."
 msgstr ""
 
-#: ../data/update-manager.schemas.in.h:6
+#: ../data/update-manager.schemas.in.h:8
 msgid "Remind to reload the channel list"
 msgstr "Ingatkan untuk memuat ulang senarai kanal"
 
-#: ../data/update-manager.schemas.in.h:7
+#: ../data/update-manager.schemas.in.h:9
 msgid "Show details of an update"
 msgstr "Tampilkan perincian dari pemutakhiran"
 
-#: ../data/update-manager.schemas.in.h:8
+#: ../data/update-manager.schemas.in.h:10
 msgid "Show version in update list"
-msgstr ""
+msgstr "Tampilkan versi di daftar pemutakhiran"
 
-#: ../data/update-manager.schemas.in.h:9
+#: ../data/update-manager.schemas.in.h:11
 msgid "Stores the size of the update-manager dialog"
 msgstr "Menyimpan ukuran dari dialog update-manager"
 
-#: ../data/update-manager.schemas.in.h:10
+#: ../data/update-manager.schemas.in.h:12
 msgid ""
 "Stores the state of the expander that contains the list of changes and the "
 "description"
 msgstr ""
 "Simpan keadaan expander yang memuat senarai dari perubahan dan deskripsi"
 
-#: ../data/update-manager.schemas.in.h:11
+#: ../data/update-manager.schemas.in.h:13
 msgid "The window size"
 msgstr "Ukuran jendela"
 
-#: ../data/update-manager.schemas.in.h:12
+#: ../data/update-manager.schemas.in.h:15
 msgid ""
-"This key is deprecated in favor of the file /etc/update-manager/release-"
-"upgrades Check automatically if a new version of the current distribution is "
-"available and offer to upgrade (if possible)."
+"This will permanently hide the new release prompt from check-new-release-"
+"gtk. Note that the small button in the main update-manager UI will still be "
+"there."
 msgstr ""
 
-#: ../update-manager:55
+#: ../data/update-manager.schemas.in.h:16
+msgid "make check-new-release-gtk ignore a given new release"
+msgstr ""
+
+#: ../update-manager:56 ../do-release-upgrade:33
 msgid "Show version and exit"
 msgstr "Pelihatkan versi dan keluar"
 
-#: ../update-manager:58
-msgid "Check if a new distribution release is available"
-msgstr "Periksa apakah rilis distribusi baru telah tersedia"
+#: ../update-manager:59
+msgid "Directory that contains the data files"
+msgstr "Direktori yang berisi berkas data tersebut"
 
-#: ../update-manager:61 ../do-release-upgrade:23
+#: ../update-manager:62
+msgid "Check if a new Ubuntu release is available"
+msgstr "Periksa apakah ada rilis baru Ubuntu"
+
+#: ../update-manager:65 ../do-release-upgrade:36 ../check-new-release:27
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr ""
 "Memeriksa bila menaikkan versi ke rilis pengembangan terakhir mungkin"
 
-#: ../update-manager:65
-msgid "Upgrade using the latest proposed version of the release upgrader"
-msgstr ""
+#: ../update-manager:76
+msgid "Do not focus on map when starting"
+msgstr "Jangan fokus pada peta ketima memulai"
 
-#: ../update-manager:68
+#: ../update-manager:79
 msgid "Try to run a dist-upgrade"
 msgstr "Mencoba menjalankan dist-upgrade"
 
-#: ../update-manager:87
+#: ../update-manager:83 ../do-release-upgrade:52
+msgid "Test upgrade with a sandbox aufs overlay"
+msgstr ""
+
+#: ../update-manager:103
 msgid "Running partial upgrade"
 msgstr "Menjalankan peningkatan versi sebagian"
 
-#: ../do-release-upgrade:27
+#: ../do-release-upgrade:40 ../check-new-release:31
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Coba penaiktingkatan ke rilis terakhir menggunakan penaik tingkat dari "
 "$distro-proposed"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:44
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1735,340 +2074,89 @@ msgstr ""
 "Saat ini, 'desktop' untuk naik tingkat reguler dari sistem desktop dan "
 "'server' untuk sistem server adalah didukung."
 
-#: ../do-release-upgrade:37
+#: ../do-release-upgrade:50
 msgid "Run the specified frontend"
 msgstr "Jalankan frontend yang dinyatakan"
 
-#: ../do-release-upgrade:41
+#: ../do-release-upgrade:55
+msgid ""
+"Check only if a new distribution release is available and report the result "
+"via the exit code"
+msgstr ""
+
+#: ../do-release-upgrade:69
 msgid "Checking for a new ubuntu release"
 msgstr "Periksa untuk luncuran distribusi baru"
 
-#: ../do-release-upgrade:48
+#: ../do-release-upgrade:79
 msgid "No new release found"
 msgstr "Tidak ada rilis baru yang ditemukan"
 
-#~ msgid ""
-#~ "Use special upgrade mode. Available:\n"
-#~ "desktop, server"
-#~ msgstr ""
-#~ "Gunakan mode peningkatan versi khusus. Tersedia:\n"
-#~ "desktop, server"
+#: ../do-release-upgrade:85 ../check-new-release:56
+#, c-format
+msgid "New release '%s' available."
+msgstr "Rilis baru '%s' sudah tersedia."
 
+#: ../do-release-upgrade:86 ../check-new-release:57
+msgid "Run 'do-release-upgrade' to upgrade to it."
+msgstr ""
+
+#: ../check-new-release:35
+#, c-format
+msgid ""
+"Do not output anything, just return %s if there is a new release and %s if "
+"there is none."
+msgstr ""
+
+#: ../Janitor/computerjanitor/exc.py:30
 #, python-format
-#~ msgid "Fetching file %li of %li at %sb/s"
-#~ msgstr "Mengunduh berkas %li dari %li pada %sb/s"
+msgid "Unimplemented method: %s"
+msgstr "Metode yang belum diimplementasikan: %s"
 
+#: ../Janitor/computerjanitor/file_cruft.py:46
+msgid "A file on disk"
+msgstr "Sebuah berkas di disk"
+
+#: ../Janitor/computerjanitor/package_cruft.py:45
+msgid ".deb package"
+msgstr "paket .deb"
+
+#: ../Janitor/computerjanitor/missing_package_cruft.py:33
+msgid "Install missing package."
+msgstr "Pasang paket yang hilang."
+
+#: ../Janitor/computerjanitor/missing_package_cruft.py:42
 #, python-format
-#~ msgid "%li days %li hours %li minutes"
-#~ msgstr "%li hari %li jam %li menit"
-
-#~ msgid ""
-#~ "The list of changes is not available yet.\n"
-#~ "Please try again later."
-#~ msgstr ""
-#~ "Senarai dari perubahan belum tersedia.\n"
-#~ "Silakan coba lagi nanti."
-
-#~ msgid "_Check"
-#~ msgstr "_Periksa"
-
-#~ msgid "Daily"
-#~ msgstr "Harian"
-
-#~ msgid "Every two days"
-#~ msgstr "Setiap dua hari"
-
-#~ msgid "Weekly"
-#~ msgstr "Mingguan"
-
-#~ msgid "Every two weeks"
-#~ msgstr "Setiap dua minggu"
-
-#~ msgid "After one week"
-#~ msgstr "Setelah satu minggu"
-
-#~ msgid "After two weeks"
-#~ msgstr "Setelah dua minggu"
-
-#~ msgid "After one month"
-#~ msgstr "Setelah satu bulan"
-
-#~ msgid "Import key"
-#~ msgstr "Impor kunci"
-
-#~ msgid "Error importing selected file"
-#~ msgstr "Kesalahan mengimpor berkas terpilih"
-
-#~ msgid "Error removing the key"
-#~ msgstr "Kesalahan menghapus kunci"
-
-#~ msgid ""
-#~ "The key you selected could not be removed. Please report this as a bug."
-#~ msgstr ""
-#~ "Berkas yang anda pilih tidak dapat dihapus. Silakan laporkan ini sebagai bug."
-
-#~ msgid "_Skip This Step"
-#~ msgstr "_Lewati Langkah Ini"
-
-#~ msgid "Checking for updates"
-#~ msgstr "Memeriksa pemutakhiran"
-
-#~ msgid "Every %s days"
-#~ msgstr "Setiap %s hari"
-
-#~ msgid "After %s days"
-#~ msgstr "Setelah %s hari"
-
-#~ msgid "Please enter a name for the disc"
-#~ msgstr "Silakan masukkan nama untuk cakram"
-
-#~ msgid "Please insert a disc in the drive:"
-#~ msgstr "Silakan masukan cakram ke dalam penggerak"
-
-#~ msgid "<b>Internet updates</b>"
-#~ msgstr "<b>Internet update</b>"
-
-#~ msgid "Authentication"
-#~ msgstr "Otentikasi"
-
-#~ msgid "Internet Updates"
-#~ msgstr "Pemutakhiran lewat Internet"
-
-#~ msgid "_Check for updates automatically:"
-#~ msgstr "_Periksa pemutakhiran secara otomatis:"
-
-#~ msgid "_Import Key File"
-#~ msgstr "_Impor Berkas Kunci"
-
-#~ msgid "<b>Comment:</b>"
-#~ msgstr "<b>Komentar:</b>"
-
-#~ msgid "<b>URI:</b>"
-#~ msgstr "<b>URI:</b>"
-
-#~ msgid ""
-#~ "Binary\n"
-#~ "Source"
-#~ msgstr ""
-#~ "Biner\n"
-#~ "Sumber"
-
-#~ msgid "Scanning CD-ROM"
-#~ msgstr "Memindai CD-ROM"
-
-#~ msgid "_Reload"
-#~ msgstr "_MuatUlang"
-
-#~ msgid "Officially supported"
-#~ msgstr "Resmi disokong"
-
-#~ msgid "Restricted copyright"
-#~ msgstr "Hak cipta terlarang"
-
-#~ msgid "     "
-#~ msgstr "     "
-
-#~ msgid "System Update Tool"
-#~ msgstr "Tool Pembaruan Sistem"
-
-#~ msgid "Asking for confirmation"
-#~ msgstr "Menanyakan konfigurasi"
-
-#~ msgid "<b>Remove %s</b>"
-#~ msgstr "<b>Hapus %s</b>"
-
-#~ msgid "<p>You have to download a total of %s. "
-#~ msgstr "<p>Anda harus mengunduh sebanyak %s. "
-
-#~ msgid "The selected file may not be a GPG key file or it might be corrupt."
-#~ msgstr ""
-#~ "Berkas terpilih mungkin bukan berkas kunci GPG atau berkas mungkin korup."
-
-#~ msgid ""
-#~ "A unresolvable problem occurred while calculating the upgrade.\n"
-#~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include the "
-#~ "files in /var/log/dist-upgrade/ in the bugreport."
-#~ msgstr ""
-#~ "Terjadi masalah yang tak terpecahkan saat menghitung peningkatan versi.\n"
-#~ "\n"
-#~ "Silakan laporkan ini sebagai bug atas paket 'update-manager' dan sertakan "
-#~ "berkas pada /var/log/dist-upgrade/ di dalam bugreport."
-
-#~ msgid "D_elete downloaded software files:"
-#~ msgstr "H_apus berkas perangkat lunak yang telah diunduh:"
-
-#~ msgid "Import the public key from a trusted software provider"
-#~ msgstr "Impor kunci publik dari penyedia perangkal lunak terpercaya"
-
-#~ msgid ""
-#~ "Only security updates from the official Ubuntu servers will be installed "
-#~ "automatically"
-#~ msgstr ""
-#~ "Hanya pemutakhiran keamanan dari server resmi Ubuntu yang akan diinstal "
-#~ "secara otomatis"
-
-#~ msgid "Restore _Defaults"
-#~ msgstr "Kembali ke _Baku"
-
-#~ msgid "Restore the default keys of your distribution"
-#~ msgstr "Kembalikan kunci baku dari distribusi anda"
-
-#~ msgid "_Install security updates without confirmation"
-#~ msgstr "_Instal pemutakhiran keamanan tanpa perlu konfirmasi"
-
-#~ msgid "<b>Components:</b>"
-#~ msgstr "<b>Komponen:</b>"
-
-#~ msgid "<b>Distribution:</b>"
-#~ msgstr "<b>Distribusi:</b>"
-
-#~ msgid "<b>Type:</b>"
-#~ msgstr "<b>Tipe:</b>"
-
-#~ msgid "APT line:"
-#~ msgstr "Baris APT:"
-
-#~ msgid "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-#~ msgstr ""
-#~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-
-#~ msgid "Community maintained (Universe)"
-#~ msgstr "Dikelola oleh komunitas (Universe)"
-
-#~ msgid "Non-free (Multiverse)"
-#~ msgstr "Tidak-bebas (Multiverse)"
-
-#~ msgid "http://packages.debian.org/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-#~ msgstr "http://packages.debian.org/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-
-#~ msgid "Debian 3.1 \"Sarge\""
-#~ msgstr "Debian 3.1 \"Sarge\""
-
-#~ msgid "http://security.debian.org/"
-#~ msgstr "http://security.debian.org/"
-
-#~ msgid "Debian 3.1 \"Sarge\" Security Updates"
-#~ msgstr "Debian 3.1 \"Sarge\" Security Updates"
-
-#~ msgid "Debian \"Etch\" (testing)"
-#~ msgstr "Debian \"Etch\" (testing)"
-
-#~ msgid "http://http.us.debian.org/debian/"
-#~ msgstr "http://http.us.debian.org/debian/"
-
-#~ msgid "Debian \"Sid\" (unstable)"
-#~ msgstr "Debian \"Sid\" (unstable)"
-
-#~ msgid "DFSG-compatible Software with Non-Free Dependencies"
-#~ msgstr ""
-#~ "Perangkat Lunak yang sesuai dengan DFSG tapi tergantung pada Perangkat Lunak "
-#~ "Tidak-Bebas"
-
-#~ msgid "Non-DFSG-compatible Software"
-#~ msgstr "Perangkat Lunak yang tidak sesuai dengan DFSG"
-
-#~ msgid "Downloading file %li of %li with unknown speed"
-#~ msgstr "Kecepatan mengunduh berkas %li dari %li tidak diketahui"
-
-#~ msgid "Cancel _Download"
-#~ msgstr "Batalkan _Unduh"
-
-#~ msgid "Could not find any upgrades"
-#~ msgstr "Tidak dapat menemukan upgrade apapun"
-
-#~ msgid "Your system has already been upgraded."
-#~ msgstr "Sistem anda telah diupgrade"
-
-#~ msgid "Cannot install all available updates"
-#~ msgstr "Tidak dapat menginstal semua pemutakhiran yang tersedia"
-
-#~ msgid ""
-#~ "<big><b>Examining your system</b></big>\n"
-#~ "\n"
-#~ "Software updates correct errors, eliminate security vulnerabilities and "
-#~ "provide new features."
-#~ msgstr ""
-#~ "<big><b>Menguji sistem anda</b></big>\n"
-#~ "\n"
-#~ "Pemutakhiran perangkat lunak memperbaiki kesalahan, melenyapkan kelemahan "
-#~ "keamanan dan menyediakan fitur baru."
-
-#~ msgid ""
-#~ "Some updates require the removal of further software. Use the function "
-#~ "\"Mark All Upgrades\" of the package manager \"Synaptic\" or run \"sudo apt-"
-#~ "get dist-upgrade\" in a terminal to update your system completely."
-#~ msgstr ""
-#~ "Beberapa pemutakhiran butuh penghapusan perangkat lunak yang ada. Gunakan "
-#~ "fungsi \"Mark All Upgrades\" dari paket manajer paket \"Synaptic\" atau "
-#~ "jalankan \"sudo apt-get dist-upgrade\"\" dalam terminal untuk memutakhirkan "
-#~ "sistem anda."
-
-#~ msgid "The following updates will be skipped:"
-#~ msgstr "Pemutakhiran berikut akan dilewati:"
-
-#~ msgid "Download is complete"
-#~ msgstr "Unduh telah selesai"
-
-#~ msgid "The upgrade aborts now. Please report this bug."
-#~ msgstr "Upgrade sekarang dibatalkan. Silakan laporkan bug ini."
-
-#~ msgid "Upgrading Ubuntu"
-#~ msgstr "Mengupgrade Ubuntu"
-
-#~ msgid "Hide details"
-#~ msgstr "Sembunyikan perincian"
-
-#~ msgid "Show details"
-#~ msgstr "Tampilkan perincian"
-
-#~ msgid "Only one software management tool is allowed to run at the same time"
-#~ msgstr ""
-#~ "Hanya satu peralatan manajemen perangkat lunak yang dapat berjalan disaat "
-#~ "yang bersamaan"
-
-#~ msgid ""
-#~ "Please close the other application e.g. 'aptitude' or 'Synaptic' first."
-#~ msgstr ""
-#~ "Silakan tutup aplikasi lain terlebih dahulu seperti 'aptitude' atau "
-#~ "'Synaptic'."
-
-#~ msgid "<b>Channels</b>"
-#~ msgstr "<b>Kanal</b>"
-
-#~ msgid "<b>Keys</b>"
-#~ msgstr "<b>Kunci</b>"
-
-#~ msgid "Installation Media"
-#~ msgstr "Media Instalasi"
-
-#~ msgid "Software Preferences"
-#~ msgstr "Preferensi Perangkat Lunak"
-
-#~ msgid "<b>Channel</b>"
-#~ msgstr "<b>Kanal</b>"
-
-#~ msgid "<b>Components</b>"
-#~ msgstr "<b>Komponen</b>"
-
-#~ msgid "Add Channel"
-#~ msgstr "Tambah Kanal"
-
-#~ msgid "_Add Channel"
-#~ msgid_plural "_Add Channels"
-#~ msgstr[0] "_Tambah Kanal"
-
-#~ msgid "_Custom"
-#~ msgstr "_Custom"
-
-#~ msgid "Ubuntu 6.06 LTS"
-#~ msgstr "Ubuntu 6.06 LTS"
-
-#~ msgid "Some software no longer officially supported"
-#~ msgstr "Beberapa perangkat lunak tidak lagi resmi disokong"
-
-#~ msgid "About %li seconds remaining"
-#~ msgstr "Sekitar %li detik lagi"
-
-#~ msgid "Run in a special upgrade mode"
-#~ msgstr "Jalankan dalam mode peningkatan versi khusu"
+msgid "Package %s should be installed."
+msgstr "Paket %s sebaiknya diinstal."
+
+#. pragma: no cover
+#: ../Janitor/plugins/dpkg_status_plugin.py:36
+#, python-format
+msgid "%i obsolete entries in the status file"
+msgstr "%i entri usang pada berkas status"
+
+#: ../Janitor/plugins/dpkg_status_plugin.py:39
+msgid "Obsolete entries in dpkg status"
+msgstr "Entri usang pada status dpkg"
+
+#. pragma: no cover
+#: ../Janitor/plugins/dpkg_status_plugin.py:42
+msgid "Obsolete dpkg status entries"
+msgstr "Entri status dpkg yang usang"
+
+#: ../Janitor/plugins/kdelibs4to5_plugin.py:39
+msgid ""
+"When upgrading, if kdelibs4-dev is installed, kdelibs5-dev needs to be "
+"installed. See bugs.launchpad.net, bug #279621 for details."
+msgstr ""
+
+#: ../Janitor/plugins/langpack_manual_plugin.py:34
+#, python-format
+msgid "%s needs to be marked as manually installed."
+msgstr ""
+
+#: ../Janitor/plugins/remove_lilo_plugin.py:28
+msgid ""
+"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgstr ""

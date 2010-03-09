@@ -8,42 +8,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2008-10-13 20:43+0000\n"
-"PO-Revision-Date: 2008-10-15 18:18+0000\n"
-"Last-Translator: Valentin Bora <Vali@tiffanyshop.ro>\n"
+"POT-Creation-Date: 2010-03-08 23:43+0000\n"
+"PO-Revision-Date: 2010-03-09 05:46+0000\n"
+"Last-Translator: Valentin Bora <contact@valentinbora.com>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 "
 "== 0) && (n != 0))) ? 2: 1));\n"
-"X-Launchpad-Export-Date: 2008-10-16 09:57+0000\n"
+"X-Launchpad-Export-Date: 2010-03-09 08:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. TRANSLATORS: download size is 0
-#: ../DistUpgrade/utils.py:134 ../UpdateManager/Common/utils.py:134
+#: ../DistUpgrade/utils.py:305 ../UpdateManager/Core/utils.py:305
 msgid "0 KB"
 msgstr "0 KO"
 
 #. TRANSLATORS: download size of very small updates
-#: ../DistUpgrade/utils.py:137 ../UpdateManager/Common/utils.py:137
+#: ../DistUpgrade/utils.py:308 ../UpdateManager/Core/utils.py:308
 msgid "1 KB"
 msgstr "1 KO"
 
 #. TRANSLATORS: download size of small updates, e.g. "250 KB"
-#: ../DistUpgrade/utils.py:140 ../UpdateManager/Common/utils.py:140
+#: ../DistUpgrade/utils.py:311 ../UpdateManager/Core/utils.py:311
 #, python-format
 msgid "%.0f KB"
 msgstr "%.0f KO"
 
 #. TRANSLATORS: download size of updates, e.g. "2.3 MB"
-#: ../DistUpgrade/utils.py:143 ../UpdateManager/Common/utils.py:143
+#: ../DistUpgrade/utils.py:314 ../UpdateManager/Core/utils.py:314
 #, python-format
 msgid "%.1f MB"
 msgstr "%.1f MO"
 
 #. TRANSLATORS: %s is a country
-#: ../DistUpgrade/distro.py:194 ../DistUpgrade/distro.py:401
+#: ../DistUpgrade/distro.py:208 ../DistUpgrade/distro.py:423
 #, python-format
 msgid "Server for %s"
 msgstr "Server pentru %s"
@@ -51,179 +51,32 @@ msgstr "Server pentru %s"
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
 #. append a list of all used servers
-#: ../DistUpgrade/distro.py:213 ../DistUpgrade/distro.py:218
-#: ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:226 ../DistUpgrade/distro.py:232
+#: ../DistUpgrade/distro.py:248
 msgid "Main server"
 msgstr "Server principal"
 
-#: ../DistUpgrade/distro.py:235
+#: ../DistUpgrade/distro.py:252
 msgid "Custom servers"
 msgstr "Servere preferențiale"
 
-#: ../DistUpgrade/dist-upgrade.py:15
-msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
-"Folosește calea primită pentru a căuta un cdrom cu pachete actualizabile"
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:131
+msgid "Could not calculate sources.list entry"
+msgstr "Nu s-a putut calcula înregistrarea sources.list"
 
-#: ../DistUpgrade/dist-upgrade.py:21
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:234
 msgid ""
-"Use frontend. Currently available: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
+"wrong architecture?"
 msgstr ""
-"Folosește interfață. Disponibile: \n"
-"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+"Nu s-au găsit pachete, poate că acesta nu e un disc Ubuntu sau este pentru o "
+"altă arhitectură?"
 
-#: ../DistUpgrade/dist-upgrade.py:24
-msgid "*DEPRECATED* this option will be ignore"
-msgstr "*DEPĂȘITĂ* această opțiune va fi ignorată"
-
-#: ../DistUpgrade/dist-upgrade.py:27
-msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr "Execută doar o actualizare parțială (fără rescrierea sources.list)"
-
-#: ../DistUpgrade/dist-upgrade.py:29
-msgid "Set datadir"
-msgstr "Configurare datadir"
-
-#: ../DistUpgrade/DistUpgradeCache.py:101
-msgid "Remove package in bad state"
-msgid_plural "Remove packages in bad state"
-msgstr[0] "Șterge pachetul aflat într-o stare eronată"
-msgstr[1] "Șterge pachetele aflate într-o stare eronată"
-msgstr[2] "Șterge pachetele aflate într-o stare eronată"
-
-#: ../DistUpgrade/DistUpgradeCache.py:104
-#, python-format
-msgid ""
-"The package '%s' is in an inconsistent state and needs to be reinstalled, "
-"but no archive can be found for it. Do you want to remove this package now "
-"to continue?"
-msgid_plural ""
-"The packages '%s' are in an inconsistent state and needs to be reinstalled, "
-"but no archives can be found for them. Do you want to remove these packages "
-"now to continue?"
-msgstr[0] ""
-"Pachetul „%s” se află într-o stare inconsistentă și trebuie reinstalat, dar "
-"nu s-a putut găsii nici o arhivă. Pentru a continua doriți să ștergeți acest "
-"pachet acum?"
-msgstr[1] ""
-"Pachetele „%s” se află într-o stare inconsistentă și trebuie reinstalate, "
-"dar nu s-a putut găsii arhive pentru ele. Pentru a continua doriți să "
-"ștergeți aceste pachete acum?"
-msgstr[2] ""
-"Pachetele „%s” se află într-o stare inconsistentă și trebuie reinstalate, "
-"dar nu s-a putut găsii arhive pentru ele. Pentru a continua doriți să "
-"ștergeți aceste pachete acum?"
-
-#: ../DistUpgrade/DistUpgradeCache.py:299
-msgid "Broken packages"
-msgstr "Pachete deteriorate"
-
-#: ../DistUpgrade/DistUpgradeCache.py:300
-msgid ""
-"Your system contains broken packages that couldn't be fixed with this "
-"software. Please fix them first using synaptic or apt-get before proceeding."
-msgstr ""
-"Sistemul conține pachete deteriorate care nu au putut fi reparate cu acest "
-"program. Înainte de a continua, remediați-le utilizând synaptic sau apt-get."
-
-#: ../DistUpgrade/DistUpgradeCache.py:521
-msgid "Can't upgrade required meta-packages"
-msgstr "Este imposibilă actualizarea meta-pachetelor cerute"
-
-#: ../DistUpgrade/DistUpgradeCache.py:525
-msgid "A essential package would have to be removed"
-msgstr "Un pachet esențial va trebui șters"
-
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:532
-msgid ""
-"An unresolvable problem occurred while calculating the upgrade.\n"
-"\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
-" * Unofficial software packages not provided by Ubuntu\n"
-"\n"
-msgstr ""
-"A apărut o problemă nerezolvabilă la calcularea înoirii.\n"
-"\n"
-" Aceast poate fi cauzată de:\n"
-" * Înoirea la o versiunea încă nelansată a Ubuntu\n"
-" * Rularea versiunii curente nelansate a Ubuntu\n"
-" * Software neoficial neoferit de Ubuntu\n"
-"\n"
-
-#: ../DistUpgrade/DistUpgradeCache.py:542
-msgid "This is most likely a transient problem, please try again later."
-msgstr "Cel mai probabil este o problemă trecătoare, încercați mai târziu."
-
-#: ../DistUpgrade/DistUpgradeCache.py:545
-msgid ""
-"If none of this applies, then please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
-msgstr ""
-"Dacă nici una dintre acestea nu se aplică, raportați o problemă pentru "
-"pachetul 'update-manager' și includeți în raport fișierele din /var/log/dist-"
-"upgrade/."
-
-#: ../DistUpgrade/DistUpgradeCache.py:550
-#: ../UpdateManager/UpdateManager.py:906
-msgid "Could not calculate the upgrade"
-msgstr "Imposibil de calculat actualizarea"
-
-#. FIXME: maybe ask a question here? instead of failing?
-#: ../DistUpgrade/DistUpgradeCache.py:597
-msgid "Error authenticating some packages"
-msgstr "Eroare la validarea unor pachete"
-
-#: ../DistUpgrade/DistUpgradeCache.py:598
-msgid ""
-"It was not possible to authenticate some packages. This may be a transient "
-"network problem. You may want to try again later. See below for a list of "
-"unauthenticated packages."
-msgstr ""
-"Nu a fost posibilă validarea unor pachete. Aceasta se poate datora unor "
-"probleme temporare ale reţelei. Puteţi încerca mai tarziu. Aveţi mai jos o "
-"listă a pachetelor nevalidate."
-
-#: ../DistUpgrade/DistUpgradeCache.py:710
-#, python-format
-msgid "Can't install '%s'"
-msgstr "Nu pot instala '%s'"
-
-#: ../DistUpgrade/DistUpgradeCache.py:711
-msgid ""
-"It was impossible to install a required package. Please report this as a "
-"bug. "
-msgstr ""
-"Nu s-a reușit instalarea pachetului cerut. Raportați această defecțiune. "
-
-#. FIXME: provide a list
-#: ../DistUpgrade/DistUpgradeCache.py:719
-msgid "Can't guess meta-package"
-msgstr "Nu pot ghici meta-pachetul"
-
-#: ../DistUpgrade/DistUpgradeCache.py:720
-msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
-" Please install one of the packages above first using synaptic or apt-get "
-"before proceeding."
-msgstr ""
-"Sistemul nu conţine un pachet ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop sau edubunt-desktop, de aceea este imposibil de determinat versiunea "
-"de Ubuntu folosită.\n"
-" Inainte de a continua vă rugam să instalaţi unul din pachetele de mai sus "
-"folosind synaptic sau apt-get."
-
-#: ../DistUpgrade/DistUpgradeController.py:96
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:277
 msgid "Failed to add the CD"
 msgstr "Adăugarea CD-ului a eşuat"
 
-#: ../DistUpgrade/DistUpgradeController.py:97
+#: ../DistUpgrade/DistUpgradeAptCdrom.py:278
 #, python-format
 msgid ""
 "There was a error adding the CD, the upgrade will abort. Please report this "
@@ -238,15 +91,172 @@ msgstr ""
 "Mesajul de eroare a fost:\n"
 "„%s”"
 
-#: ../DistUpgrade/DistUpgradeController.py:129
+#: ../DistUpgrade/DistUpgradeCache.py:130
+msgid "Remove package in bad state"
+msgid_plural "Remove packages in bad state"
+msgstr[0] "Șterge pachetul aflat într-o stare eronată"
+msgstr[1] "Șterge pachetele aflate într-o stare eronată"
+msgstr[2] "Șterge pachetele aflate într-o stare eronată"
+
+#: ../DistUpgrade/DistUpgradeCache.py:133
+#, python-format
+msgid ""
+"The package '%s' is in an inconsistent state and needs to be reinstalled, "
+"but no archive can be found for it. Do you want to remove this package now "
+"to continue?"
+msgid_plural ""
+"The packages '%s' are in an inconsistent state and need to be reinstalled, "
+"but no archives can be found for them. Do you want to remove these packages "
+"now to continue?"
+msgstr[0] ""
+"Pachetul „%s” este incomplet și trebuie să fie reinstalat, dar nu poate fi "
+"găsită nicio arhivă pentru el. Doriți să eliminați acest pachet acum pentru "
+"a continua?"
+msgstr[1] ""
+"Pachetele „%s” sunt incomplete și trebuie să fie reinstalate, dar nu pot fi "
+"găsite arhive pentru ele. Doriți să eliminați aceste pachete acum pentru a "
+"continua?"
+msgstr[2] ""
+"Pachetele „%s” sunt incomplete și trebuie să fie reinstalate, dar nu pot fi "
+"găsite arhive pentru ele. Doriți să eliminați aceste pachete acum pentru a "
+"continua?"
+
+#. FIXME: not ideal error message, but we just reuse a
+#. existing one here to avoid a new string
+#: ../DistUpgrade/DistUpgradeCache.py:231
+msgid "The server may be overloaded"
+msgstr "S-ar putea ca serverul să fie suprasolicitat"
+
+#: ../DistUpgrade/DistUpgradeCache.py:341
+msgid "Broken packages"
+msgstr "Pachete deteriorate"
+
+#: ../DistUpgrade/DistUpgradeCache.py:342
+msgid ""
+"Your system contains broken packages that couldn't be fixed with this "
+"software. Please fix them first using synaptic or apt-get before proceeding."
+msgstr ""
+"Sistemul conține pachete deteriorate care nu au putut fi reparate cu acest "
+"program. Înainte de a continua, remediați-le utilizând synaptic sau apt-get."
+
+#. FIXME: change the text to something more useful
+#: ../DistUpgrade/DistUpgradeCache.py:618
+#, python-format
+msgid ""
+"An unresolvable problem occurred while calculating the upgrade:\n"
+"%s\n"
+"\n"
+" This can be caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+" * Running the current pre-release version of Ubuntu\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+"\n"
+msgstr ""
+"O problemă ne-rezolvabilă a apărut la calcularea actualizării:\n"
+"%s\n"
+"\n"
+" Aceasta poate fi cauzată de:\n"
+" * O actualizare către o versiune încă ne-lansată de Ubuntu\n"
+" * Folosirea unei versiuni încă ne-lansate de Ubuntu\n"
+" * Pachete de programe neoficiale ce nu provin din Ubuntu\n"
+"\n"
+
+#: ../DistUpgrade/DistUpgradeCache.py:628
+msgid "This is most likely a transient problem, please try again later."
+msgstr "Cel mai probabil este o problemă trecătoare, încercați mai târziu."
+
+#: ../DistUpgrade/DistUpgradeCache.py:631
+msgid ""
+"If none of this applies, then please report this bug against the 'update-"
+"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+"report."
+msgstr ""
+"Dacă nici una dintre aceste variante nu se aplică, atunci vă rugăm să "
+"raportați această eroare referitoare la pachetul „update-manager” și "
+"includeți fișierele din /var/log/dist-upgrade/ în raport."
+
+#: ../DistUpgrade/DistUpgradeCache.py:637
+#: ../UpdateManager/UpdateManager.py:765
+msgid "Could not calculate the upgrade"
+msgstr "Nu s-a putut calcula actualizarea"
+
+#: ../DistUpgrade/DistUpgradeCache.py:687
+msgid "Error authenticating some packages"
+msgstr "Eroare la validarea unor pachete"
+
+#: ../DistUpgrade/DistUpgradeCache.py:688
+msgid ""
+"It was not possible to authenticate some packages. This may be a transient "
+"network problem. You may want to try again later. See below for a list of "
+"unauthenticated packages."
+msgstr ""
+"Nu a fost posibilă validarea unor pachete. Aceasta se poate datora unor "
+"probleme temporare ale reţelei. Puteţi încerca mai tarziu. Aveţi mai jos o "
+"listă a pachetelor nevalidate."
+
+#: ../DistUpgrade/DistUpgradeCache.py:708
+#, python-format
+msgid ""
+"The package '%s' is marked for removal but it is in the removal blacklist."
+msgstr ""
+"Pachetul „%s” este marcat pentru eliminare dar este pe lista de interzicere "
+"de eliminare."
+
+#: ../DistUpgrade/DistUpgradeCache.py:712
+#, python-format
+msgid "The essential package '%s' is marked for removal."
+msgstr "Pachetul esențial „%s” este marcat pentru eliminare."
+
+#: ../DistUpgrade/DistUpgradeCache.py:721
+#, python-format
+msgid "Trying to install blacklisted version '%s'"
+msgstr "Se încearcă instalarea versiunii exceptate „%s”"
+
+#: ../DistUpgrade/DistUpgradeCache.py:821
+#, python-format
+msgid "Can not mark '%s' for upgrade"
+msgstr "Nu se poate marca „%s” pentru actualizare"
+
+#: ../DistUpgrade/DistUpgradeCache.py:835
+#, python-format
+msgid "Can't install '%s'"
+msgstr "Nu pot instala '%s'"
+
+#: ../DistUpgrade/DistUpgradeCache.py:836
+msgid ""
+"It was impossible to install a required package. Please report this as a "
+"bug. "
+msgstr ""
+"Nu s-a reușit instalarea pachetului cerut. Raportați această defecțiune. "
+
+#. FIXME: provide a list
+#: ../DistUpgrade/DistUpgradeCache.py:845
+msgid "Can't guess meta-package"
+msgstr "Nu pot ghici meta-pachetul"
+
+#: ../DistUpgrade/DistUpgradeCache.py:846
+msgid ""
+"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop or edubuntu-desktop package and it was not possible to detect which "
+"version of Ubuntu you are running.\n"
+" Please install one of the packages above first using synaptic or apt-get "
+"before proceeding."
+msgstr ""
+"Sistemul nu conţine un pachet ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop sau edubunt-desktop, de aceea este imposibil de determinat versiunea "
+"de Ubuntu folosită.\n"
+" Inainte de a continua vă rugam să instalaţi unul din pachetele de mai sus "
+"folosind synaptic sau apt-get."
+
+#: ../DistUpgrade/DistUpgradeController.py:86
 msgid "Reading cache"
 msgstr "Citire cache"
 
-#: ../DistUpgrade/DistUpgradeController.py:216
+#: ../DistUpgrade/DistUpgradeController.py:186
 msgid "Unable to get exclusive lock"
 msgstr "Nu pot obţine acces exclusiv"
 
-#: ../DistUpgrade/DistUpgradeController.py:217
+#: ../DistUpgrade/DistUpgradeController.py:187
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -255,32 +265,51 @@ msgstr ""
 "pachetelor (ca apt-get sau aptitude). Vă rog să închideţi mai întâi acea "
 "aplicaţie."
 
-#: ../DistUpgrade/DistUpgradeController.py:237
+#: ../DistUpgrade/DistUpgradeController.py:233
+msgid "Upgrading over remote connection not supported"
+msgstr ""
+"Actualizările majore prin intermediul conexiunilor de la distanţă nu sunt "
+"suportate"
+
+#: ../DistUpgrade/DistUpgradeController.py:234
+msgid ""
+"You are running the upgrade over a remote ssh connection with a frontend "
+"that does not support this. Please try a text mode upgrade with 'do-release-"
+"upgrade'.\n"
+"\n"
+"The upgrade will abort now. Please try without ssh."
+msgstr ""
+"Efectuați o actualizare printr-o conexiune ssh la distanță, utilizînd o "
+"interfață care nu suportă acest lucru. Încercați o actualizare în mod text "
+"cu opțiunea „do-release-upgrade”.\n"
+"Actualizarea va fi abandonată. Încercați fără ssh."
+
+#: ../DistUpgrade/DistUpgradeController.py:248
 msgid "Continue running under SSH?"
 msgstr "Continuă rularea în SSH?"
 
-#: ../DistUpgrade/DistUpgradeController.py:238
+#: ../DistUpgrade/DistUpgradeController.py:249
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
 "perform a upgrade over ssh currently because in case of failure it is harder "
 "to recover.\n"
 "\n"
-"If you continue, a additional ssh daemon will be started at port '%s'.\n"
+"If you continue, an additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"Această sesiune pare să ruleze prin ssh. Momentan nu este recomandat să se "
-"facă o actualizare prin ssh deoarece în cazul unui eşec este mai greu de "
-"recuperat.\n"
+"Se pare că această sesiune rulează prin ssh. Nu este recomandat să realizați "
+"acum o actualizare prin ssh, deoarece în caz de eșec este foarte greu de "
+"reluat.\n"
 "\n"
-"Dacă continuaţi, un demon ssh adiţional va fi pornit pe portul '%s'.\n"
-"Doriţi să continuaţi?"
+"Dacă veți continua, un nou daemon ssh va fi pornit pe portul „%s”.\n"
+"Doriți să continuați?"
 
-#: ../DistUpgrade/DistUpgradeController.py:253
+#: ../DistUpgrade/DistUpgradeController.py:264
 msgid "Starting additional sshd"
 msgstr "Pornesc sshd-ul adiţional"
 
-#: ../DistUpgrade/DistUpgradeController.py:254
+#: ../DistUpgrade/DistUpgradeController.py:265
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -291,29 +320,56 @@ msgstr ""
 "fi pornit pe portul '%s'. Dacă merge ceva prost cu sshul care rulează, "
 "puteți în continuare să vă conectați la cel adițional.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:322
-#: ../DistUpgrade/DistUpgradeController.py:345
+#: ../DistUpgrade/DistUpgradeController.py:336
+#: ../DistUpgrade/DistUpgradeController.py:381
 msgid "Can not upgrade"
 msgstr "Nu pot actualiza"
 
-#: ../DistUpgrade/DistUpgradeController.py:323
+#: ../DistUpgrade/DistUpgradeController.py:337
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr ""
 "Nu este posibilă o actualizare de la '%s' la '%s'  folosind acest program."
 
 #: ../DistUpgrade/DistUpgradeController.py:346
+msgid "Sandbox setup failed"
+msgstr "Inițializarea sandbox a eșuat"
+
+#: ../DistUpgrade/DistUpgradeController.py:347
+msgid "It was not possible to create the sandbox environment."
+msgstr "Nu s-a putut crea mediul sandbox"
+
+#: ../DistUpgrade/DistUpgradeController.py:353
+msgid "Sandbox mode"
+msgstr "Mod sandbox"
+
+#: ../DistUpgrade/DistUpgradeController.py:354
+#, python-format
+msgid ""
+"This upgrade is running in sandbox (test) mode. All changes are written to "
+"'%s' and will be lost on the next reboot.\n"
+"\n"
+"*No* changes written to a systemdir from now until the next reboot are "
+"permanent."
+msgstr ""
+"Această actualizare rulează În modul de test. Toate modificările sunt scrise "
+"în „%s” și vor fi pierdute la următoarea repornire.\n"
+"\n"
+"Toate modificările scrise într-un dosar de sistem, de acum până la "
+"următoarea repornire, *nu* sunt permanente."
+
+#: ../DistUpgrade/DistUpgradeController.py:382
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
 "Python-ul instalat este deteriorat. Reparați legătura simbolică  "
 "„/usr/bin/python”."
 
-#: ../DistUpgrade/DistUpgradeController.py:372
+#: ../DistUpgrade/DistUpgradeController.py:408
 msgid "Package 'debsig-verify' is installed"
 msgstr "Pachetul 'debsig-verify' este instalat"
 
-#: ../DistUpgrade/DistUpgradeController.py:373
+#: ../DistUpgrade/DistUpgradeController.py:409
 msgid ""
 "The upgrade can not continue with that package installed.\n"
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
@@ -323,11 +379,11 @@ msgstr ""
 "Dezinstalaţi-l cu Synaptic sau tastaţi comanda 'apt-get remove debsig-"
 "verify' şi actualizaţi din nou."
 
-#: ../DistUpgrade/DistUpgradeController.py:383
+#: ../DistUpgrade/DistUpgradeController.py:419
 msgid "Include latest updates from the Internet?"
 msgstr "Include ultimele actualizări de pe Internet?"
 
-#: ../DistUpgrade/DistUpgradeController.py:384
+#: ../DistUpgrade/DistUpgradeController.py:420
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -348,53 +404,58 @@ msgstr ""
 "sistemului.\n"
 "Dacă răspunsul aici este „nu”, rețeaua nu va fi folosită deloc."
 
-#: ../DistUpgrade/DistUpgradeController.py:555
-msgid "No valid mirror found"
-msgstr "Nu am găsit un mirror valid"
+#: ../DistUpgrade/DistUpgradeController.py:644
+#, python-format
+msgid "disabled on upgrade to %s"
+msgstr "dezactivat la actuazarea către %s"
 
-#: ../DistUpgrade/DistUpgradeController.py:556
+#: ../DistUpgrade/DistUpgradeController.py:671
+msgid "No valid mirror found"
+msgstr "Nu s-a găsit nici un mirror valid"
+
+#: ../DistUpgrade/DistUpgradeController.py:672
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found.This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run a internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
 "here it will update all '%s' to '%s' entries.\n"
-"If you select 'no' the update will cancel."
+"If you select 'No' the upgrade will cancel."
 msgstr ""
-"Nu am găsit nici o arhivă pentru upgrade la scanarea informaţiilor despre "
-"arhive. Aceasta poate însemna fie că folosiţi o arhivă internă sau "
-"informaţiile despre arhive nu au fost actualizate demult.\n"
+"După ce s-au scanat informațiile despre depozite de pachete nu s-a găsit "
+"nicio intrare pentru un sit-oglindă. Acest lucru poate fi cauzat dacă aveți "
+"un sit-oglindă intern sau informația despre situri-oglindă este învechită.\n"
 "\n"
-"Doriţi oricum rescrierea fişierului 'sources.list'? Dacă „Da” se vor "
-"actualiza toate intrările de la '%s' la '%s'.\n"
-"Dacă ”nu” actualizarea va fi anulată."
+"Doriți să se rescrie „sources.list” în aceste condiții? Dacă selectați „Da” "
+"se vor actualiza toate intrările de la „%s” la „%s”.\n"
+"Dacă selectați „Nu”, actualizarea va fi anulată."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:576
+#: ../DistUpgrade/DistUpgradeController.py:692
 msgid "Generate default sources?"
-msgstr "Generez surse implicite?"
+msgstr "Generare surse implicite ?"
 
-#: ../DistUpgrade/DistUpgradeController.py:577
+#: ../DistUpgrade/DistUpgradeController.py:693
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
 "\n"
-"Should default entries for '%s' be added? If you select 'No', the update "
+"Should default entries for '%s' be added? If you select 'No', the upgrade "
 "will cancel."
 msgstr ""
-"După scanarea 'sources.list' nu a fost găsită nici o intrare validă pentru "
-"'%s'.\n"
+"După ce s-a scanat „sources.list” nu s-a găsit nicio intrare validă pentru "
+"„%s”.\n"
 "\n"
-"Să se adauge intrările implicite pentru '%s'? Dacă selectați „Nu”, "
-"actualizarea va fi oprită."
+"Doriți să se adauge o intrare implicită pentru „%s”? Dacă selectați „Nu”, "
+"actualizarea va fi anulată."
 
-#: ../DistUpgrade/DistUpgradeController.py:611
+#: ../DistUpgrade/DistUpgradeController.py:728
 msgid "Repository information invalid"
 msgstr "Informațiile despre depozit nu sunt valide"
 
-#: ../DistUpgrade/DistUpgradeController.py:612
+#: ../DistUpgrade/DistUpgradeController.py:729
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug."
@@ -402,11 +463,11 @@ msgstr ""
 "Actualizarea informațiilor despre depozit a rezultat într-un fișier nevalid. "
 "Raportați acest lucru drept eroare."
 
-#: ../DistUpgrade/DistUpgradeController.py:618
+#: ../DistUpgrade/DistUpgradeController.py:735
 msgid "Third party sources disabled"
-msgstr "Sursele externe sunt dezactivate"
+msgstr "Surse terțe dezactivate"
 
-#: ../DistUpgrade/DistUpgradeController.py:619
+#: ../DistUpgrade/DistUpgradeController.py:736
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -416,14 +477,14 @@ msgstr ""
 "dezactivate. Le puteţi reactiva după actualizare cu aplicaţia 'software-"
 "properties' sau cu managerul dvs. de pachete."
 
-#: ../DistUpgrade/DistUpgradeController.py:659
+#: ../DistUpgrade/DistUpgradeController.py:776
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Pachet aflat întro stare inconsistentă"
 msgstr[1] "Pachete aflate întro stare inconsistentă"
 msgstr[2] "Pachete aflate întro stare inconsistentă"
 
-#: ../DistUpgrade/DistUpgradeController.py:662
+#: ../DistUpgrade/DistUpgradeController.py:779
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -431,273 +492,346 @@ msgid ""
 "remove it from the system."
 msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
-"but no archive can be found for it.Please reinstall the packages manually or "
-"remove them from the system."
+"but no archive can be found for them. Please reinstall the packages manually "
+"or remove them from the system."
 msgstr[0] ""
-"Pachetul „%s„ este într-o formă inconsistentă și are nevoie de reinstalare, "
-"dar nu se găsește nicio arhivă pentru el. Reinstalați pachetul manual sau "
-"ștergeți-l din sistem."
+"Pachetul „%s” este incomplet și trebuie să fie reinstalat, dar nu poate fi "
+"găsită nicio arhivă pentru el. Vă rugăm să reinstalați pachetul manual sau "
+"să îl eliminați din sistem."
 msgstr[1] ""
-"Pachetele „%s„ sunt într-o formă inconsistentă și au nevoie de reinstalare, "
-"dar nu se găsesc arhive pentru ele. Reinstalați pachetele manual sau să le "
-"ștergeți din sistem."
+"Pachetele „%s” sunt incomplete și trebuie să fie reinstalate, dar nu pot fi "
+"găsite arhive pentru ele. Vă rugăm să reinstalați pachetele manual sau să le "
+"eliminați din sistem."
 msgstr[2] ""
-"Pachetele „%s„ sunt într-o formă inconsistentă și au nevoie de reinstalare, "
-"dar nu se găsesc arhive pentru ele. Reinstalați pachetele manual sau să le "
-"ștergeți din sistem."
+"Pachetele „%s” sunt incomplete și trebuie să fie reinstalate, dar nu pot fi "
+"găsite arhive pentru ele. Vă rugăm să reinstalați pachetele manual sau să le "
+"eliminați din sistem."
 
-#: ../DistUpgrade/DistUpgradeController.py:710
+#: ../DistUpgrade/DistUpgradeController.py:827
 msgid "Error during update"
 msgstr "Eroare în timpul actualizării"
 
-#: ../DistUpgrade/DistUpgradeController.py:711
+#: ../DistUpgrade/DistUpgradeController.py:828
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr ""
 "A apărut o problemă în timpul actualizării. De obicei este legată de "
-"probleme de rețea, verificați conexiunea dumneavoastra și să încercați din "
-"nou."
+"probleme de rețea, verificați conexiunea și încercați din nou."
 
-#: ../DistUpgrade/DistUpgradeController.py:720
+#. print "on_button_install_clicked"
+#: ../DistUpgrade/DistUpgradeController.py:837
+#: ../UpdateManager/UpdateManager.py:572
 msgid "Not enough free disk space"
 msgstr "Insuficient spaţiu liber pe disc"
 
-#: ../DistUpgrade/DistUpgradeController.py:721
+#: ../DistUpgrade/DistUpgradeController.py:838
 #, python-format
 msgid ""
-"The upgrade aborts now. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
+"The upgrade is now aborted. The upgrade needs a total of %s free space on "
+"disk '%s'. Please free at least an additional %s of disk space on '%s'. "
+"Empty your trash and remove temporary packages of former installations using "
+"'sudo apt-get clean'."
 msgstr ""
-"Actualizarea se opreşte acum. Actualizare necesită un total de %s spaţiu "
-"liber pe discul '%s'. Vă rugăm să eliberaţi cel puţin %s de spaţiu pe discul "
-"%s. Goliţi coşul de gunoi şi ştergeţi pachetele temporare de la instalările "
-"vechi folosind 'sudo apt-get clean'."
+"Procesul de actualizare a fost abandonat. Pentru a fi finalizat este nevoie "
+"de un spațiu total de %s pe discul „%s”. Vă rugăm să eliberați un spați "
+"suplimentar de cel puțin %s pe discul „%s”. Goliți coșul de gunoi și "
+"eliminați pachetele temporare folosite la procesele anterioare de instalare "
+"(pentru aceasta puteți folosi comanda „sudo apt-get clean”)."
 
-#: ../DistUpgrade/DistUpgradeController.py:832
-msgid "Support for some applications ended"
-msgstr "Suportul pentru unele aplicaţii s-a sfârşit"
+#: ../DistUpgrade/DistUpgradeController.py:873
+msgid ""
+"Canonical Ltd. no longer provides support for the following software "
+"packages. You can still get support from the community."
+msgstr ""
+"Firma Canonical nu mai oferă suport tehnic pentru următoarele pachete "
+"software. Puteți în continuare primi ajutor de la comunitate."
 
-#: ../DistUpgrade/DistUpgradeController.py:833
+#: ../DistUpgrade/DistUpgradeController.py:880
 msgid ""
 "Canonical Ltd. no longer provides support for the following software "
 "packages. You can still get support from the community.\n"
 "\n"
-"If you have not enabled community maintained software (universe), these "
-"packages will be suggested for removal at the end of the upgrade."
+"These packages will be suggested for removal at the end of the upgrade "
+"because you have not enabled the community maintained software channel "
+"(universe)."
 msgstr ""
-"Compania Canonical nu mai oferă suport pentru următoarele pachete software. "
-"Puteţi totuşi obţine suport de la comunitate.\n"
-"\n"
-"Dacă nu aţi activat software-ul intreţinut de comunitate (universe), în "
-"pasul următor aceste pachete vor fi propuse pentru dezinstalare."
+"Firma Canonical nu mai oferă suport tehnic pentru următoarele pachete "
+"software. Puteți primi în continuare ajutor de la comunitate.\n"
+"Aceste pachete vor fi sugerate pentru ștergere la finalul actualizării de "
+"versiune, deoarece nu ați activat canalul software întreținut de comunitate "
+"(univers)."
+
+#: ../DistUpgrade/DistUpgradeController.py:888
+msgid "Support for some applications ended"
+msgstr "Suportul pentru unele aplicaţii s-a sfârşit"
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:842
-#: ../DistUpgrade/DistUpgradeController.py:1469
+#: ../DistUpgrade/DistUpgradeController.py:891
+#: ../DistUpgrade/DistUpgradeController.py:1586
 msgid "Calculating the changes"
 msgstr "Se calculează modificările"
 
 #. ask the user if he wants to do the changes
-#: ../DistUpgrade/DistUpgradeController.py:857
+#: ../DistUpgrade/DistUpgradeController.py:906
 msgid "Do you want to start the upgrade?"
 msgstr "Doriți să începeți actualizarea?"
 
-#: ../DistUpgrade/DistUpgradeController.py:921
-#: ../DistUpgrade/DistUpgradeController.py:976
+#: ../DistUpgrade/DistUpgradeController.py:971
+msgid "Upgrade canceled"
+msgstr "Actualizare anulată"
+
+#: ../DistUpgrade/DistUpgradeController.py:972
+msgid ""
+"The upgrade cancels now and the original system state is restored. You can "
+"resume the upgrade at a later time."
+msgstr ""
+"Actualizarea este în curs de anulare și starea originală a sistemului va fi "
+"restaurată. Puteți reîncepe actualizarea oricând în viitor."
+
+#: ../DistUpgrade/DistUpgradeController.py:977
+#: ../DistUpgrade/DistUpgradeController.py:1076
 msgid "Could not download the upgrades"
 msgstr "Nu am putut descărca actualizările"
 
-#: ../DistUpgrade/DistUpgradeController.py:922
+#: ../DistUpgrade/DistUpgradeController.py:978
 msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
+"The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far are kept."
 msgstr ""
-"Actualizarea se oprește acum. Verificați conexiunea dumneavoastră la "
-"Internet sau mediul de instalare și încercați din nou. Toate fișierele "
-"descărcate până acum sunt păstrate."
+"Actualizarea a fost anulată. Verificați conexiunea la internet sau mediul de "
+"instalare și încercați din nou. Toate fișierele descărcate până acum vor fi "
+"păstrate."
 
-#. invoke the frontend now
-#: ../DistUpgrade/DistUpgradeController.py:951
+#. FIXME: strings are not good, but we are in string freeze
+#. currently
+#: ../DistUpgrade/DistUpgradeController.py:1031
+#: ../DistUpgrade/DistUpgradeController.py:1064
+#: ../DistUpgrade/DistUpgradeController.py:1166
+msgid "Error during commit"
+msgstr "Eroare în timpul efectuării"
+
+#. generate a new cache
+#: ../DistUpgrade/DistUpgradeController.py:1033
+#: ../DistUpgrade/DistUpgradeController.py:1066
+#: ../DistUpgrade/DistUpgradeController.py:1205
+msgid "Restoring original system state"
+msgstr "Se revine la starea iniţială a sistemului"
+
+#: ../DistUpgrade/DistUpgradeController.py:1034
+#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgradeController.py:1067
+msgid "Could not install the upgrades"
+msgstr "Nu s-au putut instala actualizările"
+
+#. invoke the frontend now and show a error message
+#: ../DistUpgrade/DistUpgradeController.py:1039
 msgid ""
-"The upgrade aborts now. Your system could be in an unusable state. A "
+"The upgrade is now aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
 msgstr ""
-"Actualizarea se opreşte acum. Sistemul dumneavoastră ar putea fi într-o "
-"stare în care nu funcţionează. O recuperare a fost pornita (dpkg --configure "
-"-a)."
+"Actualizarea a fost anulată. Sistemul ar putea fi într-o stare "
+"inutilizabilă. Recuperarea va avea loc acum (dpkg --configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:956
+#: ../DistUpgrade/DistUpgradeController.py:1044
 #, python-format
 msgid ""
 "\n"
 "\n"
 "Please report this bug against the 'update-manager' package and include the "
-"files in /var/log/dist-upgrade/ in the bugreport.\n"
+"files in /var/log/dist-upgrade/ in the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Vă rugăm raportaţi această eroare a pachetului 'update-manager' şi includeţi "
-"în raport fişierele din /var/log/dist-upgrade/.\n"
+"Raportați acest defect al pachetului „update-manager” și includeți în raport "
+"fișierele din /var/log/dist-upgrade/.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:960
-msgid "Could not install the upgrades"
-msgstr "Nu s-au putut instala actualizările"
-
-#: ../DistUpgrade/DistUpgradeController.py:977
+#: ../DistUpgrade/DistUpgradeController.py:1077
 msgid ""
-"The upgrade aborts now. Please check your Internet connection or "
+"The upgrade is now aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr ""
-"Actualizarea încetează acum. Verificați-vă conexiunea la Internet sau mediul "
-"de instalare și încercați din nou. "
+"Actualizarea a fost anulată. Verificați conexiunea la internet sau mediul de "
+"instalare și încercați din nou. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1047
+#: ../DistUpgrade/DistUpgradeController.py:1154
 msgid "Remove obsolete packages?"
 msgstr "Ştergeti pachetele degradate?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1048
-#: ../DistUpgrade/DistUpgrade.glade.h:20
+#: ../DistUpgrade/DistUpgradeController.py:1155
+#: ../DistUpgrade/DistUpgrade.ui.h:22
 msgid "_Keep"
 msgstr "_Păstrează"
 
-#: ../DistUpgrade/DistUpgradeController.py:1048
+#: ../DistUpgrade/DistUpgradeController.py:1155
 msgid "_Remove"
-msgstr "Şter_ge"
+msgstr "_Elimină"
 
-#: ../DistUpgrade/DistUpgradeController.py:1059
-msgid "Error during commit"
-msgstr "Eroare în timpul efectuării"
-
-#: ../DistUpgrade/DistUpgradeController.py:1060
+#: ../DistUpgrade/DistUpgradeController.py:1167
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
 msgstr ""
-"A apărut o problemă în timpul acţiunii de curăţenie. Vă rugăm consultaţii "
-"mesajul de mai jos pentru informaţii suplimentare. "
-
-#. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1090
-msgid "Restoring original system state"
-msgstr "Se revine la starea iniţială a sistemului"
+"A apărut o problemă în timpul acțiunii de curățare. Pentru informații "
+"suplimentare vă rugăm să consultați mesajul de mai jos. "
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1128
+#: ../DistUpgrade/DistUpgradeController.py:1243
 msgid "Required depends is not installed"
 msgstr "O dependenţă necesară nu este instalată."
 
-#: ../DistUpgrade/DistUpgradeController.py:1129
+#: ../DistUpgrade/DistUpgradeController.py:1244
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Dependenţă necesară '%s' nu este instalată. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1379
-#: ../DistUpgrade/DistUpgradeController.py:1446
+#: ../DistUpgrade/DistUpgradeController.py:1489
+#: ../DistUpgrade/DistUpgradeController.py:1556
 msgid "Checking package manager"
 msgstr "Se verifică managerul de pachete"
 
-#: ../DistUpgrade/DistUpgradeController.py:1384
+#: ../DistUpgrade/DistUpgradeController.py:1494
 msgid "Preparing the upgrade failed"
 msgstr "Pregătirea actualizării a eşuat"
 
-#: ../DistUpgrade/DistUpgradeController.py:1385
+#: ../DistUpgrade/DistUpgradeController.py:1495
 msgid ""
 "Preparing the system for the upgrade failed. Please report this as a bug "
 "against the 'update-manager' package and include the files in /var/log/dist-"
-"upgrade/ in the bugreport."
+"upgrade/ in the bug report."
 msgstr ""
-"Pregatirea sistemului pentru actializare a eşuat. Vă rog să raportaţi "
-"aceasta ca şi un bug pentru pachetul 'update-manager' şi includeţi în raport "
-"fişierele din /var/log/dist-upgrade/."
+"Pregătirea sistemului în vederea procedurii de actualizare a eșuat. Vă rugăm "
+"să raportați acest defect al pachetului „update-manager” și să includeți în "
+"raport fișierele din /var/log/dist-upgrade/."
 
-#: ../DistUpgrade/DistUpgradeController.py:1401
+#: ../DistUpgrade/DistUpgradeController.py:1511
 msgid "Getting upgrade prerequisites failed"
 msgstr "Obținerea cerințelor pentru actualizare a eșuat"
 
-#: ../DistUpgrade/DistUpgradeController.py:1402
+#: ../DistUpgrade/DistUpgradeController.py:1512
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
 "\n"
 "Please report this as a bug against the 'update-manager' package and include "
-"the files in /var/log/dist-upgrade/ in the bugreport."
+"the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
-"Pregatirea sistemului pentru actializare a eşuat. Raportaţi aceasta ca şi o "
-"eroare pentru pachetul 'update-manager' şi includeţi în raport fişierele din "
-"/var/log/dist-upgrade/."
+"Nu au fost îndeplinite cerințele prealabile pentru această actualizare. "
+"Actualizarea va fi abandonată acum, iar starea originală a sistemului va fi "
+"restabilită.\n"
+"\n"
+"Vă rugăm să raportați acest incident ca defect în pachetul 'update-manager' "
+"și să includeți fișierele din /var/log/dist-upgrade/ în raportul defectului."
 
-#: ../DistUpgrade/DistUpgradeController.py:1432
+#: ../DistUpgrade/DistUpgradeController.py:1542
 msgid "Updating repository information"
 msgstr "Actualizare informaţii depozit"
 
-#: ../DistUpgrade/DistUpgradeController.py:1457
+#: ../DistUpgrade/DistUpgradeController.py:1574
 msgid "Invalid package information"
 msgstr "Informații despre pachete nevalide"
 
-#: ../DistUpgrade/DistUpgradeController.py:1458
+#: ../DistUpgrade/DistUpgradeController.py:1575
 #, python-format
 msgid ""
 "After your package information was updated the essential package '%s' can "
 "not be found anymore.\n"
 "This indicates a serious error, please report this bug against the 'update-"
-"manager' package and include the files in /var/log/dist-upgrade/ in the "
-"bugreport."
+"manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+"report."
 msgstr ""
-"După ce informaţiile despre pachete au fost actualizate pachetul esenţial "
-"'%s' nu mai poate fi găsit.\n"
-"Aceasta indică o eroare serioasă, vă rugăm raportaţi o eroare la pachetul "
-"'update-manager' şi includeţi fişierele din /var/log/dist-upgrade/ în raport."
+"După actualizarea informațiilor pachetelor, pachetul „%s” nu mai poate fi "
+"găsit.\n"
+"Aceasta indică o eroare gravă, vă rugăm raportați acest defect în pachetul "
+"„update-manager” și includeți fișierele din /var/log/dist-upgrade/ în "
+"raportul defectului."
 
-#: ../DistUpgrade/DistUpgradeController.py:1475
-#: ../DistUpgrade/DistUpgradeController.py:1523
+#: ../DistUpgrade/DistUpgradeController.py:1592
+#: ../DistUpgrade/DistUpgradeController.py:1640
 msgid "Fetching"
 msgstr "Potrivire date"
 
-#: ../DistUpgrade/DistUpgradeController.py:1482
-#: ../DistUpgrade/DistUpgradeController.py:1527
+#: ../DistUpgrade/DistUpgradeController.py:1598
+#: ../DistUpgrade/DistUpgradeController.py:1644
 msgid "Upgrading"
 msgstr "Se actualizează"
 
 #. don't abort here, because it would restore the sources.list
-#: ../DistUpgrade/DistUpgradeController.py:1487
-#: ../DistUpgrade/DistUpgradeController.py:1529
-#: ../DistUpgrade/DistUpgradeController.py:1536
-#: ../DistUpgrade/DistUpgradeController.py:1541
+#: ../DistUpgrade/DistUpgradeController.py:1603
+#: ../DistUpgrade/DistUpgradeController.py:1646
+#: ../DistUpgrade/DistUpgradeController.py:1653
+#: ../DistUpgrade/DistUpgradeController.py:1664
 msgid "Upgrade complete"
 msgstr "Actualizare finalizată"
 
-#: ../DistUpgrade/DistUpgradeController.py:1488
-#: ../DistUpgrade/DistUpgradeController.py:1530
-#: ../DistUpgrade/DistUpgradeController.py:1537
+#: ../DistUpgrade/DistUpgradeController.py:1604
+#: ../DistUpgrade/DistUpgradeController.py:1647
+#: ../DistUpgrade/DistUpgradeController.py:1654
 msgid ""
-"The upgrade is completed but there were errors during the ugprade process."
+"The upgrade is completed but there were errors during the upgrade process."
 msgstr ""
-"Actualizarea este completă dar s-au întâmpinat erori în timpul procesului de "
+"Actualizarea s-a încheiat dar s-au înregistrat erori în procesul de "
 "actualizare."
 
-#: ../DistUpgrade/DistUpgradeController.py:1495
+#: ../DistUpgrade/DistUpgradeController.py:1611
 msgid "Searching for obsolete software"
 msgstr "Se caută aplicaţii degradate"
 
-#: ../DistUpgrade/DistUpgradeController.py:1500
+#: ../DistUpgrade/DistUpgradeController.py:1616
 msgid "System upgrade is complete."
 msgstr "Actualizarea sistemului este completă."
 
-#: ../DistUpgrade/DistUpgradeController.py:1542
+#: ../DistUpgrade/DistUpgradeController.py:1665
 msgid "The partial upgrade was completed."
 msgstr "Actualizarea parțială a fost încheiată."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:98
+#: ../DistUpgrade/DistUpgradeQuirks.py:149
+msgid "No ARMv6 CPU"
+msgstr "Nu există nici un procesor ARMv6"
+
 #: ../DistUpgrade/DistUpgradeQuirks.py:150
+msgid ""
+"Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
+"packages in karmic were built with optimizations requiring ARMv6 as the "
+"minimal architecture. It is not possible to upgrade your system to a new "
+"Ubuntu release with this hardware."
+msgstr ""
+"Sistemul dumneavoastră folosește un procesor ARM care este mai vechi decât "
+"arhitectura ARMv6. Toate pachetele din karmic au fost realizate cu "
+"optimizări care necesită ARMv6, ca arhitectură minimă. Cu acest hardware, nu "
+"se poate actualiza sistemul la noua versiunea Ubuntu."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+msgid "No init available"
+msgstr "Nu există niciun serviciu „init” disponibil"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:165
+msgid ""
+"Your system appears to be a virtualised environment without an init daemon, "
+"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"environment, requiring an update to your virtual machine configuration "
+"first.\n"
+"\n"
+"Are you sure you want to continue?"
+msgstr ""
+"Sistemul dumneavoastră pare să fie un mediu virtualizat fără un serviciu "
+"„init”, de ex. Linux-VServer. Ubuntu 9.10 nu poate funcționa în acest tip de "
+"mediu, necesitând mai întâi o actualizare a configurațiilor mașinii "
+"virtuale.\n"
+"\n"
+"Sigur doriți să continuați?"
+
+#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
+#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
+#: ../DistUpgrade/DistUpgradeQuirks.py:186
+#: ../DistUpgrade/DistUpgradeQuirks.py:271
+#: ../DistUpgrade/DistUpgradeQuirks.py:298
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -706,60 +840,106 @@ msgstr ""
 "performanța în jocuri și a altor aplicații intensive din punct de vedere "
 "grafic."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:102
+#: ../DistUpgrade/DistUpgradeQuirks.py:190
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with Ubuntu 8.10.\n"
+"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Acest calculator folosește modulul de nucleu „fglrx” pentru placa video AMD. "
-"Nu există nicio versiune disponibilă care să funcționeze cu Ubuntu 8.10.\n"
+"Acest calculator folosește driverul grafic pentru plăci AMD numit „fglrx”. "
+"Nu există în Ubuntu 10.04 nicio versiune a acestui driver care să "
+"funcționeze cu placa video din calculator.\n"
 "\n"
 "Doriți să continuați?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:154
+#: ../DistUpgrade/DistUpgradeQuirks.py:275
+#: ../DistUpgrade/DistUpgradeQuirks.py:302
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
-"Ubuntu 8.10.\n"
+"Ubuntu 10.04.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Acest calculator folosește modulul de nucleu „nvidia” pentru placa video "
-"NVIDIA. Nu există nicio versiune disponibilă care să funcționeze cu Ubuntu "
-"8.10.\n"
+"Acest calculator folosește driverul grafic pentru plăci NVIDIA numit "
+"„nvidia”. Nu există în Ubuntu 10.04 nicio versiune a acestui driver care să "
+"funcționeze cu placa video din calculator.\n"
 "\n"
 "Doriți să continuați?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:472
+msgid "evms in use"
+msgstr "evms în folosire"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:473
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"Sistemul dumneavoastră folosește gestionarul de volume „evms” în "
+"/proc/mounts. Programul „evms” nu mai beneficiază de asistență. Dezactivați-"
+"l și apoi rulați din nou actualizarea."
+
+#: ../DistUpgrade/DistUpgradeMain.py:43
+msgid "Sandbox upgrade using aufs"
+msgstr "Actualizare sandbox folosind aufs"
+
+#: ../DistUpgrade/DistUpgradeMain.py:45
+msgid "Use the given path to search for a cdrom with upgradable packages"
+msgstr ""
+"Folosește calea primită pentru a căuta un cdrom cu pachete actualizabile"
+
+#: ../DistUpgrade/DistUpgradeMain.py:51
+msgid ""
+"Use frontend. Currently available: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+msgstr ""
+"Folosește interfață. Disponibile: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
+
+#: ../DistUpgrade/DistUpgradeMain.py:54
+msgid "*DEPRECATED* this option will be ignore"
+msgstr "*DEPĂȘITĂ* această opțiune va fi ignorată"
+
+#: ../DistUpgrade/DistUpgradeMain.py:57
+msgid "Perform a partial upgrade only (no sources.list rewriting)"
+msgstr "Execută doar o actualizare parțială (fără rescrierea sources.list)"
+
+#: ../DistUpgrade/DistUpgradeMain.py:59
+msgid "Set datadir"
+msgstr "Configurare datadir"
+
 #. print "mediaChange %s %s" % (medium, drive)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:108
+#: ../DistUpgrade/DistUpgradeViewGtk.py:109
 #: ../DistUpgrade/DistUpgradeViewKDE.py:190
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:148
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Vă rugăm introduceţi '%s' în unitatea '%s'"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:127
-#: ../DistUpgrade/DistUpgradeViewKDE.py:203
+#: ../DistUpgrade/DistUpgradeViewGtk.py:129
+#: ../DistUpgrade/DistUpgradeViewKDE.py:204
 msgid "Fetching is complete"
 msgstr "Descărcare completă"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:139
-#: ../DistUpgrade/DistUpgradeViewKDE.py:216
+#: ../DistUpgrade/DistUpgradeViewGtk.py:141
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "Se aduce fișierul %li din %li cu %sB/s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:140
-#: ../DistUpgrade/DistUpgradeViewGtk.py:275
-#: ../DistUpgrade/DistUpgradeViewKDE.py:217
-#: ../DistUpgrade/DistUpgradeViewKDE.py:356
+#: ../DistUpgrade/DistUpgradeViewGtk.py:142
+#: ../DistUpgrade/DistUpgradeViewGtk.py:277
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
+#: ../DistUpgrade/DistUpgradeViewKDE.py:358
 #, python-format
 msgid "About %s remaining"
 msgstr "Mai rămân aproximativ %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:142
-#: ../DistUpgrade/DistUpgradeViewKDE.py:219
+#: ../DistUpgrade/DistUpgradeViewGtk.py:144
+#: ../DistUpgrade/DistUpgradeViewKDE.py:220
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Se descarcă fişierul %li din %li"
@@ -767,37 +947,36 @@ msgstr "Se descarcă fişierul %li din %li"
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
-#: ../DistUpgrade/DistUpgradeViewGtk.py:174
-#: ../DistUpgrade/DistUpgradeViewKDE.py:253
+#: ../DistUpgrade/DistUpgradeViewGtk.py:176
+#: ../DistUpgrade/DistUpgradeViewKDE.py:254
 msgid "Applying changes"
 msgstr "Se aplică modificările"
 
 #. we do not report followup errors from earlier failures
-#: ../DistUpgrade/DistUpgradeViewGtk.py:199
-#: ../DistUpgrade/DistUpgradeViewKDE.py:266
+#: ../DistUpgrade/DistUpgradeViewGtk.py:201
+#: ../DistUpgrade/DistUpgradeViewKDE.py:267
 msgid "dependency problems - leaving unconfigured"
 msgstr "probleme de dependențe - lăsat neconfigurat"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:204
-#: ../DistUpgrade/DistUpgradeViewKDE.py:268
+#: ../DistUpgrade/DistUpgradeViewGtk.py:206
+#: ../DistUpgrade/DistUpgradeViewKDE.py:269
 #, python-format
 msgid "Could not install '%s'"
 msgstr "'%s' nu s-a putut instala"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:205
-#: ../DistUpgrade/DistUpgradeViewKDE.py:269
+#: ../DistUpgrade/DistUpgradeViewGtk.py:207
+#: ../DistUpgrade/DistUpgradeViewKDE.py:270
 #, python-format
 msgid ""
-"The upgrade will continue but the '%s' package may be in a not working "
-"state. Please consider submitting a bugreport about it."
+"The upgrade will continue but the '%s' package may not be in a working "
+"state. Please consider submitting a bug report about it."
 msgstr ""
-"Actualizarea va continua dar pachetul '%s'  poate să fie într-o stare în "
-"care nu poate fi folosit. Te rog ia în considerarea trimiterea unui raport "
-"de eroare despre acest fapt."
+"Actualizarea va continua dar pachetul „%s” s-ar putea să nu fie funcțional. "
+"Vă rugăm să raportați această eroare."
 
 #. self.expander.set_expanded(True)
-#: ../DistUpgrade/DistUpgradeViewGtk.py:221
-#: ../DistUpgrade/DistUpgradeViewKDE.py:290
+#: ../DistUpgrade/DistUpgradeViewGtk.py:223
+#: ../DistUpgrade/DistUpgradeViewKDE.py:291
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -806,8 +985,8 @@ msgstr ""
 "Înlocuiesc fişierul de configurare particularizat\n"
 "'%s'?"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:291
+#: ../DistUpgrade/DistUpgradeViewGtk.py:224
+#: ../DistUpgrade/DistUpgradeViewKDE.py:292
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -815,34 +994,34 @@ msgstr ""
 "Veţi pierde orice schimbări făcute la acest fişier de configurare dacă "
 "alegeţi să îl înlocuiţi cu o versiune nouă."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:235
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewGtk.py:237
+#: ../DistUpgrade/DistUpgradeViewKDE.py:310
 msgid "The 'diff' command was not found"
 msgstr "Comanda 'diff' nu a putut fi localizată"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:417
-#: ../DistUpgrade/DistUpgradeViewText.py:110
+#: ../DistUpgrade/DistUpgradeViewGtk.py:440
+#: ../DistUpgrade/DistUpgradeViewText.py:88
 msgid "A fatal error occurred"
 msgstr "S-a produs o eroare fatală"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:418
+#: ../DistUpgrade/DistUpgradeViewGtk.py:441
 msgid ""
 "Please report this as a bug (if you haven't already) and include the files "
 "/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
-"report. The upgrade aborts now.\n"
+"report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Raportați acest lucru ca defecțiune (dacă nu ați făcut-o deja) și includeți "
-"fișierele /var/log/dist-upgrade/main.log și /var/log/dist-upgrade/apt.log în "
-"raportul dumneavoastră. Actualizarea se oprește acum.\n"
-"Fișierul dumneavoastră sources.list original a fost salvat în "
+"Raportați acest defect (dacă nu ați făcut-o deja) și includeți în raport "
+"fișierele /var/log/dist-upgrade/main.log și /var/log/dist-upgrade/apt.log. "
+"Actualizarea a fost anulată.\n"
+"Fișierul original sources.list a fost salvat în "
 "/etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:433
+#: ../DistUpgrade/DistUpgradeViewGtk.py:458
 msgid "Ctrl-c pressed"
 msgstr "Ctrl-c apăsat"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:434
+#: ../DistUpgrade/DistUpgradeViewGtk.py:459
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
@@ -851,97 +1030,103 @@ msgstr ""
 "deteriorată. Siguri doriți să faceți asta?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk.py:570
+#: ../DistUpgrade/DistUpgradeViewGtk.py:604
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "Pentru a preveni pierderea datelor, salvaţi documentele şi închideţi toate "
 "aplicaţiile."
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:584
+#: ../DistUpgrade/DistUpgradeViewGtk.py:618
 #, python-format
 msgid "<b>Downgrade %s</b>"
 msgstr "<b>Adu %s la o versiunea anterioară</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:586
-#: ../DistUpgrade/DistUpgradeViewKDE.py:749
+#: ../DistUpgrade/DistUpgradeViewGtk.py:620
+#: ../DistUpgrade/DistUpgradeViewKDE.py:758
 #, python-format
 msgid "Remove %s"
 msgstr "Şterge %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:591
-#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#: ../DistUpgrade/DistUpgradeViewGtk.py:625
+#: ../DistUpgrade/DistUpgradeViewKDE.py:760
+#, python-format
+msgid "Remove (was auto installed) %s"
+msgstr "Șterge %s (a fost instalat automat)"
+
+#: ../DistUpgrade/DistUpgradeViewGtk.py:628
+#: ../DistUpgrade/DistUpgradeViewKDE.py:762
 #, python-format
 msgid "Install %s"
 msgstr "Instalează %s"
 
-#: ../DistUpgrade/DistUpgradeViewGtk.py:593
-#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewGtk.py:630
+#: ../DistUpgrade/DistUpgradeViewKDE.py:764
 #, python-format
 msgid "Upgrade %s"
 msgstr "Actualizează %s"
 
+#. change = QMessageBox.question(None, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
 #: ../DistUpgrade/DistUpgradeViewKDE.py:191
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:150
 msgid "Media Change"
 msgstr "Mediul a fost Modificat"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:321
+#: ../DistUpgrade/DistUpgradeViewKDE.py:322
 msgid "Show Difference >>>"
 msgstr "Afişeaza Diferenţele >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:324
+#: ../DistUpgrade/DistUpgradeViewKDE.py:325
 msgid "<<< Hide Difference"
 msgstr "<<< Ascunde Diferenţele"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:530
+#: ../DistUpgrade/DistUpgradeViewKDE.py:539
 msgid "Error"
 msgstr "Eroare"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:542
+#: ../DistUpgrade/DistUpgradeViewKDE.py:551
 msgid "&Cancel"
 msgstr "&Anulează"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:544
-#: ../DistUpgrade/DistUpgradeViewKDE.py:781
+#: ../DistUpgrade/DistUpgradeViewKDE.py:553
+#: ../DistUpgrade/DistUpgradeViewKDE.py:792
 msgid "&Close"
 msgstr "În&chide"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:590
+#: ../DistUpgrade/DistUpgradeViewKDE.py:599
 msgid "Show Terminal >>>"
 msgstr "Afişeaza Terminalul >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:593
+#: ../DistUpgrade/DistUpgradeViewKDE.py:602
 msgid "<<< Hide Terminal"
 msgstr "<<< Ascunde Terminalul"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:673
+#: ../DistUpgrade/DistUpgradeViewKDE.py:682
 msgid "Information"
 msgstr "Informații"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:723
-#: ../DistUpgrade/DistUpgradeViewKDE.py:764
-#: ../DistUpgrade/DistUpgradeViewKDE.py:767
-#: ../DistUpgrade/DistUpgrade.glade.h:9
+#: ../DistUpgrade/DistUpgradeViewKDE.py:732
+#: ../DistUpgrade/DistUpgradeViewKDE.py:775
+#: ../DistUpgrade/DistUpgradeViewKDE.py:778 ../DistUpgrade/DistUpgrade.ui.h:11
 msgid "Details"
 msgstr "Detalii"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:777
-#: ../DistUpgrade/DistUpgradeViewText.py:222
+#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewText.py:206
 msgid "Restart required"
 msgstr "Este necesară repornirea"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:777
-#: ../DistUpgrade/DistUpgrade.glade.h:5
+#: ../DistUpgrade/DistUpgradeViewKDE.py:788
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr ""
 "<b><big>Reporniţi sistemul pentru ca actualizarea să fie completă</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:780
-#: ../DistUpgrade/DistUpgrade.glade.h:23
+#: ../DistUpgrade/DistUpgradeViewKDE.py:791 ../DistUpgrade/DistUpgrade.ui.h:25
+#: ../data/glade/UpdateManager.ui.h:31
 msgid "_Restart Now"
 msgstr "_Reporneşte acum"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -953,11 +1138,11 @@ msgstr ""
 "În cazul în care anulați această înoire este posibil ca sistemul să rămână "
 "într-o stare neutilizabilă. Este foarte indicat să continuați înoirea."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:807
 msgid "Cancel Upgrade?"
 msgstr "Anulați actualizarea?"
 
-#: ../DistUpgrade/DistUpgradeView.py:56
+#: ../DistUpgrade/DistUpgradeView.py:60
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
@@ -965,7 +1150,7 @@ msgstr[0] "%li zi"
 msgstr[1] "%li zile"
 msgstr[2] "%li de zile"
 
-#: ../DistUpgrade/DistUpgradeView.py:58
+#: ../DistUpgrade/DistUpgradeView.py:62
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
@@ -973,7 +1158,7 @@ msgstr[0] "%li oră"
 msgstr[1] "%li ore"
 msgstr[2] "%li de ore"
 
-#: ../DistUpgrade/DistUpgradeView.py:60
+#: ../DistUpgrade/DistUpgradeView.py:64
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
@@ -981,7 +1166,7 @@ msgstr[0] "%li minut"
 msgstr[1] "%li minute"
 msgstr[2] "%li de minute"
 
-#: ../DistUpgrade/DistUpgradeView.py:61
+#: ../DistUpgrade/DistUpgradeView.py:65
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
@@ -998,10 +1183,10 @@ msgstr[2] "%li de secunde"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:74
+#: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
-msgid "%(str_days)s %(str_hours)s %(str_minutes)s"
-msgstr "%(str_days)s %(str_hours)s %(str_minutes)s"
+msgid "%(str_days)s %(str_hours)s"
+msgstr "%(str_days)s %(str_hours)s"
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
@@ -1012,52 +1197,52 @@ msgstr "%(str_days)s %(str_hours)s %(str_minutes)s"
 #. plural form
 #. 
 #. Note: most western languages will not need to change this
-#: ../DistUpgrade/DistUpgradeView.py:85
+#: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
 msgid "%(str_hours)s %(str_minutes)s"
 msgstr "%(str_hours)s %(str_minutes)s"
 
 #. 56 kbit
 #. 1Mbit = 1024 kbit
-#: ../DistUpgrade/DistUpgradeView.py:106
+#: ../DistUpgrade/DistUpgradeView.py:128
 #, python-format
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
-"with a 56k modem"
+"with a 56k modem."
 msgstr ""
-"Acest download va dura aproximativ %s pe o conexiune DSL de 1Mbit, şi "
-"aproximativ %s pe un modem 56k."
+"Descărcarea va dura aproximativ %s pentru o conexiune de tip DSL de 1Mbit și "
+"aproximativ %s pentru un modem de 56k."
 
 #. if we have a estimated speed, use it
-#: ../DistUpgrade/DistUpgradeView.py:110
+#: ../DistUpgrade/DistUpgradeView.py:132
 #, python-format
 msgid "This download will take about %s with your connection. "
 msgstr ""
 "Acestă descărcare va dura aproximativ %s pe o conexiune ca a dumneavoastră. "
 
-#: ../DistUpgrade/DistUpgradeView.py:176 ../DistUpgrade/DistUpgrade.glade.h:14
+#: ../DistUpgrade/DistUpgradeView.py:233 ../DistUpgrade/DistUpgrade.ui.h:16
 msgid "Preparing to upgrade"
 msgstr "Se pregăteşte actualizarea"
 
-#: ../DistUpgrade/DistUpgradeView.py:177
+#: ../DistUpgrade/DistUpgradeView.py:234
 msgid "Getting new software channels"
 msgstr "Se obţin noi canale software"
 
-#: ../DistUpgrade/DistUpgradeView.py:178 ../DistUpgrade/DistUpgrade.glade.h:12
+#: ../DistUpgrade/DistUpgradeView.py:235 ../DistUpgrade/DistUpgrade.ui.h:14
 msgid "Getting new packages"
 msgstr "Se obțin pachete noi"
 
-#: ../DistUpgrade/DistUpgradeView.py:179 ../DistUpgrade/DistUpgrade.glade.h:13
+#: ../DistUpgrade/DistUpgradeView.py:236 ../DistUpgrade/DistUpgrade.ui.h:15
 msgid "Installing the upgrades"
 msgstr "Se instaleză actualizările"
 
-#: ../DistUpgrade/DistUpgradeView.py:180 ../DistUpgrade/DistUpgrade.glade.h:8
+#: ../DistUpgrade/DistUpgradeView.py:237 ../DistUpgrade/DistUpgrade.ui.h:10
 msgid "Cleaning up"
 msgstr "Se curăţă"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
-#: ../DistUpgrade/DistUpgradeView.py:253
+#: ../DistUpgrade/DistUpgradeView.py:321
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
@@ -1065,7 +1250,7 @@ msgstr[0] "%d pachet va fi şters."
 msgstr[1] "%d pachete vor fi şterse."
 msgstr[2] "%d pachete vor fi şterse."
 
-#: ../DistUpgrade/DistUpgradeView.py:258
+#: ../DistUpgrade/DistUpgradeView.py:326
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
@@ -1073,7 +1258,7 @@ msgstr[0] "%d pachet nou va fi instalat."
 msgstr[1] "%d pachete noi vor fi instalate."
 msgstr[2] "%d pachete noi vor fi instalate."
 
-#: ../DistUpgrade/DistUpgradeView.py:264
+#: ../DistUpgrade/DistUpgradeView.py:332
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
@@ -1081,7 +1266,7 @@ msgstr[0] "%d pachet va fi actualizat."
 msgstr[1] "%d pachete vor fi actualizate."
 msgstr[2] "%d de pachete vor fi actualizate."
 
-#: ../DistUpgrade/DistUpgradeView.py:269
+#: ../DistUpgrade/DistUpgradeView.py:337
 #, python-format
 msgid ""
 "\n"
@@ -1092,7 +1277,7 @@ msgstr ""
 "\n"
 "Trebuie să descărcaţi un total de %s. "
 
-#: ../DistUpgrade/DistUpgradeView.py:273
+#: ../DistUpgrade/DistUpgradeView.py:341
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
@@ -1101,71 +1286,71 @@ msgstr ""
 "fişierele au fost descărcate procesul nu mai poate fi abandonat."
 
 #. FIXME: this should go into DistUpgradeController
-#: ../DistUpgrade/DistUpgradeView.py:279 ../UpdateManager/UpdateManager.py:672
+#: ../DistUpgrade/DistUpgradeView.py:347 ../UpdateManager/UpdateManager.py:502
 msgid "Your system is up-to-date"
 msgstr "Sistemul dumneavoastră este actualizat"
 
-#: ../DistUpgrade/DistUpgradeView.py:280
+#: ../DistUpgrade/DistUpgradeView.py:348
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
 msgstr ""
 "Nu sunt actualizări pentru sistemul dumneavoastră. Actualizarea va înceta."
 
-#: ../DistUpgrade/DistUpgradeView.py:293
+#: ../DistUpgrade/DistUpgradeView.py:361
 msgid "Reboot required"
 msgstr "Este necesară repornirea"
 
-#: ../DistUpgrade/DistUpgradeView.py:294
+#: ../DistUpgrade/DistUpgradeView.py:362
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
 "Actualizarea s-a încheiat şi este necesară repornirea. Doriţi să faceţi "
 "acest lucru acum?"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:147
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:135
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:136
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:135
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:136
 msgid "Could not run the upgrade tool"
 msgstr "Nu s-a putut rula programul pentru actualizare"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:148
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:136
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:136
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug"
 msgstr ""
 "Aceasta este cel mai probabil o eroare în programul pentru actualizare. Vă "
 "rugam să raportaţi această eroare"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:174
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:174
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:205
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:205
 msgid "Upgrade tool signature"
 msgstr "Actualizează semnătura utilitarului"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:177
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:177
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
 msgid "Upgrade tool"
 msgstr "Program pentru actualizare"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:202
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:202
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:237
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:237
 msgid "Failed to fetch"
 msgstr "Descărcare eşuată"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:203
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:203
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:238
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:238
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr ""
 "Descărcarea actualizării a eşuat. Ar putea exista o problemă la reţea. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:207
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:242
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:242
 msgid "Failed to extract"
 msgstr "Nu s-a putut extrage"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:208
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:208
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:243
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:243
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -1173,13 +1358,13 @@ msgstr ""
 "Extragerea actualizării a eşuat. Ar putea exista o problemă cu reţeaua sau "
 "cu serverul. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:213
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:213
-msgid "Verfication failed"
-msgstr "Verificare eşuată"
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:248
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
+msgid "Verification failed"
+msgstr "Verificarea a eșuat"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:214
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:249
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
@@ -1187,13 +1372,13 @@ msgstr ""
 "Verificarea actualizării a eşuat. S-ar putea să fie o problemă cu reţeaua "
 "sau cu serverul. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:219
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:219
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:254
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:254
 msgid "Authentication failed"
 msgstr "Autentificare eşuată"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:220
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:220
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:255
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:255
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -1201,15 +1386,15 @@ msgstr ""
 "Autentificarea actualizării a eşuat.  Ar putea exista o problemă cu reţeaua "
 "sau cu serverul. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:228
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:234
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:228
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:234
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:269
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:275
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:269
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:275
 msgid "Can not run the upgrade"
 msgstr "Nu s-a putut executa actualizarea"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:229
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:229
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:270
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:270
 msgid ""
 "This usually is caused by a system were /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
@@ -1218,76 +1403,82 @@ msgstr ""
 "„noexec”. Vă rugăm să remontați fără „noexec” și să rulați actualizare din "
 "nou."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:235
-#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:235
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:276
+#: ../UpdateManager/Core/DistUpgradeFetcherCore.py:276
 #, python-format
 msgid "The error message is '%s'."
 msgstr "Mesajul de eroare este „%s”."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:111
+#: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
 "Please report this as a bug and include the files /var/log/dist-"
 "upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade aborts now.\n"
+"upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Vă rugăm raportaţi aceasta ca eroare şi includeţi fişierele /var/log/dist-"
-"upgrade/main.log şi /var/log/dist-upgrade/apt.log în raportul dumneavoastră. "
-"Actualizarea se orpeşte acum.\n"
-"Fişierul iniţial sources.list a fost salvat în "
+"Raportați acest defect și includeți fișierele /var/log/dist-upgrade/main.log "
+"și /var/log/dist-upgrade/apt.log în raport. Actualizarea a fost anulată.\n"
+"Fișierul original sources.list a fost salvat în "
 "/etc/apt/sources.list.distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:135
+#: ../DistUpgrade/DistUpgradeViewText.py:113
 msgid "Aborting"
 msgstr "Renunţ"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:140
+#: ../DistUpgrade/DistUpgradeViewText.py:118
 msgid "Demoted:\n"
 msgstr "Retrogradat:\n"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:150
 #: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
-#: ../DistUpgrade/DistUpgradeViewText.py:201
+#: ../DistUpgrade/DistUpgradeViewText.py:179
 msgid "Continue [yN] "
 msgstr "_Continuă [dN] "
 
+#: ../DistUpgrade/DistUpgradeViewText.py:150
 #: ../DistUpgrade/DistUpgradeViewText.py:172
-#: ../DistUpgrade/DistUpgradeViewText.py:194
 msgid "Details [d]"
 msgstr "Detalii [d]"
 
 #. TRANSLATORS: the "y" is "yes"
-#: ../DistUpgrade/DistUpgradeViewText.py:176
-#: ../DistUpgrade/DistUpgradeViewText.py:205
+#. TRANSLATORS: first letter of a positive (yes) answer
+#: ../DistUpgrade/DistUpgradeViewText.py:154
+#: ../DistUpgrade/DistUpgradeViewText.py:182
 msgid "y"
 msgstr "d"
 
 #. TRANSLATORS: the "n" is "no"
-#: ../DistUpgrade/DistUpgradeViewText.py:179
+#. TRANSLATORS: first letter of a negative (no) answer
+#: ../DistUpgrade/DistUpgradeViewText.py:157
+#: ../DistUpgrade/DistUpgradeViewText.py:189
 msgid "n"
 msgstr "n"
 
 #. TRANSLATORS: the "d" is "details"
-#: ../DistUpgrade/DistUpgradeViewText.py:182
+#: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "d"
 msgstr "d"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:186
+#: ../DistUpgrade/DistUpgradeViewText.py:164
 #, python-format
 msgid "Remove: %s\n"
 msgstr "Şterge: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:189
+#: ../DistUpgrade/DistUpgradeViewText.py:167
 #, python-format
 msgid "Install: %s\n"
 msgstr "Instalează: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:192
+#: ../DistUpgrade/DistUpgradeViewText.py:170
 #, python-format
 msgid "Upgrade: %s\n"
 msgstr "Actualizează: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:223
+#: ../DistUpgrade/DistUpgradeViewText.py:186
+msgid "Continue [Yn] "
+msgstr "Continuă [Dn] "
+
+#: ../DistUpgrade/DistUpgradeViewText.py:207
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
@@ -1295,15 +1486,11 @@ msgstr ""
 "Pentru a finaliza actualizare este necesară repornirea sistemului.\n"
 "Dacă alegeţi 'y' sistemul se va reporni."
 
-#: ../DistUpgrade/DistUpgradeViewText.py:227
-msgid "Restart the system now [yN] "
-msgstr "Reporneşte sistemul acum [yN] "
-
-#: ../DistUpgrade/DistUpgrade.glade.h:1
+#: ../DistUpgrade/DistUpgrade.ui.h:1
 msgid "    "
 msgstr "    "
 
-#: ../DistUpgrade/DistUpgrade.glade.h:2
+#: ../DistUpgrade/DistUpgrade.ui.h:2
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1315,175 +1502,171 @@ msgstr ""
 "Este posibil ca sistemul să fie inoperabil dacă anulaţi actualizarea. Vă "
 "recomandăm să continuaţi actualizarea."
 
-#: ../DistUpgrade/DistUpgrade.glade.h:6
+#: ../DistUpgrade/DistUpgrade.ui.h:5
+msgid ""
+"<b><big>Restart the system to complete the upgrade</big></b>\n"
+"\n"
+"Please save your work before continuing."
+msgstr ""
+"<b><big>Reporniți sistemul pentru a finaliza actualizarea</big></b>\n"
+"\n"
+"Salvați toate lucrările dechise înainte de a continua."
+
+#: ../DistUpgrade/DistUpgrade.ui.h:8
 msgid "<b><big>Start the upgrade?</big></b>"
 msgstr "<b><big>Porniţi actualizarea?</big></b>"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:7
-msgid "<b><big>Upgrading Ubuntu to version 8.10</big></b>"
-msgstr "<b><big>Se înoiește Ubuntu la versiunea 8.10</big></b>"
+#: ../DistUpgrade/DistUpgrade.ui.h:9
+msgid "<b><big>Upgrading Ubuntu to version 10.04 LTS</big></b>"
+msgstr "<b><big>Se actualizează Ubuntu la versiunea 10.04 LTS</big></b>"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:10
+#: ../DistUpgrade/DistUpgrade.ui.h:12
 msgid "Difference between the files"
 msgstr "Diferenţa dintre fişiere"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:11
+#: ../DistUpgrade/DistUpgrade.ui.h:13
 msgid "Distribution Upgrade"
 msgstr "Actualizare distribuţie"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:15
+#: ../DistUpgrade/DistUpgrade.ui.h:17
 msgid "Restarting the computer"
 msgstr "Se reporneşte calculatorul"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:16
+#: ../DistUpgrade/DistUpgrade.ui.h:18
 msgid "Setting new software channels"
 msgstr "Configurare canale software noi"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:17
+#: ../DistUpgrade/DistUpgrade.ui.h:19
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:18
+#: ../DistUpgrade/DistUpgrade.ui.h:20
 msgid "_Cancel Upgrade"
 msgstr "_Anulează actualizarea"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:19
+#: ../DistUpgrade/DistUpgrade.ui.h:21
 msgid "_Continue"
 msgstr "_Continuă"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:21
+#: ../DistUpgrade/DistUpgrade.ui.h:23
 msgid "_Replace"
 msgstr "În_locuieşte"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:22
+#: ../DistUpgrade/DistUpgrade.ui.h:24
 msgid "_Report Bug"
 msgstr "_Raportaţi eroare"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:24
+#: ../DistUpgrade/DistUpgrade.ui.h:26
 msgid "_Resume Upgrade"
 msgstr "_Continuă actualizarea"
 
-#: ../DistUpgrade/DistUpgrade.glade.h:25
+#: ../DistUpgrade/DistUpgrade.ui.h:27
 msgid "_Start Upgrade"
 msgstr "_Porneşte actualizarea"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:81
+#: ../UpdateManager/backend/InstallBackendSynaptic.py:42
+msgid "Please wait, this can take some time."
+msgstr "Vă rugăm aşteptaţi, ar putea dura."
+
+#: ../UpdateManager/backend/InstallBackendSynaptic.py:44
+msgid "Update is complete"
+msgstr "Actualizarea este completă"
+
+#: ../UpdateManager/DistUpgradeFetcher.py:85
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:103
 msgid "Could not find the release notes"
 msgstr "Nu găsesc notiţele de lansare"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:82
+#: ../UpdateManager/DistUpgradeFetcher.py:86
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:104
 msgid "The server may be overloaded. "
 msgstr "Serverul ar putea fi supraîncărcat. "
 
-#: ../UpdateManager/DistUpgradeFetcher.py:92
+#: ../UpdateManager/DistUpgradeFetcher.py:96
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:108
 msgid "Could not download the release notes"
 msgstr "Nu pot descărca informațiile versiunii"
 
-#: ../UpdateManager/DistUpgradeFetcher.py:93
+#: ../UpdateManager/DistUpgradeFetcher.py:97
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:109
 msgid "Please check your internet connection."
 msgstr "Verificaţi conexiunea internet"
 
-#: ../UpdateManager/GtkProgress.py:108
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:62
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:85
+msgid "Upgrade"
+msgstr "Actualizează"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:89
+#: ../data/glade/UpdateManager.ui.h:12
+msgid "Release Notes"
+msgstr "Informații versiune"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:128
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
+msgid "Downloading additional package files..."
+msgstr "Se descarcă pachete adiționale..."
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:141
+#, python-format
+msgid "File %s of %s at %sB/s"
+msgstr "Fișierul %s din %s la %sO/s"
+
+#: ../UpdateManager/DistUpgradeFetcherKDE.py:143
+#, python-format
+msgid "File %s of %s"
+msgstr "Fișierul %s din %s"
+
+#: ../UpdateManager/ChangelogViewer.py:70
+msgid "Open Link in Browser"
+msgstr "Deschide legătura în navigator"
+
+#: ../UpdateManager/ChangelogViewer.py:72
+msgid "Copy Link to Clipboard"
+msgstr "Copiază legătura în clipboard"
+
+#: ../UpdateManager/GtkProgress.py:115
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
 msgstr "Descarc fişierul %(current)li din %(total)li cu %(speed)s/s"
 
-#: ../UpdateManager/GtkProgress.py:113
+#: ../UpdateManager/GtkProgress.py:120
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
 msgstr "Descarc fişierul %(current)li din %(total)li"
 
-#: ../UpdateManager/UpdateManager.py:252
-msgid "The list of changes is not available"
-msgstr "Lista schimbărilor nu este disponibilă"
-
-#: ../UpdateManager/UpdateManager.py:260
-#, python-format
-msgid ""
-"The list of changes is not available yet.\n"
-"\n"
-"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"until the changes become available or try again later."
-msgstr ""
-"Lista cu modificările nu este încă disponibilă.\n"
-"\n"
-"Vă rugăm să folosiți http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
-"până ce modificările vor fi disponibile sau încercați din nou mai târziu."
-
-#: ../UpdateManager/UpdateManager.py:268
-msgid ""
-"Failed to download the list of changes. \n"
-"Please check your Internet connection."
-msgstr ""
-"Nu am putut descărca lista modificărilor. \n"
-"Vă rog să verificaţi dacă aveţi o conexiune internet activă."
-
-#: ../UpdateManager/UpdateManager.py:290
-msgid "Failed to detect distribution"
-msgstr "Nu s-a putut detecta distribuția"
-
-#: ../UpdateManager/UpdateManager.py:291
-#, python-format
-msgid "A error '%s' occurred while checking what system you are using."
-msgstr ""
-"S-a produs eroarea „%s” la verificarea sistemului pe care îl folosiți."
-
-#: ../UpdateManager/UpdateManager.py:302
-msgid "Important security updates"
-msgstr "Actualizări importante de securitate"
-
 #: ../UpdateManager/UpdateManager.py:303
-msgid "Recommended updates"
-msgstr "Actualizări recomandate"
-
-#: ../UpdateManager/UpdateManager.py:304
-msgid "Proposed updates"
-msgstr "Actualizări propuse"
-
-#: ../UpdateManager/UpdateManager.py:305
-msgid "Backports"
-msgstr "Backports"
-
-#: ../UpdateManager/UpdateManager.py:306
-msgid "Distribution updates"
-msgstr "Actualizări distribuţie"
-
-#: ../UpdateManager/UpdateManager.py:311
-msgid "Other updates"
-msgstr "Alte actualizări"
-
-#: ../UpdateManager/UpdateManager.py:320
-msgid "Previous selected"
-msgstr "Ales anterior"
-
-#: ../UpdateManager/UpdateManager.py:495
 #, python-format
 msgid "Version %s: \n"
 msgstr "Versiunea %s: \n"
 
-#: ../UpdateManager/UpdateManager.py:556
+#: ../UpdateManager/UpdateManager.py:360
 msgid "Downloading list of changes..."
 msgstr "Se descarcă listă modificărilor..."
 
-#: ../UpdateManager/UpdateManager.py:583
+#: ../UpdateManager/UpdateManager.py:400
 msgid "_Uncheck All"
 msgstr "_Debifează Toate"
 
-#: ../UpdateManager/UpdateManager.py:589
+#: ../UpdateManager/UpdateManager.py:406
 msgid "_Check All"
 msgstr "_Bifează Toate"
 
-#. TRANSLATORS: b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:633 ../UpdateManager/UpdateManager.py:689
+#: ../UpdateManager/UpdateManager.py:450
 #, python-format
-msgid "Download size: %s"
-msgstr "Dimensiunea actualizărilor: %s"
+msgid ""
+"Download size: %s\n"
+"%s selected."
+msgstr ""
+"Total descărcare: %s\n"
+"selectat %s"
 
-#: ../UpdateManager/UpdateManager.py:637
+#: ../UpdateManager/UpdateManager.py:455
 msgid "Unknown download size"
 msgstr "Mărimea descărcării necunscută"
 
-#: ../UpdateManager/UpdateManager.py:645
+#: ../UpdateManager/UpdateManager.py:463
 msgid ""
 "It is unknown when the package information was updated last. Please try "
 "clicking on the 'Check' button to update the information."
@@ -1492,7 +1675,7 @@ msgstr ""
 "despre pachte. Pentru a actualiza informaţia faceţi clic pe butonul "
 "„Verifică”."
 
-#: ../UpdateManager/UpdateManager.py:654
+#: ../UpdateManager/UpdateManager.py:472
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
@@ -1503,7 +1686,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Informația despre pachete a fost actualizată ultimat dată acum %s de zile."
 
-#: ../UpdateManager/UpdateManager.py:658
+#: ../UpdateManager/UpdateManager.py:476
 #, python-format
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
@@ -1514,14 +1697,13 @@ msgstr[1] ""
 msgstr[2] ""
 "Informația despre pachete a fost actualizată ultimat dată acum %s de ore."
 
-#: ../UpdateManager/UpdateManager.py:662
+#: ../UpdateManager/UpdateManager.py:480
 msgid "The package information was last updated less than one hour ago."
 msgstr ""
 "Informațiile despre pachete au fost actualizate ultima dată acum mai puțin "
 "de o oră."
 
-#: ../UpdateManager/UpdateManager.py:670
-#: ../data/glade/UpdateManager.glade.h:21
+#: ../UpdateManager/UpdateManager.py:500 ../data/glade/UpdateManager.ui.h:23
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
@@ -1529,31 +1711,53 @@ msgstr ""
 "Actualizările programelor corectează erorile, elimină vulnerabilitățile de "
 "securitate și vă pun la dispoziție funcționalități noi."
 
-#: ../UpdateManager/UpdateManager.py:685
+#: ../UpdateManager/UpdateManager.py:519
+msgid "Welcome to Ubuntu"
+msgstr "Bine ați venit la Ubuntu"
+
+#: ../UpdateManager/UpdateManager.py:520
+msgid ""
+"These software updates have been issued since Ubuntu was released. If you "
+"don't want to install them now, choose \"Update Manager\" from the "
+"Administration Menu later."
+msgstr ""
+"Aceste actualizări au devenit disponibile de când Ubuntu a fost lansat. Dacă "
+"nu doriți să le instalați acum, alegeți mai târziu „Administrator "
+"actualizări” din meniul de Administrație."
+
+#: ../UpdateManager/UpdateManager.py:523
+msgid "Software updates are available for this computer"
+msgstr "Sunt disponibile actualizări de programe pentru acest calculator"
+
+#: ../UpdateManager/UpdateManager.py:524
+msgid ""
+"If you don't want to install them now, choose \"Update Manager\" from the "
+"Administration menu later."
+msgstr ""
+"Dacă nu doriți să le instalați acum, alegeti opțiunea \"Administrator "
+"actualizări\" din meniul Administrare, mai târziu."
+
+#: ../UpdateManager/UpdateManager.py:573
 #, python-format
-msgid "You can install %s update."
-msgid_plural "You can install %s updates."
-msgstr[0] "Se poate instala %s actualizare."
-msgstr[1] "Se pot instala %s actualizări."
-msgstr[2] "Se pot instala %s de actualizări."
+msgid ""
+"The upgrade needs a total of %s free space on disk '%s'. Please free at "
+"least an additional %s of disk space on '%s'. Empty your trash and remove "
+"temporary packages of former installations using 'sudo apt-get clean'."
+msgstr ""
+"Actualizarea necesită %s spațiu liber total pe discul „%s”. Eliberați încă "
+"%s de spațiu pe discul „%s”. Goliți coșul de gunoi și ștergeți pachetele "
+"temporare ale actualizărilor mai vechi folosind comanda „sudo apt-get clean”."
 
-#: ../UpdateManager/UpdateManager.py:727
-msgid "Please wait, this can take some time."
-msgstr "Vă rugăm aşteptaţi, ar putea dura."
-
-#: ../UpdateManager/UpdateManager.py:729
-msgid "Update is complete"
-msgstr "Actualizare completă."
-
-#: ../UpdateManager/UpdateManager.py:781
+#: ../UpdateManager/UpdateManager.py:630
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:114
 msgid "Reading package information"
 msgstr "Se citesc informațiile pachetului"
 
-#: ../UpdateManager/UpdateManager.py:884
+#: ../UpdateManager/UpdateManager.py:743
 msgid "Could not initialize the package information"
 msgstr "Nu pot iniţializa informaţiile despre pachet"
 
-#: ../UpdateManager/UpdateManager.py:885
+#: ../UpdateManager/UpdateManager.py:744
 msgid ""
 "An unresolvable problem occurred while initializing the package "
 "information.\n"
@@ -1567,7 +1771,7 @@ msgstr ""
 "Raportați această defecțiune împotriva pachetului „update-manager” și "
 "includeți următorul mesaj:\n"
 
-#: ../UpdateManager/UpdateManager.py:907
+#: ../UpdateManager/UpdateManager.py:766
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -1579,55 +1783,58 @@ msgstr ""
 "Raportați această defecțiune împotriva pachetului „update-manager” și "
 "includeți următorul mesaj de eroare:"
 
+#: ../UpdateManager/UpdateManager.py:789
+msgid " (New install)"
+msgstr " (Instalare nouă)"
+
 #. TRANSLATORS: the b stands for Bytes
-#: ../UpdateManager/UpdateManager.py:932
+#: ../UpdateManager/UpdateManager.py:793
 #, python-format
 msgid "(Size: %s)"
 msgstr "(Mărime: %s)"
 
-#: ../UpdateManager/UpdateManager.py:934
+#: ../UpdateManager/UpdateManager.py:795
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
 msgstr "De la versiunea %(old_version)s la %(new_version)s"
 
-#: ../UpdateManager/UpdateManager.py:938
+#: ../UpdateManager/UpdateManager.py:799
 #, python-format
 msgid "Version %s"
 msgstr "Versiunea %s"
 
-#: ../UpdateManager/UpdateManager.py:951
-msgid "Your distribution is not supported anymore"
-msgstr "Distribuţia dvs. nu mai poate beneficia de suport."
+#: ../UpdateManager/UpdateManager.py:812
+msgid "Your Ubuntu release is not supported anymore"
+msgstr "Nu se mai oferă asistență pentru versiunea dumneavoastră de Ubuntu"
 
-#: ../UpdateManager/UpdateManager.py:952
+#: ../UpdateManager/UpdateManager.py:813
 msgid ""
-"You will not get any further security fixes or critical updates. Upgrade to "
-"a later version of Ubuntu Linux. See http://www.ubuntu.com for more "
-"information on upgrading."
+"You will not get any further security fixes or critical updates. Please "
+"Upgrade to a later version of Ubuntu Linux."
 msgstr ""
-"Nu veţi mai primi actualizări de securitate sau actualizări obligatorii. "
-"Instalaţi o versiune mai nouă a Ubuntu Linux. Vedeţi http://www.ubuntu.com "
-"pentru mai multe informaţii legate de actualizare."
+"Nu veți mai obține actualizări viitoare de securitate sau critice. Vă rugăm "
+"să actualizați sistemul la o versiune de Ubuntu mai nouă."
 
-#: ../UpdateManager/UpdateManager.py:978
-msgid "Downloading the upgrade tool"
-msgstr "Descarc programul pentru actualizare"
+#: ../UpdateManager/UpdateManager.py:820
+msgid "Upgrade information"
+msgstr "Informații actualizare"
 
-#: ../UpdateManager/UpdateManager.py:980
-msgid "The upgrade tool will guide you through the upgrade process."
-msgstr "Utilitarul de actualizare vă va ghida prin procesul de actualizare."
+#. print "on_button_dist_upgrade_clicked"
+#: ../UpdateManager/UpdateManager.py:840
+msgid "Downloading the release upgrade tool"
+msgstr "Se descarcă utilitarul de actualizare"
 
-#: ../UpdateManager/UpdateManager.py:988
+#: ../UpdateManager/UpdateManager.py:847
 #, python-format
-msgid "<b>New distribution release '%s' is available</b>"
-msgstr "<b>Este disponibilă noua versiune „%s”</b>"
+msgid "<b>New Ubuntu release '%s' is available</b>"
+msgstr "<b>Este disponibilă versiunea nouă de Ubuntu „%s”</b>"
 
 #. we assert a clean cache
-#: ../UpdateManager/UpdateManager.py:1031
+#: ../UpdateManager/UpdateManager.py:886
 msgid "Software index is broken"
 msgstr "Indexul pachetelor software este deteriorat"
 
-#: ../UpdateManager/UpdateManager.py:1032
+#: ../UpdateManager/UpdateManager.py:887
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
@@ -1637,7 +1844,169 @@ msgstr ""
 "managerul de pachete \"Synaptic\" sau rulaţi \"sudo apt-get install -f\" "
 "într-un terminal pentru a remedia această problemă."
 
-#: ../data/glade/UpdateManager.glade.h:1
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:136
+msgid "Downloading Package Information"
+msgstr "Se descarcă informațiile despre pachete"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:137
+msgid ""
+"The repositories are being checked for new, removed, or updated software "
+"packages"
+msgstr ""
+"Arhivele sunt verificate acum pentru pachete software noi, eliminate sau "
+"actualizate"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:145
+msgid "Downloading Package Updates"
+msgstr "Se descarcă actualizările pachetelor"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:146
+msgid ""
+"The selected package updates are being downloaded and installed on the system"
+msgstr ""
+"Actualizările pentru pachetele selectate sunt descărcate și instalate pe "
+"sistem"
+
+#: ../UpdateManagerHildon/UpdateManagerHildon.py:152
+msgid "run_synaptic called with unknown action"
+msgstr "run_synaptic a fost apelat cu o acțiune necunoscută"
+
+#: ../UpdateManagerText/UpdateManagerText.py:26
+msgid "Cancel"
+msgstr "Anulează"
+
+#: ../UpdateManagerText/UpdateManagerText.py:27
+msgid "Install"
+msgstr "Instalează"
+
+#: ../UpdateManagerText/UpdateManagerText.py:45
+msgid "Building Updates List"
+msgstr "Se construiește lista de actualizări"
+
+#: ../UpdateManagerText/UpdateManagerText.py:48
+msgid ""
+"\n"
+"A normal upgrade can not be calculated, please run: \n"
+"  sudo apt-get dist-upgrade\n"
+"\n"
+"\n"
+"This can be caused by:\n"
+" * A previous upgrade which didn't complete\n"
+" * Problems with some of the installed software\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+" * Normal changes of a pre-release version of Ubuntu"
+msgstr ""
+"\n"
+"Nu poate fi calculată o actualizare normală, executați:\n"
+"  sudo apt-get dist-upgrade\n"
+"\n"
+"\n"
+"Acest lucru poate fi cauzat de:\n"
+" * O actualizare precedentă ce nu a fost încheiată\n"
+" * Probleme în legătură cu unele aplicații instalate\n"
+" * Pachete de programe neoficiale care nu au fost furnizate de Ubuntu\n"
+" * Modificări normale ale unei versiuni încă ne-publicate de Ubuntu"
+
+#: ../UpdateManagerText/UpdateManagerText.py:117
+msgid "Downloading changelog"
+msgstr "Se descarcă jurnalul de modificări"
+
+#: ../UpdateManager/Core/MyCache.py:124
+#, python-format
+msgid "Other updates (%s)"
+msgstr "Alte actualizări (%s)"
+
+#: ../UpdateManager/Core/MyCache.py:246
+#, python-format
+msgid ""
+"Changes for the versions:\n"
+"%s\n"
+"%s\n"
+"\n"
+msgstr ""
+"Schimbări de la versiunile:\n"
+"%s\n"
+"%s\n"
+"\n"
+
+#: ../UpdateManager/Core/MyCache.py:248
+msgid "This change is not coming from a source that supports changelogs."
+msgstr ""
+"Această modificare nu provine de la o sursă care să suporte changelog-urile."
+
+#: ../UpdateManager/Core/MyCache.py:256
+#, python-format
+msgid ""
+"The changelog does not contain any relevant changes.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+"Istoricul de modificărilor nu conține modificări relevante.\n"
+"\n"
+"Folosiți http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"până când modificările devin disponibile sau încercați mai târziu."
+
+#: ../UpdateManager/Core/MyCache.py:261
+#, python-format
+msgid ""
+"The list of changes is not available yet.\n"
+"\n"
+"Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"until the changes become available or try again later."
+msgstr ""
+"Lista cu modificările nu este încă disponibilă.\n"
+"\n"
+"Vă rugăm să folosiți http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"până ce modificările vor fi disponibile sau încercați din nou mai târziu."
+
+#: ../UpdateManager/Core/MyCache.py:267
+msgid ""
+"Failed to download the list of changes. \n"
+"Please check your Internet connection."
+msgstr ""
+"Nu am putut descărca lista modificărilor. \n"
+"Vă rog să verificaţi dacă aveţi o conexiune internet activă."
+
+#: ../UpdateManager/Core/UpdateList.py:50
+msgid "Failed to detect distribution"
+msgstr "Nu s-a putut detecta distribuția"
+
+#: ../UpdateManager/Core/UpdateList.py:51
+#, python-format
+msgid "A error '%s' occurred while checking what system you are using."
+msgstr ""
+"S-a produs eroarea „%s” la verificarea sistemului pe care îl folosiți."
+
+#: ../UpdateManager/Core/UpdateList.py:62
+msgid "Important security updates"
+msgstr "Actualizări importante de securitate"
+
+#: ../UpdateManager/Core/UpdateList.py:63
+msgid "Recommended updates"
+msgstr "Actualizări recomandate"
+
+#: ../UpdateManager/Core/UpdateList.py:64
+msgid "Proposed updates"
+msgstr "Actualizări propuse"
+
+#: ../UpdateManager/Core/UpdateList.py:65
+msgid "Backports"
+msgstr "Backports"
+
+#: ../UpdateManager/Core/UpdateList.py:66
+msgid "Distribution updates"
+msgstr "Actualizări distribuţie"
+
+#: ../UpdateManager/Core/UpdateList.py:71
+msgid "Other updates"
+msgstr "Alte actualizări"
+
+#: ../UpdateManager/Core/UpdateList.py:80
+msgid "Previous selected"
+msgstr "Ales anterior"
+
+#: ../data/glade/UpdateManager.ui.h:1
 msgid ""
 "<b><big>You must check for updates manually</big></b>\n"
 "\n"
@@ -1650,103 +2019,117 @@ msgstr ""
 "configura acest comportament din <i>Surse Software</i> în tab-ul "
 "<i>Actualizări</i>."
 
-#: ../data/glade/UpdateManager.glade.h:4
-msgid "<big><b>Keep your system up-to-date</b></big>"
-msgstr "<big><b>Menţineţi sistemul actualizat la zi</b></big>"
-
-#: ../data/glade/UpdateManager.glade.h:5
+#: ../data/glade/UpdateManager.ui.h:4
 msgid "<big><b>Not all updates can be installed</b></big>"
 msgstr "<big><b>Nu s-au putut instala toate actualizările</b></big>"
 
-#: ../data/glade/UpdateManager.glade.h:6
+#: ../data/glade/UpdateManager.ui.h:5
+msgid "<big><b>Running on battery</b></big>"
+msgstr "<big><b>Se alimentează de la acumulator</b></big>"
+
+#: ../data/glade/UpdateManager.ui.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
 msgstr "<big><b>Se porneşte administratorul de pachete</b></big>"
 
-#: ../data/glade/UpdateManager.glade.h:7
+#: ../data/glade/UpdateManager.ui.h:7
 msgid "Changes"
 msgstr "Modificări"
 
-#: ../data/glade/UpdateManager.glade.h:8
+#: ../data/glade/UpdateManager.ui.h:8
 msgid "Chec_k"
 msgstr "_Verifică"
 
-#: ../data/glade/UpdateManager.glade.h:9
-msgid "Check the software channels for new updates"
-msgstr "Verifică depozitele software pentru actualizări noi"
+#: ../data/glade/UpdateManager.ui.h:9
+msgid "Co_ntinue"
+msgstr "Co_ntinuă"
 
-#: ../data/glade/UpdateManager.glade.h:10
+#: ../data/glade/UpdateManager.ui.h:10
 msgid "Description"
 msgstr "Descriere"
 
-#: ../data/glade/UpdateManager.glade.h:11
+#: ../data/glade/UpdateManager.ui.h:11
 msgid "Description of update"
 msgstr "Descrierea actualizării"
 
-#: ../data/glade/UpdateManager.glade.h:12
-msgid "Release Notes"
-msgstr "Informații versiune"
+#: ../data/glade/UpdateManager.ui.h:13
+msgid "Restart _Later"
+msgstr "Repornește mai _târziu"
 
-#: ../data/glade/UpdateManager.glade.h:13
+#: ../data/glade/UpdateManager.ui.h:14
 msgid ""
 "Run a partial upgrade, to install as many updates as possible. \n"
 "\n"
 "This can be caused by:\n"
-" ◦ A previous upgrade which didn't complete\n"
-" ◦ Problems with some of the installed software\n"
-" ◦ Unofficial software packages not provided by Ubuntu\n"
-" ◦ Normal changes of a pre-release version of Ubuntu"
+" * A previous upgrade which didn't complete\n"
+" * Problems with some of the installed software\n"
+" * Unofficial software packages not provided by Ubuntu\n"
+" * Normal changes of a pre-release version of Ubuntu"
 msgstr ""
-"Rulaţi o actualizare parţială, pentru a instala cât mai multe actualizări cu "
-"putinţă. \n"
+"Pornește o actualizare parțială, pentru a instala cât mai multe pachete "
+"posibile. \n"
 "\n"
 "Aceasta poate fi cauzată de:\n"
-" ◦ O actualizare anterioară ce nu a fost terminată\n"
-" ◦ Probleme în pachetele instalate curent\n"
-" ◦ Pachete software neoficiale neprovenind de la Ubuntu\n"
-" ◦ Modificări normale a unei versiuni nelansată a lui Ubuntu"
+" * O actualizare anterioară nefinalizată\n"
+" * Probleme la softwareul instalat\n"
+" * Pachete neoficiale care nu se găsesc în Ubuntu\n"
+" * Modificări normale într-o versiune beta Ubuntu"
 
-#: ../data/glade/UpdateManager.glade.h:20
+#: ../data/glade/UpdateManager.ui.h:21
+msgid "Settings..."
+msgstr "Configurări..."
+
+#: ../data/glade/UpdateManager.ui.h:22
 msgid "Show progress of individual files"
 msgstr "Afişează progresul pentru fiecare fişier în parte"
 
-#: ../data/glade/UpdateManager.glade.h:22
+#: ../data/glade/UpdateManager.ui.h:24
+msgid ""
+"The computer needs to restart to finish installing updates. Please save your "
+"work before continuing."
+msgstr ""
+"Pentru a finaliza actualizările, calculatorul trebuie repornit. Înainte de a "
+"continua, salvați modificările curente."
+
+#: ../data/glade/UpdateManager.ui.h:25
 msgid "U_pgrade"
 msgstr "_Actualizează"
 
-#: ../data/glade/UpdateManager.glade.h:23
-#: ../data/update-manager.desktop.in.h:3
+#: ../data/glade/UpdateManager.ui.h:26 ../data/update-manager.desktop.in.h:3
+#: ../data/update-manager-hildon.desktop.in.h:3
 msgid "Update Manager"
 msgstr "Administrator actualizări"
 
-#: ../data/glade/UpdateManager.glade.h:24
-msgid "Upgrade to the latest version of Ubuntu"
-msgstr "Actualizați la ultima versiune Ubuntu"
+#: ../data/glade/UpdateManager.ui.h:27
+msgid "Your system is running on battery. Are you sure you want to continue?"
+msgstr "Sistemul se alimentează de la acumulator. Doriți să continuați?"
 
-#: ../data/glade/UpdateManager.glade.h:25
+#: ../data/glade/UpdateManager.ui.h:28
 msgid "_Hide this information in the future"
 msgstr "_Nu mai afişa această informaţie pe viitor"
 
-#: ../data/glade/UpdateManager.glade.h:26
+#: ../data/glade/UpdateManager.ui.h:29
 msgid "_Install Updates"
 msgstr "_Instalează actualizările"
 
-#: ../data/glade/UpdateManager.glade.h:27
+#: ../data/glade/UpdateManager.ui.h:30
 msgid "_Partial Upgrade"
 msgstr "_Actualizare parţială"
 
-#: ../data/glade/UpdateManager.glade.h:28
+#: ../data/glade/UpdateManager.ui.h:32
 msgid "_Upgrade"
 msgstr "Act_ualizează"
 
-#: ../data/glade/UpdateManager.glade.h:29
+#: ../data/glade/UpdateManager.ui.h:33
 msgid "updates"
 msgstr "actualizări"
 
 #: ../data/update-manager.desktop.in.h:1
+#: ../data/update-manager-hildon.desktop.in.h:1
 msgid "Show and install available updates"
 msgstr "Afişează şi instalează actualizările disponibile"
 
 #: ../data/update-manager.desktop.in.h:2
+#: ../data/update-manager-hildon.desktop.in.h:2
 msgid "Software Updates"
 msgstr "Actualizări software"
 
@@ -1759,6 +2142,10 @@ msgid "Auto close the install window after successful install"
 msgstr "Inchide automat fereastra de instalare după instalarea cu succes"
 
 #: ../data/update-manager.schemas.in.h:3
+msgid "First run welcome message"
+msgstr "Mesaj de întâmpinare pentru prima execuție"
+
+#: ../data/update-manager.schemas.in.h:4
 msgid ""
 "If automatic checking for updates is disabled, you have to reload the "
 "channel list manually. This option allows to hide the reminder shown in this "
@@ -1768,7 +2155,13 @@ msgstr ""
 "reîncărcaţă lista canalelor manual. Această opţiune permite ascunderea "
 "reminderului afişat în acest caz."
 
-#: ../data/update-manager.schemas.in.h:4
+#: ../data/update-manager.schemas.in.h:5
+msgid "If this key is set a first run welcome message will be presented."
+msgstr ""
+"Dacă această cheie este definită va fi afișat un mesaj de întâmpinare la "
+"prima execuție."
+
+#: ../data/update-manager.schemas.in.h:6
 msgid ""
 "If this key is set the install window will be automatically closed on "
 "successful installation."
@@ -1776,7 +2169,7 @@ msgstr ""
 "Dacă aceasă cheie este setată, atunci fereastra de instalare va fi automat "
 "inchisă după o instalare cu succes."
 
-#: ../data/update-manager.schemas.in.h:5
+#: ../data/update-manager.schemas.in.h:7
 msgid ""
 "If this key is set the main update list window will show version information "
 "(from version to version)."
@@ -1785,34 +2178,34 @@ msgstr ""
 "actualizărilor va afișa informații despre versiuni (de la versiune la "
 "versiune)."
 
-#: ../data/update-manager.schemas.in.h:6
+#: ../data/update-manager.schemas.in.h:8
 msgid "Remind to reload the channel list"
 msgstr "Aminteşte să reîncarc lista canalelor"
 
-#: ../data/update-manager.schemas.in.h:7
+#: ../data/update-manager.schemas.in.h:9
 msgid "Show details of an update"
 msgstr "Arată detaliile unei actualizări"
 
-#: ../data/update-manager.schemas.in.h:8
+#: ../data/update-manager.schemas.in.h:10
 msgid "Show version in update list"
 msgstr "Afișează versiunea în lista de actualizări"
 
-#: ../data/update-manager.schemas.in.h:9
+#: ../data/update-manager.schemas.in.h:11
 msgid "Stores the size of the update-manager dialog"
 msgstr "Stochează dimensiunea dialogului update-manager"
 
-#: ../data/update-manager.schemas.in.h:10
+#: ../data/update-manager.schemas.in.h:12
 msgid ""
 "Stores the state of the expander that contains the list of changes and the "
 "description"
 msgstr ""
 "Stochează starea extensorului care conţine lista de modificaări şi descrierea"
 
-#: ../data/update-manager.schemas.in.h:11
+#: ../data/update-manager.schemas.in.h:13
 msgid "The window size"
 msgstr "Mărimea ferestrei"
 
-#: ../data/update-manager.schemas.in.h:12
+#: ../data/update-manager.schemas.in.h:14
 msgid ""
 "This key is deprecated in favor of the file /etc/update-manager/release-"
 "upgrades Check automatically if a new version of the current distribution is "
@@ -1823,41 +2216,64 @@ msgstr ""
 "distribuției și oferă posibilitatea de a actualiza la aceasta (dacă este "
 "posibil)."
 
-#: ../update-manager:55
+#: ../data/update-manager.schemas.in.h:15
+msgid ""
+"This will permanently hide the new release prompt from check-new-release-"
+"gtk. Note that the small button in the main update-manager UI will still be "
+"there."
+msgstr ""
+
+#: ../data/update-manager.schemas.in.h:16
+msgid "make check-new-release-gtk ignore a given new release"
+msgstr ""
+
+#: ../update-manager:56 ../do-release-upgrade:33
 msgid "Show version and exit"
 msgstr "Afişează versiunea şi ieşi"
 
-#: ../update-manager:58
-msgid "Check if a new distribution release is available"
-msgstr "Verifică dacă o nouă versiune este disponibilă"
+#: ../update-manager:59
+msgid "Directory that contains the data files"
+msgstr "Dosarul care conține fișierele cu date"
 
-#: ../update-manager:61 ../do-release-upgrade:23
+#: ../update-manager:62
+msgid "Check if a new Ubuntu release is available"
+msgstr "Verifică dacă este disponibilă o nouă versiune Ubuntu"
+
+#: ../update-manager:65 ../do-release-upgrade:36 ../check-new-release:27
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr ""
 "Verifică dacă este posibilă actualizarea la cea mai nouă versiune în "
 "dezvoltare"
 
-#: ../update-manager:65
+#: ../update-manager:69
 msgid "Upgrade using the latest proposed version of the release upgrader"
 msgstr ""
 "Înoiește folosind ultima versiune propusă de actualizatorul de versiuni"
 
-#: ../update-manager:68
+#: ../update-manager:76
+msgid "Do not focus on map when starting"
+msgstr "Nu adu harta în prim plan la demarare"
+
+#: ../update-manager:79
 msgid "Try to run a dist-upgrade"
 msgstr "Încercaţi să executaţi dist-upgrade"
 
-#: ../update-manager:87
+#: ../update-manager:83 ../do-release-upgrade:52
+msgid "Test upgrade with a sandbox aufs overlay"
+msgstr "Testare actualizare folosind sandbox aufs"
+
+#: ../update-manager:103
 msgid "Running partial upgrade"
 msgstr "Rulez actualizarea parţială"
 
-#: ../do-release-upgrade:27
+#: ../do-release-upgrade:40 ../check-new-release:31
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Încerați o actualizarea la ultima versiunea folosind utilitarul din $distro-"
 "proposed"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:44
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1867,542 +2283,125 @@ msgstr ""
 "Momentat sunt suportate 'desktop' pentru o actualizare normală a unui sistem "
 "de birou sau 'server' pentru actualizarea unui sistem de tip server."
 
-#: ../do-release-upgrade:37
+#: ../do-release-upgrade:50
 msgid "Run the specified frontend"
 msgstr "Lansează interfaţa specifictă"
 
-#: ../do-release-upgrade:41
+#: ../do-release-upgrade:55
+msgid ""
+"Check only if a new distribution release is available and report the result "
+"via the exit code"
+msgstr ""
+
+#: ../do-release-upgrade:69
 msgid "Checking for a new ubuntu release"
 msgstr "Verific pentru o versiune nouă Ubuntu"
 
-#: ../do-release-upgrade:48
+#: ../do-release-upgrade:79
 msgid "No new release found"
 msgstr "Nu am găsit o versiunea nouă"
 
+#: ../do-release-upgrade:85 ../check-new-release:56
+#, c-format
+msgid "New release '%s' available."
+msgstr "O nouă versiune „%s” disponibilă."
+
+#: ../do-release-upgrade:86 ../check-new-release:57
+msgid "Run 'do-release-upgrade' to upgrade to it."
+msgstr "Executați „do-release-upgrade” pentru a o aplica."
+
+#: ../check-new-release:35
+#, c-format
+msgid ""
+"Do not output anything, just return %s if there is a new release and %s if "
+"there is none."
+msgstr ""
+"Nu afișa nimic, doar întoarce %s dacă există o nouă versiune și %s în caz "
+"contrar."
+
+#: ../Janitor/computerjanitor/exc.py:30
+#, python-format
+msgid "Unimplemented method: %s"
+msgstr "Metodă neimplementată: %s"
+
+#: ../Janitor/computerjanitor/file_cruft.py:46
+msgid "A file on disk"
+msgstr "Un fișier de pe disc"
+
+#: ../Janitor/computerjanitor/package_cruft.py:45
+msgid ".deb package"
+msgstr "pachet .deb"
+
+#: ../Janitor/computerjanitor/missing_package_cruft.py:33
+msgid "Install missing package."
+msgstr "Instalare pachete lipsă."
+
+#: ../Janitor/computerjanitor/missing_package_cruft.py:42
+#, python-format
+msgid "Package %s should be installed."
+msgstr "Pachetul %s trebuie instalat."
+
+#. pragma: no cover
+#: ../Janitor/plugins/dpkg_status_plugin.py:36
+#, python-format
+msgid "%i obsolete entries in the status file"
+msgstr "%i înregistrări învechite în fișierul de stare"
+
+#: ../Janitor/plugins/dpkg_status_plugin.py:39
+msgid "Obsolete entries in dpkg status"
+msgstr "Fișiere învechite în starea dpkg"
+
+#. pragma: no cover
+#: ../Janitor/plugins/dpkg_status_plugin.py:42
+msgid "Obsolete dpkg status entries"
+msgstr "Înregistrări învechite în starea dpkg"
+
+#: ../Janitor/plugins/kdelibs4to5_plugin.py:39
+msgid ""
+"When upgrading, if kdelibs4-dev is installed, kdelibs5-dev needs to be "
+"installed. See bugs.launchpad.net, bug #279621 for details."
+msgstr ""
+"La actualizare, dacă kdelibs4-dev este instalat, va trebui instalat kdelibs5-"
+"dev. Pentru detalii consultați raportul de eroare #279621 la "
+"bugs.launchpad.net."
+
+#: ../Janitor/plugins/langpack_manual_plugin.py:34
+#, python-format
+msgid "%s needs to be marked as manually installed."
+msgstr "%s trebuie marcat ca instalat manual."
+
+#: ../Janitor/plugins/remove_lilo_plugin.py:28
+msgid ""
+"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgstr ""
+"Se șterge lilo, deoarece grub este deasemenea instalat. (Pentru detalii "
+"consultați bug #314004.)"
+
 #~ msgid ""
-#~ "Use special upgrade mode. Available:\n"
-#~ "desktop, server"
+#~ "Canonical Ltd. no longer provides support for the following software "
+#~ "packages. You can still get support from the community.\n"
+#~ "\n"
+#~ "If you have not enabled community maintained software (universe), these "
+#~ "packages will be suggested for removal at the end of the upgrade."
 #~ msgstr ""
-#~ "Folosește mod de actualizare special. Disponibile:\n"
-#~ "desktop, server"
+#~ "Compania Canonical nu mai oferă suport pentru următoarele pachete software. "
+#~ "Puteţi totuşi obţine suport de la comunitate.\n"
+#~ "\n"
+#~ "Dacă nu aţi activat software-ul intreţinut de comunitate (universe), în "
+#~ "pasul următor aceste pachete vor fi propuse pentru dezinstalare."
 
 #, python-format
-#~ msgid "Fetching file %li of %li at %sb/s"
-#~ msgstr "Descarc fişierul %li din %li la %sb/s"
-
-#, python-format
-#~ msgid "%li days %li hours %li minutes"
-#~ msgstr "%li zile %li ore %li minute"
-
 #~ msgid ""
-#~ "The list of changes is not available yet.\n"
-#~ "Please try again later."
-#~ msgstr ""
-#~ "Lista de modificări nu este încă disponibilă.\n"
-#~ "Vă rugăm să încercaţi mai târziu."
-
-#~ msgid "_Check"
-#~ msgstr "Verifi_că"
-
-#~ msgid "Daily"
-#~ msgstr "Zilnic"
-
-#~ msgid "Every two days"
-#~ msgstr "La fiecare două zile"
-
-#~ msgid "Weekly"
-#~ msgstr "Săptămânal"
-
-#~ msgid "Every two weeks"
-#~ msgstr "La fiecare 2 săptămâni"
-
-#~ msgid "After one week"
-#~ msgstr "După o saptămână"
-
-#~ msgid "After two weeks"
-#~ msgstr "După două săptămâni"
-
-#~ msgid "After one month"
-#~ msgstr "După o lună"
-
-#~ msgid "Error importing selected file"
-#~ msgstr "Eroare la importarea fişierului selectat"
-
-#~ msgid "Error removing the key"
-#~ msgstr "Eroare la ştergerea cheii."
-
-#~ msgid ""
-#~ "The key you selected could not be removed. Please report this as a bug."
-#~ msgstr "Cheia selectată nu poate fi ştearsă. Raportaţi această eroare."
-
-#~ msgid "_Skip This Step"
-#~ msgstr "_Sari peste acest pas"
-
-#~ msgid "Checking for updates"
-#~ msgstr "Verific pentru actualizări"
-
-#~ msgid "Every %s days"
-#~ msgstr "La fiecare %s zile"
-
-#~ msgid "After %s days"
-#~ msgstr "După %s zile"
-
-#~ msgid "Please enter a name for the disc"
-#~ msgstr "Introduceţi un nume pentru disc"
-
-#~ msgid "Please insert a disc in the drive:"
-#~ msgstr "Introduceţi un disc în unitate:"
-
-#~ msgid "<b>Internet updates</b>"
-#~ msgstr "<b>Actualizări de pe Internet</b>"
-
-#~ msgid "Authentication"
-#~ msgstr "Autentificare"
-
-#~ msgid "Internet Updates"
-#~ msgstr "Actualizări de pe Internet"
-
-#~ msgid "_Check for updates automatically:"
-#~ msgstr "_Verifică pentru actualizări automat:"
-
-#~ msgid "_Import Key File"
-#~ msgstr "Importă cheie"
-
-#~ msgid "<b>Comment:</b>"
-#~ msgstr "<b>Comentariu:</b>"
-
-#~ msgid "<b>URI:</b>"
-#~ msgstr "<b>URI:</b>"
-
-#~ msgid ""
-#~ "Binary\n"
-#~ "Source"
-#~ msgstr ""
-#~ "Binar\n"
-#~ "Sursă"
-
-#~ msgid "Scanning CD-ROM"
-#~ msgstr "Scanez CD-ROM"
-
-#~ msgid "_Reload"
-#~ msgstr "_Reîncarcă"
-
-#~ msgid "Officially supported"
-#~ msgstr "Pachete suportate oficial"
-
-#~ msgid "Restricted copyright"
-#~ msgstr "Copyright restrictiv"
-
-#~ msgid "     "
-#~ msgstr "     "
-
-#~ msgid "System Update Tool"
-#~ msgstr "Utilitar pentru actualizare sistem"
-
-#~ msgid "Asking for confirmation"
-#~ msgstr "Se aşteaptă confirmarea"
-
-#~ msgid "Fetching the upgrades"
-#~ msgstr "Se pregăteşte actualizarea"
-
-#~ msgid "<b>Remove %s</b>"
-#~ msgstr "<b>Şterge %s</b>"
-
-#~ msgid "Fetch data from the network for the upgrade?"
-#~ msgstr "Descarc date de la reţea pentru actualizare?"
-
-#~ msgid "<p>You have to download a total of %s. "
-#~ msgstr "Aveţi de descărcat un total de %s. "
-
-#~ msgid "The selected file may not be a GPG key file or it might be corrupt."
-#~ msgstr "Fişierul selectat nu pare a fi o cheie GPG sau poate fi corupt."
-
-#~ msgid ""
-#~ "A unresolvable problem occurred while calculating the upgrade.\n"
+#~ "This session appears to be running under ssh. It is not recommended to "
+#~ "perform a upgrade over ssh currently because in case of failure it is harder "
+#~ "to recover.\n"
 #~ "\n"
-#~ "Please report this bug against the 'update-manager' package and include the "
-#~ "files in /var/log/dist-upgrade/ in the bugreport."
+#~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
+#~ "Do you want to continue?"
 #~ msgstr ""
-#~ "A apărut o problemă ireparabilă la calcularea actualizării.\n"
+#~ "Această sesiune pare să ruleze prin ssh. Momentan nu este recomandat să se "
+#~ "facă o actualizare prin ssh deoarece în cazul unui eşec este mai greu de "
+#~ "recuperat.\n"
 #~ "\n"
-#~ "Vă rog raportaţi acest bug pentru pachetul 'update-manager' şi includeţi în "
-#~ "raport fişierele din /var/log/dist-upgrade/"
-
-#~ msgid "Fetching backport of '%s'"
-#~ msgstr "Copiez backport al '%s'"
-
-#~ msgid "changes"
-#~ msgstr "modificări"
-
-#~ msgid "Software Channel"
-#~ msgstr "Canal software"
-
-#~ msgid "(Source Code)"
-#~ msgstr "(Cod sursă)"
-
-#~ msgid "Source Code"
-#~ msgstr "Cod sursă"
-
-#~ msgid "<b>Automatic updates</b>"
-#~ msgstr "<b>Actualizări automate</b>"
-
-#~ msgid "<b>Internet</b>"
-#~ msgstr "<b>Internet</b>"
-
-#~ msgid "D_elete downloaded software files:"
-#~ msgstr "Ş_terge fişierele software descărcate:"
-
-#~ msgid "Download from:"
-#~ msgstr "Descarcă din:"
-
-#~ msgid "Import the public key from a trusted software provider"
-#~ msgstr "Elimină cheia selectată din keyring-ul de încredere."
-
-#~ msgid ""
-#~ "Only security updates from the official Ubuntu servers will be installed "
-#~ "automatically"
-#~ msgstr ""
-#~ "Doar actualizările de securitate de pe serverele oficiale Ubuntu vor fi "
-#~ "instalate automat"
-
-#~ msgid "Restore _Defaults"
-#~ msgstr "Restaurează cheile implicite."
-
-#~ msgid "Restore the default keys of your distribution"
-#~ msgstr "Restaurează cheile iniţiale pentru distribuţia mea"
-
-#~ msgid "Software Sources"
-#~ msgstr "Surse software"
-
-#~ msgid "Source code"
-#~ msgstr "Cod sursă"
-
-#~ msgid "_Download updates automatically, but do not install them"
-#~ msgstr "_Descarcă actualizări automat, dar nu le instala"
-
-#~ msgid "_Install security updates without confirmation"
-#~ msgstr "_Instalează actualizări de securitate fără confirmare"
-
-#~ msgid "<b>Components:</b>"
-#~ msgstr "<b>Componente:</b>"
-
-#~ msgid "<b>Distribution:</b>"
-#~ msgstr "<b>Distribuţie:</b>"
-
-#~ msgid "<b>Type:</b>"
-#~ msgstr "<b>Tip:</b>"
-
-#~ msgid ""
-#~ "<big><b>Enter the complete APT line of the repository that you want to add "
-#~ "as source</b></big>\n"
-#~ "\n"
-#~ "The APT line includes the type, location and components of a repository, for "
-#~ "example <i>\"deb http://ftp.debian.org sarge main\"</i>."
-#~ msgstr ""
-#~ "<big><b>Introduceţi linia APT completă a locaţiei pe care doriţi să o "
-#~ "adăugaţi</b></big>\n"
-#~ "\n"
-#~ "Linia APT conţine tipul, adresa şi conţinutul unei locaţii, de "
-#~ "exemplu<i>\"deb http://ftp.debian.org sarge main\"</i>."
-
-#~ msgid "APT line:"
-#~ msgstr "Linie APT:"
-
-#~ msgid "Edit Source"
-#~ msgstr "Editează sursa"
-
-#~ msgid "_Add Source"
-#~ msgstr "_Adaugă sursă"
-
-#~ msgid "Configure the sources for installable software and updates"
-#~ msgstr "Configurează sursele pentru software instalabil şi actualizări"
-
-#~ msgid "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-#~ msgstr ""
-#~ "http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-
-#~ msgid "Ubuntu 6.10 'Edgy Eft'"
-#~ msgstr "Ubuntu 6.10 'Edgy Eft'"
-
-#~ msgid "Community maintained"
-#~ msgstr "Pachete întreţinute de comunitate"
-
-#~ msgid "Cdrom with Ubuntu 6.10 'Edgy Eft'"
-#~ msgstr "Cdrom cu Ubuntu 6.10 'Edgy Eft'"
-
-#~ msgid "Ubuntu 6.06 LTS 'Dapper Drake'"
-#~ msgstr "Ubuntu 6.06 LTS 'Dapper Drake'"
-
-#~ msgid "Non-free drivers"
-#~ msgstr "Pachete non-libere"
-
-#~ msgid "Restricted software (Multiverse)"
-#~ msgstr "Software restricţionat (Multiverse)"
-
-#~ msgid "Cdrom with Ubuntu 6.06 LTS 'Dapper Drake'"
-#~ msgstr "Cdrom cu Ubuntu 6.06 LTS 'Dapper Drake'"
-
-#~ msgid "Ubuntu 5.10 'Breezy Badger'"
-#~ msgstr "Ubuntu 5.10 'Breezy Badger'"
-
-#~ msgid "Cdrom with Ubuntu 5.10 'Breezy Badger'"
-#~ msgstr "Cdrom cu Ubuntu 5.10 'Breezy Badger'"
-
-#~ msgid "Ubuntu 5.10 Security Updates"
-#~ msgstr "Actualizări de Securitate Ubuntu 5.10"
-
-#~ msgid "Ubuntu 5.10 Updates"
-#~ msgstr "Actualizări Ubuntu 5.10"
-
-#~ msgid "Ubuntu 5.10 Backports"
-#~ msgstr "Actualizări de securitate Ubuntu 5.04"
-
-#~ msgid "Ubuntu 5.04 'Hoary Hedgehog'"
-#~ msgstr "Ubuntu 5.04 'Hoary Hedgehog'"
-
-#~ msgid "Cdrom with Ubuntu 5.04 'Hoary Hedgehog'"
-#~ msgstr "Cdrom cu Ubuntu 5.04 'Hoary Hedgehog'"
-
-#~ msgid "Ubuntu 5.04 Security Updates"
-#~ msgstr "Actualizări de securitate Ubuntu 5.04"
-
-#~ msgid "Ubuntu 5.04 Updates"
-#~ msgstr "Actualizări de securitate Ubuntu 5.04"
-
-#~ msgid "Ubuntu 5.04 Backports"
-#~ msgstr "Ubuntu 5.04 Backports"
-
-#~ msgid "Ubuntu 4.10 'Warty Warthog'"
-#~ msgstr "Ubuntu 4.10 'Warty Warthog'"
-
-#~ msgid "Community maintained (Universe)"
-#~ msgstr "Pachete întreţinute de comunitate (Universe)"
-
-#~ msgid "Non-free (Multiverse)"
-#~ msgstr "Pachete non-libere (Multiverse)"
-
-#~ msgid "Cdrom with Ubuntu 4.10 'Warty Warthog'"
-#~ msgstr "Cdrom cu Ubuntu 4.10 'Warty Warthog'"
-
-#~ msgid "Ubuntu 4.10 Security Updates"
-#~ msgstr "Actualizări de securitate Ubuntu 4.10"
-
-#~ msgid "Ubuntu 4.10 Updates"
-#~ msgstr "Actualizări Ubuntu 4.10"
-
-#~ msgid "Ubuntu 4.10 Backports"
-#~ msgstr "Ubuntu 4.10 Backports"
-
-#~ msgid "http://packages.debian.org/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-#~ msgstr "http://packages.debian.org/changelogs/pool/%s/%s/%s/%s_%s/changelog"
-
-#~ msgid "Debian 3.1 \"Sarge\""
-#~ msgstr "Debian 3.1 \"Sarge\""
-
-#~ msgid "http://security.debian.org/"
-#~ msgstr "http://security.debian.org/"
-
-#~ msgid "Debian 3.1 \"Sarge\" Security Updates"
-#~ msgstr "Actualizări de securitate Debian 3.1 \"Sarge\""
-
-#~ msgid "Debian \"Etch\" (testing)"
-#~ msgstr "Debian \"Etch\" (testing)"
-
-#~ msgid "http://http.us.debian.org/debian/"
-#~ msgstr "http://http.us.debian.org/debian/"
-
-#~ msgid "Debian \"Sid\" (unstable)"
-#~ msgstr "Debian \"Sid\" (unstable)"
-
-#~ msgid "DFSG-compatible Software with Non-Free Dependencies"
-#~ msgstr "Software compatibil DFSG cu dependenţe negratuite"
-
-#~ msgid "Non-DFSG-compatible Software"
-#~ msgstr "Software incompatibil DFSG"
-
-#~ msgid "Could not find any upgrades"
-#~ msgstr "Nu s-au găsit actualizări"
-
-#~ msgid "Your system has already been upgraded."
-#~ msgstr "Sistemul dumneavoastră este actualizat la zi!"
-
-#~ msgid "Important security updates of Ubuntu"
-#~ msgstr "Actualizări importante de securitate pentru Ubuntu"
-
-#~ msgid "Updates of Ubuntu"
-#~ msgstr "Actualizări pentru Ubuntu"
-
-#~ msgid "Hide details"
-#~ msgstr "Ascunde detaliile"
-
-#~ msgid "Software Preferences"
-#~ msgstr "Preferinţe software"
-
-#~ msgid "<b>Components</b>"
-#~ msgstr "<b>Componente</b>"
-
-#~ msgid "<b>Sections:</b>"
-#~ msgstr "<b>Secţiuni:</b>"
-
-#~ msgid ""
-#~ "<span weight=\"bold\" size=\"larger\">Downloading changes</span>\n"
-#~ "\n"
-#~ "Need to get the changes from the central server"
-#~ msgstr ""
-#~ "<span weight=\"bold\" size=\"larger\">Descarc modificările</span>\n"
-#~ "\n"
-#~ "Trebuiesc obţinute schimbările de pe serverul central"
-
-#~ msgid "<b>Repository</b>"
-#~ msgstr "<b>Locaţie</b>"
-
-#~ msgid "<b>Temporary files</b>"
-#~ msgstr "<b>Fişiere temporare</b>"
-
-#~ msgid "<b>User Interface</b>"
-#~ msgstr "<b>Interfaţă utilizator</b>"
-
-#~ msgid "Automatically clean _temporary packages files"
-#~ msgstr "Curăţă automat fişierele _temporare ale pachetelor"
-
-#~ msgid "Clean interval in days: "
-#~ msgstr "Interval de curăţire în zile: "
-
-#~ msgid "Edit Repository..."
-#~ msgstr "Editează locaţia..."
-
-#~ msgid "Show disabled software sources"
-#~ msgstr "Afişează sursele software dezactivate"
-
-#~ msgid "Update interval in days: "
-#~ msgstr "Interval de actualizare în zile: "
-
-#~ msgid "_Add Repository"
-#~ msgstr "_Adaugă locaţie"
-
-#~ msgid "_Download upgradable packages"
-#~ msgstr "_Descarcă pachetele actualizate"
-
-#~ msgid ""
-#~ "<big><b>Available Updates</b></big>\n"
-#~ "\n"
-#~ "The following packages are found to be upgradable. You can upgrade them by "
-#~ "using the Install button."
-#~ msgstr ""
-#~ "<big><b>Actualizări disponibile</b></big>\n"
-#~ "\n"
-#~ "Pachetele următoare pot fi actualizate. Puteţi instala actualizările apăsând "
-#~ "pe butonul Instalează."
-
-#~ msgid "Non-free software"
-#~ msgstr "Software non-liber"
-
-#~ msgid "The updates are being applied."
-#~ msgstr "Actualizările sunt în curs de aplicare."
-
-#~ msgid "There are no updates available."
-#~ msgstr "Nu există nici un pachet de actualizat."
-
-#~ msgid "Changes not found, the server may not be updated yet."
-#~ msgstr ""
-#~ "Nu am găsit modificări, s-ar putea ca serverul să nu fi fost actualizat."
-
-#~ msgid "Run in a special upgrade mode"
-#~ msgstr "Rulează într-un mod special pentru actualizare"
-
-#~ msgid "None"
-#~ msgstr "Nimic"
-
-#~ msgid ""
-#~ "While scanning your repository information no mirror entry for the upgrade "
-#~ "was found.This cam happen if you run a internal mirror or if the mirror "
-#~ "information is out of date.\n"
-#~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
-#~ "here it will update all '%s' to '%s' entries.\n"
-#~ "If you select 'no' the update will cancel."
-#~ msgstr ""
-#~ "În timpul scanării datelor dumneavoastră despre depozit nicio intrare "
-#~ "oglindă nu a fost găsită. Acest lucru se poate întâmpla dacă rulaţi o "
-#~ "oglindă internă sau daca informaţiile sunt învechite.\n"
-#~ "\n"
-#~ "Doriţi să rescrieţi fişierul 'sources.list' oricum? Dacă selectaţi 'Da' se "
-#~ "vor modifica toate intrările din '%s' în '%s'. Dacă selectaţi nu, update-ul "
-#~ "va înceta."
-
-#~ msgid "%s updates"
-#~ msgstr "%s actualizări"
-
-#~ msgid "Nearest server"
-#~ msgstr "Cel mai apropiat server"
-
-#~ msgid "Active"
-#~ msgstr "Activ"
-
-#~ msgid ""
-#~ "The upgrade can use the network to check the latest updates and to fetch "
-#~ "packages that are not on the current CD.\n"
-#~ "If you have fast or inexpensive network access you should answer 'Yes' here. "
-#~ "If networking is expensive for you choose 'No'."
-#~ msgstr ""
-#~ "Actualizarea poate cauza reţeaua să verifice ultimele actualizări şi să "
-#~ "descarce pachete care nu se găsesc pe CD-ul curent.\n"
-#~ "Dacă aveţi o conexiune rapidă sau ieftină ar trebui să răspundeti cu 'Da'. "
-#~ "Dacă accesul la reţea este scump pentru dumneavoastră alegeţi 'Nu'."
-
-#~ msgid "Changes and description of the update"
-#~ msgstr "Modificări şi descrierea actualizării"
-
-#~ msgid "<b>CDROM/DVD</b>"
-#~ msgstr "<b>CDROM/DVD</b>"
-
-#~ msgid ""
-#~ "<i>To improve the user experience of Ubuntu please take part in the "
-#~ "popularity contest. If you do so the list of installed software and how "
-#~ "often it was used will be collected and sent anonymously to the Ubuntu "
-#~ "project  on a weekly basis.\n"
-#~ "\n"
-#~ "The results are used to improve the support for popular applications and to "
-#~ "rank applications in the search results.</i>"
-#~ msgstr ""
-#~ "<i>Pentru a îmbunătăţii experienţa Ubuntu vă rugăm să luaţi parte la "
-#~ "concursul de popularitate. Dacă faceţi acest lucru lista de software "
-#~ "instalat şi frecveţa de folosire vor fi colectate şi trimise anonim către "
-#~ "proiectul Ubuntu săptămânal.\n"
-#~ "\n"
-#~ "Rezultatele sunt folosite pentru îmbunătăţirea asistenţei la aplicaţiile "
-#~ "populare şi pentru a ordona aplicaţiile în rezultatele căutărilor.</i>"
-
-#~ msgid "Statistics"
-#~ msgstr "Statistici"
-
-#~ msgid "Submit statistical information"
-#~ msgstr "Trimite informaţii statistice"
-
-#~ msgid "Third Party"
-#~ msgstr "Terţ"
-
-#~ msgid "Backported updates"
-#~ msgstr "Actualizări portate înapoi"
-
-#~ msgid "Repositories changed"
-#~ msgstr "Locaţiile au fost schimbate"
-
-#~ msgid "A_uthentication"
-#~ msgstr "A_utentificare"
-
-#~ msgid ""
-#~ "You can run only one package management application at the same time. Please "
-#~ "close this other application first."
-#~ msgstr ""
-#~ "Puteţi rula doar un singur manager de pachete la un moment dat. Vă rog să "
-#~ "închideţi ceilalţi manageri mai întâi."
-
-#~ msgid "Initializing and getting list of updates..."
-#~ msgstr "Iniţializez şi obţin lista actualizărilor..."
-
-#~ msgid "CD"
-#~ msgstr "CD"
-
-#~ msgid "0"
-#~ msgstr "0"
+#~ "Dacă continuaţi, un demon ssh adiţional va fi pornit pe portul '%s'.\n"
+#~ "Doriţi să continuaţi?"

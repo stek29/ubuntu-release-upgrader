@@ -60,7 +60,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         print "%s is on the ignore list" % new_dist.name
         gtk.main_quit()
     self.build_ui()
-    self.window_main.set_title("Ubuntu %s Upgrade Available" % new_dist.version)
+    self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
     self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
     html_uri = new_dist.releaseNotesHtmlUri
     self.show_uri(html_uri)

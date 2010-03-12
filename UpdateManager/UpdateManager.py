@@ -147,6 +147,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                gobject.TYPE_PYOBJECT)
     self.treeview_update.set_model(self.store)
     self.treeview_update.set_headers_clickable(True);
+    self.treeview_update.set_direction(gtk.TEXT_DIR_LTR)
 
     tr = gtk.CellRendererText()
     tr.set_property("xpad", 6)

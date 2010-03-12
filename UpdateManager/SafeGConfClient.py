@@ -20,6 +20,7 @@
 #  USA
 
 import gconf
+import gobject
 
 class SafeGConfClient(object):
     """A gconfclient that does not crash if gconf is not avaialble"""

@@ -176,7 +176,10 @@ class DistUpgradeController(object):
         # run dpkg --configure -a
         except CacheExceptionDpkgInterrupted, e:
             logging.warning("dpkg interrupted, calling dpkg --configure -a")
-            self._view.getTerminal().call(["dpkg","--configure","-a"])
+            cmd = ["dpkg","--configure","-a"]
+            if os.environ.get("DEBIAN_FRONTEND") == "noninteractive":
+                cmd.append("--force-confold")
+            self._view.getTerminal().call(cmd)
             self.cache = MyCache(self.config,
                                  self._view,
                                  self.quirks,

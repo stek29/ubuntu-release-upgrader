@@ -50,6 +50,13 @@ class NonInteractiveFetchProgress(FetchProgress):
         
 
 class NonInteractiveInstallProgress(InstallProgress):
+    """ 
+    Non-interactive version of the install progress class
+    
+    This ensures that conffile prompts are handled and that
+    hanging scripts are killed after a (long) timeout via ctrl-c
+    """
+
     def __init__(self, logdir):
         InstallProgress.__init__(self)
         logging.debug("setting up environ for non-interactive use")
@@ -75,6 +82,11 @@ class NonInteractiveInstallProgress(InstallProgress):
             pass
     
     def error(self, pkg, errormsg):
+        logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
+        # check if re-run of maintainer script is requested
+        if not self.config.getWithDefault(
+            "NonInteractive","DebugBrokenScripts", False):
+            return
         # re-run maintainer script with sh -x/perl debug to get a better 
         # idea what went wrong
         # 
@@ -86,9 +98,6 @@ class NonInteractiveInstallProgress(InstallProgress):
         #
         # if the new preinst fails, its not yet in /var/lib/dpkg/info
         # so this is inaccurate as well
-        logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-        if not self.config.getboolean("NonInteractive","DebugBrokenScripts"):
-            return
         environ = copy.copy(os.environ)
         environ["PYCENTRAL"] = "debug"
         cmd = []
@@ -157,7 +166,6 @@ class NonInteractiveInstallProgress(InstallProgress):
             if version:
                 cmd.append(version.split(":",1)[1].strip())
 
-        print cmd
         logging.debug("re-running '%s' (%s)" % (cmd, environ))
         ret = subprocess.call(cmd, env=environ)
         logging.debug("%s script returned: %s" % (name,ret))
@@ -167,8 +175,6 @@ class NonInteractiveInstallProgress(InstallProgress):
         # looks like we have a race here *sometimes*
         time.sleep(5)
 	try:
-          # ask for a diff first
-          os.write(self.master_fd,"d\n")
           # don't overwrite
 	  os.write(self.master_fd,"n\n")
  	except Exception, e:

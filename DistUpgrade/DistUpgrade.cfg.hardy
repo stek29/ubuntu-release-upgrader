@@ -26,6 +26,10 @@ PostUpgradePurge=ltsp-client, ltspfsd, linux-restricted-modules-common
 PostUpgradeRemove=libflashsupport, slocate, gtk-qt-engine
 #PostUpgradeInstall=apt
 PostInstallScripts=./xorg_fix_proprietary.py
+# this supported blacklisting certain versions to ensure we do not upgrade
+#  - the openoffice.org-filter-binfilter causes a pre-depends cycle error
+#    (#516727)
+BadVersions=openoffice.org-filter-binfilter_1:3.2.0~rc4-1ubuntu1
 EnableApport=yes
 
 [KernelRemoval]

@@ -183,6 +183,7 @@ class InstallProgress(apt.progress.InstallProgress):
       except Exception, e:
         print "Exception during pm.DoInstall(): ", e
         logging.exception("Exception during pm.DoInstall()")
+        open("/var/run/update-manager-apt-exception","w").write(str(e))
         os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid

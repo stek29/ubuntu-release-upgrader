@@ -1022,21 +1022,25 @@ class DistUpgradeController(object):
                 # if its a ordering bug we can cleanly revert to
                 # the previous release, no packages have been installed
                 # yet (LP: #328655, #356781)
-                pre_configure_errors = [
-                  "E:Internal Error, Could not perform immediate configuration",
-                  "E:Couldn't configure pre-depend "]
-                for preconf_error in pre_configure_errors:
-                    if str(e).startswith(preconf_error):
-                        logging.debug("detected preconfigure error, restorting state")
-                        self._enableAptCronJob()
-                        # FIXME: strings are not good, but we are in string freeze
-                        # currently
-                        msg = _("Error during commit")
-                        msg += "\n'%s'\n" % str(e)
-                        msg += _("Restoring original system state")
-                        self._view.error(_("Could not install the upgrades"), msg)
-                        # abort() exits cleanly
-                        self.abort()
+                if os.path.exists("/var/run/update-manager-apt-exception"):
+                    e = open("/var/run/update-manager-apt-exception").read()
+                    # if its a ordering bug we can cleanly revert but we need to write
+                    # a marker for the parent process to know its this kind of error
+                    pre_configure_errors = [
+                        "E:Internal Error, Could not perform immediate configuration",
+                        "E:Couldn't configure pre-depend "]
+                    for preconf_error in pre_configure_errors:
+                        if str(e).startswith(preconf_error):
+                            logging.debug("detected preconfigure error, restorting state")
+                            self._enableAptCronJob()
+                            # FIXME: strings are not good, but we are in string freeze
+                            # currently
+                            msg = _("Error during commit")
+                            msg += "\n'%s'\n" % str(e)
+                            msg += _("Restoring original system state")
+                            self._view.error(_("Could not install the upgrades"), msg)
+                            # abort() exits cleanly
+                            self.abort()
                 
                 # invoke the frontend now and show a error message
                 msg = _("The upgrade is now aborted. Your system "

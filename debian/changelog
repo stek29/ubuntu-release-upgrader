@@ -3,6 +3,10 @@ update-manager (1:0.133.4) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeView.py:
     - detect pre-depends cycle and cleanly revert (LP: #516727)
       to the old system state
+  * DistUpgrade/DistUpgradeCache.py:
+    - only ensure translations are kept if they are still downloadable,
+      there is a lot of churn in the translations area so its not 
+      feasible to keep them all
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 16 Mar 2010 23:50:34 +0100
 

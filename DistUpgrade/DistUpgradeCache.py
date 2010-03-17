@@ -399,14 +399,14 @@ class MyCache(apt.Cache):
             # now the KeepInstalledSection code
             for section in self.config.getlist("Distro","KeepInstalledSection"):
                 for pkg in self:
-                    if pkg.markedDelete and pkg.section == section:
+                    if pkg.candidateDownloadable and pkg.markedDelete and pkg.section == section:
                         self._keepInstalled(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
                 if self.has_key(key) and (self[key].isInstalled or
                                           self[key].markedInstall):
                     for section in self.config.getlist(key,"KeepInstalledSection"):
                         for pkg in self:
-                            if pkg.markedDelete and pkg.section == section:
+                            if pkg.candidateDownloadable and pkg.markedDelete and pkg.section == section:
                                 self._keepInstalled(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
         
 

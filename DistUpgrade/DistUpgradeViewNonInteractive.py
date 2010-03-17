@@ -183,7 +183,7 @@ class NonInteractiveInstallProgress(InstallProgress):
     def startUpdate(self):
         InstallProgress.startUpdate(self)
         self.last_activity = time.time()
-        progress_log = self.config.getboolean("NonInteractive","DpkgProgressLog")
+        progress_log = self.config.getWithDefault("NonInteractive","DpkgProgressLog", False)
         if progress_log:
             fullpath = os.path.join(self.logdir, "dpkg-progress.%s.log" % self.install_run_number)
             logging.debug("writing dpkg progress log to '%s'" % fullpath)
@@ -318,13 +318,8 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     def confirmRestart(self):
         " generic ask about the restart, can be overridden "
 	logging.debug("confirmRestart() called")
-        # ignore if we don't have this option
-        try:
-            # rebooting here makes sense if we run e.g. in qemu
-            return self.config.getboolean("NonInteractive","RealReboot")
-        except Exception, e:
-            logging.debug("no RealReboot found, returning false (%s) " % e)
-            return False
+        # rebooting here makes sense if we run e.g. in qemu
+        return self.config.getWithDefault("NonInteractive","RealReboot", False)
     def error(self, summary, msg, extended_msg=None):
         " display a error "
         logging.error("%s %s (%s)" % (summary, msg, extended_msg))

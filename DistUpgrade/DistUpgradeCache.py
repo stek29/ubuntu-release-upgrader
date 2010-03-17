@@ -519,7 +519,7 @@ class MyCache(apt.Cache):
                 logging.debug("%s not available in cache" % kernel)
                 continue
             # check if installed
-            if self[kernel].isInstalled:
+            if self[kernel].isInstalled or self[kernel].markedInstall:
                 logging.debug("%s kernel already installed" % kernel)
                 if self[kernel].isUpgradable and not self[kernel].markedUpgrade:
                     self.markUpgrade(kernel, "Upgrading kernel from base-installer")

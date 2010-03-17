@@ -80,16 +80,21 @@ table { width:90%; }
 <p>Upgrade test started $DATE</p>
 
 <table border="1">
-<tr><th>Profile</th><th>Result</th><th>Date Finished</th><th>Runtime</th><th>Full Logs</th></tr>
+<tr><th>Profile</th><th>Result</th><th>Bugs</th><th>Date Finished</th><th>Runtime</th><th>Full Logs</th></tr>
 EOF
 }
 
 # ------------------------------------------------------------- main()
 
+bzr up
+
 DATE=$(date +"%F-%T")
 FAIL=""
 generate_index_html_head $DATE
 for p in $PROFILES; do
+    # clear log dir first
+    rm -f /var/cache/auto-upgrade-tester/result/$p/*
+    # do it
     echo "Testing $p"
     echo -n "<tr><td>$p</td>" >> index.html
     if /usr/bin/time -f %E --output=time.$p ./auto-upgrade-tester $UPGRADE_TESTER_ARGS ./profile/$p; then
@@ -98,7 +103,7 @@ for p in $PROFILES; do
      	FAIL="$FAIL $p"
         echo "<td class=\"error\">FAILED</td>" >> index.html
     fi
-    echo "<td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
+    echo "<td></td><td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
     upload_files $p $SSHKEY $PUBLISH $DATE
     upload_index_html $SSHKEY $PUBLISH $DATE
 done

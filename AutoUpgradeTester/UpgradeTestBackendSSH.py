@@ -198,6 +198,8 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             if ret != 0:
                 print "WARNING: post_upgrade_test '%s' failed" % script
                 ok = False
+                log=open(self.resultdir+"/test-%s.FAIL" % os.path.basename(script), "w")
+                log.write("FAIL")
 
         # check for conffiles (the copy is done via a post upgrade script)
         self._copyFromImage("/tmp/*.dpkg-dist", self.resultdir)

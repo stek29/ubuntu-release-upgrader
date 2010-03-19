@@ -1,5 +1,6 @@
 update-manager (1:0.133.4) UNRELEASED; urgency=low
 
+  [ Michael Vogt ]
   * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeView.py:
     - detect pre-depends cycle and cleanly revert (LP: #516727)
       to the old system state
@@ -17,6 +18,10 @@ update-manager (1:0.133.4) UNRELEASED; urgency=low
       (this can take a bit on a big install)
   * DistUpgrade/DistUpgradeViewNonInteractive.py:
     - fix crash in non-interactive mode (thanks to Andreas Hasenack)
+
+  [ Colin Watson ]
+  * Ship /var/lib/update-notifier directory in update-manager-core, so that
+    it's always there for 91-release-upgrade (LP: #540159).
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 16 Mar 2010 23:50:34 +0100
 

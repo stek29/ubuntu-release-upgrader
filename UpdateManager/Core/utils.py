@@ -209,16 +209,25 @@ def init_proxy(gconfclient=None):
 
 def on_battery():
   """
-  Check a dbus signal to org.gnome.PowerManager to not suspend
-  the system, this is to support upgrades from pre-gutsy g-p-m
+  Check via dbus if the system is running on battery.
+  This function is using UPower per default, if UPower is not
+  available it falls-back to DeviceKit.Power. 
   """
   try:
     import dbus
     bus = dbus.Bus(dbus.Bus.TYPE_SYSTEM)
-    devobj = bus.get_object('org.freedesktop.DeviceKit.Power', 
-                            '/org/freedesktop/DeviceKit/Power')
-    dev = dbus.Interface(devobj, "org.freedesktop.DBus.Properties")
-    return dev.Get("org.freedesktop.DeviceKit.Power", "on_battery")
+    try:
+        devobj = bus.get_object('org.freedesktop.UPower', 
+                                '/org/freedesktop/UPower')
+        dev = dbus.Interface(devobj, 'org.freedesktop.DBus.Properties')
+        return dev.Get('org.freedesktop.UPower', 'OnBattery')
+    except dbus.exceptions.DBusException, e:
+        if e._dbus_error_name != 'org.freedesktop.DBus.Error.ServiceUnknown':
+            raise
+        devobj = bus.get_object('org.freedesktop.DeviceKit.Power', 
+                                '/org/freedesktop/DeviceKit/Power')
+        dev = dbus.Interface(devobj, "org.freedesktop.DBus.Properties")
+        return dev.Get("org.freedesktop.DeviceKit.Power", "on_battery")
   except Exception, e:
     #import sys
     #print >>sys.stderr, "on_battery returned error: ", e

@@ -312,7 +312,7 @@ class DistUpgradeView(object):
         assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toRemoveAuto)+len(self.toDowngrade) == len(changes))
         # now build the message (the same for all frontends)
         msg = "\n"
-        pkgs_remove = len(self.toRemove)
+        pkgs_remove = len(self.toRemove) + len(self.toRemoveAuto)
         pkgs_inst = len(self.toInstall)
         pkgs_upgrade = len(self.toUpgrade)
         # FIXME: show detailed packages

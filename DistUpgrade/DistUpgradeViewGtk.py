@@ -279,7 +279,7 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.progress.set_text(" ")
           # 2 == WEBKIT_LOAD_FINISHED - the enums is not exposed via python
           if (self.parent._webkit_view and
-              self.parent._webkit_view.get_load_status() != 2):
+              self.parent._webkit_view.get_load_status() == 2):
             self.parent._webkit_view.execute_script('progress("%s")' % percent)
 
     def child_exited(self, term, pid, status):

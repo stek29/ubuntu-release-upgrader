@@ -87,6 +87,10 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_ask_me_later_clicked(self, button):
     print "ask me later"
+    # check again in a week
+    next_check = time.time() + 7*24*60*60
+    client = gconf.client_get_default()
+    client.set_int("/apps/update-notifier/release_check_time", next_check)
     gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):

@@ -6,17 +6,20 @@
 # 
 # Not that useful unfortunately when the CD is mounted "noexec".
 #
-# WARNING: make sure to call it with a absolute path!
-#          (e.g. /cdrom/cdromupgrade)
 
 # the codename is AUTO-GENERATED from the build-host relase codename
-CODENAME=karmic
+CODENAME=lucid
 UPGRADER_DIR=dists/$CODENAME/main/dist-upgrader/binary-all/
 
-cddirname="${0%\/*}"
-case "$cddirname" in
-/*) ;;
-*)  cddirname="$(pwd)/$cddirname" ;;
+# this script can be called in three ways:
+#   sh /cdrom/cdromugprade
+#   sh ./cdromupgrade
+#   sh cdromupgrade
+# the sh below is needed to figure out the cdromdirname
+case "$0" in
+/*)  cddirname="${0%\/*}" ;;
+*/*) cddirname="$(pwd)/${0%\/*}" ;;
+*)   cddirname="$(pwd)/" ;;
 esac
 
 fullpath="$cddirname/$UPGRADER_DIR"

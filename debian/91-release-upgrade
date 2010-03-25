@@ -31,9 +31,9 @@ elif [ -f "$stamp" ]; then
         expiration=$(expr $lastrun + 86400)
         if [ $now -ge $expiration ]; then
 		# But is older than 1 day old, so update in the background
-		/usr/lib/update-manager/check-new-release > "$stamp" &
+		/usr/lib/update-manager/check-new-release -q > "$stamp" &
 	fi
 else
 	# No cache at all, so update in the background
-	/usr/lib/update-manager/check-new-release > "$stamp" &
+	/usr/lib/update-manager/check-new-release -q > "$stamp" &
 fi

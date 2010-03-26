@@ -19,6 +19,12 @@ update-manager (1:0.133.7) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgradeQuirks.py:
     - fix 386 kernel check/transition on upgrades from hardy
     - move kubuntu-kde4-desktop transition into its own function
+  * DistUpgrade/sources.list.py, distro.py, distinfo.py:
+    - temporarily stop embedding from the python-apt build host 
+      because of the python-apt api changes, use 0.7.13.5 version 
+    instead
+  * debian/control:
+    - point to lp:~ubuntu-core-dev/update-manager/lucid
 
   [ Dustin Kirkland ]
   * debian/91-release-upgrade: do the release upgrade check with the

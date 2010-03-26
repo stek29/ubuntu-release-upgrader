@@ -36,7 +36,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   """ Gtk verson of the release notes check/download """
 
   # the timeout until we give up
-  FETCH_TIMEOUT = 10
+  FETCH_TIMEOUT = 20
 
   def __init__(self, options):
     SimpleGtkbuilderApp.__init__(self, options.datadir+"/glade/UpgradePromptDialog.ui", "update-manager")
@@ -57,7 +57,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     client = gconf.client_get_default()
     ignore_dist = client.get_string("/apps/update-manager/check_new_release_ignore")
     if ignore_dist == new_dist.name:
-        print "%s is on the ignore list" % new_dist.name
+        logging.warn("found new dist '%s' but it is on the ignore list" % new_dist.name)
         gtk.main_quit()
     self.build_ui()
     self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
@@ -76,17 +76,15 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     self.scrolledwindow_webkit_view.add(self.webkit_view)
 
   def on_button_upgrade_now_clicked(self, button):
-    print "upgrade now"
-    # FIXME: add inline fetch progress
-    import apt.progress
-    progress = apt.progress.TextFetchProgress()
+    logging.debug("upgrade now")
+    progress=UpdateManager.GtkProgress.GtkFetchProgress(self, _("Downloading the release upgrade tool"))
     fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
                                  parent=self,
                                  progress=progress)
     res = fetcher.run()
 
   def on_button_ask_me_later_clicked(self, button):
-    print "ask me later"
+    logging.debug("ask me later")
     # check again in a week
     next_check = time.time() + 7*24*60*60
     client = gconf.client_get_default()

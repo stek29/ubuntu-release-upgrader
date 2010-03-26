@@ -214,9 +214,6 @@ class DistUpgradeQuirks(object):
         self.feistyPostDistUpgradeCache()
         self.edgyPostDistUpgradeCache()
 
-    def from_hardyPostDistUpgradeCache(self):
-        self._kernel386TransitionCheck()
-
     def karmicPostDistUpgradeCache(self):
         """ 
         this function works around quirks in the 
@@ -466,6 +463,10 @@ class DistUpgradeQuirks(object):
     def from_hardyPostDistUpgradeCache(self):
         """ this function works around quirks in upgrades from hardy """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # ensure 386 -> generic transition happens
+        self._kernel386TransitionCheck()
+        # ensure kubuntu-kde4-desktop transition
+        self._kubuntuDesktopTransition()
         # evms got removed after hardy, warn and abort
         if self._usesEvmsInMounts():
             logging.error("evms in use in /etc/fstab")
@@ -476,19 +477,6 @@ class DistUpgradeQuirks(object):
                                "please switch it off and run the upgrade "
                                "again when this is done."))
             self.controller.abort()
-        # check if a key depends of kubuntu-kde4-desktop is installed
-        # and transition in this case as well
-        deps_found = False
-        frompkg = "kubuntu-kde4-desktop"
-        topkg = "kubuntu-desktop"
-        if self.config.getlist(frompkg,"KeyDependencies"):
-            deps_found = True
-            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
-                deps_found &= (self.controller.cache.has_key(pkg) and
-                               self.controller.cache[pkg].isInstalled)
-        if deps_found:
-            logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
-            self.controller.cache[topkg].markInstall()
             
 
     # run right before the first packages get installed
@@ -524,7 +512,25 @@ class DistUpgradeQuirks(object):
                 subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
                                     "./theme-switch-helper.py", "--defaults"])
         return True
+
     # helpers
+
+    def _kubuntuDesktopTransition(self):
+        """
+        check if a key depends of kubuntu-kde4-desktop is installed
+        and transition in this case as well
+        """
+        deps_found = False
+        frompkg = "kubuntu-kde4-desktop"
+        topkg = "kubuntu-desktop"
+        if self.config.getlist(frompkg,"KeyDependencies"):
+            deps_found = True
+            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
+                deps_found &= (self.controller.cache.has_key(pkg) and
+                               self.controller.cache[pkg].isInstalled)
+        if deps_found:
+            logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
+            self.controller.cache[topkg].markInstall()
 
     def _mysqlClusterCheck(self):
         """

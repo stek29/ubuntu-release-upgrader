@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime
 from string import Template
 
 import DistUpgradeView
@@ -866,8 +866,17 @@ class DistUpgradeController(object):
 
 
     def askDistUpgrade(self):
-        # check what packages got demoted and ask the user
-        # if those shall be removed
+        self._view.updateStatus(_("Calculating the changes"))
+        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
+            return False
+
+        if self.serverMode:
+            if not self.cache.installTasks(self.tasks):
+                return False
+
+        # check what packages got demoted, we do this after the upgrade
+        # calculation to skip packages that are marked for removal anyway
+        # FIXME: integrate this into main upgrade dialog!?!
         self.installed_demotions = self.cache.get_installed_demoted_packages()
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
@@ -891,20 +900,22 @@ class DistUpgradeController(object):
             self._view.showDemotions(_("Support for some applications ended"),
                                      text,
                                      self.installed_demotions)
-            self._view.updateStatus(_("Calculating the changes"))
-        # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
-            return False
+        # flush UI
+        self._view.processEvents()
 
-        if self.serverMode:
-            if not self.cache.installTasks(self.tasks):
-                return False
+        # show changes and confirm
         changes = self.cache.getChanges()
+        self._view.processEvents()
+
         # log the changes for debugging
         self._logChanges()
+        self._view.processEvents()
+
         # check if we have enough free space 
         if not self._checkFreeSpace():
             return False
+        self._view.processEvents()
+
         # ask the user if he wants to do the changes
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,

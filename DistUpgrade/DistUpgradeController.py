@@ -866,7 +866,7 @@ class DistUpgradeController(object):
 
 
     def askDistUpgrade(self):
-        # FIXME: integrate this into main upgrade dialog!?!
+        self._view.updateStatus(_("Calculating the changes"))
         if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
             return False
 
@@ -876,6 +876,7 @@ class DistUpgradeController(object):
 
         # check what packages got demoted, we do this after the upgrade
         # calculation to skip packages that are marked for removal anyway
+        # FIXME: integrate this into main upgrade dialog!?!
         self.installed_demotions = self.cache.get_installed_demoted_packages()
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
@@ -899,7 +900,6 @@ class DistUpgradeController(object):
             self._view.showDemotions(_("Support for some applications ended"),
                                      text,
                                      self.installed_demotions)
-            self._view.updateStatus(_("Calculating the changes"))
 
         # show changes and confirm
         changes = self.cache.getChanges()

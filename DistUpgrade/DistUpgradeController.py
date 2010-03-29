@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime
 from string import Template
 
 import DistUpgradeView
@@ -900,14 +900,22 @@ class DistUpgradeController(object):
             self._view.showDemotions(_("Support for some applications ended"),
                                      text,
                                      self.installed_demotions)
+        # flush UI
+        self._view.processEvents()
 
         # show changes and confirm
         changes = self.cache.getChanges()
+        self._view.processEvents()
+
         # log the changes for debugging
         self._logChanges()
+        self._view.processEvents()
+
         # check if we have enough free space 
         if not self._checkFreeSpace():
             return False
+        self._view.processEvents()
+
         # ask the user if he wants to do the changes
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,

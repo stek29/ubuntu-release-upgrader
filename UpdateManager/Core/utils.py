@@ -29,7 +29,22 @@ import os
 import os.path
 import subprocess
 import sys
+import time
 import urllib2
+
+class ExecutionTime(object):
+    """
+    Helper that can be used in with statements to have a simple
+    measure of the timming of a particular block of code, e.g.
+    with ExecutinTime("db flush"):
+        db.flush()
+    """
+    def __init__(self, info=""):
+        self.info = info
+    def __enter__(self):
+        self.now = time.time()
+    def __exit__(self, type, value, stack):
+        print "%s: %s" % (self.info, time.time() - self.now)
 
 # helpers inspired after textwrap - unfortunately
 # we can not use textwrap directly because it break

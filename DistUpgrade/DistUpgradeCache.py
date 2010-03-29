@@ -575,7 +575,7 @@ class MyCache(apt.Cache):
     def updateGUI(self, view, lock):
         while lock.locked():
             view.processEvents()
-            time.sleep(0.01)
+            time.sleep(0.03)
 
     @withResolverLog
     def distUpgrade(self, view, serverMode, partialUpgrade):
@@ -955,7 +955,9 @@ class MyCache(apt.Cache):
             if not self.has_key(demoted_pkgname):
                 continue
             pkg = self[demoted_pkgname]
-            if not pkg.isInstalled or self._depcache.IsAutoInstalled(pkg._pkg):
+            if (not pkg.isInstalled or
+                self._depcache.IsAutoInstalled(pkg._pkg) or
+                pkg.markedDelete):
                 continue
             installed_demotions.add(pkg.name)
         return list(installed_demotions)

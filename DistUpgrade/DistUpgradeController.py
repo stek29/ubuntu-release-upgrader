@@ -866,8 +866,16 @@ class DistUpgradeController(object):
 
 
     def askDistUpgrade(self):
-        # check what packages got demoted and ask the user
-        # if those shall be removed
+        # FIXME: integrate this into main upgrade dialog!?!
+        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
+            return False
+
+        if self.serverMode:
+            if not self.cache.installTasks(self.tasks):
+                return False
+
+        # check what packages got demoted, we do this after the upgrade
+        # calculation to skip packages that are marked for removal anyway
         self.installed_demotions = self.cache.get_installed_demoted_packages()
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
@@ -892,13 +900,8 @@ class DistUpgradeController(object):
                                      text,
                                      self.installed_demotions)
             self._view.updateStatus(_("Calculating the changes"))
-        # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
-            return False
 
-        if self.serverMode:
-            if not self.cache.installTasks(self.tasks):
-                return False
+        # show changes and confirm
         changes = self.cache.getChanges()
         # log the changes for debugging
         self._logChanges()

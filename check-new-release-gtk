@@ -7,6 +7,7 @@ import gconf
 import gobject
 import glib
 import gtk
+import locale
 import logging
 import sys
 import time
@@ -41,6 +42,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def __init__(self, options):
     SimpleGtkbuilderApp.__init__(self, options.datadir+"/glade/UpgradePromptDialog.ui", "update-manager")
     self.new_dist = None
+    logging.debug("runnign with devel=%s proposed=%s" % (
+            options.devel_release, options.proposed_release))
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)
     m.connect("new-dist-available", self.new_dist_available)
@@ -53,6 +56,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
 
   def new_dist_available(self, meta_release, new_dist):
+    logging.debug("new_dist_available: %s" % new_dist)
     self.new_dist = new_dist
     client = gconf.client_get_default()
     ignore_dist = client.get_string("/apps/update-manager/check_new_release_ignore")
@@ -63,6 +67,9 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
     self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
     html_uri = new_dist.releaseNotesHtmlUri
+    if not html_uri:
+        logging.warn("no ReleaseNotesHtmlUri found")
+        return
     self.show_uri(html_uri)
   
   def build_ui(self):
@@ -105,7 +112,22 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # gtk will do the right thing if uri is set
     pass
 
+  def window_delete_event_cb(self, window, event):
+    gtk.main_quit()
+
+  def _get_lang(self):
+   try:
+    (locale_s, encoding) = locale.getdefaultlocale()
+    return locale_s
+   except Exception, e: 
+    logging.exception("gedefaultlocale() failed")
+    return None
+
   def show_uri(self, uri):
+    lang = self._get_lang()
+    if lang:
+        uri += "?lang=%s" % lang
+    logging.debug("using uri '%s'" % uri)
     self.webkit_view.open(uri)
     self.webkit_view.connect("load-finished", self._on_load_finished)
 
@@ -133,7 +155,12 @@ if __name__ == "__main__":
   # mostly useful for development
   parser.add_option ("", "--datadir", default="/usr/share/update-manager")
   parser.add_option ("", "--test-uri")
+  parser.add_option ("", "--debug", action="store_true", default=False,
+                     help="Add debug output")
   (options, args) = parser.parse_args()
+
+  if options.debug:
+      logging.basicConfig(level=logging.DEBUG)
 
   # create object
   cnr = CheckNewReleaseGtk(options)

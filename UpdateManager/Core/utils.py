@@ -24,6 +24,7 @@ from stat import *
 
 import apt_pkg
 import locale
+import logging
 import re
 import os
 import os.path
@@ -114,6 +115,12 @@ def country_mirror():
 
 def get_dist():
   " return the codename of the current runing distro "
+  # support debug overwrite
+  dist = os.environ.get("META_RELEASE_FAKE_CODENAME")
+  if dist:
+      logging.warn("using fake release name '%s' (because of META_RELEASE_FAKE_CODENAME environment) " % dist)
+      return dist
+  # then check the real one
   from subprocess import Popen, PIPE
   p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
   res = p.wait()

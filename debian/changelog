@@ -1,3 +1,21 @@
+update-manager (1:0.133.11) lucid; urgency=low
+
+  * UpdateManager/GtkProgress.py:
+    - remove window title on cache progress (LP: #549936)
+  * check-new-release-gtk:
+    - if no ReleaseNotesHtml key is found, do nothing (it means the
+      meta-release file does not support this client)
+  * check-new-release-gtk, UpdateManager/Core/MetaRelease.py: 
+    - improve debugging
+  * UpdateManager/Core/utils.py:
+    - add META_RELEASE_FAKE_CODENAME environment that can be used to
+      test/force release upgrades
+  * check-new-release-gtk:
+    - append language parameter to uri
+    - support --debug
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 01 Apr 2010 00:10:14 +0200
+
 update-manager (1:0.133.10) lucid; urgency=low
 
   * help upgrade by hinting usplash gets removed in favor of 

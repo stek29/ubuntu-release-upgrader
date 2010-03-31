@@ -185,7 +185,7 @@ class MetaReleaseCore(object):
         while step_result:
             if index_tag.Section.has_key("Dist"):
                 name = index_tag.Section["Dist"]
-                #print name
+                logging.debug("found distro name: '%s'" % name)
                 rawdate = index_tag.Section["Date"]
                 date = time.mktime(rfc822.parsedate(rawdate))
                 supported = int(index_tag.Section["Supported"])
@@ -209,7 +209,7 @@ class MetaReleaseCore(object):
         # information. if not, we assume that we run on something not
         # supported and silently return
         if current_dist is None:
-            #sys.stderr.write("current dist not found in meta-release file\n")
+            logging.debug("current dist not found in meta-release file\n")
             return False
 
         # then see what we can upgrade to 

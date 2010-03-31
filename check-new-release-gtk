@@ -63,6 +63,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
     self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
     html_uri = new_dist.releaseNotesHtmlUri
+    if not html_uri:
+        return
     self.show_uri(html_uri)
   
   def build_ui(self):

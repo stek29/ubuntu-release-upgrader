@@ -46,6 +46,7 @@ class GtkOpProgress(apt.OpProgress):
         self._progressbar = progressbar
         # Do not show the close button 
         self._window.realize()
+        self._window.set_title("")
         host_window.window.set_functions(gtk.gdk.FUNC_MOVE)
         self._window.set_transient_for(parent)
 

@@ -860,6 +860,7 @@ class MyCache(apt.Cache):
     def _inRemovalBlacklist(self, pkgname):
         for expr in self.removal_blacklist:
             if re.compile(expr).match(pkgname):
+                logging.debug("blacklist expr '%s' matches '%s'" % (expr, pkgname))
                 return True
         return False
 

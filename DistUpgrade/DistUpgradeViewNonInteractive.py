@@ -279,7 +279,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         sys.__excepthook__ = self.excepthook
     def excepthook(self, type, value, traceback):
         " on uncaught exceptions -> print error and reboot "
-        logging.error("got exception '%s': %s " % (type, value))
+        logging.exception("got exception '%s': %s " % (type, value))
         #sys.excepthook(type, value, traceback)
         self.confirmRestart()
     def getOpCacheProgress(self):

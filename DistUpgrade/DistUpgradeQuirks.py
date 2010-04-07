@@ -413,6 +413,7 @@ class DistUpgradeQuirks(object):
         """ The current 
         """
         # check if we have sse
+        cache = self.controller.cache
         for pkgname in ["nvidia-glx-173", "nvidia-glx-180", "nvidia-glx-185"]:
             if (cache.has_key(pkgname) and 
                 cache[pkgname].markedInstall and

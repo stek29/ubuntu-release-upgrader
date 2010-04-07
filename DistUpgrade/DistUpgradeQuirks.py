@@ -138,39 +138,21 @@ class DistUpgradeQuirks(object):
         self._checkLanguageSupport()
 
     # quirks when run when the initial apt-get update was run -------
+    def lucidPostInitialUpdate(self):
+        " quirks that are run before the upgrade to lucid "
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # we switched the supported CPU arches for armel to a minimal of ARMv6.
+        # upgrades on systems with CPUs not matching this minimum will break
+        self._test_and_fail_on_non_arm_v6()
+        self._test_and_warn_if_vserver()
+
     def karmicPostInitialUpdate(self):
         " quirks that are run before the upgrade to karmic "
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # we switched the supported CPU arches for armel to a minimal of ARMv6.
         # upgrades on systems with CPUs not matching this minimum will break
-        # on karmic
-        if self.arch == "armel":
-            if not self._checkArmCPU():
-                res = self._view.error(_("No ARMv6 CPU"),
-                    _("Your system uses an ARM CPU that is older "
-                      "than the ARMv6 architecture. "
-                      "All packages in karmic were built with "
-                      "optimizations requiring ARMv6 as the "
-                      "minimal architecture. It is not possible to "
-                      "upgrade your system to a new Ubuntu release "
-                      "with this hardware."))
-                self.controller.abort()
-        # verver test (LP: #454783), see if there is a init around
-        try:
-            os.kill(1, 0)
-        except:
-            logging.warn("no init found")
-            res = self._view.askYesNoQuestion(
-                _("No init available"),
-                _("Your system appears to be a virtualised environment "
-                  "without an init daemon, e.g. Linux-VServer. "
-                  "Ubuntu 9.10 cannot function within this type of "
-                  "environment, requiring an update to your virtual "
-                  "machine configuration first.\n\n"
-                  "Are you sure you want to continue?"))
-            if res == False:
-                self.controller.abort()
-            self._view.processEvents()
+        self._test_and_fail_on_non_arm_v6()
+        self._test_and_warn_if_vserver()
 
     # fglrx is broken in intrepid (no support for xserver 1.5)
     def jauntyPostInitialUpdate(self):
@@ -514,6 +496,44 @@ class DistUpgradeQuirks(object):
         return True
 
     # helpers
+    def _test_and_fail_on_non_arm_v6(self):
+        """ 
+        Test and fail if the cpu is not a arm v6 or greater,
+        from 9.10 on we do no longer support those CPUs
+        """
+        if self.arch == "armel":
+            if not self._checkArmCPU():
+                res = self._view.error(_("No ARMv6 CPU"),
+                    _("Your system uses an ARM CPU that is older "
+                      "than the ARMv6 architecture. "
+                      "All packages in karmic were built with "
+                      "optimizations requiring ARMv6 as the "
+                      "minimal architecture. It is not possible to "
+                      "upgrade your system to a new Ubuntu release "
+                      "with this hardware."))
+                self.controller.abort()
+
+    def _test_and_warn_if_vserver(self):
+        """
+        upstart and vserver environments are not a good match, warn
+        if we find one
+        """
+        # verver test (LP: #454783), see if there is a init around
+        try:
+            os.kill(1, 0)
+        except:
+            logging.warn("no init found")
+            res = self._view.askYesNoQuestion(
+                _("No init available"),
+                _("Your system appears to be a virtualised environment "
+                  "without an init daemon, e.g. Linux-VServer. "
+                  "Ubuntu 9.10 cannot function within this type of "
+                  "environment, requiring an update to your virtual "
+                  "machine configuration first.\n\n"
+                  "Are you sure you want to continue?"))
+            if res == False:
+                self.controller.abort()
+            self._view.processEvents()
 
     def _kubuntuDesktopTransition(self):
         """

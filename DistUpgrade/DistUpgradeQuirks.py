@@ -137,59 +137,18 @@ class DistUpgradeQuirks(object):
         self._ntfsFstabFixup()
         self._checkLanguageSupport()
 
-    # quirks when run when the initial apt-get update was run -------
+    # quirks when run when the initial apt-get update was run ----------------
     def lucidPostInitialUpdate(self):
-        " quirks that are run before the upgrade to lucid "
+        """ quirks that are run before the sources.list is updated to lucid """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # we switched the supported CPU arches for armel to a minimal of ARMv6.
-        # upgrades on systems with CPUs not matching this minimum will break
+        # upgrades on systems with < arvm6 CPUs will break
         self._test_and_fail_on_non_arm_v6()
+        # vserver+upstart are problematic
         self._test_and_warn_if_vserver()
+        # fglrx dropped support for some cards
+        self._test_and_warn_on_dropped_fglrx_support()
 
-    def karmicPostInitialUpdate(self):
-        " quirks that are run before the upgrade to karmic "
-        logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # we switched the supported CPU arches for armel to a minimal of ARMv6.
-        # upgrades on systems with CPUs not matching this minimum will break
-        self._test_and_fail_on_non_arm_v6()
-        self._test_and_warn_if_vserver()
-
-    # fglrx is broken in intrepid (no support for xserver 1.5)
-    def jauntyPostInitialUpdate(self):
-        " quirks that are run before the upgrade to jaunty "
-        logging.debug("running %s" %  sys._getframe().f_code.co_name
-)
-        # this is to deal with the fact that support for some of the cards
-        # that fglrx used to support got dropped
-        if (self._checkVideoDriver("fglrx") and 
-            not self._supportInModaliases("fglrx")):
-             # TRANSLATORS: this string is not displayed in the 9.10 upgrade
-             #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
-             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                         "effects, and performance in games "
-                                         "and other graphically intensive "
-                                         "programs."),
-                                       _("This computer is currently using "
-                                         "the AMD 'fglrx' graphics driver. "
-                                         "No version of this driver is "
-                                         "available that works with your "
-                                         "hardware in Ubuntu "
-                                         "10.04 LTS.\n\nDo you want to continue?"))
-             if res == False:
-                 self.controller.abort()
-             # if the user wants to continue we remove the fglrx driver
-             # here because its no use (no support for this card)
-             logging.debug("remove xorg-driver-fglrx,xorg-driver-fglrx-envy,fglrx-kernel-source")
-             l=self.controller.config.getlist("Distro","PostUpgradePurge")
-             l.append("xorg-driver-fglrx")
-             l.append("xorg-driver-fglrx-envy")
-             l.append("fglrx-kernel-source")
-             l.append("fglrx-amdcccle")
-             l.append("xorg-driver-fglrx-dev")
-             l.append("libamdxvba1")
-             self.controller.config.set("Distro","PostUpgradePurge",",".join(l))
-
-    # quirks when the cache upgrade calculation is finished
+    # quirks when the cache upgrade calculation is finished -------------------
     def from_dapperPostDistUpgradeCache(self):
         self.hardyPostDistUpgradeCache()
         self.gutsyPostDistUpgradeCache()
@@ -496,6 +455,39 @@ class DistUpgradeQuirks(object):
         return True
 
     # helpers
+    def _test_and_warn_on_dropped_fglrx_support(self):
+        """
+        Some cards are no longer supported by fglrx. Check if that
+        is the case and warn
+        """
+        # this is to deal with the fact that support for some of the cards
+        # that fglrx used to support got dropped
+        if (self._checkVideoDriver("fglrx") and 
+            not self._supportInModaliases("fglrx")):
+             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                         "effects, and performance in games "
+                                         "and other graphically intensive "
+                                         "programs."),
+                                       _("This computer is currently using "
+                                         "the AMD 'fglrx' graphics driver. "
+                                         "No version of this driver is "
+                                         "available that works with your "
+                                         "hardware in Ubuntu "
+                                         "10.04 LTS.\n\nDo you want to continue?"))
+             if res == False:
+                 self.controller.abort()
+             # if the user wants to continue we remove the fglrx driver
+             # here because its no use (no support for this card)
+             logging.debug("remove xorg-driver-fglrx,xorg-driver-fglrx-envy,fglrx-kernel-source")
+             l=self.controller.config.getlist("Distro","PostUpgradePurge")
+             l.append("xorg-driver-fglrx")
+             l.append("xorg-driver-fglrx-envy")
+             l.append("fglrx-kernel-source")
+             l.append("fglrx-amdcccle")
+             l.append("xorg-driver-fglrx-dev")
+             l.append("libamdxvba1")
+             self.controller.config.set("Distro","PostUpgradePurge",",".join(l))
+
     def _test_and_fail_on_non_arm_v6(self):
         """ 
         Test and fail if the cpu is not a arm v6 or greater,

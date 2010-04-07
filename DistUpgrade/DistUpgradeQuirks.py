@@ -414,7 +414,7 @@ class DistUpgradeQuirks(object):
         """
         # check if we have sse
         cache = self.controller.cache
-        for pkgname in ["nvidia-glx-173", "nvidia-glx-180", "nvidia-glx-185"]:
+        for pkgname in ["nvidia-glx-180", "nvidia-glx-185", "nvidia-glx-195"]:
             if (cache.has_key(pkgname) and 
                 cache[pkgname].markedInstall and
                 self._checkVideoDriver("nvidia")):

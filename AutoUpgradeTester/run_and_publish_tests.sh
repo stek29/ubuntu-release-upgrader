@@ -8,7 +8,7 @@ PUBLISH="mvo@people.ubuntu.com"
 
 RESULTDIR=/var/cache/auto-upgrade-tester/result/
 
-PROFILES="dapper-hardy-lucid-server dapper-hardy-lucid-ubuntu server ubuntu lts-server lts-ubuntu kubuntu main-all lts-main-all"
+PROFILES="dapper-hardy-lucid-server dapper-hardy-lucid-ubuntu server server-tasks ubuntu lts-server lts-server-tasks lts-ubuntu kubuntu main-all lts-main-all"
 #PROFILES="lts-server server"
 #PROFILES="server"
 

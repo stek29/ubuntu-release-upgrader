@@ -224,6 +224,14 @@ iface eth0 inet static
             interfaces.flush()
             self._copyToImage(interfaces.name, "/etc/network/interfaces")
         
+        # generate hosts file, the default hosts file contains
+        # "127.0.0.1 ubuntu. ubuntu" for some reason and the missing
+        # domain part after the "." makes e.g. postfix rather unhappy
+        etc_hosts = tempfile.NamedTemporaryFile()
+        etc_hosts.write('127.0.0.1 localhost\n')
+        etc_hosts.write('127.0.0.1 upgrade-test-vm\n')
+        etc_hosts.flush()
+        self._copyToImage(etc_hosts.name, "/etc/hosts")
 
         # generate apt.conf
         proxy = self.config.getWithDefault("NonInteractive","Proxy","")

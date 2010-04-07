@@ -49,7 +49,7 @@ class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
 # the initrd/vmlinuz/abi space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 18*1024*1024
+KERNEL_INITRD_SIZE = 19 * 1024 * 1024
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:
@@ -860,6 +860,7 @@ class MyCache(apt.Cache):
     def _inRemovalBlacklist(self, pkgname):
         for expr in self.removal_blacklist:
             if re.compile(expr).match(pkgname):
+                logging.debug("blacklist expr '%s' matches '%s'" % (expr, pkgname))
                 return True
         return False
 

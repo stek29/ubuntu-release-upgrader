@@ -1,6 +1,6 @@
 # DistUpgradeQuirks.py 
 #  
-#  Copyright (c) 2004-2008 Canonical
+#  Copyright (c) 2004-2010 Canonical
 #  
 #  Author: Michael Vogt <michael.vogt@ubuntu.com>
 # 
@@ -174,7 +174,7 @@ class DistUpgradeQuirks(object):
                                          "No version of this driver is "
                                          "available that works with your "
                                          "hardware in Ubuntu "
-                                         "10.04.\n\nDo you want to continue?"))
+                                         "10.04 LTS.\n\nDo you want to continue?"))
              if res == False:
                  self.controller.abort()
              # if the user wants to continue we remove the fglrx driver
@@ -257,7 +257,7 @@ class DistUpgradeQuirks(object):
                                         "No version of this driver is "
                                         "available that works with your "
                                         "video card in Ubuntu "
-                                        "10.04.\n\nDo you want to continue?"))
+                                        "10.04 LTS.\n\nDo you want to continue?"))
                 if res == False:
                     self.controller.abort()
                 # if the user continue, do not install the broken driver
@@ -284,7 +284,7 @@ class DistUpgradeQuirks(object):
                                         "No version of this driver is "
                                         "available that works with your "
                                         "video card in Ubuntu "
-                                        "10.04.\n\nDo you want to continue?"))
+                                        "10.04 LTS.\n\nDo you want to continue?"))
                     if res == False:
                         self.controller.abort()
                     # if the user continue, do not install the broken driver
@@ -527,7 +527,7 @@ class DistUpgradeQuirks(object):
                 _("No init available"),
                 _("Your system appears to be a virtualised environment "
                   "without an init daemon, e.g. Linux-VServer. "
-                  "Ubuntu 9.10 cannot function within this type of "
+                  "Ubuntu 10.04 LTS cannot function within this type of "
                   "environment, requiring an update to your virtual "
                   "machine configuration first.\n\n"
                   "Are you sure you want to continue?"))

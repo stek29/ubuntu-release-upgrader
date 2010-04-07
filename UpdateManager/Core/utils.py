@@ -313,6 +313,15 @@ def str_to_bool(str):
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
+def get_lang():
+    import logging
+    try:
+        (locale_s, encoding) = locale.getdefaultlocale()
+        return locale_s
+    except Exception, e: 
+        logging.exception("gedefaultlocale() failed")
+        return None
+
 def error(parent, summary, message):
   import gtk
   d = gtk.MessageDialog(parent=parent,

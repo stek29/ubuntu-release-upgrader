@@ -194,8 +194,14 @@ class MetaReleaseCore(object):
                 dist = Dist(name, version, date,supported)
                 if index_tag.Section.has_key("ReleaseNotes"):
                     dist.releaseNotesURI = index_tag.Section["ReleaseNotes"]
+                    lang = get_lang()
+                    if lang:
+                        dist.releaseNotesURI += "?lang=%s" % lang
                 if index_tag.Section.has_key("ReleaseNotesHtml"):
                     dist.releaseNotesHtmlUri = index_tag.Section["ReleaseNotesHtml"]
+                    lang = get_lang()
+                    if lang:
+                        dist.releaseNotesHtmlUri += "?lang=%s" % lang
                 if index_tag.Section.has_key("UpgradeTool"):
                     dist.upgradeTool =  index_tag.Section["UpgradeTool"]
                 if index_tag.Section.has_key("UpgradeToolSignature"):

@@ -155,6 +155,32 @@ class DistUpgradeQuirks(object):
         self.feistyPostDistUpgradeCache()
         self.edgyPostDistUpgradeCache()
 
+    def from_hardyPostDistUpgradeCache(self):
+        """ this function works around quirks in upgrades from hardy """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # ensure 386 -> generic transition happens
+        self._kernel386TransitionCheck()
+        # ensure kubuntu-kde4-desktop transition
+        self._kubuntuDesktopTransition()
+        # evms got removed after hardy, warn and abort
+        if self._usesEvmsInMounts():
+            logging.error("evms in use in /etc/fstab")
+            self._view.error(_("evms in use"),
+                             _("Your system uses the 'evms' volume manager "
+                               "in /proc/mounts. "
+                               "The 'evms' software is no longer supported, "
+                               "please switch it off and run the upgrade "
+                               "again when this is done."))
+            self.controller.abort()
+        # check if "wl" module is loaded and if so, install bcmwl-kernel-source
+        self._checkAndInstallBroadcom()
+        # langpacks got re-organized in 9.10
+        self._dealWithLanguageSupportTransition()
+        # nvidia-71, nvidia-96 got dropped
+        self._test_and_warn_on_old_nvidia()
+        # new nvidia needs a CPU with sse support
+        self._test_and_warn_on_nvidia_and_no_sse()
+
     def karmicPostDistUpgradeCache(self):
         """ 
         this function works around quirks in the 
@@ -197,59 +223,6 @@ class DistUpgradeQuirks(object):
         hardy->intrepid upgrade 
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # now check for nvidia and show a warning if needed
-        cache = self.controller.cache
-        for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
-            if (cache.has_key(pkgname) and 
-                cache[pkgname].markedInstall and
-                self._checkVideoDriver("nvidia")):
-                logging.debug("found %s video driver" % pkgname)
-                # TRANSLATORS: this string is not displayed in the 9.10 upgrade
-                #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
-                res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the NVIDIA 'nvidia' "
-                                        "graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with your "
-                                        "video card in Ubuntu "
-                                        "10.04 LTS.\n\nDo you want to continue?"))
-                if res == False:
-                    self.controller.abort()
-                # if the user continue, do not install the broken driver
-                # so that we can transiton him to the free "nv" one after
-                # the upgrade
-                self.controller.cache[pkgname].markKeep()
-        # check if we have sse
-        for pkgname in ["nvidia-glx-173","nvidia-glx-177"]:
-            if (cache.has_key(pkgname) and 
-                cache[pkgname].markedInstall and
-                self._checkVideoDriver("nvidia")):
-                logging.debug("found %s video driver" % pkgname)
-                if not self._cpuHasSSESupport():
-                    logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
-                    # TRANSLATORS: this string is not displayed in the 9.10 upgrade
-                    #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
-                    res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the NVIDIA 'nvidia' "
-                                        "graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with your "
-                                        "video card in Ubuntu "
-                                        "10.04 LTS.\n\nDo you want to continue?"))
-                    if res == False:
-                        self.controller.abort()
-                    # if the user continue, do not install the broken driver
-                    # so that we can transiton him to the free "nv" one after
-                    # the upgrade
-                    self.controller.cache[pkgname].markKeep()
         # kdelibs4-dev is unhappy (#279621)
         fromp = "kdelibs4-dev"
         to = "kdelibs5-dev"
@@ -401,25 +374,6 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markRemove("nvidia-settings")
             self.controller.cache.markInstall("nvidia-glx")
 
-    def from_hardyPostDistUpgradeCache(self):
-        """ this function works around quirks in upgrades from hardy """
-        logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # ensure 386 -> generic transition happens
-        self._kernel386TransitionCheck()
-        # ensure kubuntu-kde4-desktop transition
-        self._kubuntuDesktopTransition()
-        # evms got removed after hardy, warn and abort
-        if self._usesEvmsInMounts():
-            logging.error("evms in use in /etc/fstab")
-            self._view.error(_("evms in use"),
-                             _("Your system uses the 'evms' volume manager "
-                               "in /proc/mounts. "
-                               "The 'evms' software is no longer supported, "
-                               "please switch it off and run the upgrade "
-                               "again when this is done."))
-            self.controller.abort()
-            
-
     # run right before the first packages get installed
     def StartUpgrade(self):
         self._applyPatches()
@@ -455,6 +409,63 @@ class DistUpgradeQuirks(object):
         return True
 
     # helpers
+    def _test_and_warn_on_nvidia_and_no_sse(self):
+        """ The current 
+        """
+        # check if we have sse
+        for pkgname in ["nvidia-glx-173", "nvidia-glx-180", "nvidia-glx-185"]:
+            if (cache.has_key(pkgname) and 
+                cache[pkgname].markedInstall and
+                self._checkVideoDriver("nvidia")):
+                logging.debug("found %s video driver" % pkgname)
+                if not self._cpuHasSSESupport():
+                    logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
+                    res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                        "effects, and performance in games "
+                                        "and other graphically intensive "
+                                        "programs."),
+                                      _("This computer is currently using "
+                                        "the NVIDIA 'nvidia' "
+                                        "graphics driver. "
+                                        "No version of this driver is "
+                                        "available that works with your "
+                                        "video card in Ubuntu "
+                                        "10.04 LTS.\n\nDo you want to continue?"))
+                    if res == False:
+                        self.controller.abort()
+                    # if the user continue, do not install the broken driver
+                    # so that we can transiton him to the free "nv" one after
+                    # the upgrade
+                    self.controller.cache[pkgname].markKeep()
+        
+
+    def _test_and_warn_on_old_nvidia(self):
+        """ nvidia-glx-71 and -96 are no longer in the archive since 8.10 """
+        # now check for nvidia and show a warning if needed
+        cache = self.controller.cache
+        for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
+            if (cache.has_key(pkgname) and 
+                cache[pkgname].markedInstall and
+                self._checkVideoDriver("nvidia")):
+                logging.debug("found %s video driver" % pkgname)
+                res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                        "effects, and performance in games "
+                                        "and other graphically intensive "
+                                        "programs."),
+                                      _("This computer is currently using "
+                                        "the NVIDIA 'nvidia' "
+                                        "graphics driver. "
+                                        "No version of this driver is "
+                                        "available that works with your "
+                                        "video card in Ubuntu "
+                                        "10.04 LTS.\n\nDo you want to continue?"))
+                if res == False:
+                    self.controller.abort()
+                # if the user continue, do not install the broken driver
+                # so that we can transiton him to the free "nv" one after
+                # the upgrade
+                self.controller.cache[pkgname].markKeep()
+
     def _test_and_warn_on_dropped_fglrx_support(self):
         """
         Some cards are no longer supported by fglrx. Check if that

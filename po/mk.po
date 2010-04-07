@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mk\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-03-09 05:47+0000\n"
 "Last-Translator: Јован Наумовски <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -302,8 +302,8 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -665,11 +665,49 @@ msgstr "Надградбата на системот е завршена."
 msgid "The partial upgrade was completed."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -677,57 +715,18 @@ msgid ""
 "Ubuntu release with this hardware."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
 "Are you sure you want to continue?"
-msgstr ""
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
@@ -852,8 +851,8 @@ msgstr "Се случи фатална грешка"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
@@ -1009,10 +1008,10 @@ msgstr[1] ""
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1023,10 +1022,10 @@ msgstr ""
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1232,9 +1231,9 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 
@@ -1871,8 +1870,7 @@ msgid "updates"
 msgstr "ажурирања"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 
 #: ../data/glade/UpgradePromptDialog.ui.h:2
@@ -1978,9 +1976,9 @@ msgid ""
 "upgrades Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
-"Овој клуч е застарен и сега се користи датотеката /etc/update-"
-"manager/release-upgrades. Проверува автоматски дали има нова верзија од "
-"тековната дистрибуција и нуди надградба (ако тоа е возможно)."
+"Овој клуч е застарен и сега се користи датотеката /etc/update-manager/"
+"release-upgrades. Проверува автоматски дали има нова верзија од тековната "
+"дистрибуција и нуди надградба (ако тоа е возможно)."
 
 #: ../data/update-manager.schemas.in.h:15
 msgid ""
@@ -2140,8 +2138,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr ""
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 
 #~ msgid ""
@@ -2151,18 +2148,17 @@ msgstr ""
 #~ "If you have not enabled community maintained software (universe), these "
 #~ "packages will be suggested for removal at the end of the upgrade."
 #~ msgstr ""
-#~ "Canonical Ltd. не овозможува поддршка за следните софтверски пакети. Сѐ уште "
-#~ "ќе можете да добивате поддршка од заедницата.\n"
+#~ "Canonical Ltd. не овозможува поддршка за следните софтверски пакети. Сѐ "
+#~ "уште ќе можете да добивате поддршка од заедницата.\n"
 #~ "\n"
 #~ "Ако не го овозможите складиштето со софтвер кој го одржува заедницата "
-#~ "(universe), овие пакети нема да бидат предложени за отстранување на крајот "
-#~ "на надградбата."
+#~ "(universe), овие пакети нема да бидат предложени за отстранување на "
+#~ "крајот на надградбата."
 
-#, python-format
 #~ msgid ""
 #~ "This session appears to be running under ssh. It is not recommended to "
-#~ "perform a upgrade over ssh currently because in case of failure it is harder "
-#~ "to recover.\n"
+#~ "perform a upgrade over ssh currently because in case of failure it is "
+#~ "harder to recover.\n"
 #~ "\n"
 #~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 #~ "Do you want to continue?"
@@ -2171,6 +2167,6 @@ msgstr ""
 #~ "извршувате ажурирање преку ssh, бидејќи во случај на грешка, поправката е "
 #~ "многу тешка.\n"
 #~ "\n"
-#~ "Ако сакате да продолжите, треба да инсталирате додатен ssh демон на портата "
-#~ "„%s“.\n"
+#~ "Ако сакате да продолжите, треба да инсталирате додатен ssh демон на "
+#~ "портата „%s“.\n"
 #~ "Дали сакате да продолжите?"

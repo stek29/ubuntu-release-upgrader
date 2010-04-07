@@ -6,16 +6,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-04-06 16:34+0000\n"
 "Last-Translator: Michael Vogt <michael.vogt@ubuntu.com>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-04-07 08:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
@@ -108,8 +108,8 @@ msgid_plural ""
 "but no archives can be found for them. Do you want to remove these packages "
 "now to continue?"
 msgstr[0] ""
-"Paket '%s' nije u cijelosti sačuvan i potrebno ga je ponovno instalirati "
-",međutim nijedna arhiva nije pronađena za njegovu instalaciju. Želite li "
+"Paket '%s' nije u cijelosti sačuvan i potrebno ga je ponovno instalirati ,"
+"međutim nijedna arhiva nije pronađena za njegovu instalaciju. Želite li "
 "ukloniti ovaj paket i nastaviti?"
 msgstr[1] ""
 "Paketi '%s' nisu u cijelosti sačuvani i potrebno ih je ponovno instalirati, "
@@ -317,8 +317,8 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -697,37 +697,20 @@ msgstr "Nadogradnja sistema je završena."
 msgid "The partial upgrade was completed."
 msgstr "Djelimična nadogradnja završena."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
-msgid "No ARMv6 CPU"
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
 msgid ""
-"Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
-"packages in karmic were built with optimizations requiring ARMv6 as the "
-"minimal architecture. It is not possible to upgrade your system to a new "
-"Ubuntu release with this hardware."
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
-msgid "No init available"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
-msgid ""
-"Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
-"environment, requiring an update to your virtual machine configuration "
-"first.\n"
-"\n"
-"Are you sure you want to continue?"
-msgstr ""
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -735,33 +718,49 @@ msgstr ""
 "Nadogradnja može reducirati desktop efekte i učinak u igrama i drugim "
 "grafički zahtjevnim programima."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
 msgid ""
 "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
 "version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
+"Ubuntu 10.04 LTS.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
+msgid "No ARMv6 CPU"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
+"Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
+"packages in karmic were built with optimizations requiring ARMv6 as the "
+"minimal architecture. It is not possible to upgrade your system to a new "
+"Ubuntu release with this hardware."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
+msgid "No init available"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
+msgid ""
+"Your system appears to be a virtualised environment without an init daemon, "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
+"environment, requiring an update to your virtual machine configuration "
+"first.\n"
+"\n"
+"Are you sure you want to continue?"
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
@@ -886,8 +885,8 @@ msgstr "Pojavila se ozbiljna greška"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
@@ -991,8 +990,8 @@ msgstr "Potreban restart"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:788
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr ""
-"<b><big>Ponovno pokretanje računara potrebno je za završetak "
-"nadogradnje</big></b>"
+"<b><big>Ponovno pokretanje računara potrebno je za završetak nadogradnje</"
+"big></b>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:791 ../DistUpgrade/DistUpgrade.ui.h:25
 #: ../data/glade/UpdateManager.ui.h:31
@@ -1047,10 +1046,10 @@ msgstr[1] ""
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1061,10 +1060,10 @@ msgstr ""
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1206,8 +1205,7 @@ msgstr "Preuzimanje nije uspjelo"
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:238
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:238
 msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr ""
-"Preuzimanje nadogradnje nije uspjelo. Vjerojatno je problem u mreži. "
+msgstr "Preuzimanje nadogradnje nije uspjelo. Vjerojatno je problem u mreži. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:242
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:242
@@ -1273,9 +1271,9 @@ msgstr "Poruka greške je '%s'."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 
@@ -1533,10 +1531,8 @@ msgstr ""
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
 msgstr[0] "Informacija o paketima je zadnji puta aktualizirana prije %s dan."
-msgstr[1] ""
-"Informacija o paketima je zadnji puta aktualizirana prije %s dana."
-msgstr[2] ""
-"Informacija o paketima je zadnji puta aktualizirana prije %s dana."
+msgstr[1] "Informacija o paketima je zadnji puta aktualizirana prije %s dana."
+msgstr[2] "Informacija o paketima je zadnji puta aktualizirana prije %s dana."
 
 #: ../UpdateManager/UpdateManager.py:477
 #, python-format
@@ -1921,8 +1917,7 @@ msgid "updates"
 msgstr "ažuriranja"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 
 #: ../data/glade/UpgradePromptDialog.ui.h:2
@@ -2191,6 +2186,5 @@ msgid "%s needs to be marked as manually installed."
 msgstr ""
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""

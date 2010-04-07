@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-03-21 10:49+0000\n"
 "Last-Translator: Ricardo Pérez López <ricpelo@gmail.com>\n"
 "Language-Team: Spanish <traductores@gnome.org>\n"
@@ -112,9 +112,9 @@ msgstr[0] ""
 "se encuentra en ningún repositorio. ¿Desea desinstalar este paquete ahora "
 "para continuar?"
 msgstr[1] ""
-"Los paquetes «%s» están en un estado inconsistente y deben reinstalarse, "
-"pero no se encuentran en ningún repositorio. ¿Desea desinstalar estos "
-"paquetes ahora para continuar?"
+"Los paquetes «%s» están en un estado inconsistente y deben reinstalarse, pero "
+"no se encuentran en ningún repositorio. ¿Desea desinstalar estos paquetes "
+"ahora para continuar?"
 
 #. FIXME: not ideal error message, but we just reuse a
 #. existing one here to avoid a new string
@@ -169,8 +169,8 @@ msgid ""
 "report."
 msgstr ""
 "Si no se corresponde con ninguno, informe de este fallo sobre el paquete "
-"«update-manager» e incluya en el informe los archivos situados en "
-"/var/log/dis-upgrade/."
+"«update-manager» e incluya en el informe los archivos situados en /var/log/"
+"dis-upgrade/."
 
 #: ../DistUpgrade/DistUpgradeCache.py:640
 #: ../UpdateManager/UpdateManager.py:766
@@ -342,8 +342,8 @@ msgstr "Modo caja de arena"
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -358,8 +358,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Su instalación de python está dañada. Por favor, repare el enlace simbólico "
-"«/usr/bin/python»."
+"Su instalación de python está dañada. Por favor, repare el enlace simbólico «/"
+"usr/bin/python»."
 
 #: ../DistUpgrade/DistUpgradeController.py:411
 msgid "Package 'debsig-verify' is installed"
@@ -442,8 +442,8 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No', the upgrade "
 "will cancel."
 msgstr ""
-"Después de explorar su «sources.list» no se encontraron entradas válidas "
-"para «%s».\n"
+"Después de explorar su «sources.list» no se encontraron entradas válidas para "
+"«%s».\n"
 "\n"
 "¿Se deben añadir entradas predeterminadas para «%s»? Si selecciona «No», la "
 "actualización se cancelará."
@@ -470,9 +470,9 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
-"Se han desactivado algunas entradas de otros proveedores en su "
-"«sources.list». Puede volver a activarlas tras la actualización con la "
-"herramienta «Orígenes del software», o con su gestor de paquetes."
+"Se han desactivado algunas entradas de otros proveedores en su «sources."
+"list». Puede volver a activarlas tras la actualización con la herramienta "
+"«Orígenes del software», o con su gestor de paquetes."
 
 #: ../DistUpgrade/DistUpgradeController.py:779
 msgid "Package in inconsistent state"
@@ -495,9 +495,9 @@ msgstr[0] ""
 "se encuentra en ningún repositorio. Por favor, reinstale el paquete "
 "manualmente o desinstálelo del sistema."
 msgstr[1] ""
-"Los paquetes «%s» están en un estado inconsistente y deben reinstalarse, "
-"pero no se encuentran en ningún repositorio. Por favor, reinstale los "
-"paquetes manualmente o desinstálelos del sistema."
+"Los paquetes «%s» están en un estado inconsistente y deben reinstalarse, pero "
+"no se encuentran en ningún repositorio. Por favor, reinstale los paquetes "
+"manualmente o desinstálelos del sistema."
 
 #: ../DistUpgrade/DistUpgradeController.py:830
 msgid "Error during update"
@@ -707,8 +707,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeController.py:1532
 msgid "Getting upgrade prerequisites failed"
-msgstr ""
-"Ha fallado la obtención de los requisitos previos de la actualización"
+msgstr "Ha fallado la obtención de los requisitos previos de la actualización"
 
 #: ../DistUpgrade/DistUpgradeController.py:1533
 msgid ""
@@ -744,8 +743,8 @@ msgstr ""
 "Después de actualizar la información sobre los paquetes, ya no aparece el "
 "paquete esencial «%s».\n"
 "Esto indica un error serio; por favor, informe del fallo sobre el paquete "
-"«update-manager» e incluya en el informe los archivos situados en "
-"/var/log/dist-upgrade/."
+"«update-manager» e incluya en el informe los archivos situados en /var/log/"
+"dist-upgrade/."
 
 #: ../DistUpgrade/DistUpgradeController.py:1613
 #: ../DistUpgrade/DistUpgradeController.py:1661
@@ -785,11 +784,65 @@ msgstr "La actualización del sistema se ha completado."
 msgid "The partial upgrade was completed."
 msgstr "La actualización parcial se ha completado."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr "Se está usando «evms»"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"Su sistema está usando el gestor de volúmenes «evms» en /proc/mounts. El "
+"software «evms» ya no está soportado; por favor, desactívelo y vuelva a "
+"ejecutar de nuevo la actualización."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+"La actualización puede reducir los efectos de escritorio, así como el "
+"rendimiento de los juegos y otros programas que usen gráficos de forma "
+"intensiva."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Este quipo está usando el controlador gráfico  «nvidia» de NVIDIA. No se "
+"encuentra disponible en Ubuntu 10.04 LTS una versión de este controlador que "
+"funcione con su hardware.\n"
+"\n"
+"¿Desea continuar?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Este quipo está usando el controlador gráfico  «fglrx» de AMD. No se "
+"encuentra disponible en Ubuntu 10.04 LTS una versión de este controlador que "
+"funcione con su hardware.\n"
+"\n"
+"¿Desea continuar?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr "No hay CPU ARMv6"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -801,80 +854,25 @@ msgstr ""
 "requieren ARMv6 como arquitectura mínima. No es posible actualizar sus "
 "sistema a la nueva versión de Ubuntu con este hardware."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr "El demonio init no está disponible"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
 "Parece que su sistema es un entorno virtualizado sin un demonio init (un "
-"Linux-VServer, p.ej.). Ubuntu 9.10 no puede funcionar en este tipo de "
+"Linux-VServer, p.ej.). Ubuntu 10.04 LTS no puede funcionar en este tipo de "
 "entorno, por lo que primero se requiere una actualización de la "
 "configuración de su máquina virtual.\n"
 "\n"
 "¿Está seguro de que desea continuar?"
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-"La actualización puede reducir los efectos de escritorio, así como el "
-"rendimiento de los juegos y otros programas que usen gráficos de forma "
-"intensiva."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Este quipo está usando el controlador gráfico  «fglrx» de AMD. No se "
-"encuentra disponible en Ubuntu 10.04 una versión de este controlador que "
-"funcione con su hardware.\n"
-"\n"
-"¿Desea continuar?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Este quipo está usando el controlador gráfico  «nvidia» de NVIDIA. No se "
-"encuentra disponible en Ubuntu 10.04 una versión de este controlador que "
-"funcione con su hardware.\n"
-"\n"
-"¿Desea continuar?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr "Se está usando «evms»"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Su sistema está usando el gestor de volúmenes «evms» en /proc/mounts. El "
-"software «evms» ya no está soportado; por favor, desactívelo y vuelva a "
-"ejecutar de nuevo la actualización."
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
@@ -1001,16 +999,16 @@ msgstr "Ha ocurrido un error fatal"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Por favor, informe de este fallo (si no lo ha hecho ya) e incluya en su "
-"informe los archivos /var/log/dist-upgrade/main.log y /var/log/dist-"
-"upgrade/apt.log. La actualización va a cancelarse ahora.\n"
-"Su archivo sources.list original se guardó en "
-"/etc/apt/sources.list.distUpgrade."
+"informe los archivos /var/log/dist-upgrade/main.log y /var/log/dist-upgrade/"
+"apt.log. La actualización va a cancelarse ahora.\n"
+"Su archivo sources.list original se guardó en /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:460
 msgid "Ctrl-c pressed"
@@ -1112,8 +1110,7 @@ msgstr "Se requiere reiniciar"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:788
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
-"<b><big>Reinicie el sistema para completar la actualización</big></b>"
+msgstr "<b><big>Reinicie el sistema para completar la actualización</big></b>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:791 ../DistUpgrade/DistUpgrade.ui.h:25
 #: ../data/glade/UpdateManager.ui.h:31
@@ -1169,10 +1166,10 @@ msgstr[1] "%li segundos"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1183,10 +1180,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1400,16 +1397,16 @@ msgstr "El mensaje de error es «%s»"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Por favor, informe de este fallo e incluya en su informe los archivos "
-"/var/log/dist-upgrade/main.log y /var/log/dist-upgrade/apt.log. La "
-"actualización va a cancelarse ahora.\n"
-"Su archivo sources.list original se guardó en "
-"/etc/apt/sources.list.distUpgrade."
+"Por favor, informe de este fallo e incluya en su informe los archivos /var/"
+"log/dist-upgrade/main.log y /var/log/dist-upgrade/apt.log. La actualización "
+"va a cancelarse ahora.\n"
+"Su archivo sources.list original se guardó en /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:113
 msgid "Aborting"
@@ -1669,8 +1666,7 @@ msgstr ""
 #, python-format
 msgid "The package information was last updated %s day ago."
 msgid_plural "The package information was last updated %s days ago."
-msgstr[0] ""
-"La información de paquetes se actualizó por última vez hace %s día."
+msgstr[0] "La información de paquetes se actualizó por última vez hace %s día."
 msgstr[1] ""
 "La información de paquetes se actualizó por última vez hace %s días."
 
@@ -1731,9 +1727,9 @@ msgid ""
 "temporary packages of former installations using 'sudo apt-get clean'."
 msgstr ""
 "La actualización necesita un total de %s de espacio libre en el disco «%s». "
-"Libere al menos %s adicionales de espacio de disco en «%s». Vacíe su "
-"papelera y elimine paquetes temporales de instalaciones anteriores usando "
-"«sudo apt-get clean»."
+"Libere al menos %s adicionales de espacio de disco en «%s». Vacíe su papelera "
+"y elimine paquetes temporales de instalaciones anteriores usando «sudo apt-"
+"get clean»."
 
 #: ../UpdateManager/UpdateManager.py:631
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:114
@@ -1829,8 +1825,8 @@ msgid ""
 "this issue at first."
 msgstr ""
 "Es imposible instalar o desinstalar ningún programa. Utilice el gestor de "
-"paquetes «Synaptic», o ejecute «sudo apt-get install -f» en una terminal, "
-"para corregir este problema primero."
+"paquetes «Synaptic», o ejecute «sudo apt-get install -f» en una terminal, para "
+"corregir este problema primero."
 
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:136
 msgid "Downloading Package Information"
@@ -1919,8 +1915,7 @@ msgstr ""
 
 #: ../UpdateManager/Core/MyCache.py:248
 msgid "This change is not coming from a source that supports changelogs."
-msgstr ""
-"Este cambio no proviene de una fuente que admita registros de cambios."
+msgstr "Este cambio no proviene de una fuente que admita registros de cambios."
 
 #: ../UpdateManager/Core/MyCache.py:256
 #, python-format
@@ -2114,8 +2109,7 @@ msgid "updates"
 msgstr "actualizaciones"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Está disponible una nueva versión de Ubuntu. ¿Le gustaría actualizar?</b>"
 
@@ -2198,8 +2192,8 @@ msgid ""
 "(from version to version)."
 msgstr ""
 "Si se establece esta valor, la ventana principal que muestra la lista de "
-"actualizaciones mostrará también la información de la versión (de «versión» "
-"a «versión»)."
+"actualizaciones mostrará también la información de la versión (de «versión» a "
+"«versión»)."
 
 #: ../data/update-manager.schemas.in.h:8
 msgid "Remind to reload the channel list"
@@ -2309,8 +2303,8 @@ msgid ""
 "for server systems are supported."
 msgstr ""
 "Ejecutar en un modo especial de actualización.\n"
-"Actualmente se soportan los modos «desktop» (para actualizaciones normales "
-"de un sistema de escritorio) y «server» (para servidores)."
+"Actualmente se soportan los modos «desktop» (para actualizaciones normales de "
+"un sistema de escritorio) y «server» (para servidores)."
 
 #: ../do-release-upgrade:50
 msgid "Run the specified frontend"
@@ -2347,8 +2341,8 @@ msgid ""
 "Do not output anything, just return %s if there is a new release and %s if "
 "there is none."
 msgstr ""
-"No produce ninguna salida; tan sólo devuelve %s si hay una nueva versión y "
-"%s si no hay ninguna."
+"No produce ninguna salida; tan sólo devuelve %s si hay una nueva versión y %"
+"s si no hay ninguna."
 
 #: ../check-new-release-gtk:67
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -2410,17 +2404,15 @@ msgid "%s needs to be marked as manually installed."
 msgstr "Se debe marcar %s como instalado manualmente."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 "Se elimina LILO ya que GRUB también está instalado (Consulte el bug #314004 "
 "para más información.)"
 
-#, python-format
 #~ msgid ""
 #~ "This session appears to be running under ssh. It is not recommended to "
-#~ "perform a upgrade over ssh currently because in case of failure it is harder "
-#~ "to recover.\n"
+#~ "perform a upgrade over ssh currently because in case of failure it is "
+#~ "harder to recover.\n"
 #~ "\n"
 #~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 #~ "Do you want to continue?"
@@ -2442,6 +2434,6 @@ msgstr ""
 #~ "Canonical Ltd. ya no soporta oficialmente los siguientes paquetes de "
 #~ "software. Aunque puede obtener soporte de la comunidad.\n"
 #~ "\n"
-#~ "Si no tiene habilitado el software mantenido por la comunidad («universe»), "
-#~ "se le sugerirá que desinstale estos paquetes al final del proceso de "
-#~ "actualización."
+#~ "Si no tiene habilitado el software mantenido por la comunidad "
+#~ "(«universe»), se le sugerirá que desinstale estos paquetes al final del "
+#~ "proceso de actualización."

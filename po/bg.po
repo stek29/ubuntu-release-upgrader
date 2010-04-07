@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update manager\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-04-05 14:17+0000\n"
 "Last-Translator: Boyan Sotirov <lz1dsb@abv.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -159,8 +159,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:631
 msgid "This is most likely a transient problem, please try again later."
-msgstr ""
-"Това най-вероятно е временен проблем. Моля, опитайте отново по-късно."
+msgstr "Това най-вероятно е временен проблем. Моля, опитайте отново по-късно."
 
 #: ../DistUpgrade/DistUpgradeCache.py:634
 msgid ""
@@ -338,8 +337,8 @@ msgstr "Ограничителен режим"
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -354,8 +353,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Инсталацията на Python е повредена. Моля, поправете симболната връзка "
-"„/usr/bin/python”!"
+"Инсталацията на Python е повредена. Моля, поправете симболната връзка „/usr/"
+"bin/python”!"
 
 #: ../DistUpgrade/DistUpgradeController.py:411
 msgid "Package 'debsig-verify' is installed"
@@ -774,11 +773,63 @@ msgstr "Надграждането на системата завърши."
 msgid "The partial upgrade was completed."
 msgstr "Частичното надграждане завърши."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr "evms се използва"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"Вашата система използва мениджър на устройства 'evms' в /proc/mounts. "
+"Софтуерът 'evms' вече не се поддържа. Моля изключете го и изпълнете "
+"надграждането отново."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+"Надграждането може да намали ефектите на работния плот и производителността "
+"в игрите и други графични програми."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Този компютър в момента използва графичния драйвер NVIDIA 'nvidia''. Няма "
+"версия на този драйвер, която да работи с вашата видео карта под Ubuntu "
+"10.04 LTS.\n"
+"\n"
+"Искате ли да продължите?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Този компютър използва графичния драйвер AMD 'fglrx'. Няма версия на този "
+"драйвер, която да работи с вашия хардуер под Ubuntu 10.04 LTS.\n"
+"\n"
+"Искате ли да продължите?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr "Няма ARMv6 CPU"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -790,78 +841,26 @@ msgstr ""
 "възможно да надграждате вашата система с новата версия на Ubuntu с този "
 "хардуер."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr "Няма достъпен init"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
+#, fuzzy
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
 "Вашата система функционира като виртуализирана среда без init демон, напр. "
-"Linux-VServer. Ubuntu 9.10 не може да работи в рамките на този тип среда, "
+"Linux-VServer. Ubuntu 10.04 LTS не може да работи в рамките на този тип среда, "
 "поради което първо е необходимо актуализация на настройката на Вашата "
 "виртуална машина.\n"
 "\n"
 "Сигурни ли сте, че искате да продължите?"
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-"Надграждането може да намали ефектите на работния плот и производителността "
-"в игрите и други графични програми."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Този компютър използва графичния драйвер AMD 'fglrx'. Няма версия на този "
-"драйвер, която да работи с вашия хардуер под Ubuntu 10.04.\n"
-"\n"
-"Искате ли да продължите?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Този компютър в момента използва графичния драйвер NVIDIA 'nvidia''. Няма "
-"версия на този драйвер, която да работи с вашата видео карта под Ubuntu "
-"10.04.\n"
-"\n"
-"Искате ли да продължите?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr "evms се използва"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Вашата система използва мениджър на устройства 'evms' в /proc/mounts. "
-"Софтуерът 'evms' вече не се поддържа. Моля изключете го и изпълнете "
-"надграждането отново."
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
@@ -988,16 +987,16 @@ msgstr "Възникна фатална грешка"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Моля, докладвайте го като грешка (ако вече не сте го направили) и включете "
 "файловете от /var/log/dist-upgrade/main.log и /var/log/dist-upgrade/apt.log "
 "в доклада. Надграждането ще бъде прекратено.\n"
-"Вашия оригинален файл sources.list беше запазен в "
-"/etc/apt/sources.list.distUpgrade."
+"Вашия оригинален файл sources.list беше запазен в /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:460
 msgid "Ctrl-c pressed"
@@ -1156,10 +1155,10 @@ msgstr[1] "%li секунди"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1170,10 +1169,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1383,16 +1382,16 @@ msgstr "Съобщението с грешка е '%s'."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Моля, докладвайте грешка и включете файловете от /var/log/dist-"
-"upgrade/main.log и /var/log/dist-upgrade/apt.log в доклада. Надграждането ще "
-"бъде прекратено.\n"
-"Вашия оригинален файл sources.list беше запазен в "
-"/etc/apt/sources.list.distUpgrade."
+"Моля, докладвайте грешка и включете файловете от /var/log/dist-upgrade/main."
+"log и /var/log/dist-upgrade/apt.log в доклада. Надграждането ще бъде "
+"прекратено.\n"
+"Вашия оригинален файл sources.list беше запазен в /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:113
 msgid "Aborting"
@@ -2084,10 +2083,8 @@ msgid "updates"
 msgstr "актуализации"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
-msgstr ""
-"<b>Налична е нова версия на Ubuntu. Бихте ли искали да надградите?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgstr "<b>Налична е нова версия на Ubuntu. Бихте ли искали да надградите?</b>"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:2
 msgid "Ask Me Later"
@@ -2371,8 +2368,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr "%s трябва да се маркира като ръчно инсталиран."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 "Премахване на lilo докато и grub е инсталиран.(Вижте грешка #314004 за "
 "подробности.)"

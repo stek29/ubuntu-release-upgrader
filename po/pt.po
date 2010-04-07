@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-03-28 04:05+0000\n"
 "Last-Translator: Flávio Martins <xhaker@gmail.com>\n"
 "Language-Team: Ubuntu Portuguese Team <ubuntu-pt.org>\n"
@@ -337,8 +337,8 @@ msgstr "Modo sandbox"
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -434,8 +434,8 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No', the upgrade "
 "will cancel."
 msgstr ""
-"Depois de rastrear 'sources.list' não se encontrou uma entrada válida para "
-"'%s'.\n"
+"Depois de rastrear 'sources.list' não se encontrou uma entrada válida para '%"
+"s'.\n"
 "\n"
 "Devem ser adicionadas as entradas padrão de '%s' ? Se escolher 'Não', a "
 "actualização será cancelada."
@@ -690,8 +690,8 @@ msgid ""
 "upgrade/ in the bug report."
 msgstr ""
 "A preparação do sistema para a actualização falhou. Por favor relate este "
-"problema no pacote 'update-manager' e inclua os ficheiros que estão em "
-"/var/log/dist-upgrade/"
+"problema no pacote 'update-manager' e inclua os ficheiros que estão em /var/"
+"log/dist-upgrade/"
 
 #: ../DistUpgrade/DistUpgradeController.py:1532
 msgid "Getting upgrade prerequisites failed"
@@ -773,11 +773,64 @@ msgstr "A actualização do sistema está completa."
 msgid "The partial upgrade was completed."
 msgstr "A actualização parcial foi completada."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr "evms em uso"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"O seu sistema utiliza o gestor de volumes \"evms\" em /proc/mounts. O "
+"software \"evms\" já não tem suporte. Por favor desactive-o e faça a "
+"actualização novamente quando esta acção estiver terminada."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+"Actualizar pode reduzir os efeitos do ambiente de trabalho, bem como o "
+"desempenho em jogos e outros programas graficamente exigentes."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Este computador utiliza o driver gráfico NVIDIA 'nvidia'. Não está "
+"disponível nenhuma versão deste driver que funcione com o seu hardware no "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Pretende continuar?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Este computador utiliza o driver gráfico AMD 'fglrx'. Não está disponível "
+"nenhuma versão deste driver que funcione com o seu hardware no Ubuntu "
+"10.04 LTS.\n"
+"\n"
+"Pretende continuar?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr "Sem CPU ARMv6"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -789,79 +842,25 @@ msgstr ""
 "arquitectura mínima. Não é possível fazer upgrade para uma nova versão de "
 "Ubuntu com este hardware."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr "Sem inicialização disponível"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
 "O seu sistema aparente ser um ambiente virtual sem um daemon de "
-"inicialização, por ex. o Linux-VServer. O Ubuntu 9.10 não pode funcionar "
+"inicialização, por ex. o Linux-VServer. O Ubuntu 10.04 LTS não pode funcionar "
 "neste tipo de ambiente, sendo necessário actualizar primeiro a configuração "
 "da sua máquina virtual.\n"
 "\n"
 "De certeza que quer continuar?"
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-"Actualizar pode reduzir os efeitos do ambiente de trabalho, bem como o "
-"desempenho em jogos e outros programas graficamente exigentes."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Este computador utiliza o driver gráfico AMD 'fglrx'. Não está disponível "
-"nenhuma versão deste driver que funcione com o seu hardware no Ubuntu "
-"10.04.\n"
-"\n"
-"Pretende continuar?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Este computador utiliza o driver gráfico NVIDIA 'nvidia'. Não está "
-"disponível nenhuma versão deste driver que funcione com o seu hardware no "
-"Ubuntu 10.04.\n"
-"\n"
-"Pretende continuar?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr "evms em uso"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"O seu sistema utiliza o gestor de volumes \"evms\" em /proc/mounts. O "
-"software \"evms\" já não tem suporte. Por favor desactive-o e faça a "
-"actualização novamente quando esta acção estiver terminada."
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
@@ -888,8 +887,8 @@ msgstr "*OBSOLETA* esta opção será ignorada"
 #: ../DistUpgrade/DistUpgradeMain.py:57
 msgid "Perform a partial upgrade only (no sources.list rewriting)"
 msgstr ""
-"Executar apenas uma actualização parcial (não se irá escrever no "
-"sources.list)"
+"Executar apenas uma actualização parcial (não se irá escrever no sources."
+"list)"
 
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Set datadir"
@@ -990,15 +989,15 @@ msgstr "Ocorreu um erro fatal"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Por favor reporte isto como um bug (se já não o fez) e inclua os ficheiros "
-"/var/log/dist-upgrade/main.log e /var/log/dist-upgrade/apt.log no seu "
-"relatório. O upgrade está abortado. A sua sources.list foi gravada em "
-"/etc/apt/sources.list.distUpgrade"
+"Por favor reporte isto como um bug (se já não o fez) e inclua os ficheiros /"
+"var/log/dist-upgrade/main.log e /var/log/dist-upgrade/apt.log no seu "
+"relatório. O upgrade está abortado. A sua sources.list foi gravada em /etc/"
+"apt/sources.list.distUpgrade"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:460
 msgid "Ctrl-c pressed"
@@ -1156,10 +1155,10 @@ msgstr[1] "%li segundos"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1170,10 +1169,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1188,8 +1187,8 @@ msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem."
 msgstr ""
-"O download irá demorar cerca de %s com uma ligação DSL de 1 Mbit e cerca de "
-"%s com um modem de 56k."
+"O download irá demorar cerca de %s com uma ligação DSL de 1 Mbit e cerca de %"
+"s com um modem de 56k."
 
 #. if we have a estimated speed, use it
 #: ../DistUpgrade/DistUpgradeView.py:132
@@ -1383,16 +1382,16 @@ msgstr "A mensagem de erro é '%s'."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Por favor reporte isto como um bug e inclua os ficheiros /var/log/dist-"
 "upgrade/main.log e /var/log/dist-upgrade/apt.log no seu relatório. O upgrade "
 "será agora abortado.\n"
-"O seu sources.list original foi guardado em "
-"/etc/apt/sources.list.distUpgrade."
+"O seu sources.list original foi guardado em /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:113
 msgid "Aborting"
@@ -2095,8 +2094,7 @@ msgid "updates"
 msgstr "actualizações"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Uma nova versão do Ubuntu está disponível. Gostaria de actualizar?<b>"
 
@@ -2213,8 +2211,8 @@ msgid ""
 "upgrades Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
-"Esta chave foi descontinuada em favor do ficheiro /etc/update-"
-"manager/release-upgrades. Verificar automaticamente se uma nova versão da "
+"Esta chave foi descontinuada em favor do ficheiro /etc/update-manager/"
+"release-upgrades. Verificar automaticamente se uma nova versão da "
 "distribuição actual está disponível e oferecer para actualizar (se possível)."
 
 #: ../data/update-manager.schemas.in.h:15
@@ -2387,8 +2385,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr "%s precisa de ser marcado como instalado manualmente."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 "Remova o LILO porque o GRUB já está instalado. (Veja o bug #314004 para "
 "detalhes.)"
@@ -2403,21 +2400,20 @@ msgstr ""
 #~ "A Canonical Ltd. já não suporta oficialmente os seguintes pacotes de "
 #~ "software. Poderá ainda obter suporte a partir da comunidade.\n"
 #~ "\n"
-#~ "Caso não tenha activado o software mantido pela comunidade (universe),  irá "
-#~ "ser sugerida a remoção destes pacotes no final da actualização."
+#~ "Caso não tenha activado o software mantido pela comunidade (universe),  "
+#~ "irá ser sugerida a remoção destes pacotes no final da actualização."
 
-#, python-format
 #~ msgid ""
 #~ "This session appears to be running under ssh. It is not recommended to "
-#~ "perform a upgrade over ssh currently because in case of failure it is harder "
-#~ "to recover.\n"
+#~ "perform a upgrade over ssh currently because in case of failure it is "
+#~ "harder to recover.\n"
 #~ "\n"
 #~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "Esta sessão aparenta estar a correr sobre ssh. Não é recomendado actualmente "
-#~ "fazer a actualização sobre ssh, porque em caso de falha, é difícil de "
-#~ "recuperar.\n"
+#~ "Esta sessão aparenta estar a correr sobre ssh. Não é recomendado "
+#~ "actualmente fazer a actualização sobre ssh, porque em caso de falha, é "
+#~ "difícil de recuperar.\n"
 #~ "\n"
 #~ "Se continuar, um processo adicional do ssh será iniciado na porta '%s'.\n"
 #~ "Deseja continuar ?"

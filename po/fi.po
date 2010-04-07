@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-03-30 20:51+0000\n"
 "Last-Translator: Tomi Juntunen <Unknown>\n"
 "Language-Team: Finnish <ubuntu-fi@lists.ubuntu.com>\n"
@@ -337,8 +337,8 @@ msgstr "Hiekkalaatikko-tila"
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -351,8 +351,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Python-asennuksesi on viallinen. Korjaa symbolinen linkki "
-"\"/usr/bin/python\"."
+"Python-asennuksesi on viallinen. Korjaa symbolinen linkki \"/usr/bin/python"
+"\"."
 
 #: ../DistUpgrade/DistUpgradeController.py:411
 msgid "Package 'debsig-verify' is installed"
@@ -416,8 +416,8 @@ msgstr ""
 "voi tapahtua jos käytössäsi on yksityinen ohjelmalähde tai ohjelmalähteen "
 "tiedot eivät ole ajan tasalla.\n"
 "\n"
-"Korvataanko \"sources.list\"-tiedosto joka tapauksessa? Jos valitset "
-"\"Kyllä\", jokainen \"%s\" muutetaan muotoon \"%s\"."
+"Korvataanko \"sources.list\"-tiedosto joka tapauksessa? Jos valitset \"Kyllä"
+"\", jokainen \"%s\" muutetaan muotoon \"%s\"."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:695
@@ -768,11 +768,65 @@ msgstr "Järjestelmän päivitys on valmis."
 msgid "The partial upgrade was completed."
 msgstr "Osittainen päivitys valmistui."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr "evms on käytössä"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"/proc/mounts -tiedoston mukaan järjestelmässäsi on käytössä evms-"
+"taltionhallinta. evms-ohjelmistoa ei enää tueta, joten ole hyvä ja poista se "
+"käytöstä ja suorita päivitys uudelleen."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+"Päivitys saattaa poistaa käytöstä visuaalisia tehosteita ja huonontaa "
+"joidenkin pelien ja graafisesti raskaiden ohjelmien suorituskykyä."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+#, fuzzy
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Järjestelmässäsi on käytössä NVIDIAn “nvidia“-näytönohjainajuri. Ubuntu "
+"10.04:ssä ei ole tästä ajurista versiota, joka toimii näytönohjaimesi "
+"kanssa. \n"
+"\n"
+"Jatketaanko päivitystä?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+#, fuzzy
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Järjestelmässäsi on käytössä AMD:n “fglrx“-näytönohjainajuri. Ubuntu 10.04:"
+"ssä ei ole tästä ajurista versiota, joka toimii näytönohjaimesi kanssa. \n"
+"\n"
+"Jatketaanko päivitystä?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr "Ei ARMv6-suoritinta"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -784,14 +838,15 @@ msgstr ""
 "vähintään ARMv6-arkkitehtuuria tukevan suorittimen. Tästä syystä "
 "järjestelmäsi päivittäminen uuteen Ubuntun julkaisuun ei ole mahdollista."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr "Init-palvelua ei löydy"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
+#, fuzzy
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
@@ -804,68 +859,13 @@ msgstr ""
 "\n"
 "Haluatko varmasti jatkaa päivitystä?"
 
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-"Päivitys saattaa poistaa käytöstä visuaalisia tehosteita ja huonontaa "
-"joidenkin pelien ja graafisesti raskaiden ohjelmien suorituskykyä."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Järjestelmässäsi on käytössä AMD:n “fglrx“-näytönohjainajuri. Ubuntu "
-"10.04:ssä ei ole tästä ajurista versiota, joka toimii näytönohjaimesi "
-"kanssa. \n"
-"\n"
-"Jatketaanko päivitystä?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Järjestelmässäsi on käytössä NVIDIAn “nvidia“-näytönohjainajuri. Ubuntu "
-"10.04:ssä ei ole tästä ajurista versiota, joka toimii näytönohjaimesi "
-"kanssa. \n"
-"\n"
-"Jatketaanko päivitystä?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr "evms on käytössä"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"/proc/mounts -tiedoston mukaan järjestelmässäsi on käytössä evms-"
-"taltionhallinta. evms-ohjelmistoa ei enää tueta, joten ole hyvä ja poista se "
-"käytöstä ja suorita päivitys uudelleen."
-
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
 msgstr "Hiekkalaatikkopäivitys aufs:ää käyttäen"
 
 #: ../DistUpgrade/DistUpgradeMain.py:45
 msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr ""
-"Käytä annettua polkua päivitettyjen pakettien etsimiseksi CD-levyltä."
+msgstr "Käytä annettua polkua päivitettyjen pakettien etsimiseksi CD-levyltä."
 
 #: ../DistUpgrade/DistUpgradeMain.py:51
 msgid ""
@@ -983,16 +983,16 @@ msgstr "Tapahtui vakava virhe"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Ilmoita tästä virheraportilla (jos et ole niin jo tehnyt) ja sisällytä "
-"siihen tiedostot /var/log/dist-upgrade/main.log ja /var/log/dist-"
-"upgrade/apt.log. Päivitys keskeytyy.\n"
-"Alkuperäinen sources.list tallennettiin nimellä "
-"/etc/apt/sources.list.distUpgrade."
+"siihen tiedostot /var/log/dist-upgrade/main.log ja /var/log/dist-upgrade/apt."
+"log. Päivitys keskeytyy.\n"
+"Alkuperäinen sources.list tallennettiin nimellä /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:460
 msgid "Ctrl-c pressed"
@@ -1094,8 +1094,8 @@ msgstr "Uudelleenkäynnistys vaaditaan"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:788
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr ""
-"<b><big>Käynnistä järjestelmä uudelleen päivityksen "
-"viimeistelemiseksi</big></b>"
+"<b><big>Käynnistä järjestelmä uudelleen päivityksen viimeistelemiseksi</"
+"big></b>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:791 ../DistUpgrade/DistUpgrade.ui.h:25
 #: ../data/glade/UpdateManager.ui.h:31
@@ -1151,10 +1151,10 @@ msgstr[1] "%li sekuntia"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1165,10 +1165,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1378,15 +1378,15 @@ msgstr "Virheviesti oli \"%s\"."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Ilmoita tästä virheraportilla ja sisällytä siihen tiedostot /var/log/dist-"
 "upgrade/main.log ja /var/log/dist-upgrade/apt.log. Päivitys keskeytyy nyt.\n"
-"Alkuperäinen sources.list tallennettiin nimellä "
-"/etc/apt/sources.list.distUpgrade."
+"Alkuperäinen sources.list tallennettiin nimellä /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:113
 msgid "Aborting"
@@ -2078,8 +2078,7 @@ msgid "updates"
 msgstr "päivitykset"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Uusi Ubuntun versio on saatavilla. Haluatko aloittaa päivityksen?</b>"
 
@@ -2210,8 +2209,7 @@ msgstr ""
 
 #: ../data/update-manager.schemas.in.h:16
 msgid "make check-new-release-gtk ignore a given new release"
-msgstr ""
-"muuta check-new-release-gtk jättämään huomiotta annettu uusi julkaisu"
+msgstr "muuta check-new-release-gtk jättämään huomiotta annettu uusi julkaisu"
 
 #: ../update-manager:56 ../do-release-upgrade:33
 msgid "Show version and exit"
@@ -2358,8 +2356,8 @@ msgid ""
 "installed. See bugs.launchpad.net, bug #279621 for details."
 msgstr ""
 "Jos paketti kdelibs4-dev on asennettu, on päivityksen aikana oltava "
-"asennettuna myös paketti kdelibs5-dev. Lisätietoja löytyy osoitteesta "
-"bugs.launchpad.net löytyvästä virheraportista #279621."
+"asennettuna myös paketti kdelibs5-dev. Lisätietoja löytyy osoitteesta bugs."
+"launchpad.net löytyvästä virheraportista #279621."
 
 #: ../Janitor/plugins/langpack_manual_plugin.py:34
 #, python-format
@@ -2367,8 +2365,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr "%s tulee merkitä käsin asennetuksi."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 "Poista lilo, koska grub on myös asennettu (katso bugista #314004 lisätietoja)"
 
@@ -2379,18 +2376,17 @@ msgstr ""
 #~ "If you have not enabled community maintained software (universe), these "
 #~ "packages will be suggested for removal at the end of the upgrade."
 #~ msgstr ""
-#~ "Canonical Ltd. ei enää tue seuraavia ohjelmapaketteja. Yhteisö tukee niitä "
-#~ "edelleen.\n"
+#~ "Canonical Ltd. ei enää tue seuraavia ohjelmapaketteja. Yhteisö tukee "
+#~ "niitä edelleen.\n"
 #~ "\n"
 #~ "Jos et ole ottanut käyttöön yhteisön ylläpitämien sovelluksien "
 #~ "ohjelmalähdettä (\"universe\"), suositellaan nämä paketit  poistettaviksi "
 #~ "päivityksen lopuksi."
 
-#, python-format
 #~ msgid ""
 #~ "This session appears to be running under ssh. It is not recommended to "
-#~ "perform a upgrade over ssh currently because in case of failure it is harder "
-#~ "to recover.\n"
+#~ "perform a upgrade over ssh currently because in case of failure it is "
+#~ "harder to recover.\n"
 #~ "\n"
 #~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 #~ "Do you want to continue?"

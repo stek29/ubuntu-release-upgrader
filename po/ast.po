@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-03-21 17:22+0000\n"
 "Last-Translator: Iñigo Varela <malditoastur@gmail.com>\n"
 "Language-Team: Asturian <ast@li.org>\n"
@@ -110,9 +110,9 @@ msgstr[0] ""
 "s'alcuentra en dengún repositoriu. ¿Quies desinstalar esti paquete agora pa "
 "continuar?"
 msgstr[1] ""
-"Los paquetes «%s» tán nun estáu inconsistente y hai de reinstalalos, pero "
-"nun s'alcuentren en dengún repositoriu. ¿Quies desinstalar estos paquete "
-"agora pa continuar?"
+"Los paquetes «%s» tán nun estáu inconsistente y hai de reinstalalos, pero nun "
+"s'alcuentren en dengún repositoriu. ¿Quies desinstalar estos paquete agora "
+"pa continuar?"
 
 #. FIXME: not ideal error message, but we just reuse a
 #. existing one here to avoid a new string
@@ -156,8 +156,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:631
 msgid "This is most likely a transient problem, please try again later."
-msgstr ""
-"Dablemente seya un problema transitoriu, téntelo otra vegada más sero."
+msgstr "Dablemente seya un problema transitoriu, téntelo otra vegada más sero."
 
 #: ../DistUpgrade/DistUpgradeCache.py:634
 msgid ""
@@ -166,8 +165,8 @@ msgid ""
 "report."
 msgstr ""
 "Si nun se correspuende con dengún, informe d'esti fallu sobro'l paquete "
-"«update-manager» ya incluya nel informe los ficheros allugaos en "
-"/var/log/dis-upgrade/."
+"«update-manager» ya incluya nel informe los ficheros allugaos en /var/log/dis-"
+"upgrade/."
 
 #: ../DistUpgrade/DistUpgradeCache.py:640
 #: ../UpdateManager/UpdateManager.py:766
@@ -311,8 +310,8 @@ msgid ""
 "still connect to the additional one.\n"
 msgstr ""
 "Pa facilitar la recuperación en casu de fall, aniciaráse un sshd adicional "
-"nel puertu «%s». Si daqué va mal col ssh n'execución, entá podrá coneutase "
-"al adicional.\n"
+"nel puertu «%s». Si daqué va mal col ssh n'execución, entá podrá coneutase al "
+"adicional.\n"
 
 #: ../DistUpgrade/DistUpgradeController.py:339
 #: ../DistUpgrade/DistUpgradeController.py:384
@@ -339,8 +338,8 @@ msgstr "Mou Sandbox"
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -355,8 +354,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"La so instalación de python ta toyida. Por favor, igüe l'enllaz simbólicu "
-"«/usr/bin/python»."
+"La so instalación de python ta toyida. Por favor, igüe l'enllaz simbólicu «/"
+"usr/bin/python»."
 
 #: ../DistUpgrade/DistUpgradeController.py:411
 msgid "Package 'debsig-verify' is installed"
@@ -490,8 +489,8 @@ msgstr[0] ""
 "s'alcuentra en dengún repositoriu. Por favor, reinstale'l paquete "
 "manualmente o desinstálelu del sistema"
 msgstr[1] ""
-"Los paquetes «%s» tán nun estáu inconsistente y hai de reinstalalos, pero "
-"nun s'alcuentren en dengún repositoriu. Por favor, reinstale los paquetes "
+"Los paquetes «%s» tán nun estáu inconsistente y hai de reinstalalos, pero nun "
+"s'alcuentren en dengún repositoriu. Por favor, reinstale los paquetes "
 "manualmente o desinstálelos del sistema"
 
 #: ../DistUpgrade/DistUpgradeController.py:830
@@ -695,8 +694,8 @@ msgid ""
 "upgrade/ in the bug report."
 msgstr ""
 "Falló tresnar el sistema pa anovalu. Por favor, informa d'ello como un bug "
-"escontra'l paquete 'update-manager', y amiesta-y los ficheros de "
-"/var/log/dist-upgrade/ a l'informe del bug."
+"escontra'l paquete 'update-manager', y amiesta-y los ficheros de /var/log/"
+"dist-upgrade/ a l'informe del bug."
 
 #: ../DistUpgrade/DistUpgradeController.py:1532
 msgid "Getting upgrade prerequisites failed"
@@ -776,11 +775,65 @@ msgstr "anovamientu del sistema completáu"
 msgid "The partial upgrade was completed."
 msgstr "L'anovamientu parcial completóse."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr "Ta usándose «evms»"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"El to sistema ta usando'l xestor de volúmenes «evms» en /proc/mounts. El "
+"software «evms» yá nun ta sofitáu; por favor, desactívalu y torna a executar "
+"de nuevo l'anovamientu."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+"L'anovamientu pue amenorgar los efeutos d'escritoriu, asina como'l "
+"rendimientu de los xuegos y otros programes qu'usen gráficos de mou "
+"intensivu."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Esti equipu ta usando'l controlador gráficu  «nvidia» de NVIDIA. Nun "
+"s'alcuentra disponible n'Ubuntu 10.04 LTS una versión d'esti controlador que "
+"funcione col so hardware.\n"
+"\n"
+"¿Quier continuar?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Esti equipu ta usando'l controlador gráficu  «fglrx» de AMD. Nun s'alcuentra "
+"disponible n'Ubuntu 10.04 LTS una versión d'esti controlador que funcione col so "
+"hardware.\n"
+"\n"
+"¿Quier continuar?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr "No ARMv6 CPU"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -792,80 +845,25 @@ msgstr ""
 "ARMv6 como arquiteutura mínima. Nun ye dable anovar el so sistema a la nueva "
 "versión d'Ubuntu con esti hardware."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr "El degorriu init nun ta disponible"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
 "Paez ser que'l sistema ye un entornu virtualizáu ensin un degorriu init (un "
-"Linux-VServer, p.ex.). Ubuntu 9.10 nun puede furrular nesta triba d'entornu, "
+"Linux-VServer, p.ex.). Ubuntu 10.04 LTS nun puede furrular nesta triba d'entornu, "
 "polo que primero requierse un anovamientu de la configuración de la to "
 "máquina virtual.\n"
 "\n"
 "¿Daveres que quies siguir?"
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-"L'anovamientu pue amenorgar los efeutos d'escritoriu, asina como'l "
-"rendimientu de los xuegos y otros programes qu'usen gráficos de mou "
-"intensivu."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Esti equipu ta usando'l controlador gráficu  «fglrx» de AMD. Nun s'alcuentra "
-"disponible n'Ubuntu 10.04 una versión d'esti controlador que funcione col so "
-"hardware.\n"
-"\n"
-"¿Quier continuar?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Esti equipu ta usando'l controlador gráficu  «nvidia» de NVIDIA. Nun "
-"s'alcuentra disponible n'Ubuntu 10.04 una versión d'esti controlador que "
-"funcione col so hardware.\n"
-"\n"
-"¿Quier continuar?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr "Ta usándose «evms»"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"El to sistema ta usando'l xestor de volúmenes «evms» en /proc/mounts. El "
-"software «evms» yá nun ta sofitáu; por favor, desactívalu y torna a executar "
-"de nuevo l'anovamientu."
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
@@ -989,8 +987,8 @@ msgstr "Ocurrió un error fatal"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
@@ -1154,10 +1152,10 @@ msgstr[1] "%li segundos"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1168,10 +1166,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1381,9 +1379,9 @@ msgstr "El mensax de fallu ye «%s»"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Por favor informa d'esto como un bug y amesta los ficheros /var/log/dist-"
@@ -1657,8 +1655,7 @@ msgstr[1] "La información de paquetes anovóse per cabera vegada hai %s díes."
 msgid "The package information was last updated %s hour ago."
 msgid_plural "The package information was last updated %s hours ago."
 msgstr[0] "La información de paquetes anovóse per cabera vegada hai %s hora."
-msgstr[1] ""
-"La información de paquetes anovóse per cabera vegada hai %s hores."
+msgstr[1] "La información de paquetes anovóse per cabera vegada hai %s hores."
 
 #: ../UpdateManager/UpdateManager.py:481
 msgid "The package information was last updated less than one hour ago."
@@ -1805,8 +1802,8 @@ msgid ""
 "this issue at first."
 msgstr ""
 "Nun ye dable instalar o desinstalar dengún programa. Por favor, use'l xestor "
-"de paquetes «Synaptic», o execute «sudo apt-get install -f» nuna terminal, "
-"pa correxir esti problema primero."
+"de paquetes «Synaptic», o execute «sudo apt-get install -f» nuna terminal, pa "
+"correxir esti problema primero."
 
 #: ../UpdateManagerHildon/UpdateManagerHildon.py:136
 msgid "Downloading Package Information"
@@ -2087,10 +2084,8 @@ msgid "updates"
 msgstr "anovamientos"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
-msgstr ""
-"<b>Hai disponible una nueva versión d'Ubuntu. ¿Prestaríate anovar?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgstr "<b>Hai disponible una nueva versión d'Ubuntu. ¿Prestaríate anovar?</b>"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:2
 msgid "Ask Me Later"
@@ -2207,10 +2202,10 @@ msgid ""
 "upgrades Check automatically if a new version of the current distribution is "
 "available and offer to upgrade (if possible)."
 msgstr ""
-"Esta contraseña ta conseñada como obsoleta en beneficiu del ficheru "
-"/etc/update-manager/release-upgrades Comprobar automáticamente si "
-"s'alcuentra disponible una nueva versión de la distribución actual, y "
-"proponer el so anovamientu (si ye dable)."
+"Esta contraseña ta conseñada como obsoleta en beneficiu del ficheru /etc/"
+"update-manager/release-upgrades Comprobar automáticamente si s'alcuentra "
+"disponible una nueva versión de la distribución actual, y proponer el so "
+"anovamientu (si ye dable)."
 
 #: ../data/update-manager.schemas.in.h:15
 msgid ""
@@ -2378,25 +2373,23 @@ msgid "%s needs to be marked as manually installed."
 msgstr "Tien de conseñase %s como instaláu manualmente."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 "Desaníciase LILO yá que GRUB tamién ta instaláu (Consulte'l bug #314004 pa "
 "más información.)"
 
-#, python-format
 #~ msgid ""
 #~ "This session appears to be running under ssh. It is not recommended to "
-#~ "perform a upgrade over ssh currently because in case of failure it is harder "
-#~ "to recover.\n"
+#~ "perform a upgrade over ssh currently because in case of failure it is "
+#~ "harder to recover.\n"
 #~ "\n"
 #~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
 #~ "Paez qu'esta sesión ta executándose baxo ssh. Anguaño, nun se recomienda "
-#~ "llevar a cau una autualización sobro ssh, porque en casu de fallu sedría más "
-#~ "abegoso de recuperar.Si continua, aniciaráse un demoniu ssh adicional nel "
-#~ "puertu «%s».¿Deseya continuar?"
+#~ "llevar a cau una autualización sobro ssh, porque en casu de fallu sedría "
+#~ "más abegoso de recuperar.Si continua, aniciaráse un demoniu ssh adicional "
+#~ "nel puertu «%s».¿Deseya continuar?"
 
 #~ msgid ""
 #~ "Canonical Ltd. no longer provides support for the following software "
@@ -2406,6 +2399,6 @@ msgstr ""
 #~ "packages will be suggested for removal at the end of the upgrade."
 #~ msgstr ""
 #~ "Canonical Ltd. ya nun sofita oficialmente los siguientes paquetes de "
-#~ "software. Magar que pue obtener sofitu de la comunidá.Si nun tien habilitao "
-#~ "el software calteníu pola comunidá («Universe»), suxeriráse-y que "
-#~ "desinstales estos paquetes al final del procesu d'autualización."
+#~ "software. Magar que pue obtener sofitu de la comunidá.Si nun tien "
+#~ "habilitao el software calteníu pola comunidá («Universe»), suxeriráse-y "
+#~ "que desinstales estos paquetes al final del procesu d'autualización."

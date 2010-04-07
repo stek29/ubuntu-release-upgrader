@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager.HEAD\n"
-"Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2010-04-02 07:16+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-07 11:35+0200\n"
 "PO-Revision-Date: 2010-03-30 20:47+0000\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -336,8 +336,8 @@ msgstr "Teszt mód"
 #: ../DistUpgrade/DistUpgradeController.py:357
 #, python-format
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
+"This upgrade is running in sandbox (test) mode. All changes are written to '%"
+"s' and will be lost on the next reboot.\n"
 "\n"
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
@@ -518,8 +518,8 @@ msgid ""
 "Empty your trash and remove temporary packages of former installations using "
 "'sudo apt-get clean'."
 msgstr ""
-"A frissítés most megszakadt. A frissítéshez %s szabad hely szükséges a(z) "
-"„%s” lemezen. Szabadítson fel további %s lemezterületet a(z) „%s” eszközön. "
+"A frissítés most megszakadt. A frissítéshez %s szabad hely szükséges a(z) „%"
+"s” lemezen. Szabadítson fel további %s lemezterületet a(z) „%s” eszközön. "
 "Ürítse a Kukát és törölje a korábbi telepítések átmeneti fájljait a „sudo "
 "apt-get clean” parancs kiadásával."
 
@@ -709,8 +709,8 @@ msgstr ""
 "A rendszer nem volt képes lekérni a frissítés előfeltételeit. A frissítés "
 "most megszakad és helyreáll a rendszer eredeti állapota.\n"
 "\n"
-"Jelentse ezt a hibát az „update-manager” csomaghoz és vegye be a "
-"/var/log/dist-upgrade/ könyvtárban található fájlokat a hibajelentésbe."
+"Jelentse ezt a hibát az „update-manager” csomaghoz és vegye be a /var/log/"
+"dist-upgrade/ könyvtárban található fájlokat a hibajelentésbe."
 
 #: ../DistUpgrade/DistUpgradeController.py:1563
 msgid "Updating repository information"
@@ -772,11 +772,63 @@ msgstr "A rendszer frissítése befejeződött."
 msgid "The partial upgrade was completed."
 msgstr "Az intelligens frissítés sikeresen befejeződött."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:149
+#: ../DistUpgrade/DistUpgradeQuirks.py:168
+msgid "evms in use"
+msgstr "Az evms használatban van"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:169
+msgid ""
+"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+"software is no longer supported, please switch it off and run the upgrade "
+"again when this is done."
+msgstr ""
+"A rendszer az „evms” kötetkezelőt használja a /proc/mounts alatt. Az „evms” "
+"szoftver már nem támogatott, kapcsolja ki és futtassa újra a frissítést."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#: ../DistUpgrade/DistUpgradeQuirks.py:478
+msgid ""
+"Upgrading may reduce desktop effects, and performance in games and other "
+"graphically intensive programs."
+msgstr ""
+"A frissítés visszafoghatja a vizuális effektusokat, a játékok és a sok "
+"grafikai számítást igénylő alkalmazások teljesítményét."
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:427
+#: ../DistUpgrade/DistUpgradeQuirks.py:455
+msgid ""
+"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+"version of this driver is available that works with your video card in "
+"Ubuntu 10.04 LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Ez a számítógép jelenleg az NVIDIA „nvidia” grafikus meghajtóját használja. "
+"Ennek a meghajtónak nem érhető el a videokártyáját az Ubuntu 10.04 LTS alatt "
+"kezelni képes verziója.\n"
+"\n"
+"Biztosan folytatja?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:482
+msgid ""
+"This computer is currently using the AMD 'fglrx' graphics driver. No version "
+"of this driver is available that works with your hardware in Ubuntu 10.04 "
+"LTS.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Ez a számítógép jelenleg az AMD „fglrx” grafikus meghajtóját használja. "
+"Ennek a meghajtónak nem érhető el a hardverét az Ubuntu 10.04 LTS alatt kezelni "
+"képes verziója.\n"
+"\n"
+"Biztosan folytatja?"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:509
 msgid "No ARMv6 CPU"
 msgstr "Nem ARMv6 processzor"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:150
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -788,77 +840,24 @@ msgstr ""
 "optimalizációkkal készült. Ezen a hardveren nem frissíthető a rendszer új "
 "Ubuntu kiadásra."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#: ../DistUpgrade/DistUpgradeQuirks.py:530
 msgid "No init available"
 msgstr "Nem érhető el init"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:165
+#: ../DistUpgrade/DistUpgradeQuirks.py:531
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
-"e.g. Linux-VServer. Ubuntu 9.10 cannot function within this type of "
+"e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
 "environment, requiring an update to your virtual machine configuration "
 "first.\n"
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
 "Úgy tűnik, hogy a rendszere egy virtualizált környezet init démon nélkül, "
-"például Linux-VServer. Az Ubuntu 9.10 nem képes működni ebben a "
+"például Linux-VServer. Az Ubuntu 10.04 nem képes működni ebben a "
 "környezetben, előbb frissítenie kell a virtuális gép beállításait.\n"
 "\n"
 "Biztosan folytatja?"
-
-#. TRANSLATORS: this string is not displayed in the 9.10 upgrade
-#. (but it will be used for 8.04 -> 10.04 LTS upgrades)
-#: ../DistUpgrade/DistUpgradeQuirks.py:186
-#: ../DistUpgrade/DistUpgradeQuirks.py:268
-#: ../DistUpgrade/DistUpgradeQuirks.py:295
-msgid ""
-"Upgrading may reduce desktop effects, and performance in games and other "
-"graphically intensive programs."
-msgstr ""
-"A frissítés visszafoghatja a vizuális effektusokat, a játékok és a sok "
-"grafikai számítást igénylő alkalmazások teljesítményét."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"This computer is currently using the AMD 'fglrx' graphics driver. No version "
-"of this driver is available that works with your hardware in Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Ez a számítógép jelenleg az AMD „fglrx” grafikus meghajtóját használja. "
-"Ennek a meghajtónak nem érhető el a hardverét az Ubuntu 10.04 alatt kezelni "
-"képes verziója.\n"
-"\n"
-"Biztosan folytatja?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:272
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Ez a számítógép jelenleg az NVIDIA „nvidia” grafikus meghajtóját használja. "
-"Ennek a meghajtónak nem érhető el a videokártyáját az Ubuntu 10.04 alatt "
-"kezelni képes verziója.\n"
-"\n"
-"Biztosan folytatja?"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:473
-msgid "evms in use"
-msgstr "Az evms használatban van"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:474
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"A rendszer az „evms” kötetkezelőt használja a /proc/mounts alatt. Az „evms” "
-"szoftver már nem támogatott, kapcsolja ki és futtassa újra a frissítést."
 
 #: ../DistUpgrade/DistUpgradeMain.py:43
 msgid "Sandbox upgrade using aufs"
@@ -986,14 +985,14 @@ msgstr "Végzetes hiba történt"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:443
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade is now aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Jelentse ezt a hibát (ha eddig még nem tette volna) és csatolja a "
-"/var/log/dist-upgrade/main.log és /var/log/dist-upgrade/apt.log nevű "
-"fájlokat. A frissítés most megszakadt.\n"
+"Jelentse ezt a hibát (ha eddig még nem tette volna) és csatolja a /var/log/"
+"dist-upgrade/main.log és /var/log/dist-upgrade/apt.log nevű fájlokat. A "
+"frissítés most megszakadt.\n"
 "Az eredeti sources.list /etc/apt/sources.list.distUpgrade néven került "
 "mentésre."
 
@@ -1153,10 +1152,10 @@ msgstr[1] "%li másodperc"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:78
 #, python-format
@@ -1167,10 +1166,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:93
 #, python-format
@@ -1185,8 +1184,8 @@ msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem."
 msgstr ""
-"A letöltés körülbelül %s alatt fejeződik be 1 megabites DSL kapcsolaton és "
-"%s alatt 56k-s modem használatával."
+"A letöltés körülbelül %s alatt fejeződik be 1 megabites DSL kapcsolaton és %"
+"s alatt 56k-s modem használatával."
 
 #. if we have a estimated speed, use it
 #: ../DistUpgrade/DistUpgradeView.py:132
@@ -1383,9 +1382,9 @@ msgstr "A hibaüzenet: „%s”."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:89
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade is now aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade is now "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Jelentse ezt hibaként és a hibajelentéshez mellékelje a /var/log/dist-"
@@ -2081,8 +2080,7 @@ msgid "updates"
 msgstr "frissítés"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr "<b>Elérhető az Ubuntu egy új változata. Szeretné frissíteni?</b>"
 
 #: ../data/glade/UpgradePromptDialog.ui.h:2
@@ -2228,13 +2226,11 @@ msgstr "Új Ubuntu kiadás elérhetőségének ellenőrzése"
 #: ../update-manager:65 ../do-release-upgrade:36 ../check-new-release:27
 #: ../check-new-release-gtk:149
 msgid "Check if upgrading to the latest devel release is possible"
-msgstr ""
-"Ellenőrzi, hogy lehetséges-e frissíteni a legújabb fejlesztői kiadásra"
+msgstr "Ellenőrzi, hogy lehetséges-e frissíteni a legújabb fejlesztői kiadásra"
 
 #: ../update-manager:69
 msgid "Upgrade using the latest proposed version of the release upgrader"
-msgstr ""
-"Frissítés a kiadásfrissítő legújabb ajánlott változatának segítségével"
+msgstr "Frissítés a kiadásfrissítő legújabb ajánlott változatának segítségével"
 
 #: ../update-manager:76
 msgid "Do not focus on map when starting"
@@ -2267,8 +2263,8 @@ msgid ""
 "for server systems are supported."
 msgstr ""
 "Futtatás speciális frissítő módban.\n"
-"Jelenleg a „desktop” (asztali rendszerek szabályos frissítése) és a „server” "
-"(kiszolgálórendszerek frissítése) módok támogatottak."
+"Jelenleg a „desktop” (asztali rendszerek szabályos frissítése) és a "
+"„server” (kiszolgálórendszerek frissítése) módok támogatottak."
 
 #: ../do-release-upgrade:50
 msgid "Run the specified frontend"
@@ -2369,8 +2365,7 @@ msgid "%s needs to be marked as manually installed."
 msgstr "A(z) %s csomagot saját kezűleg telepítettként kell megjelölni."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
-msgid ""
-"Remove lilo since grub is also installed.(See bug #314004 for details.)"
+msgid "Remove lilo since grub is also installed.(See bug #314004 for details.)"
 msgstr ""
 "A lilo eltávolítása, mivel a grub is telepítve van. (Lásd a #314004 számú "
 "hibát a részletekért)."
@@ -2389,17 +2384,16 @@ msgstr ""
 #~ "(universe tároló), akkor ezek a csomagok a telepítés végén eltávolításra "
 #~ "lesznek javasolva."
 
-#, python-format
 #~ msgid ""
 #~ "This session appears to be running under ssh. It is not recommended to "
-#~ "perform a upgrade over ssh currently because in case of failure it is harder "
-#~ "to recover.\n"
+#~ "perform a upgrade over ssh currently because in case of failure it is "
+#~ "harder to recover.\n"
 #~ "\n"
 #~ "If you continue, a additional ssh daemon will be started at port '%s'.\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "Úgy tűnik, hogy a frissítés SSH alatt fut.  Nem javasolt frissítést végezni "
-#~ "SSH alatt, mert ha hiba lépne fel, nehezebb azt helyrehozni.\n"
+#~ "Úgy tűnik, hogy a frissítés SSH alatt fut.  Nem javasolt frissítést "
+#~ "végezni SSH alatt, mert ha hiba lépne fel, nehezebb azt helyrehozni.\n"
 #~ "\n"
 #~ "Ha folytatja, egy új SSH kiszolgáló indul a következő porton: %s.\n"
 #~ "Kívánja folytatni?"

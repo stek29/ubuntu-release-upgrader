@@ -115,18 +115,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def window_delete_event_cb(self, window, event):
     gtk.main_quit()
 
-  def _get_lang(self):
-   try:
-    (locale_s, encoding) = locale.getdefaultlocale()
-    return locale_s
-   except Exception, e: 
-    logging.exception("gedefaultlocale() failed")
-    return None
-
   def show_uri(self, uri):
-    lang = self._get_lang()
-    if lang:
-        uri += "?lang=%s" % lang
     logging.debug("using uri '%s'" % uri)
     self.webkit_view.open(uri)
     self.webkit_view.connect("load-finished", self._on_load_finished)

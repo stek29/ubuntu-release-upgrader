@@ -22,18 +22,22 @@
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
 
-from DistUpgradeController import DistUpgradeController
-from DistUpgradeConfigParser import DistUpgradeConfig
+import apt
+import apt_pkg
+import atexit
+import glob
 import logging
 import os
-import sys
-import glob
 import shutil
-import atexit
+import subprocess
+import sys
+
 from datetime import datetime
 from optparse import OptionParser
 from gettext import gettext as _
 
+from DistUpgradeController import DistUpgradeController
+from DistUpgradeConfigParser import DistUpgradeConfig
 
 def do_commandline():
     " setup option parser and parse the commandline "
@@ -83,6 +87,25 @@ def setup_logging(options, config):
     # log what config files are in use here to detect user
     # changes
     logging.info("Using config files '%s'" % config.config_files)
+    logging.info("uname information: '%s'" % " ".join(os.uname()))
+    # save package state to be able to re-create failures
+    apt_preferences = apt_pkg.Config.FindFile("Dir::Etc::preferences")
+    apt_preferences_parts = apt_pkg.Config.FindDir("Dir::Etc::preferencesparts",
+                                                   "/etc/apt/preferences.d")
+    sources_list =  apt_pkg.Config.FindFile("Dir::Etc::sourcelist")
+    sources_list_parts = apt_pkg.Config.FindDir("Dir::Etc::sourceparts",
+                                                "/etc/apt/sources.list.d")
+    dpkg_status = apt_pkg.Config.FindFile("Dir::State::status")
+    state_tar = os.path.join(logdir,"system_state.tar.gz")
+    cmd = ["tar","-z","-c","-f", state_tar, 
+           dpkg_status,
+           apt_preferences, apt_preferences_parts, 
+           sources_list, sources_list_parts]
+    logging.info("creating state file with '%s'" % cmd)
+    subprocess.call(cmd)
+    # lspci output
+    s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]
+    open(os.path.join(logdir, "lspci.txt"), "w").write(s)
     return logdir
     
 def setup_view(options, config, logdir):

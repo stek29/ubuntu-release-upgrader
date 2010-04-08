@@ -1,5 +1,6 @@
-update-manager (1:0.133.8ubuntu1) lucid; urgency=low
+update-manager (1:0.134) UNRELEASED; urgency=low
 
+  [ Barry Warsaw ]
   * Bump up the amount of /boot space calculated per kernel.  The current
     value appears to undercount by about 260K/kernel. (LP: #132311)
   
@@ -8,24 +9,14 @@ update-manager (1:0.133.8ubuntu1) lucid; urgency=low
   * update "10.04" strings to "10.04 LTS" and unfuzzy translations
   * when requesting the release announcement, append ?lang=current_lang
     to the request URI
+  * update quirks for updates from hardy
   * DistUpgrade/DistUpgrade.cfg, DistUpgrade/DistUpgrade.cfg.hardy:
     - add extra protection against video driver removal (LP: #556629)
 
- -- Barry Warsaw <barry@canonical.com>  Fri, 02 Apr 2010 12:45:11 -0400
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 07 Apr 2010 09:44:08 +0200
 
-update-manager (1:0.133.8) UNRELEASED; urgency=low
+update-manager (1:0.133.11) lucid; urgency=low
 
-  * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeCache.py:
-    - do not warn about demoted packages that get removed later anyway
-  * DistUpgrade/DistUpgrade.cfg, DistUpgrade/DistUpgrade.cfg.hardy:
-    - remove deskbar-applet, and nautilus-cd-burner on ubuntu-desktop
-      upgrade   (as discussed with the desktop team)
-    - remove notification-daemon in favor of notify-osd in 
-      xubuntu-desktop (LP: #546857)
-  * DistUpgrade/DistUpgrade.cfg.hardy:
-    - remove tracker on hardy ubuntu-desktop upgrade
-  * help upgrade by hinting usplash gets removed in favor of 
-    plymouth
   * UpdateManager/GtkProgress.py:
     - remove window title on cache progress (LP: #549936)
   * check-new-release-gtk:
@@ -40,7 +31,39 @@ update-manager (1:0.133.8) UNRELEASED; urgency=low
     - append language parameter to uri
     - support --debug
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 29 Mar 2010 12:06:41 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 01 Apr 2010 00:10:14 +0200
+
+update-manager (1:0.133.10) lucid; urgency=low
+
+  * help upgrade by hinting usplash gets removed in favor of 
+    plymouth
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 31 Mar 2010 19:38:15 +0200
+
+update-manager (1:0.133.9) lucid; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeCache.py:
+    - do not warn about demoted packages that get removed later anyway
+  * DistUpgrade/DistUpgrade.cfg, DistUpgrade/DistUpgrade.cfg.hardy:
+    - remove deskbar-applet, and nautilus-cd-burner on ubuntu-desktop
+      upgrade   (as discussed with the desktop team)
+    - remove notification-daemon in favor of notify-osd in 
+      xubuntu-desktop (LP: #546857)
+  * DistUpgrade/DistUpgrade.cfg.hardy:
+    - remove tracker on hardy ubuntu-desktop upgrade
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 29 Mar 2010 14:18:49 +0200
+
+update-manager (1:0.133.8) lucid; urgency=low
+
+  * DistUpgrade/sources.list.py, distro.py, distinfo.py:
+    - temporarily stop embedding from the python-apt build host 
+      because of the python-apt api changes, use 0.7.13.5 version 
+    instead
+  * debian/control:
+    - point to lp:~ubuntu-core-dev/update-manager/lucid
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 27 Mar 2010 09:56:50 +0100
 
 update-manager (1:0.133.7) lucid; urgency=low
 

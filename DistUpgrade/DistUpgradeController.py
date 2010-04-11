@@ -1065,7 +1065,10 @@ class DistUpgradeController(object):
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
-                self._view.getTerminal().call(["dpkg","--configure","-a"])
+                cmd = ["dpkg","--configure","-a"]
+                if os.environ.get("DEBIAN_FRONTEND") == "noninteractive":
+                    cmd.append("--force-confold")
+                self._view.getTerminal().call(cmd)
                 self._enableAptCronJob()
                 return False
             except IOError, e:

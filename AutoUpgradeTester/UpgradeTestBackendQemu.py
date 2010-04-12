@@ -351,13 +351,14 @@ iface eth0 inet static
         print "Starting %s" % cmd
         self.qemu_pid = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         # spin here until ssh has come up and we can login
-        for i in range(900):
+        now = time.time()
+        while True:
             time.sleep(1)
             if self._runInImage(["/bin/true"]) == 0:
                 break
-        else:
-            print "Could not start image after 300s, exiting"
-            return False
+            if (time.time() - now) > 900:
+                print "Could not start image after 900s, exiting"
+                return False
         return True
 
     def stop(self):
@@ -392,7 +393,8 @@ iface eth0 inet static
             os.unlink(f)
 
         print "Starting for upgrade"
-        self.start()
+        if not self.start():
+            return False
 
         # copy the profile
         if os.path.exists(self.profile):

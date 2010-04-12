@@ -161,13 +161,24 @@ class DistUpgradeViewText(DistUpgradeView):
           output = ""
           if len(self.toRemove) > 0:
               output += "\n"  
-              output += twrap(_("Remove: %s\n" % " ".join(self.toRemove)), subsequent_indent='  ')
+              output += twrap(
+                  _("Remove: %s\n") % " ".join(self.toRemove), 
+                  subsequent_indent='  ')
+          if len(self.toRemoveAuto) > 0:
+              output += twrap(
+                  _("Remove (was auto installed) %s") % " ".join(self.toRemoveAuto), 
+                  subsequent_indent='  ')
+              output += "\n"
           if len(self.toInstall) > 0:
               output += "\n"
-              output += twrap(_("Install: %s\n" % " ".join(self.toInstall)), subsequent_indent='  ')
+              output += twrap(
+                  _("Install: %s\n") % " ".join(self.toInstall), 
+                  subsequent_indent='  ')
           if len(self.toUpgrade) > 0:
               output += "\n"  
-              output += twrap(_("Upgrade: %s\n" % " ".join(self.toUpgrade)), subsequent_indent='  ')
+              output += twrap(
+                  _("Upgrade: %s\n") % " ".join(self.toUpgrade), 
+                  subsequent_indent='  ')
           self.showInPager(output)
         print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
 

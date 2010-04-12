@@ -1,3 +1,14 @@
+update-manager (1:0.134.1) UNRELEASED; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - honor "DEBIAN_FRONTEND=noninteractive" on pkg failure (LP: #538206)
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - stop apparmor before dpkg starts on hardy -> lucid upgrades to
+      avoid potentially confusing error messages during the upgrade
+      (LP: #559433)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 12 Apr 2010 11:39:52 +0200
+
 update-manager (1:0.134) lucid; urgency=low
 
   [ Barry Warsaw ]

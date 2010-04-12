@@ -383,6 +383,9 @@ class DistUpgradeQuirks(object):
         self._killKBluetooth()
         self._killScreensaver()
         self._stopDocvertConverter()
+    def from_hardyStartUpgrade(self):
+        logging.debug("from_hardyStartUpgrade quirks")
+        self._stopApparmor()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
         # hal/NM triggers problem, if the old (intrepid) hal gets
@@ -653,9 +656,13 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markInstall("bcmwl-kernel-source",
                                               "'wl' module found in lsmod")
 
+    def _stopApparmor(self):
+        """ /etc/init.d/apparmor stop (see bug #559433)"""
+        if os.path.exists("/etc/init.d/apparmor"):
+            logging.debug("/etc/init.d/apparmor stop")
+            subprocess.call(["/etc/init.d/apparmor","stop"])
     def _stopDocvertConverter(self):
         " /etc/init.d/docvert-converter stop (see bug #450569)"
-        # kill update-notifier now to suppress reboot required
         if os.path.exists("/etc/init.d/docvert-converter"):
             logging.debug("/etc/init.d/docvert-converter stop")
             subprocess.call(["/etc/init.d/docvert-converter","stop"])

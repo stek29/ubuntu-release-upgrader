@@ -33,6 +33,9 @@ fi
 cp /usr/share/jockey/modaliases/nvidia-* modaliases
 cp /usr/share/jockey/modaliases/fglrx* modaliases
 
+# copy nvidia obsoleted drivers data
+cp /usr/share/nvidia-common/obsolete nvidia-obsolete.pkgs
+
 # create the tarball, copy links in place 
 tar -c -h -z -v --exclude=$DIST.tar.gz --exclude=$0 -X build-exclude.txt -f $DIST.tar.gz  ./*
 

@@ -1,11 +1,3 @@
-update-manager (1:0.135) UNRELEASED; urgency=low
-
-  * UpdateManager/Core/MyCache.py:
-    - support third party changelogs by using  ArchiveURI() and
-      append a similar structure as changelogs.ubuntu.com uses
-
- -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 12 Apr 2010 14:39:40 +0200
-
 update-manager (1:0.134.1) UNRELEASED; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
@@ -21,6 +13,13 @@ update-manager (1:0.134.1) UNRELEASED; urgency=low
     - show packages that will be removed (because they were auto installed)
       as well (LP: #558438)
     - fix i18n bug in details output
+  * UpdateManager/Core/MyCache.py:
+    - support third party changelogs by using  ArchiveURI() and
+      append a similar structure as changelogs.ubuntu.com uses 
+      (LP: #45129)
+  * UpdateManager/Core/MetaRelease.py:
+    - do not crash if meta-release file can not be parsed, just remove
+      the broken file instead (LP: #558396)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 12 Apr 2010 11:39:52 +0200
 

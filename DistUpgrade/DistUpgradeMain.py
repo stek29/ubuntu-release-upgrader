@@ -104,8 +104,11 @@ def setup_logging(options, config):
     logging.info("creating state file with '%s'" % cmd)
     subprocess.call(cmd)
     # lspci output
-    s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]
-    open(os.path.join(logdir, "lspci.txt"), "w").write(s)
+    try:
+        s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]
+        open(os.path.join(logdir, "lspci.txt"), "w").write(s)
+    except OSError, e:
+        logging.debug("lspci failed: %s" % e)
     return logdir
     
 def setup_view(options, config, logdir):

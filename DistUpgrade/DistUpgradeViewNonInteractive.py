@@ -314,8 +314,8 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         return True
     def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "
-        if default.lower() == "no":
-            return False
+        #if default.lower() == "no":
+        #    return False
         return True
     def confirmRestart(self):
         " generic ask about the restart, can be overridden "

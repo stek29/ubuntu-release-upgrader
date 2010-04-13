@@ -314,6 +314,8 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         return True
     def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "
+        # if this gets enabled upgrades over ssh with the non-interactive
+        # frontend will no longer work
         #if default.lower() == "no":
         #    return False
         return True

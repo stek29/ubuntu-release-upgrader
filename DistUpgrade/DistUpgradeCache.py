@@ -519,6 +519,9 @@ class MyCache(apt.Cache):
             if not self.has_key(kernel):
                 logging.debug("%s not available in cache" % kernel)
                 continue
+            # this can happen e.g. on cdrom -> cdrom only upgrades
+            # where on hardy we have linux-386 but on the lucid CD 
+            # we only have linux-generic
             if not self[kernel].candidateDownloadable:
                 logging.debug("%s not downloadable" % kernel)
                 continue

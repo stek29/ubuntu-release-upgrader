@@ -182,7 +182,13 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         if srcpkg.startswith("lib"):
             prefix = "lib" + srcpkg[3]
 
-        uri = (changelogs_uri or CHANGELOGS_URI) % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
+        # the changelogs_uri argument overrides the default changelogs_uri,
+        # this is useful for e.g. PPAs where we construct the changelogs
+        # path differently
+        if changelogs_uri:
+            uri = changelogs_uri
+        else:
+            uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
         # print "Trying: %s " % uri
         changelog = urllib2.urlopen(uri)
         #print changelog.read()
@@ -224,17 +230,15 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         return alllines
 
     def _guess_third_party_changelogs_uri(self, name):
-        """ guess changelogs uri based on ArchiveURI by just appending
-            /changelogs/pool/section/prefix/pkg/version/pkgname
+        """ guess changelogs uri based on ArchiveURI by replacing .deb
+            with .changelog
         """
+        # there is always a pkg and a pkg.candidate, no need to add
+        # check here
         pkg = self[name]
-        cand = pkg._pcache._depcache.GetCandidateVer(pkg._pkg)
-        if cand and cand.FileList:
-            for (packagefile, i) in cand.FileList:
-                indexfile = self._list.FindIndex(packagefile)
-                if indexfile:
-                    base_uri = indexfile.ArchiveURI("")
-                    return base_uri+"/changelogs/pool/%s/%s/%s/%s_%s/%s"
+        deb_uri = pkg.candidate.uri
+        if deb_uri:
+            return "%s.changelog" % string.rsplit(deb_uri, ".", 1)[0]
         return None
 
         

@@ -81,10 +81,9 @@ if __name__ == "__main__":
 
   # we have a new dist
   if options.check_dist_upgrade_only:
-        if not options.quiet:
-            print _("New release '%s' available.") % m.new_dist.name
-            print _("Run 'do-release-upgrade' to upgrade to it.")
-        sys.exit(RELEASE_AVAILABLE)
+    print _("New release '%s' available.") % m.new_dist.name
+    print _("Run 'do-release-upgrade' to upgrade to it.")
+    sys.exit(RELEASE_AVAILABLE)
 
   progress = apt.progress.TextFetchProgress()
   fetcher = DistUpgradeFetcherCore(new_dist=m.new_dist,

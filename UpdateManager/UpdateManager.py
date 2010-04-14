@@ -86,7 +86,7 @@ from MetaReleaseGObject import MetaRelease
 # - kill "all_changes" and move the changes into the "Update" class
 
 # list constants
-(LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN) = range(4)
+(LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN, LIST_TOGGLE_CHECKED) = range(5)
 
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
@@ -111,7 +111,6 @@ class UpdateManager(SimpleGtkbuilderApp):
   def __init__(self, datadir, options):
     self.setupDbus()
     gtk.window_set_default_icon_name("update-manager")
-
     self.datadir = datadir
     SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui",
                                  "update-manager")
@@ -144,7 +143,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # the treeview (move into it's own code!)
     self.store = gtk.ListStore(str, str, gobject.TYPE_PYOBJECT, 
-                               gobject.TYPE_PYOBJECT)
+                               gobject.TYPE_PYOBJECT, bool)
     self.treeview_update.set_model(self.store)
     self.treeview_update.set_headers_clickable(True);
     self.treeview_update.set_direction(gtk.TEXT_DIR_LTR)
@@ -157,7 +156,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     cr.set_property("xpad", 6)
     cr.connect("toggled", self.toggled)
 
-    column_install = gtk.TreeViewColumn("Install", cr)
+    column_install = gtk.TreeViewColumn("Install", cr, active=LIST_TOGGLE_CHECKED)
     column_install.set_cell_data_func (cr, self.install_column_view_func)
     column = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
     column.set_resizable(True)
@@ -246,8 +245,13 @@ class UpdateManager(SimpleGtkbuilderApp):
     renderer.set_property("visible", pkg != None)
     if pkg is None:
         return
+    current_state = renderer.get_property("active")
     to_install = pkg.markedInstall or pkg.markedUpgrade
     renderer.set_property("active", to_install)
+    # we need to update the store as well to ensure orca knowns
+    # about state changes (it will not read view_func changes)
+    if to_install != current_state:
+        self.store[iter][LIST_TOGGLE_CHECKED] = to_install
     if pkg.name in self.list.held_back:
         renderer.set_property("activatable", False)
     else: 
@@ -783,7 +787,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       origin_list.reverse()
       for origin in origin_list:
         self.store.append(['<b><big>%s</big></b>' % origin.description,
-                           origin.description, None, origin])
+                           origin.description, None, origin,True])
         for pkg in self.list.pkgs[origin]:
           name = xml.sax.saxutils.escape(pkg.name)
           if not pkg.isInstalled:
@@ -802,7 +806,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               contents = "%s\n<small>%s %s</small>" % (contents, version, size)
           else:
               contents = "%s <small>%s</small>" % (contents, size)
-          self.store.append([contents, pkg.name, pkg, None])
+          self.store.append([contents, pkg.name, pkg, None, True])
     self.update_count()
     self.setBusy(False)
     self.check_all_updates_installable()

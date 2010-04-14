@@ -136,11 +136,12 @@ if __name__ == "__main__":
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log
             # is more meaningful
+            # FIXME: ignore  404 because they are most likely transient
             print "pkg: %s failed, re-testing in a clean(er) environment" % pkg.name
             backend.restoreVMSnapshot("clean-base")
             backend.start()
             if not do_install_remove(backend, pkg.name):
-                outname = os.path.join(basedir,"result","%s-fail.txt" % pkg.name)
+                outname = os.path.join(resultdir,"%s-fail.txt" % pkg.name)
                 failures.write("failed to install/remove %s (log at %s)" % (pkg.name, outname))
                 time.sleep(5)
                 backend._copyFromImage("/var/log/apt/term.log",outname)

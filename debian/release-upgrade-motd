@@ -24,6 +24,7 @@ stamp=/var/lib/update-notifier/release-upgrade-available
 if [ -s "$stamp" ]; then
 	# Stamp exists and is populated, so display
 	cat "$stamp"
+	echo
 elif [ -f "$stamp" ]; then
 	# Stamp exists, but is empty, see if it's expired
 	now=$(date +%s)

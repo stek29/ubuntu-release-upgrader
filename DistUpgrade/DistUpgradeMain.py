@@ -89,18 +89,18 @@ def setup_logging(options, config):
     logging.info("Using config files '%s'" % config.config_files)
     logging.info("uname information: '%s'" % " ".join(os.uname()))
     # save package state to be able to re-create failures
-    apt_preferences = apt_pkg.Config.FindFile("Dir::Etc::preferences")
-    apt_preferences_parts = apt_pkg.Config.FindDir("Dir::Etc::preferencesparts",
-                                                   "/etc/apt/preferences.d")
-    sources_list =  apt_pkg.Config.FindFile("Dir::Etc::sourcelist")
-    sources_list_parts = apt_pkg.Config.FindDir("Dir::Etc::sourceparts",
-                                                "/etc/apt/sources.list.d")
-    dpkg_status = apt_pkg.Config.FindFile("Dir::State::status")
+    system_files = []
+    for f in [apt_pkg.Config.FindFile("Dir::Etc::preferences"),
+              apt_pkg.Config.FindDir("Dir::Etc::preferencesparts",
+                                     "/etc/apt/preferences.d"),
+              apt_pkg.Config.FindFile("Dir::Etc::sourcelist"),
+              apt_pkg.Config.FindDir("Dir::Etc::sourceparts",
+                                     "/etc/apt/sources.list.d"),
+              apt_pkg.Config.FindFile("Dir::State::status")]:
+        if os.path.exists(f):
+            system_files.append(f)
     state_tar = os.path.join(logdir,"system_state.tar.gz")
-    cmd = ["tar","-z","-c","-f", state_tar, 
-           dpkg_status,
-           apt_preferences, apt_preferences_parts, 
-           sources_list, sources_list_parts]
+    cmd = ["tar","-z","-c","-f", state_tar] + system_files 
     logging.info("creating state file with '%s'" % cmd)
     subprocess.call(cmd)
     # lspci output

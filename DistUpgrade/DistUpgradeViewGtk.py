@@ -113,6 +113,7 @@ class GtkFetchProgressAdapter(FetchProgress):
                                    buttons=gtk.BUTTONS_OK_CANCEL)
         dialog.set_markup(msg)
         res = dialog.run()
+        dialog.set_title("")
         dialog.destroy()
         if res == gtk.RESPONSE_OK:
             return True
@@ -209,6 +210,7 @@ class GtkInstallProgressAdapter(InstallProgress):
                 "bug report about it.") % pkg
         markup="<big><b>%s</b></big>\n\n%s" % (summary, msg)
         self.parent.dialog_error.realize()
+        self.parent.dialog_error.set_title("")
         self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
         self.parent.label_error.set_markup(markup)
         self.parent.textview_error.get_buffer().set_text(utf8(errormsg))
@@ -226,6 +228,7 @@ class GtkInstallProgressAdapter(InstallProgress):
                 "a newer version.")
         markup = "<span weight=\"bold\" size=\"larger\">%s </span> \n\n%s" % (prim, sec)
         self.parent.label_conffile.set_markup(markup)
+        self.parent.dialog_conffile.set_title("")
         self.parent.dialog_conffile.set_transient_for(self.parent.window_main)
 
         # now get the diff
@@ -562,6 +565,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         label.set_property("attributes",attrlist)
 
     def information(self, summary, msg, extended_msg=None):
+      self.dialog_information.set_title("")
       self.dialog_information.set_transient_for(self.window_main)
       msg = "<big><b>%s</b></big>\n\n%s" % (summary,msg)
       self.label_information.set_markup(msg)
@@ -579,6 +583,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         gtk.main_iteration()
 
     def error(self, summary, msg, extended_msg=None):
+        self.dialog_error.set_title("")
         self.dialog_error.set_transient_for(self.window_main)
         #self.expander_terminal.set_expanded(True)
         msg="<big><b>%s</b></big>\n\n%s" % (summary, msg)
@@ -631,6 +636,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         for up in self.toUpgrade:
             self.details_list.append([_("Upgrade %s") % up])
         self.dialog_changes.set_transient_for(self.window_main)
+        self.dialog_changes.set_title("")
         # work around problem that scroll_to() does not 
         # work when it is not realized
         self.dialog_changes.realize()
@@ -650,6 +656,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
                                    flags=gtk.DIALOG_MODAL,
                                    type=gtk.MESSAGE_QUESTION,
                                    buttons=gtk.BUTTONS_YES_NO)
+        dialog.set_title("")
         if default == 'No':
           dialog.set_default_response(gtk.RESPONSE_NO)
         else:
@@ -663,6 +670,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
     
     def confirmRestart(self):
         self.dialog_restart.set_transient_for(self.window_main)
+        self.dialog_restart.set_title("")
         self.dialog_restart.realize()
         self.dialog_restart.window.set_functions(gtk.gdk.FUNC_MOVE)
         res = self.dialog_restart.run()
@@ -677,6 +685,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
 
     def on_window_main_delete_event(self, widget, event):
         self.dialog_cancel.set_transient_for(self.window_main)
+        self.dialog_cancel.set_title("")
         self.dialog_cancel.realize()
         self.dialog_cancel.window.set_functions(gtk.gdk.FUNC_MOVE)
         res = self.dialog_cancel.run()

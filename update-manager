@@ -32,8 +32,6 @@ import sys
 from UpdateManager.UpdateManager import UpdateManager
 from DistUpgrade.DistUpgradeVersion import VERSION
 import gettext
-from gettext import gettext as _
-
 from optparse import OptionParser
 
 if __name__ == "__main__":
@@ -42,8 +40,7 @@ if __name__ == "__main__":
 
   gtk.init_check()
 
-  gettext.bindtextdomain(APP, DIR)
-  gettext.textdomain(APP)
+  gettext.install(APP, DIR, unicode=True)
   try:
     locale.setlocale(locale.LC_ALL, "")
   except:

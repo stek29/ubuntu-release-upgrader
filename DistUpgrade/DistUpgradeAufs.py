@@ -28,8 +28,8 @@ def aufsOptionsAndEnvironmentSetup(options, config):
     # enabled from the commandline (full overlay by default)
     if options and options.useAufs:
         logging.debug("enabling full overlay from commandline")
-        config.set("Aufs","Enabled", True)
-        config.set("Aufs","EnableFullOverlay",True)
+        config.set("Aufs","Enabled", "True")
+        config.set("Aufs","EnableFullOverlay","True")
     
     # setup environment based on config
     tmprw = tempfile.mkdtemp(prefix="upgrade-rw-")
@@ -45,13 +45,13 @@ def aufsOptionsAndEnvironmentSetup(options, config):
     
     if config.getWithDefault("Aufs","EnableFullOverlay", False):
         logging.debug("enabling aufs full overlay (from config)")
-        config.set("Aufs","Enabled", True)        
+        config.set("Aufs","Enabled", "True")
         os.environ["RELEASE_UPGRADE_USE_AUFS_FULL_OVERLAY"] = "1"
     if config.getWithDefault("Aufs","EnableChrootOverlay",False):
         logging.debug("enabling aufs chroot overlay")
-        config.set("Aufs","Enabled", True)        
+        config.set("Aufs","Enabled", "True")        
         os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"] = aufs_chroot_dir
-    if config.getWithDefault("Aufs","EnableChrootRsync",False):
+    if config.getWithDefault("Aufs","EnableChrootRsync", "False"):
         logging.debug("enable aufs chroot rsync back to real system")
         os.environ["RELEASE_UPGRADE_RSYNC_AUFS_CHROOT"] = "1"
     

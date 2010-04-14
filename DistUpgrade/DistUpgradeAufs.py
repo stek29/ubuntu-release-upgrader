@@ -51,7 +51,7 @@ def aufsOptionsAndEnvironmentSetup(options, config):
         logging.debug("enabling aufs chroot overlay")
         config.set("Aufs","Enabled", "True")        
         os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"] = aufs_chroot_dir
-    if config.getWithDefault("Aufs","EnableChrootRsync", "False"):
+    if config.getWithDefault("Aufs","EnableChrootRsync", False):
         logging.debug("enable aufs chroot rsync back to real system")
         os.environ["RELEASE_UPGRADE_RSYNC_AUFS_CHROOT"] = "1"
     

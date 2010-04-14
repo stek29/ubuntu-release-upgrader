@@ -1,8 +1,14 @@
-update-manager (1:0.134.3) UNRELEASED; urgency=low
+update-manager (1:0.134.5) lucid; urgency=low
 
-  * do-release-upgrade:
-    - print when a new release is available in "-q" so that the motd
-      is correct (thanks to Dustin Kirkland)
+  * DistUpgrade/DistUpgradeAufs.py:
+    - fix crash in aufs (--sandbox mode)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 14 Apr 2010 20:07:14 +0200
+
+update-manager (1:0.134.4) lucid; urgency=low
+
+  * DistUpgrade/DistUpgrade.cfg, DistUpgrade/DistUpgrade.cfg.hardy:
+    - do not enable apport anymore
   * DistUpgrade/DistUpgradeViewGtk.py:
     - set empty dialog titles for error/information dialogs (it looks
       like glade removed those for some reason from the .ui file)
@@ -19,9 +25,19 @@ update-manager (1:0.134.3) UNRELEASED; urgency=low
     - use gettext.install(unicode=True) to avoid breaking with
       optparse and ja.po (LP: #557804)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Apr 2010 18:03:17 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 14 Apr 2010 17:54:47 +0200
 
-update-manager (1:0.134.2) UNRELEASED; urgency=low
+update-manager (1:0.134.3) lucid; urgency=low
+
+  * do-release-upgrade:
+    - print when a new release is available in "-q" so that the motd
+      is correct (thanks to Dustin Kirkland)
+  * debian/release-upgrade-motd:
+    - add newline after release info (thanks to Dustin Kirkland)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Apr 2010 22:52:08 +0200
+
+update-manager (1:0.134.2) lucid; urgency=low
 
   * DistUpgrade/DistUpgradeMain.py:
     - ignore lspci errors
@@ -34,9 +50,9 @@ update-manager (1:0.134.2) UNRELEASED; urgency=low
     - use a small script instead of a symlink to ensure that dpkg
       treats them as conffiles (LP: #559194)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Apr 2010 10:05:30 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Apr 2010 15:44:39 +0200
 
-update-manager (1:0.134.1) UNRELEASED; urgency=low
+update-manager (1:0.134.1) lucid; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
     - honor "DEBIAN_FRONTEND=noninteractive" on pkg failure (LP: #538206)
@@ -59,7 +75,7 @@ update-manager (1:0.134.1) UNRELEASED; urgency=low
     - do not crash if meta-release file can not be parsed, just remove
       the broken file instead (LP: #558396)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 12 Apr 2010 11:39:52 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 12 Apr 2010 18:32:59 +0200
 
 update-manager (1:0.134) lucid; urgency=low
 

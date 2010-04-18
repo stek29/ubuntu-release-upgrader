@@ -272,10 +272,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     self.all_changes[name] += changelog
                     return
                 except urllib2.HTTPError, e:
-                    pass
-            # no changelogs_uri or 404
-            self.all_changes[name] += _( "This change is not coming from a "
-                                         "source that supports changelogs.")
+                    # no changelogs_uri or 404
+                    self.all_changes[name] += _( "This change is not coming from a "
+                                                 "source that supports changelogs.")
+                except (IOError, httplib.BadStatusLine, socket.error), e:
+                    # network errors and others
+                    print "caught exception: ", e
+                    self.all_changes[name] += _("Failed to download the list "
+                                                "of changes. \nPlease "
+                                                "check your Internet "
+                                                "connection.")
             return
         # fixup epoch handling version
         srcpkg = self[name].sourcePackageName

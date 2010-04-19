@@ -15,7 +15,7 @@ import apt
 import apt_pkg
 
 def do_install_remove(backend, pkgname):
-    " install a package in the backend "
+    """ install a package in the backend """
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
                                "apt-get","install", "-y",pkg.name])
     print "apt returned: ", ret
@@ -25,6 +25,15 @@ def do_install_remove(backend, pkgname):
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
                                "apt-get","autoremove", "-y",pkg.name])
     print "apt returned: ", ret
+    if ret != 0:
+        return False
+    return True
+
+def test_downloadable(backend, pkgname):
+    """ test if the pkg is downloadable or gives a 404 """ 
+    ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
+                               "apt-get","install", "--download-only", "-y",pkg.name])
+    print "apt --download-only returned: ", ret
     if ret != 0:
         return False
     return True
@@ -133,16 +142,22 @@ if __name__ == "__main__":
             continue
         
         statusfile.write("%s-%s\n" % (pkg.name, pkg.candidateVersion))
+        if not test_downloadable(backend, pkg.name):
+            # because the test runs for so long its likely that we hit
+            # 404 because the archive has changed since we ran, deal with
+            # that here by not outputing it as a error for a start
+            # FIXME: restart whole test
+            continue
+            
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log
             # is more meaningful
-            # FIXME: ignore  404 because they are most likely transient
             print "pkg: %s failed, re-testing in a clean(er) environment" % pkg.name
             backend.restoreVMSnapshot("clean-base")
             backend.start()
             if not do_install_remove(backend, pkg.name):
                 outname = os.path.join(resultdir,"%s-fail.txt" % pkg.name)
-                failures.write("failed to install/remove %s (log at %s)" % (pkg.name, outname))
+                failures.write("failed to install/remove %s (log at %s)\n" % (pkg.name, outname))
                 time.sleep(5)
                 backend._copyFromImage("/var/log/apt/term.log",outname)
                                        

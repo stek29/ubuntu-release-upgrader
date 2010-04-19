@@ -70,6 +70,8 @@ if __name__ == "__main__":
     print "copy status file"
     backend._copyFromImage("/var/lib/dpkg/status",
                            os.path.join(aptbasedir,"var/lib/dpkg/","status"))
+    print "run update"
+    backend._runInImage(["apt-get","update"])
     backend.stop()
 
     # build apt stuff (outside of the kvm)
@@ -91,7 +93,6 @@ if __name__ == "__main__":
     # now test if we can install stuff
     backend.saveVMSnapshot("clean-base")
     backend.start()
-    backend._runInImage(["apt-get","update"])
 
     # setup dirs
     resultdir = backend.resultdir

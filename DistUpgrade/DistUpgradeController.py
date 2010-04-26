@@ -999,19 +999,12 @@ class DistUpgradeController(object):
         self.abort()
 
     def enableApport(self, fname="/etc/default/apport"):
-        " enable apoprt "
-        # for jaunty and later we could use this instead:
-        #  env = copy.copy(os.environ)
-        #  env["force_start"] = "1"
-        #  subprocess.call(["/etc/init.d/apport","start"], env=env)
-        # but hardy and intrepid do not have the force_start yet
-        if not (os.path.exists(fname) and os.path.exists("etc-default-apport")):
-            return
-        # copy the jaunty version of the conf file in place
-        # (this avoids a conffile prompt later)
-        logging.debug("enabling apport")
-        shutil.copy("etc-default-apport","/etc/default/apport")
-        subprocess.call(["/etc/init.d/apport","start"])
+        """ enable apoprt """
+        # startup apport just until the next reboot, it has the magic
+        # "force_start" environment for this
+        env = copy.copy(os.environ)
+        env["force_start"] = "1"
+        subprocess.call(["/etc/init.d/apport","start"], env=env)
         
     def doDistUpgrade(self):
         # check if we want apport running during the upgrade

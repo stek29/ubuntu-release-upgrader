@@ -99,6 +99,16 @@ if __name__ == "__main__":
     print "Using resultdir: '%s'" % resultdir
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
 
+    # pkg blacklist - only useful for pkg that causes exsessive delays
+    # when installing, e.g. by requiring input or by tryint to connect
+    # to a (firewalled) network
+    pkgs_blacklisted = set()
+    sname = os.path.join(resultdir,"pkgs_blacklisted.txt")
+    print "looking at ", sname
+    if os.path.exists(sname):
+        pkgs_blacklisted = set(open(sname).read().split("\n"))
+        print "have '%s' with '%i' entries" % (sname, len(pkgs_blacklisted))
+
     # set with package that have been tested successfully
     pkgs_tested = set()
     sname = os.path.join(resultdir,"pkgs_done.txt")
@@ -125,6 +135,11 @@ if __name__ == "__main__":
 
         # skip stuff in the ubuntu-minimal that we can't install or upgrade
         if pkg.isInstalled and not pkg.isUpgradable:
+            continue
+
+        # skip blacklisted pkg names
+        if pkg.name in pkgs_blacklisted:
+            print "blacklisted: ", pkg.name
             continue
 
         # skip packages we tested already

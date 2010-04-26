@@ -425,7 +425,7 @@ iface eth0 inet static
 
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader
-        cmd_prefix=""
+        cmd_prefix=[]
         if not self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
             print "Disabling ForceOverwrite"
             cmd_prefix = ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]

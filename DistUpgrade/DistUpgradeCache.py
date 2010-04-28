@@ -577,9 +577,18 @@ class MyCache(apt.Cache):
 
     # FIXME: make this a decorator (just like the withResolverLog())
     def updateGUI(self, view, lock):
+        i=0
+        progress = view.getOpCacheProgress()
         while lock.locked():
+            if i == 0:
+                incr = +1
+            elif i == 100:
+                incr = -1
+            i += incr
+            progress.update(i)
             view.processEvents()
-            time.sleep(0.03)
+            time.sleep(0.02)
+        progress.update(100.0)
 
     @withResolverLog
     def distUpgrade(self, view, serverMode, partialUpgrade):

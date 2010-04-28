@@ -577,20 +577,15 @@ class MyCache(apt.Cache):
 
     # FIXME: make this a decorator (just like the withResolverLog())
     def updateGUI(self, view, lock):
-        i=0
-        # FIXME: we can't do the progress stuff here because
-        #        the QT backend will explode when a thread accesses the GUI
-        #progress = view.getOpCacheProgress()
+        i = 0
         while lock.locked():
-            #if i == 0:
-            #    incr = +1
-            #elif i == 100:
-            #    incr = -1
-            #i += incr
-            #progress.update(i)
+            if i % 15 == 0:
+                view.pulseProgress()
             view.processEvents()
             time.sleep(0.02)
-        progress.update(100.0)
+            i += 1
+        view.pulseProgress(finished=True)
+        view.processEvents()
 
     @withResolverLog
     def distUpgrade(self, view, serverMode, partialUpgrade):

@@ -683,6 +683,11 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         while gtk.events_pending():
             gtk.main_iteration()
 
+    def pulseProgress(self, finished=False):
+      self.progressbar_cache.pulse()
+      if finished:
+        self.progressbar_cache.set_fraction(1.0)
+
     def on_window_main_delete_event(self, widget, event):
         self.dialog_cancel.set_transient_for(self.window_main)
         self.dialog_cancel.set_title("")

@@ -17,7 +17,7 @@ import apt_pkg
 def do_install_remove(backend, pkgname):
     """ install a package in the backend """
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
-                               "apt-get","install", "-y",pkg.name])
+                               "apt-get","install","-q","-y",pkg.name])
     print "apt returned: ", ret
     if ret != 0:
         return False
@@ -32,7 +32,7 @@ def do_install_remove(backend, pkgname):
 def test_downloadable(backend, pkgname):
     """ test if the pkg is downloadable or gives a 404 """ 
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
-                               "apt-get","install", "--download-only", "-y",pkg.name])
+                               "apt-get","install","-q","--download-only","-y",pkg.name])
     print "apt --download-only returned: ", ret
     if ret != 0:
         return False

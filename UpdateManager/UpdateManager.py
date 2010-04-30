@@ -505,7 +505,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
       if num_updates == 0:
           text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
-          self.label_downsize.set_text("")
+          self.label_downsize.set_text("\n")
           self.notebook_details.set_sensitive(False)
           self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)

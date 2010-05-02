@@ -826,7 +826,9 @@ class MyCache(apt.Cache):
         # install (that result in a upgrade and removes a markDelete)
         for key in metapkgs:
             try:
-                if self.has_key(key) and self[key].isInstalled:
+                if (self.has_key(key) and
+                    self[key].isInstalled and
+                    self[key].isUpgradable):
                     logging.debug("Marking '%s' for upgrade" % key)
                     self[key].markUpgrade()
             except SystemError, e:

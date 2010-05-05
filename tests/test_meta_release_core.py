@@ -34,10 +34,15 @@ class TestMetaReleaseCore(unittest.TestCase):
         self.new_dist = None
 
     def testnewdist(self):
-        new_dist = get_new_dist("hardy")
-        self.assert_(new_dist.name == "intrepid")
-
-
+        """ test that upgrades offer the right upgrade path """
+        for (current, next) in [ ("dapper", "edgy"),
+                                 ("hardy", "lucid"),
+                                 ("intrepid", "jaunty"),
+                                 ("jaunty", "karmic"),
+                                 ("karmic", "lucid") ]:
+            new_dist = get_new_dist(current)
+            self.assert_(new_dist.name == next,
+                         "New dist name for %s is '%s', but expected '%s''" % (current, new_dist.name, next))
 
 if __name__ == '__main__':
     unittest.main()

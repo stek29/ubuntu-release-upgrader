@@ -16,10 +16,13 @@ import apt_pkg
 
 def do_install_remove(backend, pkgname):
     """ install a package in the backend """
+    #print "watchdog_runing: ", backend.watchdog_running
     if not backend.watchdog_running:
         print "starting watchdog"
-        backend._runInImage("/bin/apt-watchdog")
+        backend._runInImage(["/bin/apt-watchdog"])
         backend.watchdog_running = True
+#    ret = backend._runInImage(["DEBIAN_FRONTEND=text","DEBIAN_PRIORITY=low",
+#                               "apt-get","install","-q","-y",pkg.name])
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
                                "apt-get","install","-q","-y",pkg.name])
     print "apt returned: ", ret
@@ -35,8 +38,7 @@ def do_install_remove(backend, pkgname):
 
 def test_downloadable(backend, pkgname):
     """ test if the pkg is downloadable or gives a 404 """ 
-    ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
-                               "apt-get","install","-q","--download-only","-y",pkg.name])
+    ret = backend._runInImage(["apt-get","install","-q","--download-only","-y",pkg.name])
     print "apt --download-only returned: ", ret
     if ret != 0:
         return False
@@ -73,7 +75,7 @@ if __name__ == "__main__":
     # copy status file from image to aptbasedir
     backend.start()
     print "copy apt-watchdog"
-    backend._copyToImage(["apt-watchdog", "/bin/"])
+    backend._copyToImage("apt-watchdog", "/bin/")
     print "copy status file"
     backend._copyFromImage("/var/lib/dpkg/status",
                            os.path.join(aptbasedir,"var/lib/dpkg/","status"))
@@ -129,12 +131,12 @@ if __name__ == "__main__":
 
     # now see if we can install and remove it again
     for (i, pkg) in enumerate(cache):
-#    for (i, pkg) in enumerate([ cache["nvidia-glx-71"],
-#                                cache["powertop"],
+#    for (i, pkg) in enumerate([ cache["abook"],
+#                                cache["emacspeak"],
 #                                cache["postfix"] ]):
         # clean the cache
         cache._depcache.Init()
-        print "\n\nPackage %i of %i (%f.2)" % (i, len(cache), 
+        print "\n\nPackage %s: %i of %i (%f.2)" % (pkg.name, i, len(cache), 
                                              float(i)/float(len(cache))*100)
         print "pkgs_tested has %i entries\n\n" % len(pkgs_tested)
 
@@ -164,13 +166,15 @@ if __name__ == "__main__":
             failures.write("%s markInstall()\n " % pkg.name)
             continue
         
-        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidateVersion))
         if not test_downloadable(backend, pkg.name):
             # because the test runs for so long its likely that we hit
             # 404 because the archive has changed since we ran, deal with
             # that here by not outputing it as a error for a start
             # FIXME: restart whole test
             continue
+
+        # mark as tested
+        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidateVersion))
             
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log

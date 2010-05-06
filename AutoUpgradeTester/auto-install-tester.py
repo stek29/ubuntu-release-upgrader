@@ -16,6 +16,10 @@ import apt_pkg
 
 def do_install_remove(backend, pkgname):
     """ install a package in the backend """
+    if not hasattr(backend, "watchdog_running"):
+        print "starting watchdog"
+        backend._runInImage("/bin/apt-watchdog")
+        backend.watchdog_running = True
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
                                "apt-get","install","-q","-y",pkg.name])
     print "apt returned: ", ret
@@ -67,14 +71,16 @@ if __name__ == "__main__":
 
     # copy status file from image to aptbasedir
     backend.start()
+    print "copy apt-watchdog"
+    backend._copyToImage("apt-watchdog", "/bin/")
     print "copy status file"
     backend._copyFromImage("/var/lib/dpkg/status",
                            os.path.join(aptbasedir,"var/lib/dpkg/","status"))
     print "run update"
-    backend._runInImage(["apt-get","update"])
+    backend._runInImage(["apt-get","-q", "update"])
     backend.stop()
 
-    # build apt stuff (outside of the kvm)
+   # build apt stuff (outside of the kvm)
     mirror = backend.config.get("NonInteractive","Mirror")
     dist = backend.config.get("Sources","From")
     components = backend.config.getlist("NonInteractive","Components")

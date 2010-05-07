@@ -45,6 +45,8 @@ class Dist(object):
         self.releaseNotesHtmlUri = None
         self.upgradeTool = None
         self.upgradeToolSig = None
+        # the server may report that the upgrade is broken currently
+        self.upgrade_broken = None
 
 class MetaReleaseCore(object):
     """
@@ -206,6 +208,8 @@ class MetaReleaseCore(object):
                     dist.upgradeTool =  index_tag.Section["UpgradeTool"]
                 if index_tag.Section.has_key("UpgradeToolSignature"):
                     dist.upgradeToolSig =  index_tag.Section["UpgradeToolSignature"]
+                if "UpgradeBroken" in index_tag.Section:
+                    dist.upgrade_broken = index_tag.Section["UpgradeBroken"]
                 dists.append(dist)
                 if name == current_dist_name:
                     current_dist = dist 
@@ -292,6 +296,11 @@ class MetaReleaseCore(object):
             except:
                 logging.exception("parse failed for '%s'" % self.METARELEASE_FILE)
                 # no use keeping a broken file around
+                os.remove(self.METARELEASE_FILE)
+            # we don't want to keep a meta-release file around when it
+            # has a "Broken" flag, this ensures we are not bitten by
+            # I-M-S/cache issues
+            if self.new_dist.upgrade_broken:
                 os.remove(self.METARELEASE_FILE)
         else:
             self._debug("NO self.metarelease_information")

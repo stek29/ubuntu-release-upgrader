@@ -11,6 +11,11 @@ update-manager (1:0.140) UNRELEASED; urgency=low
     - fix minor UI resize issue (LP: #572228)
   * DistUpgrade/DistUpgrade.cfg:
     - add ubuntu-netbook (LP: #574279)
+  * UpdateManager/Core/MetaRelease.py:
+    - add looking for a "UpgradeBroken" tag that contains a reason string
+      if the user should not be allowed to perform a release upgrade
+  * UpdateManager/UpdateManager.py, do-release-upgrade:
+    - honor "UpgradeBroken" flag and error in this case
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 20 Apr 2010 11:40:44 +0200
 

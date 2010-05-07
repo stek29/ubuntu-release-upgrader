@@ -79,6 +79,13 @@ if __name__ == "__main__":
       print _("No new release found")
     sys.exit(NO_RELEASE_AVAILABLE)
 
+  if m.new_dist.upgrade_broken:
+    if not options.quiet:
+      print _("Release upgrade not possible right now") 
+      print _("The release upgrade can not be performed currently, "
+              "please try again later. The server reported: '%s'") % m.new_dist.upgrade_broken
+    sys.exit(NO_RELEASE_AVAILABLE)
+
   # we have a new dist
   if options.check_dist_upgrade_only:
     print _("New release '%s' available.") % m.new_dist.name

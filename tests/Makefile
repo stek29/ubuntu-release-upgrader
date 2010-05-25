@@ -3,9 +3,11 @@
 all: check # mago_test
 
 check:
+	set -e; \
 	find . -name 'test_*.py' | \
 	while read file; do \
 	    if [ -x $$file ]; then \
+		echo "*** RUNNING $$file"; \
 	    	python $$file ; \
 	    fi \
 	done

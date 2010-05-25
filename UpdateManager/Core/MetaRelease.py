@@ -300,7 +300,7 @@ class MetaReleaseCore(object):
             # we don't want to keep a meta-release file around when it
             # has a "Broken" flag, this ensures we are not bitten by
             # I-M-S/cache issues
-            if self.new_dist.upgrade_broken:
+            if self.new_dist and self.new_dist.upgrade_broken:
                 os.remove(self.METARELEASE_FILE)
         else:
             self._debug("NO self.metarelease_information")

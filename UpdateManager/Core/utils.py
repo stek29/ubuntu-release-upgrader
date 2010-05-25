@@ -138,16 +138,20 @@ def url_downloadable(uri, debug_func=None):
 
   Supports http (via HEAD) and ftp (via size request)
   """
-  if debug_func:
-    debug_func("url_downloadable: %s" % uri)
+  if not debug_func:
+      lambda x: True
+  debug_func("url_downloadable: %s" % uri)
   import urlparse
   (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
+  debug_func("s='%s' n='%s' p='%s' q='%s' f='%s'" % (scheme, netloc, path, querry, fragment))
   if scheme == "http":
     import httplib
     proxy = os.getenv("http_proxy")
     if (proxy):
-      path = scheme + netloc + path
-      netloc = proxy
+      path = "%s://%s%s" % (scheme, netloc, path)
+      (proxy_scheme, proxy_netloc, proxy_path, proxy_querry, proxy_fragment) = urlparse.urlsplit(proxy)
+      netloc = proxy_netloc
+      debug_func("proxy detected: s='%s' n='%s' p='%s' q='%s' f='%s'" % (scheme, netloc, path, querry, fragment))
     try:
       c = httplib.HTTPConnection(netloc)
       c.request("HEAD", path)

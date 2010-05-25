@@ -500,19 +500,11 @@ class DistUpgradeController(object):
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange
         #  component names here)
-        fromDists = [self.fromDist,
-                     self.fromDist+"-security",
-                     self.fromDist+"-updates",
-                     self.fromDist+"-proposed",
-                     self.fromDist+"-backports"
-                    ]
-        toDists = [self.toDist,
-                   self.toDist+"-security",
-                   self.toDist+"-updates",
-                   self.toDist+"-proposed",
-                   self.toDist+"-backports"
-                   ]
-
+        pockets = self.config.getlist("Sources","Pockets")
+        fromDists = [self.fromDist] + ["%s-%s" % (self.fromDist, x) 
+                                       for x in pockets]
+        toDists = [self.toDist] + ["%s-%s" % (self.toDist,x) 
+                                   for x in pockets]
         self.sources_disabled = False
 
         # look over the stuff we have

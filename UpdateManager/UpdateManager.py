@@ -168,12 +168,12 @@ class UpdateManager(SimpleGtkbuilderApp):
     column = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
     column.set_resizable(True)
     major,minor,patch = gtk.pygtk_version
-    if (major >= 2) and (minor >= 5):
-      column_install.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-      column_install.set_fixed_width(30)
-      column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-      column.set_fixed_width(100)
-      self.treeview_update.set_fixed_height_mode(False)
+
+    column_install.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+    column_install.set_fixed_width(30)
+    column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+    column.set_fixed_width(100)
+    self.treeview_update.set_fixed_height_mode(False)
 
     self.treeview_update.append_column(column_install)
     column_install.set_visible(True)
@@ -199,10 +199,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
 
     # get progress object
-    self.progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
-                                              self.progressbar_cache,
-                                              self.label_cache,
-                                              self.window_main)
+    self.progress = GtkProgress.GtkOpProgressInline(
+        self.progressbar_cache_inline, self.window_main)
 
     #set minimum size to prevent the headline label blocking the resize process
     self.window_main.set_size_request(500,-1) 
@@ -929,7 +927,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.destroy()
         sys.exit(1)
     else:
-        self.progress.hide()
+        self.progress.all_done()
 
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform

@@ -476,7 +476,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       if ago_days > 0:
           return ngettext("The package information was last updated %(days_ago)s day ago.",
                           "The package information was last updated %(days_ago)s days ago.",
-                          ago_days) % { "days_days" : ago_days, }
+                          ago_days) % { "days_ago" : ago_days, }
       elif ago_hours > 0:
           return ngettext("The package information was last updated %(hours_ago)s hour ago.",
                           "The package information was last updated %(hours_ago)s hours ago.",

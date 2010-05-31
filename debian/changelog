@@ -1,7 +1,9 @@
-update-manager (1:0.141) UNRELEASED; urgency=low
+update-manager (1:0.141) maverick; urgency=low
 
   * UpdateManager/backend/__init__.py:
-    - switch to aptdaemon as install backend by default
+    - switch to aptdaemon as install backend by default (unless
+      the user has UPDATE_MANAGER_FORCE_BACKEND_SYNAPTIC in his
+      environment)
   * DistUpgrade/DistUpgradeController.py:
    - use pockets from DistUpgrade.cfg instead of hard-coding them
   * tests/test_sources_list.py:
@@ -12,7 +14,7 @@ update-manager (1:0.141) UNRELEASED; urgency=low
   * UpdateManager/UpdateManager.py:
     - fix typo (thanks to seb128)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 25 May 2010 11:23:57 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 31 May 2010 15:14:01 +0200
 
 update-manager (1:0.140) maverick; urgency=low
 

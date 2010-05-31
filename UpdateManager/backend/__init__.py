@@ -35,19 +35,20 @@ class InstallBackend(gobject.GObject):
 
 def get_backend(*args, **kwargs):
     """Select and return a package manager backend."""
-    # try synaptic
-    if (os.path.exists("/usr/sbin/synaptic") and
-        not "UPDATE_MANAGER_FORCE_BACKEND_APTDAEMON" in os.environ):
-        from InstallBackendSynaptic import InstallBackendSynaptic
-        return InstallBackendSynaptic(*args, **kwargs)
     # try aptdaemon
-    if os.path.exists("/usr/sbin/aptd"):
+    if (os.path.exists("/usr/sbin/aptd") and
+        not "UPDATE_MANAGER_FORCE_BACKEND_SYNAPTIC" in os.environ):
         # check if the gtkwidgets are installed as well
         try:
             from InstallBackendAptdaemon import InstallBackendAptdaemon
             return InstallBackendAptdaemon(*args, **kwargs)
         except ImportError:
             pass
+    # try synaptic
+    if (os.path.exists("/usr/sbin/synaptic") and
+        not "UPDATE_MANAGER_FORCE_BACKEND_APTDAEMON" in os.environ):
+        from InstallBackendSynaptic import InstallBackendSynaptic
+        return InstallBackendSynaptic(*args, **kwargs)
     # nothing found, raise
     raise Exception("No working backend found, please try installing "
                     "synaptic or aptdaemon")

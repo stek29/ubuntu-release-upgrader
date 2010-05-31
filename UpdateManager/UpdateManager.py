@@ -29,6 +29,7 @@ import gtk
 import gtk.gdk
 import gconf
 import gobject
+gobject.threads_init()
 import glib
 
 import warnings
@@ -121,6 +122,12 @@ class UpdateManager(SimpleGtkbuilderApp):
     except:
         logging.exception("setlocale failed")
 
+    # Used for inhibiting power management
+    self.sleep_cookie = None
+    self.sleep_dev = None
+
+    self.reboot_required = False
+
     self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
@@ -208,8 +215,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     # show the main window
     self.window_main.show()
     # get the install backend
-    self.install_backend = backend.backend_factory(self.window_main)
-
+    self.install_backend = backend.get_backend(self.window_main)
+    self.install_backend.connect("action-done", self._on_backend_done)
     # it can only the iconified *after* it is shown (even if the docs
     # claim otherwise)
     if options.no_focus_on_map:
@@ -616,29 +623,44 @@ class UpdateManager(SimpleGtkbuilderApp):
     os.environ["APT_LISTCHANGES_FRONTEND"]="none"
 
     # Do not suspend during the update process
-    (dev, cookie) = inhibit_sleep()
+    (self.sleep_dev, self.sleep_cookie) = inhibit_sleep()
 
     # set window to insensitive
     self.window_main.set_sensitive(False)
     self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-
+#
     # do it
     if action == UPDATE:
         self.install_backend.update()
     elif action == INSTALL:
-        has_reboot = os.path.exists(REBOOT_REQUIRED_FILE)
-        # do it
-        self.install_backend.commit(self.cache)
-        # check if there is a new reboot required notification
-        if not has_reboot and os.path.exists(REBOOT_REQUIRED_FILE):
-            self.show_reboot_required_dialog()
-    s = _("Reading package information")
-    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
+        # If the progress dialog should be closed automatically afterwards
+        gconfclient =  gconf.client_get_default()
+        close_on_done = gconfclient.get_bool("/apps/update-manager/"
+                                             "autoclose_install_window")
+        # Get the packages which should be installed and update
+        pkgs_install = []
+        pkgs_upgrade = []
+        for pkg in self.cache:
+            if pkg.markedInstall:
+                pkgs_install.append(pkg.name)
+            elif pkg.markedUpgrade:
+                pkgs_upgrade.append(pkg.name)
+        self.reboot_required = os.path.exists(REBOOT_REQUIRED_FILE)
+        self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
+
+  def _on_backend_done(self, backend, action):
+    # check if there is a new reboot required notification
+    if action == INSTALL and not self.reboot_required and \
+       os.path.exists(REBOOT_REQUIRED_FILE):
+        self.show_reboot_required_dialog()
+    msg = _("Reading package information")
+    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % msg)
     self.fillstore()
 
     # Allow suspend after synaptic is finished
-    if cookie != False:
-        allow_sleep(dev, cookie)
+    if self.sleep_cookie:
+        allow_sleep(self.sleep_dev, self.sleep_cookie)
+        self.sleep_cookie = self.sleep_dev = None
     self.window_main.set_sensitive(True)
     self.window_main.window.set_cursor(None)
 

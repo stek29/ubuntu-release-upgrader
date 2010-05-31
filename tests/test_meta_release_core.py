@@ -49,17 +49,28 @@ class TestMetaReleaseCore(unittest.TestCase):
         from UpdateManager.Core.utils import url_downloadable
         logging.debug("proxy 1")
         os.environ["http_proxy"] = "http://localhost:3128/"
-        self.assertTrue(url_downloadable("http://www.ubuntu.com/news",
+        self.assertTrue(url_downloadable("http://www.ubuntu.com/desktop",
                         logging.debug),
                         "download with proxy %s failed" % os.environ["http_proxy"])
         logging.debug("proxy 2")
         os.environ["http_proxy"] = "http://localhost:3128"
-        self.assertTrue(url_downloadable("http://www.ubuntu.com/news",
+        self.assertTrue(url_downloadable("http://www.ubuntu.com/desktop",
                         logging.debug),
                         "download with proxy %s failed" % os.environ["http_proxy"])
         logging.debug("no proxy")
         del os.environ["http_proxy"]
-        self.assertTrue(url_downloadable("http://www.ubuntu.com/news",
+        self.assertTrue(url_downloadable("http://www.ubuntu.com/desktop",
+                        logging.debug),
+                        "download with no proxy failed")
+
+        logging.debug("no proxy, no valid adress")
+        self.assertFalse(url_downloadable("http://www.ubuntu.com/xxx",
+                        logging.debug),
+                        "download with no proxy failed")
+
+        logging.debug("proxy, no valid adress")
+        os.environ["http_proxy"] = "http://localhost:3128"
+        self.assertFalse(url_downloadable("http://www.ubuntu.com/xxx",
                         logging.debug),
                         "download with no proxy failed")
 

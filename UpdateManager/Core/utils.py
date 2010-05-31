@@ -32,6 +32,8 @@ import subprocess
 import sys
 import time
 import urllib2
+import urlparse
+
 
 class ExecutionTime(object):
     """
@@ -130,6 +132,10 @@ def get_dist():
   dist = p.stdout.readline().strip()
   return dist
 
+class HeadRequest(urllib2.Request):
+    def get_method(self):
+        return "HEAD"
+
 def url_downloadable(uri, debug_func=None):
   """
   helper that checks if the given uri exists and is downloadable
@@ -141,26 +147,15 @@ def url_downloadable(uri, debug_func=None):
   if not debug_func:
       lambda x: True
   debug_func("url_downloadable: %s" % uri)
-  import urlparse
   (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
   debug_func("s='%s' n='%s' p='%s' q='%s' f='%s'" % (scheme, netloc, path, querry, fragment))
   if scheme == "http":
-    import httplib
-    proxy = os.getenv("http_proxy")
-    if (proxy):
-      path = "%s://%s%s" % (scheme, netloc, path)
-      (proxy_scheme, proxy_netloc, proxy_path, proxy_querry, proxy_fragment) = urlparse.urlsplit(proxy)
-      netloc = proxy_netloc
-      debug_func("proxy detected: s='%s' n='%s' p='%s' q='%s' f='%s'" % (scheme, netloc, path, querry, fragment))
     try:
-      c = httplib.HTTPConnection(netloc)
-      c.request("HEAD", path)
-      res = c.getresponse()
-      if debug_func:
-        debug_func("url_downloadable result '%s'" % res.status)
-      res.close()
-      if res.status == 200:
-        return True
+        http_file = urllib2.urlopen(HeadRequest(uri))
+        http_file.close()
+        if http_file.code == 200:
+            return True
+        return False
     except Exception, e:
       debug_func("error from httplib: '%s'" % e)
       return False

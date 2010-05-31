@@ -31,7 +31,7 @@ from subprocess import Popen,PIPE
 from Core.MetaRelease import MetaReleaseCore
 
 import gtk
-gtk.gdk.threads_init()
+
 
 class MetaRelease(MetaReleaseCore,gobject.GObject):
 

@@ -218,7 +218,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     # show the main window
     self.window_main.show()
     # get the install backend
-    self.install_backend = backend.backend_factory(self.window_main)
+    self.install_backend = backend.get_backend(self.window_main)
     self.install_backend.connect("action-done", self._on_backend_done)
     # it can only the iconified *after* it is shown (even if the docs
     # claim otherwise)

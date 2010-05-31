@@ -1,11 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # (c) 2005-2009 Canonical, GPL
-#
 
 from aptdaemon import client, errors
 from aptdaemon.defer import inline_callbacks
 from aptdaemon.gtkwidgets import AptProgressDialog
 
-from InstallBackend import InstallBackend
+from UpdateManager.backend import InstallBackend
 
 
 class InstallBackendAptdaemon(InstallBackend):

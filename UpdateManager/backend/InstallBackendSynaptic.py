@@ -1,25 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # (c) 2005-2007 Canonical, GPL
-#
 
 import apt_pkg
-import subprocess
-import gtk
-import gtk.gdk
-import thread
-import time
-import os
 import tempfile
-import gconf
 from gettext import gettext as _
 
 import gobject
 
-from InstallBackend import InstallBackend
+from UpdateManager.backend import InstallBackend
+
 
 class InstallBackendSynaptic(InstallBackend):
     """ Install backend based on synaptic """
 
     def _run_synaptic(self, action, opt, tempf):
+        """Execute synaptic."""
         try:
             apt_pkg.PkgSystemUnLock()
         except SystemError:

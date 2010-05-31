@@ -202,6 +202,7 @@ class NonInteractiveInstallProgress(InstallProgress):
                                                         pkg,
                                                         status_str))
     def updateInterface(self):
+        InstallProgress.updateInterface(self)
         if self.statusfd == None:
             return
 
@@ -210,63 +211,13 @@ class NonInteractiveInstallProgress(InstallProgress):
             # ctrl-c
             os.write(self.master_fd,chr(3))
 
-
-        # read status fd from dpkg
-        # from python-apt/apt/progress.py (but modified a bit)
-        # -------------------------------------------------------------
-        res = select.select([self.statusfd],[],[],0.1)
-        while len(res[0]) > 0:
-            self.last_activity = time.time()
-            while not self.read.endswith("\n"):
-                self.read += os.read(self.statusfd.fileno(),1)
-            if self.read.endswith("\n"):
-                s = self.read
-                #print s
-                (status, pkg, percent, status_str) = string.split(s, ":")
-                if status == "pmerror":
-                    self.error(pkg,status_str)
-                elif status == "pmconffile":
-                    # we get a string like this:
-                    # 'current-conffile' 'new-conffile' useredited distedited
-                    match = re.compile("\s*\'(.*)\'\s*\'(.*)\'.*").match(status_str)
-                    if match:
-                        self.conffile(match.group(1), match.group(2))
-                elif status == "pmstatus":
-                    if (float(percent) != self.percent or 
-                        status_str != self.status):
-                        self.statusChange(pkg, float(percent), status_str.strip())
-                        self.percent = float(percent)
-                        self.status = string.strip(status_str)
-                        sys.stdout.write("[%s] %s: %s\n" % (float(percent), pkg, status_str.strip()))
-                        sys.stdout.flush()
-            self.read = ""
-            res = select.select([self.statusfd],[],[],0.1)
-        # -------------------------------------------------------------
-
-        #fcntl.fcntl(self.master_fd, fcntl.F_SETFL, os.O_NDELAY)
-        # read master fd (terminal output)
-        res = select.select([self.master_fd],[],[],0.1)
-        while len(res[0]) > 0:
-           self.last_activity = time.time()
-           try:
-               s = os.read(self.master_fd, 1)
-               sys.stdout.write("%s" % s)
-           except OSError,e:
-               # happens after we are finished because the fd is closed
-               return
-           res = select.select([self.master_fd],[],[],0.1)
-        sys.stdout.flush()
-
     def fork(self):
         logging.debug("doing a pty.fork()")
         # some maintainer scripts fail without
         os.environ["TERM"] = "dumb"
         # unset PAGER so that we can do "diff" in the dpkg prompt
         os.environ["PAGER"] = "true"
-        (self.pid, self.master_fd) = pty.fork()
-        if self.pid != 0:
-            logging.debug("pid is: %s" % self.pid)
-        return self.pid
+        return InstallProgress.fork(self)
         
 
 class DistUpgradeViewNonInteractive(DistUpgradeView):

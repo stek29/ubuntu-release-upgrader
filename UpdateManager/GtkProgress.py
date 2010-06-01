@@ -31,7 +31,48 @@ from Core.utils import *
 # 3x caching and menu creation
 STEPS_UPDATE_CACHE = [33, 66, 100]
 
-class GtkOpProgress(apt.OpProgress):
+class GtkOpProgressInline(apt.OpProgress):
+    def __init__(self, progressbar, parent,                  
+                 steps=STEPS_UPDATE_CACHE):
+        # steps
+        self.all_steps = steps
+        self._init_steps()
+        # the progressbar to use
+        self._progressbar = progressbar
+        self._parent = parent
+    def _init_steps(self):
+        self.steps = self.all_steps[:]
+        self.base = 0
+        self.old = 0
+        self.next = int(self.steps.pop(0))
+    def update(self, percent):
+        # ui
+        self._progressbar.show()
+        self._parent.set_sensitive(False)
+        # if the old percent was higher, a new progress was started
+        if self.old > percent:
+            # set the borders to the next interval
+            self.base = self.next
+            try:
+                self.next = int(self.steps.pop(0))
+            except:
+                pass
+        progress = self.base + percent/100 * (self.next - self.base)
+        self.old = percent
+        self._progressbar.set_text("%s" % self.op)
+        self._progressbar.set_fraction(progress/100.0)
+        while gtk.events_pending():
+            gtk.main_iteration()
+    def done(self):
+        """ one sub-step is done """
+        pass
+    def all_done(self):
+        """ all steps are completed (called by the parent) """
+        self._parent.set_sensitive(True)
+        self._progressbar.hide()
+        self._init_steps()
+
+class GtkOpProgressWindow(apt.OpProgress):
     def __init__(self, host_window, progressbar, status, parent,
                  steps=STEPS_UPDATE_CACHE):
         # used for the "one run progressbar"
@@ -46,6 +87,7 @@ class GtkOpProgress(apt.OpProgress):
         self._progressbar = progressbar
         # Do not show the close button 
         self._window.realize()
+        self._window.set_title("")
         host_window.window.set_functions(gtk.gdk.FUNC_MOVE)
         self._window.set_transient_for(parent)
 

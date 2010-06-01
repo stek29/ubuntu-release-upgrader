@@ -224,6 +224,14 @@ iface eth0 inet static
             interfaces.flush()
             self._copyToImage(interfaces.name, "/etc/network/interfaces")
         
+        # generate hosts file, the default hosts file contains
+        # "127.0.0.1 ubuntu. ubuntu" for some reason and the missing
+        # domain part after the "." makes e.g. postfix rather unhappy
+        etc_hosts = tempfile.NamedTemporaryFile()
+        etc_hosts.write('127.0.0.1 localhost\n')
+        etc_hosts.write('127.0.0.1 upgrade-test-vm\n')
+        etc_hosts.flush()
+        self._copyToImage(etc_hosts.name, "/etc/hosts")
 
         # generate apt.conf
         proxy = self.config.getWithDefault("NonInteractive","Proxy","")
@@ -343,13 +351,14 @@ iface eth0 inet static
         print "Starting %s" % cmd
         self.qemu_pid = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         # spin here until ssh has come up and we can login
-        for i in range(900):
+        now = time.time()
+        while True:
             time.sleep(1)
             if self._runInImage(["/bin/true"]) == 0:
                 break
-        else:
-            print "Could not start image after 300s, exiting"
-            return False
+            if (time.time() - now) > 900:
+                print "Could not start image after 900s, exiting"
+                return False
         return True
 
     def stop(self):
@@ -384,7 +393,8 @@ iface eth0 inet static
             os.unlink(f)
 
         print "Starting for upgrade"
-        self.start()
+        if not self.start():
+            return False
 
         # copy the profile
         if os.path.exists(self.profile):
@@ -415,7 +425,7 @@ iface eth0 inet static
 
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader
-        cmd_prefix=""
+        cmd_prefix=[]
         if not self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
             print "Disabling ForceOverwrite"
             cmd_prefix = ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]

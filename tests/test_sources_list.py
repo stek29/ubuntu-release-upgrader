@@ -146,11 +146,14 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
         d = DistUpgradeController(v,datadir=self.testdir)
         for scheme in ["ftp","http"]:
             entry = "deb %s://archive.ubuntu.com/ubuntu/ hardy main universe restricted multiverse" % scheme
-            self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)),
+                            "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
-            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)),
+                            "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ xxx main" % scheme
-            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)))
+            self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)),
+                            "entry '%s' not downloadable" % entry)
 
     def testEOL2EOLUpgrades(self):
         " test upgrade from EOL release to EOL release "

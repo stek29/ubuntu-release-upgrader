@@ -49,7 +49,7 @@ class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
 # the initrd/vmlinuz/abi space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 18*1024*1024
+KERNEL_INITRD_SIZE = 19 * 1024 * 1024
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:
@@ -474,7 +474,8 @@ class MyCache(apt.Cache):
         try:
             # get new detection module and use the modalises files
             # from within the release-upgrader
-            nv = NvidiaDetection(datadir="./modaliases/")
+            nv = NvidiaDetection(datadir="./modaliases/",
+                                 obsolete="./nvidia-obsolete.pkgs")
             #nv = NvidiaDetection()
             # check if a binary driver is installed now
             for oldDriver in nv.oldPackages:
@@ -517,6 +518,12 @@ class MyCache(apt.Cache):
         for kernel in kernels:
             if not self.has_key(kernel):
                 logging.debug("%s not available in cache" % kernel)
+                continue
+            # this can happen e.g. on cdrom -> cdrom only upgrades
+            # where on hardy we have linux-386 but on the lucid CD 
+            # we only have linux-generic
+            if not self[kernel].candidateDownloadable:
+                logging.debug("%s not downloadable" % kernel)
                 continue
             # check if installed
             if self[kernel].isInstalled or self[kernel].markedInstall:
@@ -570,9 +577,15 @@ class MyCache(apt.Cache):
 
     # FIXME: make this a decorator (just like the withResolverLog())
     def updateGUI(self, view, lock):
+        i = 0
         while lock.locked():
+            if i % 15 == 0:
+                view.pulseProgress()
             view.processEvents()
-            time.sleep(0.01)
+            time.sleep(0.02)
+            i += 1
+        view.pulseProgress(finished=True)
+        view.processEvents()
 
     @withResolverLog
     def distUpgrade(self, view, serverMode, partialUpgrade):
@@ -813,7 +826,9 @@ class MyCache(apt.Cache):
         # install (that result in a upgrade and removes a markDelete)
         for key in metapkgs:
             try:
-                if self.has_key(key) and self[key].isInstalled:
+                if (self.has_key(key) and
+                    self[key].isInstalled and
+                    self[key].isUpgradable):
                     logging.debug("Marking '%s' for upgrade" % key)
                     self[key].markUpgrade()
             except SystemError, e:
@@ -857,6 +872,7 @@ class MyCache(apt.Cache):
     def _inRemovalBlacklist(self, pkgname):
         for expr in self.removal_blacklist:
             if re.compile(expr).match(pkgname):
+                logging.debug("blacklist expr '%s' matches '%s'" % (expr, pkgname))
                 return True
         return False
 
@@ -952,7 +968,9 @@ class MyCache(apt.Cache):
             if not self.has_key(demoted_pkgname):
                 continue
             pkg = self[demoted_pkgname]
-            if not pkg.isInstalled or self._depcache.IsAutoInstalled(pkg._pkg):
+            if (not pkg.isInstalled or
+                self._depcache.IsAutoInstalled(pkg._pkg) or
+                pkg.markedDelete):
                 continue
             installed_demotions.add(pkg.name)
         return list(installed_demotions)

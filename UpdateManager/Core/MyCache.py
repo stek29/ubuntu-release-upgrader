@@ -154,7 +154,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             verstr = "".join(l[1:])
         return verstr
         
-    def _get_changelog_or_news(self, name, fname, strict_versioning=False):
+    def _get_changelog_or_news(self, name, fname, strict_versioning=False, changelogs_uri=None):
         " helper that fetches the file in question "
         # don't touch the gui in this function, it needs to be thread-safe
         pkg = self[name]
@@ -182,7 +182,13 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         if srcpkg.startswith("lib"):
             prefix = "lib" + srcpkg[3]
 
-        uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
+        # the changelogs_uri argument overrides the default changelogs_uri,
+        # this is useful for e.g. PPAs where we construct the changelogs
+        # path differently
+        if changelogs_uri:
+            uri = changelogs_uri
+        else:
+            uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
         # print "Trying: %s " % uri
         changelog = urllib2.urlopen(uri)
         #print changelog.read()
@@ -222,6 +228,19 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                         break
             alllines = alllines + line
         return alllines
+
+    def _guess_third_party_changelogs_uri(self, name):
+        """ guess changelogs uri based on ArchiveURI by replacing .deb
+            with .changelog
+        """
+        # there is always a pkg and a pkg.candidate, no need to add
+        # check here
+        pkg = self[name]
+        deb_uri = pkg.candidate.uri
+        if deb_uri:
+            return "%s.changelog" % string.rsplit(deb_uri, ".", 1)[0]
+        return None
+
         
     def get_news_and_changelog(self, name, lock):
         self.get_news(name)
@@ -245,9 +264,20 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         origins = self[name].candidateOrigin
         self.all_changes[name] = _("Changes for the versions:\n%s\n%s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
         if not CHANGELOG_ORIGIN in [o.origin for o in origins]:
+            # Try non official changelog location
+            changelogs_uri = self._guess_third_party_changelogs_uri(name)
+            if changelogs_uri:
+                try:
+                    changelog = self._get_changelog_or_news(name, "changelog", False, changelogs_uri)
+                    self.all_changes[name] += changelog
+                    return
+                except urllib2.HTTPError, e:
+                    pass
+            # no changelogs_uri or 404
             self.all_changes[name] += _( "This change is not coming from a "
                                          "source that supports changelogs.")
             return
+        # fixup epoch handling version
         srcpkg = self[name].sourcePackageName
         srcver_epoch = self[name].candidateVersion.replace(':', '%3A')
         try:

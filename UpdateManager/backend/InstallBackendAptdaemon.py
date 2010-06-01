@@ -1,87 +1,62 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # (c) 2005-2009 Canonical, GPL
-#
 
+from aptdaemon import client, errors
+from aptdaemon.defer import inline_callbacks
+from aptdaemon.gtkwidgets import AptProgressDialog
+
+from UpdateManager.backend import InstallBackend
 import apt_pkg
-import gobject
-import gtk
-
-import dbus
-from aptdaemon import client
-from aptdaemon.enums import *
-from aptdaemon.gtkwidgets import (AptErrorDialog, 
-                                  AptProgressDialog, 
-                                  AptMessageDialog)
-
-from InstallBackend import InstallBackend
-
 
 class InstallBackendAptdaemon(InstallBackend):
-    """The abstract backend that can install/remove packages"""
 
-    def _get_icon(self):
-        theme = gtk.icon_theme_get_default ()
-        icon = theme.load_icon("update-manager", 16, 0)
-        return icon
+    """Makes use of aptdaemon to refresh the cache and to install updates."""
 
-    def commit(self, cache):
+    def __init__(self, window_main):
+        InstallBackend.__init__(self, window_main)
+        self.client = client.AptClient()
+
+    @inline_callbacks
+    def update(self):
+        """Refresh the package list"""
+        try:
+            apt_pkg.PkgSystemUnLock()
+        except SystemError:
+            pass
+        try:
+            trans = yield self.client.update_cache(defer=True)
+            self._run_in_dialog(trans, self.UPDATE)
+        except errors.NotAuthorizedError:
+            self.emit("action-done", self.UPDATE)
+        except:
+            self.emit("action-done", self.UPDATE)
+            raise
+
+    @inline_callbacks
+    def commit(self, pkgs_install, pkgs_upgrade, close_on_done):
         """Commit a list of package adds and removes"""
         try:
             apt_pkg.PkgSystemUnLock()
         except SystemError:
             pass
-        self.ac = client.AptClient()
-        add = []
-        upgrade = []
-        for pkg in cache:
-                if pkg.markedInstall: 
-                    add.append(pkg.name)
-                elif pkg.markedUpgrade:
-                    upgrade.append(pkg.name)
-        # parameter order: install, reinstall, remove, purge, upgrade
-        t = self.ac.commit_packages(add, [], [], [], upgrade,
-                                    exit_handler=self._on_exit)
-        dia = AptProgressDialog(t, parent=self.window_main)
-        dia.set_icon(self._get_icon())
         try:
-            dia.run()
-        except dbus.exceptions.DBusException, e:
-            if e._dbus_error_name == "org.freedesktop.PolicyKit.Error.NotAuthorized":
-                pass
-            else:
-                raise
-        dia.hide()
-        self._show_messages(t)
+            trans = yield self.client.commit_packages(pkgs_install, [], [],
+                                                      [], pkgs_upgrade,
+                                                      defer=True)
+            self._run_in_dialog(trans, self.INSTALL)
+        except errors.NotAuthorizedError:
+            self.emit("action-done", self.INSTALL)
+        except:
+            self.emit("action-done", self.INSTALL)
+            raise
 
-    def update(self):
-        """Run a update to refresh the package list"""
-        try:
-            apt_pkg.PkgSystemUnLock()
-        except SystemError:
-            pass
-        self.ac = client.AptClient()
-        t = self.ac.update_cache(exit_handler=self._on_exit)
-        dia = AptProgressDialog(t, parent=self.window_main, terminal=False)
-        dia.set_icon(self._get_icon())
-        try:
-            dia.run()
-        except dbus.exceptions.DBusException, e:
-            if e._dbus_error_name == "org.freedesktop.PolicyKit.Error.NotAuthorized":
-                pass
-            else:
-                raise
-        dia.hide()
-        self._show_messages(t)
+    def _run_in_dialog(self, trans, action):
+        dia = AptProgressDialog(trans, parent=self.window_main)
+        dia.set_icon_name("update-manager")
+        dia.connect("finished", self._on_finished, action)
+        dia.run()
 
-    def _on_exit(self, trans, exit):
-        if exit == EXIT_FAILED:
-            d = AptErrorDialog(trans.get_error(), parent=self.window_main)
-            d.run()
-            d.hide()
-
-    def _show_messages(self, trans):
-        while gtk.events_pending():
-            gtk.main_iteration()
-        for msg in trans._messages:
-            d = AptMessageDialog(msg.enum, msg.details, parent=self.window_main)
-            d.run()
-            d.hide()
+    def _on_finished(self, dialog, action):
+        dialog.hide()
+        self.emit("action-done", action)

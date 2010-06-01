@@ -375,6 +375,11 @@ class DistUpgradeView(object):
         """ process gui events (to keep the gui alive during a long
             computation """
         pass
+    def pulseProgress(self, finished=False):
+      """ do a progress pulse (e.g. bounce a bar back and forth, show
+          a spinner)
+      """
+      pass
     def showDemotions(self, summary, msg, demotions):
       """
       show demoted packages to the user, default implementation

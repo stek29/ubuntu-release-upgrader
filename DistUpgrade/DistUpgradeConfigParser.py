@@ -58,3 +58,5 @@ if __name__ == "__main__":
     print c.getlist("Distro","ForcedPurges")
     print c.getListFromFile("Sources","ValidMirrors")
     print c.getWithDefault("Distro","EnableApport", True)
+    print c.set("Distro","Foo", "False")
+    print c.getWithDefault("Distro","Foo", True)

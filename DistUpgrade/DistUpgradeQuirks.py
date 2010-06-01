@@ -1,6 +1,6 @@
 # DistUpgradeQuirks.py 
 #  
-#  Copyright (c) 2004-2008 Canonical
+#  Copyright (c) 2004-2010 Canonical
 #  
 #  Author: Michael Vogt <michael.vogt@ubuntu.com>
 # 
@@ -137,77 +137,18 @@ class DistUpgradeQuirks(object):
         self._ntfsFstabFixup()
         self._checkLanguageSupport()
 
-    # quirks when run when the initial apt-get update was run -------
-    def karmicPostInitialUpdate(self):
-        " quirks that are run before the upgrade to karmic "
+    # quirks when run when the initial apt-get update was run ----------------
+    def lucidPostInitialUpdate(self):
+        """ quirks that are run before the sources.list is updated to lucid """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # we switched the supported CPU arches for armel to a minimal of ARMv6.
-        # upgrades on systems with CPUs not matching this minimum will break
-        # on karmic
-        if self.arch == "armel":
-            if not self._checkArmCPU():
-                res = self._view.error(_("No ARMv6 CPU"),
-                    _("Your system uses an ARM CPU that is older "
-                      "than the ARMv6 architecture. "
-                      "All packages in karmic were built with "
-                      "optimizations requiring ARMv6 as the "
-                      "minimal architecture. It is not possible to "
-                      "upgrade your system to a new Ubuntu release "
-                      "with this hardware."))
-                self.controller.abort()
-        # verver test (LP: #454783), see if there is a init around
-        try:
-            os.kill(1, 0)
-        except:
-            logging.warn("no init found")
-            res = self._view.askYesNoQuestion(
-                _("No init available"),
-                _("Your system appears to be a virtualised environment "
-                  "without an init daemon, e.g. Linux-VServer. "
-                  "Ubuntu 9.10 cannot function within this type of "
-                  "environment, requiring an update to your virtual "
-                  "machine configuration first.\n\n"
-                  "Are you sure you want to continue?"))
-            if res == False:
-                self.controller.abort()
-            self._view.processEvents()
+        # upgrades on systems with < arvm6 CPUs will break
+        self._test_and_fail_on_non_arm_v6()
+        # vserver+upstart are problematic
+        self._test_and_warn_if_vserver()
+        # fglrx dropped support for some cards
+        self._test_and_warn_on_dropped_fglrx_support()
 
-    # fglrx is broken in intrepid (no support for xserver 1.5)
-    def jauntyPostInitialUpdate(self):
-        " quirks that are run before the upgrade to jaunty "
-        logging.debug("running %s" %  sys._getframe().f_code.co_name
-)
-        # this is to deal with the fact that support for some of the cards
-        # that fglrx used to support got dropped
-        if (self._checkVideoDriver("fglrx") and 
-            not self._supportInModaliases("fglrx")):
-             # TRANSLATORS: this string is not displayed in the 9.10 upgrade
-             #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
-             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                         "effects, and performance in games "
-                                         "and other graphically intensive "
-                                         "programs."),
-                                       _("This computer is currently using "
-                                         "the AMD 'fglrx' graphics driver. "
-                                         "No version of this driver is "
-                                         "available that works with your "
-                                         "hardware in Ubuntu "
-                                         "10.04.\n\nDo you want to continue?"))
-             if res == False:
-                 self.controller.abort()
-             # if the user wants to continue we remove the fglrx driver
-             # here because its no use (no support for this card)
-             logging.debug("remove xorg-driver-fglrx,xorg-driver-fglrx-envy,fglrx-kernel-source")
-             l=self.controller.config.getlist("Distro","PostUpgradePurge")
-             l.append("xorg-driver-fglrx")
-             l.append("xorg-driver-fglrx-envy")
-             l.append("fglrx-kernel-source")
-             l.append("fglrx-amdcccle")
-             l.append("xorg-driver-fglrx-dev")
-             l.append("libamdxvba1")
-             self.controller.config.set("Distro","PostUpgradePurge",",".join(l))
-
-    # quirks when the cache upgrade calculation is finished
+    # quirks when the cache upgrade calculation is finished -------------------
     def from_dapperPostDistUpgradeCache(self):
         self.hardyPostDistUpgradeCache()
         self.gutsyPostDistUpgradeCache()
@@ -215,7 +156,30 @@ class DistUpgradeQuirks(object):
         self.edgyPostDistUpgradeCache()
 
     def from_hardyPostDistUpgradeCache(self):
+        """ this function works around quirks in upgrades from hardy """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # ensure 386 -> generic transition happens
         self._kernel386TransitionCheck()
+        # ensure kubuntu-kde4-desktop transition
+        self._kubuntuDesktopTransition()
+        # evms got removed after hardy, warn and abort
+        if self._usesEvmsInMounts():
+            logging.error("evms in use in /etc/fstab")
+            self._view.error(_("evms in use"),
+                             _("Your system uses the 'evms' volume manager "
+                               "in /proc/mounts. "
+                               "The 'evms' software is no longer supported, "
+                               "please switch it off and run the upgrade "
+                               "again when this is done."))
+            self.controller.abort()
+        # check if "wl" module is loaded and if so, install bcmwl-kernel-source
+        self._checkAndInstallBroadcom()
+        # langpacks got re-organized in 9.10
+        self._dealWithLanguageSupportTransition()
+        # nvidia-71, nvidia-96 got dropped
+        self._test_and_warn_on_old_nvidia()
+        # new nvidia needs a CPU with sse support
+        self._test_and_warn_on_nvidia_and_no_sse()
 
     def karmicPostDistUpgradeCache(self):
         """ 
@@ -259,59 +223,6 @@ class DistUpgradeQuirks(object):
         hardy->intrepid upgrade 
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # now check for nvidia and show a warning if needed
-        cache = self.controller.cache
-        for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
-            if (cache.has_key(pkgname) and 
-                cache[pkgname].markedInstall and
-                self._checkVideoDriver("nvidia")):
-                logging.debug("found %s video driver" % pkgname)
-                # TRANSLATORS: this string is not displayed in the 9.10 upgrade
-                #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
-                res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the NVIDIA 'nvidia' "
-                                        "graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with your "
-                                        "video card in Ubuntu "
-                                        "10.04.\n\nDo you want to continue?"))
-                if res == False:
-                    self.controller.abort()
-                # if the user continue, do not install the broken driver
-                # so that we can transiton him to the free "nv" one after
-                # the upgrade
-                self.controller.cache[pkgname].markKeep()
-        # check if we have sse
-        for pkgname in ["nvidia-glx-173","nvidia-glx-177"]:
-            if (cache.has_key(pkgname) and 
-                cache[pkgname].markedInstall and
-                self._checkVideoDriver("nvidia")):
-                logging.debug("found %s video driver" % pkgname)
-                if not self._cpuHasSSESupport():
-                    logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
-                    # TRANSLATORS: this string is not displayed in the 9.10 upgrade
-                    #              (but it will be used for 8.04 -> 10.04 LTS upgrades)
-                    res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the NVIDIA 'nvidia' "
-                                        "graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with your "
-                                        "video card in Ubuntu "
-                                        "10.04.\n\nDo you want to continue?"))
-                    if res == False:
-                        self.controller.abort()
-                    # if the user continue, do not install the broken driver
-                    # so that we can transiton him to the free "nv" one after
-                    # the upgrade
-                    self.controller.cache[pkgname].markKeep()
         # kdelibs4-dev is unhappy (#279621)
         fromp = "kdelibs4-dev"
         to = "kdelibs5-dev"
@@ -463,34 +374,6 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markRemove("nvidia-settings")
             self.controller.cache.markInstall("nvidia-glx")
 
-    def from_hardyPostDistUpgradeCache(self):
-        """ this function works around quirks in upgrades from hardy """
-        logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        # evms got removed after hardy, warn and abort
-        if self._usesEvmsInMounts():
-            logging.error("evms in use in /etc/fstab")
-            self._view.error(_("evms in use"),
-                             _("Your system uses the 'evms' volume manager "
-                               "in /proc/mounts. "
-                               "The 'evms' software is no longer supported, "
-                               "please switch it off and run the upgrade "
-                               "again when this is done."))
-            self.controller.abort()
-        # check if a key depends of kubuntu-kde4-desktop is installed
-        # and transition in this case as well
-        deps_found = False
-        frompkg = "kubuntu-kde4-desktop"
-        topkg = "kubuntu-desktop"
-        if self.config.getlist(frompkg,"KeyDependencies"):
-            deps_found = True
-            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
-                deps_found &= (self.controller.cache.has_key(pkg) and
-                               self.controller.cache[pkg].isInstalled)
-        if deps_found:
-            logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
-            self.controller.cache[topkg].markInstall()
-            
-
     # run right before the first packages get installed
     def StartUpgrade(self):
         self._applyPatches()
@@ -500,6 +383,9 @@ class DistUpgradeQuirks(object):
         self._killKBluetooth()
         self._killScreensaver()
         self._stopDocvertConverter()
+    def from_hardyStartUpgrade(self):
+        logging.debug("from_hardyStartUpgrade quirks")
+        self._stopApparmor()
     def jauntyStartUpgrade(self):
         self._createPycentralPkgRemove()
         # hal/NM triggers problem, if the old (intrepid) hal gets
@@ -524,7 +410,154 @@ class DistUpgradeQuirks(object):
                 subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
                                     "./theme-switch-helper.py", "--defaults"])
         return True
+
     # helpers
+    def _test_and_warn_on_nvidia_and_no_sse(self):
+        """ The current 
+        """
+        # check if we have sse
+        cache = self.controller.cache
+        for pkgname in ["nvidia-glx-180", "nvidia-glx-185", "nvidia-glx-195"]:
+            if (cache.has_key(pkgname) and 
+                cache[pkgname].markedInstall and
+                self._checkVideoDriver("nvidia")):
+                logging.debug("found %s video driver" % pkgname)
+                if not self._cpuHasSSESupport():
+                    logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
+                    res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                        "effects, and performance in games "
+                                        "and other graphically intensive "
+                                        "programs."),
+                                      _("This computer is currently using "
+                                        "the NVIDIA 'nvidia' "
+                                        "graphics driver. "
+                                        "No version of this driver is "
+                                        "available that works with your "
+                                        "video card in Ubuntu "
+                                        "10.04 LTS.\n\nDo you want to continue?"))
+                    if res == False:
+                        self.controller.abort()
+                    # if the user continue, do not install the broken driver
+                    # so that we can transiton him to the free "nv" one after
+                    # the upgrade
+                    self.controller.cache[pkgname].markKeep()
+        
+
+    def _test_and_warn_on_old_nvidia(self):
+        """ nvidia-glx-71 and -96 are no longer in the archive since 8.10 """
+        # now check for nvidia and show a warning if needed
+        cache = self.controller.cache
+        for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
+            if (cache.has_key(pkgname) and 
+                cache[pkgname].markedInstall and
+                self._checkVideoDriver("nvidia")):
+                logging.debug("found %s video driver" % pkgname)
+                res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                        "effects, and performance in games "
+                                        "and other graphically intensive "
+                                        "programs."),
+                                      _("This computer is currently using "
+                                        "the NVIDIA 'nvidia' "
+                                        "graphics driver. "
+                                        "No version of this driver is "
+                                        "available that works with your "
+                                        "video card in Ubuntu "
+                                        "10.04 LTS.\n\nDo you want to continue?"))
+                if res == False:
+                    self.controller.abort()
+                # if the user continue, do not install the broken driver
+                # so that we can transiton him to the free "nv" one after
+                # the upgrade
+                self.controller.cache[pkgname].markKeep()
+
+    def _test_and_warn_on_dropped_fglrx_support(self):
+        """
+        Some cards are no longer supported by fglrx. Check if that
+        is the case and warn
+        """
+        # this is to deal with the fact that support for some of the cards
+        # that fglrx used to support got dropped
+        if (self._checkVideoDriver("fglrx") and 
+            not self._supportInModaliases("fglrx")):
+             res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
+                                         "effects, and performance in games "
+                                         "and other graphically intensive "
+                                         "programs."),
+                                       _("This computer is currently using "
+                                         "the AMD 'fglrx' graphics driver. "
+                                         "No version of this driver is "
+                                         "available that works with your "
+                                         "hardware in Ubuntu "
+                                         "10.04 LTS.\n\nDo you want to continue?"))
+             if res == False:
+                 self.controller.abort()
+             # if the user wants to continue we remove the fglrx driver
+             # here because its no use (no support for this card)
+             logging.debug("remove xorg-driver-fglrx,xorg-driver-fglrx-envy,fglrx-kernel-source")
+             l=self.controller.config.getlist("Distro","PostUpgradePurge")
+             l.append("xorg-driver-fglrx")
+             l.append("xorg-driver-fglrx-envy")
+             l.append("fglrx-kernel-source")
+             l.append("fglrx-amdcccle")
+             l.append("xorg-driver-fglrx-dev")
+             l.append("libamdxvba1")
+             self.controller.config.set("Distro","PostUpgradePurge",",".join(l))
+
+    def _test_and_fail_on_non_arm_v6(self):
+        """ 
+        Test and fail if the cpu is not a arm v6 or greater,
+        from 9.10 on we do no longer support those CPUs
+        """
+        if self.arch == "armel":
+            if not self._checkArmCPU():
+                res = self._view.error(_("No ARMv6 CPU"),
+                    _("Your system uses an ARM CPU that is older "
+                      "than the ARMv6 architecture. "
+                      "All packages in karmic were built with "
+                      "optimizations requiring ARMv6 as the "
+                      "minimal architecture. It is not possible to "
+                      "upgrade your system to a new Ubuntu release "
+                      "with this hardware."))
+                self.controller.abort()
+
+    def _test_and_warn_if_vserver(self):
+        """
+        upstart and vserver environments are not a good match, warn
+        if we find one
+        """
+        # verver test (LP: #454783), see if there is a init around
+        try:
+            os.kill(1, 0)
+        except:
+            logging.warn("no init found")
+            res = self._view.askYesNoQuestion(
+                _("No init available"),
+                _("Your system appears to be a virtualised environment "
+                  "without an init daemon, e.g. Linux-VServer. "
+                  "Ubuntu 10.04 LTS cannot function within this type of "
+                  "environment, requiring an update to your virtual "
+                  "machine configuration first.\n\n"
+                  "Are you sure you want to continue?"))
+            if res == False:
+                self.controller.abort()
+            self._view.processEvents()
+
+    def _kubuntuDesktopTransition(self):
+        """
+        check if a key depends of kubuntu-kde4-desktop is installed
+        and transition in this case as well
+        """
+        deps_found = False
+        frompkg = "kubuntu-kde4-desktop"
+        topkg = "kubuntu-desktop"
+        if self.config.getlist(frompkg,"KeyDependencies"):
+            deps_found = True
+            for pkg in self.config.getlist(frompkg,"KeyDependencies"):
+                deps_found &= (self.controller.cache.has_key(pkg) and
+                               self.controller.cache[pkg].isInstalled)
+        if deps_found:
+            logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
+            self.controller.cache[topkg].markInstall()
 
     def _mysqlClusterCheck(self):
         """
@@ -623,9 +656,13 @@ class DistUpgradeQuirks(object):
             self.controller.cache.markInstall("bcmwl-kernel-source",
                                               "'wl' module found in lsmod")
 
+    def _stopApparmor(self):
+        """ /etc/init.d/apparmor stop (see bug #559433)"""
+        if os.path.exists("/etc/init.d/apparmor"):
+            logging.debug("/etc/init.d/apparmor stop")
+            subprocess.call(["/etc/init.d/apparmor","stop"])
     def _stopDocvertConverter(self):
         " /etc/init.d/docvert-converter stop (see bug #450569)"
-        # kill update-notifier now to suppress reboot required
         if os.path.exists("/etc/init.d/docvert-converter"):
             logging.debug("/etc/init.d/docvert-converter stop")
             subprocess.call(["/etc/init.d/docvert-converter","stop"])

@@ -798,6 +798,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def processEvents(self):
         QApplication.processEvents()
 
+    def pulseProgress(self, finished=False):
+        # FIXME: currently we do nothing here because this is
+        # run in a different python thread and QT explodes if the UI is
+        # touched from a non QThread
+        pass
+
     def on_window_main_delete_event(self):
         #FIXME make this user friendly
         text = _("""<b><big>Cancel the running upgrade?</big></b>

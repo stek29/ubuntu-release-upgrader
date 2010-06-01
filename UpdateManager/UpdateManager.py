@@ -29,6 +29,7 @@ import gtk
 import gtk.gdk
 import gconf
 import gobject
+gobject.threads_init()
 import glib
 
 import warnings
@@ -86,7 +87,7 @@ from MetaReleaseGObject import MetaRelease
 # - kill "all_changes" and move the changes into the "Update" class
 
 # list constants
-(LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN) = range(4)
+(LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN, LIST_TOGGLE_CHECKED) = range(5)
 
 # actions for "invoke_manager"
 (INSTALL, UPDATE) = range(2)
@@ -111,7 +112,6 @@ class UpdateManager(SimpleGtkbuilderApp):
   def __init__(self, datadir, options):
     self.setupDbus()
     gtk.window_set_default_icon_name("update-manager")
-
     self.datadir = datadir
     SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui",
                                  "update-manager")
@@ -121,6 +121,12 @@ class UpdateManager(SimpleGtkbuilderApp):
         locale.setlocale(locale.LC_ALL, "")
     except:
         logging.exception("setlocale failed")
+
+    # Used for inhibiting power management
+    self.sleep_cookie = None
+    self.sleep_dev = None
+
+    self.reboot_required = False
 
     self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
     self.window_main.set_sensitive(False)
@@ -144,7 +150,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # the treeview (move into it's own code!)
     self.store = gtk.ListStore(str, str, gobject.TYPE_PYOBJECT, 
-                               gobject.TYPE_PYOBJECT)
+                               gobject.TYPE_PYOBJECT, bool)
     self.treeview_update.set_model(self.store)
     self.treeview_update.set_headers_clickable(True);
     self.treeview_update.set_direction(gtk.TEXT_DIR_LTR)
@@ -157,17 +163,17 @@ class UpdateManager(SimpleGtkbuilderApp):
     cr.set_property("xpad", 6)
     cr.connect("toggled", self.toggled)
 
-    column_install = gtk.TreeViewColumn("Install", cr)
+    column_install = gtk.TreeViewColumn("Install", cr, active=LIST_TOGGLE_CHECKED)
     column_install.set_cell_data_func (cr, self.install_column_view_func)
     column = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
     column.set_resizable(True)
     major,minor,patch = gtk.pygtk_version
-    if (major >= 2) and (minor >= 5):
-      column_install.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-      column_install.set_fixed_width(30)
-      column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-      column.set_fixed_width(100)
-      self.treeview_update.set_fixed_height_mode(False)
+
+    column_install.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+    column_install.set_fixed_width(30)
+    column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+    column.set_fixed_width(100)
+    self.treeview_update.set_fixed_height_mode(False)
 
     self.treeview_update.append_column(column_install)
     column_install.set_visible(True)
@@ -193,10 +199,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
 
     # get progress object
-    self.progress = GtkProgress.GtkOpProgress(self.dialog_cacheprogress,
-                                              self.progressbar_cache,
-                                              self.label_cache,
-                                              self.window_main)
+    self.progress = GtkProgress.GtkOpProgressInline(
+        self.progressbar_cache_inline, self.window_main)
 
     #set minimum size to prevent the headline label blocking the resize process
     self.window_main.set_size_request(500,-1) 
@@ -209,8 +213,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     # show the main window
     self.window_main.show()
     # get the install backend
-    self.install_backend = backend.backend_factory(self.window_main)
-
+    self.install_backend = backend.get_backend(self.window_main)
+    self.install_backend.connect("action-done", self._on_backend_done)
     # it can only the iconified *after* it is shown (even if the docs
     # claim otherwise)
     if options.no_focus_on_map:
@@ -246,8 +250,13 @@ class UpdateManager(SimpleGtkbuilderApp):
     renderer.set_property("visible", pkg != None)
     if pkg is None:
         return
+    current_state = renderer.get_property("active")
     to_install = pkg.markedInstall or pkg.markedUpgrade
     renderer.set_property("active", to_install)
+    # we need to update the store as well to ensure orca knowns
+    # about state changes (it will not read view_func changes)
+    if to_install != current_state:
+        self.store[iter][LIST_TOGGLE_CHECKED] = to_install
     if pkg.name in self.list.held_back:
         renderer.set_property("activatable", False)
     else: 
@@ -470,13 +479,13 @@ class UpdateManager(SimpleGtkbuilderApp):
       ago_days = int( (time.time() - mtime) / (24*60*60))
       ago_hours = int((time.time() - mtime) / (60*60) )
       if ago_days > 0:
-          return ngettext("The package information was last updated %s day ago.",
-                          "The package information was last updated %s days ago.",
-                          ago_days) % ago_days
+          return ngettext("The package information was last updated %(days_ago)s day ago.",
+                          "The package information was last updated %(days_ago)s days ago.",
+                          ago_days) % { "days_ago" : ago_days, }
       elif ago_hours > 0:
-          return ngettext("The package information was last updated %s hour ago.",
-                          "The package information was last updated %s hours ago.",
-                          ago_hours) % ago_hours
+          return ngettext("The package information was last updated %(hours_ago)s hour ago.",
+                          "The package information was last updated %(hours_ago)s hours ago.",
+                          ago_hours) % { "hours_ago" : ago_hours, }
       else:
           return _("The package information was last updated less than one hour ago.")
       return None
@@ -501,7 +510,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
       if num_updates == 0:
           text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
-          self.label_downsize.set_text("")
+          self.label_downsize.set_text("\n")
           self.notebook_details.set_sensitive(False)
           self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
@@ -612,29 +621,44 @@ class UpdateManager(SimpleGtkbuilderApp):
     os.environ["APT_LISTCHANGES_FRONTEND"]="none"
 
     # Do not suspend during the update process
-    (dev, cookie) = inhibit_sleep()
+    (self.sleep_dev, self.sleep_cookie) = inhibit_sleep()
 
     # set window to insensitive
     self.window_main.set_sensitive(False)
     self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-
+#
     # do it
     if action == UPDATE:
         self.install_backend.update()
     elif action == INSTALL:
-        has_reboot = os.path.exists(REBOOT_REQUIRED_FILE)
-        # do it
-        self.install_backend.commit(self.cache)
-        # check if there is a new reboot required notification
-        if not has_reboot and os.path.exists(REBOOT_REQUIRED_FILE):
-            self.show_reboot_required_dialog()
-    s = _("Reading package information")
-    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % s)
+        # If the progress dialog should be closed automatically afterwards
+        gconfclient =  gconf.client_get_default()
+        close_on_done = gconfclient.get_bool("/apps/update-manager/"
+                                             "autoclose_install_window")
+        # Get the packages which should be installed and update
+        pkgs_install = []
+        pkgs_upgrade = []
+        for pkg in self.cache:
+            if pkg.markedInstall:
+                pkgs_install.append(pkg.name)
+            elif pkg.markedUpgrade:
+                pkgs_upgrade.append(pkg.name)
+        self.reboot_required = os.path.exists(REBOOT_REQUIRED_FILE)
+        self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
+
+  def _on_backend_done(self, backend, action):
+    # check if there is a new reboot required notification
+    if action == INSTALL and not self.reboot_required and \
+       os.path.exists(REBOOT_REQUIRED_FILE):
+        self.show_reboot_required_dialog()
+    msg = _("Reading package information")
+    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % msg)
     self.fillstore()
 
     # Allow suspend after synaptic is finished
-    if cookie != False:
-        allow_sleep(dev, cookie)
+    if self.sleep_cookie:
+        allow_sleep(self.sleep_dev, self.sleep_cookie)
+        self.sleep_cookie = self.sleep_dev = None
     self.window_main.set_sensitive(True)
     self.window_main.window.set_cursor(None)
 
@@ -783,7 +807,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       origin_list.reverse()
       for origin in origin_list:
         self.store.append(['<b><big>%s</big></b>' % origin.description,
-                           origin.description, None, origin])
+                           origin.description, None, origin,True])
         for pkg in self.list.pkgs[origin]:
           name = xml.sax.saxutils.escape(pkg.name)
           if not pkg.isInstalled:
@@ -802,7 +826,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               contents = "%s\n<small>%s %s</small>" % (contents, version, size)
           else:
               contents = "%s <small>%s</small>" % (contents, size)
-          self.store.append([contents, pkg.name, pkg, None])
+          self.store.append([contents, pkg.name, pkg, None, True])
     self.update_count()
     self.setBusy(False)
     self.check_all_updates_installable()
@@ -838,6 +862,11 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def on_button_dist_upgrade_clicked(self, button):
       #print "on_button_dist_upgrade_clicked"
+      if self.new_dist.upgrade_broken:
+          return self.error(
+              _("Release upgrade not possible right now"),
+              _("The release upgrade can not be performed currently, "
+                "please try again later. The server reported: '%s'") % self.new_dist.upgrade_broken)
       fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkProgress.GtkFetchProgress(self, _("Downloading the release upgrade tool")))
       if self.options.sandbox:
           fetcher.run_options.append("--sandbox")
@@ -898,7 +927,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.destroy()
         sys.exit(1)
     else:
-        self.progress.hide()
+        self.progress.all_done()
 
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform

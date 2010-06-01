@@ -1,26 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # (c) 2005-2007 Canonical, GPL
-#
 
 import apt_pkg
-import subprocess
-import gtk
-import gtk.gdk
-import thread
-import time
-import os
 import tempfile
-import gconf
 from gettext import gettext as _
 
-from InstallBackend import InstallBackend
+import gobject
+
+from UpdateManager.backend import InstallBackend
+
 
 class InstallBackendSynaptic(InstallBackend):
     """ Install backend based on synaptic """
-    
-    # synaptic actions
-    (INSTALL, UPDATE) = range(2)
 
-    def _run_synaptic(self, id, lock, cache=None, action=INSTALL):
+    def _run_synaptic(self, action, opt, tempf):
+        """Execute synaptic."""
         try:
             apt_pkg.PkgSystemUnLock()
         except SystemError:
@@ -28,54 +23,41 @@ class InstallBackendSynaptic(InstallBackend):
         cmd = ["/usr/bin/gksu", 
                "--desktop", "/usr/share/applications/update-manager.desktop", 
                "--", "/usr/sbin/synaptic", "--hide-main-window",  
-               "--non-interactive", "--parent-window-id", "%s" % (id) ]
-        if action == self.INSTALL:
-            # close when update was successful (its ok to use a Synaptic::
-            # option here, it will not get auto-saved, because synaptic does
-            # not save options in non-interactive mode)
-            gconfclient =  gconf.client_get_default()
-            if gconfclient.get_bool("/apps/update-manager/autoclose_install_window"):
-                cmd.append("-o")
-                cmd.append("Synaptic::closeZvt=true")
-            # custom progress strings
-            cmd.append("--progress-str")
-            cmd.append("%s" % _("Please wait, this can take some time."))
-            cmd.append("--finish-str")
-            cmd.append("%s" %  _("Update is complete"))
-            f = tempfile.NamedTemporaryFile()
-            for pkg in cache:
-                if pkg.markedInstall or pkg.markedUpgrade:
-                    f.write("%s\tinstall\n" % pkg.name)
-            cmd.append("--set-selections-file")
-            cmd.append("%s" % f.name)
-            f.flush()
-            self.return_code = subprocess.call(cmd)
-            f.close()
-        elif action == self.UPDATE:
-            cmd.append("--update-at-startup")
-            self.return_code = subprocess.call(cmd)
-        else:
-            print "run_synaptic() called with unknown action"
-            return False
-        lock.release()
+               "--non-interactive", "--parent-window-id",
+               "%s" % self.window_main.window.xid ]
+        cmd.extend(opt)
+        flags = gobject.SPAWN_DO_NOT_REAP_CHILD
+        (pid, stdin, stdout, stderr) = gobject.spawn_async(cmd, flags=flags)
+        gobject.child_watch_add(pid, self._on_synaptic_exit, (action, tempf))
 
-    def _perform_action(self, action, cache=None):
-        lock = thread.allocate_lock()
-        lock.acquire()
-        t = thread.start_new_thread(self._run_synaptic,
-                                    (self.window_main.window.xid,
-                                     lock, cache, action))
-        while lock.locked():
-            while gtk.events_pending():
-                gtk.main_iteration()
-            time.sleep(0.05)
-        return self.return_code
-        
+    def _on_synaptic_exit(self, pid, condition, data):
+        action, tempf = data
+        if tempf:
+            tempf.close()
+        self.emit("action-done", action)
+
     def update(self):
-        return self._perform_action(self.UPDATE)
+        opt = ["--update-at-startup"]
+        tempf = None
+        self._run_synaptic(self.UPDATE, opt, tempf)
 
-    def commit(self, cache):
-        return self._perform_action(self.INSTALL, cache)
-
-
-
+    def commit(self, pkgs_install, pkgs_upgrade, close_on_done):
+        # close when update was successful (its ok to use a Synaptic::
+        # option here, it will not get auto-saved, because synaptic does
+        # not save options in non-interactive mode)
+        opt = []
+        if close_on_done:
+            opt.append("-o")
+            opt.append("Synaptic::closeZvt=true")
+        # custom progress strings
+        opt.append("--progress-str")
+        opt.append("%s" % _("Please wait, this can take some time."))
+        opt.append("--finish-str")
+        opt.append("%s" %  _("Update is complete"))
+        tempf = tempfile.NamedTemporaryFile()
+        for pkg_name in pkgs_install + pkgs_upgrade:
+            tempf.write("%s\tinstall\n" % pkg_name)
+        opt.append("--set-selections-file")
+        opt.append("%s" % tempf.name)
+        tempf.flush()
+        self._run_synaptic(self.INSTALL, opt, tempf)

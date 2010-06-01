@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime
 from string import Template
 
 import DistUpgradeView
@@ -500,19 +500,11 @@ class DistUpgradeController(object):
         # this must map, i.e. second in "from" must be the second in "to"
         # (but they can be different, so in theory we could exchange
         #  component names here)
-        fromDists = [self.fromDist,
-                     self.fromDist+"-security",
-                     self.fromDist+"-updates",
-                     self.fromDist+"-proposed",
-                     self.fromDist+"-backports"
-                    ]
-        toDists = [self.toDist,
-                   self.toDist+"-security",
-                   self.toDist+"-updates",
-                   self.toDist+"-proposed",
-                   self.toDist+"-backports"
-                   ]
-
+        pockets = self.config.getlist("Sources","Pockets")
+        fromDists = [self.fromDist] + ["%s-%s" % (self.fromDist, x) 
+                                       for x in pockets]
+        toDists = [self.toDist] + ["%s-%s" % (self.toDist,x) 
+                                   for x in pockets]
         self.sources_disabled = False
 
         # look over the stuff we have
@@ -866,8 +858,17 @@ class DistUpgradeController(object):
 
 
     def askDistUpgrade(self):
-        # check what packages got demoted and ask the user
-        # if those shall be removed
+        self._view.updateStatus(_("Calculating the changes"))
+        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
+            return False
+
+        if self.serverMode:
+            if not self.cache.installTasks(self.tasks):
+                return False
+
+        # check what packages got demoted, we do this after the upgrade
+        # calculation to skip packages that are marked for removal anyway
+        # FIXME: integrate this into main upgrade dialog!?!
         self.installed_demotions = self.cache.get_installed_demoted_packages()
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
@@ -891,20 +892,22 @@ class DistUpgradeController(object):
             self._view.showDemotions(_("Support for some applications ended"),
                                      text,
                                      self.installed_demotions)
-            self._view.updateStatus(_("Calculating the changes"))
-        # FIXME: integrate this into main upgrade dialog!?!
-        if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
-            return False
+        # flush UI
+        self._view.processEvents()
 
-        if self.serverMode:
-            if not self.cache.installTasks(self.tasks):
-                return False
+        # show changes and confirm
         changes = self.cache.getChanges()
+        self._view.processEvents()
+
         # log the changes for debugging
         self._logChanges()
+        self._view.processEvents()
+
         # check if we have enough free space 
         if not self._checkFreeSpace():
             return False
+        self._view.processEvents()
+
         # ask the user if he wants to do the changes
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,
@@ -988,19 +991,12 @@ class DistUpgradeController(object):
         self.abort()
 
     def enableApport(self, fname="/etc/default/apport"):
-        " enable apoprt "
-        # for jaunty and later we could use this instead:
-        #  env = copy.copy(os.environ)
-        #  env["force_start"] = "1"
-        #  subprocess.call(["/etc/init.d/apport","start"], env=env)
-        # but hardy and intrepid do not have the force_start yet
-        if not (os.path.exists(fname) and os.path.exists("etc-default-apport")):
-            return
-        # copy the jaunty version of the conf file in place
-        # (this avoids a conffile prompt later)
-        logging.debug("enabling apport")
-        shutil.copy("etc-default-apport","/etc/default/apport")
-        subprocess.call(["/etc/init.d/apport","start"])
+        """ enable apoprt """
+        # startup apport just until the next reboot, it has the magic
+        # "force_start" environment for this
+        env = copy.copy(os.environ)
+        env["force_start"] = "1"
+        subprocess.call(["/etc/init.d/apport","start"], env=env)
         
     def doDistUpgrade(self):
         # check if we want apport running during the upgrade
@@ -1054,7 +1050,10 @@ class DistUpgradeController(object):
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
-                self._view.getTerminal().call(["dpkg","--configure","-a"])
+                cmd = ["dpkg","--configure","-a"]
+                if os.environ.get("DEBIAN_FRONTEND") == "noninteractive":
+                    cmd.append("--force-confold")
+                self._view.getTerminal().call(cmd)
                 self._enableAptCronJob()
                 return False
             except IOError, e:

@@ -45,6 +45,8 @@ class Dist(object):
         self.releaseNotesHtmlUri = None
         self.upgradeTool = None
         self.upgradeToolSig = None
+        # the server may report that the upgrade is broken currently
+        self.upgrade_broken = None
 
 class MetaReleaseCore(object):
     """
@@ -185,7 +187,7 @@ class MetaReleaseCore(object):
         while step_result:
             if index_tag.Section.has_key("Dist"):
                 name = index_tag.Section["Dist"]
-                #print name
+                self._debug("found distro name: '%s'" % name)
                 rawdate = index_tag.Section["Date"]
                 date = time.mktime(rfc822.parsedate(rawdate))
                 supported = int(index_tag.Section["Supported"])
@@ -194,12 +196,20 @@ class MetaReleaseCore(object):
                 dist = Dist(name, version, date,supported)
                 if index_tag.Section.has_key("ReleaseNotes"):
                     dist.releaseNotesURI = index_tag.Section["ReleaseNotes"]
+                    lang = get_lang()
+                    if lang:
+                        dist.releaseNotesURI += "?lang=%s" % lang
                 if index_tag.Section.has_key("ReleaseNotesHtml"):
                     dist.releaseNotesHtmlUri = index_tag.Section["ReleaseNotesHtml"]
+                    lang = get_lang()
+                    if lang:
+                        dist.releaseNotesHtmlUri += "?lang=%s" % lang
                 if index_tag.Section.has_key("UpgradeTool"):
                     dist.upgradeTool =  index_tag.Section["UpgradeTool"]
                 if index_tag.Section.has_key("UpgradeToolSignature"):
                     dist.upgradeToolSig =  index_tag.Section["UpgradeToolSignature"]
+                if "UpgradeBroken" in index_tag.Section:
+                    dist.upgrade_broken = index_tag.Section["UpgradeBroken"]
                 dists.append(dist)
                 if name == current_dist_name:
                     current_dist = dist 
@@ -209,7 +219,7 @@ class MetaReleaseCore(object):
         # information. if not, we assume that we run on something not
         # supported and silently return
         if current_dist is None:
-            #sys.stderr.write("current dist not found in meta-release file\n")
+            self._debug("current dist not found in meta-release file\n")
             return False
 
         # then see what we can upgrade to 
@@ -281,7 +291,17 @@ class MetaReleaseCore(object):
         # now check the information we have
         if self.metarelease_information != None:
             self._debug("have self.metarelease_information")
-            self.parse()
+            try:
+                self.parse()
+            except:
+                logging.exception("parse failed for '%s'" % self.METARELEASE_FILE)
+                # no use keeping a broken file around
+                os.remove(self.METARELEASE_FILE)
+            # we don't want to keep a meta-release file around when it
+            # has a "Broken" flag, this ensures we are not bitten by
+            # I-M-S/cache issues
+            if self.new_dist and self.new_dist.upgrade_broken:
+                os.remove(self.METARELEASE_FILE)
         else:
             self._debug("NO self.metarelease_information")
         self.downloading = False

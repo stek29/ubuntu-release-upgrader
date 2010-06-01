@@ -24,12 +24,30 @@ from stat import *
 
 import apt_pkg
 import locale
+import logging
 import re
 import os
 import os.path
 import subprocess
 import sys
+import time
 import urllib2
+import urlparse
+
+
+class ExecutionTime(object):
+    """
+    Helper that can be used in with statements to have a simple
+    measure of the timming of a particular block of code, e.g.
+    with ExecutinTime("db flush"):
+        db.flush()
+    """
+    def __init__(self, info=""):
+        self.info = info
+    def __enter__(self):
+        self.now = time.time()
+    def __exit__(self, type, value, stack):
+        print "%s: %s" % (self.info, time.time() - self.now)
 
 # helpers inspired after textwrap - unfortunately
 # we can not use textwrap directly because it break
@@ -99,6 +117,12 @@ def country_mirror():
 
 def get_dist():
   " return the codename of the current runing distro "
+  # support debug overwrite
+  dist = os.environ.get("META_RELEASE_FAKE_CODENAME")
+  if dist:
+      logging.warn("using fake release name '%s' (because of META_RELEASE_FAKE_CODENAME environment) " % dist)
+      return dist
+  # then check the real one
   from subprocess import Popen, PIPE
   p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
   res = p.wait()
@@ -108,6 +132,10 @@ def get_dist():
   dist = p.stdout.readline().strip()
   return dist
 
+class HeadRequest(urllib2.Request):
+    def get_method(self):
+        return "HEAD"
+
 def url_downloadable(uri, debug_func=None):
   """
   helper that checks if the given uri exists and is downloadable
@@ -116,25 +144,18 @@ def url_downloadable(uri, debug_func=None):
 
   Supports http (via HEAD) and ftp (via size request)
   """
-  if debug_func:
-    debug_func("url_downloadable: %s" % uri)
-  import urlparse
+  if not debug_func:
+      lambda x: True
+  debug_func("url_downloadable: %s" % uri)
   (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
+  debug_func("s='%s' n='%s' p='%s' q='%s' f='%s'" % (scheme, netloc, path, querry, fragment))
   if scheme == "http":
-    import httplib
-    proxy = os.getenv("http_proxy")
-    if (proxy):
-      path = scheme + netloc + path
-      netloc = proxy
     try:
-      c = httplib.HTTPConnection(netloc)
-      c.request("HEAD", path)
-      res = c.getresponse()
-      if debug_func:
-        debug_func("url_downloadable result '%s'" % res.status)
-      res.close()
-      if res.status == 200:
-        return True
+        http_file = urllib2.urlopen(HeadRequest(uri))
+        http_file.close()
+        if http_file.code == 200:
+            return True
+        return False
     except Exception, e:
       debug_func("error from httplib: '%s'" % e)
       return False
@@ -290,6 +311,15 @@ def str_to_bool(str):
 
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
+
+def get_lang():
+    import logging
+    try:
+        (locale_s, encoding) = locale.getdefaultlocale()
+        return locale_s
+    except Exception, e: 
+        logging.exception("gedefaultlocale() failed")
+        return None
 
 def error(parent, summary, message):
   import gtk

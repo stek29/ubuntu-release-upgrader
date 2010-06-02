@@ -446,7 +446,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
                    _("Please report this as a bug (if you haven't already) and include the "
                      "files /var/log/dist-upgrade/main.log and "
                      "/var/log/dist-upgrade/apt.log "
-                     "in your report. The upgrade is now aborted.\n"
+                     "in your report. The upgrade has aborted.\n"
                      "Your original sources.list was saved in "
                      "/etc/apt/sources.list.distUpgrade."),
                    "\n".join(lines))

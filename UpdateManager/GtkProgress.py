@@ -31,7 +31,7 @@ from Core.utils import *
 # 3x caching and menu creation
 STEPS_UPDATE_CACHE = [33, 66, 100]
 
-class GtkOpProgressInline(apt.OpProgress):
+class GtkOpProgressInline(apt.progress.base.OpProgress):
     def __init__(self, progressbar, parent,                  
                  steps=STEPS_UPDATE_CACHE):
         # steps

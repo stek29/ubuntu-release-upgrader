@@ -53,10 +53,10 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         self.all_changes = {}
         self.all_news = {}
         # on broken packages, try to fix via saveDistUpgrade()
-        if self._depcache.BrokenCount > 0:
+        if self._depcache.broken_count > 0:
             self.saveDistUpgrade()
-        assert (self._depcache.BrokenCount == 0 and 
-                self._depcache.DelCount == 0)
+        assert (self._depcache.broken_count == 0 and 
+                self._depcache.del_count == 0)
 
     def _dpkgJournalDirty(self):
         """
@@ -64,7 +64,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         (similar to debSystem::CheckUpdates)
         """
         d = os.path.dirname(
-            apt_pkg.Config.FindFile("Dir::State::status"))+"/updates"
+            apt_pkg.Config.find_file("Dir::State::status"))+"/updates"
         for f in os.listdir(d):
             if re.match("[0-9]+", f):
                 return True
@@ -74,30 +74,30 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         #apt_pkg.Config.Set("Debug::pkgPolicy","1")
         #self.depcache = apt_pkg.GetDepCache(self.cache)
         #self._depcache = apt_pkg.GetDepCache(self._cache)
-        self._depcache.ReadPinFile()
+        self._depcache.read_pinfile()
         if os.path.exists(SYNAPTIC_PINFILE):
-            self._depcache.ReadPinFile(SYNAPTIC_PINFILE)
-        self._depcache.Init()
+            self._depcache.read_pinfile(SYNAPTIC_PINFILE)
+        self._depcache.init()
     def clear(self):
         self._initDepCache()
     @property
     def requiredDownload(self):
         """ get the size of the packages that are required to download """
-        pm = apt_pkg.GetPackageManager(self._depcache)
-        fetcher = apt_pkg.GetAcquire()
-        pm.GetArchives(fetcher, self._list, self._records)
-        return fetcher.FetchNeeded
+        pm = apt_pkg.PackageManager(self._depcache)
+        fetcher = apt_pkg.Acquire()
+        pm.get_archives(fetcher, self._list, self._records)
+        return fetcher.fetch_needed
     @property
     def installCount(self):
-        return self._depcache.InstCount
+        return self._depcache.inst_count
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
-        self._depcache.Upgrade(True)
-        wouldDelete = self._depcache.DelCount
-        if self._depcache.DelCount > 0:
+        self._depcache.upgrade(True)
+        wouldDelete = self._depcache.del_count
+        if self._depcache.del_count > 0:
             self.clear()
-        assert self._depcache.BrokenCount == 0 and self._depcache.DelCount == 0
-        self._depcache.Upgrade()
+        assert self._depcache.broken_count == 0 and self._depcache.del_count == 0
+        self._depcache.upgrade()
         return wouldDelete
     def matchPackageOrigin(self, pkg, matcher):
         """ match 'pkg' origin against 'matcher', take versions between
@@ -106,23 +106,23 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             -updates (as v1.2) and -security (v1.1). we want to display
             it as a security update then
         """
-        inst_ver = pkg._pkg.CurrentVer
-        cand_ver = self._depcache.GetCandidateVer(pkg._pkg)
+        inst_ver = pkg._pkg.current_ver
+        cand_ver = self._depcache.get_candidate_ver(pkg._pkg)
         # init matcher with candidateVer
         update_origin = matcher[(None,None)]
         verFileIter = None
-        for (verFileIter,index) in cand_ver.FileList:
-            if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
-                indexfile = pkg._pcache._list.FindIndex(verFileIter)
+        for (verFileIter,index) in cand_ver.file_list:
+            if matcher.has_key((verFileIter.archive, verFileIter.origin)):
+                indexfile = pkg._pcache._list.find_index(verFileIter)
                 if indexfile: # and indexfile.IsTrusted:
-                    match = matcher[verFileIter.Archive, verFileIter.Origin]
+                    match = matcher[verFileIter.archive, verFileIter.origin]
                     update_origin = match
                     break
         else:
             # add a node for each origin/archive combination
-            if verFileIter and verFileIter.Origin and verFileIter.Archive:
-                matcher[verFileIter.Archive, verFileIter.Origin] = UpdateOrigin(_("Other updates (%s)") % verFileIter.Origin, 0)
-                update_origin = matcher[verFileIter.Archive, verFileIter.Origin]
+            if verFileIter and verFileIter.origin and verFileIter.archive:
+                matcher[verFileIter.archive, verFileIter.origin] = UpdateOrigin(_("Other updates (%s)") % verFileIter.origin, 0)
+                update_origin = matcher[verFileIter.archive, verFileIter.origin]
         # if the candidate comes from a unknown source (e.g. a PPA) skip
         # skip the shadow logic below as it would put e.g. a PPA package
         # in "Recommended updates" when the version in the PPA 
@@ -131,18 +131,18 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             return update_origin
         # for known packages, check if we have higher versions that
         # "shadow" this one
-        for ver in pkg._pkg.VersionList:
+        for ver in pkg._pkg.version_list:
             # discard is < than installed ver
             if (inst_ver and
-                apt_pkg.VersionCompare(ver.VerStr, inst_ver.VerStr) <= 0):
-                #print "skipping '%s' " % ver.VerStr
+                apt_pkg.VersionCompare(ver.ver_str, inst_ver.ver_str) <= 0):
+                #print "skipping '%s' " % ver.ver_str
                 continue
             # check if we have a match
-            for(verFileIter,index) in ver.FileList:
-                if matcher.has_key((verFileIter.Archive, verFileIter.Origin)):
-                    indexfile = pkg._pcache._list.FindIndex(verFileIter)
+            for(verFileIter,index) in ver.file_list:
+                if matcher.has_key((verFileIter.archive, verFileIter.origin)):
+                    indexfile = pkg._pcache._list.find_index(verFileIter)
                     if indexfile: # and indexfile.IsTrusted:
-                        match = matcher[verFileIter.Archive, verFileIter.Origin]
+                        match = matcher[verFileIter.archive, verFileIter.origin]
                         if match.importance > update_origin.importance:
                             update_origin = match
         return update_origin
@@ -165,7 +165,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         # assume "main" section 
         src_section = "main"
         # use the section of the candidate as a starting point
-        section = pkg._pcache._depcache.GetCandidateVer(pkg._pkg).Section
+        section = pkg._pcache._depcache.get_candidate_ver(pkg._pkg).section
 
         # get the source version, start with the binaries version
         binver = pkg.candidateVersion

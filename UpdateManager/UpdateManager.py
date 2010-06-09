@@ -251,7 +251,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     if pkg is None:
         return
     current_state = renderer.get_property("active")
-    to_install = pkg.markedInstall or pkg.markedUpgrade
+    to_install = pkg.marked_install or pkg.marked_upgrade
     renderer.set_property("active", to_install)
     # we need to update the store as well to ensure orca knowns
     # about state changes (it will not read view_func changes)
@@ -639,9 +639,9 @@ class UpdateManager(SimpleGtkbuilderApp):
         pkgs_install = []
         pkgs_upgrade = []
         for pkg in self.cache:
-            if pkg.markedInstall:
+            if pkg.marked_install:
                 pkgs_install.append(pkg.name)
-            elif pkg.markedUpgrade:
+            elif pkg.marked_upgrade:
                 pkgs_upgrade.append(pkg.name)
         self.reboot_required = os.path.exists(REBOOT_REQUIRED_FILE)
         self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
@@ -671,7 +671,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.setBusy(True)
       actiongroup = apt_pkg.GetPkgActionGroup(self.cache._depcache)
       for pkg in self.list.pkgs[origin]:
-          if pkg.markedInstall or pkg.markedUpgrade:
+          if pkg.marked_install or pkg.marked_upgrade:
               #print "marking keep: ", pkg.name
               pkg.markKeep()
           elif not (pkg.name in self.list.held_back):
@@ -697,9 +697,9 @@ class UpdateManager(SimpleGtkbuilderApp):
         return False
     self.setBusy(True)
     # update the cache
-    if pkg.markedInstall or pkg.markedUpgrade:
+    if pkg.marked_install or pkg.marked_upgrade:
         pkg.markKeep()
-        if self.cache._depcache.BrokenCount:
+        if self.cache._depcache.broken_count:
             Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
             Fix.ResolveByKeep()
     else:
@@ -810,7 +810,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                            origin.description, None, origin,True])
         for pkg in self.list.pkgs[origin]:
           name = xml.sax.saxutils.escape(pkg.name)
-          if not pkg.isInstalled:
+          if not pkg.is_installed:
               name += _(" (New install)")
           summary = xml.sax.saxutils.escape(pkg.summary)
           contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
@@ -936,7 +936,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       if remind == False:
           return
 
-      update_days = apt_pkg.Config.FindI("APT::Periodic::Update-Package-Lists")
+      update_days = apt_pkg.Config.find_i("APT::Periodic::Update-Package-Lists")
       if update_days < 1:
           self.dialog_manual_update.set_transient_for(self.window_main)
           self.dialog_manual_update.set_title("")

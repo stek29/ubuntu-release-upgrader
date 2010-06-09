@@ -118,8 +118,8 @@ class MyCache(apt.Cache):
         reqreinst = set()
         for pkg in self:
             if (not pkg.candidateDownloadable and 
-                (pkg._pkg.InstState == self.ReInstReq or
-                 pkg._pkg.InstState == self.HoldReInstReq)):
+                (pkg._pkg.inst_state == self.ReInstReq or
+                 pkg._pkg.inst_state == self.HoldReInstReq)):
                 reqreinst.add(pkg.name)
         return reqreinst
 
@@ -208,7 +208,7 @@ class MyCache(apt.Cache):
 
     # methods
     def lockListsDir(self):
-        name = apt_pkg.Config.FindDir("Dir::State::Lists") + "lock"
+        name = apt_pkg.Config.find_dir("Dir::State::Lists") + "lock"
         self._listsLock = apt_pkg.GetLock(name)
         if self._listsLock < 0:
             e = "Can not lock '%s' " % name
@@ -671,7 +671,7 @@ class MyCache(apt.Cache):
                     # version is lower than installed one
                     if apt_pkg.VersionCompare(ver.VerStr, pkg.installedVersion) < 0:
                         for (verFileIter,index) in ver.FileList:
-                            indexfile = pkg._list.FindIndex(verFileIter)
+                            indexfile = pkg._list.find_index(verFileIter)
                             if indexfile and not indexfile.IsTrusted:
                                 untrusted.append(pkg.name)
                                 break
@@ -1040,7 +1040,7 @@ class MyCache(apt.Cache):
                 mounted.append(where)
         # make sure mounted is sorted by longest path
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
-        archivedir = apt_pkg.Config.FindDir("Dir::Cache::archives")
+        archivedir = apt_pkg.Config.find_dir("Dir::Cache::archives")
         aufs_rw_dir = "/tmp/"
         if (hasattr(self, "config") and
             self.config.getWithDefault("Aufs","Enabled", False)):

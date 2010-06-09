@@ -23,6 +23,8 @@ from gettext import gettext as _
 from stat import *
 
 import apt_pkg
+apt_pkg.init_config()
+
 import locale
 import logging
 import re
@@ -99,11 +101,11 @@ def country_mirror():
   lang_mirror = { 'c'     : '',
                 }
   # no lang, no mirror
-  if not os.environ.has_key('LANG'):
+  if not 'LANG' in os.environ:
     return ''
   lang = os.environ['LANG'].lower()
   # check if it is a special case
-  if lang_mirror.has_key(lang[:5]):
+  if lang[:5] in lang_mirror:
     return lang_mirror[lang[:5]]
   # now check for the most comon form (en_US.UTF-8)
   if "_" in lang:
@@ -188,17 +190,16 @@ def init_proxy(gconfclient=None):
   SYNAPTIC_CONF_FILE = "/root/.synaptic/synaptic.conf"
   proxy = None
   # generic apt config wins
-  apt_pkg.InitConfig()
-  if apt_pkg.Config.Find("Acquire::http::Proxy") != '':
-    proxy = apt_pkg.Config.Find("Acquire::http::Proxy")
+  if apt_pkg.Config.find("Acquire::http::Proxy") != '':
+    proxy = apt_pkg.Config.find("Acquire::http::Proxy")
   # then synaptic
   elif os.path.exists(SYNAPTIC_CONF_FILE):
-    cnf = apt_pkg.newConfiguration()
-    apt_pkg.ReadConfigFile(cnf, SYNAPTIC_CONF_FILE)
-    use_proxy = cnf.FindB("Synaptic::useProxy", False)
+    cnf = apt_pkg.Configuration()
+    apt_pkg.read_config_file(cnf, SYNAPTIC_CONF_FILE)
+    use_proxy = cnf.find_b("Synaptic::useProxy", False)
     if use_proxy:
-      proxy_host = cnf.Find("Synaptic::httpProxy")
-      proxy_port = str(cnf.FindI("Synaptic::httpProxyPort"))
+      proxy_host = cnf.find("Synaptic::httpProxy")
+      proxy_port = str(cnf.find_i("Synaptic::httpProxyPort"))
       if proxy_host and proxy_port:
         proxy = "http://%s:%s/" % (proxy_host, proxy_port)
   # then gconf
@@ -227,6 +228,7 @@ def init_proxy(gconfclient=None):
     opener = urllib2.build_opener(proxy_support)
     urllib2.install_opener(opener)
     os.putenv("http_proxy",proxy)
+  return proxy
 
 def on_battery():
   """

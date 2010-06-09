@@ -58,9 +58,9 @@ def get_replace(cache, pkgname):
 if __name__ == "__main__":
 
   # init
-  apt_pkg.Config.Set("Dir::state","./apt/")
-  apt_pkg.Config.Set("Dir::Etc","./apt")
-  apt_pkg.Config.Set("Dir::State::status","./apt/status")
+  apt_pkg.Config.set("Dir::state","./apt/")
+  apt_pkg.Config.set("Dir::Etc","./apt")
+  apt_pkg.Config.set("Dir::State::status","./apt/status")
   try:
     os.makedirs("apt/lists/partial")
   except OSError:
@@ -79,11 +79,11 @@ if __name__ == "__main__":
 
       # and the archs
       for arch in ARCHES:
-        apt_pkg.Config.Set("APT::Architecture",arch)
-        cache = apt.Cache(apt.progress.OpProgress())
-        prog = apt.progress.FetchProgress() 
+        apt_pkg.Config.set("APT::Architecture",arch)
+        cache = apt.Cache(apt.progress.base.OpProgress())
+        prog = apt.progress.base.AcquireProgress() 
         cache.update(prog)
-        cache.open(apt.progress.OpProgress())
+        cache.open(apt.progress.base.OpProgress())
         map(lambda pkg: dist.pkgs_in_comp[comp].add(pkg.name), cache)
 
   # check what is no longer in main
@@ -108,11 +108,11 @@ if __name__ == "__main__":
   file("apt/sources.list","w").write(line)
   dist.pkgs_in_comp[comp] = set()
   for arch in ARCHES:
-    apt_pkg.Config.Set("APT::Architecture",arch)
-    cache = apt.Cache(apt.progress.OpProgress())
-    prog = apt.progress.FetchProgress() 
+    apt_pkg.Config.set("APT::Architecture",arch)
+    cache = apt.Cache(apt.progress.base.OpProgress())
+    prog = apt.progress.base.AcquireProgress() 
     cache.update(prog)
-    cache.open(apt.progress.OpProgress())
+    cache.open(apt.progress.base.OpProgress())
     # go over the packages in "main" and check if they replaces something
     # that we think is a demotion
     for pkgname in new.pkgs_in_comp["main"]:

@@ -669,18 +669,18 @@ class UpdateManager(SimpleGtkbuilderApp):
       if pkg is not None:
           return
       self.setBusy(True)
-      actiongroup = apt_pkg.GetPkgActionGroup(self.cache._depcache)
+      actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
       for pkg in self.list.pkgs[origin]:
           if pkg.marked_install or pkg.marked_upgrade:
               #print "marking keep: ", pkg.name
-              pkg.markKeep()
+              pkg.mark_keep()
           elif not (pkg.name in self.list.held_back):
               #print "marking install: ", pkg.name
-              pkg.markInstall(autoFix=False,autoInst=False)
+              pkg.mark_install(autoFix=False,autoInst=False)
       # check if we left breakage
-      if self.cache._depcache.BrokenCount:
-          Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
-          Fix.ResolveByKeep()
+      if self.cache._depcache.broken_count:
+          Fix = apt_pkg.ProblemResolver(self.cache._depcache)
+          Fix.resolve_by_keep()
       self.refresh_updates_count()
       self.treeview_update.queue_draw()
       del actiongroup
@@ -698,12 +698,12 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.setBusy(True)
     # update the cache
     if pkg.marked_install or pkg.marked_upgrade:
-        pkg.markKeep()
+        pkg.mark_keep()
         if self.cache._depcache.broken_count:
-            Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
-            Fix.ResolveByKeep()
+            Fix = apt_pkg.ProblemResolver(self.cache._depcache)
+            Fix.resolve_by_keep()
     else:
-        pkg.markInstall()
+        pkg.mark_install()
     self.treeview_update.queue_draw()
     self.refresh_updates_count()
     self.setBusy(False)

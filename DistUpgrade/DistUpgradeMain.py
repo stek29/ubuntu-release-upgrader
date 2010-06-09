@@ -90,13 +90,13 @@ def setup_logging(options, config):
     logging.info("uname information: '%s'" % " ".join(os.uname()))
     # save package state to be able to re-create failures
     system_files = []
-    for f in [apt_pkg.Config.FindFile("Dir::Etc::preferences"),
-              apt_pkg.Config.FindDir("Dir::Etc::preferencesparts",
+    for f in [apt_pkg.Config.find_file("Dir::Etc::preferences"),
+              apt_pkg.Config.find_dir("Dir::Etc::preferencesparts",
                                      "/etc/apt/preferences.d"),
-              apt_pkg.Config.FindFile("Dir::Etc::sourcelist"),
-              apt_pkg.Config.FindDir("Dir::Etc::sourceparts",
+              apt_pkg.Config.find_file("Dir::Etc::sourcelist"),
+              apt_pkg.Config.find_dir("Dir::Etc::sourceparts",
                                      "/etc/apt/sources.list.d"),
-              apt_pkg.Config.FindFile("Dir::State::status")]:
+              apt_pkg.Config.find_file("Dir::State::status")]:
         if os.path.exists(f):
             system_files.append(f)
     state_tar = os.path.join(logdir,"system_state.tar.gz")

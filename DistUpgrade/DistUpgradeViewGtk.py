@@ -166,7 +166,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         reaper = vte.reaper_get()
         reaper.connect("child-exited", self.child_exited)
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::StopOnError","False")
+        apt_pkg.Config.set("DPkg::StopOnError","False")
 
     def startUpdate(self):
         InstallProgress.startUpdate(self)

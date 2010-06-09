@@ -47,8 +47,8 @@ class AptCdrom(object):
 
     def restoreBackup(self, backup_ext):
         " restore the backup copy of the cdroms.list file (*not* sources.list)! "
-        cdromstate = os.path.join(apt_pkg.Config.FindDir("Dir::State"),
-                                  apt_pkg.Config.Find("Dir::State::cdroms"))
+        cdromstate = os.path.join(apt_pkg.Config.find_dir("Dir::State"),
+                                  apt_pkg.Config.find("Dir::State::cdroms"))
         if os.path.exists(cdromstate+backup_ext):
             shutil.copy(cdromstate+backup_ext, cdromstate)
         # mvo: we don't have to care about restoring the sources.list here because
@@ -89,7 +89,7 @@ class AptCdrom(object):
 
     def _writeDatabase(self):
         " update apts cdrom.list "
-        dbfile = apt_pkg.Config.FindFile("Dir::State::cdroms")
+        dbfile = apt_pkg.Config.find_file("Dir::State::cdroms")
         cdrom = apt_pkg.GetCdrom()
         (res,id)=cdrom.Ident(apt.progress.CdromProgress())
         label = self._readDiskName()
@@ -103,7 +103,7 @@ class AptCdrom(object):
         packages = set(packages)
         # now go over the packagesdirs and drop stuff that is not
         # our binary-$arch 
-        arch = apt_pkg.Config.Find("APT::Architecture")
+        arch = apt_pkg.Config.find("APT::Architecture")
         for d in set(packages):
             if "/binary-" in d and not arch in d:
                 packages.remove(d)
@@ -140,7 +140,7 @@ class AptCdrom(object):
 
     def _copyTranslations(self, translations, targetdir=None):
         if not targetdir:
-            targetdir=apt_pkg.Config.FindDir("Dir::State::lists")
+            targetdir=apt_pkg.Config.find_dir("Dir::State::lists")
         diskname = self._readDiskName()
         for f in translations:
             fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
@@ -160,7 +160,7 @@ class AptCdrom(object):
 
     def _copyPackages(self, packages, targetdir=None):
         if not targetdir:
-            targetdir=apt_pkg.Config.FindDir("Dir::State::lists")
+            targetdir=apt_pkg.Config.find_dir("Dir::State::lists")
         # CopyPackages()
         diskname = self._readDiskName()
         for f in packages:
@@ -181,8 +181,8 @@ class AptCdrom(object):
 
     def _verifyRelease(self, signatures):
         " verify the signatues and hashes "
-        gpgv = apt_pkg.Config.Find("Dir::Bin::gpg","/usr/bin/gpgv")
-        keyring = apt_pkg.Config.Find("Apt::GPGV::TrustedKeyring",
+        gpgv = apt_pkg.Config.find("Dir::Bin::gpg","/usr/bin/gpgv")
+        keyring = apt_pkg.Config.find("Apt::GPGV::TrustedKeyring",
                                       "/etc/apt/trusted.gpg")
         for sig in signatures:
             basepath = os.path.split(sig)[0]
@@ -212,7 +212,7 @@ class AptCdrom(object):
     def _copyRelease(self, signatures, targetdir=None):
         " copy the release file "
         if not targetdir:
-            targetdir=apt_pkg.Config.FindDir("Dir::State::lists")
+            targetdir=apt_pkg.Config.find_dir("Dir::State::lists")
         diskname = self._readDiskName()
         for sig in signatures:
             releasef = os.path.splitext(sig)[0]
@@ -249,7 +249,7 @@ class AptCdrom(object):
         debline = self._generateSourcesListLine(diskname, self.packages)
         
         # prepend to the sources.list
-        sourceslist=apt_pkg.Config.FindFile("Dir::Etc::sourcelist")
+        sourceslist=apt_pkg.Config.find_file("Dir::Etc::sourcelist")
         content=open(sourceslist).read()
         open(sourceslist,"w").write("# added by the release upgrader\n%s\n%s" % (debline,content))
         self._writeDatabase()
@@ -261,8 +261,8 @@ class AptCdrom(object):
         logging.debug("AptCdrom.add() called with '%s'", self.cdrompath)
         # do backup (if needed) of the cdroms.list file
         if backup_ext:
-            cdromstate = os.path.join(apt_pkg.Config.FindDir("Dir::State"),
-                                      apt_pkg.Config.Find("Dir::State::cdroms"))
+            cdromstate = os.path.join(apt_pkg.Config.find_dir("Dir::State"),
+                                      apt_pkg.Config.find("Dir::State::cdroms"))
             if os.path.exists(cdromstate):
                 shutil.copy(cdromstate, cdromstate+backup_ext)
         # do the actual work

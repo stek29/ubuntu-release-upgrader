@@ -126,8 +126,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.sleep_cookie = None
     self.sleep_dev = None
 
-    self.reboot_required = False
-
     self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
@@ -598,21 +596,25 @@ class UpdateManager(SimpleGtkbuilderApp):
         return
     self.invoke_manager(INSTALL)
     
-  def show_reboot_required_dialog(self):
-    self.dialog_reboot.set_transient_for(self.window_main)
-    self.dialog_reboot.set_title("")
-    res = self.dialog_reboot.run()
-    self.dialog_reboot.hide()
-    if res == gtk.RESPONSE_OK:
-      try:
-          bus = dbus.SessionBus()
-          proxy_obj = bus.get_object("org.gnome.SessionManager",
-				     "/org/gnome/SessionManager")
-          iface = dbus.Interface(proxy_obj, "org.gnome.SessionManager")
-          iface.RequestReboot()
-          # FIXME: try sesion restart with hal?
-      except dbus.DBusException, e:
-          pass
+  def on_button_restart_required_clicked(self, button=None):
+      self._request_reboot_via_session_manager()
+
+  def show_reboot_required_info(self):
+    self.frame_restart_required.show()
+    self.label_restart_required.set_text(_("The computer needs to restart to "
+                                       "finish installing updates. Please "
+                                       "save your work before continuing."))
+
+  def _request_reboot_via_session_manager(self):
+    try:
+        bus = dbus.SessionBus()
+        proxy_obj = bus.get_object("org.gnome.SessionManager",
+                                   "/org/gnome/SessionManager")
+        iface = dbus.Interface(proxy_obj, "org.gnome.SessionManager")
+        iface.RequestReboot()
+        # FIXME: try sesion restart with hal?
+    except dbus.DBusException, e:
+        pass
 
   def invoke_manager(self, action):
     # check first if no other package manager is runing
@@ -643,14 +645,13 @@ class UpdateManager(SimpleGtkbuilderApp):
                 pkgs_install.append(pkg.name)
             elif pkg.marked_upgrade:
                 pkgs_upgrade.append(pkg.name)
-        self.reboot_required = os.path.exists(REBOOT_REQUIRED_FILE)
         self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
   def _on_backend_done(self, backend, action):
     # check if there is a new reboot required notification
-    if action == INSTALL and not self.reboot_required and \
-       os.path.exists(REBOOT_REQUIRED_FILE):
-        self.show_reboot_required_dialog()
+    if (action == INSTALL and
+        os.path.exists(REBOOT_REQUIRED_FILE)):
+        self.show_reboot_required_info()
     msg = _("Reading package information")
     self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % msg)
     self.fillstore()
@@ -802,6 +803,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.run()
         dialog.destroy()
     if self.list.num_updates > 0:
+      self.scrolledwindow_update.show()
       origin_list = self.list.pkgs.keys()
       origin_list.sort(lambda x,y: cmp(x.importance,y.importance))
       origin_list.reverse()

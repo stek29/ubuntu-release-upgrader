@@ -245,8 +245,8 @@ class DistUpgradeController(object):
                                  )
                 sys.exit(1)
                 return False
-            # ask for a spare one to start
-            port = 9004
+            # ask for a spare one to start (and below 1024)
+            port = 1022
             res = self._view.askYesNoQuestion(
                 _("Continue running under SSH?"),
                 _("This session appears to be running under ssh. "

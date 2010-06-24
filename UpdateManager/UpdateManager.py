@@ -207,7 +207,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     # deal with no-focus-on-map
     if options.no_focus_on_map:
         self.window_main.set_focus_on_map(False)
-        self.progress._window.set_focus_on_map(False)
+        if self.progress._window:
+            self.progress._window.set_focus_on_map(False)
     # show the main window
     self.window_main.show()
     # get the install backend

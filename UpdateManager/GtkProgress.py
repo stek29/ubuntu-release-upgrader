@@ -40,6 +40,7 @@ class GtkOpProgressInline(apt.progress.base.OpProgress):
         # the progressbar to use
         self._progressbar = progressbar
         self._parent = parent
+        self._window = None
     def _init_steps(self):
         self.steps = self.all_steps[:]
         self.base = 0

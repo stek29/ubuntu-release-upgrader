@@ -193,6 +193,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     init_proxy(self.gconfclient)
     # init show version
     self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
+    # init summary_before_name
+    self.summary_before_name = self.gconfclient.get_bool("/apps/update-manager/summary_before_name")
     # keep track when we run (for update-notifier)
     self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
 
@@ -816,7 +818,10 @@ class UpdateManager(SimpleGtkbuilderApp):
           if not pkg.is_installed:
               name += _(" (New install)")
           summary = xml.sax.saxutils.escape(pkg.summary)
-          contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
+          if self.summary_before_name:
+              contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
+          else:
+              contents = "%s\n<small>%s</small>" % (summary, name)
           #TRANSLATORS: the b stands for Bytes
           size = _("(Size: %s)") % humanize_size(pkg.packageSize)
           if pkg.installedVersion != None:

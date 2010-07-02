@@ -203,11 +203,11 @@ class KDEFetchProgressAdapter(FetchProgress):
         self.parent.window_main.progress_text.setText("  ")
         self.status.setText(_("Fetching is complete"))
 
-    def pulse(self):
+    def pulse(self, owner):
         """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
-        FetchProgress.pulse(self)
+        FetchProgress.pulse(self, owner)
         self.progress.setValue(self.percent)
         currentItem = self.currentItems + 1
         if currentItem > self.totalItems:

@@ -426,7 +426,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         attrlist.insert(attr)
         self.label_status.set_property("attributes", attrlist)
         # reasonable fault handler
-        #sys.excepthook = self._handleException
+        sys.excepthook = self._handleException
 
     def _handleException(self, type, value, tb):
       # we handle the exception here, hand it to apport and run the

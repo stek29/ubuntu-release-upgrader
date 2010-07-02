@@ -99,9 +99,11 @@ def FuzzyTimeToStr(sec):
 class FetchProgress(apt.progress.base.AcquireProgress):
   def __init__(self):
     super(FetchProgress, self).__init__()
-    self.est_speed = 0
   def start(self):
     super(FetchProgress, self).start()
+    self.est_speed = 0.0
+    self.eta = 0.0
+    self.percent = 0.0
     self.release_file_download_error = False
   def update_status(self, uri, descr, shortDescr, status):
     super(FetchProgress, self).update_

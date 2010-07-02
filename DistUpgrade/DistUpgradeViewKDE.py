@@ -154,7 +154,7 @@ class KDECdromProgressAdapter(apt.progress.CdromProgress):
     def changeCdrom(self):
         return False
 
-class KDEOpProgress(apt.progress.OpProgress):
+class KDEOpProgress(apt.progress.base.OpProgress):
   """ methods on the progress bar """
   def __init__(self, progressbar, progressbar_label):
       self.progressbar = progressbar

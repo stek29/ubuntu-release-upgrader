@@ -96,14 +96,15 @@ def FuzzyTimeToStr(sec):
   return map["str_seconds"]
 
 
-class FetchProgress(apt.progress.FetchProgress):
+class FetchProgress(apt.progress.base.AcquireProgress):
   def __init__(self):
-    #print "init FetchProgress in DistUpgradeView"
-    apt.progress.FetchProgress.__init__(self)
+    super(FetchProgress, self).__init__()
     self.est_speed = 0
   def start(self):
+    super(FetchProgress, self).start()
     self.release_file_download_error = False
-  def updateStatus(self, uri, descr, shortDescr, status):
+  def update_status(self, uri, descr, shortDescr, status):
+    super(FetchProgress, self).update_
     # FIXME: workaround issue in libapt/python-apt that does not 
     #        raise a exception if *all* files fails to download
     if status == self.dlFailed:
@@ -115,10 +116,15 @@ class FetchProgress(apt.progress.FetchProgress):
           if uri.startswith(net):
             self.release_file_download_error = True
             break
-  def pulse(self):
-    apt.progress.FetchProgress.pulse(self)
-    if self.currentCPS > self.est_speed:
-      self.est_speed = (self.est_speed+self.currentCPS)/2.0
+  def pulse(self, owner):
+    super(FetchProgress, self).pulse(owner)
+    self.percent = (((self.current_bytes + self.current_items) * 100.0) /
+                    float(self.total_bytes + self.total_items))
+    if self.current_cps > self.est_speed:
+      self.est_speed = (self.est_speed+self.current_cps)/2.0
+    if self.current_cps > 0:
+      self.eta = ((self.total_bytes - self.current_bytes) /
+                  float(self.current_cps))
     return True
   def estimatedDownloadTime(self, requiredDownload):
     """ get the estimated download time """
@@ -134,12 +140,12 @@ class FetchProgress(apt.progress.FetchProgress):
     
 
 
-class InstallProgress(apt.progress.InstallProgress):
+class InstallProgress(apt.progress.base.InstallProgress):
   """ Base class for InstallProgress that supports some fancy
       stuff like apport integration
   """
   def __init__(self):
-    apt.progress.InstallProgress.__init__(self)
+    apt.progress.base.InstallProgress.__init__(self)
     self.master_fd = None
 
   def waitChild(self):
@@ -200,7 +206,7 @@ class InstallProgress(apt.progress.InstallProgress):
   
   def error(self, pkg, errormsg):
     " install error from a package "
-    apt.progress.InstallProgress.error(self, pkg, errormsg)
+    apt.progress.base.InstallProgress.error(self, pkg, errormsg)
     logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     if "/" in pkg:
       pkg = os.path.basename(pkg)
@@ -244,7 +250,7 @@ class DistUpgradeView(object):
         pass
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
-        return apt.progress.OpProgress()
+        return apt.progress.base.OpProgress()
     def getFetchProgress(self):
         " return a fetch progress object "
         return FetchProgress()

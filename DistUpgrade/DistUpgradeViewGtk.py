@@ -69,7 +69,7 @@ class GtkCdromProgressAdapter(apt.progress.CdromProgress):
     def changeCdrom(self):
         return False
 
-class GtkOpProgress(apt.progress.OpProgress):
+class GtkOpProgress(apt.progress.base.OpProgress):
   def __init__(self, progressbar):
       self.progressbar = progressbar
       #self.progressbar.set_pulse_step(0.01)
@@ -93,7 +93,7 @@ class GtkFetchProgressAdapter(FetchProgress):
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
-        FetchProgress.__init__(self)
+        super(GtkFetchProgressAdapter, self).__init__()
         # if this is set to false the download will cancel
         self.status = parent.label_status
         self.progress = parent.progressbar_cache
@@ -120,7 +120,7 @@ class GtkFetchProgressAdapter(FetchProgress):
         return False
     def start(self):
         #logging.debug("start")
-        FetchProgress.start(self)
+        super(GtkFetchProgressAdapter, self).start()
         self.progress.set_fraction(0)
         self.status.show()
         self.button_cancel.show()
@@ -129,20 +129,18 @@ class GtkFetchProgressAdapter(FetchProgress):
         self.progress.set_text(" ")
         self.status.set_text(_("Fetching is complete"))
         self.button_cancel.hide()
-    def pulse(self):
-        # FIXME: move the status_str and progress_str into python-apt
-        # (python-apt need i18n first for this)
-        FetchProgress.pulse(self)
+    def pulse(self, owner):
+        super(GtkFetchProgressAdapter, self).pulse(owner)
         self.progress.set_fraction(self.percent/100.0)
-        currentItem = self.currentItems + 1
-        if currentItem > self.totalItems:
-            currentItem = self.totalItems
+        currentItem = self.current_items + 1
+        if currentItem > self.total_items:
+            currentItem = self.total_items
 
-        if self.currentCPS > 0:
-            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+        if self.current_cps > 0:
+            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.total_items, apt_pkg.SizeToStr(self.current_cps)))
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(self.eta))
         else:
-            self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.totalItems))
+            self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.total_items))
             self.progress.set_text("  ")
 
         while gtk.events_pending():
@@ -428,7 +426,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         attrlist.insert(attr)
         self.label_status.set_property("attributes", attrlist)
         # reasonable fault handler
-        sys.excepthook = self._handleException
+        #sys.excepthook = self._handleException
 
     def _handleException(self, type, value, tb):
       # we handle the exception here, hand it to apport and run the

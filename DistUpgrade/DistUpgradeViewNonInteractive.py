@@ -20,29 +20,31 @@
 #  USA
 
 import apt
+import apt_pkg
 import logging
 import time
 import sys
-from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
-from DistUpgradeConfigParser import DistUpgradeConfig
 import os
 import pty
-import apt_pkg
 import select
 import fcntl
 import string
 import re
 import subprocess
-from subprocess import call, PIPE, Popen
 import copy
 import apt.progress
+
 from ConfigParser import NoSectionError, NoOptionError
+from subprocess import call, PIPE, Popen
+
+from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
+from DistUpgradeConfigParser import DistUpgradeConfig
 
 class NonInteractiveFetchProgress(FetchProgress):
-    def updateStatus(self, uri, descr, shortDescr, status):
-        FetchProgress.updateStatus(self, uri, descr, shortDescr, status)
+    def update_status(self, uri, descr, shortDescr, status):
+        FetchProgress.update_status(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
-        if status == apt.progress.FetchProgress.dlDone:
+        if status == apt_pkg.STAT_DONE:
             print "fetched %s (%.2f/100) at %sb/s" % (uri, self.percent, 
                                                       apt_pkg.SizeToStr(int(self.currentCPS)))
             if sys.stdout.isatty():
@@ -180,8 +182,8 @@ class NonInteractiveInstallProgress(InstallProgress):
  	except Exception, e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
 
-    def startUpdate(self):
-        InstallProgress.startUpdate(self)
+    def start_update(self):
+        InstallProgress.start_update(self)
         self.last_activity = time.time()
         progress_log = self.config.getWithDefault("NonInteractive","DpkgProgressLog", False)
         if progress_log:
@@ -191,12 +193,12 @@ class NonInteractiveInstallProgress(InstallProgress):
         else:
             self.dpkg_progress_log = open(os.devnull, "w")
         self.dpkg_progress_log.write("%s: Start\n" % time.time())
-    def finishUpdate(self):
+    def finish_update(self):
         InstallProgress.finishUpdate(self)
         self.dpkg_progress_log.write("%s: Finished\n" % time.time())
         self.dpkg_progress_log.close()
         self.install_run_number += 1
-    def statusChange(self, pkg, percent, status_str):
+    def status_change(self, pkg, percent, status_str):
         self.dpkg_progress_log.write("%s:%s:%s:%s\n" % (time.time(),
                                                         percent,
                                                         pkg,

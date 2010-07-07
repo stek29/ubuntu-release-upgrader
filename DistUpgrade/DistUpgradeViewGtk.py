@@ -166,8 +166,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         # some options for dpkg to make it die less easily
         apt_pkg.Config.set("DPkg::StopOnError","False")
 
-    def startUpdate(self):
-        InstallProgress.startUpdate(self)
+    def start_update(self):
+        InstallProgress.start_update(self)
         self.finished = False
         # FIXME: add support for the timeout
         # of the terminal (to display something useful then)
@@ -257,7 +257,7 @@ class GtkInstallProgressAdapter(InstallProgress):
           sys.exitfunc = lambda: True
         return pid
 
-    def statusChange(self, pkg, percent, status):
+    def status_change(self, pkg, percent, status):
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
@@ -288,12 +288,12 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.apt_status = status
         self.finished = True
 
-    def waitChild(self):
+    def wait_child(self):
         while not self.finished:
             self.update_interface()
         return self.apt_status
 
-    def finishUpdate(self):
+    def finish_update(self):
         self.label_status.set_text("")
     
     def update_interface(self):

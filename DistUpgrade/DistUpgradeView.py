@@ -109,8 +109,8 @@ class FetchProgress(apt.progress.base.AcquireProgress):
     super(FetchProgress, self).update_
     # FIXME: workaround issue in libapt/python-apt that does not 
     #        raise a exception if *all* files fails to download
-    if status == self.dlFailed:
-      logging.warn("updateStatus: dlFailed on '%s' " % uri)
+    if status == apt_pkg.STAT_FAILED:
+      logging.warn("update_status: dlFailed on '%s' " % uri)
       if uri.endswith("Release.gpg") or uri.endswith("Release"):
         # only care about failures from network, not gpg, bzip, those
         # are different issues

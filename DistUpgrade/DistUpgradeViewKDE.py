@@ -245,8 +245,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         # some options for dpkg to make it die less easily
         apt_pkg.Config.Set("DPkg::StopOnError","False")
 
-    def startUpdate(self):
-        InstallProgress.startUpdate(self)
+    def start_update(self):
+        InstallProgress.start_update(self)
         self.finished = False
         # FIXME: add support for the timeout
         # of the terminal (to display something useful then)
@@ -336,7 +336,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         logging.debug(" fork pid is: %s" % self.child_pid)
         return self.child_pid
 
-    def statusChange(self, pkg, percent, status):
+    def status_change(self, pkg, percent, status):
         """update progress bar and label"""
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
@@ -359,7 +359,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           else:
             self.progress_text.setText(" ")
 
-    def finishUpdate(self):
+    def finish_update(self):
         self.label_status.setText("")
 
     def update_interface(self):
@@ -615,7 +615,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def getCdromProgress(self):
         return self._cdromProgress
 
-    def updateStatus(self, msg):
+    def update_status(self, msg):
         self.window_main.label_status.setText(utf8(msg))
 
     def hideStep(self, step):

@@ -186,7 +186,7 @@ class KDEFetchProgressAdapter(FetchProgress):
         self.progress = parent.window_main.progressbar_cache
         self.parent = parent
 
-    def mediaChange(self, medium, drive):
+    def media_change(self, medium, drive):
       msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
       change = QMessageBox.question(self.parent.window_main, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
       if change == QMessageBox.Ok:
@@ -209,15 +209,15 @@ class KDEFetchProgressAdapter(FetchProgress):
         # (python-apt need i18n first for this)
         FetchProgress.pulse(self, owner)
         self.progress.setValue(self.percent)
-        currentItem = self.currentItems + 1
-        if currentItem > self.totalItems:
-            currentItem = self.totalItems
+        current_item = self.current_items + 1
+        if current_item > self.total_items:
+            current_item = self.total_items
 
-        if self.currentCPS > 0:
-            self.status.setText(_("Fetching file %li of %li at %sB/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+        if self.current_cps > 0:
+            self.status.setText(_("Fetching file %li of %li at %sB/s") % (current_item, self.total_items, apt_pkg.size_to_str(self.current_cps)))
             self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % unicode(FuzzyTimeToStr(self.eta), 'utf-8') + "</i>")
         else:
-            self.status.setText(_("Fetching file %li of %li") % (currentItem, self.totalItems))
+            self.status.setText(_("Fetching file %li of %li") % (current_item, self.total_items))
             self.parent.window_main.progress_text.setText("  ")
 
         QApplication.processEvents()
@@ -243,7 +243,7 @@ class KDEInstallProgressAdapter(InstallProgress):
             logging.error("Can not open terminal log: '%s'" % e)
             self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::StopOnError","False")
+        apt_pkg.config.set("DPkg::StopOnError","False")
 
     def start_update(self):
         InstallProgress.start_update(self)
@@ -403,7 +403,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         QApplication.processEvents()
         time.sleep(0.02)
 
-    def waitChild(self):
+    def wait_child(self):
         while True:
             self.update_interface()
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)

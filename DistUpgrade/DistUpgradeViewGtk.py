@@ -104,7 +104,7 @@ class GtkFetchProgressAdapter(FetchProgress):
     def cancelClicked(self, widget):
         logging.debug("cancelClicked")
         self.canceled = True
-    def mediaChange(self, medium, drive):
+    def media_change(self, medium, drive):
         #print "mediaChange %s %s" % (medium, drive)
         msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
         dialog = gtk.MessageDialog(parent=self.parent.window_main,
@@ -137,7 +137,7 @@ class GtkFetchProgressAdapter(FetchProgress):
             currentItem = self.total_items
 
         if self.current_cps > 0:
-            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.total_items, apt_pkg.SizeToStr(self.current_cps)))
+            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.total_items, apt_pkg.size_to_str(self.current_cps)))
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(self.eta))
         else:
             self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.total_items))

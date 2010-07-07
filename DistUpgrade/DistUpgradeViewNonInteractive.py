@@ -45,8 +45,8 @@ class NonInteractiveFetchProgress(FetchProgress):
         FetchProgress.update_status(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt_pkg.STAT_DONE:
-            print "fetched %s (%.2f/100) at %sb/s" % (uri, self.percent, 
-                                                      apt_pkg.SizeToStr(int(self.currentCPS)))
+            print "fetched %s (%.2f/100) at %sb/s" % (
+                uri, self.percent, apt_pkg.size_to_str(int(self.current_cps)))
             if sys.stdout.isatty():
                 sys.stdout.flush()
         
@@ -70,7 +70,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         self.install_run_number = 0
         try:
             if self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
-                apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+                apt_pkg.config.set("DPkg::Options::","--force-overwrite")
         except (NoSectionError, NoOptionError), e:
             pass
         # more debug
@@ -194,7 +194,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             self.dpkg_progress_log = open(os.devnull, "w")
         self.dpkg_progress_log.write("%s: Start\n" % time.time())
     def finish_update(self):
-        InstallProgress.finishUpdate(self)
+        InstallProgress.finish_update(self)
         self.dpkg_progress_log.write("%s: Finished\n" % time.time())
         self.dpkg_progress_log.close()
         self.install_run_number += 1

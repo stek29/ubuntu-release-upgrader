@@ -83,7 +83,7 @@ class DumbTerminal(QTextEdit):
             os.environ["TERM"] = "dumb"
         return self.child_pid
 
-    def updateInterface(self):
+    def update_interface(self):
         (rlist, wlist, xlist) = select.select([self.installProgress.master_fd],[],[], 0)
         if len(rlist) > 0:
             line = os.read(self.installProgress.master_fd, 255)
@@ -362,7 +362,7 @@ class KDEInstallProgressAdapter(InstallProgress):
     def finishUpdate(self):
         self.label_status.setText("")
 
-    def updateInterface(self):
+    def update_interface(self):
         """
         no mainloop in this application, just call processEvents lots here
         it's also important to sleep for a minimum amount of time
@@ -384,9 +384,9 @@ class KDEInstallProgressAdapter(InstallProgress):
 
         # now update the GUI
         try:
-          InstallProgress.updateInterface(self)
+          InstallProgress.update_interface(self)
         except ValueError, e:
-          logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
+          logging.error("got ValueError from InstallProgress.update_interface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
         # check about terminal activity
@@ -405,7 +405,7 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def waitChild(self):
         while True:
-            self.updateInterface()
+            self.update_interface()
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
             if pid == self.child_pid:
                 break
@@ -826,7 +826,7 @@ if __name__ == "__main__":
           subprocess.call(["bash"])
           sys.exit()
       while True:
-          view.terminal_text.updateInterface()
+          view.terminal_text.update_interface()
           QApplication.processEvents()
           time.sleep(0.01)
 

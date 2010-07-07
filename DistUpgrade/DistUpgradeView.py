@@ -118,7 +118,11 @@ class FetchProgress(apt.progress.base.AcquireProgress):
           if uri.startswith(net):
             self.release_file_download_error = True
             break
-  def pulse(self, owner):
+  # required, otherwise the lucid version of python-apt gets really
+  # unhappy, its expecting this function for apt.progress.base.AcquireProgress
+  def pulse_items(self, arg):
+    return True
+  def pulse(self, owner=None):
     super(FetchProgress, self).pulse(owner)
     self.percent = (((self.current_bytes + self.current_items) * 100.0) /
                     float(self.total_bytes + self.total_items))
@@ -158,11 +162,11 @@ class InstallProgress(apt.progress.base.InstallProgress):
       """
       while True:
           try:
-              select.select([self.statusfd], [], [], self.selectTimeout)
+              select.select([self.statusfd], [], [], self.select_timeout)
           except select.error, (errno_, errstr):
               if errno_ != errno.EINTR:
                   raise
-          self.updateInterface()
+          self.update_interface()
           try:
               (pid, res) = os.waitpid(self.child_pid, os.WNOHANG)
               if pid == self.child_pid:

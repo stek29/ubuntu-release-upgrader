@@ -337,7 +337,7 @@ class KDEInstallProgressAdapter(InstallProgress):
     def finishUpdate(self):
         self.label_status.setText("")
 
-    def updateInterface(self):
+    def update_interface(self):
         """
         no mainloop in this application, just call processEvents lots here
         it's also important to sleep for a minimum amount of time
@@ -359,9 +359,9 @@ class KDEInstallProgressAdapter(InstallProgress):
 
         # now update the GUI
         try:
-          InstallProgress.updateInterface(self)
+          InstallProgress.update_interface(self)
         except ValueError, e:
-          logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
+          logging.error("got ValueError from InstallProgress.update_interface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
         # check about terminal activity
@@ -380,7 +380,7 @@ class KDEInstallProgressAdapter(InstallProgress):
 
     def waitChild(self):
         while True:
-            self.updateInterface()
+            self.update_interface()
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
             if pid == self.child_pid:
                 break

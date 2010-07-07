@@ -290,14 +290,14 @@ class GtkInstallProgressAdapter(InstallProgress):
 
     def waitChild(self):
         while not self.finished:
-            self.updateInterface()
+            self.update_interface()
         return self.apt_status
 
     def finishUpdate(self):
         self.label_status.set_text("")
     
-    def updateInterface(self):
-        InstallProgress.updateInterface(self)
+    def update_interface(self):
+        InstallProgress.update_interface(self)
         # check if we haven't started yet with packages, pulse then
         if self.start_time == 0.0:
           self.progress.pulse()

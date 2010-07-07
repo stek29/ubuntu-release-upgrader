@@ -201,8 +201,8 @@ class NonInteractiveInstallProgress(InstallProgress):
                                                         percent,
                                                         pkg,
                                                         status_str))
-    def updateInterface(self):
-        InstallProgress.updateInterface(self)
+    def update_interface(self):
+        InstallProgress.update_interface(self)
         if self.statusfd == None:
             return
 

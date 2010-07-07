@@ -195,7 +195,7 @@ class DistUpgradeFetcherCore(object):
 
     def fetchDistUpgrader(self):
         " download the tarball with the upgrade script "
-        self.tmpdir = tmpdir = tempfile.mkdtemp()
+        self.tmpdir = tmpdir = tempfile.mkdtemp(prefix="update-manager-")
         os.chdir(tmpdir)
         # turn debugging on here (if required)
         #apt_pkg.Config.Set("Debug::Acquire::http","1")

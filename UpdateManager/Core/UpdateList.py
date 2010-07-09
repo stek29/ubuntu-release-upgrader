@@ -27,6 +27,8 @@ from gettext import ngettext
 import os
 import sys
 
+from utils import ExecutionTime
+
 class UpdateOrigin(object):
   def __init__(self, desc, importance):
     self.packages = []
@@ -75,7 +77,8 @@ class UpdateList(object):
     self.held_back = []
 
     # do the upgrade
-    self.distUpgradeWouldDelete = cache.saveDistUpgrade()
+    with ExecutionTime("saveDistUpgrade"):
+      self.distUpgradeWouldDelete = cache.saveDistUpgrade()
 
     dselect_upgrade_origin = UpdateOrigin(_("Previous selected"), 1)
 

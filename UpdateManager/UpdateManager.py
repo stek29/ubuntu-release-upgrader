@@ -766,7 +766,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     # clean most objects
     self.dl_size = 0
     try:
-        self.initCache()
+        with ExecutionTime("initCache"):
+            self.initCache()
     except SystemError, e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not initialize the package information"),
@@ -785,10 +786,12 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.destroy()
         sys.exit(1)
     self.store.clear()
-    self.list = UpdateList(self)
+    with ExecutionTime("UpdateList"):
+        self.list = UpdateList(self)
     # fill them again
     try:
-        self.list.update(self.cache)
+        with ExecutionTime("list.update()"):
+            self.list.update(self.cache)
     except SystemError, e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not calculate the upgrade"),

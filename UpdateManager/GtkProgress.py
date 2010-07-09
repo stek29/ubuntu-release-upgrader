@@ -30,6 +30,7 @@ from Core.utils import *
 # intervals of the start up progress
 # 3x caching and menu creation
 STEPS_UPDATE_CACHE = [33, 66, 100]
+#STEPS_UPDATE_CACHE = [25, 50, 75, 100]
 
 class GtkOpProgressInline(apt.progress.base.OpProgress):
     def __init__(self, progressbar, parent,                  
@@ -112,8 +113,9 @@ class GtkOpProgressWindow(apt.OpProgress):
                 pass
         progress = self.base + percent/100 * (self.next - self.base)
         self.old = percent
-        self._status.set_markup("<i>%s</i>" % self.op)
-        self._progressbar.set_fraction(progress/100.0)
+        if abs(percent-self._progressbar.get_fraction()*100.0) > 0.1:
+            self._status.set_markup("<i>%s</i>" % self.op)
+            self._progressbar.set_fraction(progress/100.0)
         while gtk.events_pending():
             gtk.main_iteration()
 

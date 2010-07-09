@@ -820,9 +820,9 @@ class UpdateManager(SimpleGtkbuilderApp):
               name += _(" (New install)")
           summary = xml.sax.saxutils.escape(pkg.summary)
           if self.summary_before_name:
-              contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
-          else:
               contents = "%s\n<small>%s</small>" % (summary, name)
+          else:
+              contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           #TRANSLATORS: the b stands for Bytes
           size = _("(Size: %s)") % humanize_size(pkg.packageSize)
           if pkg.installedVersion != None:

@@ -958,9 +958,9 @@ class DistUpgradeController(object):
         user_canceled = False
         while currentRetry < maxRetries:
             try:
-                pm = apt_pkg.GetPackageManager(self.cache._depcache)
-                fetcher = apt_pkg.GetAcquire(fprogress)
-                res = self.cache._fetchArchives(fetcher, pm)
+                pm = apt_pkg.PackageManager(self.cache._depcache)
+                fetcher = apt_pkg.Acquire(fprogress)
+                res = self.cache._fetch_archives(fetcher, pm)
             except apt.cache.FetchCancelledException, e:
                 logging.info("user canceled")
                 user_canceled = True

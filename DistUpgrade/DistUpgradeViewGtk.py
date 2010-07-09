@@ -141,16 +141,16 @@ class GtkFetchProgressAdapter(FetchProgress):
           currentItem = self.current_items + 1
           if currentItem > self.total_items:
             currentItem = self.total_items
-            if self.current_cps > 0:
-              self.status.set_text(_("Fetching file %li of %li at %sB/s") % (
-                  currentItem, self.total_items, 
-                  apt_pkg.size_to_str(self.current_cps)))
-              self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(
-                  self.eta))
-            else:
-              self.status.set_text(_("Fetching file %li of %li") % (
-                  currentItem, self.total_items))
-              self.progress.set_text("  ")
+          if self.current_cps > 0:
+            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (
+                currentItem, self.total_items, 
+                apt_pkg.size_to_str(self.current_cps)))
+            self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(
+                self.eta))
+          else:
+            self.status.set_text(_("Fetching file %li of %li") % (
+                currentItem, self.total_items))
+            self.progress.set_text("  ")
         while gtk.events_pending():
             gtk.main_iteration()
         return (not self.canceled)

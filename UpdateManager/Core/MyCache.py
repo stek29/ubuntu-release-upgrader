@@ -41,8 +41,7 @@ CHANGELOG_ORIGIN = "Ubuntu"
 
 class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def __init__(self, progress, rootdir=None):
-        with ExecutionTime("apt.Cache"):
-            apt.Cache.__init__(self, progress, rootdir)
+        apt.Cache.__init__(self, progress, rootdir)
         # raise if we have packages in reqreinst state
         # and let the caller deal with that (runs partial upgrade)
         assert len(self.reqReinstallPkgs) == 0

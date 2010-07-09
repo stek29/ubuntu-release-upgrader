@@ -8,7 +8,10 @@ update-manager (1:0.142.3) UNRELEASED; urgency=low
     - call progressbar.set_fraction() less often to avoid too much
       CPU consumption on certain graphic drivers
   * UpdateManager/GtkProgress.py:
-    - limit the amount of set_fraction() here too
+    - limit the amount of set_fraction() here too (LP: #595845)
+  * UpdateManager/UpdateManager.py:
+    - disconnect the model before adding lots of new items, this
+      speeds up the building of the view massively
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 30 Jun 2010 19:34:38 +0200
 

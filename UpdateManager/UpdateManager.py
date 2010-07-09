@@ -809,6 +809,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.run()
         dialog.destroy()
     if self.list.num_updates > 0:
+      #self.treeview_update.set_model(None)
       self.scrolledwindow_update.show()
       origin_list = self.list.pkgs.keys()
       origin_list.sort(lambda x,y: cmp(x.importance,y.importance))
@@ -838,6 +839,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           else:
               contents = "%s <small>%s</small>" % (contents, size)
           self.store.append([contents, pkg.name, pkg, None, True])
+      self.treeview_update.set_model(self.store)
     self.update_count()
     self.setBusy(False)
     self.check_all_updates_installable()
@@ -996,6 +998,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     while gtk.events_pending():
       gtk.main_iteration()
 
-    self.fillstore()
+    with ExecutionTime("fillstore"):
+        self.fillstore()
     self.check_auto_update()
     gtk.main()

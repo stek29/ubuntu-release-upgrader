@@ -60,8 +60,9 @@ class GtkOpProgressInline(apt.progress.base.OpProgress):
                 pass
         progress = self.base + percent/100 * (self.next - self.base)
         self.old = percent
-        self._progressbar.set_text("%s" % self.op)
-        self._progressbar.set_fraction(progress/100.0)
+        if abs(percent-self._progressbar.get_fraction()*100.0) > 0.1:
+            self._progressbar.set_text("%s" % self.op)
+            self._progressbar.set_fraction(progress/100.0)
         while gtk.events_pending():
             gtk.main_iteration()
     def done(self):

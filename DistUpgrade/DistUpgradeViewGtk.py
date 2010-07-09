@@ -74,13 +74,17 @@ class GtkOpProgress(apt.progress.base.OpProgress):
       self.progressbar = progressbar
       #self.progressbar.set_pulse_step(0.01)
       #self.progressbar.pulse()
+      self.fraction = 0.0
 
   def update(self, percent):
       #if percent > 99:
       #    self.progressbar.set_fraction(1)
       #else:
       #    self.progressbar.pulse()
-      self.progressbar.set_fraction(percent/100.0)
+      new_fraction = percent/100.0
+      if abs(self.fraction-new_fraction) > 0.1:
+        self.fraction = new_fraction
+        self.progressbar.set_fraction(self.fraction)
       while gtk.events_pending():
           gtk.main_iteration()
 
@@ -131,18 +135,22 @@ class GtkFetchProgressAdapter(FetchProgress):
         self.button_cancel.hide()
     def pulse(self, owner):
         super(GtkFetchProgressAdapter, self).pulse(owner)
-        self.progress.set_fraction(self.percent/100.0)
-        currentItem = self.current_items + 1
-        if currentItem > self.total_items:
+        # only update if there is a noticable change
+        if abs(self.percent-self.progress.get_fraction()*100.0) > 0.1:
+          self.progress.set_fraction(self.percent/100.0)
+          currentItem = self.current_items + 1
+          if currentItem > self.total_items:
             currentItem = self.total_items
-
-        if self.current_cps > 0:
-            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.total_items, apt_pkg.size_to_str(self.current_cps)))
-            self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(self.eta))
-        else:
-            self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.total_items))
-            self.progress.set_text("  ")
-
+            if self.current_cps > 0:
+              self.status.set_text(_("Fetching file %li of %li at %sB/s") % (
+                  currentItem, self.total_items, 
+                  apt_pkg.size_to_str(self.current_cps)))
+              self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(
+                  self.eta))
+            else:
+              self.status.set_text(_("Fetching file %li of %li") % (
+                  currentItem, self.total_items))
+              self.progress.set_text("  ")
         while gtk.events_pending():
             gtk.main_iteration()
         return (not self.canceled)
@@ -262,8 +270,10 @@ class GtkInstallProgressAdapter(InstallProgress):
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
-        self.progress.set_fraction(float(percent)/100.0)
-        self.label_status.set_text(status.strip())
+        # only update if there is a noticable change
+        if abs(percent-self.progress.get_fraction()*100.0) > 0.1:
+          self.progress.set_fraction(float(percent)/100.0)
+          self.label_status.set_text(status.strip())
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()
@@ -309,9 +319,10 @@ class GtkInstallProgressAdapter(InstallProgress):
             logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
             self.activity_timeout_reported = True
           self.parent.expander_terminal.set_expanded(True)
+        # process events
         while gtk.events_pending():
             gtk.main_iteration()
-	time.sleep(0.005)
+	time.sleep(0.01)
 
 class DistUpgradeVteTerminal(object):
   def __init__(self, parent, term):

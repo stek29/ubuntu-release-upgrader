@@ -154,7 +154,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
     apt.progress.base.InstallProgress.__init__(self)
     self.master_fd = None
 
-  def waitChild(self):
+  def wait_child(self):
       """Wait for child progress to exit.
 
       The return values is the full status returned from os.waitpid()
@@ -191,7 +191,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       # like etckeeper (LP: #283642)
       signal.signal(signal.SIGPIPE,signal.SIG_IGN) 
       try:
-        res = pm.DoInstall(self.writefd)
+        res = pm.do_install(self.writefd)
       except Exception, e:
         print "Exception during pm.DoInstall(): ", e
         logging.exception("Exception during pm.DoInstall()")
@@ -199,7 +199,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
         os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid
-    res = os.WEXITSTATUS(self.waitChild())
+    res = os.WEXITSTATUS(self.wait_child())
     # check if we want to sync the changes back, *only* do that
     # if res is positive
     if (res == 0 and

@@ -99,6 +99,7 @@ def FuzzyTimeToStr(sec):
 class FetchProgress(apt.progress.base.AcquireProgress):
   def __init__(self):
     super(FetchProgress, self).__init__()
+    self.est_speed = 0.0
   def start(self):
     super(FetchProgress, self).start()
     self.est_speed = 0.0

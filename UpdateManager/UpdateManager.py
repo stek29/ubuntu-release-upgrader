@@ -3,10 +3,12 @@
 #  Copyright (c) 2004-2008 Canonical
 #                2004 Michiel Sikkes
 #                2005 Martin Willemoes Hansen
+#                2010 Mohamed Amine IL Idrissi
 #  
 #  Author: Michiel Sikkes <michiel@eyesopened.nl>
 #          Michael Vogt <mvo@debian.org>
 #          Martin Willemoes Hansen <mwh@sysrq.dk>
+#          Mohamed Amine IL Idrissi <ilidrissiamine@gmail.com>
 # 
 #  This program is free software; you can redistribute it and/or 
 #  modify it under the terms of the GNU General Public License as 
@@ -73,6 +75,7 @@ from Core.utils import *
 from Core.UpdateList import UpdateList
 from Core.MyCache import MyCache, NotEnoughFreeSpaceError
 from Core.MetaRelease import Dist
+from Core.AlertWatcher import AlertWatcher
 from SafeGConfClient import SafeGConfClient
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
@@ -224,15 +227,17 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.window_main.set_urgency_hint(True)
         self.initial_focus_id = self.window_main.connect(
             "focus-in-event", self.on_initial_focus_in)
-    else:
-        self.warn_on_battery()
+    
+    # Alert watcher
+    self.alert_watcher = AlertWatcher()
+    self.alert_watcher.connect("network-alert", self._on_network_alert)
+    self.alert_watcher.connect("battery-alert", self._on_battery_alert)
 
   def on_initial_focus_in(self, widget, event):
       """callback run on initial focus-in (if started unmapped)"""
       widget.unstick()
       widget.set_urgency_hint(False)
       self.window_main.disconnect(self.initial_focus_id)
-      self.warn_on_battery()
       return False
 
   def warn_on_battery(self):
@@ -462,6 +467,8 @@ class UpdateManager(SimpleGtkbuilderApp):
           if self.dl_size != 0:
               t = _("%s will be downloaded.") % (humanize_size(self.dl_size))
               self.image_downsize.set_sensitive(True)
+              if self.alert_watcher.network_state != 3: # not connected
+                  self.button_install.set_sensitive(False)
           else:
               if self.cache.installCount > 1:
                   t = _("The updates have already been downloaded, but not installed")
@@ -469,12 +476,17 @@ class UpdateManager(SimpleGtkbuilderApp):
                   t = _("The update has already been downloaded, but not installed")
               else:
                   t = _("There is no updates to install")
-              self.image_downsize.set_sensitive(False)    
+              self.image_downsize.set_sensitive(False)
+              self.button_install.set_sensitive(True)
           self.label_downsize.set_text(t)
+          self.hbox_downsize.show()
+          self.vbox_alerts.show()
       except SystemError, e:
           print "requiredDownload could not be calculated: %s" % e
           self.label_downsize.set_markup(_("Unknown download size."))
           self.image_downsize.set_sensitive(False)
+          self.hbox_downsize.show()
+          self.vbox_updates.show()
 
   def _get_last_apt_get_update_text(self):
       """
@@ -676,6 +688,30 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.sleep_cookie = self.sleep_dev = None
     self.window_main.set_sensitive(True)
     self.window_main.window.set_cursor(None)
+
+  def _on_network_alert(self, watcher, state):
+      if state == 2: # NM_STATE_CONNECTING
+          self.label_offline.set_text(_("Connecting..."))
+          self.button_reload.set_sensitive(False)
+          self.refresh_updates_count()
+          self.hbox_offline.show()
+          self.vbox_alerts.show()
+      elif state == 3: # NM_STATE_CONNECTED
+          self.button_reload.set_sensitive(True)
+          self.hbox_offline.hide()
+      else:
+          self.label_offline.set_text(_("You may not be able to check for updates or download new updates."))
+          self.button_reload.set_sensitive(False)
+          self.refresh_updates_count()
+          self.hbox_offline.show()
+          self.vbox_alerts.show()
+          
+  def _on_battery_alert(self, watcher, on_battery):
+      if on_battery:
+          self.hbox_battery.show()
+          self.vbox_alerts.show()
+      else:
+          self.hbox_battery.hide()    
 
   def row_activated(self, treeview, path, column):
       iter = self.store.get_iter(path)

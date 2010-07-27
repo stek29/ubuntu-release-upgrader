@@ -461,7 +461,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def refresh_updates_count(self):
       self.button_install.set_sensitive(self.cache.installCount)
       try:
-          #inst_count = self.cache.installCount
+          inst_count = self.cache.installCount
           self.dl_size = self.cache.requiredDownload
           t = ""
           if self.dl_size != 0:
@@ -469,15 +469,19 @@ class UpdateManager(SimpleGtkbuilderApp):
               self.image_downsize.set_sensitive(True)
               if self.alert_watcher.network_state != 3: # not connected
                   self.button_install.set_sensitive(False)
+              else:
+                  self.button_install.set_sensitive(True)    
           else:
-              if self.cache.installCount > 1:
+              if inst_count > 1:
                   t = _("The updates have already been downloaded, but not installed")
-              elif self.cache.installCount == 1:
+                  self.button_install.set_sensitive(True)
+              elif inst_count == 1:
                   t = _("The update has already been downloaded, but not installed")
+                  self.button_install.set_sensitive(True)
               else:
                   t = _("There is no updates to install")
+                  self.button_install.set_sensitive(False)
               self.image_downsize.set_sensitive(False)
-              self.button_install.set_sensitive(True)
           self.label_downsize.set_text(t)
           self.hbox_downsize.show()
           self.vbox_alerts.show()
@@ -486,7 +490,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.label_downsize.set_markup(_("Unknown download size."))
           self.image_downsize.set_sensitive(False)
           self.hbox_downsize.show()
-          self.vbox_updates.show()
+          self.vbox_alerts.show()
 
   def _get_last_apt_get_update_text(self):
       """
@@ -698,6 +702,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.vbox_alerts.show()
       elif state == 3: # NM_STATE_CONNECTED
           self.button_reload.set_sensitive(True)
+          self.refresh_updates_count()
           self.hbox_offline.hide()
       else:
           self.label_offline.set_text(_("You may not be able to check for updates or download new updates."))
@@ -887,6 +892,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.update_count()
     self.setBusy(False)
     self.check_all_updates_installable()
+    self.refresh_updates_count()
     return False
 
   def dist_no_longer_supported(self, meta_release):

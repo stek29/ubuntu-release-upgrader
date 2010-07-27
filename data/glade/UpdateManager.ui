@@ -48,7 +48,7 @@
                         <property name="wrap">True</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
-                          <attribute name="scale" value="1,000000"/>
+                          <attribute name="scale" value="1.000000"/>
                         </attributes>
                       </object>
                       <packing>
@@ -208,19 +208,104 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox15">
+                  <object class="GtkVBox" id="vbox_alerts">
                     <property name="visible">True</property>
-                    <property name="spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="label_downsize">
+                      <object class="GtkHBox" id="hbox_downsize">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label">
+                        <child>
+                          <object class="GtkImage" id="image_downsize">
+                            <property name="visible">True</property>
+                            <property name="icon_name">aptdaemon-download</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_downsize">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label">
 </property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">0</property>
                       </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox_battery">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkImage" id="image_battery">
+                            <property name="visible">True</property>
+                            <property name="icon_name">battery</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_battery">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">It&#x2019;s safer to connect the computer to AC power before updating.</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox_offline">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkImage" id="image_offline">
+                            <property name="visible">True</property>
+                            <property name="icon_name">network-offline</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_offline">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">You may not be able to check or download updates when offline.</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox15">
+                    <property name="visible">True</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <object class="GtkHBox" id="hbox19">
@@ -338,7 +423,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -508,8 +593,8 @@
                     <property name="can_default">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <accelerator key="W" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                     <accelerator key="Q" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                    <accelerator key="W" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>

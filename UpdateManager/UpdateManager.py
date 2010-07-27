@@ -456,14 +456,25 @@ class UpdateManager(SimpleGtkbuilderApp):
   def refresh_updates_count(self):
       self.button_install.set_sensitive(self.cache.installCount)
       try:
-          inst_count = self.cache.installCount
+          #inst_count = self.cache.installCount
           self.dl_size = self.cache.requiredDownload
-          t = _("Download size: %s\n%s selected.") % (
-                                                      humanize_size(self.dl_size),inst_count)
+          t = ""
+          if self.dl_size != 0:
+              t = _("%s will be downloaded.") % (humanize_size(self.dl_size))
+              self.image_downsize.set_sensitive(True)
+          else:
+              if self.cache.installCount > 1:
+                  t = _("The updates have already been downloaded, but not installed")
+              elif self.cache.installCount == 1:
+                  t = _("The update has already been downloaded, but not installed")
+              else:
+                  t = _("There is no updates to install")
+              self.image_downsize.set_sensitive(False)    
           self.label_downsize.set_text(t)
       except SystemError, e:
           print "requiredDownload could not be calculated: %s" % e
-          self.label_downsize.set_markup(_("Unknown download size"))
+          self.label_downsize.set_markup(_("Unknown download size."))
+          self.image_downsize.set_sensitive(False)
 
   def _get_last_apt_get_update_text(self):
       """

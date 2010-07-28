@@ -786,6 +786,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         sys.exit(1)
     self.store.clear()
     self.list = UpdateList(self)
+    while gtk.events_pending():
+        gtk.main_iteration()
     # fill them again
     try:
         self.list.update(self.cache)

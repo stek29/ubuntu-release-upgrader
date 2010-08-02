@@ -590,7 +590,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def on_button_settings_clicked(self, widget):
     #print "on_button_settings_clicked"
     try:
-        apt_pkg.PkgSystemUnLock()
+        apt_pkg.pkgsystem_unlock()
     except SystemError:
         pass
     cmd = ["/usr/bin/gksu", 
@@ -838,6 +838,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         sys.exit(1)
     self.store.clear()
     self.list = UpdateList(self)
+    while gtk.events_pending():
+        gtk.main_iteration()
     # fill them again
     try:
         self.list.update(self.cache)
@@ -945,7 +947,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def initCache(self): 
     # get the lock
     try:
-        apt_pkg.PkgSystemLock()
+        apt_pkg.pkgsystem_lock()
     except SystemError, e:
         pass
         #d = gtk.MessageDialog(parent=self.window_main,

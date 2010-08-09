@@ -82,7 +82,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
         except Exception, e:
             pass
-    
+
     def error(self, pkg, errormsg):
         logging.error("got a error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
         # check if re-run of maintainer script is requested
@@ -207,11 +207,25 @@ class NonInteractiveInstallProgress(InstallProgress):
         InstallProgress.update_interface(self)
         if self.statusfd == None:
             return
-
         if (self.last_activity + self.timeout) < time.time():
-            logging.warning("no activity %s seconds (%s) - sending ctrl-c" % (self.timeout, self.status))
+            logging.warning("no activity %s seconds (%s) - sending ctrl-c" % (
+                    self.timeout, self.status))
             # ctrl-c
             os.write(self.master_fd,chr(3))
+        # read master fd and write to stdout so that terminal output
+        # actualy works
+        res = select.select([self.master_fd],[],[],0.1)
+        while len(res[0]) > 0:
+           self.last_activity = time.time()
+           try:
+               s = os.read(self.master_fd, 1)
+               sys.stdout.write("%s" % s)
+           except OSError,e:
+               # happens after we are finished because the fd is closed
+               return
+           res = select.select([self.master_fd],[],[],0.1)
+        sys.stdout.flush()
+    
 
     def fork(self):
         logging.debug("doing a pty.fork()")
@@ -219,8 +233,10 @@ class NonInteractiveInstallProgress(InstallProgress):
         os.environ["TERM"] = "dumb"
         # unset PAGER so that we can do "diff" in the dpkg prompt
         os.environ["PAGER"] = "true"
-        return InstallProgress.fork(self)
-        
+        (self.pid, self.master_fd) = pty.fork()
+        if self.pid != 0:
+            logging.debug("pid is: %s" % self.pid)
+        return self.pid
 
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "

@@ -464,22 +464,24 @@ class UpdateManager(SimpleGtkbuilderApp):
           inst_count = self.cache.installCount
           self.dl_size = self.cache.requiredDownload
           t = ""
+          if inst_count >= 1:
+              t = ngettext("One update has been selected. ", 
+                           "%s updates have been selected. " % inst_count,
+                           inst_count)
           if self.dl_size != 0:
-              t = _("%s will be downloaded.") % (humanize_size(self.dl_size))
+              t += _("%s will be downloaded.") % (humanize_size(self.dl_size))
               self.image_downsize.set_sensitive(True)
               if self.alert_watcher.network_state != 3: # not connected
                   self.button_install.set_sensitive(False)
               else:
-                  self.button_install.set_sensitive(True)    
-          else:
-              if inst_count > 1:
-                  t = _("The updates have already been downloaded, but not installed")
                   self.button_install.set_sensitive(True)
-              elif inst_count == 1:
-                  t = _("The update has already been downloaded, but not installed")
+          else:
+              if inst_count >= 1:
+                  t += ngettext("The update has already been downloaded, but not installed",
+                  "The updates have already been downloaded, but not installed", inst_count)
                   self.button_install.set_sensitive(True)
               else:
-                  t = _("There is no updates to install")
+                  t += _("There is no updates to install")
                   self.button_install.set_sensitive(False)
               self.image_downsize.set_sensitive(False)
           self.label_downsize.set_text(t)
@@ -1052,4 +1054,5 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     self.fillstore()
     self.check_auto_update()
+    self.alert_watcher.check_alert_state()
     gtk.main()

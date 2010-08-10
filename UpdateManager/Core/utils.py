@@ -194,7 +194,7 @@ def init_proxy(gconfclient=None):
     proxy = apt_pkg.config.find("Acquire::http::Proxy")
   # then synaptic
   elif os.path.exists(SYNAPTIC_CONF_FILE):
-    cnf = apt_pkg.configuration()
+    cnd = apt_pkg.Configuration()
     apt_pkg.read_config_file(cnf, SYNAPTIC_CONF_FILE)
     use_proxy = cnf.find_b("Synaptic::useProxy", False)
     if use_proxy:

@@ -179,7 +179,6 @@
             <child>
               <object class="GtkVBox" id="vbox12">
                 <property name="visible">True</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow_update">
                     <property name="visible">True</property>
@@ -208,15 +207,106 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkVBox" id="vbox_alerts">
+                    <property name="spacing">3</property>
+                    <child>
+                      <object class="GtkHBox" id="hbox_downsize">
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkImage" id="image_downsize">
+                            <property name="visible">True</property>
+                            <property name="icon_name">aptdaemon-download</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_downsize">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label">
+</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox_battery">
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkImage" id="image_battery">
+                            <property name="visible">True</property>
+                            <property name="icon_name">battery</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_battery">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">It&#x2019;s safer to connect the computer to AC power before updating.</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox_offline">
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkImage" id="image_offline">
+                            <property name="visible">True</property>
+                            <property name="icon_name">network-offline</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_offline">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkHBox" id="hbox15">
                     <property name="visible">True</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="label_downsize">
+                      <object class="GtkLabel" id="label_placeholder">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label">
-</property>
                       </object>
                       <packing>
                         <property name="position">0</property>
@@ -228,7 +318,7 @@
                         <property name="spacing">6</property>
                         <property name="homogeneous">True</property>
                         <child>
-                          <object class="GtkButton" id="button1">
+                          <object class="GtkButton" id="button_reload">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
@@ -326,9 +416,6 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -338,11 +425,12 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
+                <property name="padding">6</property>
                 <property name="position">3</property>
               </packing>
             </child>

@@ -91,6 +91,8 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     @property
     def installCount(self):
         return self._depcache.inst_count
+    def keepCount(self):
+        return self._depcache.keep_count
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
         self._depcache.upgrade(True)

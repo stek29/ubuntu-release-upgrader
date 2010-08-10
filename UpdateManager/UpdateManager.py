@@ -553,8 +553,9 @@ class UpdateManager(SimpleGtkbuilderApp):
       if num_updates == 0:
           text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
           self.label_downsize.set_text("\n")
-          self.notebook_details.set_sensitive(False)
-          self.treeview_update.set_sensitive(False)
+          if self.cache.keepCount() == 0:
+              self.notebook_details.set_sensitive(False)
+              self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")

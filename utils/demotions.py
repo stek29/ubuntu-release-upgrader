@@ -43,24 +43,24 @@ def get_replace(cache, pkgname):
     #print "can not find '%s'" % pkgname
     return replaces
   pkg = cache[pkgname]
-  ver = cache._depcache.GetCandidateVer(pkg._pkg)
-  depends = ver.DependsList
+  ver = cache._depcache.get_candidate_ver(pkg._pkg)
+  depends = ver.depends_list
   for t in ["Replaces"]:
     if not depends.has_key(t):
       continue
     for depVerList in depends[t]:
       base_deps = []
       for depOr in depVerList:
-        replaces.add(depOr.TargetPkg.Name)
+        replaces.add(depOr.target_pkg.name)
   return replaces
 
 
 if __name__ == "__main__":
 
   # init
-  apt_pkg.Config.set("Dir::state","./apt/")
-  apt_pkg.Config.set("Dir::Etc","./apt")
-  apt_pkg.Config.set("Dir::State::status","./apt/status")
+  apt_pkg.config.set("Dir::state","./apt/")
+  apt_pkg.config.set("Dir::Etc","./apt")
+  apt_pkg.config.set("Dir::State::status","./apt/status")
   try:
     os.makedirs("apt/lists/partial")
   except OSError:

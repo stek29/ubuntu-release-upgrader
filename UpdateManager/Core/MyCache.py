@@ -190,6 +190,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             uri = changelogs_uri
         else:
             uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
+
         # print "Trying: %s " % uri
         changelog = urllib2.urlopen(uri)
         #print changelog.read()
@@ -230,7 +231,22 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             alllines = alllines + line
         return alllines
 
-    def _guess_third_party_changelogs_uri(self, name):
+    def _guess_third_party_changelogs_uri_by_source(self, name):
+        pkg = self[name]
+        deb_uri = pkg.candidate.uri
+        srcrec = pkg.candidate.record.get("Source")
+        if not srcrec:
+            return None
+        # srcpkg can be "apt" or "gcc-default (1.0)"
+        srcpkg = srcrec.split("(")[0].strip()
+        if "(" in srcrec:
+            srcver = srcrec.split("(")[1].rstrip(")")
+        else:
+            srcver = pkg.candidate.version
+        base_uri = deb_uri.rpartition("/")[0]
+        return base_uri + "/%s_%s.changelog" % (srcpkg, srcver)
+
+    def _guess_third_party_changelogs_uri_by_binary(self, name):
         """ guess changelogs uri based on ArchiveURI by replacing .deb
             with .changelog
         """
@@ -266,14 +282,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         self.all_changes[name] = _("Changes for the versions:\n%s\n%s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
         if not CHANGELOG_ORIGIN in [o.origin for o in origins]:
             # Try non official changelog location
-            changelogs_uri = self._guess_third_party_changelogs_uri(name)
-            if changelogs_uri:
-                try:
-                    changelog = self._get_changelog_or_news(name, "changelog", False, changelogs_uri)
-                    self.all_changes[name] += changelog
-                    return
-                except urllib2.HTTPError, e:
-                    pass
+            changelogs_uri_binary = self._guess_third_party_changelogs_uri_by_binary(name)
+            changelogs_uri_source = self._guess_third_party_changelogs_uri_by_source(name)
+            for changelogs_uri in [changelogs_uri_binary,changelogs_uri_source]:
+                if changelogs_uri:
+                    try:
+                        changelog = self._get_changelog_or_news(name, "changelog", False, changelogs_uri)
+                        self.all_changes[name] += changelog
+                        return
+                    except urllib2.HTTPError, e:
+                        pass
             # no changelogs_uri or 404
             self.all_changes[name] += _( "This change is not coming from a "
                                          "source that supports changelogs.")

@@ -83,7 +83,7 @@ class DumbTerminal(QTextEdit):
             os.environ["TERM"] = "dumb"
         return self.child_pid
 
-    def updateInterface(self):
+    def update_interface(self):
         (rlist, wlist, xlist) = select.select([self.installProgress.master_fd],[],[], 0)
         if len(rlist) > 0:
             line = os.read(self.installProgress.master_fd, 255)
@@ -154,7 +154,7 @@ class KDECdromProgressAdapter(apt.progress.CdromProgress):
     def changeCdrom(self):
         return False
 
-class KDEOpProgress(apt.progress.OpProgress):
+class KDEOpProgress(apt.progress.base.OpProgress):
   """ methods on the progress bar """
   def __init__(self, progressbar, progressbar_label):
       self.progressbar = progressbar
@@ -186,7 +186,7 @@ class KDEFetchProgressAdapter(FetchProgress):
         self.progress = parent.window_main.progressbar_cache
         self.parent = parent
 
-    def mediaChange(self, medium, drive):
+    def media_change(self, medium, drive):
       msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
       change = QMessageBox.question(self.parent.window_main, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
       if change == QMessageBox.Ok:
@@ -203,21 +203,21 @@ class KDEFetchProgressAdapter(FetchProgress):
         self.parent.window_main.progress_text.setText("  ")
         self.status.setText(_("Fetching is complete"))
 
-    def pulse(self):
+    def pulse(self, owner):
         """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
-        FetchProgress.pulse(self)
+        FetchProgress.pulse(self, owner)
         self.progress.setValue(self.percent)
-        currentItem = self.currentItems + 1
-        if currentItem > self.totalItems:
-            currentItem = self.totalItems
+        current_item = self.current_items + 1
+        if current_item > self.total_items:
+            current_item = self.total_items
 
-        if self.currentCPS > 0:
-            self.status.setText(_("Fetching file %li of %li at %sB/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
+        if self.current_cps > 0:
+            self.status.setText(_("Fetching file %li of %li at %sB/s") % (current_item, self.total_items, apt_pkg.size_to_str(self.current_cps)))
             self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % unicode(FuzzyTimeToStr(self.eta), 'utf-8') + "</i>")
         else:
-            self.status.setText(_("Fetching file %li of %li") % (currentItem, self.totalItems))
+            self.status.setText(_("Fetching file %li of %li") % (current_item, self.total_items))
             self.parent.window_main.progress_text.setText("  ")
 
         QApplication.processEvents()
@@ -243,10 +243,10 @@ class KDEInstallProgressAdapter(InstallProgress):
             logging.error("Can not open terminal log: '%s'" % e)
             self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::StopOnError","False")
+        apt_pkg.config.set("DPkg::StopOnError","False")
 
-    def startUpdate(self):
-        InstallProgress.startUpdate(self)
+    def start_update(self):
+        InstallProgress.start_update(self)
         self.finished = False
         # FIXME: add support for the timeout
         # of the terminal (to display something useful then)
@@ -336,7 +336,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         logging.debug(" fork pid is: %s" % self.child_pid)
         return self.child_pid
 
-    def statusChange(self, pkg, percent, status):
+    def status_change(self, pkg, percent, status):
         """update progress bar and label"""
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
@@ -359,10 +359,10 @@ class KDEInstallProgressAdapter(InstallProgress):
           else:
             self.progress_text.setText(" ")
 
-    def finishUpdate(self):
+    def finish_update(self):
         self.label_status.setText("")
 
-    def updateInterface(self):
+    def update_interface(self):
         """
         no mainloop in this application, just call processEvents lots here
         it's also important to sleep for a minimum amount of time
@@ -384,9 +384,9 @@ class KDEInstallProgressAdapter(InstallProgress):
 
         # now update the GUI
         try:
-          InstallProgress.updateInterface(self)
+          InstallProgress.update_interface(self)
         except ValueError, e:
-          logging.error("got ValueError from InstallProgress.updateInterface. Line was '%s' (%s)" % (self.read, e))
+          logging.error("got ValueError from InstallProgress.update_interface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
         # check about terminal activity
@@ -403,9 +403,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         QApplication.processEvents()
         time.sleep(0.02)
 
-    def waitChild(self):
+    def wait_child(self):
         while True:
-            self.updateInterface()
+            self.update_interface()
             (pid, res) = os.waitpid(self.child_pid,os.WNOHANG)
             if pid == self.child_pid:
                 break
@@ -615,7 +615,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def getCdromProgress(self):
         return self._cdromProgress
 
-    def updateStatus(self, msg):
+    def update_status(self, msg):
         self.window_main.label_status.setText(utf8(msg))
 
     def hideStep(self, step):
@@ -826,7 +826,7 @@ if __name__ == "__main__":
           subprocess.call(["bash"])
           sys.exit()
       while True:
-          view.terminal_text.updateInterface()
+          view.terminal_text.update_interface()
           QApplication.processEvents()
           time.sleep(0.01)
 

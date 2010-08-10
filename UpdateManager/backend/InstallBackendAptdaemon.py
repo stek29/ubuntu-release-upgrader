@@ -28,9 +28,9 @@ class InstallBackendAptdaemon(InstallBackend):
             trans = yield self.client.update_cache(defer=True)
             self._run_in_dialog(trans, self.UPDATE)
         except errors.NotAuthorizedError:
-            self.emit("action-done", self.UPDATE)
+            self.emit("action-done", self.UPDATE, False)
         except:
-            self.emit("action-done", self.UPDATE)
+            self.emit("action-done", self.UPDATE, True)
             raise
 
     @inline_callbacks
@@ -46,9 +46,9 @@ class InstallBackendAptdaemon(InstallBackend):
                                                       defer=True)
             self._run_in_dialog(trans, self.INSTALL)
         except errors.NotAuthorizedError:
-            self.emit("action-done", self.INSTALL)
+            self.emit("action-done", self.INSTALL, False)
         except:
-            self.emit("action-done", self.INSTALL)
+            self.emit("action-done", self.INSTALL, True)
             raise
 
     def _run_in_dialog(self, trans, action):
@@ -59,4 +59,4 @@ class InstallBackendAptdaemon(InstallBackend):
 
     def _on_finished(self, dialog, action):
         dialog.hide()
-        self.emit("action-done", action)
+        self.emit("action-done", action, True)

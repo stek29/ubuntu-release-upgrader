@@ -69,18 +69,22 @@ class GtkCdromProgressAdapter(apt.progress.CdromProgress):
     def changeCdrom(self):
         return False
 
-class GtkOpProgress(apt.progress.OpProgress):
+class GtkOpProgress(apt.progress.base.OpProgress):
   def __init__(self, progressbar):
       self.progressbar = progressbar
       #self.progressbar.set_pulse_step(0.01)
       #self.progressbar.pulse()
+      self.fraction = 0.0
 
   def update(self, percent):
       #if percent > 99:
       #    self.progressbar.set_fraction(1)
       #else:
       #    self.progressbar.pulse()
-      self.progressbar.set_fraction(percent/100.0)
+      new_fraction = percent/100.0
+      if abs(self.fraction-new_fraction) > 0.1:
+        self.fraction = new_fraction
+        self.progressbar.set_fraction(self.fraction)
       while gtk.events_pending():
           gtk.main_iteration()
 
@@ -93,7 +97,7 @@ class GtkFetchProgressAdapter(FetchProgress):
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
-        FetchProgress.__init__(self)
+        super(GtkFetchProgressAdapter, self).__init__()
         # if this is set to false the download will cancel
         self.status = parent.label_status
         self.progress = parent.progressbar_cache
@@ -104,7 +108,7 @@ class GtkFetchProgressAdapter(FetchProgress):
     def cancelClicked(self, widget):
         logging.debug("cancelClicked")
         self.canceled = True
-    def mediaChange(self, medium, drive):
+    def media_change(self, medium, drive):
         #print "mediaChange %s %s" % (medium, drive)
         msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
         dialog = gtk.MessageDialog(parent=self.parent.window_main,
@@ -120,7 +124,7 @@ class GtkFetchProgressAdapter(FetchProgress):
         return False
     def start(self):
         #logging.debug("start")
-        FetchProgress.start(self)
+        super(GtkFetchProgressAdapter, self).start()
         self.progress.set_fraction(0)
         self.status.show()
         self.button_cancel.show()
@@ -129,22 +133,24 @@ class GtkFetchProgressAdapter(FetchProgress):
         self.progress.set_text(" ")
         self.status.set_text(_("Fetching is complete"))
         self.button_cancel.hide()
-    def pulse(self):
-        # FIXME: move the status_str and progress_str into python-apt
-        # (python-apt need i18n first for this)
-        FetchProgress.pulse(self)
-        self.progress.set_fraction(self.percent/100.0)
-        currentItem = self.currentItems + 1
-        if currentItem > self.totalItems:
-            currentItem = self.totalItems
-
-        if self.currentCPS > 0:
-            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (currentItem, self.totalItems, apt_pkg.SizeToStr(self.currentCPS)))
-            self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(self.eta))
-        else:
-            self.status.set_text(_("Fetching file %li of %li") % (currentItem, self.totalItems))
+    def pulse(self, owner):
+        super(GtkFetchProgressAdapter, self).pulse(owner)
+        # only update if there is a noticable change
+        if abs(self.percent-self.progress.get_fraction()*100.0) > 0.1:
+          self.progress.set_fraction(self.percent/100.0)
+          currentItem = self.current_items + 1
+          if currentItem > self.total_items:
+            currentItem = self.total_items
+          if self.current_cps > 0:
+            self.status.set_text(_("Fetching file %li of %li at %sB/s") % (
+                currentItem, self.total_items, 
+                apt_pkg.size_to_str(self.current_cps)))
+            self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(
+                self.eta))
+          else:
+            self.status.set_text(_("Fetching file %li of %li") % (
+                currentItem, self.total_items))
             self.progress.set_text("  ")
-
         while gtk.events_pending():
             gtk.main_iteration()
         return (not self.canceled)
@@ -166,10 +172,10 @@ class GtkInstallProgressAdapter(InstallProgress):
         reaper = vte.reaper_get()
         reaper.connect("child-exited", self.child_exited)
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.Set("DPkg::StopOnError","False")
+        apt_pkg.Config.set("DPkg::StopOnError","False")
 
-    def startUpdate(self):
-        InstallProgress.startUpdate(self)
+    def start_update(self):
+        InstallProgress.start_update(self)
         self.finished = False
         # FIXME: add support for the timeout
         # of the terminal (to display something useful then)
@@ -259,13 +265,15 @@ class GtkInstallProgressAdapter(InstallProgress):
           sys.exitfunc = lambda: True
         return pid
 
-    def statusChange(self, pkg, percent, status):
+    def status_change(self, pkg, percent, status):
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
           #print "setting start time to %s" % self.start_time
           self.start_time = time.time()
-        self.progress.set_fraction(float(percent)/100.0)
-        self.label_status.set_text(status.strip())
+        # only update if there is a noticable change
+        if abs(percent-self.progress.get_fraction()*100.0) > 0.1:
+          self.progress.set_fraction(float(percent)/100.0)
+          self.label_status.set_text(status.strip())
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()
@@ -290,16 +298,16 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.apt_status = status
         self.finished = True
 
-    def waitChild(self):
+    def wait_child(self):
         while not self.finished:
-            self.updateInterface()
+            self.update_interface()
         return self.apt_status
 
-    def finishUpdate(self):
+    def finish_update(self):
         self.label_status.set_text("")
     
-    def updateInterface(self):
-        InstallProgress.updateInterface(self)
+    def update_interface(self):
+        InstallProgress.update_interface(self)
         # check if we haven't started yet with packages, pulse then
         if self.start_time == 0.0:
           self.progress.pulse()
@@ -311,9 +319,10 @@ class GtkInstallProgressAdapter(InstallProgress):
             logging.warning("no activity on terminal for %s seconds (%s)" % (self.TIMEOUT_TERMINAL_ACTIVITY, self.label_status.get_text()))
             self.activity_timeout_reported = True
           self.parent.expander_terminal.set_expanded(True)
+        # process events
         while gtk.events_pending():
             gtk.main_iteration()
-	time.sleep(0.005)
+	time.sleep(0.01)
 
 class DistUpgradeVteTerminal(object):
   def __init__(self, parent, term):

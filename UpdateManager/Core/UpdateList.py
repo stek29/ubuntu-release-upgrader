@@ -27,6 +27,8 @@ from gettext import ngettext
 import os
 import sys
 
+from utils import ExecutionTime
+
 class UpdateOrigin(object):
   def __init__(self, desc, importance):
     self.packages = []
@@ -81,7 +83,7 @@ class UpdateList(object):
 
     # sort by origin
     for pkg in cache:
-      if pkg.isUpgradable or pkg.markedInstall:
+      if pkg.is_upgradable or pkg.marked_install:
         if pkg.candidateOrigin == None:
             # can happen for e.g. locked packages
             # FIXME: do something more sensible here (but what?)
@@ -93,9 +95,9 @@ class UpdateList(object):
           self.pkgs[origin_node] = []
         self.pkgs[origin_node].append(pkg)
         self.num_updates = self.num_updates + 1
-      if pkg.isUpgradable and not (pkg.markedUpgrade or pkg.markedInstall):
+      if pkg.is_upgradable and not (pkg.marked_upgrade or pkg.marked_install):
           self.held_back.append(pkg.name)
     for l in self.pkgs.keys():
       self.pkgs[l].sort(lambda x,y: cmp(x.name,y.name))
-    self.keepcount = cache._depcache.KeepCount
+    self.keepcount = cache._depcache.keep_count
 

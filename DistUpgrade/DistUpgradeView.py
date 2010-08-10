@@ -96,18 +96,22 @@ def FuzzyTimeToStr(sec):
   return map["str_seconds"]
 
 
-class FetchProgress(apt.progress.FetchProgress):
+class FetchProgress(apt.progress.base.AcquireProgress):
   def __init__(self):
-    #print "init FetchProgress in DistUpgradeView"
-    apt.progress.FetchProgress.__init__(self)
-    self.est_speed = 0
+    super(FetchProgress, self).__init__()
+    self.est_speed = 0.0
   def start(self):
+    super(FetchProgress, self).start()
+    self.est_speed = 0.0
+    self.eta = 0.0
+    self.percent = 0.0
     self.release_file_download_error = False
-  def updateStatus(self, uri, descr, shortDescr, status):
+  def update_status(self, uri, descr, shortDescr, status):
+    super(FetchProgress, self).update_
     # FIXME: workaround issue in libapt/python-apt that does not 
     #        raise a exception if *all* files fails to download
-    if status == self.dlFailed:
-      logging.warn("updateStatus: dlFailed on '%s' " % uri)
+    if status == apt_pkg.STAT_FAILED:
+      logging.warn("update_status: dlFailed on '%s' " % uri)
       if uri.endswith("Release.gpg") or uri.endswith("Release"):
         # only care about failures from network, not gpg, bzip, those
         # are different issues
@@ -115,10 +119,19 @@ class FetchProgress(apt.progress.FetchProgress):
           if uri.startswith(net):
             self.release_file_download_error = True
             break
-  def pulse(self):
-    apt.progress.FetchProgress.pulse(self)
-    if self.currentCPS > self.est_speed:
-      self.est_speed = (self.est_speed+self.currentCPS)/2.0
+  # required, otherwise the lucid version of python-apt gets really
+  # unhappy, its expecting this function for apt.progress.base.AcquireProgress
+  def pulse_items(self, arg):
+    return True
+  def pulse(self, owner=None):
+    super(FetchProgress, self).pulse(owner)
+    self.percent = (((self.current_bytes + self.current_items) * 100.0) /
+                    float(self.total_bytes + self.total_items))
+    if self.current_cps > self.est_speed:
+      self.est_speed = (self.est_speed+self.current_cps)/2.0
+    if self.current_cps > 0:
+      self.eta = ((self.total_bytes - self.current_bytes) /
+                  float(self.current_cps))
     return True
   def estimatedDownloadTime(self, requiredDownload):
     """ get the estimated download time """
@@ -134,15 +147,15 @@ class FetchProgress(apt.progress.FetchProgress):
     
 
 
-class InstallProgress(apt.progress.InstallProgress):
+class InstallProgress(apt.progress.base.InstallProgress):
   """ Base class for InstallProgress that supports some fancy
       stuff like apport integration
   """
   def __init__(self):
-    apt.progress.InstallProgress.__init__(self)
+    apt.progress.base.InstallProgress.__init__(self)
     self.master_fd = None
 
-  def waitChild(self):
+  def wait_child(self):
       """Wait for child progress to exit.
 
       The return values is the full status returned from os.waitpid()
@@ -150,11 +163,11 @@ class InstallProgress(apt.progress.InstallProgress):
       """
       while True:
           try:
-              select.select([self.statusfd], [], [], self.selectTimeout)
+              select.select([self.statusfd], [], [], self.select_timeout)
           except select.error, (errno_, errstr):
               if errno_ != errno.EINTR:
                   raise
-          self.updateInterface()
+          self.update_interface()
           try:
               (pid, res) = os.waitpid(self.child_pid, os.WNOHANG)
               if pid == self.child_pid:
@@ -179,7 +192,7 @@ class InstallProgress(apt.progress.InstallProgress):
       # like etckeeper (LP: #283642)
       signal.signal(signal.SIGPIPE,signal.SIG_IGN) 
       try:
-        res = pm.DoInstall(self.writefd)
+        res = pm.do_install(self.writefd)
       except Exception, e:
         print "Exception during pm.DoInstall(): ", e
         logging.exception("Exception during pm.DoInstall()")
@@ -187,7 +200,7 @@ class InstallProgress(apt.progress.InstallProgress):
         os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid
-    res = os.WEXITSTATUS(self.waitChild())
+    res = os.WEXITSTATUS(self.wait_child())
     # check if we want to sync the changes back, *only* do that
     # if res is positive
     if (res == 0 and
@@ -200,7 +213,7 @@ class InstallProgress(apt.progress.InstallProgress):
   
   def error(self, pkg, errormsg):
     " install error from a package "
-    apt.progress.InstallProgress.error(self, pkg, errormsg)
+    apt.progress.base.InstallProgress.error(self, pkg, errormsg)
     logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     if "/" in pkg:
       pkg = os.path.basename(pkg)
@@ -244,7 +257,7 @@ class DistUpgradeView(object):
         pass
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
-        return apt.progress.OpProgress()
+        return apt.progress.base.OpProgress()
     def getFetchProgress(self):
         " return a fetch progress object "
         return FetchProgress()
@@ -291,16 +304,16 @@ class DistUpgradeView(object):
         self.toRemoveAuto = []
         self.toDowngrade = []
         for pkg in changes:
-            if pkg.markedInstall: 
+            if pkg.marked_install: 
               self.toInstall.append(pkg.name)
-            elif pkg.markedUpgrade: 
+            elif pkg.marked_upgrade: 
               self.toUpgrade.append(pkg.name)
-            elif pkg.markedDelete:
-              if pkg._pcache._depcache.IsAutoInstalled(pkg._pkg):
+            elif pkg.marked_delete:
+              if pkg._pcache._depcache.is_auto_installed(pkg._pkg):
                 self.toRemoveAuto.append(pkg.name)
               else:
                 self.toRemove.append(pkg.name)
-            elif pkg.markedDowngrade: 
+            elif pkg.marked_downgrade: 
               self.toDowngrade.append(pkg.name)
         # sort it
         self.toInstall.sort()

@@ -112,12 +112,12 @@ class DistUpgradeController(object):
         self.fromDist = self.config.get("Sources","From")
         self.toDist = self.config.get("Sources","To")
         self.origin = self.config.get("Sources","ValidOrigin")
-        self.arch = apt_pkg.Config.Find("APT::Architecture")
+        self.arch = apt_pkg.Config.find("APT::Architecture")
 
         # we run with --force-overwrite by default
         if not os.environ.has_key("RELEASE_UPGRADE_NO_FORCE_OVERWRITE"):
             logging.debug("enable dpkg --force-overwrite")
-            apt_pkg.Config.Set("DPkg::Options::","--force-overwrite")
+            apt_pkg.Config.set("DPkg::Options::","--force-overwrite")
 
         # we run in full upgrade mode by default
         self._partialUpgrade = False
@@ -135,26 +135,26 @@ class DistUpgradeController(object):
 
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
-        apt_pkg.Config.Set("Acquire::Retries", str(maxRetries))
+        apt_pkg.Config.set("Acquire::Retries", str(maxRetries))
         # max sizes for dpkgpm for large installs (see linux/limits.h and 
         #                                          linux/binfmts.h)
-        apt_pkg.Config.Set("Dpkg::MaxArgs", str(64*1024))
-        apt_pkg.Config.Set("Dpkg::MaxArgBytes", str(128*1024))
+        apt_pkg.Config.set("Dpkg::MaxArgs", str(64*1024))
+        apt_pkg.Config.set("Dpkg::MaxArgBytes", str(128*1024))
 
         # smaller to avoid hangs
-        apt_pkg.Config.Set("Acquire::http::Timeout","20")
-        apt_pkg.Config.Set("Acquire::ftp::Timeout","20")
+        apt_pkg.Config.set("Acquire::http::Timeout","20")
+        apt_pkg.Config.set("Acquire::ftp::Timeout","20")
 
         # no list cleanup here otherwise a "cancel" in the upgrade
         # will not restore the full state (lists will be missing)
-        apt_pkg.Config.Set("Apt::Get::List-Cleanup", "false")
+        apt_pkg.Config.set("Apt::Get::List-Cleanup", "false")
 
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add
         self.valid_mirrors = self.config.getListFromFile("Sources","ValidMirrors")
         # debugging
-        #apt_pkg.Config.Set("DPkg::Options::","--debug=0077")
+        #apt_pkg.Config.set("DPkg::Options::","--debug=0077")
 
         # apt cron job
         self._aptCronJobPerms = 0755
@@ -245,8 +245,8 @@ class DistUpgradeController(object):
                                  )
                 sys.exit(1)
                 return False
-            # ask for a spare one to start
-            port = 9004
+            # ask for a spare one to start (and below 1024)
+            port = 1022
             res = self._view.askYesNoQuestion(
                 _("Continue running under SSH?"),
                 _("This session appears to be running under ssh. "
@@ -368,9 +368,9 @@ class DistUpgradeController(object):
             logging.info("using backports in '%s' " % backportsdir)
             logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
             if os.path.exists(backportsdir+"/usr/bin/dpkg"):
-                apt_pkg.Config.Set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
+                apt_pkg.Config.set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
             if os.path.exists(backportsdir+"/usr/lib/apt/methods"):
-                apt_pkg.Config.Set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
+                apt_pkg.Config.set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
             conf = backportsdir+"/etc/apt/apt.conf.d/01ubuntu"
             if os.path.exists(conf):
                 logging.debug("adding config '%s'" % conf)
@@ -528,7 +528,7 @@ class DistUpgradeController(object):
             # and disable them if not
             elif entry.uri.startswith("cdrom:"):
                 # 
-                listdir = apt_pkg.Config.FindDir("Dir::State::lists")
+                listdir = apt_pkg.Config.find_dir("Dir::State::lists")
                 if not os.path.exists("%s/%s%s_%s_%s" % 
                                       (listdir,
                                        apt_pkg.URItoFileName(entry.uri),
@@ -716,8 +716,8 @@ class DistUpgradeController(object):
         #       accidentally shot them, if not, maybe offer to write a standard
         #       sources.list?
         try:
-            sourceslist = apt_pkg.GetPkgSourceList()
-            sourceslist.ReadMainList()
+            sourceslist = apt_pkg.SourceList()
+            sourceslist.read_main_list()
         except SystemError:
             logging.error("Repository information invalid after updating (we broke it!)")
             self._view.error(_("Repository information invalid"),
@@ -745,11 +745,11 @@ class DistUpgradeController(object):
         held = []
         keep = []
         for pkg in self.cache:
-            if pkg.markedInstall: inst.append(pkg.name)
-            elif pkg.markedUpgrade: up.append(pkg.name)
-            elif pkg.markedDelete: rm.append(pkg.name)
-            elif (pkg.isInstalled and pkg.isUpgradable): held.append(pkg.name)
-            elif pkg.isInstalled and pkg.markedKeep: keep.append(pkg.name)
+            if pkg.marked_install: inst.append(pkg.name)
+            elif pkg.marked_upgrade: up.append(pkg.name)
+            elif pkg.marked_delete: rm.append(pkg.name)
+            elif (pkg.is_installed and pkg.is_upgradable): held.append(pkg.name)
+            elif pkg.is_installed and pkg.marked_keep: keep.append(pkg.name)
         logging.debug("Keep at same version: %s" % " ".join(keep))
         logging.debug("Upgradable, but held- back: %s" % " ".join(held))
         logging.debug("Remove: %s" % " ".join(rm))
@@ -799,7 +799,7 @@ class DistUpgradeController(object):
         if not self.useNetwork:
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
             return True
-        self.cache._list.ReadMainList()
+        self.cache._list.read_main_list()
         progress = self._view.getFetchProgress()
         # FIXME: also remove all files from the lists partial dir!
         currentRetry = 0
@@ -896,7 +896,7 @@ class DistUpgradeController(object):
         self._view.processEvents()
 
         # show changes and confirm
-        changes = self.cache.getChanges()
+        changes = self.cache.get_changes()
         self._view.processEvents()
 
         # log the changes for debugging
@@ -958,9 +958,9 @@ class DistUpgradeController(object):
         user_canceled = False
         while currentRetry < maxRetries:
             try:
-                pm = apt_pkg.GetPackageManager(self.cache._depcache)
-                fetcher = apt_pkg.GetAcquire(fprogress)
-                res = self.cache._fetchArchives(fetcher, pm)
+                pm = apt_pkg.PackageManager(self.cache._depcache)
+                fetcher = apt_pkg.Acquire(fprogress)
+                res = self.cache._fetch_archives(fetcher, pm)
             except apt.cache.FetchCancelledException, e:
                 logging.info("user canceled")
                 user_canceled = True
@@ -1158,7 +1158,7 @@ class DistUpgradeController(object):
         progress.done()
 
         # get changes
-        changes = self.cache.getChanges()
+        changes = self.cache.get_changes()
         logging.debug("The following packages are marked for removal: %s" % " ".join([pkg.name for pkg in changes]))
         summary = _("Remove obsolete packages?")
         actions = [_("_Keep"), _("_Remove")]
@@ -1207,7 +1207,7 @@ class DistUpgradeController(object):
         """ abort the upgrade, cleanup (as much as possible) """
         logging.debug("abort called")
         if hasattr(self, "sources"):
-            self.sources.restoreBackup(self.sources_backup_ext)
+            self.sources.restore_backup(self.sources_backup_ext)
         if hasattr(self, "aptcdrom"):
             self.aptcdrom.restoreBackup(self.sources_backup_ext)
         # generate a new cache
@@ -1261,7 +1261,7 @@ class DistUpgradeController(object):
         # when the cache is searched for the backport packages)
         backportslist = self.config.getlist("PreRequists","Packages")
         i=0
-        noCache = apt_pkg.Config.Find("Acquire::http::No-Cache","false")
+        noCache = apt_pkg.Config.find("Acquire::http::No-Cache","false")
         maxRetries = self.config.getint("Network","MaxRetries")
         while i < maxRetries:
             self.doUpdate(showErrors=False)
@@ -1274,17 +1274,17 @@ class DistUpgradeController(object):
                 break
             # FIXME: move this to some more generic place
             logging.debug("setting a cache control header to turn off caching temporarily")
-            apt_pkg.Config.Set("Acquire::http::No-Cache","true")
+            apt_pkg.Config.set("Acquire::http::No-Cache","true")
             i += 1
         if i == maxRetries:
             logging.error("pre-requists item is NOT trusted, giving up")
             return False
-        apt_pkg.Config.Set("Acquire::http::No-Cache",noCache)
+        apt_pkg.Config.set("Acquire::http::No-Cache",noCache)
         return True
 
     def _allBackportsAuthenticated(self, backportslist):
         # check if the user overwrote the check
-        if apt_pkg.Config.FindB("APT::Get::AllowUnauthenticated",False) == True:
+        if apt_pkg.Config.find_b("APT::Get::AllowUnauthenticated",False) == True:
             logging.warning("skip authentication check because of APT::Get::AllowUnauthenticated==true")
             return True
         try:
@@ -1365,7 +1365,7 @@ class DistUpgradeController(object):
         if self.aptcdrom and not self.useNetwork:
             logging.debug("Searching for pre-requists on CDROM")
             p = os.path.join(self.aptcdrom.cdrompath,
-                             "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.Config.Find("APT::Architecture"))
+                             "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.Config.find("APT::Architecture"))
             found_pkgs = set()
             for udeb in glob.glob(p+"*_*.udeb"):
                 logging.debug("copying pre-req '%s' to '%s'" % (udeb, backportsdir))
@@ -1403,8 +1403,8 @@ class DistUpgradeController(object):
         if not os.path.exists(prereq_template):
             logging.error("sourceslist not found '%s'" % prereq_template)
             return False
-        outpath = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
-        outfile = os.path.join(apt_pkg.Config.FindDir("Dir::Etc::sourceparts"), prereq_template)
+        outpath = os.path.join(apt_pkg.Config.find_dir("Dir::Etc::sourceparts"), prereq_template)
+        outfile = os.path.join(apt_pkg.Config.find_dir("Dir::Etc::sourceparts"), prereq_template)
         self._addPreRequistsSourcesList(prereq_template, outfile) 
         try:
             self._verifyBackports()
@@ -1417,12 +1417,12 @@ class DistUpgradeController(object):
             return False
         
         # save cachedir and setup new one
-        cachedir = apt_pkg.Config.Find("Dir::Cache::archives")
+        cachedir = apt_pkg.Config.find("Dir::Cache::archives")
         cwd = os.getcwd()
         if not os.path.exists(os.path.join(backportsdir,"partial")):
             os.mkdir(os.path.join(backportsdir,"partial"))
         os.chdir(backportsdir)
-        apt_pkg.Config.Set("Dir::Cache::archives",backportsdir)
+        apt_pkg.Config.set("Dir::Cache::archives",backportsdir)
 
         # FIXME: sanity check the origin (just for safety)
         for pkgname in backportslist:
@@ -1459,7 +1459,7 @@ class DistUpgradeController(object):
 
         # reset the cache dir
         os.unlink(outpath)
-        apt_pkg.Config.Set("Dir::Cache::archives",cachedir)
+        apt_pkg.Config.set("Dir::Cache::archives",cachedir)
         os.chdir(cwd)
         return self.setupRequiredBackports(backportsdir)
 

@@ -182,38 +182,38 @@ class MetaReleaseCore(object):
         dists = []
 
         # parse the metarelease_information file
-        index_tag = apt_pkg.ParseTagFile(self.metarelease_information)
-        step_result = index_tag.Step()
+        index_tag = apt_pkg.TagFile(self.metarelease_information)
+        step_result = index_tag.step()
         while step_result:
-            if index_tag.Section.has_key("Dist"):
-                name = index_tag.Section["Dist"]
+            if "Dist" in index_tag.section:
+                name = index_tag.section["Dist"]
                 self._debug("found distro name: '%s'" % name)
-                rawdate = index_tag.Section["Date"]
+                rawdate = index_tag.section["Date"]
                 date = time.mktime(rfc822.parsedate(rawdate))
-                supported = int(index_tag.Section["Supported"])
-                version = index_tag.Section["Version"]
+                supported = int(index_tag.section["Supported"])
+                version = index_tag.section["Version"]
                 # add the information to a new date object
                 dist = Dist(name, version, date,supported)
-                if index_tag.Section.has_key("ReleaseNotes"):
-                    dist.releaseNotesURI = index_tag.Section["ReleaseNotes"]
+                if "ReleaseNotes" in index_tag.section:
+                    dist.releaseNotesURI = index_tag.section["ReleaseNotes"]
                     lang = get_lang()
                     if lang:
                         dist.releaseNotesURI += "?lang=%s" % lang
-                if index_tag.Section.has_key("ReleaseNotesHtml"):
-                    dist.releaseNotesHtmlUri = index_tag.Section["ReleaseNotesHtml"]
+                if "ReleaseNotesHtml" in index_tag.section:
+                    dist.releaseNotesHtmlUri = index_tag.section["ReleaseNotesHtml"]
                     lang = get_lang()
                     if lang:
                         dist.releaseNotesHtmlUri += "?lang=%s" % lang
-                if index_tag.Section.has_key("UpgradeTool"):
-                    dist.upgradeTool =  index_tag.Section["UpgradeTool"]
-                if index_tag.Section.has_key("UpgradeToolSignature"):
-                    dist.upgradeToolSig =  index_tag.Section["UpgradeToolSignature"]
-                if "UpgradeBroken" in index_tag.Section:
-                    dist.upgrade_broken = index_tag.Section["UpgradeBroken"]
+                if "UpgradeTool" in index_tag.section:
+                    dist.upgradeTool =  index_tag.section["UpgradeTool"]
+                if "UpgradeToolSignature" in index_tag.section:
+                    dist.upgradeToolSig =  index_tag.section["UpgradeToolSignature"]
+                if "UpgradeBroken" in index_tag.section:
+                    dist.upgrade_broken = index_tag.section["UpgradeBroken"]
                 dists.append(dist)
                 if name == current_dist_name:
                     current_dist = dist 
-            step_result = index_tag.Step()
+            step_result = index_tag.step()
 
         # first check if the current runing distro is in the meta-release
         # information. if not, we assume that we run on something not

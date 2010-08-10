@@ -23,6 +23,7 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
+import logging
 import os
 import string
 import urllib2
@@ -291,12 +292,17 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     try:
                         changelog = self._get_changelog_or_news(name, "changelog", False, changelogs_uri)
                         self.all_changes[name] += changelog
-                        return
                     except urllib2.HTTPError, e:
-                        pass
-            # no changelogs_uri or 404
-            self.all_changes[name] += _( "This change is not coming from a "
-                                         "source that supports changelogs.")
+                        # no changelogs_uri or 404
+                        self.all_changes[name] += _(
+                            "This change is not coming from a "
+                            "source that supports changelogs.")
+                    except (IOError, httplib.BadStatusLine, socket.error), e:
+                        # network errors and others
+                        logging.exception("error on changelog fetching")
+                        self.all_changes[name] += _(
+                            "Failed to download the list of changes. \n"
+                            "Please check your Internet connection.")
             return
         # fixup epoch handling version
         srcpkg = self[name].sourcePackageName

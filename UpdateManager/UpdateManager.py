@@ -692,14 +692,15 @@ class UpdateManager(SimpleGtkbuilderApp):
                 pkgs_upgrade.append(pkg.name)
         self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
-  def _on_backend_done(self, backend, action):
+  def _on_backend_done(self, backend, action, authorized):
     # check if there is a new reboot required notification
     if (action == INSTALL and
         os.path.exists(REBOOT_REQUIRED_FILE)):
         self.show_reboot_required_info()
-    msg = _("Reading package information")
-    self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % msg)
-    self.fillstore()
+    if authorized:
+        msg = _("Reading package information")
+        self.label_cache_progress_title.set_label("<b><big>%s</big></b>" % msg)
+        self.fillstore()
 
     # Allow suspend after synaptic is finished
     if self.sleep_cookie:

@@ -98,6 +98,13 @@ from MetaReleaseGObject import MetaRelease
 # file that signals if we need to reboot
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
+# NetworkManager enums
+NM_STATE_UNKNOWN = 0
+NM_STATE_ASLEEP = 1
+NM_STATE_CONNECTING = 2
+NM_STATE_CONNECTED = 3
+NM_STATE_DISCONNECTED = 4
+
 class UpdateManagerDbusControler(dbus.service.Object):
     """ this is a helper to provide the UpdateManagerIFace """
     def __init__(self, parent, bus_name,
@@ -471,7 +478,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           if self.dl_size != 0:
               t += _("%s will be downloaded.") % (humanize_size(self.dl_size))
               self.image_downsize.set_sensitive(True)
-              if self.alert_watcher.network_state != 3: # not connected
+              if self.alert_watcher.network_state != NM_STATE_CONNECTED:
                   self.button_install.set_sensitive(False)
               else:
                   self.button_install.set_sensitive(True)
@@ -696,13 +703,13 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.window_main.window.set_cursor(None)
 
   def _on_network_alert(self, watcher, state):
-      if state == 2: # NM_STATE_CONNECTING
+      if state == NM_STATE_CONNECTING:
           self.label_offline.set_text(_("Connecting..."))
           self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()
-      elif state == 3: # NM_STATE_CONNECTED
+      elif state == NM_STATE_CONNECTED:
           self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()

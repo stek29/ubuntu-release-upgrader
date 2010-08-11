@@ -489,7 +489,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                   "The updates have already been downloaded, but not installed", inst_count)
                   self.button_install.set_sensitive(True)
               else:
-                  download_str = _("There is no updates to install")
+                  download_str = _("There are no updates to install")
                   self.button_install.set_sensitive(False)
               self.image_downsize.set_sensitive(False)
           # TRANSLATORS: this allows to switch the order of the count of

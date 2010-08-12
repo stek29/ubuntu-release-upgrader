@@ -42,22 +42,22 @@ class AlertWatcher(gobject.GObject):
         self.network_state = 3 # make it always connected if NM isn't available
         
     def check_alert_state(self):
-		try:
-			obj = self.bus.get_object("org.freedesktop.NetworkManager", \
-									  "/org/freedesktop/NetworkManager")
-			obj.connect_to_signal("StateChanged", self._network_alert, \
-						dbus_interface="org.freedesktop.NetworkManager")
-			interface = dbus.Interface(obj, "org.freedesktop.DBus.Properties")
-			self.network_state = interface.Get("org.freedesktop.NetworkManager", "State")
-			self._network_alert(self.network_state)
+        try:
+            obj = self.bus.get_object("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager")
+            obj.connect_to_signal("StateChanged", self._network_alert,
+                                  dbus_interface="org.freedesktop.NetworkManager")
+            interface = dbus.Interface(obj, "org.freedesktop.DBus.Properties")
+            self.network_state = interface.Get("org.freedesktop.NetworkManager", "State")
+            self._network_alert(self.network_state)
 		
-			obj = self.bus.get_object('org.freedesktop.UPower',
-									  '/org/freedesktop/UPower')
-			obj.connect_to_signal("Changed", self._power_changed,
-						dbus_interface="org.freedesktop.UPower")
-			self._power_changed()
-		except dbus.exceptions.DBusException, e:
-			pass
+            obj = self.bus.get_object('org.freedesktop.UPower',
+                                      '/org/freedesktop/UPower')
+            obj.connect_to_signal("Changed", self._power_changed,
+                                  dbus_interface="org.freedesktop.UPower")
+            self._power_changed()
+        except dbus.exceptions.DBusException, e:
+            pass
     
     def _network_alert(self, state):
         self.network_state = state

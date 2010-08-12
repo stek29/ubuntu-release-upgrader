@@ -710,19 +710,21 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.window_main.window.set_cursor(None)
 
   def _on_network_alert(self, watcher, state):
+      # do not set the buttons to sensitive/insensitive until NM
+      # can deal with dialup connections properly
       if state == NM_STATE_CONNECTING:
           self.label_offline.set_text(_("Connecting..."))
-          self.button_reload.set_sensitive(False)
+          #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()
       elif state == NM_STATE_CONNECTED:
-          self.button_reload.set_sensitive(True)
+          #self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()
       else:
           self.label_offline.set_text(_("You may not be able to check for updates or download new updates."))
-          self.button_reload.set_sensitive(False)
+          #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()

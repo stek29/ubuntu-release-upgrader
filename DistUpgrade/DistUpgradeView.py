@@ -66,6 +66,9 @@ def FuzzyTimeToStr(sec):
 
   # now assemble the string
   if days > 0:
+    # Don't print str_hours if it's an empty string, see LP: #288912
+    if map["str_hours"] == '':
+        return map["str_days"]
     # TRANSLATORS: you can alter the ordering of the remaining time
     # information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
     # around. Make sure to keep all '$(str_*)s' in the translated string
@@ -81,6 +84,9 @@ def FuzzyTimeToStr(sec):
     return map["str_hours"]
   # when we are near the end, become more precise again
   elif hours > 0:
+    # Don't print str_minutes if it's an empty string, see LP: #288912
+    if map["str_minutes"] == '':
+        return map["str_hours"]
     # TRANSLATORS: you can alter the ordering of the remaining time
     # information here if you shuffle %(str_hours)s %(str_minutes)s
     # around. Make sure to keep all '$(str_*)s' in the translated string

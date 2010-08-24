@@ -473,8 +473,8 @@ class UpdateManager(SimpleGtkbuilderApp):
           count_str = ""
           download_str = ""
           if inst_count > 0:
-              count_str = ngettext("%(count)s update has been selected. ", 
-                                   "%(count)s updates have been selected. ",
+              count_str = ngettext("%(count)s update has been selected.", 
+                                   "%(count)s updates have been selected.",
                                    inst_count) % { 'count' : inst_count }
           if self.dl_size != 0:
               download_str = _("%s will be downloaded.") % (humanize_size(self.dl_size))
@@ -494,7 +494,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               self.image_downsize.set_sensitive(False)
           # TRANSLATORS: this allows to switch the order of the count of
           #              updates and the download size string (if needed)
-          self.label_downsize.set_text(_("%(count_str)s%(download_str)s") % {
+          self.label_downsize.set_text(_("%(count_str)s %(download_str)s") % {
                   'count_str' : count_str,
                   'download_str' : download_str})
           self.hbox_downsize.show()

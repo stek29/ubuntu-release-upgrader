@@ -423,7 +423,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         self._cdromProgress = GtkCdromProgressAdapter(self)
         self._installProgress = GtkInstallProgressAdapter(self)
         # details dialog
-        self.details_list = gtk.ListStore(gobject.TYPE_STRING)
+        self.details_list = gtk.TreeStore(gobject.TYPE_STRING)
         column = gtk.TreeViewColumn("")
         render = gtk.CellRendererText()
         column.pack_start(render, True)
@@ -631,30 +631,23 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         self.label_changes.set_markup(self.confirmChangesMessage)
         # fill in the details
         self.details_list.clear()
-        for demotion in self.demotions:
-            self.details_list.append([_("No longer supported %s") % demotion])
-        for dg in self.toDowngrade:
-            self.details_list.append([_("<b>Downgrade %s</b>") % dg])
-        for rm in self.toRemove:
-            s = _("Remove %s") % rm
-            if removal_bold:
-              s = "<b>%s</b>" % s
-            self.details_list.append([s])
-        for rm in self.toRemoveAuto:
-            s = _("Remove (was auto installed) %s") % rm
-            self.details_list.append([s])
-        for inst in self.toInstall:
-            self.details_list.append([_("Install %s") % inst])
-        for up in self.toUpgrade:
-            self.details_list.append([_("Upgrade %s") % up])
+        for (parent_text, details_list) in ( 
+            ( _("No longer supported by Canonical (%s)"), self.demotions),
+            ( _("<b>Downgrade (%s)</b>"), self.toDowngrade),
+            ( _("Remove (%s)"), self.toRemove),
+            ( _("No longer needed (%s)"), self.toRemoveAuto),
+            ( _("Install (%s)"), self.toInstall),
+            ( _("Upgrade (%s)"), self.toUpgrade),
+          ):
+          if details_list:
+            node = self.details_list.append(None, 
+                                            [parent_text % len(details_list)])
+            for pkg in details_list:
+              self.details_list.append(node, [pkg])
+        # prepare dialog
+        self.dialog_changes.realize()
         self.dialog_changes.set_transient_for(self.window_main)
         self.dialog_changes.set_title("")
-        # work around problem that scroll_to() does not 
-        # work when it is not realized
-        self.dialog_changes.realize()
-        self.treeview_details.realize()
-        self.treeview_details.set_cursor((0,))
-        self.treeview_details.scroll_to_point(0,0)
         self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE)
         res = self.dialog_changes.run()
         self.dialog_changes.hide()

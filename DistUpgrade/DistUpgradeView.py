@@ -298,12 +298,13 @@ class DistUpgradeView(object):
     def showStep(self, step):
         " show a certain step from the GUI "
         pass
-    def confirmChanges(self, summary, changes, downloadSize,
+    def confirmChanges(self, summary, changes, demotions, downloadSize,
                        actions=None, removal_bold=True):
         """ display the list of changed packages (apt.Package) and
             return if the user confirms them
         """
         self.confirmChangesMessage = ""
+        self.demotions = demotions
         self.toInstall = []
         self.toUpgrade = []
         self.toRemove = []
@@ -335,6 +336,14 @@ class DistUpgradeView(object):
         pkgs_inst = len(self.toInstall)
         pkgs_upgrade = len(self.toUpgrade)
         # FIXME: show detailed packages
+        if self.demotions > 0:
+          msg += ngettext(
+            "%(amount)d installed package is no longer supported by Canonical. "
+            "You can still get support from the community.",
+            "%(amount)d installed packages are no longer supported by "
+            "Canonical. You can still get support from the community.",
+            len(self.demotions)) % { 'amount' : len(self.demotions) }
+          msg += "\n\n"
         if pkgs_remove > 0:
           # FIXME: make those two separate lines to make it clear
           #        that the "%" applies to the result of ngettext

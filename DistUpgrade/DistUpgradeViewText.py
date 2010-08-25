@@ -141,9 +141,10 @@ class DistUpgradeViewText(DistUpgradeView):
       # if we don't have a pager, just print
       print output
 
-    def confirmChanges(self, summary, changes, downloadSize,
+    def confirmChanges(self, summary, changes, demotions, downloadSize,
                        actions=None, removal_bold=True):
-      DistUpgradeView.confirmChanges(self, summary, changes, downloadSize, actions)
+      DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
+                                     downloadSize, actions)
       print
       print twrap(summary)
       print twrap(self.confirmChangesMessage)

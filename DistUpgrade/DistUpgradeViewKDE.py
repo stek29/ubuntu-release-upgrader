@@ -716,12 +716,13 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         return False
 
-    def confirmChanges(self, summary, changes, downloadSize, 
+    def confirmChanges(self, summary, changes, demotions, downloadSize, 
                        actions=None, removal_bold=True):
         """show the changes dialogue"""
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
-        DistUpgradeView.confirmChanges(self, summary, changes, downloadSize)
+        DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
+                                       downloadSize)
         msg = unicode(self.confirmChangesMessage, 'UTF-8')
         self.changesDialogue = QDialog(self.window_main)
         loadUi("dialog_changes.ui", self.changesDialogue)

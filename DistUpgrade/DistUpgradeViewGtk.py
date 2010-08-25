@@ -609,11 +609,12 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         self.dialog_error.hide()
         return False
 
-    def confirmChanges(self, summary, changes, downloadSize, 
+    def confirmChanges(self, summary, changes, demotions, downloadSize, 
                        actions=None, removal_bold=True):
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
-        if not DistUpgradeView.confirmChanges(self, summary, changes, downloadSize):
+        if not DistUpgradeView.confirmChanges(self, summary, changes, 
+                                              demotions, downloadSize):
           return False
         # append warning
         self.confirmChangesMessage +=  "\n\n<b>%s</b>" %  \

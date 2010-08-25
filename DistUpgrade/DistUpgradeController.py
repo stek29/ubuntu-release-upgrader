@@ -866,35 +866,6 @@ class DistUpgradeController(object):
             if not self.cache.installTasks(self.tasks):
                 return False
 
-        # check what packages got demoted, we do this after the upgrade
-        # calculation to skip packages that are marked for removal anyway
-        # FIXME: integrate this into main upgrade dialog!?!
-        self.installed_demotions = self.cache.get_installed_demoted_packages()
-        if len(self.installed_demotions) > 0:
-	    self.installed_demotions.sort()
-            logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
-            logging.debug("found: %s" % self.found_components)
-            text = _("Canonical Ltd. no longer provides "
-                     "support for the following software "
-                     "packages. You can still get support "
-                     "from the community.")
-            # if universe is not there, explain that we will ask for removal
-            # of the packages later
-            if not "universe" in self.found_components[self.toDist]:
-                text =  _("Canonical Ltd. no longer provides "
-                          "support for the following software "
-                          "packages. You can still get support "
-                          "from the community.\n\n"
-                          "These packages will be suggested for "
-                          "removal at the end of the upgrade because "
-                          "you have not enabled the community maintained "
-                          "software channel (universe).")
-            self._view.showDemotions(_("Support for some applications ended"),
-                                     text,
-                                     self.installed_demotions)
-        # flush UI
-        self._view.processEvents()
-
         # show changes and confirm
         changes = self.cache.get_changes()
         self._view.processEvents()
@@ -908,9 +879,20 @@ class DistUpgradeController(object):
             return False
         self._view.processEvents()
 
-        # ask the user if he wants to do the changes
+        # get the demotions
+        self.installed_demotions = self.cache.get_installed_demoted_packages()
+        if len(self.installed_demotions) > 0:
+	    self.installed_demotions.sort()
+            logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
+            logging.debug("found: %s" % self.found_components)
+
+        # flush UI
+        self._view.processEvents()
+
+        # ask the user
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,
+                                        self.installed_demotions,
                                         self.cache.requiredDownload)
         return res
 

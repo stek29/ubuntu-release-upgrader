@@ -755,6 +755,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.changesDialogue.treeview_details.clear()
         self.changesDialogue.treeview_details.setHeaderLabels(["Packages"])
         self.changesDialogue.treeview_details.header().hide()
+        for demoted in self.demotions:
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("No longer supported %s") % demoted]) )
         for rm in self.toRemove:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )
         for rm in self.toRemoveAuto:

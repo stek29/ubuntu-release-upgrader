@@ -160,6 +160,11 @@ class DistUpgradeViewText(DistUpgradeView):
         # TRANSLATORS: the "d" is "details"
         elif res.strip().lower().startswith(_("d")):
           output = ""
+          if len(self.demotions) > 0:
+              output += "\n"  
+              output += twrap(
+                  _("No longer supported: %s\n") % " ".join(self.demotions), 
+                  subsequent_indent='  ')
           if len(self.toRemove) > 0:
               output += "\n"  
               output += twrap(

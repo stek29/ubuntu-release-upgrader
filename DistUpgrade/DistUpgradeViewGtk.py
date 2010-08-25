@@ -631,6 +631,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         self.label_changes.set_markup(self.confirmChangesMessage)
         # fill in the details
         self.details_list.clear()
+        for demotion in self.demotions:
+            self.details_list.append([_("No longer supported %s") % demotion])
         for dg in self.toDowngrade:
             self.details_list.append([_("<b>Downgrade %s</b>") % dg])
         for rm in self.toRemove:

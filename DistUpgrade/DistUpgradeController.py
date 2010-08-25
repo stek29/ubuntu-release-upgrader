@@ -884,7 +884,7 @@ class DistUpgradeController(object):
         if len(self.installed_demotions) > 0:
 	    self.installed_demotions.sort()
             logging.debug("demoted: '%s'" % " ".join(self.installed_demotions))
-            logging.debug("found: %s" % self.found_components)
+            logging.debug("found components: %s" % self.found_components)
 
         # flush UI
         self._view.processEvents()

@@ -479,10 +479,13 @@ class UpdateManager(SimpleGtkbuilderApp):
           if self.dl_size != 0:
               download_str = _("%s will be downloaded.") % (humanize_size(self.dl_size))
               self.image_downsize.set_sensitive(True)
-              if self.alert_watcher.network_state != NM_STATE_CONNECTED:
-                  self.button_install.set_sensitive(False)
-              else:
-                  self.button_install.set_sensitive(True)
+              # do not set the buttons to sensitive/insensitive until NM
+              # can deal with dialup connections properly
+              #if self.alert_watcher.network_state != NM_STATE_CONNECTED:
+              #    self.button_install.set_sensitive(False)
+              #else:
+              #    self.button_install.set_sensitive(True)
+              self.button_install.set_sensitive(True)
           else:
               if inst_count > 0:
                   download_str = ngettext("The update has already been downloaded, but not installed",

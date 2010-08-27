@@ -1147,7 +1147,7 @@ class DistUpgradeController(object):
         # FIXME Add an explanation about what obsolete packages are
         #explanation = _("")
         if (len(changes) > 0 and 
-            self._view.confirmChanges(summary, changes, 0, actions, False)):
+            self._view.confirmChanges(summary, changes, [], 0, actions, False)):
             fprogress = self._view.getFetchProgress()
             iprogress = self._view.getInstallProgress(self.cache)
             try:

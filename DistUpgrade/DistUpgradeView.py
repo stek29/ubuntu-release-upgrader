@@ -336,7 +336,7 @@ class DistUpgradeView(object):
         pkgs_inst = len(self.toInstall)
         pkgs_upgrade = len(self.toUpgrade)
         # FIXME: show detailed packages
-        if self.demotions > 0:
+        if len(self.demotions) > 0:
           msg += ngettext(
             "%(amount)d installed package is no longer supported by Canonical. "
             "You can still get support from the community.",

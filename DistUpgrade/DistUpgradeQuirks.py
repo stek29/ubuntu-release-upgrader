@@ -181,6 +181,13 @@ class DistUpgradeQuirks(object):
         # new nvidia needs a CPU with sse support
         self._test_and_warn_on_nvidia_and_no_sse()
 
+    def maverickPostDistUpgradeCache(self):
+        """
+        this function works around quirks in the 
+        lucid->maverick upgrade calculation
+        """
+        self._add_extras_repository()
+
     def karmicPostDistUpgradeCache(self):
         """ 
         this function works around quirks in the 
@@ -1011,4 +1018,17 @@ class DistUpgradeQuirks(object):
                             return
         
 
-
+    def _add_extras_repository(self):
+        logging.debug("_add_extras_repository")
+        import aptsources.sourceslist
+        sources = aptsources.sourceslist.SourcesList()
+        for entry in sources:
+            if "extras.ubuntu.com" in entry.uri:
+                logging.debug("found extras.ubuntu.com, no need to add it")
+                break
+        else:
+            logging.info("no extras.ubuntu.com, adding it to sources.list")
+            sources.add("deb","http://extras.ubuntu.com/ubuntu",
+                        self.controller.toDist, ["main"],
+                        "Third party developers repository")
+            sources.save()

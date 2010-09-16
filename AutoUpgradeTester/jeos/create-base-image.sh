@@ -31,3 +31,6 @@ fi
 # create the image
 ubuntu-vm-builder kvm $1 --kernel-flavour $KERNEL --ssh-key $(pwd)/ssh-key.pub \
     --components main,restricted --rootsize 80000 --arch i386 --dest ubuntu-$1
+
+# move into place
+mv ubuntu-$1/*.qcow2 $1-i386.qcow2

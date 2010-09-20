@@ -612,7 +612,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     except SystemError:
         pass
     cmd = ["/usr/bin/gksu", 
-           "--desktop", "/usr/share/applications/software-properties.desktop", 
+           "--desktop", "/usr/share/applications/software-properties-gtk.desktop", 
            "--", "/usr/bin/software-properties-gtk","--open-tab","2",
            "--toplevel", "%s" % self.window_main.window.xid ]
     self.window_main.set_sensitive(False)

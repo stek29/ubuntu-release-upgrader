@@ -847,7 +847,7 @@ class MyCache(apt.Cache):
                         self[key].mark_install()
                     except (SystemError, KeyError), e:
                         logging.error("failed to mark '%s' for install (%s)" % (key,e))
-                        view.error(_("Can't install '%s'" % key),
+                        view.error(_("Can't install '%s'") % key,
                                    _("It was impossible to install a "
                                      "required package. Please report "
                                      "this as a bug. "))

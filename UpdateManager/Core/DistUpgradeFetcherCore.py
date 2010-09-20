@@ -273,7 +273,7 @@ class DistUpgradeFetcherCore(object):
             return False
           else:
             self.error(_("Can not run the upgrade"),
-                       _("The error message is '%s'." % e.strerror))
+                       _("The error message is '%s'.") % e.strerror)
         return True
 
 if __name__ == "__main__":

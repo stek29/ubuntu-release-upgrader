@@ -138,9 +138,9 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
         if currentItem > self.totalItems:
             currentItem = self.totalItems
         if self.currentCPS > 0:
-            self.label.setText(_("Downloading additional package files...") + _("File %s of %s at %sB/s" % (self.currentItems,self.totalItems,apt_pkg.SizeToStr(self.currentCPS))))
+            self.label.setText(_("Downloading additional package files...") + _("File %s of %s at %sB/s") % (self.currentItems,self.totalItems,apt_pkg.SizeToStr(self.currentCPS)))
         else:
-            self.label.setText(_("Downloading additional package files...") + _("File %s of %s" % (self.currentItems,self.totalItems)))
+            self.label.setText(_("Downloading additional package files...") + _("File %s of %s") % (self.currentItems,self.totalItems))
         KApplication.kApplication().processEvents()
         return True
 

@@ -1020,15 +1020,18 @@ class DistUpgradeQuirks(object):
 
     def _add_extras_repository(self):
         logging.debug("_add_extras_repository")
-        import aptsources.sourceslist
-        sources = aptsources.sourceslist.SourcesList()
-        for entry in sources:
-            if "extras.ubuntu.com" in entry.uri:
-                logging.debug("found extras.ubuntu.com, no need to add it")
-                break
-        else:
-            logging.info("no extras.ubuntu.com, adding it to sources.list")
-            sources.add("deb","http://extras.ubuntu.com/ubuntu",
-                        self.controller.toDist, ["main"],
-                        "Third party developers repository")
-            sources.save()
+        try:
+            import aptsources.sourceslist
+            sources = aptsources.sourceslist.SourcesList()
+            for entry in sources:
+                if "extras.ubuntu.com" in entry.uri:
+                    logging.debug("found extras.ubuntu.com, no need to add it")
+                    break
+            else:
+                logging.info("no extras.ubuntu.com, adding it to sources.list")
+                sources.add("deb","http://extras.ubuntu.com/ubuntu",
+                            self.controller.toDist, ["main"],
+                            "Third party developers repository")
+                sources.save()
+        except:
+            logging.exception("error adding extras.ubuntu.com")

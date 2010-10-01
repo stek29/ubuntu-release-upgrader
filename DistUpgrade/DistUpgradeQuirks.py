@@ -1047,6 +1047,9 @@ class DistUpgradeQuirks(object):
             if ("foomatic-db-gutenprint" in cache and
                 cache["foomatic-db-gutenprint"].marked_delete and
                 "ijsgutenprint-ppds" in cache):
-                cache["isfgutenprint-ppds"].markInstall()
+                logging.info("installing ijsgutenprint-ppds")
+                cache.markInstall(
+                    "ijsgutenprint-ppds",
+                    "foomatic-db-gutenprint -> ijsgutenprint-ppds rule")
         except:
             logging.exception("_gutenprint_fixup failed")

@@ -187,6 +187,7 @@ class DistUpgradeQuirks(object):
         lucid->maverick upgrade calculation
         """
         self._add_extras_repository()
+        self._gutenprint_fixup()
 
     def karmicPostDistUpgradeCache(self):
         """ 
@@ -1035,3 +1036,17 @@ class DistUpgradeQuirks(object):
                 sources.save()
         except:
             logging.exception("error adding extras.ubuntu.com")
+
+    def _gutenprint_fixup(self):
+        """ foomatic-db-gutenprint get removed during the upgrade,
+            replace it with the compressed ijsgutenprint-ppds
+            (context is foomatic-db vs foomatic-db-compressed-ppds)
+        """
+        try:
+            cache = self.controller.cache
+            if ("foomatic-db-gutenprint" in cache and
+                cache["foomatic-db-gutenprint"].marked_delete and
+                "ijsgutenprint-ppds" in cache):
+                cache["isfgutenprint-ppds"].markInstall()
+        except:
+            logging.exception("_gutenprint_fixup failed")

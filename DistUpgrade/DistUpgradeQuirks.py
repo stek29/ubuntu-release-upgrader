@@ -1021,6 +1021,14 @@ class DistUpgradeQuirks(object):
 
     def _add_extras_repository(self):
         logging.debug("_add_extras_repository")
+        cache = self.controller.cache
+        if not "ubuntu-extras-keyring" in cache:
+            logging.debug("no ubuntu-extras-keyring, no need to add repo")
+            return
+        if not (cache["ubuntu-extras-keyring"].marked_install or
+                cache["ubuntu-extras-keyring"].installed):
+            logging.debug("ubuntu-extras-keyring not installed/marked_install")
+            return
         try:
             import aptsources.sourceslist
             sources = aptsources.sourceslist.SourcesList()

@@ -1,3 +1,14 @@
+update-manager (1:0.142.20) maverick; urgency=low
+
+  * DistUpgrade/DistUpgrade.cfg:
+    - add blcr-dkms to the "BadVersions" variable. The current blcr-dkms
+      source will not build with 2.6.35. Adding it here will cause the
+      upgrade to abort with a message if it is installed. 
+      It also means that if support for 2.6.35 is added to blcr-dkms via
+      a SRU that will automatically unblock the upgrade (LP: #555729)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 06 Oct 2010 16:50:51 +0200
+
 update-manager (1:0.142.19) maverick; urgency=low
 
   * DistUpgrade/DistUpgradeQuirks.py:

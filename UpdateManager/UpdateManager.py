@@ -642,6 +642,8 @@ class UpdateManager(SimpleGtkbuilderApp):
                                             req.size_needed,
                                             req.dir))
         return
+    except SystemError, e:
+        logging.exception("free space check failed")
     self.invoke_manager(INSTALL)
     
   def on_button_restart_required_clicked(self, button=None):

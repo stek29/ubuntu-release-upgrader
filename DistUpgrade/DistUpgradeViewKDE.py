@@ -301,6 +301,10 @@ class KDEInstallProgressAdapter(InstallProgress):
         #self.confDialogue.resize(self.confDialogue.minimumSizeHint())
         self.confDialogue.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
 
+        # workaround silly dpkg 
+        if not os.path.exists(current):
+          current = current+".dpkg-dist"
+
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
           cmd = ["/usr/bin/diff", "-u", current, new]

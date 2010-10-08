@@ -1,13 +1,16 @@
 update-manager (1:0.142.20) UNRELEASEDmaverick; urgency=low
 
   * UpdateManager/UpdateManager.py:
-    - do not crash if the free space check fails 
+    - do not crash if the free space check fails (LP: #656881)
   * DistUpgrade/DistUpgrade.cfg:
     - add blcr-dkms to the "BadVersions" variable. The current blcr-dkms
       source will not build with 2.6.35. Adding it here will cause the
       upgrade to abort with a message if it is installed. 
       It also means that if support for 2.6.35 is added to blcr-dkms via
       a SRU that will automatically unblock the upgrade (LP: #555729)
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - workaround dpkg not sending the correct filename on conffile
+      prompts over the status-fd (LP: #656912)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 06 Oct 2010 16:50:51 +0200
 

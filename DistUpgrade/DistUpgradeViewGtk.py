@@ -237,6 +237,10 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.parent.dialog_conffile.set_title("")
         self.parent.dialog_conffile.set_transient_for(self.parent.window_main)
 
+        # workaround silly dpkg 
+        if not os.path.exists(current):
+          current = current+".dpkg-dist"
+
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
           cmd = ["/usr/bin/diff", "-u", current, new]

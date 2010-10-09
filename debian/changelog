@@ -1,5 +1,6 @@
-update-manager (1:0.142.20) UNRELEASEDmaverick; urgency=low
+update-manager (1:0.142.20) maverick-proposed; urgency=low
 
+  [ Michael Vogt ]
   * UpdateManager/UpdateManager.py:
     - do not crash if the free space check fails (LP: #656881)
   * DistUpgrade/DistUpgrade.cfg:
@@ -13,7 +14,13 @@ update-manager (1:0.142.20) UNRELEASEDmaverick; urgency=low
     - workaround dpkg not sending the correct filename on conffile
       prompts over the status-fd (LP: #656912)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 06 Oct 2010 16:50:51 +0200
+  [ Jonathan Riddell ]
+  * DistUpgrade/DistUpgradeViewKDE.py:
+    - disable confDialogue.show_difference_button, workaround for 
+      "distupgrade crashed during conf file change review" (LP: #656876)
+      requires release note that user needs to view changes manually on command line
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Sat, 09 Oct 2010 19:08:23 +0100
 
 update-manager (1:0.142.19) maverick; urgency=low
 

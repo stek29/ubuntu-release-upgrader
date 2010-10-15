@@ -36,6 +36,15 @@ class testQuirks(unittest.TestCase):
         self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse") == True)
         self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-without-sse") == False)
 
+    def test_cpu_is_i686(self):
+        q = DistUpgradeQuirks(MockController(), MockConfig)
+        q.arch = "i386"
+        self.assertTrue(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-with-sse"))
+        self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-without-cmov"))
+        self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-i586"))
+        self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-i486"))
+        self.assertTrue(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-via-c7m"))
+
     def test_patch(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         shutil.copy("./patchdir/foo.orig", "./patchdir/foo")

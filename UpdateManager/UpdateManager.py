@@ -523,16 +523,20 @@ class UpdateManager(SimpleGtkbuilderApp):
       mtime = os.stat("/var/lib/apt/periodic/update-success-stamp")[stat.ST_MTIME]
       ago_days = int( (time.time() - mtime) / (24*60*60))
       ago_hours = int((time.time() - mtime) / (60*60) )
-      if ago_days > 0:
-          return ngettext("The package information was last updated %(days_ago)s day ago.",
+      if ago_days > 7:
+	  return [ngettext("The package information was last updated %(days_ago)s day ago. \n Press the 'Check' button below to check for software updates.",
+                          "The package information was last updated %(days_ago)s days ago. \n Press the 'Check' button below to check for software updates.",
+                          ago_days) % { "days_ago" : ago_days, } , True]
+      elif ago_days > 0:
+          return [ngettext("The package information was last updated %(days_ago)s day ago.",
                           "The package information was last updated %(days_ago)s days ago.",
-                          ago_days) % { "days_ago" : ago_days, }
+                          ago_days) % { "days_ago" : ago_days, } , False]
       elif ago_hours > 0:
-          return ngettext("The package information was last updated %(hours_ago)s hour ago.",
+          return [ngettext("The package information was last updated %(hours_ago)s hour ago.",
                           "The package information was last updated %(hours_ago)s hours ago.",
-                          ago_hours) % { "hours_ago" : ago_hours, }
+                          ago_hours) % { "hours_ago" : ago_hours, } , False]
       else:
-          return _("The package information was last updated less than one hour ago.")
+          return [_("The package information was last updated less than one hour ago.") , False]
       return None
 
   def update_last_updated_text(self):
@@ -541,7 +545,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       num_updates = self.cache.installCount
       if num_updates == 0:
           if self._get_last_apt_get_update_text() is not None:
-              text_label_main = self._get_last_apt_get_update_text()
+              text_label_main = self._get_last_apt_get_update_text()[0]
               self.label_main_details.set_text(text_label_main)
           return True
       # stop the timer if there are upgrades now
@@ -564,7 +568,9 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")
           if self._get_last_apt_get_update_text() is not None:
-              text_label_main = self._get_last_apt_get_update_text()
+              text_label_main = self._get_last_apt_get_update_text()[0]
+	      if self._get_last_apt_get_update_text()[1] == True:
+			text_header = "<big><b>%s</b></big>"  % _("Software updates may be available for your computer.")
           # add timer to ensure we update the information when the 
           # last package count update was performed
           glib.timeout_add_seconds(10, self.update_last_updated_text)

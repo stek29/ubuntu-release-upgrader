@@ -3,7 +3,7 @@
 set -e
 
 # update demotions
-(cd utils && ./demotions.py lucid maverick > demoted.cfg)
+(cd utils && ./demotions.py maverick natty > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
 #(cd utils && ./demotions.py hardy lucid > demoted.cfg.hardy)
 
@@ -16,7 +16,7 @@ rm -rf utils/apt/lists utils/apt/*.bin
 
 # run the test-suit
 #echo "Running integrated tests"
-#(cd tests && for test in *.py; do python $$test; done)
+(cd tests && make)
 
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)

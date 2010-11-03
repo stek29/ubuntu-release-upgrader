@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-import unittest
-
+import logging
 import os
 import os.path
 import sys
 import time
+import unittest
 sys.path.insert(0, "../")
 
 from UpdateManager.Core.MetaRelease import *
@@ -86,5 +86,6 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     unittest.main()
 

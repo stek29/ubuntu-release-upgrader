@@ -197,8 +197,11 @@ class DistUpgradeFetcherCore(object):
         " download the tarball with the upgrade script "
         self.tmpdir = tmpdir = tempfile.mkdtemp(prefix="update-manager-")
         os.chdir(tmpdir)
+        logging.debug("using tmpdir: '%s'" % tmpdir)
         # turn debugging on here (if required)
-        #apt_pkg.Config.Set("Debug::Acquire::http","1")
+        if self.DEBUG > 0:
+            apt_pkg.Config.Set("Debug::Acquire::http","1")
+            apt_pkg.Config.Set("Debug::Acquire::ftp","1")
         #os.listdir(tmpdir)
         fetcher = apt_pkg.Acquire(self._progress)
         if self.new_dist.upgradeToolSig != None:

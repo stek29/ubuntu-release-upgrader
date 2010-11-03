@@ -17,8 +17,8 @@ class testPreRequists(unittest.TestCase):
     testdir = os.path.abspath("./data-sources-list-test/")
 
     def setUp(self):
-        apt_pkg.Config.Set("Dir::Etc",self.testdir)
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc",self.testdir)
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         self.dc = DistUpgradeController(DistUpgradeView(),
                                         datadir=self.testdir)
     def testPreReqSourcesListAddingSimple(self):
@@ -57,12 +57,12 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
                     os.path.join(self.testdir,"sources.list"))
         tmpdir = tempfile.mkdtemp()
         # unset sourceparts
-        apt_pkg.Config.Set("Dir::Etc::sourceparts", tmpdir)
+        apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
         # write empty status file
         open(tmpdir+"/status","w")
         os.makedirs(tmpdir+"/lists/partial")
-        apt_pkg.Config.Set("Dir::State", tmpdir)
-        apt_pkg.Config.Set("Dir::State::status", tmpdir+"/status")
+        apt_pkg.config.set("Dir::State", tmpdir)
+        apt_pkg.config.set("Dir::State::status", tmpdir+"/status")
         self.dc.openCache(lock=False)
         exp = False
         try:
@@ -71,70 +71,70 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
             exp = True
         self.assert_(exp == True)
 
-    def testVerifyBackportsValid(self):
+    def disabled__because_of_jaunty_EOL_testVerifyBackportsValid(self):
         " test the backport verification "
         # only minimal stuff in sources.list to speed up tests
         shutil.copy(os.path.join(self.testdir,"sources.list.minimal"),
                     os.path.join(self.testdir,"sources.list"))
         tmpdir = tempfile.mkdtemp()
-        #apt_pkg.Config.Set("Debug::pkgAcquire::Auth","true")
-        #apt_pkg.Config.Set("Debug::Acquire::gpgv","true")
-        apt_pkg.Config.Set("APT::GPGV::TrustedKeyring",self.testdir+"/trusted.gpg")
+        #apt_pkg.config.set("Debug::pkgAcquire::Auth","true")
+        #apt_pkg.config.set("Debug::Acquire::gpgv","true")
+        apt_pkg.config.set("APT::GPGV::TrustedKeyring",self.testdir+"/trusted.gpg")
         # set sourceparts
-        apt_pkg.Config.Set("Dir::Etc::sourceparts", tmpdir)
+        apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
         template = os.path.join(self.testdir,"prerequists-sources.list.in")
         out = os.path.join(tmpdir,"prerequists-sources.list")
         # write empty status file
         open(tmpdir+"/status","w")
         os.makedirs(tmpdir+"/lists/partial")
-        apt_pkg.Config.Set("Dir::State", tmpdir)
-        apt_pkg.Config.Set("Dir::State::status", tmpdir+"/status")
+        apt_pkg.config.set("Dir::State", tmpdir)
+        apt_pkg.config.set("Dir::State::status", tmpdir+"/status")
         self.dc._addPreRequistsSourcesList(template, out)
         self.dc.openCache(lock=False)
         res = self.dc._verifyBackports()
         self.assert_(res == True)
 
-    def testVerifyBackportsNoValidMirror(self):
+    def disabled__because_of_jaunty_EOL_testVerifyBackportsNoValidMirror(self):
         " test the backport verification with no valid mirror "
         # only minimal stuff in sources.list to speed up tests
         shutil.copy(os.path.join(self.testdir,"sources.list.no_valid_mirror"),
                     os.path.join(self.testdir,"sources.list"))
         tmpdir = tempfile.mkdtemp()
-        #apt_pkg.Config.Set("Debug::pkgAcquire::Auth","true")
-        #apt_pkg.Config.Set("Debug::Acquire::gpgv","true")
-        apt_pkg.Config.Set("APT::GPGV::TrustedKeyring",self.testdir+"/trusted.gpg")
+        #apt_pkg.config.set("Debug::pkgAcquire::Auth","true")
+        #apt_pkg.config.set("Debug::Acquire::gpgv","true")
+        apt_pkg.config.set("APT::GPGV::TrustedKeyring",self.testdir+"/trusted.gpg")
         # set sourceparts
-        apt_pkg.Config.Set("Dir::Etc::sourceparts", tmpdir)
+        apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
         template = os.path.join(self.testdir,"prerequists-sources.list.in.no_archive_falllback")
         out = os.path.join(tmpdir,"prerequists-sources.list")
         # write empty status file
         open(tmpdir+"/status","w")
         os.makedirs(tmpdir+"/lists/partial")
-        apt_pkg.Config.Set("Dir::State", tmpdir)
-        apt_pkg.Config.Set("Dir::State::status", tmpdir+"/status")
+        apt_pkg.config.set("Dir::State", tmpdir)
+        apt_pkg.config.set("Dir::State::status", tmpdir+"/status")
         self.dc._addPreRequistsSourcesList(template, out, dumb=True)
         self.dc.openCache(lock=False)
         res = self.dc._verifyBackports()
         self.assert_(res == True)
 
-    def testVerifyBackportsNoValidMirror(self):
+    def disabled__because_of_jaunty_EOL_testVerifyBackportsNoValidMirror(self):
         " test the backport verification with no valid mirror "
         # only minimal stuff in sources.list to speed up tests
         shutil.copy(os.path.join(self.testdir,"sources.list.no_valid_mirror"),
                     os.path.join(self.testdir,"sources.list"))
         tmpdir = tempfile.mkdtemp()
-        #apt_pkg.Config.Set("Debug::pkgAcquire::Auth","true")
-        #apt_pkg.Config.Set("Debug::Acquire::gpgv","true")
-        apt_pkg.Config.Set("APT::GPGV::TrustedKeyring",self.testdir+"/trusted.gpg")
+        #apt_pkg.config.set("Debug::pkgAcquire::Auth","true")
+        #apt_pkg.config.set("Debug::Acquire::gpgv","true")
+        apt_pkg.config.set("APT::GPGV::TrustedKeyring",self.testdir+"/trusted.gpg")
         # set sourceparts
-        apt_pkg.Config.Set("Dir::Etc::sourceparts", tmpdir)
+        apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
         template = os.path.join(self.testdir,"prerequists-sources.list.in.broken")
         out = os.path.join(tmpdir,"prerequists-sources.list")
         # write empty status file
         open(tmpdir+"/status","w")
         os.makedirs(tmpdir+"/lists/partial")
-        apt_pkg.Config.Set("Dir::State", tmpdir)
-        apt_pkg.Config.Set("Dir::State::status", tmpdir+"/status")
+        apt_pkg.config.set("Dir::State", tmpdir)
+        apt_pkg.config.set("Dir::State::status", tmpdir+"/status")
         try:
             self.dc._addPreRequistsSourcesList(template, out, dumb=False)
             self.dc.openCache(lock=False)

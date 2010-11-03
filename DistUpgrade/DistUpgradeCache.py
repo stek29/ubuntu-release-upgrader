@@ -225,7 +225,7 @@ class MyCache(apt.Cache):
         self.unlockListsDir()
         res = apt.Cache.update(self, fprogress)
         self.lockListsDir()
-        if fprogress.release_file_download_error:
+        if fprogress and fprogress.release_file_download_error:
             # FIXME: not ideal error message, but we just reuse a 
             #        existing one here to avoid a new string
             raise IOError(_("The server may be overloaded"))

@@ -473,12 +473,13 @@ class DistUpgradeController(object):
             # -> if not that means that "main" is missing and we
             #    need to  enable it
             for pkgname in self.config.getlist("Distro","BaseMetaPkgs"):
-                if ((not self.cache.has_key(pkgname)
-                     or
-                     len(self.cache[pkgname].candidateOrigin) == 0)
+                if ((not pkgname in self.cache or
+                     not self.cache[pkgname].candidate or
+                     len(self.cache[pkgname].candidate.origins) == 0)
                     or
-                    (len(self.cache[pkgname].candidateOrigin) == 1 and
-                     self.cache[pkgname].candidateOrigin[0].archive == "now")
+                    (self.cache[pkgname].candidate and
+                     len(self.cache[pkgname].candidate.origins) == 1 and
+                     self.cache[pkgname].candidate.origins[0].archive == "now")
                    ):
                     logging.debug("BaseMetaPkg '%s' has no candidateOrigin" % pkgname)
                     try:
@@ -1276,8 +1277,10 @@ class DistUpgradeController(object):
         except ConfigParser.NoOptionError, e:
             pass
         for pkgname in backportslist:
-            pkg = self.cache[pkgname]                
-            for cand in pkg.candidateOrigin:
+            pkg = self.cache[pkgname]
+            if not pkg.candidate:
+                return False
+            for cand in pkg.candidate.origins:
                 if cand.trusted:
                     break
             else:

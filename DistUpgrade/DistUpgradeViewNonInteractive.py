@@ -244,7 +244,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         self.config = DistUpgradeConfig(".")
         self._fetchProgress = NonInteractiveFetchProgress()
         self._installProgress = NonInteractiveInstallProgress(logdir)
-        self._opProgress = apt.progress.OpProgress()
+        self._opProgress = apt.progress.base.OpProgress()
         sys.__excepthook__ = self.excepthook
     def excepthook(self, type, value, traceback):
         " on uncaught exceptions -> print error and reboot "

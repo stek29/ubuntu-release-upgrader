@@ -7,13 +7,19 @@ update-manager (1:0.145) UNRELEASEDnatty; urgency=low
     - fix jaunty test now that this is moved to old-releases.ubuntu.com
   * pre-build.sh:
     - run testsuite
-  * UpdateManager/Core/DistUpgradeFetcherCore.py:
-    - some python-apt 0.8 fixes
   * tests/test_dist_upgrade_fetcher_core.py:
     - fix test failures and ensure its python-apt 0.8 clean
   * po/update-manager.pot:
     - updated
-  
+  * DistUpgrade/DistUpgradeCache.py:
+    - do not crash if no acquire progress is given
+  * DistUpgrade/DistUpgradeController.py, 
+    DistUpgrade/DistUpgradeViewNonInteractive.py,
+    UpdateManager/Core/DistUpgradeFetcherCore.py,
+    tests/test_update_origin.py,
+    tests/test_sources_list.py:
+    - fixes in the python-apt 0.8 API
+
   [ Bilal Akhtar ]
   * UpdateManager/UpdateManager.py:
     - add more meaningful text if info is out-of-date (LP: #35009)

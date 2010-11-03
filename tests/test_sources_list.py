@@ -18,8 +18,8 @@ class testSourcesListUpdate(unittest.TestCase):
     testdir = os.path.abspath("./data-sources-list-test/")
 
     def setUp(self):
-        apt_pkg.Config.Set("Dir::Etc",self.testdir)
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc",self.testdir)
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         if os.path.exists(os.path.join(self.testdir, "sources.list")):
             os.unlink(os.path.join(self.testdir, "sources.list"))
 
@@ -29,7 +29,7 @@ class testSourcesListUpdate(unittest.TestCase):
         """
         shutil.copy(os.path.join(self.testdir,"sources.list.nothing"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourcelist","sources.list")
+        apt_pkg.config.set("Dir::Etc::sourcelist","sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
@@ -49,7 +49,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         """
         shutil.copy(os.path.join(self.testdir,"sources.list.in"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourcelist","sources.list")
+        apt_pkg.config.set("Dir::Etc::sourcelist","sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
@@ -69,8 +69,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         # check that the backup file was created correctly
         self.assert_(subprocess.call(
             ["cmp",
-             apt_pkg.Config.FindFile("Dir::Etc::sourcelist")+".in",
-             apt_pkg.Config.FindFile("Dir::Etc::sourcelist")+".distUpgrade"
+             apt_pkg.config.find_file("Dir::Etc::sourcelist")+".in",
+             apt_pkg.config.find_file("Dir::Etc::sourcelist")+".distUpgrade"
             ]) == 0)
 
     def test_commercial_transition(self):
@@ -79,7 +79,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         """
         shutil.copy(os.path.join(self.testdir,"sources.list.commercial-transition"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
@@ -95,11 +95,11 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         """ 
         test transition of powerpc to ports.ubuntu.com
         """
-        arch = apt_pkg.Config.Find("APT::Architecture")
-        apt_pkg.Config.Set("APT::Architecture","powerpc")
+        arch = apt_pkg.config.find("APT::Architecture")
+        apt_pkg.config.set("APT::Architecture","powerpc")
         shutil.copy(os.path.join(self.testdir,"sources.list.powerpc"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
@@ -112,17 +112,17 @@ deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
 
 deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted
 """)
-        apt_pkg.Config.Set("APT::Architecture",arch)
+        apt_pkg.config.set("APT::Architecture",arch)
 
     def test_sparc_transition(self):
         """ 
         test transition of sparc to ports.ubuntu.com
         """
-        arch = apt_pkg.Config.Find("APT::Architecture")
-        apt_pkg.Config.Set("APT::Architecture","sparc")
+        arch = apt_pkg.config.find("APT::Architecture")
+        apt_pkg.config.set("APT::Architecture","sparc")
         shutil.copy(os.path.join(self.testdir,"sources.list.sparc"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.fromDist = "gutsy"
@@ -137,7 +137,7 @@ deb-src http://archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
 
 deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
 """)
-        apt_pkg.Config.Set("APT::Architecture",arch)
+        apt_pkg.config.set("APT::Architecture",arch)
 
 
     def testVerifySourcesListEntry(self):
@@ -161,7 +161,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
         d = DistUpgradeController(v,datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir,"sources.list.EOL"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.fromDist = "warty"
@@ -184,7 +184,7 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted
         d = DistUpgradeController(v,datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir,"sources.list.EOL2Supported"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.fromDist = "gutsy"
@@ -207,7 +207,7 @@ deb http://de.archive.ubuntu.com/ubuntu hardy-security main restricted
         d = DistUpgradeController(v,datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir,"sources.list.EOL2Supported"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.fromDist = "gutsy"
@@ -229,7 +229,7 @@ deb http://archive.ubuntu.com/ubuntu hardy-security main restricted
         """
         shutil.copy(os.path.join(self.testdir,"sources.list.partner"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
@@ -252,7 +252,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         """
         shutil.copy(os.path.join(self.testdir,"sources.list.apt-cacher"),
                     os.path.join(self.testdir,"sources.list"))
-        apt_pkg.Config.Set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
@@ -277,7 +277,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
 
         
     def _verifySources(self, expected):
-        sources_list = open(apt_pkg.Config.FindFile("Dir::Etc::sourcelist")).read()
+        sources_list = open(apt_pkg.config.find_file("Dir::Etc::sourcelist")).read()
         for l in expected.split("\n"):
             self.assert_(l in sources_list,
                          "expected entry '%s' in sources.list missing. got:\n'''%s'''" % (l, sources_list))

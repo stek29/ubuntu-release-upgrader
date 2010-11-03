@@ -11,54 +11,57 @@ from UpdateManager.Core.MyCache import MyCache
 
 
 class testOriginMatcher(unittest.TestCase):
+
     def setUp(self):
-        self.dpkg_status = open("apt/var/lib/dpkg/status","w")
+        self.aptroot = os.path.join(os.getcwd(), "aptroot-update-origin/")
+        self.dpkg_status = open("%s/var/lib/dpkg/status" % self.aptroot,"w")
         self.dpkg_status.flush()
-        self.cache = MyCache(apt.progress.OpProgress(), rootdir=os.path.join(os.getcwd(),"apt/"))
+        self.cache = MyCache(apt.progress.base.OpProgress(), 
+                             rootdir=self.aptroot)
         self.cache._listsLock = 0
         self.cache.update()
-        self.cache.open(apt.progress.OpProgress())
+        self.cache.open()
 
     def testOriginMatcherSimple(self):
         test_pkgs = set()
         for pkg in self.cache:
-            if pkg.candidateOrigin:
-                if [l.archive for l in pkg.candidateOrigin
-                    if l.archive == "dapper-security"]:
+            if pkg.candidate and pkg.candidate.origins:
+                if [l.archive for l in pkg.candidate.origins
+                    if l.archive == "lucid-security"]:
                     test_pkgs.add(pkg.name)
-        self.assert_(len(test_pkgs) > 0)
+        self.assertTrue(len(test_pkgs) > 0)
         ul = UpdateList(None)
-        matcher = ul.initMatcher("dapper")
+        matcher = ul.initMatcher("lucid")
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
             self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
-                             matcher[("dapper-security","Ubuntu")],
-                             "pkg '%s' is not in dapper-security but in '%s' instead" % (pkg.name, self.cache.matchPackageOrigin(pkg, matcher).description))
+                             matcher[("lucid-security","Ubuntu")],
+                             "pkg '%s' is not in lucid-security but in '%s' instead" % (pkg.name, self.cache.matchPackageOrigin(pkg, matcher).description))
         
 
     def testOriginMatcherWithVersionInUpdatesAndSecurity(self):
         # empty dpkg status
-        self.cache.open(apt.progress.OpProgress())
+        self.cache.open(apt.progress.base.OpProgress())
         
         # find test packages set
         test_pkgs = set()
         for pkg in self.cache:
             if pkg.candidateOrigin:
                 for v in pkg.candidateOrigin:
-                    if (v.archive == "dapper-updates" and
-                        len(pkg._pkg.VersionList) > 2):
+                    if (v.archive == "lucid-updates" and
+                        len(pkg._pkg.version_list) > 2):
                         test_pkgs.add(pkg.name)
         self.assert_(len(test_pkgs) > 0,
                      "no suitable test package found that has a version in both -security and -updates and where -updates is newer")
 
         # now test if versions in -security are detected
         ul = UpdateList(None)
-        matcher = ul.initMatcher("dapper")
+        matcher = ul.initMatcher("lucid")
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
             self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
-                             matcher[("dapper-security","Ubuntu")],
-                             "package '%s' from dapper-updates contains also a (not yet installed) security updates, but it is not labeled as such" % pkg.name)
+                             matcher[("lucid-security","Ubuntu")],
+                             "package '%s' from lucid-updates contains also a (not yet installed) security updates, but it is not labeled as such" % pkg.name)
 
         # now check if it marks the version with -update if the -security
         # version is installed
@@ -66,22 +69,22 @@ class testOriginMatcher(unittest.TestCase):
             pkg = self.cache[pkgname]
             # FIXME: make this more inteligent (picking the versin from
             #        -security
-            sec_ver = pkg._pkg.VersionList[1]
+            sec_ver = pkg._pkg.version_list[1]
             self.dpkg_status.write("Package: %s\n"
                               "Status: install ok installed\n"
                               "Installed-Size: 1\n"
                               "Version: %s\n"
                               "Description: foo\n\n"
-                              % (pkg.name, sec_ver.VerStr))
+                              % (pkg.name, sec_ver.ver_str))
             self.dpkg_status.flush()
-        self.cache.open(apt.progress.OpProgress())
+        self.cache.open()
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
-            self.assert_(pkg._pkg.CurrentVer != None,
+            self.assert_(pkg._pkg.current_ver != None,
                          "no package '%s' installed" % pkg.name)
             self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
-                             matcher[("dapper-updates","Ubuntu")],
-                             "package '%s' (%s) from dapper-updates is labeld '%s' even though we have marked this version as installed already" % (pkg.name, pkg.candidateVersion, self.cache.matchPackageOrigin(pkg, matcher).description))
+                             matcher[("lucid-updates","Ubuntu")],
+                             "package '%s' (%s) from lucid-updates is labeld '%s' even though we have marked this version as installed already" % (pkg.name, pkg.candidateVersion, self.cache.matchPackageOrigin(pkg, matcher).description))
 
 
 if __name__ == "__main__":

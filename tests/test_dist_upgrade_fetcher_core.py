@@ -11,6 +11,8 @@ sys.path.insert(0, "../")
 from UpdateManager.Core.MetaRelease import *
 from UpdateManager.Core.DistUpgradeFetcherCore import *
 
+# make sure we have a writable location for the meta-release file
+os.environ["XDG_CACHE_HOME"] = "/tmp"
 
 def get_new_dist():
     """ 

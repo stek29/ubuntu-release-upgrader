@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0,"../")
 
 import apt
+import shutil
 import unittest
 from UpdateManager.Core.UpdateList import UpdateList
 from UpdateManager.Core.MyCache import MyCache
@@ -21,6 +22,10 @@ class testOriginMatcher(unittest.TestCase):
         self.cache._listsLock = 0
         self.cache.update()
         self.cache.open()
+
+    def tearDown(self):
+        shutil.rmtree(os.path.join(self.aptroot,
+                                   "var/lib/apt/lists/"))
 
     def testOriginMatcherSimple(self):
         test_pkgs = set()

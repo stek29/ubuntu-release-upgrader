@@ -19,7 +19,7 @@ def get_new_dist():
     """
     meta = MetaReleaseCore()
     #meta.DEBUG = True
-    meta.current_dist_name = "hardy"
+    meta.current_dist_name = "lucid"
     meta.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
     while meta.downloading:
         time.sleep(0.1)
@@ -27,14 +27,16 @@ def get_new_dist():
     meta.download()
     return meta.new_dist
 
-class TestFetchProgress(apt.progress.FetchProgress):
+class TestFetchProgress(apt.progress.base.AcquireProgress):
     " class to test if the fetch progress was run "
     def start(self):
         self.started = True
     def stop(self):
         self.stopped = True
-    def pulse(self):
+    def pulse(self, acquire):
         self.pulsed = True
+        #for item in acquire.items:
+        #    print item, item.destfile, item.desc_uri
         return True
 
 class TestMetaReleaseCore(unittest.TestCase):
@@ -57,8 +59,8 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
 
     def setUp(self):
         self.new_dist = get_new_dist()
-        apt_pkg.Config.Set("Dir::Etc",self.testdir)
-        apt_pkg.Config.Set("Dir::Etc::sourcelist", "sources.list.hardy")
+        apt_pkg.config.set("Dir::Etc",self.testdir)
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list.hardy")
     
     def testfetcher(self):
         progress = TestFetchProgress()

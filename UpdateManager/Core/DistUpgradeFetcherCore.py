@@ -199,19 +199,27 @@ class DistUpgradeFetcherCore(object):
         os.chdir(tmpdir)
         # turn debugging on here (if required)
         #apt_pkg.Config.Set("Debug::Acquire::http","1")
-        fetcher = apt_pkg.GetAcquire(self._progress)
+        #os.listdir(tmpdir)
+        fetcher = apt_pkg.Acquire(self._progress)
         if self.new_dist.upgradeToolSig != None:
             uri = self._expandUri(self.new_dist.upgradeToolSig)
-            af = apt_pkg.GetPkgAcqFile(fetcher,uri, descr=_("Upgrade tool signature"))
+            af1 = apt_pkg.AcquireFile(fetcher, 
+                                     uri, 
+                                     descr=_("Upgrade tool signature"))
         if self.new_dist.upgradeTool != None:
             self.uri = self._expandUri(self.new_dist.upgradeTool)
-            af = apt_pkg.GetPkgAcqFile(fetcher,self.uri, descr=_("Upgrade tool"))
-            if fetcher.Run() != fetcher.ResultContinue:
+            af2 = apt_pkg.AcquireFile(fetcher, 
+                                     self.uri, 
+                                     descr=_("Upgrade tool"))
+            result = fetcher.run()
+            if result != fetcher.RESULT_CONTINUE:
+                logging.warn("fetch result != continue" % result)
                 return False
             # check that both files are really there and non-null
             for f in [os.path.basename(self.new_dist.upgradeToolSig),
                       os.path.basename(self.new_dist.upgradeTool)]:
                 if not (os.path.exists(f) and os.path.getsize(f) > 0):
+                    logging.warn("file '%s' missing" % f)
                     return False
             return True
         return False

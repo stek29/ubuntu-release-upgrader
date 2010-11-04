@@ -14,7 +14,8 @@ from UpdateManager.Core.MyCache import MyCache
 class testOriginMatcher(unittest.TestCase):
 
     def setUp(self):
-        self.aptroot = os.path.join(os.getcwd(), "aptroot-update-origin/")
+        self.aptroot = os.path.join(os.getcwd(), 
+                                    "aptroot-update-origin/")
         self.dpkg_status = open("%s/var/lib/dpkg/status" % self.aptroot,"w")
         self.dpkg_status.flush()
         self.cache = MyCache(apt.progress.base.OpProgress(), 
@@ -24,8 +25,20 @@ class testOriginMatcher(unittest.TestCase):
         self.cache.open()
 
     def tearDown(self):
-        shutil.rmtree(os.path.join(self.aptroot,
-                                   "var/lib/apt/lists/"))
+        # kill data dirs
+        # FIXME: use tmpdir in the long run
+        for d in ["var/lib/apt/lists/",
+                  "var/cache/apt"]:
+            try:
+                shutil.rmtree(os.path.join(self.aptroot, d))
+            except IOError:
+                pass
+        # kill off status file
+        try:
+            os.remove(os.path.join(self.aptroot, "var/lib/dpkg/status"))
+        except OSError:
+            pass
+
 
     def testOriginMatcherSimple(self):
         test_pkgs = set()

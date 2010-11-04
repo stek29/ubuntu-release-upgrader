@@ -1003,6 +1003,7 @@ class DistUpgradeController(object):
                 # yet (LP: #328655, #356781)
                 if os.path.exists("/var/run/update-manager-apt-exception"):
                     e = open("/var/run/update-manager-apt-exception").read()
+                    logging.error("found exception: '%s'" % e)
                     # if its a ordering bug we can cleanly revert but we need to write
                     # a marker for the parent process to know its this kind of error
                     pre_configure_errors = [

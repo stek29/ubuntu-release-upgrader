@@ -349,10 +349,10 @@ def humanize_size(bytes):
         return _("1 KB")
     elif bytes < 1024 * 1024:
         # TRANSLATORS: download size of small updates, e.g. "250 KB"
-        return locale.format(_("%.0f KB"), bytes/1024)
+        return locale.format_string(_("%.0f KB"), bytes/1024)
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
-        return locale.format(_("%.1f MB"), bytes / 1024 / 1024)
+        return locale.format_string(_("%.1f MB"), bytes / 1024 / 1024)
 
 if __name__ == "__main__":
   #print mirror_from_sources_list()

@@ -30,7 +30,7 @@ import sys
 import subprocess
 from subprocess import PIPE, Popen, call
 from hashlib import md5
-from utils import lsmod
+from utils import lsmod, get_arch
 
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
@@ -50,7 +50,7 @@ class DistUpgradeQuirks(object):
         self._view = controller._view
         self.config = config
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
-        self.arch = Popen(["dpkg", "--print-architecture"], stdout=PIPE).communicate()[0]
+        self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
 
     # the quirk function have the name:
@@ -138,13 +138,20 @@ class DistUpgradeQuirks(object):
         self._checkLanguageSupport()
 
     # quirks when run when the initial apt-get update was run ----------------
+    def from_lucidPostInitialUpdate(self):
+        """ Quirks that are run before the sources.list is updated to the
+            new distribution when upgrading from a lucid system (either
+            to maverick or the new LTS)
+        """
+        logging.debug("running %s" %  sys._getframe().f_code.co_name)
+        # systems < i686 will not upgrade
+        self._test_and_fail_on_non_i686()
+
     def lucidPostInitialUpdate(self):
         """ quirks that are run before the sources.list is updated to lucid """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # upgrades on systems with < arvm6 CPUs will break
         self._test_and_fail_on_non_arm_v6()
-        # systems < i686 will not upgrade
-        self._test_and_fail_on_non_i686()
         # vserver+upstart are problematic
         self._test_and_warn_if_vserver()
         # fglrx dropped support for some cards

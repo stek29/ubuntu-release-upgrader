@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch
 from string import Template
 
 import DistUpgradeView
@@ -112,7 +112,7 @@ class DistUpgradeController(object):
         self.fromDist = self.config.get("Sources","From")
         self.toDist = self.config.get("Sources","To")
         self.origin = self.config.get("Sources","ValidOrigin")
-        self.arch = apt_pkg.Config.find("APT::Architecture")
+        self.arch = get_arch()
 
         # we run with --force-overwrite by default
         if not os.environ.has_key("RELEASE_UPGRADE_NO_FORCE_OVERWRITE"):

@@ -86,7 +86,6 @@ def lsmod():
       modules.append(line.split()[0])
   return modules
 
-
 def check_and_fix_xbit(path):
   " check if a given binary has the executable bit and if not, add it"
   if not os.path.exists(path):
@@ -353,6 +352,9 @@ def humanize_size(bytes):
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
         return locale.format_string(_("%.1f MB"), bytes / 1024 / 1024)
+
+def get_arch():
+    return apt_pkg.Config.find("APT::Architecture")
 
 if __name__ == "__main__":
   #print mirror_from_sources_list()

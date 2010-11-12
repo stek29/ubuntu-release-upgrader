@@ -74,6 +74,14 @@ if __name__ == "__main__":
   while m.downloading:
     time.sleep(0.5)
 
+  # make sure to inform the user if his distro is no longer supported
+  if m.no_longer_supported is not None:
+    url = "https://help.ubuntu.com/community/UpgradeNotes" 
+    print _("Your current Ubuntu release is no longer supported.\n"
+            "For upgrade instructions, please visit:\n"
+            "%(url)s\n") % { 'url' : url }
+
+  # now inform about a new release
   if m.new_dist is None:
     if not options.quiet:
       print _("No new release found")

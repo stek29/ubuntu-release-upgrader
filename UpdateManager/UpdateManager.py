@@ -105,6 +105,25 @@ NM_STATE_CONNECTING = 2
 NM_STATE_CONNECTED = 3
 NM_STATE_DISCONNECTED = 4
 
+def show_dist_no_longer_supported_dialog(parent=None):
+    """ show a no-longer-supported dialog """
+    msg = "<big><b>%s</b></big>\n\n%s" % (
+        _("Your Ubuntu release is not supported anymore."),
+        _("You will not get any further security fixes or critical "
+          "updates. "
+          "Please upgrade to a later version of Ubuntu Linux."))
+    dialog = gtk.MessageDialog(parent, 0, gtk.MESSAGE_WARNING,
+                               gtk.BUTTONS_CLOSE,"")
+    dialog.set_title("")
+    dialog.set_markup(msg)
+    button = gtk.LinkButton(uri="http://www.ubuntu.com/getubuntu/upgrading",
+                            label=_("Upgrade information"))
+    button.show()
+    dialog.get_content_area().pack_end(button)
+    dialog.run()
+    dialog.destroy()
+
+
 class UpdateManagerDbusControler(dbus.service.Object):
     """ this is a helper to provide the UpdateManagerIFace """
     def __init__(self, parent, bus_name,
@@ -943,21 +962,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     return False
 
   def dist_no_longer_supported(self, meta_release):
-    msg = "<big><b>%s</b></big>\n\n%s" % \
-          (_("Your Ubuntu release is not supported anymore."),
-	   _("You will not get any further security fixes or critical "
-             "updates. "
-             "Please upgrade to a later version of Ubuntu Linux."))
-    dialog = gtk.MessageDialog(self.window_main, 0, gtk.MESSAGE_WARNING,
-                               gtk.BUTTONS_CLOSE,"")
-    dialog.set_title("")
-    dialog.set_markup(msg)
-    button = gtk.LinkButton(uri="http://www.ubuntu.com/getubuntu/upgrading",
-                            label=_("Upgrade information"))
-    button.show()
-    dialog.get_content_area().pack_end(button)
-    dialog.run()
-    dialog.destroy()
+    show_dist_no_longer_supported_dialog(self.window_main)
 
   def error(self, summary, details):
       " helper function to display a error message "

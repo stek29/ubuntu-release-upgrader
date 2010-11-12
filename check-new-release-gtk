@@ -52,13 +52,15 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     else:
         glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
 
-
   def new_dist_available(self, meta_release, new_dist):
     logging.debug("new_dist_available: %s" % new_dist)
     self.new_dist = new_dist
     client = gconf.client_get_default()
     ignore_dist = client.get_string("/apps/update-manager/check_new_release_ignore")
-    if ignore_dist == new_dist.name:
+    # only honor the ignore list if the distro is still supported, otherwise
+    # go into nag mode
+    if (ignore_dist == new_dist.name and
+        meta_release.no_longer_supported is None):
         logging.warn("found new dist '%s' but it is on the ignore list" % new_dist.name)
         gtk.main_quit()
     self.build_ui()
@@ -69,6 +71,10 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         logging.warn("no ReleaseNotesHtmlUri found")
         return
     self.show_uri(html_uri)
+    # show alert on unsupported distros
+    if meta_release.no_longer_supported is not None:
+        from UpdateManager.UpdateManager import show_dist_no_longer_supported_dialog
+        show_dist_no_longer_supported_dialog(self.window_main)
   
   def build_ui(self):
     import webkit

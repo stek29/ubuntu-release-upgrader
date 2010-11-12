@@ -944,7 +944,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def dist_no_longer_supported(self, meta_release):
     msg = "<big><b>%s</b></big>\n\n%s" % \
-          (_("Your Ubuntu release is not supported anymore"),
+          (_("Your Ubuntu release is not supported anymore."),
 	   _("You will not get any further security fixes or critical "
              "updates. "
              "Please upgrade to a later version of Ubuntu Linux."))

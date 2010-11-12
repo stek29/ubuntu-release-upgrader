@@ -34,7 +34,7 @@ class InstallBackendSynaptic(InstallBackend):
         action, tempf = data
         if tempf:
             tempf.close()
-        self.emit("action-done", action)
+        self.emit("action-done", action, True)
 
     def update(self):
         opt = ["--update-at-startup"]

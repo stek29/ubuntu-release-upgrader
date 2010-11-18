@@ -958,9 +958,10 @@ class DistUpgradeController(object):
         # maximum fetch-retries reached without a successful commit
         if user_canceled:
             self._view.information(_("Upgrade canceled"),
-                                   _("The upgrade cancels now and the original "
-                                     "system state is restored. You can resume "
-                                     "the upgrade at a later time."))
+                                   _("The upgrade will cancel now and the "
+                                     "original system state will be restored."
+                                     "You can resume the upgrade at a later "
+                                     "time."))
         else:
             logging.error("giving up on fetching after maximum retries")
             self._view.error(_("Could not download the upgrades"),

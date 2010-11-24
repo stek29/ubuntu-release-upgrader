@@ -42,7 +42,7 @@ class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
         FetchProgress.pulse(self)
         return True
 
-class TextCdromProgressAdapter(apt.progress.CdromProgress):
+class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress  """
     def update(self, text, step):
         """ update is called regularly so that the gui can be redrawn """
@@ -73,7 +73,7 @@ class DistUpgradeViewText(DistUpgradeView):
           logging.warning("Error setting locales (%s)" % e)
         
         self.last_step = 0 # keep a record of the latest step
-        self._opCacheProgress = apt.progress.OpTextProgress()
+        self._opCacheProgress = apt.progress.text.OpProgress()
         self._fetchProgress = TextFetchProgress()
         self._cdromProgress = TextCdromProgressAdapter()
         self._installProgress = InstallProgress()

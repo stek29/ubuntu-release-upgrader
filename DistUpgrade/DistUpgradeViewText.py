@@ -79,6 +79,14 @@ class DistUpgradeViewText(DistUpgradeView):
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
         #self._process_events_tick = 0
+        #self._check_for_gnu_screen()
+    
+    def _check_for_gnu_screen(self):
+        if (not "TERM" in os.environ or
+            not os.environ["TERM"] == "screen"):
+            self.information(_("Not running inside screen"),
+                             _("Its recommended to run a server upgrade inside "
+                               "the 'screen' environment."))
 
     def _handleException(self, type, value, tb):
       import traceback

@@ -279,7 +279,7 @@ class MyCache(apt.Cache):
         """ create a snapshot of the current changes """
         self.to_install = []
         self.to_remove = []
-        for pkg in self.getChanges():
+        for pkg in self.get_changes():
             if pkg.marked_install or pkg.marked_upgrade:
                 self.to_install.append(pkg.name)
             if pkg.marked_delete:
@@ -662,21 +662,22 @@ class MyCache(apt.Cache):
         
         # check the trust of the packages that are going to change
         untrusted = []
-        for pkg in self.getChanges():
+        for pkg in self.get_changes():
             if pkg.marked_delete:
                 continue
             # special case because of a bug in pkg.candidateOrigin
-            if pkg.markedDowngrade:
+            if pkg.marked_downgrade:
                 for ver in pkg._pkg.version_list:
                     # version is lower than installed one
-                    if apt_pkg.VersionCompare(ver.VerStr, pkg.installedVersion) < 0:
-                        for (verFileIter,index) in ver.FileList:
+                    if apt_pkg.version_compare(
+                        ver.ver_str, pkg.installed.version) < 0:
+                        for (verFileIter, index) in ver.file_list:
                             indexfile = pkg._list.find_index(verFileIter)
-                            if indexfile and not indexfile.IsTrusted:
+                            if indexfile and not indexfile.is_trusted:
                                 untrusted.append(pkg.name)
                                 break
                 continue
-            origins = pkg.candidateOrigin
+            origins = pkg.candidate.origin
             trusted = False
             for origin in origins:
                 #print origin
@@ -715,7 +716,7 @@ class MyCache(apt.Cache):
         """
         removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
         # check changes
-        for pkg in self.getChanges():
+        for pkg in self.get_changes():
             if pkg.marked_delete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
                 raise SystemError, _("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name
@@ -745,11 +746,11 @@ class MyCache(apt.Cache):
         if ver is None:
             print "No candidate ver: ", pkg.name
             return False
-        if ver.FileList is None:
+        if ver.file_list is None:
             print "No FileList for: %s " % self._pkg.Name()
             return False
-        f, index = ver.FileList.pop(0)
-        pkg._pcache._records.Lookup((f, index))
+        f, index = ver.file_list.pop(0)
+        pkg._pcache._records.lookup((f, index))
         return True
 
     @property
@@ -760,7 +761,7 @@ class MyCache(apt.Cache):
             if not self._lookupPkgRecord(pkg):
                 logging.debug("no PkgRecord found for '%s', skipping " % pkg.name)
                 continue
-            for line in pkg._pcache._records.Record.split("\n"):
+            for line in pkg._pcache._records.record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):
                         task = task.strip()
@@ -783,10 +784,10 @@ class MyCache(apt.Cache):
             if pkg.marked_install or pkg.is_installed:
                 continue
             self._lookupPkgRecord(pkg)
-            if not (hasattr(pkg._pcache._records,"Record") and pkg._pcache._records.Record):
+            if not (hasattr(pkg._pcache._records,"Record") and pkg._pcache._records.record):
                 logging.warning("can not find Record for '%s'" % pkg.name)
                 continue
-            for line in pkg._pcache._records.Record.split("\n"):
+            for line in pkg._pcache._records.record.split("\n"):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):
                         task = task.strip()
@@ -911,7 +912,7 @@ class MyCache(apt.Cache):
             self[pkgname].markDelete(purge=purge)
             self.view.processEvents()
             #logging.debug("marking '%s' for removal" % pkgname)
-            for pkg in self.getChanges():
+            for pkg in self.get_changes():
                 if (pkg.name not in remove_candidates or 
                       pkg.name in foreign_pkgs or 
                       self._inRemovalBlacklist(pkg.name)):
@@ -1145,5 +1146,5 @@ if __name__ == "__main__":
         c.create_snapshot()
         c.installedTasks
         c.installTasks(["ubuntu-desktop"])
-        print c.getChanges()
+        print c.get_changes()
         c.restore_snapshot()

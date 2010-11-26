@@ -257,12 +257,8 @@ class MetaReleaseCore(object):
         if lastmodified > 0:
             req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
         try:
-            # need try/except for hardy, can be removed afterwards
-            try:
-                uri=urllib2.urlopen(req, timeout=20)
-            # hardy does not have timeout yet
-            except TypeError:
-                uri=urllib2.urlopen(req)
+            # open
+            uri=urllib2.urlopen(req, timeout=20)
             # sometime there is a root owned meta-relase file
             # there, try to remove it so that we get it
             # with proper permissions
@@ -283,11 +279,17 @@ class MetaReleaseCore(object):
             except IOError, e:
                 pass
             uri.close()
-        except (urllib2.URLError, httplib.BadStatusLine), e:
-            self._debug("result of meta-release download: '%s'" % e)
-            if os.path.exists(self.METARELEASE_FILE):
+        # http error
+        except urllib2.HTTPError, e:
+            # mvo: only reuse local info on "not-modified"
+            if e.code == 304 and os.path.exists(self.METARELEASE_FILE):
                 self._debug("reading file '%s'" % self.METARELEASE_FILE)
                 self.metarelease_information=open(self.METARELEASE_FILE,"r")
+            else:
+                self._debug("result of meta-release download: '%s'" % e)
+        # generic network error
+        except (urllib2.URLError, httplib.BadStatusLine), e:
+            self._debug("result of meta-release download: '%s'" % e)
         # now check the information we have
         if self.metarelease_information != None:
             self._debug("have self.metarelease_information")

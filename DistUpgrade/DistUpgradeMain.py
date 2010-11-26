@@ -155,7 +155,10 @@ def check_for_gnu_screen():
         os.execv("/usr/bin/screen",  ["screen", "-d", "-r", "-p", SCREENNAME])
     # otherwise re-exec inside screen with (-L) for logging enabled
     os.environ["RELEASE_UPGRADER_NO_SCREEN"]="1"
-    cmd = ["screen", "-L", "-S", SCREENNAME]+sys.argv
+    # unset escape key to avoid confusing people who are not used to
+    # screen. people who already run screen will not be affected by this
+    # unset escape key with -e, enable log with -L, set name with -S
+    cmd = ["screen", "-e", "\\0\\0", "-L", "-S", SCREENNAME]+sys.argv
     logging.info("re-exec inside screen: '%s'" % cmd)
     os.execv("/usr/bin/screen", cmd)
 

@@ -88,6 +88,9 @@ def setup_logging(options, config):
     # changes
     logging.info("Using config files '%s'" % config.config_files)
     logging.info("uname information: '%s'" % " ".join(os.uname()))
+    return logdir
+
+def save_system_state(logdir):
     # save package state to be able to re-create failures
     system_files = []
     for f in [apt_pkg.Config.find_file("Dir::Etc::preferences"),
@@ -109,7 +112,6 @@ def setup_logging(options, config):
         open(os.path.join(logdir, "lspci.txt"), "w").write(s)
     except OSError, e:
         logging.debug("lspci failed: %s" % e)
-    return logdir
     
 def setup_view(options, config, logdir):
     " setup view based on the config and commandline "
@@ -132,13 +134,45 @@ def setup_view(options, config, logdir):
         sys.exit(1)
     return instance
 
+def check_for_gnu_screen():
+    """ check if there is a upgrade already running inside gnu screen,
+        if so, reattach
+        if not, create new screen window
+    """
+    SCREENNAME = "ubuntu-release-upgrade-screen-window"
+    # get the active screen sockets
+    try:
+        out = subprocess.Popen(
+            ["screen","-ls"], stdout=subprocess.PIPE).communicate()[0]
+        logging.debug("screen returned: '%s'" % out)
+    except OSError:
+        logging.info("screen could not be run")
+        return
+    # check if a release upgrade is among them
+    if SCREENNAME in out:
+        logging.info("found active screen session, re-attaching")
+        # if we have it, attach to it
+        os.execv("/usr/bin/screen",  ["screen", "-d", "-r", "-p", SCREENNAME])
+    # otherwise re-exec inside screen with (-L) for logging enabled
+    os.environ["RELEASE_UPGRADER_NO_SCREEN"]="1"
+    cmd = ["screen", "-L", "-S", SCREENNAME]+sys.argv
+    logging.info("re-exec inside screen: '%s'" % cmd)
+    os.execv("/usr/bin/screen", cmd)
+
 def main():
-    " main method "
+    """ main method """
     
     # commandline setup and config
     (options, args) = do_commandline()
     config = DistUpgradeConfig(".")
     logdir = setup_logging(options, config)
+
+    # gnu screen support
+    if not "RELEASE_UPGRADER_NO_SCREEN" in os.environ:
+        check_for_gnu_screen()
+
+    # save system state
+    save_system_state(logdir)
 
     from DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)

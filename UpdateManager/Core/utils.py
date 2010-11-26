@@ -30,6 +30,7 @@ import logging
 import re
 import os
 import os.path
+import stat
 import subprocess
 import sys
 import time
@@ -51,10 +52,20 @@ class ExecutionTime(object):
     def __exit__(self, type, value, stack):
         print "%s: %s" % (self.info, time.time() - self.now)
 
-# helpers inspired after textwrap - unfortunately
-# we can not use textwrap directly because it break
-# packagenames with "-" in them into new lines
+def inside_chroot():
+    """ returns True if we are inside a chroot 
+    """
+    # if there is no proc or no pid 1 we are very likely inside a chroot
+    if not os.path.exists("/proc") or not os.path.exists("/proc/1"):
+        return True
+    # if the inode is differnt for pid 1 "/" and our "/"
+    return os.stat("/") != os.stat("/proc/1/root")
+
 def wrap(t, width=70, subsequent_indent=""):
+    """ helpers inspired after textwrap - unfortunately
+        we can not use textwrap directly because it break
+        packagenames with "-" in them into new lines
+    """
     out = ""
     for s in t.split():
         if (len(out)-out.rfind("\n")) + len(s) > width:
@@ -358,4 +369,5 @@ def get_arch():
 
 if __name__ == "__main__":
   #print mirror_from_sources_list()
-  print on_battery()
+  #print on_battery()
+  print inside_chroot()

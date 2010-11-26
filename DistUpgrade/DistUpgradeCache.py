@@ -41,6 +41,8 @@ from DistUpgradeGettext import ngettext
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
+from utils import inside_chroot
+
 class CacheException(Exception):
     pass
 class CacheExceptionLockingFailed(CacheException):
@@ -604,8 +606,12 @@ class MyCache(apt.Cache):
             # see if our KeepInstalled rules are honored
             self.keepInstalledRule()
 
-            # check if we got a new kernel
-            self.checkForKernel()
+            # check if we got a new kernel (if we are not inside a 
+            # chroot)
+            if inside_chroot():
+                logging.warn("skipping kernel checks because we run inside a chroot")
+            else:
+                self.checkForKernel()
 
             # check for nvidia stuff
             self.checkForNvidia()
@@ -677,7 +683,7 @@ class MyCache(apt.Cache):
                                 untrusted.append(pkg.name)
                                 break
                 continue
-            origins = pkg.candidate.origin
+            origins = pkg.candidate.origins
             trusted = False
             for origin in origins:
                 #print origin

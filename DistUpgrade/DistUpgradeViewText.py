@@ -32,6 +32,7 @@ import apt.progress
 import gettext
 from DistUpgradeGettext import gettext as _
 from utils import wrap, twrap
+import subprocess
 
 class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
     def __init__(self):
@@ -79,14 +80,29 @@ class DistUpgradeViewText(DistUpgradeView):
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
         #self._process_events_tick = 0
-        #self._check_for_gnu_screen()
+        if not "RELEASE_UPGRADER_NO_SCREEN" in os.environ:
+            self._check_for_gnu_screen()
     
     def _check_for_gnu_screen(self):
-        if (not "TERM" in os.environ or
-            not os.environ["TERM"] == "screen"):
-            self.information(_("Not running inside screen"),
-                             _("Its recommended to run a server upgrade inside "
-                               "the 'screen' environment."))
+        SCREENNAME = "ubuntu-release-upgrade-screen-window"
+        # get the active screen sockets
+        try:
+            out = subprocess.Popen(["screen","-ls"], stdout=subprocess.PIPE).communicate()[0]
+            logging.debug("screen returned: '%s'" % out)
+        except OSError, e:
+            logging.info("screen could not be run")
+            return
+        # check if a release upgrade is among them
+        if SCREENNAME in out:
+            logging.info("found active screen session, re-attaching")
+            # if we have it, attach to it
+            os.execv(
+                "/usr/bin/screen",  ["screen", "-d", "-r", "-p", SCREENNAME])
+        # otherwise re-exec inside screen with (-L) for logging enabled
+        os.environ["RELEASE_UPGRADER_NO_SCREEN"]="1"
+        cmd = ["screen", "-L", "-S", SCREENNAME]+sys.argv
+        logging.info("re-exec inside screen: '%s'" % cmd)
+        os.execv("/usr/bin/screen", cmd)
 
     def _handleException(self, type, value, tb):
       import traceback

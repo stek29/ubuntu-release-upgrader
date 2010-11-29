@@ -82,19 +82,19 @@ class DistUpgradeViewText(DistUpgradeView):
         #self._process_events_tick = 0
 
     def _handleException(self, type, value, tb):
-      import traceback
-      print
-      lines = traceback.format_exception(type, value, tb)
-      logging.error("not handled exception:\n%s" % "\n".join(lines))
-      self.error(_("A fatal error occurred"),
-                 _("Please report this as a bug and include the "
-                   "files /var/log/dist-upgrade/main.log and "
-                   "/var/log/dist-upgrade/apt.log "
-                   "in your report. The upgrade has aborted.\n"
-                   "Your original sources.list was saved in "
-                   "/etc/apt/sources.list.distUpgrade."),
-                 "\n".join(lines))
-      sys.exit(1)
+        import traceback
+        print
+        lines = traceback.format_exception(type, value, tb)
+        logging.error("not handled exception:\n%s" % "\n".join(lines))
+        self.error(_("A fatal error occurred"),
+                   _("Please report this as a bug and include the "
+                     "files /var/log/dist-upgrade/main.log and "
+                     "/var/log/dist-upgrade/apt.log "
+                     "in your report. The upgrade has aborted.\n"
+                     "Your original sources.list was saved in "
+                     "/etc/apt/sources.list.distUpgrade."),
+                   "\n".join(lines))
+        sys.exit(1)
 
     def getFetchProgress(self):
         return self._fetchProgress

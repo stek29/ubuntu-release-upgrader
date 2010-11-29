@@ -158,7 +158,11 @@ def check_for_gnu_screen():
     # unset escape key to avoid confusing people who are not used to
     # screen. people who already run screen will not be affected by this
     # unset escape key with -e, enable log with -L, set name with -S
-    cmd = ["screen", "-e", "\\0\\0", "-L", "-S", SCREENNAME]+sys.argv
+    cmd = ["screen", 
+           "-e", "\\0\\0",
+           "-L", 
+           "-c", "screenrc",
+           "-S", SCREENNAME]+sys.argv
     logging.info("re-exec inside screen: '%s'" % cmd)
     os.execv("/usr/bin/screen", cmd)
 

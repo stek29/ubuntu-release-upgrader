@@ -32,6 +32,7 @@ import apt.progress
 import gettext
 from DistUpgradeGettext import gettext as _
 from utils import wrap, twrap
+import subprocess
 
 class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
     def __init__(self):
@@ -79,29 +80,21 @@ class DistUpgradeViewText(DistUpgradeView):
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
         #self._process_events_tick = 0
-        #self._check_for_gnu_screen()
-    
-    def _check_for_gnu_screen(self):
-        if (not "TERM" in os.environ or
-            not os.environ["TERM"] == "screen"):
-            self.information(_("Not running inside screen"),
-                             _("Its recommended to run a server upgrade inside "
-                               "the 'screen' environment."))
 
     def _handleException(self, type, value, tb):
-      import traceback
-      print
-      lines = traceback.format_exception(type, value, tb)
-      logging.error("not handled exception:\n%s" % "\n".join(lines))
-      self.error(_("A fatal error occurred"),
-                 _("Please report this as a bug and include the "
-                   "files /var/log/dist-upgrade/main.log and "
-                   "/var/log/dist-upgrade/apt.log "
-                   "in your report. The upgrade has aborted.\n"
-                   "Your original sources.list was saved in "
-                   "/etc/apt/sources.list.distUpgrade."),
-                 "\n".join(lines))
-      sys.exit(1)
+        import traceback
+        print
+        lines = traceback.format_exception(type, value, tb)
+        logging.error("not handled exception:\n%s" % "\n".join(lines))
+        self.error(_("A fatal error occurred"),
+                   _("Please report this as a bug and include the "
+                     "files /var/log/dist-upgrade/main.log and "
+                     "/var/log/dist-upgrade/apt.log "
+                     "in your report. The upgrade has aborted.\n"
+                     "Your original sources.list was saved in "
+                     "/etc/apt/sources.list.distUpgrade."),
+                   "\n".join(lines))
+        sys.exit(1)
 
     def getFetchProgress(self):
         return self._fetchProgress

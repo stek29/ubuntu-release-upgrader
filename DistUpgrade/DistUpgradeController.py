@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch, iptables_active
 from string import Template
 
 import DistUpgradeView
@@ -252,7 +252,7 @@ class DistUpgradeController(object):
                 _("This session appears to be running under ssh. "
                   "It is not recommended to perform a upgrade "
                   "over ssh currently because in case of failure "
-                "it is harder to recover.\n\n"
+                  "it is harder to recover.\n\n"
                   "If you continue, an additional ssh daemon will be "
                   "started at port '%s'.\n"
                   "Do you want to continue?") % port)
@@ -263,13 +263,20 @@ class DistUpgradeController(object):
                                    "-o", "PidFile=%s" % pidfile,
                                    "-p",str(port)])
             if res == 0:
-                self._view.information(
-                    _("Starting additional sshd"),
-                    _("To make recovery in case of failure easier, an "
-                      "additional sshd will be started on port '%s'. "
-                      "If anything goes wrong with the running ssh "
-                      "you can still connect to the additional one.\n"
-                      ) % port)
+                summary = _("Starting additional sshd")
+                descr =  _("To make recovery in case of failure easier, an "
+                           "additional sshd will be started on port '%s'. "
+                           "If anything goes wrong with the running ssh "
+                           "you can still connect to the additional one.\n"
+                           ) % port
+                if iptables_active():
+                    cmd = "iptables -I INPUT -p tcp --dport %s -j ACCEPT" % port
+                    descr += _(
+                        "If you run a firewall, you may need to "
+                        "temporarily open this port. As this is "
+                        "potentially dangerous its not done automatically."
+                        "You can open the port with e.g.:\n'%s'") % cmd
+                self._view.information(summary, descr)
         return True
 
     def _tryUpdateSelf(self):

@@ -2,6 +2,12 @@ update-manager (1:0.145.5) UNRELEASED; urgency=low
 
   * DistUpgrade/DistUpgradeViewText.py:
     - start with gnu screen integration
+  * DistUpgrade/DistUpgradeController.py:
+    - when starting a additional sshd detect if there is a firewall
+      running and if so print information that the additional sshd
+      may need to be added to the firewall rules
+  * UpdateManager/Core/utils.py:
+    - add iptables_active() helper
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Nov 2010 18:06:56 +0100
 

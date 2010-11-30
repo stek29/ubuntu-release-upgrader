@@ -367,7 +367,30 @@ def humanize_size(bytes):
 def get_arch():
     return apt_pkg.Config.find("APT::Architecture")
 
+
+def iptables_active():
+    """ Return True if iptables is active """
+    # FIXME: is there a better way?
+    iptables_empty="""Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+"""
+    if os.getuid() != 0:
+        raise OSError, "Need root to check the iptables state"
+    out = subprocess.Popen(["iptables", "-L"], 
+                           stdout=subprocess.PIPE).communicate()[0]
+    if out == iptables_empty:
+        return False
+    return True
+
+
 if __name__ == "__main__":
   #print mirror_from_sources_list()
   #print on_battery()
-  print inside_chroot()
+  #print inside_chroot()
+  print iptables_active()

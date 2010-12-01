@@ -370,6 +370,7 @@ class HtmlView(object):
 class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
     " gtk frontend of the distUpgrade tool "
     def __init__(self, datadir=None, logdir=None):
+        DistUpgradeView.__init__(self)
         self.logdir = logdir
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")

@@ -241,6 +241,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
     def __init__(self, datadir=None, logdir=None):
+        DistUpgradeView.__init__(self)
         self.config = DistUpgradeConfig(".")
         self._fetchProgress = NonInteractiveFetchProgress()
         self._installProgress = NonInteractiveInstallProgress(logdir)

@@ -261,6 +261,7 @@ class DummyHtmlView(object):
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
     def __init__(self):
+        self.needs_screen = False
         pass
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"

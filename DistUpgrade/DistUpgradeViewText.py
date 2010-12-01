@@ -58,6 +58,8 @@ class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
 class DistUpgradeViewText(DistUpgradeView):
     " text frontend of the distUpgrade tool "
     def __init__(self, datadir=None, logdir=None):
+        # indicate that we benefit from using gnu screen
+        self.needs_screen = True
         # its important to have a debconf frontend for
         # packages like "quagga"
         if not os.environ.has_key("DEBIAN_FRONTEND"):

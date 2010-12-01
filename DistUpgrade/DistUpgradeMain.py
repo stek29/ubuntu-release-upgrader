@@ -59,6 +59,9 @@ def do_commandline():
     parser.add_option("--partial", dest="partial", default=False,
                       action="store_true", 
                       help=_("Perform a partial upgrade only (no sources.list rewriting)"))
+    parser.add_option("--disable-gnu-screen", action="store_true", 
+                      default=False,
+                      help=_("Disable GNU screen support"))
     parser.add_option("--datadir", dest="datadir", default=None,
                       help=_("Set datadir"))
     return parser.parse_args()
@@ -134,7 +137,7 @@ def setup_view(options, config, logdir):
         sys.exit(1)
     return instance
 
-def check_for_gnu_screen():
+def run_new_gnu_screen_window_or_reattach():
     """ check if there is a upgrade already running inside gnu screen,
         if so, reattach
         if not, create new screen window
@@ -174,18 +177,18 @@ def main():
     config = DistUpgradeConfig(".")
     logdir = setup_logging(options, config)
 
-    # gnu screen support
-    if not "RELEASE_UPGRADER_NO_SCREEN" in os.environ:
-        check_for_gnu_screen()
-
-    # save system state
-    save_system_state(logdir)
-
     from DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)
 
     # create view and app objects
     view = setup_view(options, config, logdir)
+
+    # gnu screen support
+    if (view.needs_screen and
+        not "RELEASE_UPGRADER_NO_SCREEN" in os.environ and
+        not options.disable_gnu_screen):
+        run_new_gnu_screen_window_or_reattach()
+
     app = DistUpgradeController(view, options, datadir=options.datadir)
     atexit.register(app._enableAptCronJob)
 
@@ -194,6 +197,9 @@ def main():
         if not app.doPartialUpgrade():
             sys.exit(1)
         sys.exit(0)
+
+    # save system state (only if not doing just a partial upgrade)
+    save_system_state(logdir)
 
     # full upgrade, return error code for success/failure
     if app.run():

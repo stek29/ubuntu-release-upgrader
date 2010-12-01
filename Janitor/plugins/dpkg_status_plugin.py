@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from apt_pkg import ParseTagFile, PkgSystemLock, PkgSystemUnLock
+from apt_pkg import TagFile, PkgSystemLock, PkgSystemUnLock
 import subprocess
 import logging
 
@@ -54,9 +54,9 @@ class DpkgStatusPlugin(computerjanitor.Plugin):
     
     def get_cruft(self):
         n_cruft = 0
-        tagf = ParseTagFile(open(self.status))
-        while tagf.Step():
-            statusline = tagf.Section.get("Status")
+        tagf = TagFile(open(self.status))
+        while tagf.step():
+            statusline = tagf.section.get("Status")
             (want, flag, status) = statusline.split()
             if want == "purge" and flag == "ok" and status == "not-installed":
                 n_cruft += 1

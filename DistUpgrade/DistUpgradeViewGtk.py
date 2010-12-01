@@ -188,8 +188,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         # if no libgnome2-perl is installed show the terminal
         frontend= os.environ.get("DEBIAN_FRONTEND") or "gnome"
         if frontend == "gnome" and self._cache:
-          if (not self._cache.has_key("libgnome2-perl") or 
-              not self._cache["libgnome2-perl"].isInstalled):
+          if (not "libgnome2-perl" in self._cache or 
+              not self._cache["libgnome2-perl"].is_installed):
             frontend = "dialog"
             self.expander.set_expanded(True)
         self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,

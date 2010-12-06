@@ -1,6 +1,6 @@
 # UpdateManager.py 
 #  
-#  Copyright (c) 2004-2008 Canonical
+#  Copyright (c) 2004-2010 Canonical
 #                2004 Michiel Sikkes
 #                2005 Martin Willemoes Hansen
 #                2010 Mohamed Amine IL Idrissi
@@ -9,6 +9,7 @@
 #          Michael Vogt <mvo@debian.org>
 #          Martin Willemoes Hansen <mwh@sysrq.dk>
 #          Mohamed Amine IL Idrissi <ilidrissiamine@gmail.com>
+#          Alex Launi <alex.launi@canonical.com>
 # 
 #  This program is free software; you can redistribute it and/or 
 #  modify it under the terms of the GNU General Public License as 

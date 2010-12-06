@@ -1,6 +1,6 @@
 # UpdateManager.py 
 #  
-#  Copyright (c) 2004-2008 Canonical
+#  Copyright (c) 2004-2010 Canonical
 #                2004 Michiel Sikkes
 #                2005 Martin Willemoes Hansen
 #                2010 Mohamed Amine IL Idrissi
@@ -9,6 +9,7 @@
 #          Michael Vogt <mvo@debian.org>
 #          Martin Willemoes Hansen <mwh@sysrq.dk>
 #          Mohamed Amine IL Idrissi <ilidrissiamine@gmail.com>
+#          Alex Launi <alex.launi@canonical.com>
 # 
 #  This program is free software; you can redistribute it and/or 
 #  modify it under the terms of the GNU General Public License as 
@@ -124,17 +125,44 @@ def show_dist_no_longer_supported_dialog(parent=None):
     dialog.destroy()
 
 
-class UpdateManagerDbusControler(dbus.service.Object):
+class UpdateManagerDbusController(dbus.service.Object):
     """ this is a helper to provide the UpdateManagerIFace """
     def __init__(self, parent, bus_name,
                  object_path='/org/freedesktop/UpdateManagerObject'):
         dbus.service.Object.__init__(self, bus_name, object_path)
         self.parent = parent
+        self.alert_watcher = AlertWatcher ()
+        self.alert_watcher.connect("network-alert", self._on_network_alert)
+        self.connected = False
 
     @dbus.service.method('org.freedesktop.UpdateManagerIFace')
     def bringToFront(self):
         self.parent.window_main.present()
         return True
+
+    @dbus.service.method('org.freedesktop.UpdateManagerIFace')
+    def update(self):
+        try:
+            self.alert_watcher.check_alert_state ()
+            self.parent.invoke_manager(UPDATE)
+            return self.connected
+        except:
+            return False
+
+    @dbus.service.method('org.freedesktop.UpdateManagerIFace')
+    def upgrade(self):
+        try:
+            self.parent.cache.checkFreeSpace()
+            self.parent.invoke_manager(INSTALL)
+            return True
+        except:
+            return False	
+
+    def _on_network_alert(self, watcher, state):
+        if state == NM_STATE_CONNECTED:
+            self.connected = True
+        else:
+            self.connected = False
 
 class UpdateManager(SimpleGtkbuilderApp):
 
@@ -316,7 +344,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     except dbus.DBusException, e:
          #print "no listening object (%s) "% e
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
-         self.dbusControler = UpdateManagerDbusControler(self, bus_name)
+         self.dbusControler = UpdateManagerDbusController(self, bus_name)
 
 
   def on_checkbutton_reminder_toggled(self, checkbutton):

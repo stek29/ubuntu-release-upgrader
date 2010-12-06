@@ -124,7 +124,7 @@ def show_dist_no_longer_supported_dialog(parent=None):
     dialog.destroy()
 
 
-class UpdateManagerDbusControler(dbus.service.Object):
+class UpdateManagerDbusController(dbus.service.Object):
     """ this is a helper to provide the UpdateManagerIFace """
     def __init__(self, parent, bus_name,
                  object_path='/org/freedesktop/UpdateManagerObject'):
@@ -135,6 +135,8 @@ class UpdateManagerDbusControler(dbus.service.Object):
     def bringToFront(self):
         self.parent.window_main.present()
         return True
+
+	
 
 class UpdateManager(SimpleGtkbuilderApp):
 
@@ -316,7 +318,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     except dbus.DBusException, e:
          #print "no listening object (%s) "% e
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
-         self.dbusControler = UpdateManagerDbusControler(self, bus_name)
+         self.dbusControler = UpdateManagerDbusController(self, bus_name)
 
 
   def on_checkbutton_reminder_toggled(self, checkbutton):

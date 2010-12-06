@@ -130,6 +130,9 @@ class UpdateManagerDbusController(dbus.service.Object):
                  object_path='/org/freedesktop/UpdateManagerObject'):
         dbus.service.Object.__init__(self, bus_name, object_path)
         self.parent = parent
+        self.alert_watcher = AlertWatcher ()
+        self.alert_watcher.connect("network-alert", self._on_network_alert)
+        self.connected = False
 
     @dbus.service.method('org.freedesktop.UpdateManagerIFace')
     def bringToFront(self):
@@ -139,8 +142,9 @@ class UpdateManagerDbusController(dbus.service.Object):
     @dbus.service.method('org.freedesktop.UpdateManagerIFace')
     def update(self):
         try:
+            self.alert_watcher.check_alert_state ()
             self.parent.invoke_manager(UPDATE)
-            return True
+            return self.connected
         except:
             return False
 
@@ -152,6 +156,12 @@ class UpdateManagerDbusController(dbus.service.Object):
             return True
         except:
             return False	
+
+    def _on_network_alert(self, watcher, state):
+        if state == NM_STATE_CONNECTED:
+            self.connected = True
+        else:
+            self.connected = False
 
 class UpdateManager(SimpleGtkbuilderApp):
 

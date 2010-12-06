@@ -136,7 +136,22 @@ class UpdateManagerDbusController(dbus.service.Object):
         self.parent.window_main.present()
         return True
 
-	
+    @dbus.service.method('org.freedesktop.UpdateManagerIFace')
+    def update(self):
+        try:
+            self.parent.invoke_manager(UPDATE)
+            return True
+        except:
+            return False
+
+    @dbus.service.method('org.freedesktop.UpdateManagerIFace')
+    def upgrade(self):
+        try:
+            self.parent.cache.checkFreeSpace()
+            self.parent.invoke_manager(INSTALL)
+            return True
+        except:
+            return False	
 
 class UpdateManager(SimpleGtkbuilderApp):
 

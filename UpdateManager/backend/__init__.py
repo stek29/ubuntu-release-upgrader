@@ -43,7 +43,8 @@ def get_backend(*args, **kwargs):
             from InstallBackendAptdaemon import InstallBackendAptdaemon
             return InstallBackendAptdaemon(*args, **kwargs)
         except ImportError:
-            pass
+            import logging
+            logging.exception("importing aptdaemon")
     # try synaptic
     if (os.path.exists("/usr/sbin/synaptic") and
         not "UPDATE_MANAGER_FORCE_BACKEND_APTDAEMON" in os.environ):

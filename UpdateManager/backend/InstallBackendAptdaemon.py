@@ -3,7 +3,7 @@
 # (c) 2005-2009 Canonical, GPL
 
 from aptdaemon import client, errors
-from aptdaemon.defer import inline_callbacks
+from defer import inline_callbacks
 from aptdaemon.gtkwidgets import AptProgressDialog
 
 from UpdateManager.backend import InstallBackend
@@ -41,9 +41,10 @@ class InstallBackendAptdaemon(InstallBackend):
         except SystemError:
             pass
         try:
-            trans = yield self.client.commit_packages(pkgs_install, [], [],
-                                                      [], pkgs_upgrade,
-                                                      defer=True)
+            reinstall = remove = purge = upgrade = downgrade = []
+            trans = yield self.client.commit_packages(
+                pkgs_install, reinstall, remove, purge, pkgs_upgrade, 
+                downgrade, defer=True)
             self._run_in_dialog(trans, self.INSTALL)
         except errors.NotAuthorizedError:
             self.emit("action-done", self.INSTALL, False)

@@ -3,6 +3,7 @@
 # (c) 2005-2007 Canonical, GPL
 
 import apt_pkg
+import os
 import tempfile
 from gettext import gettext as _
 
@@ -34,7 +35,7 @@ class InstallBackendSynaptic(InstallBackend):
         action, tempf = data
         if tempf:
             tempf.close()
-        self.emit("action-done", action, True)
+        self.emit("action-done", action, True, os.WEXITSTATUS(condition) == 0)
 
     def update(self):
         opt = ["--update-at-startup"]

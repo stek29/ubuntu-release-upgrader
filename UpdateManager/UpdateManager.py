@@ -765,7 +765,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                 pkgs_upgrade.append(pkg.name)
         self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
-  def _on_backend_done(self, backend, action, authorized):
+  def _on_backend_done(self, backend, action, authorized, success):
     # check if there is a new reboot required notification
     if (action == INSTALL and
         os.path.exists(REBOOT_REQUIRED_FILE)):

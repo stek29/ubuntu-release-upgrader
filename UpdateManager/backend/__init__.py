@@ -13,7 +13,12 @@ class InstallBackend(gobject.GObject):
     """The abstract backend that can install/remove packages"""
 
     __gsignals__ = {"action-done": (gobject.SIGNAL_RUN_FIRST,
-                                    gobject.TYPE_NONE, (gobject.TYPE_INT, gobject.TYPE_BOOLEAN))}
+                                    gobject.TYPE_NONE, 
+                                    (gobject.TYPE_INT,     # action id
+                                     gobject.TYPE_BOOLEAN, # authorized
+                                     gobject.TYPE_BOOLEAN) # success
+                                    ),
+                    }
 
     (INSTALL, UPDATE) = range(2)
 

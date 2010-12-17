@@ -790,7 +790,7 @@ class MyCache(apt.Cache):
             if pkg.marked_install or pkg.is_installed:
                 continue
             self._lookupPkgRecord(pkg)
-            if not (hasattr(pkg._pcache._records,"Record") and pkg._pcache._records.record):
+            if not (hasattr(pkg._pcache._records,"record") and pkg._pcache._records.record):
                 logging.warning("can not find Record for '%s'" % pkg.name)
                 continue
             for line in pkg._pcache._records.record.split("\n"):

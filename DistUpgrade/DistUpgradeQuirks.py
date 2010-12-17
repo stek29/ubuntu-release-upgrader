@@ -984,10 +984,8 @@ class DistUpgradeQuirks(object):
         if not os.path.exists(patchdir):
             logging.debug("no patchdir")
             return
-        if not ("PATH" in os.environ and
-                [p for p in os.environ["PATH"].split(":")
-                 if os.path.exists(os.path.join(p,"sed"))]):
-            logging.debug("no binary 'sed' found in PATH")
+        if not os.path.exists("/bin/ed"):
+            logging.error("ed not found, can not patch")
             return
         for f in os.listdir(patchdir):
             # skip, not a patch file, they all end with .$md5sum
@@ -1004,15 +1002,16 @@ class DistUpgradeQuirks(object):
             if (os.path.exists(path) and
                 md5(open(path).read()).hexdigest() == md5sum):
                 logging.info("applying '%s'" % f)
-                # dry-run first, then patch if ok
-                cmd = ["sed","-n", "-f", patchdir+"/"+f, path]
+                # open input
+                input = open(os.path.join(patchdir, f))
+                # and run ed on it
+                cmd = ["ed", "-s", path]
                 logging.debug("runing '%s'" % cmd)
-                res = call(cmd)
+                res = call(cmd, stdin=input)
                 if res == 0:
-                    res = call(["sed","-i","-f", patchdir+"/"+f, path])
                     logging.info("applied '%s' with %i status" % (f,res))
                 else:
-                    logging.warning("dry run failed, ignoring patch '%s'" % f)
+                    logging.warning("ed failed '%s'" % f)
                     
     def _supportInModaliases(self, xorgdrivername, modaliasesdir="./modaliases", lspci=None):
         """ 

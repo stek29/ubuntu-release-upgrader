@@ -997,17 +997,23 @@ class DistUpgradeQuirks(object):
             # FIXME: this is not clever and needs quoting support for
             #        filenames with "_" in the name
             path = encoded_path.replace("_","/")
-            #logging.debug("target for '%s' is '%s' -> '%s'" % (
-            #        f, encoded_path, path))
+            logging.debug("target for '%s' is '%s' -> '%s'" % (
+                    f, encoded_path, path))
             if (os.path.exists(path) and
                 md5(open(path).read()).hexdigest() == md5sum):
                 logging.info("applying '%s'" % f)
                 # open input
-                input = open(os.path.join(patchdir, f))
+                input = open(os.path.join(patchdir, f)).read()
                 # and run ed on it
                 cmd = ["ed", "-s", path]
                 logging.debug("runing '%s'" % cmd)
-                res = call(cmd, stdin=input)
+                # diff -ed produces a patch *without* "w" at the end, so
+                # we need it into ed now
+                p = Popen(cmd, stdin=PIPE)
+                p.stdin.write(input)
+                p.stdin.write("w\n")
+                p.stdin.close()
+                res = p.wait()
                 if res == 0:
                     logging.info("applied '%s' with %i status" % (f,res))
                 else:

@@ -156,7 +156,11 @@ class UpdateManagerDbusController(dbus.service.Object):
             self.parent.invoke_manager(INSTALL)
             return True
         except:
-            return False	
+            return False
+
+    @dbus.service.signal('org.freedesktop.UpdateManagerIFace', 'b')
+    def updated(self, success):
+        pass	
 
     def _on_network_alert(self, watcher, state):
         if state == NM_STATE_CONNECTED:
@@ -344,7 +348,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     except dbus.DBusException, e:
          #print "no listening object (%s) "% e
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
-         self.dbusControler = UpdateManagerDbusController(self, bus_name)
+         self.dbusController = UpdateManagerDbusController(self, bus_name)
 
 
   def on_checkbutton_reminder_toggled(self, checkbutton):
@@ -766,6 +770,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
   def _on_backend_done(self, backend, action, authorized, success):
+    if (action == UPDATE):
+        self.dbusController.updated(success)
     # check if there is a new reboot required notification
     if (action == INSTALL and
         os.path.exists(REBOOT_REQUIRED_FILE)):
@@ -932,9 +938,14 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.list = UpdateList(self)
     while gtk.events_pending():
         gtk.main_iteration()
+
     # fill them again
     try:
-        self.list.update(self.cache)
+        # This is  a quite nasty hack to stop the initial update 
+        if not self.options.no_update:
+            self.list.update(self.cache)
+        else:
+            self.options.no_update = False
     except SystemError, e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not calculate the upgrade"),

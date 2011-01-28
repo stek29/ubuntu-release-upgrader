@@ -46,8 +46,8 @@ binary-indep: build install
 	(cd DistUpgrade/ && \
 	   ./build-tarball.sh && \
 	   mkdir -p $(DEBVER)  && \
-	   cp $(DIST).tar.gz ReleaseAnnouncement DevelReleaseAnnouncement \
-	      EOLReleaseAnnouncement\
+	   cp $(DIST).tar.gz ReleaseAnnouncement* DevelReleaseAnnouncement* \
+	      EOLReleaseAnnouncement* \
 	      $(DEBVER) && \
 	   tar czvf ../../$(TARNAME) $(DEBVER)/ReleaseAnnouncement $(DEBVER)/DevelReleaseAnnouncement $(DEBVER)/$(DIST).tar.gz )
 	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -

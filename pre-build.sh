@@ -10,6 +10,17 @@ set -e
 # update base-installer
 (cd utils && ./update-base-installer.sh)
 
+# (auto) generate the required html
+if [ ! -x /usr/bin/parsewiki ]; then
+    echo "please sudo apt-get install parsewiki"
+    exit 1
+fi
+(cd DistUpgrade; 
+ parsewiki DevelReleaseAnnouncement > DevelReleaseAnnouncement.html;
+ parsewiki ReleaseAnnouncement > ReleaseAnnouncement.html;
+ parsewiki EOLReleaseAnnouncement > EOLReleaseAnnouncement.html;
+)
+
 # cleanup
 rm -rf utils/apt/lists utils/apt/*.bin
 (cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)

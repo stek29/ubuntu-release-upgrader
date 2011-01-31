@@ -26,13 +26,6 @@ if [ ! -h $DIST ]; then
 	ln -s dist-upgrade.py $DIST
 fi
 
-# copy the nvidia-modaliases files
-if [ ! -d modaliases ]; then
-    mkdir modaliases 
-fi
-cp /usr/share/jockey/modaliases/nvidia-* modaliases
-cp /usr/share/jockey/modaliases/fglrx* modaliases
-
 # copy nvidia obsoleted drivers data
 cp /usr/share/nvidia-common/obsolete nvidia-obsolete.pkgs
 

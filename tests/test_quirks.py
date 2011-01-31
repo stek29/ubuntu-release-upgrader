@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0,"../")
 
 import apt
+import mock
 import unittest
 import shutil
 import subprocess
@@ -18,17 +19,33 @@ class MockController(object):
 class MockConfig(object):
     pass
 
-class testQuirks(unittest.TestCase):
+class TestQuirks(unittest.TestCase):
+
+    def test_parse_from_modaliases_header(self):
+        pkgrec = { "Package" : "foo",
+                   "Modaliases" : "modules1(pci:v00001002d00006700sv*sd*bc03sc*i*, pci:v00001002d00006701sv*sd*bc03sc*i*), module2(pci:v00001002d00006702sv*sd*bc03sc*i*, pci:v00001001d00006702sv*sd*bc03sc*i*)"
+                 }
+        controller = mock.Mock()
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        self.assertEqual(q._parse_modaliases_from_pkg_header({}), [])
+        self.assertEqual(q._parse_modaliases_from_pkg_header(pkgrec),
+                         [("modules1",
+                           ["pci:v00001002d00006700sv*sd*bc03sc*i*", "pci:v00001002d00006701sv*sd*bc03sc*i*"]),
+                         ("module2",
+                          ["pci:v00001002d00006702sv*sd*bc03sc*i*", "pci:v00001001d00006702sv*sd*bc03sc*i*"]) ])
 
     def testFglrx(self):
         mock_lspci_good = set(['1002:9714'])
         mock_lspci_bad = set(['8086:ac56'])
-        q = DistUpgradeQuirks(MockController(), MockConfig)
+        config = mock.Mock()
+        cache = apt.Cache()
+        controller = mock.Mock()
+        controller.cache = cache
+        q = DistUpgradeQuirks(controller, config)
         self.assert_(q._supportInModaliases("fglrx",
-                                            "../DistUpgrade/modaliases/",
                                             mock_lspci_good) == True)
         self.assert_(q._supportInModaliases("fglrx",
-                                            "../DistUpgrade/modaliases/",
                                             mock_lspci_bad) == False)
 
     def test_cpuHasSSESupport(self):

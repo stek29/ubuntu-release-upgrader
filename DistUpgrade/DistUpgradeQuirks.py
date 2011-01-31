@@ -1019,38 +1019,51 @@ class DistUpgradeQuirks(object):
                 else:
                     logging.warning("ed failed '%s'" % f)
                     
-    def _supportInModaliases(self, xorgdrivername, modaliasesdir="./modaliases", lspci=None):
+    def _supportInModaliases(self, pkgname, lspci=None):
         """ 
-        Check if xorgdriver will work on this hardware
+        Check if pkgname will work on this hardware
 
         This helper will check with the modaliasesdir if the given 
-        xorgdriver will work on this hardware (or the hardware given
+        pkg will work on this hardware (or the hardware given
         via the lspci argument)
         """
+        # get lspci info (if needed)
         if not lspci:
             lspci = set()
             p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
             for line in p.communicate()[0].split("\n"):
                 if line:
                     lspci.add(line.split()[2])
-        for filename in os.listdir(modaliasesdir):
-            #logging.debug("modalias file '%s'" % filename)
-            for line in open(os.path.join(modaliasesdir,filename)):
-                line = line.strip()
-                if line == "" or line.startswith("#"):
-                    continue
-                (key, pciid, xorgdriver, pkgname) = line.split()
-                if xorgdriver != xorgdrivername:
-                    continue
+        # get pkg
+        if (not pkgname in self.controller.cache or
+            not self.controller.cache[pkgname].candidate):
+            logging.warn("can not find '%s' in cache")
+            return False
+        pkg = self.controller.cache[pkgname]
+        for (module, pciid_list) in self._parse_modaliases_from_pkg_header(pkg.candidate.record):
+            for pciid in pciid_list:
                 m = re.match("pci:v0000(.+)d0000(.+)sv.*", pciid)
                 if m:
                     matchid = "%s:%s" % (m.group(1), m.group(2))
                     if matchid.lower() in lspci:
                         logging.debug("found system pciid '%s' in modaliases" % matchid)
                         return True
-        logging.debug("checking for %s support in modaliases but none found" % xorgdrivername)
+        logging.debug("checking for %s support in modaliases but none found" % pkgname)
         return False
                     
+    def _parse_modaliases_from_pkg_header(self, pkgrecord):
+        """ return a list of (module1, (pciid, ...), (module2, (pciid, ...)))"""
+        if not "Modaliases" in pkgrecord:
+            return []
+        # split the string
+        modules = []
+        for m in pkgrecord["Modaliases"].split(")"):
+            m = m.strip(", ")
+            if not m:
+                continue
+            (module, pciids) = m.split("(")
+            modules.append ((module, [x.strip() for x in pciids.split(",")]))
+        return modules
 
     def _kernel386TransitionCheck(self):
         """ test if the current kernel is 386 and if the system is 

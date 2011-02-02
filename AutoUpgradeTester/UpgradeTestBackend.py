@@ -54,9 +54,11 @@ class UpgradeTestBackend(object):
                                             name=os.path.basename(profile))
         else:
             raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
-        base_resultdir = self.config.getWithDefault("NonInteractive",
-                                                    "ResultDir",
-                                                    "results-upgrade-tester")
+        if resultdir:
+            base_resultdir = resultdir
+        else:
+            base_resultdir = self.config.getWithDefault(
+                "NonInteractive", "ResultDir", "results-upgrade-tester")
         self.resultdir = os.path.abspath(
             os.path.join(base_resultdir, profiledir.split("/")[-1]))
         if not os.path.exists(self.resultdir):

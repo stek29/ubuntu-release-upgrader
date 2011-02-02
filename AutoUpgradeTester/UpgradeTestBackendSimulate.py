@@ -15,11 +15,8 @@ from UpgradeTestBackend import UpgradeTestBackend
 class UpgradeTestBackendSimulate(UpgradeTestBackend):
 
     def __init__(self, profiledir, resultdir=""):
-        super(UpgradeTestBackendSimulate, self).__init__(profiledir, resultdir)
         tmpdir = tempfile.mkdtemp()
-        print tmpdir
-        self.resultdir = tmpdir + self.resultdir
-        os.makedirs(self.resultdir)
+        super(UpgradeTestBackendSimulate, self).__init__(profiledir, resultdir=tmpdir)
 
     def installPackages(self, pkgs):
         print "simulate installing packages: %s" % ",".join(pkgs)

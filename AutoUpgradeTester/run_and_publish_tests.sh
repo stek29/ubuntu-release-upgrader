@@ -14,6 +14,7 @@ PROFILES="server server-tasks ubuntu kubuntu main-all"
 
 #UPGRADE_TESTER_ARGS="--tests-only"
 UPGRADE_TESTER_ARGS="--quiet"
+UPGRADE_TESTER_ARGS=" -b UpgradeTestBackendSimulate "
 
 upload_files() {
     profile=$1
@@ -69,7 +70,8 @@ cat > index.html <<EOF
 <head>
   <title>Auto upgrade tester</title>
 <style type="text/css">
-.error { background-color:#FFFF00; }
+.error { background-color:#FF6600; }
+.warning { background-color:#FFA000; }
 .aright { text-align:right; }
 table { width:90%; }
 </style>
@@ -100,8 +102,17 @@ for p in $PROFILES; do
     if /usr/bin/time -f %E --output=time.$p ./auto-upgrade-tester $UPGRADE_TESTER_ARGS ./profile/$p; then
         echo -n "<td>OK</td>" >> index.html
     else
+        exitcode=$?
+        if [ $exitcode -eq 99 ]; then
+            echo "<td class=\"error\">Failed to bootstrap</td>" >> index.html
+        elif [ $exitcode -eq 98 ]; then
+            echo "<td class=\"error\">Failed to upgrade</td>" >> index.html
+        elif [ $exitcode -eq 97 ]; then
+            echo "<td class=\"warning\">Upgraded, but post upgrade test failed</td>" >> index.html
+        else
+            echo "<td class=\"error\">Unknown failure (should not happen)</td>" >> index.html
+        fi
      	FAIL="$FAIL $p"
-        echo "<td class=\"error\">FAILED</td>" >> index.html
     fi
     echo "<td></td><td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
     upload_files $p $SSHKEY $PUBLISH $DATE

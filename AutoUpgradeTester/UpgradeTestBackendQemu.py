@@ -58,7 +58,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         "-monitor","stdio",
         "-localtime",
         "-no-reboot",    # exit on reboot
-        "-no-acpi",      # the dapper kernel does not like qemus acpi
 #        "-no-kvm",      # crashes sometimes with kvm HW
         ]
 

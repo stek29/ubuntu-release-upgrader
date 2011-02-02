@@ -21,6 +21,20 @@ if os.path.exists("./UpgradeTestBackend.py"):
 from optparse import OptionParser
 from AutoUpgradeTester.UpgradeTestBackend import UpgradeTestBackend
 
+# bigger exitcode means more problematic error,
+# exitcode 101 means generic error
+class FailedToBootstrapError(Exception):
+    """ Failed to initial bootstrap the test system """
+    exitcode = 99
+
+class FailedToUpgradeError(Exception):
+    """ Failed to upgrade the test system """
+    exitcode = 98
+
+class FailedPostUpgradeTestError(Exception):
+    """ Some post upgrade tests failed """
+    exitcode = 97
+
 class OutputThread(multiprocessing.Process):
     def __init__(self, filename):
         multiprocessing.Process.__init__(self)
@@ -69,36 +83,36 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
     os.dup2(fd, 1)
     os.dup2(fd, 2)
     print "%s log started" % datetime.datetime.now()
-    result = True
+    result = 0
     try:
         # init the chroot
         if not backend.bootstrap():
             print "FAILED: bootstrap for '%s'" % profile
-            raise "Failed to bootstrap '%s'" % profile
+            raise FailedToBootstrapError("Failed to bootstrap '%s'" % profile)
         if add_pkgs:
             if not backend.installPackages(add_pkgs):
                 print "FAILED: installPacakges '%s'" % add_pkgs
                 raise Exception, "Failed to install packages '%s'" % add_pkgs
         if not backend.upgrade():
             print "FAILED: upgrade for '%s'" % profile
-            print "Failure logs can be found here:"
-            for n in ["main.log", "apt.log"]:
-                print "%s/%s" % (backend.resultdir, n)
-            raise Exception, "Failed to upgrade %s" % profile
+            raise FailedToUpgradeError("Failed to upgrade %s" % profile)
         if not backend.test():
             print "FAILED: test for '%s'" % profile
-            raise Exception, "Failed in post upgrade test %s" % profile
+            raise FailedPostUpgradeTestError("Failed in post upgrade test %s" % profile)
         print "profile: %s worked" % profile
+    except (FailedToBootstrapError, FailedToUpgradeError, FailedPostUpgradeTestError) as e:
+        print e
+        result = e.exitcode
     except Exception, e:
         import traceback
         traceback.print_exc()
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
-        result = False
+        result = 2
     finally:
         # print out result details
         print "Logs can be found here:"
-        for n in ["main.log", "apt.log"]:
-            print "%s/%s" % (backend.resultdir, n)
+        for n in ["bootstrap.log", "main.log", "apt.log"]:
+            print " %s/%s" % (backend.resultdir, n)
         # give the output time to settle and kill the daemon
         time.sleep(2)
         if out.is_alive():
@@ -158,7 +172,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # generic
-    res = True
+    res = 0
     add_pkgs = []
     if  options.add_pkgs:
         add_pkgs = options.add_pkgs.split(",")
@@ -169,8 +183,8 @@ if __name__ == "__main__":
             os.dup2(fd1, 1)
             os.dup2(fd2, 2)
             print "Testing '%s'" % d
-            res &= testUpgrade(options.backend, base+d, add_pkgs)
-            sys.exit(not res)
+            res = max(res, testUpgrade(options.backend, base+d, add_pkgs))
+        sys.exit(res)
     # profile mode, test the given profiles
     for profile in profiles:
         if not "/" in profile:
@@ -192,16 +206,20 @@ if __name__ == "__main__":
                 print "Testing '%s'" % profile
                 current_res = testUpgrade(options.backend, profile, 
                                           add_pkgs, options.quiet)
-                if current_res:
+                if current_res == 0: 
                     print "Profile '%s' worked" % profile
                 else:
                     print "Profile '%s' FAILED" % profile
-                res &= current_res
+                res = max(res, current_res)
         except Exception, e:
             print "ERROR: exception caught '%s' " % e
             import traceback
             traceback.print_exc()
-            res = False
+            if hasattr(e, "exitcode"):
+                res = max(res, e.exitcode)
+            else:
+                res = max(res, 101)
+                       
 
     # return exit code
-    sys.exit(not res)
+    sys.exit(res)

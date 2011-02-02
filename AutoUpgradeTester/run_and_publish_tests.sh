@@ -8,13 +8,18 @@ PUBLISH="mvo@people.ubuntu.com"
 
 RESULTDIR=/var/cache/auto-upgrade-tester/result/
 
+# output
+DATE=$(date +"%F-%T")
+HTML_BASEDIR=~/public_html/automatic-upgrade-testing
+HTMLDIR=$HTML_BASEDIR/$DATE
+
 PROFILES="server server-tasks ubuntu kubuntu main-all"
 #PROFILES="lts-server server"
 #PROFILES="server"
 
 #UPGRADE_TESTER_ARGS="--tests-only"
-UPGRADE_TESTER_ARGS="--quiet"
-UPGRADE_TESTER_ARGS=" -b UpgradeTestBackendSimulate "
+UPGRADE_TESTER_ARGS="--quiet --html-output-dir $HTMLDIR"
+UPGRADE_TESTER_ARGS="$UPGRADE_TESTER_ARGS -b UpgradeTestBackendSimulate "
 
 upload_files() {
     profile=$1
@@ -60,76 +65,28 @@ EOF
     sftp $SSHKEY -b sftp-upload $PUBLISH >/dev/null
 }
 
-generate_index_html_head() {
-    DATE=$1
-cat > index.html <<EOF
-<?xml version="1.0" encoding="ascii"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-          "DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <title>Auto upgrade tester</title>
-<style type="text/css">
-.error { background-color:#FF6600; }
-.warning { background-color:#FFA000; }
-.aright { text-align:right; }
-table { width:90%; }
-</style>
-</head>
-<body>
-<h1>Automatic upgrade tester test results</h1>
-
-<p>Upgrade test started $DATE</p>
-
-<table border="1">
-<tr><th>Profile</th><th>Result</th><th>Bugs</th><th>Date Finished</th><th>Runtime</th><th>Full Logs</th></tr>
-EOF
-}
-
 # ------------------------------------------------------------- main()
 
 bzr up
 
-DATE=$(date +"%F-%T")
 FAIL=""
-generate_index_html_head $DATE
+
+PROFILES_ARG=""
 for p in $PROFILES; do
     # clear log dir first
-    rm -f /var/cache/auto-upgrade-tester/result/$p/*
+    rm -f $RESULTDIR/$p/*
     # do it
-    echo "Testing $p"
-    echo -n "<tr><td>$p</td>" >> index.html
-    if /usr/bin/time -f %E --output=time.$p ./auto-upgrade-tester $UPGRADE_TESTER_ARGS ./profile/$p; then
-        echo -n "<td>OK</td>" >> index.html
-    else
-        exitcode=$?
-        if [ $exitcode -eq 99 ]; then
-            echo "<td class=\"error\">Failed to bootstrap</td>" >> index.html
-        elif [ $exitcode -eq 98 ]; then
-            echo "<td class=\"error\">Failed to upgrade</td>" >> index.html
-        elif [ $exitcode -eq 97 ]; then
-            echo "<td class=\"warning\">Upgraded, but post upgrade test failed</td>" >> index.html
-        else
-            echo "<td class=\"error\">Unknown failure (should not happen)</td>" >> index.html
-        fi
-     	FAIL="$FAIL $p"
-    fi
-    echo "<td></td><td>$(date +"%F %T")</td><td class=\"aright\">$(cat time.$p)</td><td><a href=\"./$p\">Logs for $p test</a></tr>" >> index.html
-    upload_files $p $SSHKEY $PUBLISH $DATE
-    upload_index_html $SSHKEY $PUBLISH $DATE
+    PROFILES_ARG=" $PROFILES_ARG profile/$p"
 done
 
-echo "<p>Upgrade test finished $(date +"%F %T")</p>" >> index.html
+# run with the profiles we have
+./auto-upgrade-tester $UPGRADE_TESTER_ARGS $PROFILES_ARG
 
-echo "</table>" >> index.html
-echo "</body>" >> index.html
+# update current symlink
+rm -f $HTML_BASEDIR/current
+ln -s $DATE $HTML_BASEDIR/current
 
-# upload final index
-upload_index_html $SSHKEY $PUBLISH $DATE
-update_current_symlink $SSHKEY $PUBLISH
-
-echo "Tested: $PROFILES"
-if [ -n "$FAIL" ]; then
-    echo "Failed: $FAIL"
-fi
+# FIXME: portme
+#upload_index_html $SSHKEY $PUBLISH $DATE
+#update_current_symlink $SSHKEY $PUBLISH
 

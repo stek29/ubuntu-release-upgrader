@@ -51,10 +51,12 @@ class OutputThread(multiprocessing.Process):
 
 # FIXME: move this into the generic backend code
 def login(backend):
+    """ login into a backend """
     backend.bootstrap()
     backend.login()
 
 def createBackend(backend_name, profile):
+    """ create a backend of the given name for the given profile """
     try:
         backend_full_name = "AutoUpgradeTester.%s" % backend_name
         backend_modul = __import__(backend_full_name, fromlist="AutoUpgradeTester")
@@ -63,14 +65,81 @@ def createBackend(backend_name, profile):
         print "Can not import: %s (%s) " % (backend_name, e)
         return None
     return backend_class(profile)
+
+class HtmlOutputStream:
+    HTML_HEADER=r"""
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Auto upgrade tester</title>
+<style type="text/css">
+.error { background-color:#FF6600; }
+.warning { background-color:#FFA000; }
+.aright { text-align:right; }
+table { width:90%%; }
+</style>
+</head>
+<body>
+<h1>Automatic upgrade tester test results</h1>
+
+<p>Upgrade test started %(date)s</p>
+
+<table border="1">
+<tr><th>Profile</th><th>Result</th><th>Bugs</th><th>Date Finished</th><th>Runtime</th><th>Full Logs</th></tr>
+"""
+
+    HTML_FOOTER="""
+</table>
+<p>Upgrade test finished %s</p>
+</body>
+"""
+
+    def __init__(self, outputdir=None):
+        self.html_output = None
+        if outputdir:
+            self.outputdir = outputdir
+            if not os.path.exists(outputdir):
+                os.makedirs(outputdir)
+            self.html_output = open(os.path.join(outputdir, "index.html"), "w")
+    def write(self, s):
+        if self.html_output:
+            self.html_output.write(s)
+    def copy_results_and_add_table_link(self, profile_name, resultdir):
+        if not self.html_output:
+            return
+        # copy logs & sanitize permissions
+        targetdir = os.path.join(self.outputdir, profile_name)
+        html_output.copytree(resultdir, targetdir)
+        for f in glob.glob(targetdir+"/*"):
+            os.chmod(f, 0644)
+        # write html line that links to output dir
+        s = "<td><a href=\"./%(logdir)s\">Logs for %(profile)s test</a></td>" %  {
+            'logdir' : profile_name,
+            'profile': profile_name, }
+        html_output.write(s)
+            
+    def copytree(self, src, dst):
+        if self.html_output:
+            shutil.copytree(src, dst)
+    def write_html_header(self, time_started):
+        self.write(self.HTML_HEADER % { 'date' : time_started })
+    def write_html_footer(self):
+        self.write(self.HTML_FOOTER % datetime.datetime.now())
     
-def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
+def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
+                html_output=HtmlOutputStream()):
+    """ test upgrade for the given backend/profile """
     backend = createBackend(backend_name, profile)
     assert(backend != None)
     if not os.path.exists(profile):
         print "ERROR: Can't find '%s' " % profile
-        return False
+        html_output.write("<tr><td>Can't find profile '%s'</td>" % profile)
+        html_output.write(4*"<td></td>")
+        return 2
     print "Storing the result in '%s'" % backend.resultdir
+    profile_name = os.path.split(os.path.normpath(profile))[1]
     # setup output
     outfile = os.path.join(backend.resultdir, "bootstrap.log")
     fd = os.open(outfile, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0644)
@@ -82,24 +151,32 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
     old_stderr = os.dup(2)
     os.dup2(fd, 1)
     os.dup2(fd, 2)
-    print "%s log started" % datetime.datetime.now()
+    time_started = datetime.datetime.now()
+    print "%s log started" % time_started
     result = 0
     try:
-        # init the chroot
+        # write what we working on
+        html_output.write("<td>%s</td>" % profile_name)
+        # init 
         if not backend.bootstrap():
             print "FAILED: bootstrap for '%s'" % profile
+            html_output.write("<td class=\"error\">Failed to bootstrap</td>")
             raise FailedToBootstrapError("Failed to bootstrap '%s'" % profile)
         if add_pkgs:
             if not backend.installPackages(add_pkgs):
                 print "FAILED: installPacakges '%s'" % add_pkgs
+                html_output.write("<td class=\"error\">Failed to add pkgs '%s'</td>" % ",".join(add_pkgs))
                 raise Exception, "Failed to install packages '%s'" % add_pkgs
         if not backend.upgrade():
             print "FAILED: upgrade for '%s'" % profile
+            html_output.write("<td class=\"error\">Failed to upgrade</td>")
             raise FailedToUpgradeError("Failed to upgrade %s" % profile)
         if not backend.test():
             print "FAILED: test for '%s'" % profile
+            html_output.write("<td class=\"warning\">Upgraded, but post upgrade test failed</td>")
             raise FailedPostUpgradeTestError("Failed in post upgrade test %s" % profile)
         print "profile: %s worked" % profile
+        html_output.write("<td>ok</td>")
     except (FailedToBootstrapError, FailedToUpgradeError, FailedPostUpgradeTestError) as e:
         print e
         result = e.exitcode
@@ -107,6 +184,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         import traceback
         traceback.print_exc()
         print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
+        html_output.write("<td class=\"error\">Unknown failure (should not happen)</td>")
         result = 2
     finally:
         # print out result details
@@ -118,6 +196,13 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False):
         if out.is_alive():
             out.terminate()
             out.join()
+        # write result line
+        s="<td></td><td>%(date)s</td><td class=\"aright\">%(runtime)s</td>" % {
+            'date'    : datetime.datetime.now(),
+            'runtime' : datetime.datetime.now() - time_started}
+        html_output.write(s)
+        html_output.copy_results_and_add_table_link(profile_name, backend.resultdir)
+        html_output.write("</tr>")
     # close and restore file descriptors
     os.close(fd)
     os.dup2(old_stdout, 1)
@@ -152,6 +237,8 @@ if __name__ == "__main__":
                       help="generate a diff of the upgraded image versus a fresh installed image")
     parser.add_option("--quiet", "--quiet", default=False, action="store_true",
                       help="quiet operation")
+    parser.add_option("", "--html-output-dir", default=None,
+                      help="html output directory")
     
     (options, args) = parser.parse_args()
 
@@ -186,6 +273,11 @@ if __name__ == "__main__":
             res = max(res, testUpgrade(options.backend, base+d, add_pkgs))
         sys.exit(res)
     # profile mode, test the given profiles
+    time_started = datetime.datetime.now()
+
+    # clean output dir
+    html_output = HtmlOutputStream(options.html_output_dir)
+    html_output.write_html_header(time_started)
     for profile in profiles:
         if not "/" in profile:
             profile = base + profile
@@ -204,22 +296,25 @@ if __name__ == "__main__":
                 backend.genDiff()
             else:
                 print "Testing '%s'" % profile
+                now = datetime.datetime.now()
                 current_res = testUpgrade(options.backend, profile, 
-                                          add_pkgs, options.quiet)
+                                          add_pkgs, options.quiet,
+                                          html_output)
                 if current_res == 0: 
                     print "Profile '%s' worked" % profile
                 else:
                     print "Profile '%s' FAILED" % profile
                 res = max(res, current_res)
         except Exception, e:
-            print "ERROR: exception caught '%s' " % e
             import traceback
+            print "ERROR: exception caught '%s' " % e
+            html_output.write('<pre class="error">unhandled ERROR %s:\n%s</pre>' % (e, traceback.format_exc()))
             traceback.print_exc()
             if hasattr(e, "exitcode"):
                 res = max(res, e.exitcode)
             else:
                 res = max(res, 101)
-                       
+    html_output.write_html_footer()
 
     # return exit code
     sys.exit(res)

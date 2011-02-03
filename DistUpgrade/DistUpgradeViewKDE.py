@@ -762,15 +762,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.changesDialogue.treeview_details.setHeaderLabels(["Packages"])
         self.changesDialogue.treeview_details.header().hide()
         for demoted in self.demotions:
-            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("No longer supported %s") % demoted]) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("No longer supported %s") % demoted.name]) )
         for rm in self.toRemove:
-            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm]) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove %s") % rm.name]) )
         for rm in self.toRemoveAuto:
-            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove (was auto installed) %s") % rm]) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Remove (was auto installed) %s") % rm.name]) )
         for inst in self.toInstall:
-            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Install %s") % inst]) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Install %s") % inst.name]) )
         for up in self.toUpgrade:
-            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Upgrade %s") % up]) )
+            self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Upgrade %s") % up.name]) )
 
         #FIXME resize label, stop it being shrinkable
         res = self.changesDialogue.exec_()

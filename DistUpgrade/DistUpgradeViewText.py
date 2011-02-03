@@ -166,27 +166,27 @@ class DistUpgradeViewText(DistUpgradeView):
           if len(self.demotions) > 0:
               output += "\n"  
               output += twrap(
-                  _("No longer supported: %s\n") % " ".join(self.demotions), 
+                  _("No longer supported: %s\n") % " ".join([p.name for p in self.demotions]),
                   subsequent_indent='  ')
           if len(self.toRemove) > 0:
               output += "\n"  
               output += twrap(
-                  _("Remove: %s\n") % " ".join(self.toRemove), 
+                  _("Remove: %s\n") % " ".join([p.name for p in self.toRemove]),
                   subsequent_indent='  ')
           if len(self.toRemoveAuto) > 0:
               output += twrap(
-                  _("Remove (was auto installed) %s") % " ".join(self.toRemoveAuto), 
+                  _("Remove (was auto installed) %s") % " ".join([p.name for p in self.toRemoveAuto]), 
                   subsequent_indent='  ')
               output += "\n"
           if len(self.toInstall) > 0:
               output += "\n"
               output += twrap(
-                  _("Install: %s\n") % " ".join(self.toInstall), 
+                  _("Install: %s\n") % " ".join([p.name for p in self.toInstall]),
                   subsequent_indent='  ')
           if len(self.toUpgrade) > 0:
               output += "\n"  
               output += twrap(
-                  _("Upgrade: %s\n") % " ".join(self.toUpgrade), 
+                  _("Upgrade: %s\n") % " ".join([p.name for p in self.toUpgrade]),
                   subsequent_indent='  ')
           self.showInPager(output)
         print "%s %s" % (_("Continue [yN] "), _("Details [d]")),

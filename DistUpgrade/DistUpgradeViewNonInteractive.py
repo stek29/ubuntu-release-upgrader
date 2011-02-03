@@ -279,9 +279,9 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
                        actions=None, removal_bold=True):
         DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
                                        downloadSize, actions)
-	logging.debug("toinstall: '%s'" % self.toInstall)
-        logging.debug("toupgrade: '%s'" % self.toUpgrade)
-        logging.debug("toremove: '%s'" % self.toRemove)
+	logging.debug("toinstall: '%s'" % [p.name for p in self.toInstall])
+        logging.debug("toupgrade: '%s'" % [p.name for p in self.toUpgrade])
+        logging.debug("toremove: '%s'" % [p.name for p in self.toRemove])
         return True
     def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "

@@ -979,7 +979,7 @@ class MyCache(apt.Cache):
                 self._depcache.is_auto_installed(pkg._pkg) or
                 pkg.marked_delete):
                 continue
-            installed_demotions.add(pkg.name)
+            installed_demotions.add(pkg)
         return list(installed_demotions)
 
     def _getForeignPkgs(self, allowed_origin, fromDist, toDist):

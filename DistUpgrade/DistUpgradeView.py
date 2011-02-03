@@ -314,16 +314,16 @@ class DistUpgradeView(object):
         self.toDowngrade = []
         for pkg in changes:
             if pkg.marked_install: 
-              self.toInstall.append(pkg.name)
+              self.toInstall.append(pkg)
             elif pkg.marked_upgrade: 
-              self.toUpgrade.append(pkg.name)
+              self.toUpgrade.append(pkg)
             elif pkg.marked_delete:
               if pkg._pcache._depcache.is_auto_installed(pkg._pkg):
-                self.toRemoveAuto.append(pkg.name)
+                self.toRemoveAuto.append(pkg)
               else:
-                self.toRemove.append(pkg.name)
+                self.toRemove.append(pkg)
             elif pkg.marked_downgrade: 
-              self.toDowngrade.append(pkg.name)
+              self.toDowngrade.append(pkg)
         # sort it
         self.toInstall.sort()
         self.toUpgrade.sort()

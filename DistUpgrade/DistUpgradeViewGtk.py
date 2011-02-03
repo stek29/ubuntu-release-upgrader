@@ -21,6 +21,7 @@
 
 import pygtk
 pygtk.require('2.0')
+import glib
 import gtk
 import gtk.gdk
 import vte
@@ -648,12 +649,14 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
             node = self.details_list.append(None, 
                                             [parent_text % len(details_list)])
             for pkg in details_list:
-              self.details_list.append(node, [pkg])
+              self.details_list.append(node, ["<b>%s</b> - %s" % (
+                    pkg.name, glib.markup_escape_text(pkg.summary))])
         # prepare dialog
         self.dialog_changes.realize()
         self.dialog_changes.set_transient_for(self.window_main)
         self.dialog_changes.set_title("")
-        self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE)
+        self.dialog_changes.window.set_functions(gtk.gdk.FUNC_MOVE|
+                                                 gtk.gdk.FUNC_RESIZE)
         res = self.dialog_changes.run()
         self.dialog_changes.hide()
         if res == gtk.RESPONSE_YES:

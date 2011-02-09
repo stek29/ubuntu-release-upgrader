@@ -1,16 +1,17 @@
 #!/usr/bin/python
 
-import os
+
 import apt
-import os.path
-import string
 import apt_pkg
-import re
 import logging
+import re
+import os
+import string
+import sys
 
 # global install blacklist
 pkg_blacklist = None
-
+pkg_whitelist = ""
 
 class InstallProgress(apt.progress.InstallProgress):
    " Out install progress that can automatically remove broken pkgs "
@@ -154,8 +155,16 @@ for comp in comps:
    for pkgname in sorted_pkgs[i:]:
       pkg = cache[pkgname]
       i += 1
+      print "\r%.3f     " % (float(i)/len(cache)),
+      sys.stdout.flush()
+      # ignore stuff that does not match the whitelist pattern
+      # (if we use this)
+      if pkg_whitelist:
+         if not re.match(pkg_whitelist, pkg.name):
+            #print "skipping '%s' (not in whitelist)" % pkg.name
+            continue
+      # only work on stuff that has a origin
       if pkg.candidateOrigin:
-         print "\r%.3f" % (float(i)/(len(cache)*100.0)),
          for c in pkg.candidateOrigin:
             if comp == None or c.component == comp:
                current = set([p.name for p in cache if p.markedInstall])

@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-PYTHONVER="python2.6"
+PYTHONVER="python2.7"
 BASEPATH="/usr/lib/%s/dist-packages/" % PYTHONVER
 
 # stuff that we know does not work when doing a simple "import"

@@ -16,6 +16,8 @@ blacklist = ["speechd_config",
              "plannerui.so",
              # needs a KeyringDaemon
              "desktopcouch",
+             # just hangs
+             "ropemacs",
              ]
 
 def try_import(module):

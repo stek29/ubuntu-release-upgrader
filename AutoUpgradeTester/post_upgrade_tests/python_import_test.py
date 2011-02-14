@@ -6,8 +6,11 @@ import subprocess
 import sys
 
 
-PYTHONVER="python2.7"
-BASEPATH="/usr/lib/%s/dist-packages/" % PYTHONVER
+OLD_PYTHONVER="python2.6"
+NEW_PYTHONVER="python2.7"
+
+OLD_BASEPATH="/usr/lib/%s/dist-packages/" % OLD_PYTHONVER
+NEW_BASEPATH="/usr/lib/%s/dist-packages/" % NEW_PYTHONVER
 
 # stuff that we know does not work when doing a simple "import"
 blacklist = ["speechd_config", 
@@ -33,20 +36,29 @@ def try_import(module):
         print "WARNING: failed to import '%s'" % module
         return False
     return True
+
+def py_module_filter(pymodule):
+    f = pymodule
+    # ignore a bunch of modules that 
+    if (f.endswith(".egg-info") or 
+        f.startswith("_") or 
+        f.endswith("_d.so") or
+        f in blacklist):
+        return False
+    return True
             
 if __name__ == "__main__":
     #logging.basicConfig(level=logging.DEBUG)
 
+    old_modules = set(filter(py_module_filter, os.listdir(OLD_BASEPATH)))
+    new_modules = set(filter(py_module_filter, os.listdir(NEW_BASEPATH)))
+    print "Available for the old version, but *not* the new: %s" % (
+        ",".join(old_modules - new_modules))
+
     res = True
-    for f in os.listdir(BASEPATH):
-        # ignore a bunch of modules that 
-        if (f.endswith(".egg-info") or 
-            f.startswith("_") or 
-            f.endswith("_d.so") or
-            f in blacklist):
-            continue
+    for f in filter(py_module_filter, os.listdir(NEW_BASEPATH)):
         logging.debug("looking at '%s'" % f)
-        if os.path.isdir(BASEPATH+f) and os.path.exists(BASEPATH+f+"/__init__.py"):
+        if os.path.isdir(NEW_BASEPATH+f) and os.path.exists(NEW_BASEPATH+f+"/__init__.py"):
             res &= try_import(f)
         elif f.endswith(".py"):
             res &= try_import(f.split(".")[0])

@@ -30,6 +30,7 @@ blacklist = ["speechd_config",
              ]
 
 def get_module_from_path(path):
+    f = os.path.basename(path)
     if path and os.path.exists(os.path.join(path, "__init__.py")):
         return f
     elif f.endswith(".py"):

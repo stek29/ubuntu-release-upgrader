@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
 
 import logging
 import os
@@ -23,25 +23,41 @@ blacklist = ["speechd_config",
              "ropemacs",
              ]
 
-def try_import(module):
-    logging.info("Importing %s" % module)
+def get_module_from_path(path):
+    if path and os.path.exists(os.path.join(path, "__init__.py")):
+        return f
+    elif f.endswith(".py"):
+        return f.split(".")[0]
+    elif f.endswith(".so"):
+        return f.split(".")[0]
+
+def try_import(path):
+    logging.info("Importing %s" % path)
     # a simple __import__(module) does not work, the problem
     # is that module import have funny side-effects (like
     # "import uno; import pyatspi" will fail, but importing
     # them individually is fine
+    module = get_module_from_path(path)
+    if not module:
+        logging.debug("could not get module for '%s'" % path)
+        return False
     cmd = ["python", "-c","import %s" % module]
     logging.debug("cmd: '%s'" % cmd)
     ret = subprocess.call(cmd)
     if ret != 0:
         print "WARNING: failed to import '%s'" % module
+        subprocess.call(["dpkg", "-S", os.path.realpath(path)])
+        print "\n\n"
         return False
     return True
 
 def py_module_filter(pymodule):
     f = pymodule
     # ignore a bunch of modules that 
-    if (f.endswith(".egg-info") or 
-        f.startswith("_") or 
+    if (f.endswith(".egg-info") or
+        f.endswith(".pth") or 
+        f.startswith("_") or
+        f.endswith(".pyc") or 
         f.endswith("_d.so") or
         f in blacklist):
         return False
@@ -52,18 +68,13 @@ if __name__ == "__main__":
 
     old_modules = set(filter(py_module_filter, os.listdir(OLD_BASEPATH)))
     new_modules = set(filter(py_module_filter, os.listdir(NEW_BASEPATH)))
-    print "Available for the old version, but *not* the new: %s" % (
-        ",".join(old_modules - new_modules))
+    print "Available for the old version, but *not* the new: %s\n" % (
+        ", ".join(old_modules - new_modules))
 
     res = True
     for f in filter(py_module_filter, os.listdir(NEW_BASEPATH)):
         logging.debug("looking at '%s'" % f)
-        if os.path.isdir(NEW_BASEPATH+f) and os.path.exists(NEW_BASEPATH+f+"/__init__.py"):
-            res &= try_import(f)
-        elif f.endswith(".py"):
-            res &= try_import(f.split(".")[0])
-        elif f.endswith(".so"):
-            res &= try_import(f.split(".")[0])
-    
+        res &= try_import(os.path.join(NEW_BASEPATH, f))
+        
     if not res:
         sys.exit(1)

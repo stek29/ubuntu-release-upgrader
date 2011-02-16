@@ -988,6 +988,19 @@ class DistUpgradeController(object):
         env = copy.copy(os.environ)
         env["force_start"] = "1"
         subprocess.call(["/etc/init.d/apport","start"], env=env)
+
+    def _create_apt_brtfs_snasphot_if_available(self):
+        try:
+            import apt_btrfs_snasphot
+        except ImportError:
+            return None
+        apt_btrfs = apt_btrfs_snapshot.AptBtrfsSnapshot()
+        if not apt_btrfs.snapshots_supported:
+            logging.debug("btrfs snapshots not supported")
+            return None
+        prefix = "release-upgrade-%s-" % self.toDist
+        res = apt_btrfs.create_btrfs_root_snapshot(prefix)
+        logging.info("creating snapshot '%s' (success=%s)" % (prefix, res))
         
     def doDistUpgrade(self):
         # check if we want apport running during the upgrade
@@ -1001,6 +1014,8 @@ class DistUpgradeController(object):
         maxRetries = self.config.getint("Network","MaxRetries")
         if not self._partialUpgrade:
             self.quirks.run("StartUpgrade")
+            # FIXME: take this into account for diskspace calculation
+            self._create_apt_btrfs_snapshot_if_available()
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)

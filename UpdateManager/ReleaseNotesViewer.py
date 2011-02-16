@@ -29,6 +29,7 @@ import gtk
 import pango
 import subprocess
 import os
+import pango
 
 class ReleaseNotesViewer(gtk.TextView):
     def __init__(self, notes):
@@ -42,6 +43,7 @@ class ReleaseNotesViewer(gtk.TextView):
         # setup the buffer and signals
         self.set_property("editable", False)
         self.set_cursor_visible(False)
+        self.modify_font(pango.FontDescription("monospace"))
         self.buffer = gtk.TextBuffer()
         self.set_buffer(self.buffer)
         self.buffer.set_text(notes)

@@ -274,7 +274,7 @@ class DistUpgradeController(object):
                     descr += _(
                         "If you run a firewall, you may need to "
                         "temporarily open this port. As this is "
-                        "potentially dangerous its not done automatically."
+                        "potentially dangerous it's not done automatically. "
                         "You can open the port with e.g.:\n'%s'") % cmd
                 self._view.information(summary, descr)
         return True
@@ -966,7 +966,7 @@ class DistUpgradeController(object):
         if user_canceled:
             self._view.information(_("Upgrade canceled"),
                                    _("The upgrade will cancel now and the "
-                                     "original system state will be restored."
+                                     "original system state will be restored. "
                                      "You can resume the upgrade at a later "
                                      "time."))
         else:

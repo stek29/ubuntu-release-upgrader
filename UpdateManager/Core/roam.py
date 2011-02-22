@@ -78,13 +78,13 @@ class ModemManagerHelper(object):
     def is_cdma_roaming(self):
         for m in self.modems:
             dev = self.bus.get_object(self.MM_DBUS_IFACE, m)
-            cdma = bus.Interface(dev, self.MM_DBUS_IFACE_MODEM + ".Cdma")
+            cdma = self.bus.Interface(dev, self.MM_DBUS_IFACE_MODEM + ".Cdma")
             (cmda_1x, evdo) = cdma.GetRegistrationState()
             # Be conservative about roaming. If registration unknown, 
             # assume yes.
             # MM_MODEM_CDMA_REGISTRATION_STATE
-            roaming_states (self.MM_MODEM_CDMA_REGISTRATION_STATE_REGISTERED,
-                            self.MM_MODEM_CDMA_REGISTRATION_STATE_ROAMING) 
+            roaming_states = (self.MM_MODEM_CDMA_REGISTRATION_STATE_REGISTERED,
+                              self.MM_MODEM_CDMA_REGISTRATION_STATE_ROAMING) 
             if cmda_1x in roaming_states:
                 return True
             elif evdo in roaming_states:
@@ -110,26 +110,28 @@ class NetworkManagerHelper(object):
         self.proxy = self.bus.get_object("org.freedesktop.NetworkManager", 
                                          "/org/freedesktop/NetworkManager")
 
+    @staticmethod
+    def get_dbus_property(proxy, interface, property):
+        props = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
+        property = props.Get(interface, property)
+        return property
+
     def is_active_connection_gsm_or_cdma_roaming(self):
         res = False
-        nm = dbus.Interface(self.proxy, "org.freedesktop.NetworkManager")
-        props = dbus.Interface(self.proxy, "org.freedesktop.DBus.Properties")
-        actives = props.Get(self.NM_DBUS_IFACE, 'ActiveConnections')
+        actives = self.get_dbus_property(
+            self.proxy, self.NM_DBUS_IFACE, 'ActiveConnections')
         for a in actives:
             active = self.bus.get_object(self.NM_DBUS_IFACE, a)
-            props = dbus.Interface(active, "org.freedesktop.DBus.Properties")
-            default = props.Get(self.NM_DBUS_IFACE + ".Connection.Active", 
-                                'Default')
-            if default != 1:
+            default_route = self.get_dbus_property(
+                active, self.NM_DBUS_IFACE + ".Connection.Active", 'Default')
+            if not default_route:
                 continue
-    
-
-            devs = props.Get(self.NM_DBUS_IFACE + ".Connection.Active", 
-                             'Devices')
+            devs = self.get_dbus_property(
+                active, self.NM_DBUS_IFACE + ".Connection.Active", 'Devices')
             for d in devs:
                 dev = self.bus.get_object(self.NM_DBUS_IFACE, d)
-                props = dbus.Interface(dev, "org.freedesktop.DBus.Properties")
-                type = props.Get(self.NM_DBUS_IFACE + ".Device", 'DeviceType')
+                type = self.get_dbus_property(
+                    dev, self.NM_DBUS_IFACE + ".Device", 'DeviceType')
                 if type == self.NM_DEVICE_TYPE_GSM:
                     mmhelper = ModemManagerHelper()
                     res |= mmhelper.is_gsm_roaming()

@@ -379,7 +379,7 @@ class MyCache(apt.Cache):
         if (self.has_key(pkgname)
             and self[pkgname].is_installed
             and self[pkgname].marked_delete):
-            self.markInstall(pkgname, reason)
+            self.mark_install(pkgname, reason)
 
     def keepInstalledRule(self):
         """ run after the dist-upgrade to ensure that certain
@@ -414,10 +414,10 @@ class MyCache(apt.Cache):
 
     def postUpgradeRule(self):
         " run after the upgrade was done in the cache "
-        for (rule, action) in [("Install", self.markInstall),
-                               ("Upgrade", self.markUpgrade),
-                               ("Remove", self.markRemove),
-                               ("Purge", self.markPurge)]:
+        for (rule, action) in [("Install", self.mark_install),
+                               ("Upgrade", self.mark_upgrade),
+                               ("Remove", self.mark_remove),
+                               ("Purge", self.mark_purge)]:
             # first the global list
             for pkg in self.config.getlist("Distro","PostUpgrade%s" % rule):
                 action(pkg, "Distro PostUpgrade%s rule" % rule)
@@ -482,7 +482,7 @@ class MyCache(apt.Cache):
             # check if a binary driver is installed now
             for oldDriver in nv.oldPackages:
                 if self.has_key(oldDriver) and self[oldDriver].is_installed:
-                    self.markRemove(oldDriver, "old nvidia driver")
+                    self.mark_remove(oldDriver, "old nvidia driver")
                     break
             else:
                 logging.info("no old nvidia driver installed, installing no new")
@@ -531,11 +531,11 @@ class MyCache(apt.Cache):
             if self[kernel].is_installed or self[kernel].marked_install:
                 logging.debug("%s kernel already installed" % kernel)
                 if self[kernel].is_upgradable and not self[kernel].marked_upgrade:
-                    self.markUpgrade(kernel, "Upgrading kernel from base-installer")
+                    self.mark_upgrade(kernel, "Upgrading kernel from base-installer")
                 return 
         # if we have not found a kernel yet, use the first one that installs
         for kernel in kernels:
-            if self.markInstall(kernel, "Selecting new kernel from base-installer"):
+            if self.mark_install(kernel, "Selecting new kernel from base-installer"):
                 return
 
     def checkForKernel(self):
@@ -575,7 +575,7 @@ class MyCache(apt.Cache):
                 not (pkg.is_installed or pkg.marked_install) and
                 not pkg.name in removeEssentialOk and
                 pkg.priority in need):
-                self.markInstall(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
+                self.mark_install(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
 
     # FIXME: make this a decorator (just like the withResolverLog())
     def updateGUI(self, view, lock):
@@ -837,7 +837,7 @@ class MyCache(apt.Cache):
                     self[key].is_installed and
                     self[key].is_upgradable):
                     logging.debug("Marking '%s' for upgrade" % key)
-                    self[key].markUpgrade()
+                    self[key].mark_upgrade()
             except SystemError, e:
                 logging.debug("Can't mark '%s' for upgrade (%s)" % (key,e))
                 raise SystemError, _("Can not mark '%s' for upgrade") % key

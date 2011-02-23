@@ -256,7 +256,7 @@ if __name__ == "__main__":
 
 
   for pkg in sys.argv[1:]:
-    cache[pkg].markInstall()
+    cache[pkg].mark_install()
   cache.commit(fp,ip)
   
   sys.exit(0)

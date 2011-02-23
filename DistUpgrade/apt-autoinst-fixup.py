@@ -30,7 +30,7 @@ need_fixup = set()
 need_fixup.add("mdadm")
 
 for pkg in cache:
-    if pkg.isInstalled and pkg.section == "metapackages":
+    if pkg.is_installed and pkg.section == "metapackages":
         logging.debug("Found installed meta-pkg: '%s' " % pkg.name)
         dependsList = pkg._pkg.CurrentVer.DependsList
         for t in ["Depends","PreDepends","Recommends"]:
@@ -38,8 +38,8 @@ for pkg in cache:
                 for depOr in dependsList[t]:
                     for dep in depOr:
                         depname = dep.TargetPkg.Name
-                        if (cache[depname].isInstalled and
-                            cache._depcache.IsAutoInstalled(cache[depname]._pkg)):
+                        if (cache[depname].is_installed and
+                            cache._depcache.is_auto_installed(cache[depname]._pkg)):
                             logging.info("Removed auto-flag from package '%s'" % depname)
                             need_fixup.add(depname)
         

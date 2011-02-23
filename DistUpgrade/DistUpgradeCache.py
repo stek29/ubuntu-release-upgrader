@@ -349,7 +349,7 @@ class MyCache(apt.Cache):
                 return False
         return True
 
-    def markInstall(self, pkg, reason=""):
+    def mark_install(self, pkg, reason=""):
         logging.debug("Installing '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
             self[pkg].mark_install()
@@ -358,7 +358,7 @@ class MyCache(apt.Cache):
                 #raise (SystemError, "Installing '%s' failed" % pkg)
                 return False
         return True
-    def markUpgrade(self, pkg, reason=""):
+    def mark_upgrade(self, pkg, reason=""):
         logging.debug("Upgrading '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg) and self[pkg].is_installed:
             self[pkg].mark_upgrade()
@@ -366,11 +366,11 @@ class MyCache(apt.Cache):
                 logging.error("Upgrading '%s' failed" % pkg)
                 return False
         return True
-    def markRemove(self, pkg, reason=""):
+    def mark_remove(self, pkg, reason=""):
         logging.debug("Removing '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
             self[pkg].mark_delete()
-    def markPurge(self, pkg, reason=""):
+    def mark_purge(self, pkg, reason=""):
         logging.debug("Purging '%s' (%s)" % (pkg, reason))
         if self.has_key(pkg):
             self._depcache.mark_delete(self[pkg]._pkg,True)

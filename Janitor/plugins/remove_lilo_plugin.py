@@ -35,7 +35,7 @@ class RemoveLiloPlugin(computerjanitor.Plugin):
         if "lilo" in self.app.apt_cache and "grub" in self.app.apt_cache:
             lilo = self.app.apt_cache["lilo"]
             grub = self.app.apt_cache["grub"]
-            if lilo.isInstalled and grub.isInstalled:
+            if lilo.is_installed and grub.is_installed:
                 if not os.path.exists("/etc/lilo.conf"):
                     yield computerjanitor.PackageCruft(lilo, self.description)
                 else:

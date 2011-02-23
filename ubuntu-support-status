@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # analyize
     cache = apt.Cache()
     for pkg in cache:
-        if pkg.isInstalled:
+        if pkg.is_installed:
             total += 1
             if not pkg.candidate or not pkg.candidate.downloadable:
                 no_candidate.add(pkg.name)
@@ -144,11 +144,11 @@ if __name__ == "__main__":
             print twrap(" ".join(sorted(tset)))
 
     if options.list:
-        pkg = max(cache, key=lambda pkg: pkg.isInstalled and len(pkg.name))
+        pkg = max(cache, key=lambda pkg: pkg.is_installed and len(pkg.name))
         field_width = len(pkg.name)
         format_str = "%-"+str(field_width)+"s  %s"
         for pkg in sorted(cache, cmp=lambda a,b: cmp(a.name, b.name)):
-            if pkg.isInstalled:
+            if pkg.is_installed:
                 support =  supported_time_for_pkgname.get(pkg.name, _("Unsupported"))
                 print format_str % (pkg.name, support)
                 

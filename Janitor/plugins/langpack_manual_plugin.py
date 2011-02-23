@@ -60,6 +60,6 @@ class MarkLangpacksManuallyInstalledPlugin(computerjanitor.Plugin):
             if (pkg.name.startswith("language-pack-") and 
                 not pkg.name.endswith("-base") and
                 cache._depcache.IsAutoInstalled(pkg._pkg) and
-                pkg.isInstalled):
+                pkg.is_installed):
                 logging.debug("setting '%s' to manual installed" % pkg.name)
                 yield ManualInstallCruft(pkg)

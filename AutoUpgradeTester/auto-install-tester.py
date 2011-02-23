@@ -143,7 +143,7 @@ if __name__ == "__main__":
         pkg_failed = False
 
         # skip stuff in the ubuntu-minimal that we can't install or upgrade
-        if pkg.isInstalled and not pkg.isUpgradable:
+        if pkg.is_installed and not pkg.is_upgradable:
             continue
 
         # skip blacklisted pkg names

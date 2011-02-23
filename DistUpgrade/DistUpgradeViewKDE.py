@@ -850,10 +850,10 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    if cache[pkg].isInstalled and not cache[pkg].isUpgradable: 
-      cache[pkg].markDelete(purge=True)
+    if cache[pkg].is_installed and not cache[pkg].isUpgradable: 
+      cache[pkg].mark_delete(purge=True)
     else:
-      cache[pkg].markInstall()
+      cache[pkg].mark_install()
   cache.commit(view._fetchProgress,view._installProgress)
 
   # keep the window open

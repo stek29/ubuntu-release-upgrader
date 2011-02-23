@@ -720,10 +720,10 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    if cache[pkg].isInstalled:
-      cache[pkg].markDelete()
+    if cache[pkg].is_installed:
+      cache[pkg].mark_delete()
     else:
-      cache[pkg].markInstall()
+      cache[pkg].mark_install()
   cache.commit(fp,ip)
   gtk.main()
   sys.exit(0)

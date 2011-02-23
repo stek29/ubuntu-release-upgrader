@@ -25,7 +25,7 @@ class HelloPlugin(computerjanitor.Plugin):
         cache = self.app.apt_cache
         if cache.has_key("hello"):
             pkg = cache["hello"]
-            if pkg.isInstalled:
+            if pkg.is_installed:
                 yield computerjanitor.PackageCruft(cache["hello"],
                                                  "We don't like hello.")
 

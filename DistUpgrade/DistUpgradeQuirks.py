@@ -219,20 +219,20 @@ class DistUpgradeQuirks(object):
         # bug 332328 - make sure pidgin-libnotify is upgraded
         for pkg in ["pidgin-libnotify"]:
             if (self.controller.cache.has_key(pkg) and
-                self.controller.cache[pkg].isInstalled and
-                not self.controller.cache[pkg].markedUpgrade):
+                self.controller.cache[pkg].is_installed and
+                not self.controller.cache[pkg].marked_upgrade):
                 logging.debug("forcing '%s' upgrade" % pkg)
-                self.controller.cache[pkg].markUpgrade()
+                self.controller.cache[pkg].mark_upgrade()
         # deal with kipi/gwenview/kphotoalbum
         for pkg in ["gwenview","digikam"]:
             if (self.controller.cache.has_key(pkg) and
-                self.controller.cache[pkg].isInstalled and
-                not self.controller.cache[pkg].markedUpgrade):
+                self.controller.cache[pkg].is_installed and
+                not self.controller.cache[pkg].marked_upgrade):
                 logging.debug("forcing libkipi '%s' upgrade" % pkg)
                 if self.controller.cache.has_key("libkipi0"):
                     logging.debug("removing  libkipi0)")
-                    self.controller.cache["libkipi0"].markDelete()
-                self.controller.cache[pkg].markUpgrade()
+                    self.controller.cache["libkipi0"].mark_delete()
+                self.controller.cache[pkg].mark_upgrade()
         
     def intrepidPostDistUpgradeCache(self):
         """ 
@@ -244,9 +244,9 @@ class DistUpgradeQuirks(object):
         fromp = "kdelibs4-dev"
         to = "kdelibs5-dev"
         if (self.controller.cache.has_key(fromp) and 
-            self.controller.cache[fromp].isInstalled and
+            self.controller.cache[fromp].is_installed and
             self.controller.cache.has_key(to)):
-            self.controller.cache.markInstall(to, "kdelibs4-dev -> kdelibs5-dev transition")
+            self.controller.cache.mark_install(to, "kdelibs4-dev -> kdelibs5-dev transition")
 
     def hardyPostDistUpgradeCache(self):
         """ 
@@ -256,15 +256,15 @@ class DistUpgradeQuirks(object):
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # deal with gnome-translator and help apt with the breaks
         if (self.controller.cache.has_key("nautilus") and
-            self.controller.cache["nautilus"].isInstalled and
-            not self.controller.cache["nautilus"].markedUpgrade):
+            self.controller.cache["nautilus"].is_installed and
+            not self.controller.cache["nautilus"].marked_upgrade):
             # uninstallable and gutsy apt is unhappy about this
             # breaks because it wants to upgrade it and gives up
             # if it can't
             for broken in ("link-monitor-applet"):
-                if self.controller.cache.has_key(broken) and self.controller.cache[broken].isInstalled:
-                    self.controller.cache[broken].markDelete()
-            self.controller.cache["nautilus"].markInstall()
+                if self.controller.cache.has_key(broken) and self.controller.cache[broken].is_installed:
+                    self.controller.cache[broken].mark_delete()
+            self.controller.cache["nautilus"].mark_install()
         # evms gives problems, remove it if it is not in use
         self._checkAndRemoveEvms()
         # give the language-support-* packages a extra kick
@@ -272,9 +272,9 @@ class DistUpgradeQuirks(object):
         if self.config.get("Options","withNetwork") == "True":
             for pkg in self.controller.cache:
                 if (pkg.name.startswith("language-support-") and
-                    pkg.isInstalled and
-                    not pkg.markedUpgrade):
-                    self.controller.cache.markInstall(pkg.name,"extra language-support- kick")
+                    pkg.is_installed and
+                    not pkg.marked_upgrade):
+                    self.controller.cache.mark_install(pkg.name,"extra language-support- kick")
 
     def gutsyPostDistUpgradeCache(self):
         """ this function works around quirks in the feisty->gutsy upgrade """
@@ -286,9 +286,9 @@ class DistUpgradeQuirks(object):
                 flavour == '686' or
                 flavour == 'k7'):
                 kernel = "linux-image-generic"
-                if not (self.controller.cache[kernel].isInstalled or self.controller.cache[kernel].markedInstall):
+                if not (self.controller.cache[kernel].is_installed or self.controller.cache[kernel].marked_install):
                     logging.debug("Selecting new kernel '%s'" % kernel)
-                    self.controller.cache[kernel].markInstall()
+                    self.controller.cache[kernel].mark_install()
         except Exception, e:
             logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
         # fix feisty->gutsy utils-linux -> nfs-common transition (LP: #141559)
@@ -303,7 +303,7 @@ class DistUpgradeQuirks(object):
                     continue
                 if "nfs" in fstype:
                     logging.debug("found nfs mount in line '%s', marking nfs-common for install " % line)
-                    self.controller.cache["nfs-common"].markInstall()
+                    self.controller.cache["nfs-common"].mark_install()
                     break
         except Exception, e:
             logging.warning("problem while transitioning util-linux -> nfs-common (%s)" % e)
@@ -314,9 +314,9 @@ class DistUpgradeQuirks(object):
         # ndiswrapper changed again *sigh*
         for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
             if self.controller.cache.has_key(fr) and self.controller.cache.has_key(to):
-                if self.controller.cache[fr].isInstalled and not self.controller.cache[to].markedInstall:
+                if self.controller.cache[fr].is_installed and not self.controller.cache[to].marked_install:
                     try:
-                        self.controller.cache.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
+                        self.controller.cache.mark_install(to,"%s->%s quirk upgrade rule" % (fr, to))
                     except SystemError, e:
                         logging.warning("Failed to apply %s->%s install (%s)" % (fr, to, e))
             
@@ -327,32 +327,32 @@ class DistUpgradeQuirks(object):
         for pkg in self.controller.cache:
             # deal with the python2.4-$foo -> python-$foo transition
             if (pkg.name.startswith("python2.4-") and
-                pkg.isInstalled and
-                not pkg.markedUpgrade):
+                pkg.is_installed and
+                not pkg.marked_upgrade):
                 basepkg = "python-"+pkg.name[len("python2.4-"):]
                 if (self.controller.cache.has_key(basepkg) and 
                     self.controller.cache[basepkg].candidateDownloadable and
-                    not self.controller.cache[basepkg].markedInstall):
+                    not self.controller.cache[basepkg].marked_install):
                     try:
-                        self.controller.cache.markInstall(basepkg,
+                        self.controller.cache.mark_install(basepkg,
                                          "python2.4->python upgrade rule")
                     except SystemError, e:
                         logging.debug("Failed to apply python2.4->python install: %s (%s)" % (basepkg, e))
             # xserver-xorg-input-$foo gives us trouble during the upgrade too
             if (pkg.name.startswith("xserver-xorg-input-") and
-                pkg.isInstalled and
-                not pkg.markedUpgrade):
+                pkg.is_installed and
+                not pkg.marked_upgrade):
                 try:
-                    self.controller.cache.markInstall(pkg.name, "xserver-xorg-input fixup rule")
+                    self.controller.cache.mark_install(pkg.name, "xserver-xorg-input fixup rule")
                 except SystemError, e:
                     logging.debug("Failed to apply fixup: %s (%s)" % (pkg.name, e))
             
         # deal with held-backs that are unneeded
         for pkgname in ["hpijs", "bzr", "tomboy"]:
-            if (self.controller.cache.has_key(pkgname) and self.controller.cache[pkgname].isInstalled and
-                self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].markedUpgrade):
+            if (self.controller.cache.has_key(pkgname) and self.controller.cache[pkgname].is_installed and
+                self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].marked_upgrade):
                 try:
-                    self.controller.cache.markInstall(pkgname,"%s quirk upgrade rule" % pkgname)
+                    self.controller.cache.mark_install(pkgname,"%s quirk upgrade rule" % pkgname)
                 except SystemError, e:
                     logging.debug("Failed to apply %s install (%s)" % (pkgname,e))
         # libgl1-mesa-dri from xgl.compiz.info (and friends) breaks the
@@ -376,20 +376,20 @@ class DistUpgradeQuirks(object):
         # deal with general if $foo is installed, install $bar
         for (fr, to) in [("xserver-xorg-driver-all","xserver-xorg-video-all")]:
             if self.controller.cache.has_key(fr) and self.controller.cache.has_key(to):
-                if self.controller.cache[fr].isInstalled and not self.controller.cache[to].markedInstall:
+                if self.controller.cache[fr].is_installed and not self.controller.cache[to].marked_install:
                     try:
-                        self.controller.cache.markInstall(to,"%s->%s quirk upgrade rule" % (fr, to))
+                        self.controller.cache.mark_install(to,"%s->%s quirk upgrade rule" % (fr, to))
                     except SystemError, e:
                         logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
                     
     def dapperPostDistUpgradeCache(self):
         """ this function works around quirks in the breezy->dapper upgrade """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        if (self.controller.cache.has_key("nvidia-glx") and self.controller.cache["nvidia-glx"].isInstalled and
-            self.controller.cache.has_key("nvidia-settings") and self.controller.cache["nvidia-settings"].isInstalled):
+        if (self.controller.cache.has_key("nvidia-glx") and self.controller.cache["nvidia-glx"].is_installed and
+            self.controller.cache.has_key("nvidia-settings") and self.controller.cache["nvidia-settings"].is_installed):
             logging.debug("nvidia-settings and nvidia-glx is installed")
-            self.controller.cache.markRemove("nvidia-settings")
-            self.controller.cache.markInstall("nvidia-glx")
+            self.controller.cache.mark_remove("nvidia-settings")
+            self.controller.cache.mark_install("nvidia-glx")
 
     # run right before the first packages get installed
     def StartUpgrade(self):
@@ -436,7 +436,7 @@ class DistUpgradeQuirks(object):
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-180", "nvidia-glx-185", "nvidia-glx-195"]:
             if (cache.has_key(pkgname) and 
-                cache[pkgname].markedInstall and
+                cache[pkgname].marked_install and
                 self._checkVideoDriver("nvidia")):
                 logging.debug("found %s video driver" % pkgname)
                 if not self._cpuHasSSESupport():
@@ -457,7 +457,7 @@ class DistUpgradeQuirks(object):
                     # if the user continue, do not install the broken driver
                     # so that we can transiton him to the free "nv" one after
                     # the upgrade
-                    self.controller.cache[pkgname].markKeep()
+                    self.controller.cache[pkgname].mark_keep()
         
 
     def _test_and_warn_on_old_nvidia(self):
@@ -466,7 +466,7 @@ class DistUpgradeQuirks(object):
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
             if (cache.has_key(pkgname) and 
-                cache[pkgname].markedInstall and
+                cache[pkgname].marked_install and
                 self._checkVideoDriver("nvidia")):
                 logging.debug("found %s video driver" % pkgname)
                 res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
@@ -485,7 +485,7 @@ class DistUpgradeQuirks(object):
                 # if the user continue, do not install the broken driver
                 # so that we can transiton him to the free "nv" one after
                 # the upgrade
-                self.controller.cache[pkgname].markKeep()
+                self.controller.cache[pkgname].mark_keep()
 
     def _test_and_warn_on_dropped_fglrx_support(self):
         """
@@ -611,10 +611,10 @@ class DistUpgradeQuirks(object):
             deps_found = True
             for pkg in self.config.getlist(frompkg,"KeyDependencies"):
                 deps_found &= (self.controller.cache.has_key(pkg) and
-                               self.controller.cache[pkg].isInstalled)
+                               self.controller.cache[pkg].is_installed)
         if deps_found:
             logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
-            self.controller.cache[topkg].markInstall()
+            self.controller.cache[topkg].mark_install()
 
     def _mysqlClusterCheck(self):
         """
@@ -623,7 +623,7 @@ class DistUpgradeQuirks(object):
         """
         logging.debug("_mysqlClusterCheck")
         if (self.controller.cache.has_key("mysql-server") and
-            self.controller.cache["mysql-server"].isInstalled):
+            self.controller.cache["mysql-server"].is_installed):
             # taken from the mysql-server-5.1.preinst
             ret = subprocess.call([
                     "egrep", "-q", "-i", "-r",
@@ -636,17 +636,17 @@ class DistUpgradeQuirks(object):
             if ret == 0:
                 logging.debug("mysql clustering in use, do not upgrade to 5.1")
                 for pkg in ("mysql-server", "mysql-client"):
-                    self.controller.cache.markRemove(pkg, "clustering in use")
+                    self.controller.cache.mark_remove(pkg, "clustering in use")
                     # mark mysql-{server,client}-5.0 as manual install (#453513)
                     depcache = self.controller.cache._depcache
                     for pkg in ["mysql-server-5.0", "mysql-client-5.0"]:
-                        if pkg.isInstalled and depcache.IsAutoInstalled(pkg._pkg):
+                        if pkg.is_installed and depcache.IsAutoInstalled(pkg._pkg):
                             logging.debug("marking '%s' manual installed" % pkg.name)
                             autoInstDeps = False
                             fromUser = True
-                            depcache.MarkInstall(pkg._pkg, autoInstDeps, fromUser)
+                            depcache.Mark_install(pkg._pkg, autoInstDeps, fromUser)
             else:
-                self.controller.cache.markUpgrade("mysql-server", "no clustering in use")
+                self.controller.cache.mark_upgrade("mysql-server", "no clustering in use")
 
     def _checkArmCPU(self):
         """
@@ -671,15 +671,15 @@ class DistUpgradeQuirks(object):
         for pkg in self.controller.cache:
             depcache = self.controller.cache._depcache
             if (pkg.name.startswith("language-support-translations") and
-                pkg.isInstalled):
+                pkg.is_installed):
                 for dp_or in pkg.installedDependencies:
                     for dpname in dp_or.or_dependencies:
                         dp = self.controller.cache[dpname.name]
-                        if dp.isInstalled and depcache.IsAutoInstalled(dp._pkg):
+                        if dp.is_installed and depcache.IsAutoInstalled(dp._pkg):
                             logging.debug("marking '%s' manual installed" % dp.name)
                             autoInstDeps = False
                             fromUser = True
-                            depcache.MarkInstall(dp._pkg, autoInstDeps, fromUser)
+                            depcache.mark_install(dp._pkg, autoInstDeps, fromUser)
                             
     def _checkLanguageSupport(self):
         """
@@ -692,7 +692,7 @@ class DistUpgradeQuirks(object):
         p = subprocess.Popen(["check-language-support"],stdout=subprocess.PIPE)
         for pkgname in p.communicate()[0].split():
             if (self.controller.cache.has_key(pkgname) and
-                not self.controller.cache[pkgname].isInstalled):
+                not self.controller.cache[pkgname].is_installed):
                 logging.debug("language support package '%s' missing" % pkgname)
                 # check if kde/gnome and copy language-selector note
                 base = "/usr/share/language-support/"
@@ -710,7 +710,7 @@ class DistUpgradeQuirks(object):
         """
         logging.debug("checking for 'wl' module")
         if "wl" in lsmod():
-            self.controller.cache.markInstall("bcmwl-kernel-source",
+            self.controller.cache.mark_install("bcmwl-kernel-source",
                                               "'wl' module found in lsmod")
 
     def _stopApparmor(self):
@@ -808,8 +808,8 @@ class DistUpgradeQuirks(object):
                     "evms-bootdebug",
                     "evms-gui", "evms-cli",
                     "linux-patch-evms"]:
-            if self.controller.cache.has_key(pkg) and self.controller.cache[pkg].isInstalled:
-                self.controller.cache[pkg].markDelete()
+            if self.controller.cache.has_key(pkg) and self.controller.cache[pkg].is_installed:
+                self.controller.cache[pkg].mark_delete()
         return True
 
     def _addRelatimeToFstab(self):
@@ -1076,13 +1076,13 @@ class DistUpgradeQuirks(object):
         #  that)
         for pkgname in ["linux-386", "linux-image-386"]:
             if (self.controller.cache.has_key(pkgname) and
-                self.controller.cache[pkgname].isInstalled):
+                self.controller.cache[pkgname].is_installed):
                 working_kernels = self.controller.cache.getKernelsFromBaseInstaller()
                 upgrade_to = ["linux-generic", "linux-image-generic"]
                 for pkgname in upgrade_to:
                     if pkgname in working_kernels:
                         logging.debug("386 kernel installed, but generic kernel  will work on this machine")
-                        if self.controller.cache.markInstall(pkgname, "386 -> generic transition"):
+                        if self.controller.cache.mark_install(pkgname, "386 -> generic transition"):
                             return
         
 
@@ -1123,7 +1123,7 @@ class DistUpgradeQuirks(object):
                 cache["foomatic-db-gutenprint"].marked_delete and
                 "ijsgutenprint-ppds" in cache):
                 logging.info("installing ijsgutenprint-ppds")
-                cache.markInstall(
+                cache.mark_install(
                     "ijsgutenprint-ppds",
                     "foomatic-db-gutenprint -> ijsgutenprint-ppds rule")
         except:

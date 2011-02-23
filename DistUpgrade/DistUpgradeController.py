@@ -1123,7 +1123,7 @@ class DistUpgradeController(object):
 
         # now get the meta-pkg specific obsoletes and purges
         for pkg in self.config.getlist("Distro","MetaPkgs"):
-            if self.cache.has_key(pkg) and self.cache[pkg].isInstalled:
+            if self.cache.has_key(pkg) and self.cache[pkg].is_installed:
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
         # now add the obsolete kernels to the forced obsoletes
         self.forced_obsoletes.extend(self.cache.identifyObsoleteKernels())
@@ -1450,7 +1450,7 @@ class DistUpgradeController(object):
             logging.debug("marking '%s' for install" % pkgname)
             # mvo: autoInst is not available on dapper
             #pkg.markInstall(autoInst=False, autoFix=False)
-            pkg.markInstall(autoFix=False)
+            pkg.mark_install(autoFix=False)
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())

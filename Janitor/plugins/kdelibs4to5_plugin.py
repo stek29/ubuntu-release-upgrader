@@ -33,8 +33,8 @@ class Kdelibs4devToKdelibs5devPlugin(computerjanitor.Plugin):
         fromp = "kdelibs4-dev"
         top = "kdelibs5-dev"
         cache = self.app.apt_cache
-        if (fromp in cache and cache[fromp].isInstalled and
-            top in cache and not cache[top].isInstalled):
+        if (fromp in cache and cache[fromp].is_installed and
+            top in cache and not cache[top].is_installed):
                 yield computerjanitor.MissingPackageCruft(cache[top],
                         _("When upgrading, if kdelibs4-dev is installed, "
                           "kdelibs5-dev needs to be installed. See "

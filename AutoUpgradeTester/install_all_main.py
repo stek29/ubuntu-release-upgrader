@@ -25,18 +25,18 @@ def blacklisted(name):
 
 cache = apt.Cache()
 group = apt_pkg.GetPkgActionGroup(cache._depcache)
-#print [pkg.name for pkg in cache if pkg.isInstalled]
+#print [pkg.name for pkg in cache if pkg.is_installed]
 
 troublemaker = set()
 for pkg in cache:
     for c in pkg.candidateOrigin:
         if c.component == "main":
-            current = set([p.name for p in cache if p.markedInstall])
-	    if not (pkg.isInstalled or blacklisted(pkg.name)):
-	            pkg.markInstall()
-            new = set([p.name for p in cache if p.markedInstall])
+            current = set([p.name for p in cache if p.marked_install])
+	    if not (pkg.is_installed or blacklisted(pkg.name)):
+	            pkg.mark_install()
+            new = set([p.name for p in cache if p.marked_install])
             #if not pkg.markedInstall or len(new) < len(current):
-	    if not (pkg.isInstalled or pkg.markedInstall):
+	    if not (pkg.is_installed or pkg.marked_install):
                 print "Can't install: %s" % pkg.name
             if len(current-new) > 0:
                 troublemaker.add(pkg.name)
@@ -44,15 +44,15 @@ for pkg in cache:
 
 #print len(troublemaker)
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard"]:
-    cache[pkg].markInstall()
+    cache[pkg].mark_install()
 
 # make sure we don't install blacklisted stuff
 for pkg in cache:
 	if blacklisted(pkg.name):
-		pkg.markKeep()
+		pkg.mark_keep()
 
 print "We can install:"
-print len([pkg.name for pkg in cache if pkg.markedInstall])
+print len([pkg.name for pkg in cache if pkg.marked_install])
 print "Download: "
 pm = apt_pkg.GetPackageManager(cache._depcache)
 fetcher = apt_pkg.GetAcquire()

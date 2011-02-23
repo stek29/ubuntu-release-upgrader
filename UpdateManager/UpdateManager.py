@@ -734,7 +734,18 @@ class UpdateManager(SimpleGtkbuilderApp):
                                    "/org/gnome/SessionManager")
         iface = dbus.Interface(proxy_obj, "org.gnome.SessionManager")
         iface.RequestReboot()
-        # FIXME: try sesion restart with hal?
+    except dbus.DBusException:
+        self._request_reboot_via_consolekit()
+    except:
+        pass
+
+  def _request_reboot_via_consolekit(self):
+    try:
+        bus = dbus.SystemBus()
+        proxy_obj = bus.get_object("org.freedesktop.ConsoleKit",
+                                   "/org/freedesktop/ConsoleKit/Manager")
+        iface = dbus.Interface(proxy_obj, "org.freedesktop.ConsoleKit.Manager")
+        iface.Restart()
     except dbus.DBusException, e:
         pass
 

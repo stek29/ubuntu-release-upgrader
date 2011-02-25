@@ -78,7 +78,7 @@ class ModemManagerHelper(object):
     def is_cdma_roaming(self):
         for m in self.modems:
             dev = self.bus.get_object(self.MM_DBUS_IFACE, m)
-            cdma = self.bus.Interface(dev, self.MM_DBUS_IFACE_MODEM + ".Cdma")
+            cdma = dbus.Interface(dev, self.MM_DBUS_IFACE_MODEM + ".Cdma")
             (cmda_1x, evdo) = cdma.GetRegistrationState()
             # Be conservative about roaming. If registration unknown, 
             # assume yes.
@@ -147,8 +147,15 @@ if __name__ == "__main__":
     # test code
     mmhelper = ModemManagerHelper()
     print mmhelper.modems
-    mmhelper.is_gsm_roaming()
-    mmhelper.is_cdma_roaming()
+    try:
+        mmhelper.is_gsm_roaming()
+    except:
+        print "mmhelper.is_gsm_roaming() invalid, no GSM device?"
+
+    try:
+        mmhelper.is_cdma_roaming()
+    except:
+        print "mmhelper.is_cdma_roaming() invalid, no CDMA device?"
 
     # roaming?
     nmhelper = NetworkManagerHelper()

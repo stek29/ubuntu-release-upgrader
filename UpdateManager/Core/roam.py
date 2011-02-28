@@ -22,6 +22,7 @@
 
 
 import dbus
+import sys
 
 class ModemManagerHelper(object):
 
@@ -146,7 +147,7 @@ if __name__ == "__main__":
     
     # test code
     mmhelper = ModemManagerHelper()
-    print mmhelper.modems
+    #print mmhelper.modems
     try:
         mmhelper.is_gsm_roaming()
     except:
@@ -159,4 +160,8 @@ if __name__ == "__main__":
 
     # roaming?
     nmhelper = NetworkManagerHelper()
-    print "roam: ", nmhelper.is_active_connection_gsm_or_cdma_roaming()
+    is_roaming = nmhelper.is_active_connection_gsm_or_cdma_roaming()
+    print "roam: ", is_roaming
+    if is_roaming:
+        sys.exit(1)
+    sys.exit(0)

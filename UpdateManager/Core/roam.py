@@ -96,6 +96,13 @@ class ModemManagerHelper(object):
 class NetworkManagerHelper(object):
     NM_DBUS_IFACE = "org.freedesktop.NetworkManager"
 
+    # connection states
+    NM_STATE_UNKNOWN = 0
+    NM_STATE_ASLEEP = 1
+    NM_STATE_CONNECTING = 2
+    NM_STATE_CONNECTED = 3
+    NM_STATE_DISCONNECTED = 4
+
     # The device type is unknown. 
     NM_DEVICE_TYPE_UNKNOWN = 0
     # The device is wired Ethernet device. 

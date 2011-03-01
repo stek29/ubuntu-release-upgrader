@@ -100,11 +100,7 @@ from MetaReleaseGObject import MetaRelease
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
 # NetworkManager enums
-NM_STATE_UNKNOWN = 0
-NM_STATE_ASLEEP = 1
-NM_STATE_CONNECTING = 2
-NM_STATE_CONNECTED = 3
-NM_STATE_DISCONNECTED = 4
+from Core.roam import NetworkManagerHelper
 
 def show_dist_no_longer_supported_dialog(parent=None):
     """ show a no-longer-supported dialog """
@@ -163,7 +159,7 @@ class UpdateManagerDbusController(dbus.service.Object):
         pass	
 
     def _on_network_alert(self, watcher, state):
-        if state == NM_STATE_CONNECTED:
+        if state == NetworkManagerHelper.NM_STATE_CONNECTED:
             self.connected = True
         else:
             self.connected = False
@@ -803,13 +799,13 @@ class UpdateManager(SimpleGtkbuilderApp):
   def _on_network_alert(self, watcher, state):
       # do not set the buttons to sensitive/insensitive until NM
       # can deal with dialup connections properly
-      if state == NM_STATE_CONNECTING:
+      if state == NetworkManagerHelper.NM_STATE_CONNECTING:
           self.label_offline.set_text(_("Connecting..."))
           #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()
-      elif state == NM_STATE_CONNECTED:
+      elif state == NetworkManagerHelper.NM_STATE_CONNECTED:
           #self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()
@@ -828,7 +824,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_battery.hide()    
 
   def _on_network_3g_alert(self, watcher, on_3g, is_roaming):
-      print "on 3g: %s; roaming: %s" % (on_3g, is_roaming)
+      #print "on 3g: %s; roaming: %s" % (on_3g, is_roaming)
       if is_roaming:
           self.hbox_roaming.show()
           self.hbox_on_3g.hide()
@@ -836,7 +832,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_on_3g.show()
           self.hbox_roaming.hide()
       else:
-          self.hbox.on_3g.hide()
+          self.hbox_on_3g.hide()
           self.hbox_roaming.hide()
 
   def row_activated(self, treeview, path, column):

@@ -903,6 +903,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.label_main_details.set_size_request(width - border_space ,-1)
     self.label_header.set_size_request(width - border_space,-1)
     self.label_downsize.set_size_request(width - border_space,-1)
+    self.label_roaming.set_size_request(width - border_space,-1)
 
   def exit(self):
     """ exit the application, save the state """

@@ -293,6 +293,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.alert_watcher = AlertWatcher()
     self.alert_watcher.connect("network-alert", self._on_network_alert)
     self.alert_watcher.connect("battery-alert", self._on_battery_alert)
+    self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
 
   def on_initial_focus_in(self, widget, event):
       """callback run on initial focus-in (if started unmapped)"""
@@ -825,6 +826,18 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.vbox_alerts.show()
       else:
           self.hbox_battery.hide()    
+
+  def _on_network_3g_alert(self, watcher, on_3g, is_roaming):
+      print "on 3g: %s; roaming: %s" % (on_3g, is_roaming)
+      if is_roaming:
+          self.hbox_roaming.show()
+          self.hbox_on_3g.hide()
+      elif on_3g:
+          self.hbox_on_3g.show()
+          self.hbox_roaming.hide()
+      else:
+          self.hbox.on_3g.hide()
+          self.hbox_roaming.hide()
 
   def row_activated(self, treeview, path, column):
       iter = self.store.get_iter(path)

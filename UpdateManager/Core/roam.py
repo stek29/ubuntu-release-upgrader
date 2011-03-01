@@ -117,7 +117,7 @@ class NetworkManagerHelper(object):
         property = props.Get(interface, property)
         return property
 
-    def is_active_connection_gsm_or_cdma_roaming(self):
+    def is_active_connection_gsm_or_cdma(self):
         res = False
         actives = self.get_dbus_property(
             self.proxy, self.NM_DBUS_IFACE, 'ActiveConnections')
@@ -134,13 +134,19 @@ class NetworkManagerHelper(object):
                 type = self.get_dbus_property(
                     dev, self.NM_DBUS_IFACE + ".Device", 'DeviceType')
                 if type == self.NM_DEVICE_TYPE_GSM:
-                    mmhelper = ModemManagerHelper()
-                    res |= mmhelper.is_gsm_roaming()
+                    return True
                 elif type == self.NM_DEVICE_TYPE_CDMA:
-                    mmhelper = ModemManagerHelper()
-                    res |= mmhelper.is_cdma_roaming()
+                    return True
                 else:
                     continue
+        return res
+
+    def is_active_connection_gsm_or_cdma_roaming(self):
+        res = False
+        if self.is_active_connection_gsm_or_cdma():
+            mmhelper = ModemManagerHelper()
+            res |= mmhelper.is_gsm_roaming()
+            res |= mmhelper.is_cdma_roaming()
         return res
 
 if __name__ == "__main__":

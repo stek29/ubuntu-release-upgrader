@@ -32,7 +32,11 @@ class AlertWatcher(gobject.GObject):
                                       (gobject.TYPE_INT,)),
                     "battery-alert": (gobject.SIGNAL_RUN_FIRST,
                                       gobject.TYPE_NONE,
-                                      (gobject.TYPE_BOOLEAN,))
+                                      (gobject.TYPE_BOOLEAN,)),
+                    "network-3g-alert": (gobject.SIGNAL_RUN_FIRST,
+                                         gobject.TYPE_NONE,
+                                        (gobject.TYPE_BOOLEAN,
+                                         gobject.TYPE_BOOLEAN,)),
                     }
     
     def __init__(self):
@@ -45,19 +49,36 @@ class AlertWatcher(gobject.GObject):
         try:
             obj = self.bus.get_object("org.freedesktop.NetworkManager",
                                       "/org/freedesktop/NetworkManager")
-            obj.connect_to_signal("StateChanged", self._network_alert,
+            obj.connect_to_signal("StateChanged",
+                                  self._on_network_state_changed,
                                   dbus_interface="org.freedesktop.NetworkManager")
             interface = dbus.Interface(obj, "org.freedesktop.DBus.Properties")
             self.network_state = interface.Get("org.freedesktop.NetworkManager", "State")
             self._network_alert(self.network_state)
-		
+            # power
             obj = self.bus.get_object('org.freedesktop.UPower',
                                       '/org/freedesktop/UPower')
             obj.connect_to_signal("Changed", self._power_changed,
                                   dbus_interface="org.freedesktop.UPower")
             self._power_changed()
+            # 3g
+            self._update_3g_state()
         except dbus.exceptions.DBusException, e:
             pass
+
+    def _on_network_state_changed(self, state):
+        self._network_alert(state)
+        self._update_3g_state()
+
+    def _update_3g_state(self):
+        from roam import NetworkManagerHelper
+        nm = NetworkManagerHelper()
+        on_3g = nm.is_active_connection_gsm_or_cdma()
+        is_roaming = nm.is_active_connection_gsm_or_cdma_roaming()
+        self._network_3g_alert(on_3g, is_roaming)
+
+    def _network_3g_alert(self, on_3g, is_roaming):
+        self.emit("network-3g-alert", on_3g, is_roaming)
     
     def _network_alert(self, state):
         self.network_state = state

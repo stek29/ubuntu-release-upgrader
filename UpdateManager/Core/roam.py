@@ -85,10 +85,11 @@ class ModemManagerHelper(object):
             # assume yes.
             # MM_MODEM_CDMA_REGISTRATION_STATE
             roaming_states = (self.MM_MODEM_CDMA_REGISTRATION_STATE_REGISTERED,
-                              self.MM_MODEM_CDMA_REGISTRATION_STATE_ROAMING) 
-            if cmda_1x in roaming_states:
+                              self.MM_MODEM_CDMA_REGISTRATION_STATE_ROAMING)
+            # evdo trumps cmda_1x (thanks to Mathieu Trudel-Lapierre)
+            if evdo in roaming_states:
                 return True
-            elif evdo in roaming_states:
+            elif cmda_1x in roaming_states:
                 return True
             return False
 

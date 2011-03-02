@@ -87,7 +87,7 @@ class ModemManagerHelper(object):
             if reg[0] in (self.MM_MODEM_GSM_NETWORK_REG_STATUS_UNKNOWN,
                           self.MM_MODEM_GSM_NETWORK_REG_STATUS_ROAMING):
                 return True
-            return False
+        return False
 
     def is_cdma_roaming(self):
         for m in self.modems:
@@ -107,7 +107,7 @@ class ModemManagerHelper(object):
                 return True
             elif cmda_1x in roaming_states:
                 return True
-            return False
+        return False
 
 class NetworkManagerHelper(object):
     NM_DBUS_IFACE = "org.freedesktop.NetworkManager"
@@ -176,17 +176,10 @@ class NetworkManagerHelper(object):
 if __name__ == "__main__":
     
     # test code
-    mmhelper = ModemManagerHelper()
-    #print mmhelper.modems
-    try:
-        mmhelper.is_gsm_roaming()
-    except:
-        print "mmhelper.is_gsm_roaming() invalid, no GSM device?"
-
-    try:
-        mmhelper.is_cdma_roaming()
-    except:
-        print "mmhelper.is_cdma_roaming() invalid, no CDMA device?"
+    if sys.argv[1:] and sys.argv[1] == "--test":
+        mmhelper = ModemManagerHelper()
+        print "is_gsm_roaming", mmhelper.is_gsm_roaming()
+        print "is_cdma_romaing", mmhelper.is_cdma_roaming()
 
     # roaming?
     nmhelper = NetworkManagerHelper()

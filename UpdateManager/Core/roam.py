@@ -31,6 +31,10 @@ class ModemManagerHelper(object):
     MM_DBUS_IFACE = "org.freedesktop.ModemManager"
     MM_DBUS_IFACE_MODEM = MM_DBUS_IFACE + ".Modem"
 
+    # MM_MODEM_TYPE
+    MM_MODEM_TYPE_GSM = 1
+    MM_MODEM_TYPE_CDMA = 2
+
     # GSM
     # Not registered, not searching for new operator to register. 
     MM_MODEM_GSM_NETWORK_REG_STATUS_IDLE = 0
@@ -63,9 +67,18 @@ class ModemManagerHelper(object):
         modem_manager = dbus.Interface(self.proxy, self.MM_DBUS_IFACE)
         self.modems = modem_manager.EnumerateDevices()
 
+    @staticmethod
+    def get_dbus_property(proxy, interface, property):
+        props = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
+        property = props.Get(interface, property)
+        return property
+
     def is_gsm_roaming(self):
         for m in self.modems:
             dev = self.bus.get_object(self.MM_DBUS_IFACE, m)
+            type = self.get_dbus_property(dev, self.MM_DBUS_IFACE_MODEM, "Type")
+            if type != self.MM_MODEM_TYPE_GSM:
+                continue
             net = dbus.Interface(dev, self.MM_DBUS_IFACE_MODEM + ".Gsm.Network")
             reg = net.GetRegistrationInfo()
             # Be conservative about roaming. If registration unknown, 
@@ -79,6 +92,9 @@ class ModemManagerHelper(object):
     def is_cdma_roaming(self):
         for m in self.modems:
             dev = self.bus.get_object(self.MM_DBUS_IFACE, m)
+            type = self.get_dbus_property(dev, self.MM_DBUS_IFACE_MODEM, "Type")
+            if type != self.MM_MODEM_TYPE_CDMA:
+                continue
             cdma = dbus.Interface(dev, self.MM_DBUS_IFACE_MODEM + ".Cdma")
             (cmda_1x, evdo) = cdma.GetRegistrationState()
             # Be conservative about roaming. If registration unknown, 

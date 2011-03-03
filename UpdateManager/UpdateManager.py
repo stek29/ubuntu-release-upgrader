@@ -580,11 +580,11 @@ class UpdateManager(SimpleGtkbuilderApp):
       the last apt-get update was run
       """
       ago_hours = self._get_last_apt_get_update_hours()
-      ago_days = int( ago_hours / 24 )
       if ago_hours is None:
           return _("It is unknown when the package information was "
                    "updated last. Please try clicking on the 'Check' "
                    "button to update the information.")
+      ago_days = int( ago_hours / 24 )
       if ago_days > self.NO_UPDATE_WARNING_DAYS:
 	  return _("The package information was last updated %(days_ago)s "
                    "days ago.\n"

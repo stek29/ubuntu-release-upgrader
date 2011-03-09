@@ -55,6 +55,15 @@ class AptCdrom(object):
         #      aptsources will do this for us anyway
         
 
+    def comment_out_cdrom_entry(self):
+        """ comment out the cdrom entry """
+        diskname = self._readDiskName()
+        pentry = self._generateSourcesListLine(diskname, self.packages)
+        sourceslist=apt_pkg.Config.find_file("Dir::Etc::sourcelist")
+        content = open(sourceslist).read()
+        content = content.replace(pentry, "# %s" % pentry)
+        open(sourceslist, "w").write(content)
+
     def _scanCD(self):
         """ 
         scan the CD for interessting files and return them as:
@@ -110,7 +119,8 @@ class AptCdrom(object):
         return packages
     
     def _readDiskName(self):
-        diskname = None
+        # default to cdrompath if there is no name
+        diskname = self.cdrompath
         info = os.path.join(self.cdrompath, ".disk","info")
         if os.path.exists(info):
             diskname = open(info).read()

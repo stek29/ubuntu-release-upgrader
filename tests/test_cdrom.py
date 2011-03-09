@@ -1,19 +1,20 @@
 #!/usr/bin/python
 
-import unittest
-import tempfile
-import shutil
-import sys
+import apt_pkg
 import os
 import os.path
-import apt_pkg
+import shutil
+import sys
 import tempfile
-sys.path.insert(0,"../DistUpgrade")
+import unittest
 
+from mock import Mock
+
+sys.path.insert(0,"../DistUpgrade")
 from DistUpgradeAptCdrom import AptCdrom
 
 
-class testAptCdrom(unittest.TestCase):
+class TestAptCdrom(unittest.TestCase):
     " this test the apt-cdrom implementation "
     
 #    def testAdd(self):
@@ -108,6 +109,21 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         line=cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
         self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid restricted",
                      "sources.list line incorrect, got %s" % line)
+
+    def test_comment_out(self):
+        tmpdir = tempfile.mkdtemp()
+        sourceslist = os.path.join(tmpdir, "sources.list")
+        open(sourceslist, "w")
+        apt_pkg.config.set("dir::etc::sourcelist",  sourceslist)
+        apt_pkg.config.set("dir::state::lists", tmpdir)
+        view = Mock()
+        cdrom = AptCdrom(view, "./test-data-cdrom")
+        cdrom.add()
+        cdrom.comment_out_cdrom_entry()
+        for line in open(sourceslist):
+            self.assertTrue(line.startswith("#"))
+        self.assertEqual(len(open(sourceslist).readlines()), 2)
+
 
 if __name__ == "__main__":
     apt_pkg.init()

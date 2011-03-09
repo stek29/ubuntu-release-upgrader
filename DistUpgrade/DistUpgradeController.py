@@ -1141,7 +1141,7 @@ class DistUpgradeController(object):
             # initial remove candidates when no network is used should
             # be the demotions to make sure we don't leave potential
             # unsupported software
-            remove_candidates = set(self.installed_demotions)
+            remove_candidates = set([p.name for p in self.installed_demotions])
         remove_candidates |= set(self.forced_obsoletes)
 
         # no go for the unused dependencies
@@ -1565,6 +1565,8 @@ class DistUpgradeController(object):
         # add cdrom (if we have one)
         if (self.aptcdrom and
             not self.aptcdrom.add(self.sources_backup_ext)):
+            self._view.error(_("Failed to add the cdrom"),
+                             _("Sorry, adding the cdrom was not successful."))
             sys.exit(1)
 
         # then update the package index files
@@ -1629,6 +1631,10 @@ class DistUpgradeController(object):
         self._view.setStep(DistUpgradeView.STEP_CLEANUP)
         self._view.updateStatus(_("Searching for obsolete software"))
         self.doPostUpgrade()
+
+        # comment out cdrom source
+        if self.aptcdrom:
+            self.aptcdrom.comment_out_cdrom_entry()
 
         # done, ask for reboot
         self._view.setStep(DistUpgradeView.STEP_REBOOT)

@@ -191,6 +191,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.window_main.grab_focus()
     self.button_close.grab_focus()
     self.dl_size = 0
+    self.connected = True
 
     # create text view
     self.textview_changes = ChangelogViewer()
@@ -422,10 +423,17 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     changes_buffer = self.textview_changes.get_buffer()
     
-    # check if we have the changes already
+    # check if we have the changes already and if so, display them 
+    # (even if currently disconnected)
     if self.cache.all_changes.has_key(name):
       changes = self.cache.all_changes[name]
       self.set_changes_buffer(changes_buffer, changes[0], name, changes[1])
+    # if not connected, do not even attempt to get the changes
+    elif not self.connected:
+        changes_buffer.set_text(
+            _("No network connection detected, you can not download "
+              "changelog information."))
+    # else, get it from the entwork
     else:
       if self.expander_details.get_expanded():
         lock = thread.allocate_lock()
@@ -805,11 +813,18 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()
-      elif state == NetworkManagerHelper.NM_STATE_CONNECTED:
+          self.connected = False
+      # in doubt (STATE_UNKNOWN), assume connected
+      elif state in (NetworkManagerHelper.NM_STATE_CONNECTED,
+                     NetworkManagerHelper.NM_STATE_UNKNOWN):
           #self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()
+          self.connected = True
+          # trigger re-showing the current app to get changelog info (if needed)
+          self.on_treeview_update_cursor_changed(self.treeview_update)
       else:
+          self.connected = False
           self.label_offline.set_text(_("You may not be able to check for updates or download new updates."))
           #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()

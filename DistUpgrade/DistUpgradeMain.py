@@ -95,20 +95,11 @@ def setup_logging(options, config):
 
 def save_system_state(logdir):
     # save package state to be able to re-create failures
-    system_files = []
-    for f in [apt_pkg.Config.find_file("Dir::Etc::preferences"),
-              apt_pkg.Config.find_dir("Dir::Etc::preferencesparts",
-                                     "/etc/apt/preferences.d"),
-              apt_pkg.Config.find_file("Dir::Etc::sourcelist"),
-              apt_pkg.Config.find_dir("Dir::Etc::sourceparts",
-                                     "/etc/apt/sources.list.d"),
-              apt_pkg.Config.find_file("Dir::State::status")]:
-        if os.path.exists(f):
-            system_files.append(f)
-    state_tar = os.path.join(logdir,"system_state.tar.gz")
-    cmd = ["tar","-z","-c","-f", state_tar] + system_files 
-    logging.info("creating state file with '%s'" % cmd)
-    subprocess.call(cmd)
+    from apt_clone import AptClone
+    target = os.path.join(logdir, "apt-clone_system_state.tar.gz")
+    logging.debug("creating statefile: '%s'" % target)
+    clone = AptClone()
+    clone.save_state(sourcedir="/", target=target, with_dpkg_status=True)
     # lspci output
     try:
         s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]

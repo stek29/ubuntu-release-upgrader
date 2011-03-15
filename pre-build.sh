@@ -2,6 +2,12 @@
 
 set -e
 
+# test
+if [ ! -e DistUpgrade/apt_clone.py ]; then
+    echo "Need a installed apt-clone (lp:apt-clone) to continue"
+    exit 1
+fi
+
 # update demotions
 (cd utils && ./demotions.py maverick natty > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade

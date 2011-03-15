@@ -95,7 +95,11 @@ def setup_logging(options, config):
 
 def save_system_state(logdir):
     # save package state to be able to re-create failures
-    from apt_clone import AptClone
+    try:
+        from apt_clone import AptClone
+    except ImportError:
+        logging.error("failed to import AptClone")
+        return
     target = os.path.join(logdir, "apt-clone_system_state.tar.gz")
     logging.debug("creating statefile: '%s'" % target)
     clone = AptClone()

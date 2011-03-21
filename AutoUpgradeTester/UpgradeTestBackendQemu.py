@@ -54,15 +54,16 @@ class PortInUseException(Exception):
 class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
     " qemu/kvm backend - need qemu >= 0.9.0"
 
-    qemu_options = [
+    QEMU_DEFAULT_OPTIONS = [
         "-monitor","stdio",
         "-localtime",
         "-no-reboot",    # exit on reboot
-#        "-no-kvm",      # crashes sometimes with kvm HW
+        #        "-no-kvm",      # crashes sometimes with kvm HW
         ]
 
     def __init__(self, profile):
         UpgradeTestBackendSSH.__init__(self, profile)
+        self.qemu_options = self.QEMU_DEFAULT_OPTIONS[:]
         self.qemu_pid = None
         self.profiledir = os.path.dirname(profile)
         # get the kvm binary

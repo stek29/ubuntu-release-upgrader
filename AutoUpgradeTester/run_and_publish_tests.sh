@@ -17,9 +17,9 @@ PROFILES="server server-tasks ubuntu kubuntu main-all"
 #PROFILES="lts-server server"
 #PROFILES="server"
 
-#UPGRADE_TESTER_ARGS="--tests-only"
 UPGRADE_TESTER_ARGS="--quiet --html-output-dir $HTMLDIR"
-UPGRADE_TESTER_ARGS="$UPGRADE_TESTER_ARGS -b UpgradeTestBackendSimulate "
+#UPGRADE_TESTER_ARGS="$UPGRADE_TESTER_ARGS -b UpgradeTestBackendSimulate "
+#UPGRADE_TESTER_ARGS="$UPGRADE_TESTER_ARGS --tests-only"
 
 upload_files() {
     profile=$1

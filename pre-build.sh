@@ -2,15 +2,6 @@
 
 set -e
 
-# FIXME: this can go away and become a symlink in DistUpgrade/apt_clone.py
-#        once apt-clone is accetped into the distro
-if [ ! -e /usr/share/pyshared/apt_clone.py ]; then
-    echo "Need a installed apt-clone (lp:apt-clone) to continue"
-    exit 1
-fi
-cp /usr/share/pyshared/apt_clone.py DistUpgrade
-
-
 # update demotions
 (cd utils && ./demotions.py maverick natty > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade

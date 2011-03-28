@@ -51,8 +51,8 @@ def try_import(path):
     # them individually is fine
     module = get_module_from_path(path)
     if not module:
-        logging.debug("could not get module for '%s'" % path)
-        return False
+        logging.warn("could not get module for '%s'" % path)
+        return True
     cmd = ["python", "-c","import %s" % module]
     logging.debug("cmd: '%s'" % cmd)
     TOTAL += 1

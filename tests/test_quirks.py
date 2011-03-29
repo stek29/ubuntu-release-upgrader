@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0,"../")
 
 import apt
+import hashlib
 import mock
 import unittest
 import shutil
@@ -64,10 +65,24 @@ class TestQuirks(unittest.TestCase):
 
     def test_patch(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
-        shutil.copy("./patchdir/foo.orig", "./patchdir/foo")
+        shutil.copy("./patchdir/foo_orig", "./patchdir/foo")
+        shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
+        shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
         q._applyPatches(patchdir="./patchdir")
+        # simple case is foo
         self.assertFalse("Hello" in open("./patchdir/foo").read())
-        self.assertTrue("Hello" in open("./patchdir/foo.orig").read())
+        self.assertTrue("Hello" in open("./patchdir/foo_orig").read())
+        md5 = hashlib.md5()
+        md5.update(open("./patchdir/foo").read())
+        self.assertEqual(md5.hexdigest(), "52f83ff6877e42f613bcd2444c22528c")
+        # more complex example fstab
+        md5 = hashlib.md5()
+        md5.update(open("./patchdir/fstab").read())
+        self.assertEqual(md5.hexdigest(), "c56d2d038afb651920c83106ec8dfd09")
+        # most complex example
+        md5 = hashlib.md5()
+        md5.update(open("./patchdir/pycompile").read())
+        self.assertEqual(md5.hexdigest(), "97c07a02e5951cf68cb3f86534f6f917")
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)

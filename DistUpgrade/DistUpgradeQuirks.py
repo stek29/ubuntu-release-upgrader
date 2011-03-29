@@ -990,7 +990,7 @@ class DistUpgradeQuirks(object):
                 logging.debug("skipping '%s' (no '.')" % f)
                 continue
             logging.debug("check if patch '%s' needs to be applied" % f)
-            (encoded_path, md5sum) = string.rsplit(f, ".", 1)
+            (encoded_path, md5sum, result_md5sum) = string.rsplit(f, ".", 2)
             # FIXME: this is not clever and needs quoting support for
             #        filenames with "_" in the name
             path = encoded_path.replace("_","/")
@@ -998,7 +998,7 @@ class DistUpgradeQuirks(object):
                     f, encoded_path, path))
             from DistUpgradePatcher import patch
             try:
-                patch(path, os.path.join(patchdir, f))
+                patch(path, os.path.join(patchdir, f, result_md5sum))
                 logging.info("applied '%s' successfully" % f)
             except Exception, e:
                 logging.exception("ed failed for '%s'" % f)

@@ -19,8 +19,10 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import string
 import hashlib
+import re
+import string
+
 
 class PatchError(Exception):
     """ Error during the patch process """
@@ -46,6 +48,21 @@ def patch(orig, edpatch, result_md5sum=None):
         if state == STATE_EXPECT_COMMAND:
             # in commands get rid of whitespace, 
             line = line.strip()
+            # check if we have a substitute command
+            if line.startswith("s/"):
+                # strip away the "s/"
+                line = line[2:]
+                # chop off the flags at the end 
+                subs, flags = string.rsplit(line, sep="/", maxsplit=1)
+                if flags:
+                    raise PatchError("flags for s// not supported yet")
+                # get the actual substitution regexp and replacement and 
+                # execute it
+                regexp, sep, repl = subs.partition("/")
+                new, count = re.subn(regexp, repl, orig_lines[start], count=1)
+                orig_lines[start] = new
+                continue
+            # otherwise the last char is the command
             command = line[-1]
             # read address
             (start_str, sep, end_str) = line[:-1].partition(",")
@@ -61,10 +78,10 @@ def patch(orig, edpatch, result_md5sum=None):
             if command == "c":
                 del orig_lines[start:end]
                 state = STATE_EXPECT_DATA
+                start -= 1
             elif command == "a":
                 # not allowed to have a range in append
                 state = STATE_EXPECT_DATA
-                start += 1
             elif command == "d":
                 del orig_lines[start:end]
             else:
@@ -75,8 +92,8 @@ def patch(orig, edpatch, result_md5sum=None):
                 state = STATE_EXPECT_COMMAND
             else:
                 # copy line verbatim and increase position
-                orig_lines.insert(start, line)
                 start += 1
+                orig_lines.insert(start, line)
 
     # done with the patching, (optional) verify and write result
     result = "".join(orig_lines)

@@ -69,6 +69,7 @@ class TestQuirks(unittest.TestCase):
         shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
         shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
         shutil.copy("./patchdir/dotdot_orig", "./patchdir/dotdot")
+        shutil.copy("./patchdir/fail_orig", "./patchdir/fail")
         q._applyPatches(patchdir="./patchdir")
         # simple case is foo
         self.assertFalse("Hello" in open("./patchdir/foo").read())
@@ -88,6 +89,13 @@ class TestQuirks(unittest.TestCase):
         md5 = hashlib.md5()
         md5.update(open("./patchdir/dotdot").read())
         self.assertEqual(md5.hexdigest(), "cddc4be46bedd91db15ddb9f7ddfa804")
+        # test that incorrect md5sum after patching rejects the patch
+        self.assertEqual(open("./patchdir/fail").read(),
+                         open("./patchdir/fail_orig").read())
+        #test lowlevel too
+        from DistUpgrade.DistUpgradePatcher import patch, PatchError
+        self.assertRaises(PatchError, patch, "./patchdir/fail", "patchdir/patchdir_fail.ed04abbc6ee688ee7908c9dbb4b9e0a2.deadbeefdeadbeefdeadbeff", "deadbeefdeadbeefdeadbeff")
+        
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)

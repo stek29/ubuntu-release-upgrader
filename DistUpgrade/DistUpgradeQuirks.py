@@ -998,7 +998,7 @@ class DistUpgradeQuirks(object):
                     f, encoded_path, path))
             from DistUpgradePatcher import patch
             try:
-                patch(path, os.path.join(patchdir, f, result_md5sum))
+                patch(path, os.path.join(patchdir, f), result_md5sum)
                 logging.info("applied '%s' successfully" % f)
             except Exception, e:
                 logging.exception("ed failed for '%s'" % f)

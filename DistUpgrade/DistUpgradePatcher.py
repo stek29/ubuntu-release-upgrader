@@ -100,7 +100,7 @@ def patch(orig, edpatch, result_md5sum=None):
     if result_md5sum:
         md5 = hashlib.md5()
         md5.update(result)
-        if md5sum.hexdigest() != result_md5sum:
+        if md5.hexdigest() != result_md5sum:
             raise PatchError("patch did not patch to the expected data")
     open(orig, "w").write(result)
     return True

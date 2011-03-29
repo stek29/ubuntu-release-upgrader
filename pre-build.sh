@@ -38,6 +38,9 @@ rm -rf utils/apt/lists utils/apt/*.bin
 #echo "Running integrated tests"
 (cd tests && make)
 
+# test leftovers
+rm -f ./tests/data-sources-list-test/apt.log
+
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 echo "VERSION='$DEBVER'" > DistUpgrade/DistUpgradeVersion.py

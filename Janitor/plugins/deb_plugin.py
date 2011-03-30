@@ -35,8 +35,8 @@ class DebPlugin(computerjanitor.Plugin):
 
     def post_cleanup(self):
         try:
-            self.app.apt_cache.commit(apt.progress.TextFetchProgress(),
-                                      apt.progress.InstallProgress())
+            self.app.apt_cache.commit(apt.progress.text.AcquireProgress(),
+                                      apt.progress.base.InstallProgress())
         except Exception, e: # pragma: no cover
             raise
         finally:

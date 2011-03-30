@@ -65,8 +65,8 @@ current = 0
 maxRetries = 3
 while current < maxRetries:
     try:
-        res = cache.commit(apt.progress.TextFetchProgress(),
-                           apt.progress.InstallProgress())    
+        res = cache.commit(apt.progress.text.AcquireProgress(),
+                           apt.progress.base.InstallProgress())    
     except IOError, e:
         # fetch failed, will be retried
         current += 1

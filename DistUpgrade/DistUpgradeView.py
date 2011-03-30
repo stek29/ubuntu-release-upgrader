@@ -114,7 +114,7 @@ class FetchProgress(apt.progress.base.AcquireProgress):
     self.percent = 0.0
     self.release_file_download_error = False
   def update_status(self, uri, descr, shortDescr, status):
-    super(FetchProgress, self).update_
+    super(FetchProgress, self).update_status(uri, descr, shortDescr, status)
     # FIXME: workaround issue in libapt/python-apt that does not 
     #        raise a exception if *all* files fails to download
     if status == apt_pkg.STAT_FAILED:

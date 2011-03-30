@@ -34,13 +34,13 @@ from DistUpgradeGettext import gettext as _
 from utils import wrap, twrap
 import subprocess
 
-class TextFetchProgress(FetchProgress, apt.progress.TextFetchProgress):
+class TextFetchProgress(FetchProgress, apt.progress.text.AcquireProgress):
     def __init__(self):
-        apt.progress.TextFetchProgress.__init__(self)
+        apt.progress.text.AcquireProgress.__init__(self)
         FetchProgress.__init__(self)
-    def pulse(self):
-        apt.progress.TextFetchProgress.pulse(self)
-        FetchProgress.pulse(self)
+    def pulse(self, owner):
+        apt.progress.text.AcquireProgress.pulse(self, owner)
+        FetchProgress.pulse(self, owner)
         return True
 
 class TextCdromProgressAdapter(apt.progress.base.CdromProgress):

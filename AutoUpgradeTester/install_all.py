@@ -16,7 +16,7 @@ pkg_blacklist = None
 # installing only all python packages)
 pkg_whitelist = ""
 
-class InstallProgress(apt.progress.InstallProgress):
+class InstallProgress(apt.progress.base.InstallProgress):
    " Out install progress that can automatically remove broken pkgs "
    def error(self, pkg, errormsg):
       # on failure: 
@@ -44,7 +44,7 @@ def do_install(cache):
    while current < maxRetries:
       print "Retry: ", current
       try:
-         res = cache.commit(apt.progress.TextFetchProgress(),
+         res = cache.commit(apt.progress.text.AcquireProgress(),
                             InstallProgress())
          break
       except IOError, e:

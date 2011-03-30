@@ -170,8 +170,8 @@ This can be caused by:
 	button = self.button_bar.buttonPressed(res)
 	if button == "ok":
 		self.screen.suspend()
-		res = self.cache.commit(apt.progress.TextFetchProgress(),
-					apt.progress.InstallProgress())
+		res = self.cache.commit(apt.progress.text.AcquireProgress(),
+					apt.progress.base.InstallProgress())
 		
 			
 

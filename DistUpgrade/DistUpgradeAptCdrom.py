@@ -99,8 +99,8 @@ class AptCdrom(object):
     def _writeDatabase(self):
         " update apts cdrom.list "
         dbfile = apt_pkg.Config.find_file("Dir::State::cdroms")
-        cdrom = apt_pkg.GetCdrom()
-        (res,id)=cdrom.Ident(apt.progress.CdromProgress())
+        cdrom = apt_pkg.Cdrom()
+        id=cdrom.ident(apt.progress.base.CdromProgress())
         label = self._readDiskName()
         out=open(dbfile,"a")
         out.write('CD::%s "%s";\n' % (id, label))
@@ -206,8 +206,8 @@ class AptCdrom(object):
                 return False
             # now do the hash sum checks
             t=apt_pkg.ParseTagFile(open(releasef))
-            t.Step()
-            for entry in t.Section["SHA256"].split("\n"):
+            t.step()
+            for entry in t.section["SHA256"].split("\n"):
                 (hash,size,name) = entry.split()
                 f=os.path.join(basepath,name)
                 if not os.path.exists(f):

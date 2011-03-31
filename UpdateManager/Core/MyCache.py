@@ -287,6 +287,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             # Try non official changelog location
             changelogs_uri_binary = self._guess_third_party_changelogs_uri_by_binary(name)
             changelogs_uri_source = self._guess_third_party_changelogs_uri_by_source(name)
+            error_message = ""
             for changelogs_uri in [changelogs_uri_binary,changelogs_uri_source]:
                 if changelogs_uri:
                     try:
@@ -294,15 +295,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                         self.all_changes[name] += changelog
                     except urllib2.HTTPError, e:
                         # no changelogs_uri or 404
-                        self.all_changes[name] += _(
+                        error_message = _(
                             "This change is not coming from a "
                             "source that supports changelogs.")
                     except (IOError, httplib.BadStatusLine, socket.error), e:
                         # network errors and others
                         logging.exception("error on changelog fetching")
-                        self.all_changes[name] += _(
+                        error_message = _(
                             "Failed to download the list of changes. \n"
                             "Please check your Internet connection.")
+	    self.all_changes[name] += error_message
             return
         # fixup epoch handling version
         srcpkg = self[name].sourcePackageName

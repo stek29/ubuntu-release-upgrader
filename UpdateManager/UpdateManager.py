@@ -239,7 +239,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.treeview_update.append_column(column)
     self.treeview_update.set_search_column(LIST_NAME)
     self.treeview_update.connect("button-press-event", self.show_context_menu)
-    self.treeview_update.connect("row-activated", self.row_activated)
 
     # setup the help viewer and disable the help button if there
     # is no viewer available
@@ -312,8 +311,9 @@ class UpdateManager(SimpleGtkbuilderApp):
   def install_column_view_func(self, cell_layout, renderer, model, iter):
     pkg = model.get_value(iter, LIST_PKG)
     # hide it if we are only a header line
-    renderer.set_property("visible", pkg != None)
+    # renderer.set_property("visible", pkg != None)
     if pkg is None:
+	renderer.set_property("activatable", True)
         return
     current_state = renderer.get_property("active")
     to_install = pkg.marked_install or pkg.marked_upgrade
@@ -849,22 +849,17 @@ class UpdateManager(SimpleGtkbuilderApp):
       else:
           self.hbox_on_3g.hide()
           self.hbox_roaming.hide()
-
-  def row_activated(self, treeview, path, column):
-      iter = self.store.get_iter(path)
-      pkg = self.store.get_value(iter, LIST_PKG)
-      origin = self.store.get_value(iter, LIST_ORIGIN)
-      if pkg is not None:
-          return
+  def toggle_from_origin(self, pkg, origin, select_all = True ):
       self.setBusy(True)
       actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
+      
       for pkg in self.list.pkgs[origin]:
           if pkg.marked_install or pkg.marked_upgrade:
               #print "marking keep: ", pkg.name
-              pkg.mark_keep()
-          elif not (pkg.name in self.list.held_back):
+	      pkg.mark_keep()
+	  elif not (pkg.name in self.list.held_back):
               #print "marking install: ", pkg.name
-              pkg.mark_install(autoFix=False,autoInst=False)
+	      pkg.mark_install(autoFix=False,autoInst=False)
       # check if we left breakage
       if self.cache._depcache.broken_count:
           Fix = apt_pkg.ProblemResolver(self.cache._depcache)
@@ -873,14 +868,29 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.treeview_update.queue_draw()
       del actiongroup
       self.setBusy(False)
-
+  def row_activated(self, treeview, path, column):
+      iter = self.store.get_iter(path)
+          
+      pkg = self.store.get_value(iter, LIST_PKG)
+      origin = self.store.get_value(iter, LIST_ORIGIN)
+      if pkg is not None:
+          return
+      self.toggle_from_origin(pkg, origin, True)
 
   def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """
     iter = self.store.get_iter(path)
     pkg = self.store.get_value(iter, LIST_PKG)
+    origin = self.store.get_value(iter, LIST_ORIGIN)
     # make sure that we don't allow to toggle deactivated updates
     # this is needed for the call by the row activation callback
+    if pkg is None:
+	
+	toggled_value = not self.store.get_value(iter, LIST_TOGGLE_CHECKED)
+	self.toggle_from_origin(pkg, origin, toggled_value)
+	self.store.set_value(iter, LIST_TOGGLE_CHECKED, toggled_value )
+	self.treeview_update.queue_draw()
+	return 
     if pkg is None or pkg.name in self.list.held_back:
         return False
     self.setBusy(True)

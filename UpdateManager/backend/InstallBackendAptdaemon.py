@@ -22,7 +22,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def update(self):
         """Refresh the package list"""
         try:
-            apt_pkg.PkgSystemUnLock()
+            apt_pkg.pkgsystem_unlock()
         except SystemError:
             pass
         try:
@@ -38,7 +38,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def commit(self, pkgs_install, pkgs_upgrade, close_on_done):
         """Commit a list of package adds and removes"""
         try:
-            apt_pkg.PkgSystemUnLock()
+            apt_pkg.pkgsystem_unlock()
         except SystemError:
             pass
         try:
@@ -47,9 +47,9 @@ class InstallBackendAptdaemon(InstallBackend):
                 pkgs_install, reinstall, remove, purge, pkgs_upgrade, 
                 downgrade, defer=True)
             self._run_in_dialog(trans, self.INSTALL)
-        except errors.NotAuthorizedError:
+        except errors.NotAuthorizedError as e:
             self.emit("action-done", self.INSTALL, False, False)
-        except:
+        except Exception as e:
             self.emit("action-done", self.INSTALL, True, False)
             raise
 
@@ -63,3 +63,12 @@ class InstallBackendAptdaemon(InstallBackend):
         dialog.hide()
         self.emit("action-done", action, 
                   True, dialog._transaction.exit == EXIT_SUCCESS)
+
+if __name__ == "__main__":
+    import apt
+
+    b = InstallBackendAptdaemon(None)
+    b.commit(["2vcard"], [], False)
+
+    import gtk
+    gtk.main()

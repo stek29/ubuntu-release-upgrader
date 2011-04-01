@@ -18,7 +18,7 @@ class InstallBackendSynaptic(InstallBackend):
     def _run_synaptic(self, action, opt, tempf):
         """Execute synaptic."""
         try:
-            apt_pkg.PkgSystemUnLock()
+            apt_pkg.pkgsystem_unlock()
         except SystemError:
             pass
         cmd = ["/usr/bin/gksu", 

@@ -310,8 +310,6 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
     pkg = model.get_value(iter, LIST_PKG)
-    # hide it if we are only a header line
-    # renderer.set_property("visible", pkg != None)
     if pkg is None:
 	renderer.set_property("activatable", True)
         return
@@ -849,7 +847,15 @@ class UpdateManager(SimpleGtkbuilderApp):
       else:
           self.hbox_on_3g.hide()
           self.hbox_roaming.hide()
-  def toggle_from_origin(self, pkg, origin, select_all = True ):
+   def row_activated(self, treeview, path, column):
+      iter = self.store.get_iter(path)
+          
+      pkg = self.store.get_value(iter, LIST_PKG)
+      origin = self.store.get_value(iter, LIST_ORIGIN)
+      if pkg is not None:
+          return
+      self.toggle_from_origin(pkg, origin, True)
+   def toggle_from_origin(self, pkg, origin, select_all = True ):
       self.setBusy(True)
       actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
       
@@ -859,7 +865,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 	      pkg.mark_keep()
 	  elif not (pkg.name in self.list.held_back):
               #print "marking install: ", pkg.name
-	      pkg.mark_install(autoFix=False,autoInst=False)
+              pkg.mark_install(autoFix=False,autoInst=False)
       # check if we left breakage
       if self.cache._depcache.broken_count:
           Fix = apt_pkg.ProblemResolver(self.cache._depcache)
@@ -868,15 +874,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.treeview_update.queue_draw()
       del actiongroup
       self.setBusy(False)
-  def row_activated(self, treeview, path, column):
-      iter = self.store.get_iter(path)
-          
-      pkg = self.store.get_value(iter, LIST_PKG)
-      origin = self.store.get_value(iter, LIST_ORIGIN)
-      if pkg is not None:
-          return
-      self.toggle_from_origin(pkg, origin, True)
-
+  
   def toggled(self, renderer, path):
     """ a toggle button in the listview was toggled """
     iter = self.store.get_iter(path)

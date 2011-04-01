@@ -847,7 +847,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       else:
           self.hbox_on_3g.hide()
           self.hbox_roaming.hide()
-   def row_activated(self, treeview, path, column):
+  def row_activated(self, treeview, path, column):
       iter = self.store.get_iter(path)
           
       pkg = self.store.get_value(iter, LIST_PKG)
@@ -855,15 +855,14 @@ class UpdateManager(SimpleGtkbuilderApp):
       if pkg is not None:
           return
       self.toggle_from_origin(pkg, origin, True)
-   def toggle_from_origin(self, pkg, origin, select_all = True ):
+  def toggle_from_origin(self, pkg, origin, select_all = True ):
       self.setBusy(True)
       actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
-      
       for pkg in self.list.pkgs[origin]:
           if pkg.marked_install or pkg.marked_upgrade:
               #print "marking keep: ", pkg.name
-	      pkg.mark_keep()
-	  elif not (pkg.name in self.list.held_back):
+              pkg.mark_keep()
+          elif not (pkg.name in self.list.held_back):
               #print "marking install: ", pkg.name
               pkg.mark_install(autoFix=False,autoInst=False)
       # check if we left breakage

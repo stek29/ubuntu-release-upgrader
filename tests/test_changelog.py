@@ -37,7 +37,12 @@ class TestChangelogs(unittest.TestCase):
         pkg = self.cache[pkgname]
         self.assertTrue(pkg.candidate.version in uri)
         self.assertTrue("gtk+2.0" in uri)
-
+    def test_changelog_not_supported(self):
+        pkgname = "liboverlay-scrollbar-0.1-0"
+        # test binary changelogs
+        self.cache.get_changelog(pkgname)
+	error = "This change is not coming from a source that supports changelogs."
+	self.assertEqual(self.cache.all_changes[pkgname].count(error),1)        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == "-v":

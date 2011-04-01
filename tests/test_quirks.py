@@ -1,16 +1,17 @@
 #!/usr/bin/python
 
-import os
-import sys
-sys.path.insert(0,"../")
-
 import apt
+import apt_pkg
 import hashlib
 import mock
+import os
 import unittest
 import shutil
 import subprocess
+import sys
+import tempfile
 
+sys.path.insert(0,"../")
 from DistUpgrade.DistUpgradeQuirks import DistUpgradeQuirks
 
 class MockController(object):
@@ -105,6 +106,33 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(open("./test-data/fstab.ntfs").read().endswith("0\n"))
         self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 0" in open("./test-data/fstab.ntfs").read())
         self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open("./test-data/fstab.ntfs").read())
+
+    def test_kde_card_games_transition(self):
+        # fake nothing is installed
+        empty_status = tempfile.NamedTemporaryFile()
+        apt_pkg.config.set("Dir::state::status", empty_status.name)
+
+        # create quirks class
+        controller = mock.Mock()
+        config = mock.Mock()
+        quirks = DistUpgradeQuirks(controller, config)
+        # add cache to the quirks class
+        cache = quirks.controller.cache = apt.Cache()
+        # add mark_install to the cache (this is part of mycache normally)
+        cache.mark_install = lambda p, s: cache[p].mark_install()
+
+        # test if the quirks handler works when kdegames-card is not installed
+        # does not try to install it
+        self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
+        quirks._add_kdegames_card_extra_if_installed()
+        self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
+
+        # mark it for install
+        cache["kdegames-card-data"].mark_install()
+        self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
+        quirks._add_kdegames_card_extra_if_installed()
+        # verify that the quirks handler is now installing it
+        self.assertTrue(cache["kdegames-card-data-extra"].marked_install)  
 
 if __name__ == "__main__":
     import logging

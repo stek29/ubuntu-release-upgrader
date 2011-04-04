@@ -113,7 +113,7 @@ def show_dist_no_longer_supported_dialog(parent=None):
                                gtk.BUTTONS_CLOSE,"")
     dialog.set_title("")
     dialog.set_markup(msg)
-    button = gtk.LinkButton(uri="http://www.ubuntu.com/getubuntu/upgrading",
+    button = gtk.LinkButton(uri="http://www.ubuntu.com/releaseendoflife",
                             label=_("Upgrade information"))
     button.show()
     dialog.get_content_area().pack_end(button)

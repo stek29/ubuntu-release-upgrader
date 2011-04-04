@@ -117,8 +117,13 @@ def show_dist_no_longer_supported_dialog(parent=None):
                             label=_("Upgrade information"))
     button.show()
     dialog.get_content_area().pack_end(button)
+    # this data used in the test to get the dialog
+    if parent:
+        parent.set_data("no-longer-supported-nag", dialog)
     dialog.run()
     dialog.destroy()
+    if parent:
+        parent.set_data("no-longer-supported-nag", None)
 
 
 class UpdateManagerDbusController(dbus.service.Object):

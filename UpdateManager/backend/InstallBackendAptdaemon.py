@@ -46,18 +46,19 @@ class InstallBackendAptdaemon(InstallBackend):
             trans = yield self.client.commit_packages(
                 pkgs_install, reinstall, remove, purge, pkgs_upgrade, 
                 downgrade, defer=True)
-            self._run_in_dialog(trans, self.INSTALL)
+            yield self._run_in_dialog(trans, self.INSTALL)
         except errors.NotAuthorizedError as e:
             self.emit("action-done", self.INSTALL, False, False)
         except Exception as e:
             self.emit("action-done", self.INSTALL, True, False)
             raise
 
+    @inline_callbacks
     def _run_in_dialog(self, trans, action):
         dia = AptProgressDialog(trans, parent=self.window_main)
         dia.set_icon_name("update-manager")
         dia.connect("finished", self._on_finished, action)
-        dia.run()
+        yield dia.run()
 
     def _on_finished(self, dialog, action):
         dialog.hide()

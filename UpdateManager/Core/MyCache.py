@@ -38,9 +38,11 @@ from utils import ExecutionTime
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"
-CHANGELOG_ORIGIN = "Ubuntu"
 
 class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
+
+    CHANGELOG_ORIGIN = "Ubuntu"
+
     def __init__(self, progress, rootdir=None):
         apt.Cache.__init__(self, progress, rootdir)
         # raise if we have packages in reqreinst state
@@ -283,10 +285,11 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         " get the changelog file from the changelog location "
         origins = self[name].candidateOrigin
         self.all_changes[name] = _("Changes for the versions:\n%s\n%s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
-        if not CHANGELOG_ORIGIN in [o.origin for o in origins]:
+        if not self.CHANGELOG_ORIGIN in [o.origin for o in origins]:
             # Try non official changelog location
             changelogs_uri_binary = self._guess_third_party_changelogs_uri_by_binary(name)
             changelogs_uri_source = self._guess_third_party_changelogs_uri_by_source(name)
+            error_message = ""
             for changelogs_uri in [changelogs_uri_binary,changelogs_uri_source]:
                 if changelogs_uri:
                     try:
@@ -294,15 +297,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                         self.all_changes[name] += changelog
                     except urllib2.HTTPError, e:
                         # no changelogs_uri or 404
-                        self.all_changes[name] += _(
+                        error_message = _(
                             "This change is not coming from a "
                             "source that supports changelogs.")
                     except (IOError, httplib.BadStatusLine, socket.error), e:
                         # network errors and others
                         logging.exception("error on changelog fetching")
-                        self.all_changes[name] += _(
+                        error_message = _(
                             "Failed to download the list of changes. \n"
                             "Please check your Internet connection.")
+            self.all_changes[name] += error_message
             return
         # fixup epoch handling version
         srcpkg = self[name].sourcePackageName

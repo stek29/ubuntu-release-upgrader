@@ -3,15 +3,16 @@
 
 import apt
 import logging
+import mock
 import os
 import os.path
 import sys
 import time
 import unittest
+import urllib2
 
 sys.path.insert(0, "../")
 from UpdateManager.Core.MyCache import MyCache
-
 
 class TestChangelogs(unittest.TestCase):
 
@@ -38,6 +39,24 @@ class TestChangelogs(unittest.TestCase):
         self.assertTrue(pkg.candidate.version in uri)
         self.assertTrue("gtk+2.0" in uri)
 
+    def test_changelog_not_supported(self):
+        def monkey_patched_get_changelogs(name, what, ver, uri):
+            raise urllib2.HTTPError(
+                "url", "code", "msg", "hdrs", open("/dev/zero"))
+        pkgname = "update-manager"
+        # patch origin
+        real_origin = self.cache.CHANGELOG_ORIGIN
+        self.cache.CHANGELOG_ORIGIN = "xxx"
+        # monkey patch to raise the right error
+        self.cache._get_changelog_or_news = monkey_patched_get_changelogs
+        # get changelog
+        self.cache.get_changelog(pkgname)
+	error = "This change is not coming from a source that supports changelogs."
+        # verify that we don't have the lines twice
+	self.assertEqual(self.cache.all_changes[pkgname].split("\n")[-1], error)
+	self.assertEqual(len(self.cache.all_changes[pkgname].split("\n")), 5)
+	self.assertEqual(self.cache.all_changes[pkgname].count(error), 1)
+        self.cache.CHANGELOG_ORIGIN = real_origin
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == "-v":

@@ -8,7 +8,9 @@ from aptdaemon.gtkwidgets import AptProgressDialog
 from aptdaemon.enums import EXIT_SUCCESS
 
 from UpdateManager.backend import InstallBackend
+
 import apt_pkg
+import dbus
 
 class InstallBackendAptdaemon(InstallBackend):
 
@@ -48,6 +50,10 @@ class InstallBackendAptdaemon(InstallBackend):
                 downgrade, defer=True)
             yield self._run_in_dialog(trans, self.INSTALL)
         except errors.NotAuthorizedError as e:
+            self.emit("action-done", self.INSTALL, False, False)
+        except dbus.DBusException as e:
+            if e.get_dbus_name() != "org.freedesktop.DBus.Error.NoReply":
+                raise
             self.emit("action-done", self.INSTALL, False, False)
         except Exception as e:
             self.emit("action-done", self.INSTALL, True, False)

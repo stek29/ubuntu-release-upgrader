@@ -44,6 +44,8 @@ def get_replace(cache, pkgname):
     return replaces
   pkg = cache[pkgname]
   ver = cache._depcache.get_candidate_ver(pkg._pkg)
+  if not ver:
+    return replaces
   depends = ver.depends_list
   for t in ["Replaces"]:
     if not depends.has_key(t):

@@ -4,6 +4,7 @@ import glob
 import hashlib
 import os
 import subprocess
+import sys
 
 basepath = "/var/lib/dpkg/info/*.md5sums"
 ok = True

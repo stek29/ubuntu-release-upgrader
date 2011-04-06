@@ -655,11 +655,17 @@ class UpdateManager(SimpleGtkbuilderApp):
           firstrun = self.gconfclient.get_bool("/apps/update-manager/first_run")
           if firstrun:
               text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
-              text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
+              if is_unity_running():
+                  text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
+              else:   
+                  text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
               self.gconfclient.set_bool("/apps/update-manager/first_run", False)
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
-              text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from the Administration menu later.")
+              if is_unity_running():
+                  text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from Applications later.")
+              else:
+                  text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from the Administration menu later.")
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()

@@ -52,6 +52,16 @@ class ExecutionTime(object):
     def __exit__(self, type, value, stack):
         print "%s: %s" % (self.info, time.time() - self.now)
 
+def is_unity_running():
+    """ return True if Unity is currently running """
+    unity_running = False
+    try:
+        bus = dbus.SessionBus()
+        unity_running = bus.name_has_owner("com.canonical.Unity")
+    except:
+        LOG.exception("could not check for Unity dbus service")
+    return unity_running
+
 def inside_chroot():
     """ returns True if we are inside a chroot 
     """

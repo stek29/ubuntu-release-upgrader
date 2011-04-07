@@ -300,7 +300,6 @@ class KDEInstallProgressAdapter(InstallProgress):
         #FIXME, below to be tested
         #self.confDialogue.resize(self.confDialogue.minimumSizeHint())
         self.confDialogue.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
-        self.confDialogue.show_difference_button.setEnabled(False)
 
         # workaround silly dpkg 
         if not os.path.exists(current):

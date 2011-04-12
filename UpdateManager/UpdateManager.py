@@ -85,6 +85,8 @@ from SimpleGtkbuilderApp import SimpleGtkbuilderApp
 from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
 
+from gi.repository import Dbusmenu, Unity
+
 #import pdb
 
 # FIXME:
@@ -298,28 +300,23 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
 
     # Create Unity launcher quicklist
-    try:
-        from gi.repository import Unity, Dbusmenu
-        
-        um_launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("update-manager.desktop")
-        quicklist = Dbusmenu.Menuitem.new()
+    um_launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("update-manager.desktop")
+    quicklist = Dbusmenu.Menuitem.new()
 
-        update_dbusmenuitem = Dbusmenu.Menuitem.new()
-        update_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
-        update_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-        update_dbusmenuitem.connect ("item-activated", self.on_button_reload_clicked, None)
-        quicklist.child_append(update_dbusmenuitem)
+    update_dbusmenuitem = Dbusmenu.Menuitem.new()
+    update_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
+    update_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+    update_dbusmenuitem.connect ("item-activated", self.on_button_reload_clicked, None)
+    quicklist.child_append(update_dbusmenuitem)
 
-        self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
-        self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
-                                                     _("Install All Available Updates"))
-        self.install_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-        self.install_dbusmenuitem.connect ("item-activated", self.install_all_updates, None)
-        quicklist.child_append (self.install_dbusmenuitem)
+    self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
+    self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
+                                                 _("Install All Available Updates"))
+    self.install_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+    self.install_dbusmenuitem.connect ("item-activated", self.install_all_updates, None)
+    quicklist.child_append (self.install_dbusmenuitem)
 
-        um_launcher_entry.set_property ("quicklist", quicklist)
-    except ImportError:
-        pass
+    um_launcher_entry.set_property ("quicklist", quicklist)
 
   def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)

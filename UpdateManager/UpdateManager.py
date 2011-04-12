@@ -321,7 +321,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     except ImportError:
         pass
 
-  def install_all_updates (self, widget, data = None):
+  def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)
     self.on_button_install_clicked (None)
 
@@ -713,7 +713,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
 
-  def on_button_reload_clicked(self, widget):
+  def on_button_reload_clicked(self, widget, menuitem = None, data = None):
     #print "on_button_reload_clicked"
     self.check_metarelease()
     self.invoke_manager(UPDATE)

@@ -297,6 +297,34 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.alert_watcher.connect("battery-alert", self._on_battery_alert)
     self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
 
+    # Create Unity launcher quicklist
+    try:
+        from gi.repository import Unity, Dbusmenu
+        
+        um_launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("update-manager.desktop")
+        quicklist = Dbusmenu.Menuitem.new()
+
+        update_menu_item = Dbusmenu.Menuitem.new()
+        update_menu_item.property_set (Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
+        update_menu_item.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+        update_menu_item.connect ("item-activated", self.on_button_reload_clicked, None)
+        quicklist.child_append(update_menu_item)
+
+        install_all_updates_menu_item = Dbusmenu.Menuitem.new()
+        install_all_updates_menu_item.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
+                                                     _("Install All Available Updates"))
+        install_all_updates_menu_item.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+        install_all_updates_menu_item.connect ("item-activated", self.install_all_updates, None)
+        quicklist.child_append (install_all_updates_menu_item)
+
+        um_launcher_entry.set_property ("quicklist", quicklist)
+    except ImportError:
+        pass
+
+  def install_all_updates (self, widget, data = None):
+    self.select_all_updgrades (None)
+    self.on_button_install_clicked (None)
+
   def on_initial_focus_in(self, widget, event):
       """callback run on initial focus-in (if started unmapped)"""
       widget.unstick()

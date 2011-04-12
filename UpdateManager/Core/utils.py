@@ -63,6 +63,20 @@ def is_unity_running():
         logging.exception("could not check for Unity dbus service")
     return unity_running
 
+def is_child_of_process_name(processname, pid=None):
+    if not pid:
+        pid = os.getpid()
+    while pid > 0:
+        stat_file = "/proc/%s/stat" % pid
+        stat = open(stat_file).read()
+        # extract command (inside ())
+        command = stat.partition("(")[2].partition(")")[0]
+        if command == processname:
+            return True
+        # get parent (second to the right of command) and check that next
+        pid = int(stat.partition(")")[2].split()[1])
+    return False
+
 def inside_chroot():
     """ returns True if we are inside a chroot 
     """

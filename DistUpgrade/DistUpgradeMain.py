@@ -165,25 +165,6 @@ def run_new_gnu_screen_window_or_reattach():
     logging.info("re-exec inside screen: '%s'" % cmd)
     os.execv("/usr/bin/screen", cmd)
 
-def set_environment_if_remote_login():
-    """ check if we are running form a remote login and if so, setup
-        "RELEASE_UPGRADER_ON_SSH" in the environment
-    """
-    # easy
-    if (os.environ.has_key("SSH_CONNECTION") or
-        os.environ.has_key("SSH_TTY")):
-        os.environ["RELEASE_UPGRADER_ON_SSH"] = "1"
-        return True
-    # sudo cleans out SSH_ environment
-    out = subprocess.Popen(["who","-m","--ips"],stdout=subprocess.PIPE).communicate()[0]
-    logging.debug("who -m --ips: '%s'" % out)
-    # FIXME: what about IPv6 ?
-    # do regexp search for a IP 
-    if re.search("(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$", out):
-        os.environ["RELEASE_UPGRADER_ON_SSH"] = "1"
-        return True
-    return False
-
 
 def main():
     """ main method """
@@ -199,10 +180,6 @@ def main():
     # create view and app objects
     view = setup_view(options, config, logdir)
 
-    # this check MUST run before screen is started, it alters the 
-    # who -m --ips output
-    set_environment_if_remote_login()
-    
     # gnu screen support
     if (view.needs_screen and
         not "RELEASE_UPGRADER_NO_SCREEN" in os.environ and

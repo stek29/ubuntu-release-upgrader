@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch, iptables_active
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch, iptables_active, is_child_of_process_name
 from string import Template
 
 import DistUpgradeView
@@ -215,7 +215,7 @@ class DistUpgradeController(object):
         """
         pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
         if (not os.path.exists(pidfile) and 
-            "RELEASE_UPGRADER_ON_SSH" in os.environ):
+            is_child_of_process_name("sshd")):
             # check if the frontend supports ssh upgrades (see lp: #322482)
             if not self._viewSupportsSSH():
                 logging.error("upgrade over ssh not alllowed")

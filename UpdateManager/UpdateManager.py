@@ -304,18 +304,18 @@ class UpdateManager(SimpleGtkbuilderApp):
         um_launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("update-manager.desktop")
         quicklist = Dbusmenu.Menuitem.new()
 
-        update_menu_item = Dbusmenu.Menuitem.new()
-        update_menu_item.property_set (Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
-        update_menu_item.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-        update_menu_item.connect ("item-activated", self.on_button_reload_clicked, None)
-        quicklist.child_append(update_menu_item)
+        update_dbusmenuitem = Dbusmenu.Menuitem.new()
+        update_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
+        update_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+        update_dbusmenuitem.connect ("item-activated", self.on_button_reload_clicked, None)
+        quicklist.child_append(update_dbusmenuitem)
 
-        install_all_updates_menu_item = Dbusmenu.Menuitem.new()
-        install_all_updates_menu_item.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
+        self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
+        self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
                                                      _("Install All Available Updates"))
-        install_all_updates_menu_item.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-        install_all_updates_menu_item.connect ("item-activated", self.install_all_updates, None)
-        quicklist.child_append (install_all_updates_menu_item)
+        self.install_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+        self.install_dbusmenuitem.connect ("item-activated", self.install_all_updates, None)
+        quicklist.child_append (self.install_dbusmenuitem)
 
         um_launcher_entry.set_property ("quicklist", quicklist)
     except ImportError:
@@ -578,14 +578,17 @@ class UpdateManager(SimpleGtkbuilderApp):
               #else:
               #    self.button_install.set_sensitive(True)
               self.button_install.set_sensitive(True)
+              self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, True)
           else:
               if inst_count > 0:
                   download_str = ngettext("The update has already been downloaded, but not installed",
                   "The updates have already been downloaded, but not installed", inst_count)
                   self.button_install.set_sensitive(True)
+                  self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, True)
               else:
                   download_str = _("There are no updates to install")
                   self.button_install.set_sensitive(False)
+                  self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, False)
               self.image_downsize.set_sensitive(False)
           # TRANSLATORS: this allows to switch the order of the count of
           #              updates and the download size string (if needed)
@@ -668,6 +671,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               self.notebook_details.set_sensitive(False)
               self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
+          self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, False)
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")

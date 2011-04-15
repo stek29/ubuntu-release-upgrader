@@ -23,6 +23,24 @@ class MockConfig(object):
 
 class TestQuirks(unittest.TestCase):
 
+    def test_enable_recommends_during_upgrade(self):
+        controller = mock.Mock()
+
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        # server mode
+        apt_pkg.config.set("APT::Install-Recommends", "0")
+        controller.serverMode = True
+        self.assertFalse(apt_pkg.config.find_b("APT::Install-Recommends"))
+        q.ensure_recommends_are_installed_on_desktops()
+        self.assertFalse(apt_pkg.config.find_b("APT::Install-Recommends"))
+        # desktop mode
+        apt_pkg.config.set("APT::Install-Recommends", "0")
+        controller.serverMode = False
+        self.assertFalse(apt_pkg.config.find_b("APT::Install-Recommends"))
+        q.ensure_recommends_are_installed_on_desktops()
+        self.assertTrue(apt_pkg.config.find_b("APT::Install-Recommends"))
+
     def test_parse_from_modaliases_header(self):
         pkgrec = { "Package" : "foo",
                    "Modaliases" : "modules1(pci:v00001002d00006700sv*sd*bc03sc*i*, pci:v00001002d00006701sv*sd*bc03sc*i*), module2(pci:v00001002d00006702sv*sd*bc03sc*i*, pci:v00001001d00006702sv*sd*bc03sc*i*)"

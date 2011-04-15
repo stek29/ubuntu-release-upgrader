@@ -1138,3 +1138,13 @@ class DistUpgradeQuirks(object):
         except:
             logging.exception("_add_kdegames_card_extra_if_installed failed")
         
+    def ensure_recommends_are_installed_on_desktops(self):
+        """ ensure that on a desktop install recommends are installed 
+            (LP: #759262)
+        """
+        import apt
+        if not self.controller.serverMode:
+            if not apt.apt_pkg.config.find_b("Apt::Install-Recommends"):
+                logging.warn("Apt::Install-Recommends was disabled, enabling it just for the upgrade")
+                apt.apt_pkg.config.set("Apt::Install-Recommends", "1")
+

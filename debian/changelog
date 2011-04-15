@@ -8,6 +8,10 @@ update-manager (1:0.147.6) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgradeViewText.py:
     - make user confirm information() messages before continuing
       (important for e.g. the "sshd has started" message)
+  * DistUpgrade/DistUpgradeQuirks.py, DistUpgrade/DistUpgradeController.py:
+    - ensure that new recommends are installed on a desktop mode upgrade 
+      even if that got disabled e.g. via synaptic (LP: #759262)
+    - add test for this feature
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 12 Apr 2011 10:40:17 +0200
 

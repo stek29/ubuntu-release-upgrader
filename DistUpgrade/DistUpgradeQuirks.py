@@ -1004,6 +1004,10 @@ class DistUpgradeQuirks(object):
             path = encoded_path.replace("_","/")
             logging.debug("target for '%s' is '%s' -> '%s'" % (
                     f, encoded_path, path))
+            # target does not exist
+            if not os.path.exists(path):
+                logging.debug("target '%s' does not exist" % path)
+                continue
             # check the input md5sum, this is not strictly needed as patch()
             # will verify the result md5sum and discard the result if that
             # does not match but this will remove a misleading error in the 

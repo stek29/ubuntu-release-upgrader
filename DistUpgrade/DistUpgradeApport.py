@@ -23,7 +23,7 @@ def apport_crash(type, value, tb):
         report = Report()
         for fname in os.listdir("/var/log/dist-upgrade/"):
             f = os.path.join("/var/log/dist-upgrade",fname)
-            if not os.path.isfile(f):
+            if not os.path.isfile(f) or os.path.getsize(f) == 0:
                 continue
             report[f.replace(".","").replace("-","")] = (open(f), )
         report.add_to_existing('/var/crash/_usr_bin_update-manager.0.crash')

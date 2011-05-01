@@ -37,7 +37,7 @@ import time
 import copy
 import ConfigParser
 from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch, iptables_active
+from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch, iptables_active, is_child_of_process_name
 from string import Template
 
 import DistUpgradeView
@@ -196,21 +196,6 @@ class DistUpgradeController(object):
         self.cache.partialUpgrade = self._partialUpgrade
         logging.debug("/openCache(), new cache size %i" % len(self.cache))
 
-    def _isRemoteLogin(self):
-        " check if we are running form a remote login "
-        # easy
-        if (os.environ.has_key("SSH_CONNECTION") or
-            os.environ.has_key("SSH_TTY")):
-            return True
-        # sudo cleans out SSH_ environment
-        out = subprocess.Popen(["who","-m","--ips"],stdout=subprocess.PIPE).communicate()[0]
-        logging.debug("who -m --ips: '%s'" % out)
-        # FIXME: what about IPv6 ?
-        # do regexp search for a IP 
-        if re.search("(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$", out):
-            return True
-        return False
-
     def _viewSupportsSSH(self):
       """
       Returns True if this view support upgrades over ssh.
@@ -229,7 +214,9 @@ class DistUpgradeController(object):
             of trouble)
         """
         pidfile = os.path.join("/var/run/release-upgrader-sshd.pid")
-        if (not os.path.exists(pidfile) and self._isRemoteLogin()):
+        if (not os.path.exists(pidfile) and 
+            os.path.isdir("/proc") and
+            is_child_of_process_name("sshd")):
             # check if the frontend supports ssh upgrades (see lp: #322482)
             if not self._viewSupportsSSH():
                 logging.error("upgrade over ssh not alllowed")
@@ -982,12 +969,10 @@ class DistUpgradeController(object):
         self.abort()
 
     def enableApport(self, fname="/etc/default/apport"):
-        """ enable apoprt """
+        """ enable apport """
         # startup apport just until the next reboot, it has the magic
         # "force_start" environment for this
-        env = copy.copy(os.environ)
-        env["force_start"] = "1"
-        subprocess.call(["/etc/init.d/apport","start"], env=env)
+        subprocess.call(["service","apport","start","force_start=1"])
 
     def _maybe_create_apt_btrfs_snapshot(self):
         """ create btrfs snapshot (if btrfs layout is there) """
@@ -1580,6 +1565,8 @@ class DistUpgradeController(object):
         # that the system had no sources.list entries and therefore no
         # desktop file information)
         self.serverMode = self.cache.needServerMode()
+        # do it here as we neeed to know if we are in server or client mode
+        self.quirks.ensure_recommends_are_installed_on_desktops()
         # now check if we still have some key packages available/downloadable
         # after the update - if not something went seriously wrong
         # (this happend e.g. during the intrepid->jaunty upgrade for some

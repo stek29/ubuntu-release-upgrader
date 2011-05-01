@@ -27,6 +27,7 @@ import apt_pkg
 import atexit
 import glob
 import logging
+import re
 import os
 import shutil
 import subprocess
@@ -163,6 +164,7 @@ def run_new_gnu_screen_window_or_reattach():
            "-S", SCREENNAME]+sys.argv
     logging.info("re-exec inside screen: '%s'" % cmd)
     os.execv("/usr/bin/screen", cmd)
+
 
 def main():
     """ main method """

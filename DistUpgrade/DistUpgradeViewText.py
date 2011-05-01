@@ -125,6 +125,8 @@ class DistUpgradeViewText(DistUpgradeView):
       print twrap(msg)
       if extended_msg:
         print twrap(extended_msg)
+      print _("To continue please press [ENTER]")
+      sys.stdin.readline()
     def error(self, summary, msg, extended_msg=None):
       print
       print twrap(summary)

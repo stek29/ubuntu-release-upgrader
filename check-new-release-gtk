@@ -1,4 +1,27 @@
 #!/usr/bin/python
+# check-new-release-gtk - this is called periodically in the background
+#                         (currently by update-notifier every 48h) to
+#                         gather information about new releases of Ubuntu
+#                         or to nag about no longer supported versions
+#  
+#  Copyright (c) 2010,2011 Canonical
+#  
+#  Author: Michael Vogt <mvo@ubuntu.com>
+# 
+#  This program is free software; you can redistribute it and/or 
+#  modify it under the terms of the GNU General Public License as 
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#  USA
 
 import apt
 import gconf
@@ -74,6 +97,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # show alert on unsupported distros
     if meta_release.no_longer_supported is not None:
         from UpdateManager.UpdateManager import show_dist_no_longer_supported_dialog
+        self.window_main.realize()
         show_dist_no_longer_supported_dialog(self.window_main)
   
   def build_ui(self):

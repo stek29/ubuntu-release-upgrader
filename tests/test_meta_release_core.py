@@ -1,12 +1,38 @@
 #!/usr/bin/python
 
-import unittest
-
+import random
 import logging
+import multiprocessing
 import os
 import os.path
 import sys
 import time
+import urllib2
+import unittest
+
+
+from BaseHTTPServer import BaseHTTPRequestHandler
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+from SocketServer import TCPServer
+
+class SillyProxyRequestHandler(BaseHTTPRequestHandler):
+    def do_HEAD(self):
+        code = 200
+        info = ""
+        try:
+            f = urllib2.urlopen(self.path)
+            info = f.info()
+        except urllib2.HTTPError as e:
+            code = e.code
+        s = "HTTP/1.0 %s OK\n%s" % (code, info)
+        self.wfile.write(s)
+    # well, good enough
+    do_GET = do_HEAD
+
+PORT = random.randint(1025, 65535)
+Handler = SillyProxyRequestHandler
+httpd = TCPServer(("", PORT), Handler)
+
 
 sys.path.insert(0, "../")
 from UpdateManager.Core.MetaRelease import *
@@ -33,6 +59,12 @@ class TestMetaReleaseCore(unittest.TestCase):
 
     def setUp(self):
         self.new_dist = None
+        self.httpd = multiprocessing.Process(target=httpd.serve_forever)
+        self.httpd.start()
+
+    def tearDown(self):
+        self.httpd.terminate()
+        self.httpd.join()
 
     def testnewdist(self):
         """ test that upgrades offer the right upgrade path """
@@ -48,12 +80,12 @@ class TestMetaReleaseCore(unittest.TestCase):
     def test_url_downloadable(self):
         from UpdateManager.Core.utils import url_downloadable
         logging.debug("proxy 1")
-        os.environ["http_proxy"] = "http://localhost:3128/"
+        os.environ["http_proxy"] = "http://localhost:%s/" % PORT
         self.assertTrue(url_downloadable("http://www.ubuntu.com/desktop",
                         logging.debug),
                         "download with proxy %s failed" % os.environ["http_proxy"])
         logging.debug("proxy 2")
-        os.environ["http_proxy"] = "http://localhost:3128"
+        os.environ["http_proxy"] = "http://localhost:%s" %  PORT
         self.assertTrue(url_downloadable("http://www.ubuntu.com/desktop",
                         logging.debug),
                         "download with proxy %s failed" % os.environ["http_proxy"])
@@ -69,7 +101,7 @@ class TestMetaReleaseCore(unittest.TestCase):
                         "download with no proxy failed")
 
         logging.debug("proxy, no valid adress")
-        os.environ["http_proxy"] = "http://localhost:3128"
+        os.environ["http_proxy"] = "http://localhost:%s" % PORT
         self.assertFalse(url_downloadable("http://www.ubuntu.com/xxx",
                         logging.debug),
                         "download with no proxy failed")

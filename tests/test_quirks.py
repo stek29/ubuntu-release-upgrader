@@ -1,16 +1,17 @@
 #!/usr/bin/python
 
-import os
-import sys
-sys.path.insert(0,"../")
-
 import apt
+import apt_pkg
 import hashlib
 import mock
+import os
 import unittest
 import shutil
 import subprocess
+import sys
+import tempfile
 
+sys.path.insert(0,"../")
 from DistUpgrade.DistUpgradeQuirks import DistUpgradeQuirks
 
 class MockController(object):
@@ -21,6 +22,24 @@ class MockConfig(object):
     pass
 
 class TestQuirks(unittest.TestCase):
+
+    def test_enable_recommends_during_upgrade(self):
+        controller = mock.Mock()
+
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        # server mode
+        apt_pkg.config.set("APT::Install-Recommends", "0")
+        controller.serverMode = True
+        self.assertFalse(apt_pkg.config.find_b("APT::Install-Recommends"))
+        q.ensure_recommends_are_installed_on_desktops()
+        self.assertFalse(apt_pkg.config.find_b("APT::Install-Recommends"))
+        # desktop mode
+        apt_pkg.config.set("APT::Install-Recommends", "0")
+        controller.serverMode = False
+        self.assertFalse(apt_pkg.config.find_b("APT::Install-Recommends"))
+        q.ensure_recommends_are_installed_on_desktops()
+        self.assertTrue(apt_pkg.config.find_b("APT::Install-Recommends"))
 
     def test_parse_from_modaliases_header(self):
         pkgrec = { "Package" : "foo",
@@ -63,14 +82,8 @@ class TestQuirks(unittest.TestCase):
         self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-i486"))
         self.assertTrue(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-via-c7m"))
 
-    def test_patch(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        shutil.copy("./patchdir/foo_orig", "./patchdir/foo")
-        shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
-        shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
-        shutil.copy("./patchdir/dotdot_orig", "./patchdir/dotdot")
-        shutil.copy("./patchdir/fail_orig", "./patchdir/fail")
-        q._applyPatches(patchdir="./patchdir")
+    def _verify_result_checksums(self):
+        """ helper for test_patch to verify that we get the expected result """
         # simple case is foo
         self.assertFalse("Hello" in open("./patchdir/foo").read())
         self.assertTrue("Hello" in open("./patchdir/foo_orig").read())
@@ -92,10 +105,26 @@ class TestQuirks(unittest.TestCase):
         # test that incorrect md5sum after patching rejects the patch
         self.assertEqual(open("./patchdir/fail").read(),
                          open("./patchdir/fail_orig").read())
+
+    def test_patch(self):
+        q = DistUpgradeQuirks(MockController(), MockConfig)
+        # create patch environment
+        shutil.copy("./patchdir/foo_orig", "./patchdir/foo")
+        shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
+        shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
+        shutil.copy("./patchdir/dotdot_orig", "./patchdir/dotdot")
+        shutil.copy("./patchdir/fail_orig", "./patchdir/fail")
+        # apply patches
+        q._applyPatches(patchdir="./patchdir")
+        self._verify_result_checksums()
+        # now apply patches again and ensure we don't patch twice
+        q._applyPatches(patchdir="./patchdir")
+        self._verify_result_checksums()
+
+    def test_patch_lowlevel(self):
         #test lowlevel too
         from DistUpgrade.DistUpgradePatcher import patch, PatchError
         self.assertRaises(PatchError, patch, "./patchdir/fail", "patchdir/patchdir_fail.ed04abbc6ee688ee7908c9dbb4b9e0a2.deadbeefdeadbeefdeadbeff", "deadbeefdeadbeefdeadbeff")
-        
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
@@ -105,6 +134,33 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(open("./test-data/fstab.ntfs").read().endswith("0\n"))
         self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 0" in open("./test-data/fstab.ntfs").read())
         self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open("./test-data/fstab.ntfs").read())
+
+    def test_kde_card_games_transition(self):
+        # fake nothing is installed
+        empty_status = tempfile.NamedTemporaryFile()
+        apt_pkg.config.set("Dir::state::status", empty_status.name)
+
+        # create quirks class
+        controller = mock.Mock()
+        config = mock.Mock()
+        quirks = DistUpgradeQuirks(controller, config)
+        # add cache to the quirks class
+        cache = quirks.controller.cache = apt.Cache()
+        # add mark_install to the cache (this is part of mycache normally)
+        cache.mark_install = lambda p, s: cache[p].mark_install()
+
+        # test if the quirks handler works when kdegames-card is not installed
+        # does not try to install it
+        self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
+        quirks._add_kdegames_card_extra_if_installed()
+        self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
+
+        # mark it for install
+        cache["kdegames-card-data"].mark_install()
+        self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
+        quirks._add_kdegames_card_extra_if_installed()
+        # verify that the quirks handler is now installing it
+        self.assertTrue(cache["kdegames-card-data-extra"].marked_install)  
 
 if __name__ == "__main__":
     import logging

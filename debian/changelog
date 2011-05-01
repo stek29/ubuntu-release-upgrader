@@ -1,9 +1,98 @@
-update-manager (1:0.147.1) UNRELEASED; urgency=low
+update-manager (1:0.150.1) natty-proposed; urgency=low
+
+  [ Brian Murray ]
+  * DistUpgrade/DistUpgradeApport.py: 
+    - do not report zero size attachments (LP: #772052)
+  * DistUpgrade/DistUpgrade.cfg:
+    - enable apport for distribution upgrades (LP: #772913)
+  * DistUpgrade/DistUpgradeController.py:
+    - use service to start apport
+
+  [ Michael Vogt ]
+  * DistUpgrade/DistUpgrade.cfg:
+    - Remove 'dontzap' from kubuntu-desktops rules (LP: #769680).
+      This fixes a upgrade issue when a old package is leftover
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 29 Apr 2011 15:55:38 +0200
+
+update-manager (1:0.150) natty; urgency=low
+
+  * DistUpgrade/DistUpgradeQuirks.py, tests/test_quirks.py:
+    - don't print a error for already patched files, this removes
+      a misleading error from the upgrade logs
+    - update tests
+  
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 20 Apr 2011 14:25:15 +0200
+
+update-manager (1:0.147.6) natty; urgency=low
+
+  * AutoUpgradeTester/profile/{euca-cloud,euca-nc,xubuntu}/DistUpgrade.cfg:
+    - updated for maverick->natty now that the auto-upgrade-test server
+      has more diskspace
+  * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeMain.py:
+    - make running-under-ssh check more robust by looking for sshd parent
+  * DistUpgrade/DistUpgradeViewText.py:
+    - make user confirm information() messages before continuing
+      (important for e.g. the "sshd has started" message)
+  * DistUpgrade/DistUpgradeQuirks.py, DistUpgrade/DistUpgradeController.py:
+    - ensure that new recommends are installed on a desktop mode upgrade 
+      even if that got disabled e.g. via synaptic (LP: #759262)
+    - add test for this feature
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 15 Apr 2011 10:05:29 +0200
+
+update-manager (1:0.147.5) natty; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeMain.py:
+    - fix ssh detection (LP: #744995)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 08 Apr 2011 18:24:30 +0200
+
+update-manager (1:0.147.4) natty; urgency=low
+
+  * DistUpgrade/DistUpgradeViewKDE.py
+   - Allow to view differences in conf file changes LP: #746431
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 07 Apr 2011 14:42:15 +0100
+
+update-manager (1:0.147.3) natty; urgency=low
+
+  * merged lp:~evfool/update-manager/fix665173 (LP: #665173),
+    many thanks to Robert Roth (update the test a bit)
+  * merged lp:~evfool/update-manager/fix150677 (LP: #150677),
+    many thanks to Robert Roth 
+  * merged lp:~evfool/update-manager/fix727069 (LP: #727069),
+    many thanks to Robert Roth 
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 06 Apr 2011 17:32:35 +0200
+
+update-manager (1:0.147.2) natty; urgency=low
+
+  * UpdateManager/backend/InstallBackendAptdaemon.py:
+    - no not trigger a apport exception on user auth issues and if
+      the user does not type the password in time (LP: #626798)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 05 Apr 2011 15:49:58 +0200
+
+update-manager (1:0.147.1) natty; urgency=low
 
   * UpdateManager/backend/InstallBackendAptdaemon.py:
     - use pkgsystem_unlock, improve exception handling, add test
+  * DistUpgrade/DistUpgradeQuirks.py: 
+    - add quirks handler for maverick->natty upgrade for the 
+      kdegames-card-data case (LP: #745396)
+  * tests/test_quirks.py:
+    - add test for LP: #745396
+  * UpdateManager/UpdateManager.py, do-release-upgrade:
+    - point to http://www.ubuntu.com/releaseendoflife when the release
+      is end-of-life message is displayed (LP: #671016)
+  * DistUpgrade/EOLReleaseAnnouncement:
+    - improve wording, this is displayed if the user is trying to upgrade
+      from a unsupported version of Ubuntu to a already unsupported
+      version. This now links to  http://www.ubuntu.com/releaseendoflife
+      (LP: #671016)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 01 Apr 2011 11:02:10 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 04 Apr 2011 11:31:50 +0200
 
 update-manager (1:0.147) natty; urgency=low
 

@@ -233,7 +233,7 @@ class MetaReleaseCore(object):
         # only warn if unsupported and a new dist is available (because 
         # the development version is also unsupported)
         if upgradable_to != "" and not current_dist.supported:
-            self.dist_no_longer_supported(upgradable_to)
+            self.dist_no_longer_supported(current_dist)
         if upgradable_to != "":
             self.new_dist_available(upgradable_to)
 

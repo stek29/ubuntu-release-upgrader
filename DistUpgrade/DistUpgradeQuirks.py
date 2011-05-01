@@ -24,6 +24,7 @@ import logging
 import os
 import os.path
 import re
+import hashlib
 import shutil
 import string
 import sys
@@ -189,6 +190,13 @@ class DistUpgradeQuirks(object):
         self._test_and_warn_on_old_nvidia()
         # new nvidia needs a CPU with sse support
         self._test_and_warn_on_nvidia_and_no_sse()
+
+    def nattyPostDistUpgradeCache(self):
+        """
+        this function works around quirks in the 
+        maverick -> natty cache upgrade calculation
+        """
+        self._add_kdegames_card_extra_if_installed()
 
     def maverickPostDistUpgradeCache(self):
         """
@@ -996,6 +1004,23 @@ class DistUpgradeQuirks(object):
             path = encoded_path.replace("_","/")
             logging.debug("target for '%s' is '%s' -> '%s'" % (
                     f, encoded_path, path))
+            # target does not exist
+            if not os.path.exists(path):
+                logging.debug("target '%s' does not exist" % path)
+                continue
+            # check the input md5sum, this is not strictly needed as patch()
+            # will verify the result md5sum and discard the result if that
+            # does not match but this will remove a misleading error in the 
+            # logs
+            md5 = hashlib.md5()
+            md5.update(open(path).read())
+            if md5.hexdigest() == result_md5sum:
+                logging.debug("already at target hash, skipping '%s'" % path)
+                continue
+            elif md5.hexdigest() != md5sum:
+                logging.warn("unexpected target md5sum, skipping: '%s'" % path)
+                continue
+            # patchable, do it
             from DistUpgradePatcher import patch
             try:
                 patch(path, os.path.join(patchdir, f), result_md5sum)
@@ -1112,3 +1137,32 @@ class DistUpgradeQuirks(object):
                     "foomatic-db-gutenprint -> ijsgutenprint-ppds rule")
         except:
             logging.exception("_gutenprint_fixup failed")
+
+    def _add_kdegames_card_extra_if_installed(self):
+        """ test if kdegames-card-data is installed and if so,
+            add kdegames-card-data-extra so that users do not 
+            loose functionality (LP: #745396)
+        """
+        try:
+            cache = self.controller.cache
+            if not ("kdegames-card-data" in cache or
+                    "kdegames-card-data-extra" in cache):
+                return
+            if (cache["kdegames-card-data"].is_installed or
+                cache["kdegames-card-data"].marked_install):
+                cache.mark_install(
+                    "kdegames-card-data-extra",
+                    "kdegames-card-data -> k-c-d-extra transition")
+        except:
+            logging.exception("_add_kdegames_card_extra_if_installed failed")
+        
+    def ensure_recommends_are_installed_on_desktops(self):
+        """ ensure that on a desktop install recommends are installed 
+            (LP: #759262)
+        """
+        import apt
+        if not self.controller.serverMode:
+            if not apt.apt_pkg.config.find_b("Apt::Install-Recommends"):
+                logging.warn("Apt::Install-Recommends was disabled, enabling it just for the upgrade")
+                apt.apt_pkg.config.set("Apt::Install-Recommends", "1")
+

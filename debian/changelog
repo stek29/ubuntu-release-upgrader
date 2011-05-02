@@ -9,10 +9,17 @@ update-manager (1:0.151) UNRELEASED; urgency=low
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 02 May 2011 10:18:38 +0200
 
-update-manager (1:0.150.2) UNRELEASEDnatty-proposed; urgency=low
+update-manager (1:0.150.2) natty-proposed; urgency=low
 
-  * remove "kde-plasmoid-cwp" early as it will break upgrades
-    later (LP: #773022)
+  * debian/control:
+    - point to "natty" branch
+  * DistUpgrade/DistUpgrade.cfg:
+    - remove "kde-plasmoid-cwp" early as it will break upgrades
+      later (LP: #773022)
+  * DistUpgrade/DistUpgradeCache.py:
+    - do not fail if not all meta-package can not be upgraded, packages
+      like ubuntu-desktop and xubuntu-desktop have implicit conflicts
+      LP: #775411
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 02 May 2011 09:52:35 +0200
 

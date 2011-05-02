@@ -82,14 +82,8 @@ class TestQuirks(unittest.TestCase):
         self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-i486"))
         self.assertTrue(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-via-c7m"))
 
-    def test_patch(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        shutil.copy("./patchdir/foo_orig", "./patchdir/foo")
-        shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
-        shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
-        shutil.copy("./patchdir/dotdot_orig", "./patchdir/dotdot")
-        shutil.copy("./patchdir/fail_orig", "./patchdir/fail")
-        q._applyPatches(patchdir="./patchdir")
+    def _verify_result_checksums(self):
+        """ helper for test_patch to verify that we get the expected result """
         # simple case is foo
         self.assertFalse("Hello" in open("./patchdir/foo").read())
         self.assertTrue("Hello" in open("./patchdir/foo_orig").read())
@@ -111,10 +105,26 @@ class TestQuirks(unittest.TestCase):
         # test that incorrect md5sum after patching rejects the patch
         self.assertEqual(open("./patchdir/fail").read(),
                          open("./patchdir/fail_orig").read())
+
+    def test_patch(self):
+        q = DistUpgradeQuirks(MockController(), MockConfig)
+        # create patch environment
+        shutil.copy("./patchdir/foo_orig", "./patchdir/foo")
+        shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
+        shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
+        shutil.copy("./patchdir/dotdot_orig", "./patchdir/dotdot")
+        shutil.copy("./patchdir/fail_orig", "./patchdir/fail")
+        # apply patches
+        q._applyPatches(patchdir="./patchdir")
+        self._verify_result_checksums()
+        # now apply patches again and ensure we don't patch twice
+        q._applyPatches(patchdir="./patchdir")
+        self._verify_result_checksums()
+
+    def test_patch_lowlevel(self):
         #test lowlevel too
         from DistUpgrade.DistUpgradePatcher import patch, PatchError
         self.assertRaises(PatchError, patch, "./patchdir/fail", "patchdir/patchdir_fail.ed04abbc6ee688ee7908c9dbb4b9e0a2.deadbeefdeadbeefdeadbeff", "deadbeefdeadbeefdeadbeff")
-        
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)

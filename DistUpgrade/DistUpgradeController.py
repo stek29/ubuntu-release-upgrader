@@ -969,12 +969,10 @@ class DistUpgradeController(object):
         self.abort()
 
     def enableApport(self, fname="/etc/default/apport"):
-        """ enable apoprt """
+        """ enable apport """
         # startup apport just until the next reboot, it has the magic
         # "force_start" environment for this
-        env = copy.copy(os.environ)
-        env["force_start"] = "1"
-        subprocess.call(["/etc/init.d/apport","start"], env=env)
+        subprocess.call(["service","apport","start","force_start=1"])
 
     def _maybe_create_apt_btrfs_snapshot(self):
         """ create btrfs snapshot (if btrfs layout is there) """
@@ -1436,8 +1434,8 @@ class DistUpgradeController(object):
                 return False
             logging.debug("marking '%s' for install" % pkgname)
             # mvo: autoInst is not available on dapper
-            #pkg.markInstall(autoInst=False, autoFix=False)
-            pkg.mark_install(autoFix=False)
+            #pkg.markInstall(auto_inst=False, auto_fix=False)
+            pkg.mark_install(auto_fix=False)
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())

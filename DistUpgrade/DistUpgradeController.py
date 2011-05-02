@@ -1434,8 +1434,8 @@ class DistUpgradeController(object):
                 return False
             logging.debug("marking '%s' for install" % pkgname)
             # mvo: autoInst is not available on dapper
-            #pkg.markInstall(autoInst=False, autoFix=False)
-            pkg.mark_install(autoFix=False)
+            #pkg.markInstall(auto_inst=False, auto_fix=False)
+            pkg.mark_install(auto_fix=False)
 
         # mark the backports for upgrade and get them
         fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())

@@ -875,7 +875,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               pkg.mark_keep()
           elif not (pkg.name in self.list.held_back):
               #print "marking install: ", pkg.name
-              pkg.mark_install(autoFix=False,autoInst=False)
+              pkg.mark_install(auto_fix=False,auto_inst=False)
       # check if we left breakage
       if self.cache._depcache.broken_count:
           Fix = apt_pkg.ProblemResolver(self.cache._depcache)

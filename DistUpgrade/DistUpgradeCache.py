@@ -299,7 +299,7 @@ class MyCache(apt.Cache):
             pkg.mark_delete()
         for name in self.to_install:
             pkg = self[name]
-            pkg.mark_install(autoFix=False, autoInst=False)
+            pkg.mark_install(auto_fix=False, auto_inst=False)
 
     def needServerMode(self):
         """ 
@@ -831,6 +831,7 @@ class MyCache(apt.Cache):
 
         # every meta-pkg that is installed currently, will be marked
         # install (that result in a upgrade and removes a markDelete)
+        installed_a_metapkg = False
         for key in metapkgs:
             try:
                 if (self.has_key(key) and
@@ -839,8 +840,8 @@ class MyCache(apt.Cache):
                     logging.debug("Marking '%s' for upgrade" % key)
                     self[key].mark_upgrade()
             except SystemError, e:
-                logging.debug("Can't mark '%s' for upgrade (%s)" % (key,e))
-                raise SystemError, _("Can not mark '%s' for upgrade") % key
+                logging.warn("Can't mark '%s' for upgrade (%s)" % (key,e))
+
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
             logging.debug("none of the '%s' meta-pkgs installed" % metapkgs)

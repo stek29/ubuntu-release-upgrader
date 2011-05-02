@@ -299,7 +299,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
 
     # Create Unity launcher quicklist
-    self.unity = UnitySupport(self)
+    # FIXME: instead of passing parent we really should just send signals
+    self.unity = UnitySupport(parent=self)
 
   def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)

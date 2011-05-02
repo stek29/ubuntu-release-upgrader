@@ -84,8 +84,8 @@ from ChangelogViewer import ChangelogViewer
 from SimpleGtkbuilderApp import SimpleGtkbuilderApp
 from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
+from UnitySupport import UnitySupport
 
-from gi.repository import Dbusmenu, Unity
 
 #import pdb
 
@@ -299,23 +299,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
 
     # Create Unity launcher quicklist
-    self.unity = um_launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("update-manager.desktop")
-    quicklist = Dbusmenu.Menuitem.new()
-
-    update_dbusmenuitem = Dbusmenu.Menuitem.new()
-    update_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
-    update_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-    update_dbusmenuitem.connect ("item-activated", self.on_button_reload_clicked, None)
-    quicklist.child_append(update_dbusmenuitem)
-
-    self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
-    self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
-                                                 _("Install All Available Updates"))
-    self.install_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-    self.install_dbusmenuitem.connect ("item-activated", self.install_all_updates, None)
-    quicklist.child_append (self.install_dbusmenuitem)
-
-    um_launcher_entry.set_property ("quicklist", quicklist)
+    self.unity = UnitySupport(self)
 
   def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)
@@ -573,17 +557,17 @@ class UpdateManager(SimpleGtkbuilderApp):
               #else:
               #    self.button_install.set_sensitive(True)
               self.button_install.set_sensitive(True)
-              self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+              self.unity.set_install_menuitem_visible(True)
           else:
               if inst_count > 0:
                   download_str = ngettext("The update has already been downloaded, but not installed",
                   "The updates have already been downloaded, but not installed", inst_count)
                   self.button_install.set_sensitive(True)
-                  self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+                  self.unity.set_install_menuitem_visible(True)
               else:
                   download_str = _("There are no updates to install")
                   self.button_install.set_sensitive(False)
-                  self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, False)
+                  self.unity.set_install_menuitem_visible(False)
               self.image_downsize.set_sensitive(False)
           # TRANSLATORS: this allows to switch the order of the count of
           #              updates and the download size string (if needed)
@@ -661,13 +645,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
 
       # setup unity stuff
-      self.unity.set_property("count", num_updates)
-      self.unity.set_property("count-visible", True)
-      # FIXME: setup emblem as well(?) and add urgency only for security
-      if num_updates > 0:
-          self.unity.set_property("urgent", True)
-      else:
-          self.unity.set_property("urgent", False)
+      self.unity.set_updates_count(num_updates)
 
       if num_updates == 0:
           text_header= "<big><b>%s</b></big>"  % _("Your system is up-to-date")
@@ -676,7 +654,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               self.notebook_details.set_sensitive(False)
               self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
-          self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, False)
+          self.unity.set_install_menuitem_visible(False)
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")

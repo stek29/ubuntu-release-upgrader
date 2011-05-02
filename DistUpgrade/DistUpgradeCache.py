@@ -839,8 +839,10 @@ class MyCache(apt.Cache):
                     logging.debug("Marking '%s' for upgrade" % key)
                     self[key].mark_upgrade()
             except SystemError, e:
-                logging.debug("Can't mark '%s' for upgrade (%s)" % (key,e))
-                raise SystemError, _("Can not mark '%s' for upgrade") % key
+                # warn here, but don't fail, its possible that meta-packages
+                # conflict (like ubuntu-desktop vs xubuntu-desktop) LP: #775411
+                logging.warn("Can't mark '%s' for upgrade (%s)" % (key,e))
+
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
             logging.debug("none of the '%s' meta-pkgs installed" % metapkgs)

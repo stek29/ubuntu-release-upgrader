@@ -1,8 +1,9 @@
-# UpdateManager.py 
+# UnitySupport.py 
 #  
 #  Copyright (c) 2011 Canonical
 #  
 #  Author: Michael Vogt <mvo@ubuntu.com>
+#          Bilal Akhtar <bilalakhtar@ubuntu.com>
 # 
 #  This program is free software; you can redistribute it and/or 
 #  modify it under the terms of the GNU General Public License as 

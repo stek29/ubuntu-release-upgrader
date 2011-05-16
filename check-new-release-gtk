@@ -35,7 +35,7 @@ import time
 
 import UpdateManager.GtkProgress
 
-from gettext import gettext as _
+import gettext
 from optparse import OptionParser
 
 from DistUpgrade.utils import init_proxy
@@ -157,6 +157,16 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
       gtk.main_quit()
 
 if __name__ == "__main__":
+  APP="update-manager"
+  DIR="/usr/share/locale"
+
+  gtk.init_check()
+
+  gettext.install(APP, DIR, unicode=True)
+  try:
+    locale.setlocale(locale.LC_ALL, "")
+  except:
+    pass
 
   init_proxy()
 

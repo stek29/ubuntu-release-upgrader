@@ -298,7 +298,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     except urllib2.HTTPError, e:
                         # no changelogs_uri or 404
                         error_message = _(
-                            "This change is not coming from a "
+                            "This update does not come from a "
                             "source that supports changelogs.")
                     except (IOError, httplib.BadStatusLine, socket.error), e:
                         # network errors and others

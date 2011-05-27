@@ -1,4 +1,4 @@
-from ConfigParser import RawConfigParser, NoOptionError, NoSectionError
+from ConfigParser import SafeConfigParser, NoOptionError, NoSectionError
 import subprocess
 import os.path
 import logging
@@ -6,9 +6,9 @@ import glob
 
 CONFIG_OVERRIDE_DIR =  "/etc/update-manager/release-upgrades.d"
 
-class DistUpgradeConfig(RawConfigParser):
+class DistUpgradeConfig(SafeConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg"):
-        RawConfigParser.__init__(self)
+        SafeConfigParser.__init__(self)
         # we support a config overwrite, if DistUpgrade.cfg.dapper exists
         # and the user runs dapper, that one will be used
         from_release = subprocess.Popen(["lsb_release","-c","-s"],

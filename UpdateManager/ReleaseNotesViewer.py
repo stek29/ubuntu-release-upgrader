@@ -30,6 +30,23 @@ import pygtk
 import os
 import subprocess
 
+def open_url(url):
+    """Open the specified URL in a browser"""
+    # Find an appropiate browser
+    if os.path.exists("/usr/bin/xdg-open"):
+        command = ["xdg-open", url]
+    elif os.path.exists("/usr/bin/exo-open"):
+        command = ["exo-open", url]
+    elif os.path.exists('/usr/bin/gnome-open'):
+        command = ['gnome-open', url]
+    else:
+        command = ['x-www-browser', url]
+    # Avoid to run the browser as user root
+    if os.getuid() == 0 and os.environ.has_key('SUDO_USER'):
+        command = ['sudo', '-u', os.environ['SUDO_USER']] + command
+    subprocess.Popen(command)
+
+
 class ReleaseNotesViewer(gtk.TextView):
     def __init__(self, notes):
         """Init the ReleaseNotesViewer as an Inheritance of the gtk.TextView.
@@ -116,26 +133,8 @@ class ReleaseNotesViewer(gtk.TextView):
         for tag in tags:
             url = tag.get_data("url")
             if url != "":
-                self.open_url(url)
+                open_url(url)
                 break
-
-    def open_url(self, url):
-        """Open the specified URL in a browser"""
-        # Find an appropiate browser
-        if os.path.exists("/usr/bin/xdg-open"):
-            command = ["xdg-open", url]
-        elif os.path.exists("/usr/bin/exo-open"):
-            command = ["exo-open", url]
-        elif os.path.exists('/usr/bin/gnome-open'):
-            command = ['gnome-open', url]
-        else:
-            command = ['x-www-browser', url]
-
-        # Avoid to run the browser as user root
-        if os.getuid() == 0 and os.environ.has_key('SUDO_USER'):
-            command = ['sudo', '-u', os.environ['SUDO_USER']] + command
-
-        subprocess.Popen(command)
 
     def motion_notify_event(self, text_view, event):
         """callback for the mouse movement event, that calls the
@@ -186,7 +185,7 @@ class ReleaseNotesViewer(gtk.TextView):
 if __name__ == "__main__":
     # some simple test code
     win = gtk.Window()
-    rv = ReleaseNotesViewerWebkit(open("../DistUpgrade/ReleaseAnnouncement").read())
+    rv = ReleaseNotesViewer(open("../DistUpgrade/ReleaseAnnouncement").read())
     win.add(rv)
     win.show_all()
     gtk.main()

@@ -23,11 +23,30 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+import gtk
 import webkit
+
+from ReleaseNotesViewer import open_url
 
 class ReleaseNotesViewerWebkit(webkit.WebView):
     def __init__(self, notes_url):
         super(ReleaseNotesViewerWebkit, self).__init__()
         self.load_uri(notes_url)
+        self.connect("navigation-policy-decision-requested", self._on_navigation_policy_decision_requested)
+    def _on_navigation_policy_decision_requested(self, view, frame, request, action, policy):
+        open_url(request.get_uri())
+        policy.ignore()
+        return True
+        
+    
+if __name__ == "__main__":
+    win = gtk.Window()
+    win.set_size_request(600, 400)
+    scroll = gtk.ScrolledWindow()
+    rv = ReleaseNotesViewerWebkit("http://archive.ubuntu.com/ubuntu/dists/natty/main/dist-upgrader-all/0.150/ReleaseAnnouncement.html")
+    scroll.add(rv)
+    win.add(scroll)
+    win.show_all()
+    gtk.main()
 
 

@@ -33,6 +33,8 @@ import subprocess
 import os
 from gettext import gettext as _
 
+from ReleaseNotesViewer import open_url
+
 class ChangelogViewer(gtk.TextView):
     def __init__(self, changelog=None):
         """Init the ChangelogViewer as an Inheritance of the gtk.TextView"""
@@ -82,7 +84,7 @@ class ChangelogViewer(gtk.TextView):
     def handle_context_menu(self, menuitem, action, url):
         """Handle activate event for the links' context menu"""
         if action == "open":
-            self.open_url(url)
+            open_url(url)
         if action == "copy":
             cb = gtk.Clipboard()
             cb.set_text(url)
@@ -202,30 +204,12 @@ class ChangelogViewer(gtk.TextView):
             url = tag.get_data("url")
             if url != None:
                 if event.button == 1: 
-                    self.open_url(url)
+                    open_url(url)
                     break
                 if event.button == 3:
                     self.create_context_menu(url)
                     self.menu.popup(None, None, None, event.button, event.time)
                     return True
-
-    def open_url(self, url):
-        """Open the specified URL in a browser"""
-        # Find an appropiate browser
-        if os.path.exists("/usr/bin/xdg-open"):
-            command = ["xdg-open", url]
-        elif os.path.exists("/usr/bin/exo-open"):
-            command = ["exo-open", url]
-        elif os.path.exists('/usr/bin/gnome-open'):
-            command = ['gnome-open', url]
-        else:
-            command = ['x-www-browser', url]
-
-        # Avoid to run the browser as user root
-        if os.getuid() == 0 and os.environ.has_key('SUDO_USER'):
-            command = ['sudo', '-u', os.environ['SUDO_USER']] + command
-
-        subprocess.Popen(command)
 
     def motion_notify_event(self, text_view, event):
         """callback for the mouse movement event, that calls the

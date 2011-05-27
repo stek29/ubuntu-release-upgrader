@@ -168,10 +168,9 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.progress = parent.progressbar_cache
         self.expander = parent.expander_terminal
         self.term = parent._term
+        self.term.connect("child-exited", self.child_exited)
         self.parent = parent
         # setup the child waiting
-        reaper = vte.reaper_get()
-        reaper.connect("child-exited", self.child_exited)
         # some options for dpkg to make it die less easily
         apt_pkg.Config.set("DPkg::StopOnError","False")
 
@@ -298,9 +297,9 @@ class GtkInstallProgressAdapter(InstallProgress):
               self.parent._webkit_view.get_property("load-status") == 2):
             self.parent._webkit_view.execute_script('progress("%s")' % percent)
 
-    def child_exited(self, term, pid, status):
+    def child_exited(self, term):
         # we need to capture the full status here (not only the WEXITSTATUS)
-        self.apt_status = status
+        self.apt_status = status = term.get_child_exit_status()
         self.finished = True
 
     def wait_child(self):

@@ -216,7 +216,7 @@ class DistUpgradeFetcherCore(object):
                                      descr=_("Upgrade tool"))
             result = fetcher.run()
             if result != fetcher.RESULT_CONTINUE:
-                logging.warn("fetch result != continue" % result)
+                logging.warn("fetch result != continue (%s)" % result)
                 return False
             # check that both files are really there and non-null
             for f in [os.path.basename(self.new_dist.upgradeToolSig),

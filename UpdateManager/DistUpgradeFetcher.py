@@ -60,7 +60,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
     def showReleaseNotes(self):
       # first try showing the webkit version, this may fail (return None
       # because e.g. there is no webkit installed)
-      res = _try_show_release_notes_webkit()
+      res = self._try_show_release_notes_webkit()
       if res is not None:
           return res
       else:
@@ -72,6 +72,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           try:
               from ReleaseNotesViewerWebkit import ReleaseNotesViewerWebkit
               webkit_release_notes = ReleaseNotesViewerWebkit(self.new_dist.releaseNotesHtmlUri)
+              webkit_release_notes.show()
               self.parent.scrolled_notes.add(webkit_release_notes)
               res = self.parent.dialog_release_notes.run()
               self.parent.dialog_release_notes.hide()

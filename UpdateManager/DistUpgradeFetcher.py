@@ -58,6 +58,31 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         allow_sleep()
 
     def showReleaseNotes(self):
+      # first try showing the webkit version, this may fail (return None
+      # because e.g. there is no webkit installed)
+      res = _try_show_release_notes_webkit()
+      if res is not None:
+          return res
+      else:
+          # fallback to text
+          return self._try_show_release_notes_textview()
+
+    def _try_show_release_notes_webkit(self):
+      if self.new_dist.releaseNotesHtmlUri is not None:
+          try:
+              from ReleaseNotesViewerWebkit import ReleaseNotesViewerWebkit
+              webkit_release_notes = ReleaseNotesViewerWebkit(self.new_dist.releaseNotesHtmlUri)
+              self.parent.scrolled_notes.add(webkit_release_notes)
+              res = self.parent.dialog_release_notes.run()
+              self.parent.dialog_release_notes.hide()
+              if res == gtk.RESPONSE_OK:
+                  return True
+              return False
+          except ImportError:
+              pass
+      return None
+
+    def _try_show_release_notes_textview(self):
       # FIXME: care about i18n! (append -$lang or something)
       if self.new_dist.releaseNotesURI != None:
           uri = self._expandUri(self.new_dist.releaseNotesURI)

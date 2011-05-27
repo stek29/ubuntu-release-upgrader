@@ -23,13 +23,12 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-
-import pygtk
+import logging
+import pango
 import gtk
-import pango
-import subprocess
+import pygtk
 import os
-import pango
+import subprocess
 
 class ReleaseNotesViewer(gtk.TextView):
     def __init__(self, notes):
@@ -187,7 +186,7 @@ class ReleaseNotesViewer(gtk.TextView):
 if __name__ == "__main__":
     # some simple test code
     win = gtk.Window()
-    rv = ReleaseNotesViewer(open("../DistUpgrade/ReleaseAnnouncement").read())
+    rv = ReleaseNotesViewerWebkit(open("../DistUpgrade/ReleaseAnnouncement").read())
     win.add(rv)
     win.show_all()
     gtk.main()

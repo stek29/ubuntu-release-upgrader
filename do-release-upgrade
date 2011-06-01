@@ -9,7 +9,7 @@ from DistUpgrade.DistUpgradeVersion import VERSION
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
 from UpdateManager.Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from optparse import OptionParser
-from gettext import gettext as _
+import gettext
 
 import os
 import sys
@@ -21,6 +21,14 @@ RELEASE_AVAILABLE=0
 NO_RELEASE_AVAILABLE=1
 
 if __name__ == "__main__":
+  APP="update-manager"
+  DIR="/usr/share/locale"
+
+  gettext.install(APP, DIR, unicode=True)
+  try:
+    locale.setlocale(locale.LC_ALL, "")
+  except:
+    pass
 
   init_proxy()
 

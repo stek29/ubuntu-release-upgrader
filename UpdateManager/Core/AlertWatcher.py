@@ -19,28 +19,28 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import gobject
+from gi.repository import GObject
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 
-class AlertWatcher(gobject.GObject):
+class AlertWatcher(GObject.GObject):
     """ a class that checks for alerts and reports them, like a battery
     or network warning """
     
-    __gsignals__ = {"network-alert": (gobject.SIGNAL_RUN_FIRST,
-                                      gobject.TYPE_NONE,
-                                      (gobject.TYPE_INT,)),
-                    "battery-alert": (gobject.SIGNAL_RUN_FIRST,
-                                      gobject.TYPE_NONE,
-                                      (gobject.TYPE_BOOLEAN,)),
-                    "network-3g-alert": (gobject.SIGNAL_RUN_FIRST,
-                                         gobject.TYPE_NONE,
-                                        (gobject.TYPE_BOOLEAN,
-                                         gobject.TYPE_BOOLEAN,)),
+    __gsignals__ = {"network-alert": (GObject.SignalFlags.RUN_FIRST,
+                                      None,
+                                      (GObject.TYPE_INT,)),
+                    "battery-alert": (GObject.SignalFlags.RUN_FIRST,
+                                      None,
+                                      (GObject.TYPE_BOOLEAN,)),
+                    "network-3g-alert": (GObject.SignalFlags.RUN_FIRST,
+                                         None,
+                                        (GObject.TYPE_BOOLEAN,
+                                         GObject.TYPE_BOOLEAN,)),
                     }
     
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         DBusGMainLoop(set_as_default=True)
         self.bus = dbus.Bus(dbus.Bus.TYPE_SYSTEM)
         self.network_state = 3 # make it always connected if NM isn't available

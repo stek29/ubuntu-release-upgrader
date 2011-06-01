@@ -77,5 +77,5 @@ if __name__ == "__main__":
     b = InstallBackendAptdaemon(None)
     b.commit(["2vcard"], [], False)
 
-    import gtk
-    gtk.main()
+    from gi.repository import Gtk
+    Gtk.main()

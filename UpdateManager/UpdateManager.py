@@ -30,8 +30,9 @@ from gi.repository import Gtk
 import Gtk.gdk
 from gi.repository import GConf
 from gi.repository import GObject
+from gi.repository import GLib
 GObject.threads_init()
-import glib
+from gi.repository import Pango
 
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
@@ -49,7 +50,6 @@ import re
 import locale
 import logging
 import tempfile
-from gi.repository import Pango
 import subprocess
 import pwd
 import urllib2

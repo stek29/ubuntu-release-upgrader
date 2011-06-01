@@ -359,14 +359,14 @@ def get_lang():
         return None
 
 def error(parent, summary, message):
-  import gtk
-  d = gtk.MessageDialog(parent=parent,
-                        flags=gtk.DIALOG_MODAL,
-                        type=gtk.MESSAGE_ERROR,
-                        buttons=gtk.BUTTONS_CLOSE)
+  from gi.repository import Gtk
+  d = Gtk.MessageDialog(parent=parent,
+                        flags=Gtk.DialogFlags.MODAL,
+                        type=Gtk.MessageType.ERROR,
+                        buttons=Gtk.ButtonsType.CLOSE)
   d.set_markup("<big><b>%s</b></big>\n\n%s" % (summary, message))
   d.realize()
-  d.window.set_functions(gtk.gdk.FUNC_MOVE)
+  d.window.set_functions(Gdk.FUNC_MOVE)
   d.set_title("")
   res = d.run()
   d.destroy()

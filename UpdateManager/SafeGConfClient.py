@@ -19,51 +19,51 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import gconf
-import gobject
+from gi.repository import GConf
+from gi.repository import GObject
 
 class SafeGConfClient(object):
     """A gconfclient that does not crash if gconf is not avaialble"""
     def __init__(self):
-        self.gconfclient = gconf.client_get_default()
+        self.gconfclient = GConf.Client.get_default()
 
     def get_bool(self, key, default=False):
         try:
             return self.gconfclient.get_bool(key)
-        except gobject.GError, e:
+        except GObject.GError, e:
             return default
     def get_int(self, key, default=0):
         try:
             return self.gconfclient.get_int(key)
-        except gobject.GError, e:
+        except GObject.GError, e:
             return default
     def get_pair(self, key, vtype1, vtype2):
         try:
             return self.gconfclient.get_pair(key, vtype1, vtype2)
-        except gobject.GError, e:
+        except GObject.GError, e:
             return (0, 0)
     def get_string(self, key, default=""):
         try:
             return self.gconfclient.get_string(key)
-        except gobject.GError, e:
+        except GObject.GError, e:
             return default
     def set_int(self, key, value):
         try:
             self.gconfclient.set_int(key, value)
-        except gobject.GError, e:
+        except GObject.GError, e:
             pass
     def set_bool(self, key, value):
         try:
             self.gconfclient.set_bool(key, value)
-        except gobject.GError, e:
+        except GObject.GError, e:
             pass
     def set_pair(self, key, vtype1, vtype2, value1, value2):
         try:
             self.gconfclient.set_pair(key, vtype1, vtype2, value1, value2)
-        except gobject.GError, e:
+        except GObject.GError, e:
             pass
     def set_string(self, key, value):
         try:
             self.gconfclient.set_string(key, value)
-        except gobject.GError, e:
+        except GObject.GError, e:
             pass

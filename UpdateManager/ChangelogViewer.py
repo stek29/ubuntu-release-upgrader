@@ -6,7 +6,7 @@
 #  Author: Sebastian Heinlein <sebastian.heinlein@web.de>
 #          Michael Vogt <michael.vogt@ubuntu.com>
 #
-#  This modul provides an inheritance of the gtk.TextView that is 
+#  This modul provides an inheritance of the Gtk.TextView that is 
 #  aware of http URLs and allows to open them in a browser.
 #  It is based on the pygtk-demo "hypertext".
 # 
@@ -27,19 +27,19 @@
 
 
 import pygtk
-import gtk
-import pango
+from gi.repository import Gtk
+from gi.repository import Pango
 import subprocess
 import os
 from gettext import gettext as _
 
 from ReleaseNotesViewer import open_url
 
-class ChangelogViewer(gtk.TextView):
+class ChangelogViewer(Gtk.TextView):
     def __init__(self, changelog=None):
-        """Init the ChangelogViewer as an Inheritance of the gtk.TextView"""
+        """Init the ChangelogViewer as an Inheritance of the Gtk.TextView"""
         # init the parent
-        gtk.TextView.__init__(self)
+        GObject.GObject.__init__(self)
         # global hovering over link state
         self.hovering = False
         self.first = True
@@ -50,7 +50,7 @@ class ChangelogViewer(gtk.TextView):
         self.set_right_margin(4)
         self.set_left_margin(4)
         self.set_pixels_above_lines(4)
-        self.buffer = gtk.TextBuffer()
+        self.buffer = Gtk.TextBuffer()
         self.set_buffer(self.buffer)
         self.connect("button-press-event", self.button_press_event)
         self.connect("motion-notify-event", self.motion_notify_event)
@@ -63,15 +63,15 @@ class ChangelogViewer(gtk.TextView):
             
     def create_context_menu(self, url):
         """Create the context menu to be displayed when links are right clicked"""
-        self.menu = gtk.Menu()
+        self.menu = Gtk.Menu()
         
         # create menu items
-        item_grey_link = gtk.MenuItem(url)
+        item_grey_link = Gtk.MenuItem(url)
         item_grey_link.connect("activate", self.handle_context_menu, "open", url)
-        item_seperator = gtk.MenuItem()
-        item_open_link = gtk.MenuItem(_("Open Link in Browser"))
+        item_seperator = Gtk.MenuItem()
+        item_open_link = Gtk.MenuItem(_("Open Link in Browser"))
         item_open_link.connect("activate", self.handle_context_menu, "open", url)
-        item_copy_link = gtk.MenuItem(_("Copy Link to Clipboard"))
+        item_copy_link = Gtk.MenuItem(_("Copy Link to Clipboard"))
         item_copy_link.connect("activate", self.handle_context_menu, "copy", url)
         
         # add menu items
@@ -86,7 +86,7 @@ class ChangelogViewer(gtk.TextView):
         if action == "open":
             open_url(url)
         if action == "copy":
-            cb = gtk.Clipboard()
+            cb = Gtk.Clipboard()
             cb.set_text(url)
             cb.store()
 
@@ -99,7 +99,7 @@ class ChangelogViewer(gtk.TextView):
             if url != "":
                 return
         tag = self.buffer.create_tag(None, foreground="blue",
-                                     underline=pango.UNDERLINE_SINGLE)
+                                     underline=Pango.Underline.SINGLE)
         tag.set_data("url", url)
         self.buffer.apply_tag(tag , start, end)
 
@@ -145,7 +145,7 @@ class ChangelogViewer(gtk.TextView):
         for (start_str, end_list, url_prefix) in search_items:
             while True:
                 ret = iter.forward_search(start_str,
-                                          gtk.TEXT_SEARCH_VISIBLE_ONLY,
+                                          Gtk.TextSearchFlags.VISIBLE_ONLY,
                                           iter_end)
                 # if we reach the end break the loop
                 if not ret:
@@ -194,7 +194,7 @@ class ChangelogViewer(gtk.TextView):
                 return False
 
         # get the iter at the mouse position
-        (x, y) = self.window_to_buffer_coords(gtk.TEXT_WINDOW_WIDGET,
+        (x, y) = self.window_to_buffer_coords(Gtk.TextWindowType.WIDGET,
                                               int(event.x), int(event.y))
         iter = self.get_iter_at_location(x, y)
         
@@ -214,7 +214,7 @@ class ChangelogViewer(gtk.TextView):
     def motion_notify_event(self, text_view, event):
         """callback for the mouse movement event, that calls the
            check_hovering method with the mouse postition coordiantes"""
-        x, y = text_view.window_to_buffer_coords(gtk.TEXT_WINDOW_WIDGET,
+        x, y = text_view.window_to_buffer_coords(Gtk.TextWindowType.WIDGET,
                                                  int(event.x), int(event.y))
         self.check_hovering(x, y)
         self.window.get_pointer()
@@ -225,7 +225,7 @@ class ChangelogViewer(gtk.TextView):
            that calls the check_hovering method with the mouse position
            coordinates"""
         (wx, wy, mod) = text_view.window.get_pointer()
-        (bx, by) = text_view.window_to_buffer_coords(gtk.TEXT_WINDOW_WIDGET, wx,
+        (bx, by) = text_view.window_to_buffer_coords(Gtk.TextWindowType.WIDGET, wx,
                                                      wy)
         self.check_hovering(bx, by)
         return False
@@ -251,18 +251,18 @@ class ChangelogViewer(gtk.TextView):
             self.hovering = _hovering
             # Set the appropriate cursur icon
             if self.hovering:
-                self.get_window(gtk.TEXT_WINDOW_TEXT).\
-                        set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
+                self.get_window(Gtk.TextWindowType.TEXT).\
+                        set_cursor(Gdk.Cursor.new(Gdk.HAND2))
             else:
-                self.get_window(gtk.TEXT_WINDOW_TEXT).\
-                        set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+                self.get_window(Gtk.TextWindowType.TEXT).\
+                        set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
 
 
 if __name__ == "__main__":
-    w = gtk.Window()
+    w = Gtk.Window()
     cv = ChangelogViewer()
     changes = cv.get_buffer()
-    changes.create_tag("versiontag", weight=pango.WEIGHT_BOLD)
+    changes.create_tag("versiontag", weight=Pango.Weight.BOLD)
     changes.set_text("""
 
 Version 6-14-0ubuntu1.9.04:
@@ -274,4 +274,4 @@ Version 6-14-0ubuntu1.9.04:
 
     w.add(cv)
     w.show_all()
-    gtk.main()
+    Gtk.main()

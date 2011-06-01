@@ -20,8 +20,8 @@
 #  USA
 
 import pygtk
-pygtk.require('2.0')
-import gtk
+pyGtk.require('2.0')
+from gi.repository import Gtk
 
 from ReleaseNotesViewer import ReleaseNotesViewer
 from Core.utils import *
@@ -76,7 +76,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               self.parent.scrolled_notes.add(webkit_release_notes)
               res = self.parent.dialog_release_notes.run()
               self.parent.dialog_release_notes.hide()
-              if res == gtk.RESPONSE_OK:
+              if res == Gtk.ResponseType.OK:
                   return True
               return False
           except ImportError:
@@ -88,13 +88,13 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
       if self.new_dist.releaseNotesURI != None:
           uri = self._expandUri(self.new_dist.releaseNotesURI)
           self.window_main.set_sensitive(False)
-          self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-          while gtk.events_pending():
-              gtk.main_iteration()
+          self.window_main.window.set_cursor(Gdk.Cursor.new(Gdk.WATCH))
+          while Gtk.events_pending():
+              Gtk.main_iteration()
 
           # download/display the release notes
           # FIXME: add some progress reporting here
-          res = gtk.RESPONSE_CANCEL
+          res = Gtk.ResponseType.CANCEL
           timeout = socket.getdefaulttimeout()
           try:
               socket.setdefaulttimeout(5)
@@ -110,8 +110,8 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                         _("Could not find the release notes")
               secondary = _("The server may be overloaded. ")
-              dialog = gtk.MessageDialog(self.window_main,gtk.DIALOG_MODAL,
-                                         gtk.MESSAGE_ERROR,gtk.BUTTONS_CLOSE,"")
+              dialog = Gtk.MessageDialog(self.window_main,Gtk.DialogFlags.MODAL,
+                                         Gtk.MessageType.ERROR,Gtk.ButtonsType.CLOSE,"")
               dialog.set_title("")
               dialog.set_markup(primary);
               dialog.format_secondary_text(secondary);
@@ -121,8 +121,8 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                         _("Could not download the release notes")
               secondary = _("Please check your internet connection.")
-              dialog = gtk.MessageDialog(self.window_main,gtk.DIALOG_MODAL,
-                                         gtk.MESSAGE_ERROR,gtk.BUTTONS_CLOSE,"")
+              dialog = Gtk.MessageDialog(self.window_main,Gtk.DialogFlags.MODAL,
+                                         Gtk.MessageType.ERROR,Gtk.ButtonsType.CLOSE,"")
               dialog.set_title("")
               dialog.set_markup(primary);
               dialog.format_secondary_text(secondary);
@@ -132,7 +132,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           self.window_main.set_sensitive(True)
           self.window_main.window.set_cursor(None)
           # user clicked cancel
-          if res == gtk.RESPONSE_OK:
+          if res == Gtk.ResponseType.OK:
               return True
       return False
 

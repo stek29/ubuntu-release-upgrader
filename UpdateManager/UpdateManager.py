@@ -26,13 +26,11 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gtk.gdk
-import gconf
-import gobject
-gobject.threads_init()
+from gi.repository import Gtk
+import Gtk.gdk
+from gi.repository import GConf
+from gi.repository import GObject
+GObject.threads_init()
 import glib
 
 import warnings
@@ -51,7 +49,7 @@ import re
 import locale
 import logging
 import tempfile
-import pango
+from gi.repository import Pango
 import subprocess
 import pwd
 import urllib2
@@ -111,11 +109,11 @@ def show_dist_no_longer_supported_dialog(parent=None):
         _("You will not get any further security fixes or critical "
           "updates. "
           "Please upgrade to a later version of Ubuntu Linux."))
-    dialog = gtk.MessageDialog(parent, 0, gtk.MESSAGE_WARNING,
-                               gtk.BUTTONS_CLOSE,"")
+    dialog = Gtk.MessageDialog(parent, 0, Gtk.MessageType.WARNING,
+                               Gtk.ButtonsType.CLOSE,"")
     dialog.set_title("")
     dialog.set_markup(msg)
-    button = gtk.LinkButton(uri="http://www.ubuntu.com/releaseendoflife",
+    button = Gtk.LinkButton(uri="http://www.ubuntu.com/releaseendoflife",
                             label=_("Upgrade information"))
     button.show()
     dialog.get_content_area().pack_end(button)
@@ -178,7 +176,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def __init__(self, datadir, options):
     self.setupDbus()
-    gtk.window_set_default_icon_name("update-manager")
+    Gtk.Window.set_default_icon_name("update-manager")
     self.datadir = datadir
     SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui",
                                  "update-manager")
@@ -193,7 +191,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.sleep_cookie = None
     self.sleep_dev = None
 
-    self.image_logo.set_from_icon_name("update-manager", gtk.ICON_SIZE_DIALOG)
+    self.image_logo.set_from_icon_name("update-manager", Gtk.IconSize.DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
     self.button_close.grab_focus()
@@ -205,7 +203,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.textview_changes.show()
     self.scrolledwindow_changes.add(self.textview_changes)
     changes_buffer = self.textview_changes.get_buffer()
-    changes_buffer.create_tag("versiontag", weight=pango.WEIGHT_BOLD)
+    changes_buffer.create_tag("versiontag", weight=Pango.Weight.BOLD)
 
     # expander
     self.expander_details.connect("notify::expanded", self.activate_details)
@@ -215,29 +213,29 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.button_close.connect("clicked", lambda w: self.exit())
 
     # the treeview (move into it's own code!)
-    self.store = gtk.ListStore(str, str, gobject.TYPE_PYOBJECT, 
-                               gobject.TYPE_PYOBJECT, bool)
+    self.store = Gtk.ListStore(str, str, GObject.TYPE_PYOBJECT, 
+                               GObject.TYPE_PYOBJECT, bool)
     self.treeview_update.set_model(self.store)
     self.treeview_update.set_headers_clickable(True);
-    self.treeview_update.set_direction(gtk.TEXT_DIR_LTR)
+    self.treeview_update.set_direction(Gtk.TextDirection.LTR)
 
-    tr = gtk.CellRendererText()
+    tr = Gtk.CellRendererText()
     tr.set_property("xpad", 6)
     tr.set_property("ypad", 6)
-    cr = gtk.CellRendererToggle()
+    cr = Gtk.CellRendererToggle()
     cr.set_property("activatable", True)
     cr.set_property("xpad", 6)
     cr.connect("toggled", self.toggled)
 
-    column_install = gtk.TreeViewColumn("Install", cr, active=LIST_TOGGLE_CHECKED)
+    column_install = Gtk.TreeViewColumn("Install", cr, active=LIST_TOGGLE_CHECKED)
     column_install.set_cell_data_func (cr, self.install_column_view_func)
-    column = gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
+    column = Gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
     column.set_resizable(True)
-    major,minor,patch = gtk.pygtk_version
+    major,minor,patch = Gtk.pygtk_version
 
-    column_install.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+    column_install.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
     column_install.set_fixed_width(30)
-    column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+    column.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
     column.set_fixed_width(100)
     self.treeview_update.set_fixed_height_mode(False)
 
@@ -320,7 +318,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.dialog_on_battery.set_title("")
           res = self.dialog_on_battery.run()
           self.dialog_on_battery.hide()
-          if res != gtk.RESPONSE_YES:
+          if res != Gtk.ResponseType.YES:
               sys.exit()
 
   def install_column_view_func(self, cell_layout, renderer, model, iter):
@@ -455,7 +453,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         changes_buffer.set_text("%s\n" % _("Downloading list of changes..."))
         iter = changes_buffer.get_iter_at_line(1)
         anchor = changes_buffer.create_child_anchor(iter)
-        button = gtk.Button(stock="gtk-cancel")
+        button = Gtk.Button(stock="gtk-cancel")
         self.textview_changes.add_child_at_anchor(button, anchor)
         button.show()
         id = button.connect("clicked",
@@ -463,8 +461,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         # wait for the dl-thread
         while lock.locked():
           time.sleep(0.01)
-          while gtk.events_pending():
-            gtk.main_iteration()
+          while Gtk.events_pending():
+            Gtk.main_iteration()
         # download finished (or canceld, or time-out)
         button.hide()
         button.disconnect(id);
@@ -490,15 +488,15 @@ class UpdateManager(SimpleGtkbuilderApp):
     """
     Show a context menu if a right click was performed on an update entry
     """
-    if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
-        menu = gtk.Menu()
-        item_select_none = gtk.MenuItem(_("_Uncheck All"))
+    if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
+        menu = Gtk.Menu()
+        item_select_none = Gtk.MenuItem(_("_Uncheck All"))
         item_select_none.connect("activate", self.select_none_updgrades)
         menu.add(item_select_none)
         num_updates = self.cache.installCount
         if num_updates == 0:
             item_select_none.set_property("sensitive", False)
-        item_select_all = gtk.MenuItem(_("_Check All"))
+        item_select_all = Gtk.MenuItem(_("_Check All"))
         item_select_all.connect("activate", self.select_all_updgrades)
         menu.add(item_select_all)
         menu.popup(None, None, None, 0, event.time)
@@ -531,11 +529,11 @@ class UpdateManager(SimpleGtkbuilderApp):
       if self.window_main.window is None:
           return
       if flag == True:
-          self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+          self.window_main.window.set_cursor(Gdk.Cursor.new(Gdk.WATCH))
       else:
           self.window_main.window.set_cursor(None)
-      while gtk.events_pending():
-          gtk.main_iteration()
+      while Gtk.events_pending():
+          Gtk.main_iteration()
 
   def refresh_updates_count(self):
       self.button_install.set_sensitive(self.cache.installCount)
@@ -716,14 +714,14 @@ class UpdateManager(SimpleGtkbuilderApp):
     except SystemError:
         pass
     cmd = ["/usr/bin/gksu", 
-           "--desktop", "/usr/share/applications/software-properties-gtk.desktop", 
+           "--desktop", "/usr/share/applications/software-properties-Gtk.desktop", 
            "--", "/usr/bin/software-properties-gtk","--open-tab","2",
            "--toplevel", "%s" % self.window_main.window.xid ]
     self.window_main.set_sensitive(False)
     p = subprocess.Popen(cmd)
     while p.poll() is None:
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
         time.sleep(0.05)
     self.fillstore()
 
@@ -792,14 +790,14 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # set window to insensitive
     self.window_main.set_sensitive(False)
-    self.window_main.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+    self.window_main.window.set_cursor(Gdk.Cursor.new(Gdk.WATCH))
 #
     # do it
     if action == UPDATE:
         self.install_backend.update()
     elif action == INSTALL:
         # If the progress dialog should be closed automatically afterwards
-        gconfclient =  gconf.client_get_default()
+        gconfclient =  GConf.Client.get_default()
         close_on_done = gconfclient.get_bool("/apps/update-manager/"
                                              "autoclose_install_window")
         # Get the packages which should be installed and update
@@ -959,14 +957,14 @@ class UpdateManager(SimpleGtkbuilderApp):
   def exit(self):
     """ exit the application, save the state """
     self.save_state()
-    #gtk.main_quit()
+    #Gtk.main_quit()
     sys.exit(0)
 
   def save_state(self):
     """ save the state  (window-size for now) """
     (x,y) = self.window_main.get_size()
     self.gconfclient.set_pair("/apps/update-manager/window_size",
-                              gconf.VALUE_INT, gconf.VALUE_INT, x, y)
+                              GConf.ValueType.INT, GConf.ValueType.INT, x, y)
 
   def restore_state(self):
     """ restore the state (window-size for now) """
@@ -978,7 +976,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                         0,
                                         True)
     (x,y) = self.gconfclient.get_pair("/apps/update-manager/window_size",
-                                      gconf.VALUE_INT, gconf.VALUE_INT)
+                                      GConf.ValueType.INT, GConf.ValueType.INT)
     if x > 0 and y > 0:
       self.window_main.resize(x,y)
 
@@ -998,9 +996,9 @@ class UpdateManager(SimpleGtkbuilderApp):
                   "package and include the following error message:\n"),
                 e)
                )
-        dialog = gtk.MessageDialog(self.window_main,
-                                   0, gtk.MESSAGE_ERROR,
-                                   gtk.BUTTONS_CLOSE,"")
+        dialog = Gtk.MessageDialog(self.window_main,
+                                   0, Gtk.MessageType.ERROR,
+                                   Gtk.ButtonsType.CLOSE,"")
         dialog.set_markup(msg)
         dialog.vbox.set_spacing(6)
         dialog.run()
@@ -1008,8 +1006,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         sys.exit(1)
     self.store.clear()
     self.list = UpdateList(self)
-    while gtk.events_pending():
-        gtk.main_iteration()
+    while Gtk.events_pending():
+        Gtk.main_iteration()
 
     # fill them again
     try:
@@ -1027,9 +1025,9 @@ class UpdateManager(SimpleGtkbuilderApp):
                   "package and include the following error message:"),
                 e)
                )
-        dialog = gtk.MessageDialog(self.window_main,
-                                   0, gtk.MESSAGE_ERROR,
-                                   gtk.BUTTONS_CLOSE,"")
+        dialog = Gtk.MessageDialog(self.window_main,
+                                   0, Gtk.MessageType.ERROR,
+                                   Gtk.ButtonsType.CLOSE,"")
         dialog.set_markup(msg)
         dialog.vbox.set_spacing(6)
         dialog.run()
@@ -1078,9 +1076,9 @@ class UpdateManager(SimpleGtkbuilderApp):
   def error(self, summary, details):
       " helper function to display a error message "
       msg = ("<big><b>%s</b></big>\n\n%s\n" % (summary, details) )
-      dialog = gtk.MessageDialog(self.window_main,
-                                 0, gtk.MESSAGE_ERROR,
-                                 gtk.BUTTONS_CLOSE,"")
+      dialog = Gtk.MessageDialog(self.window_main,
+                                 0, Gtk.MessageType.ERROR,
+                                 Gtk.ButtonsType.CLOSE,"")
       dialog.set_markup(msg)
       dialog.vbox.set_spacing(6)
       dialog.run()
@@ -1111,10 +1109,10 @@ class UpdateManager(SimpleGtkbuilderApp):
         apt_pkg.pkgsystem_lock()
     except SystemError, e:
         pass
-        #d = gtk.MessageDialog(parent=self.window_main,
-        #                      flags=gtk.DIALOG_MODAL,
-        #                      type=gtk.MESSAGE_ERROR,
-        #                      buttons=gtk.BUTTONS_CLOSE)
+        #d = Gtk.MessageDialog(parent=self.window_main,
+        #                      flags=Gtk.DialogFlags.MODAL,
+        #                      type=Gtk.MessageType.ERROR,
+        #                      buttons=Gtk.ButtonsType.CLOSE)
         #d.set_markup("<big><b>%s</b></big>\n\n%s" % (
         #    _("Only one software management tool is allowed to "
         #      "run at the same time"),
@@ -1144,9 +1142,9 @@ class UpdateManager(SimpleGtkbuilderApp):
                 "Please use the package manager \"Synaptic\" or run "
 		"\"sudo apt-get install -f\" in a terminal to fix "
 		"this issue at first.")))
-        dialog = gtk.MessageDialog(self.window_main,
-                                   0, gtk.MESSAGE_ERROR,
-                                   gtk.BUTTONS_CLOSE,"")
+        dialog = Gtk.MessageDialog(self.window_main,
+                                   0, Gtk.MessageType.ERROR,
+                                   Gtk.ButtonsType.CLOSE,"")
         dialog.set_markup(msg)
         dialog.vbox.set_spacing(6)
         dialog.run()
@@ -1168,7 +1166,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.dialog_manual_update.set_title("")
           res = self.dialog_manual_update.run()
           self.dialog_manual_update.hide()
-          if res == gtk.RESPONSE_YES:
+          if res == Gtk.ResponseType.YES:
               self.on_button_reload_clicked(None)
 
   def check_all_updates_installable(self):
@@ -1182,7 +1180,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.dialog_dist_upgrade.set_title("")
       res = self.dialog_dist_upgrade.run()
       self.dialog_dist_upgrade.hide()
-      if res == gtk.RESPONSE_YES:
+      if res == Gtk.ResponseType.YES:
           os.execl("/usr/bin/gksu",
                    "/usr/bin/gksu", "--desktop",
                    "/usr/share/applications/update-manager.desktop",
@@ -1208,10 +1206,10 @@ class UpdateManager(SimpleGtkbuilderApp):
     # check for new distributin information
     self.check_metarelease()
 
-    while gtk.events_pending():
-      gtk.main_iteration()
+    while Gtk.events_pending():
+      Gtk.main_iteration()
 
     self.fillstore()
     self.check_auto_update()
     self.alert_watcher.check_alert_state()
-    gtk.main()
+    Gtk.main()

@@ -648,7 +648,7 @@ class MyCache(apt.Cache):
                              "please try again later.")
             else:
                 details += _("If none of this applies, then please report this bug using "
-                             "the command 'ubuntu-bug update-manager' in a terminal."
+                             "the command 'ubuntu-bug update-manager' in a terminal.")
             # make the error text available again on stdout for the
             # text frontend
             self._stopAptResolverLog()

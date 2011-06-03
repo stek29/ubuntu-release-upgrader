@@ -718,7 +718,9 @@ class DistUpgradeController(object):
             self._view.error(_("Repository information invalid"),
                              _("Upgrading the repository information "
                                "resulted in a invalid file. Please "
-                               "report this as a bug."))
+                               "report this as a bug using the command "
+                               "'ubuntu-bug update-manager' in a "
+                               "terminal."))
             return False
 
         if self.sources_disabled:
@@ -1037,8 +1039,9 @@ class DistUpgradeController(object):
                         "will run now (dpkg --configure -a).")
                 if not self._partialUpgrade:
                     if not run_apport():
-                        msg += _("\n\nPlease report this bug against the 'update-manager' "
-                                 "package and include the files in /var/log/dist-upgrade/ "
+                        msg += _("\n\nPlease report this bug using the command "
+                                 "'ubuntu-bug update-manager' in a terminal and "
+                                 "include the files in /var/log/dist-upgrade/ "
                                  "in the bug report.\n"
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
@@ -1497,11 +1500,11 @@ class DistUpgradeController(object):
             logging.error("self.prepared() failed")
             self._view.error(_("Preparing the upgrade failed"),
                              _("Preparing the system for the upgrade "
-                               "failed. Please report this as a bug "
-                               "against the 'update-manager' "
-                               "package and include the files in "
-                               "/var/log/dist-upgrade/ "
-                               "in the bug report." ))
+                               "failed. Please report this using the "
+                               "command 'ubuntu-bug update-manager' "
+                               "in a terminal and include the files "
+                               "in /var/log/dist-upgrade/ "
+                               "in the bug report."))
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -1519,10 +1522,11 @@ class DistUpgradeController(object):
                                    "the original system state.\n"
                                    "\n"
                                    "Please report this as a bug "
-                                   "against the 'update-manager' "
-                                   "package and include the files in "
+                                   "using the command "
+                                   "'ubuntu-bug update-manager' in a "
+                                   "terminal and include the files in "
                                    "/var/log/dist-upgrade/ "
-                                   "in the bug report." ))
+                                   "in the bug report."))
                 self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
@@ -1584,8 +1588,9 @@ class DistUpgradeController(object):
                                    "updated the essential package '%s' can "
                                    "not be found anymore.\n"
                                    "This indicates a serious error, please "
-                                   "report this bug against the 'update-manager' "
-                                   "package and include the files in /var/log/dist-upgrade/ "
+                                   "report this bug using the command "
+                                   "'ubuntu-bug update-manager' in a terminal "
+                                   "and include the files in /var/log/dist-upgrade/ "
                                    "in the bug report.") % pkg)
                 self.abort()
 

@@ -647,10 +647,9 @@ class MyCache(apt.Cache):
                 details += _("This is most likely a transient problem, "
                              "please try again later.")
             else:
-                details += _("If none of this applies, then please report this bug against "
-                             "the 'update-manager' package and include the files in "
-                             "/var/log/dist-upgrade/ in the bug report.")
-            # make the error text available again on stdout for the 
+                details += _("If none of this applies, then please report this bug using "
+                             "the command 'ubuntu-bug update-manager' in a terminal."
+            # make the error text available again on stdout for the
             # text frontend
             self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
@@ -860,7 +859,9 @@ class MyCache(apt.Cache):
                         view.error(_("Can't install '%s'") % key,
                                    _("It was impossible to install a "
                                      "required package. Please report "
-                                     "this as a bug. "))
+                                     "this as a bug using "
+                                     "'ubuntu-bug update-manager' in "
+                                     "a terminal."))
                         return False
                     logging.debug("marked_install: '%s' -> '%s'" % (key, self[key].marked_install))
                     break

@@ -134,7 +134,7 @@ class DistUpgradeFetcherCore(object):
         if not os.path.exists(script):
             return self.error(_("Could not run the upgrade tool"),
                          _("Could not run the upgrade tool") + ".  " + _("This is most likely a bug in the upgrade tool. "
-                          "Please report it as a bug"))
+                          "Please report it as a bug using the command 'ubuntu-bug update-manager'."))
         return True
 
     def mirror_from_sources_list(self, uri, default_uri):
@@ -278,7 +278,7 @@ class DistUpgradeFetcherCore(object):
         except OSError, e:
           if e.errno == 13:
             self.error(_("Can not run the upgrade"),
-                       _("This usually is caused by a system were /tmp "
+                       _("This usually is caused by a system where /tmp "
                          "is mounted noexec. Please remount without "
                          "noexec and run the upgrade again."))
             return False

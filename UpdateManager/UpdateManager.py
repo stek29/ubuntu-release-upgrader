@@ -1,4 +1,4 @@
-# UpdateManager.py 
+# UpdateManager.py
 #  
 #  Copyright (c) 2004-2010 Canonical
 #                2004 Michiel Sikkes
@@ -166,7 +166,7 @@ class UpdateManagerDbusController(dbus.service.Object):
         pass	
 
     def _on_network_alert(self, watcher, state):
-        if state == NetworkManagerHelper.NM_STATE_CONNECTED:
+        if state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST:
             self.connected = True
         else:
             self.connected = False
@@ -834,7 +834,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def _on_network_alert(self, watcher, state):
       # do not set the buttons to sensitive/insensitive until NM
       # can deal with dialup connections properly
-      if state == NetworkManagerHelper.NM_STATE_CONNECTING:
+      if state in NetworkManagerHelper.NM_STATE_CONNECTING_LIST:
           self.label_offline.set_text(_("Connecting..."))
           #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
@@ -842,8 +842,8 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.vbox_alerts.show()
           self.connected = False
       # in doubt (STATE_UNKNOWN), assume connected
-      elif state in (NetworkManagerHelper.NM_STATE_CONNECTED,
-                     NetworkManagerHelper.NM_STATE_UNKNOWN):
+      elif (state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST or 
+           state == NetworkManagerHelper.NM_STATE_UNKNOWN):
           #self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()

@@ -113,11 +113,24 @@ class NetworkManagerHelper(object):
     NM_DBUS_IFACE = "org.freedesktop.NetworkManager"
 
     # connection states
+    # Old enum values are for NM 0.7
+    
+    # The NetworkManager daemon is in an unknown state.
     NM_STATE_UNKNOWN = 0
-    NM_STATE_ASLEEP = 1
-    NM_STATE_CONNECTING = 2
-    NM_STATE_CONNECTED = 3
-    NM_STATE_DISCONNECTED = 4
+    # The NetworkManager daemon is connecting a device.
+    NM_STATE_CONNECTING_OLD = 2
+    NM_STATE_CONNECTING = 40
+    NM_STATE_CONNECTING_LIST = [NM_STATE_CONNECTING_OLD,
+                                NM_STATE_CONNECTING]
+    # The NetworkManager daemon is connected.
+    NM_STATE_CONNECTED_OLD = 3
+    NM_STATE_CONNECTED_LOCAL = 50
+    NM_STATE_CONNECTED_SITE = 60
+    NM_STATE_CONNECTED_GLOBAL = 70
+    NM_STATE_CONNECTED_LIST = [NM_STATE_CONNECTED_OLD,
+                               NM_STATE_CONNECTED_LOCAL,
+                               NM_STATE_CONNECTED_SITE,
+                               NM_STATE_CONNECTED_GLOBAL]
 
     # The device type is unknown. 
     NM_DEVICE_TYPE_UNKNOWN = 0

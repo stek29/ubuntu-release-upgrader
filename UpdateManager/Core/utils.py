@@ -387,7 +387,7 @@ def humanize_size(bytes):
         return locale.format_string(_("%.0f KB"), bytes/1024)
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
-        return locale.format_string(_("%.1f MB"), bytes / 1024 / 1024)
+        return locale.format_string(_("%.1f MB"), float(bytes) / 1024 / 1024)
 
 def get_arch():
     return apt_pkg.Config.find("APT::Architecture")

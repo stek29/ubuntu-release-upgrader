@@ -34,36 +34,50 @@ class IUnitySupport(object):
     def __init__(self, parent): pass
     def set_updates_count(self, num_updates): pass
     def set_install_menuitem_visible(self, visible): pass
+    def set_progress(self, progress): pass
 
 class UnitySupportImpl(IUnitySupport):
     """ implementation of unity support (if unity is available) """
 
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         # create launcher and quicklist
         um_launcher_entry = Unity.LauncherEntry.get_for_desktop_id(
             "update-manager.desktop")
         self._unity = um_launcher_entry
-        quicklist = Dbusmenu.Menuitem.new()
-        # update
-        update_dbusmenuitem = Dbusmenu.Menuitem.new()
-        update_dbusmenuitem.property_set(
-            Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
-        update_dbusmenuitem.property_set_bool(
-            Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-        update_dbusmenuitem.connect (
-            "item-activated", parent.on_button_reload_clicked, None)
-        quicklist.child_append(update_dbusmenuitem)
-        # install 
-        self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
-        self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
-                                                 _("Install All Available Updates"))
-        self.install_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-        self.install_dbusmenuitem.connect (
-            "item-activated", parent.install_all_updates, None)
-        quicklist.child_append (self.install_dbusmenuitem)
-        # add it
-        um_launcher_entry.set_property ("quicklist", quicklist)
+        if parent:
+            self._add_quicklist(parent)
+
+    def _add_quicklist(self, parent):
+            quicklist = Dbusmenu.Menuitem.new()
+            # update
+            update_dbusmenuitem = Dbusmenu.Menuitem.new()
+            update_dbusmenuitem.property_set(
+                Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
+            update_dbusmenuitem.property_set_bool(
+                Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+            update_dbusmenuitem.connect (
+                "item-activated", parent.on_button_reload_clicked, None)
+            quicklist.child_append(update_dbusmenuitem)
+            # install 
+            self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
+            self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,
+                                                    _("Install All Available Updates"))
+            self.install_dbusmenuitem.property_set_bool (Dbusmenu.MENUITEM_PROP_VISIBLE, True)
+            self.install_dbusmenuitem.connect (
+                "item-activated", parent.install_all_updates, None)
+            quicklist.child_append (self.install_dbusmenuitem)
+            # add it
+            self._unity.set_property ("quicklist", quicklist)
     
+    def set_progress(self, progress):
+        """ set the progress [0,100] """
+        # hide progress when out of bounds
+        if progress < 0 or progress > 100:
+            self._unity.set_property("progress_visible", False)
+        else:
+            self._unity.set_property("progress_visible", True)
+        self._unity.set_property("progress", progress/100.0)
+
     def set_updates_count(self, num_updates):
         self._unity.set_property("count", num_updates)
         self._unity.set_property("count-visible", True)

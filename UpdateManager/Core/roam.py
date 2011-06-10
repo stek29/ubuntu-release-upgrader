@@ -116,9 +116,8 @@ class NetworkManagerHelper(object):
     # Old enum values are for NM 0.7
     
     # The NetworkManager daemon is in an unknown state.
-    NM_STATE_UNKNOWN_LIST = [NM_STATE_UNKNOWN]
+    NM_STATE_UNKNOWN = 0
     # The NetworkManager daemon is connecting a device.
-    NM_STATE_CONNECTING = 2
     NM_STATE_CONNECTING_OLD = 2
     NM_STATE_CONNECTING = 40
     NM_STATE_CONNECTING_LIST = [NM_STATE_CONNECTING_OLD,

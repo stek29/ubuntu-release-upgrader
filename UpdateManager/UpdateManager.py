@@ -842,8 +842,8 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.vbox_alerts.show()
           self.connected = False
       # in doubt (STATE_UNKNOWN), assume connected
-      elif state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST or 
-           state in NetworkManagerHelper.NM_STATE_UNKNOWN_LIST:
+      elif (state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST or 
+           state == NetworkManagerHelper.NM_STATE_UNKNOWN):
           #self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()

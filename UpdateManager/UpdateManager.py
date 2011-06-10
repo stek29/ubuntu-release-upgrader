@@ -1,4 +1,4 @@
-# UpdateManager.py 
+# UpdateManager.py
 #  
 #  Copyright (c) 2004-2010 Canonical
 #                2004 Michiel Sikkes

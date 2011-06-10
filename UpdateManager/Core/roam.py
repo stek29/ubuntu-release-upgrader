@@ -117,11 +117,6 @@ class NetworkManagerHelper(object):
     
     # The NetworkManager daemon is in an unknown state.
     NM_STATE_UNKNOWN_LIST = [NM_STATE_UNKNOWN]
-    # The NetworkManager daemon is asleep and all interfaces managed by it are inactive.
-    NM_STATE_ASLEEP_OLD = 1
-    NM_STATE_ASLEEP = 10
-    NM_STATE_ASLEEP_LIST = [NM_STATE_ASLEEP_OLD,
-                            NM_STATE_ASLEEP]
     # The NetworkManager daemon is connecting a device.
     NM_STATE_CONNECTING = 2
     NM_STATE_CONNECTING_OLD = 2
@@ -137,14 +132,6 @@ class NetworkManagerHelper(object):
                                NM_STATE_CONNECTED_LOCAL,
                                NM_STATE_CONNECTED_SITE,
                                NM_STATE_CONNECTED_GLOBAL]
-    # The NetworkManager daemon is disconnecting.
-    NM_STATE_DISCONNECTING = 30
-    NM_STATE_DISCONNECTING_LIST = [NM_STATE_DISCONNECTING]
-    # The NetworkManager daemon is disconnected.
-    NM_STATE_DISCONNECTED_OLD = 4
-    NM_STATE_DISCONNECTED = 20
-    NM_STATE_DISCONNECTED_LIST = [NM_STATE_DISCONNECTED_OLD,
-    NM_STATE_DISCONNECTED]
 
     # The device type is unknown. 
     NM_DEVICE_TYPE_UNKNOWN = 0

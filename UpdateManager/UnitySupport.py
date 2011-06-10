@@ -71,12 +71,12 @@ class UnitySupportImpl(IUnitySupport):
     
     def set_progress(self, progress):
         """ set the progress [0,100] """
+        self._unity.set_property("progress", progress/100.0)
         # hide progress when out of bounds
         if progress < 0 or progress > 100:
             self._unity.set_property("progress_visible", False)
         else:
             self._unity.set_property("progress_visible", True)
-        self._unity.set_property("progress", progress/100.0)
 
     def set_updates_count(self, num_updates):
         self._unity.set_property("count", num_updates)

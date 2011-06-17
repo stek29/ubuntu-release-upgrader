@@ -80,11 +80,12 @@ class UnitySupportImpl(IUnitySupport):
 
     def set_updates_count(self, num_updates):
         self._unity.set_property("count", num_updates)
-        self._unity.set_property("count-visible", True)
         # FIXME: setup emblem as well(?) and add urgency only for security
         if num_updates > 0:
+            self._unity.set_property("count-visible", True)
             self._unity.set_property("urgent", True)
         else:
+            self._unity.set_property("count-visible", False)
             self._unity.set_property("urgent", False)
 
     def set_install_menuitem_visible(self, visible):

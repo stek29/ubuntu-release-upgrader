@@ -76,7 +76,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def _on_finished(self, dialog, action):
         dialog.hide()
         # tell unity to hide the progress again
-        self.unity.set_progress(0)
+        self.unity.set_progress(-1)
         self.emit("action-done", action, 
                   True, dialog._transaction.exit == EXIT_SUCCESS)
 

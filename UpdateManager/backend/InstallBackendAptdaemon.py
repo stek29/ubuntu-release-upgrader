@@ -63,7 +63,7 @@ class InstallBackendAptdaemon(InstallBackend):
             raise
 
     def _on_progress_changed(self, trans, progress):
-        print "_on_progress_changed", progress
+        #print "_on_progress_changed", progress
         self.unity.set_progress(progress)
 
     @inline_callbacks

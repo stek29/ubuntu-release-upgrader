@@ -147,6 +147,10 @@ class DistUpgradeQuirks(object):
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # systems < i686 will not upgrade
         self._test_and_fail_on_non_i686()
+        self._test_and_warn_on_i8xx()
+
+    def oneiricPostInitialUpdate(self):
+        self._test_and_warn_on_i8xx()
 
     def lucidPostInitialUpdate(self):
         """ quirks that are run before the sources.list is updated to lucid """
@@ -437,6 +441,37 @@ class DistUpgradeQuirks(object):
         return True
 
     # helpers
+    def _get_pci_ids(self):
+        """ return a set of pci ids of the system (using lspci -n) """
+        lspci = set()
+        p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+        for line in p.communicate()[0].split("\n"):
+            if line:
+                lspci.add(line.split()[2])
+        return lspci
+
+    def _test_and_warn_on_i8xx(self):
+        I8XX_PCI_IDS = ["8086:7121", # i810
+                        "8086:7125", # i810e
+                        "8086:1132", # i815
+                        "8086:3577", # i830
+                        "8086:2562", # i845
+                        "8086:3582", # i855
+                        "8086:2572", # i865
+                        ]
+        lspci = self._get_pci_ids()
+        if set(I8XX_PCI_IDS).intersection(lspci):
+            res = self._view.askYesNoQuestion(
+                _("Your graphics hardware may not be fully supported in "
+                  "Ubuntu 11.04."),
+                _("The support in Ubuntu 11.04 for your intel graphics "
+                  "hardware is limited "
+                  "and you may encounter problems after the upgrade. "
+                  "Do you want to continue with the upgrade?")
+                )
+            if res == False:
+                self.controller.abort()
+
     def _test_and_warn_on_nvidia_and_no_sse(self):
         """ The current 
         """
@@ -1038,11 +1073,7 @@ class DistUpgradeQuirks(object):
         """
         # get lspci info (if needed)
         if not lspci:
-            lspci = set()
-            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
-            for line in p.communicate()[0].split("\n"):
-                if line:
-                    lspci.add(line.split()[2])
+            lspci = self._get_pci_ids()
         # get pkg
         if (not pkgname in self.controller.cache or
             not self.controller.cache[pkgname].candidate):

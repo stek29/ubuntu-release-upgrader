@@ -10,6 +10,10 @@ set -e
 # update base-installer
 (cd utils && ./update-base-installer.sh)
 
+# update apt_btrfs_snapshot.py copy, this nees a installed
+# apt-btrfs-snapshot on the build machine
+cp /usr/share/pyshared/apt_btrfs_snapshot.py DistUpgrade
+
 # (auto) generate the required html
 if [ ! -x /usr/bin/parsewiki ]; then
     echo "please sudo apt-get install parsewiki"

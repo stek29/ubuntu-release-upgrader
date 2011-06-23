@@ -33,6 +33,7 @@ class IUnitySupport(object):
     """ interface for unity support """
     def __init__(self, parent): pass
     def set_updates_count(self, num_updates): pass
+    def set_urgency(self, urgent): pass
     def set_install_menuitem_visible(self, visible): pass
     def set_progress(self, progress): pass
 
@@ -80,13 +81,14 @@ class UnitySupportImpl(IUnitySupport):
 
     def set_updates_count(self, num_updates):
         self._unity.set_property("count", num_updates)
-        # FIXME: setup emblem as well(?) and add urgency only for security
+        # FIXME: setup emblem as well(?)
         if num_updates > 0:
             self._unity.set_property("count-visible", True)
-            self._unity.set_property("urgent", True)
         else:
             self._unity.set_property("count-visible", False)
-            self._unity.set_property("urgent", False)
+
+    def set_urgency(self, urgent):
+        self._unity.set_property("urgent", urgent)
 
     def set_install_menuitem_visible(self, visible):
         self.install_dbusmenuitem.property_set_bool(Dbusmenu.MENUITEM_PROP_VISIBLE, visible)

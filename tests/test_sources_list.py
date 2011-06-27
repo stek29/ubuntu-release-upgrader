@@ -144,7 +144,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
         from aptsources.sourceslist import SourceEntry
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
-        for scheme in ["http"]: #["ftp","http"]:
+        for scheme in ["ftp","http"]:
             entry = "deb %s://archive.ubuntu.com/ubuntu/ hardy main universe restricted multiverse" % scheme
             self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)),
                             "entry '%s' not downloadable" % entry)

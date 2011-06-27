@@ -983,7 +983,7 @@ class DistUpgradeController(object):
         except ImportError:
             return
         apt_btrfs = apt_btrfs_snapshot.AptBtrfsSnapshot()
-        if not apt_btrfs.snapshots_supported:
+        if not apt_btrfs.snapshots_supported():
             logging.debug("btrfs snapshots not supported")
             return
         prefix = "release-upgrade-%s-" % self.toDist

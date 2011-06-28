@@ -264,6 +264,9 @@ class GtkInstallProgressAdapter(InstallProgress):
           for env in self.env:
             (key, value) = env.split("=")
             os.environ[key] = value
+            # force dpkg terminal messages untranslated for better bug
+            # duplication detection
+            os.environ["DPKG_UNTRANSLATED_MESSAGES"] = "1"
           # HACK to work around bug in python/vte and unregister the logging
           #      atexit func in the child
           sys.exitfunc = lambda: True

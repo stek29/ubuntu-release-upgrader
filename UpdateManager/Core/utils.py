@@ -30,7 +30,7 @@ import logging
 import re
 import os
 import os.path
-import stat
+import glob
 import subprocess
 import sys
 import time
@@ -51,6 +51,14 @@ class ExecutionTime(object):
         self.now = time.time()
     def __exit__(self, type, value, stack):
         print "%s: %s" % (self.info, time.time() - self.now)
+
+def estimate_kernel_size_in_boot():
+    """ estimate the amount of space that the current kernel takes in /boot """
+    size = 0
+    kver = os.uname()[2]
+    for f in glob.glob("/boot/*%s*" % kver):
+        size += os.path.getsize(f)
+    return size
 
 def is_unity_running():
     """ return True if Unity is currently running """

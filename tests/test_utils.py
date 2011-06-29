@@ -17,6 +17,10 @@ from UpdateManager.Core.utils import *
 
 class TestUtils(unittest.TestCase):
 
+    def test_estimate_kernel_size(self):
+        estimate = estimate_kernel_size_in_boot()
+        self.assertTrue(estimate > 0)
+
     def test_is_child_of_process_name(self):
         self.assertTrue(is_child_of_process_name("init"))
         self.assertFalse(is_child_of_process_name("mvo"))

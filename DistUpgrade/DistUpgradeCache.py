@@ -41,7 +41,7 @@ from DistUpgradeGettext import ngettext
 from DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgradeView import FuzzyTimeToStr
 
-from utils import inside_chroot
+from utils import inside_chroot, estimate_kernel_size_in_boot
 
 class CacheException(Exception):
     pass
@@ -51,7 +51,16 @@ class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
 # the initrd/vmlinuz/abi space required in /boot for each kernel
-KERNEL_INITRD_SIZE = 19 * 1024 * 1024
+# we estimate based on the current kernel size and add a safety marging
+def _set_kernel_initrd_size():
+    size = estimate_kernel_size_in_boot()
+    if size == 0:
+        logging.warn("estimate_kernel_size_in_boot() returned '0'?")
+        size = 28*1024*1024
+    # add small safety buffer
+    size += 1*1024*1024
+    return size
+KERNEL_INITRD_SIZE = _set_kernel_initrd_size()
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:

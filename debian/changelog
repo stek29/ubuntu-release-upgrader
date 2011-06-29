@@ -4,6 +4,10 @@ update-manager (1:0.151.8) UNRELEASED; urgency=low
     - set DPKG_UNTRANSLATED_MESSAGES to force untranslated dpkg
       terminal messages for easier package failure duplication 
       detection
+  * DistUpgrade/DistUpgradeCache.py:
+    - when calculating the size of the space required in /boot use
+      the size of the currently running kernel as the base and add
+      a small safety margin (LP: #798462). 
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 28 Jun 2011 10:04:00 +0100
 

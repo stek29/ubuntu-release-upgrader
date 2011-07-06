@@ -444,7 +444,10 @@ class DistUpgradeQuirks(object):
     def _get_pci_ids(self):
         """ return a set of pci ids of the system (using lspci -n) """
         lspci = set()
-        p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+        try:
+            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+        except OSError:
+            return lspci
         for line in p.communicate()[0].split("\n"):
             if line:
                 lspci.add(line.split()[2])

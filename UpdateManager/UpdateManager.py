@@ -255,11 +255,11 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.gconfclient = SafeGConfClient()
     init_proxy(self.gconfclient)
     # init show version
-    self.show_versions = self.gconfclient.get_bool("/apps/update-manager/show_versions")
+    self.show_versions = self.gconfclient.get_bool("show-versions")
     # init summary_before_name
-    self.summary_before_name = self.gconfclient.get_bool("/apps/update-manager/summary_before_name")
+    self.summary_before_name = self.gconfclient.get_bool("summary-before-name")
     # keep track when we run (for update-notifier)
-    self.gconfclient.set_int("/apps/update-manager/launch_time", int(time.time()))
+    self.gconfclient.set_int("launch-time", int(time.time()))
 
     # get progress object
     self.progress = GtkProgress.GtkOpProgressInline(
@@ -363,7 +363,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
 
   def on_checkbutton_reminder_toggled(self, checkbutton):
-    self.gconfclient.set_bool("/apps/update-manager/remind_reload",
+    self.gconfclient.set_bool("remind-reload",
                               not checkbutton.get_active())
 
   def close(self, widget, data=None):
@@ -673,14 +673,14 @@ class UpdateManager(SimpleGtkbuilderApp):
           glib.timeout_add_seconds(10, self.update_last_updated_text)
       else:
           # show different text on first run (UX team suggestion)
-          firstrun = self.gconfclient.get_bool("/apps/update-manager/first_run")
+          firstrun = self.gconfclient.get_bool("first-run")
           if firstrun:
               text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
               if is_unity_running():
                   text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
               else:   
                   text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
-              self.gconfclient.set_bool("/apps/update-manager/first_run", False)
+              self.gconfclient.set_bool("first-run", False)
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
               if is_unity_running():
@@ -703,7 +703,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                         True,
                                         0,
                                         True)
-    self.gconfclient.set_bool("/apps/update-manager/show_details",expanded)
+    self.gconfclient.set_bool("show-details",expanded)
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
 
@@ -808,9 +808,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.install_backend.update()
     elif action == INSTALL:
         # If the progress dialog should be closed automatically afterwards
-        gconfclient =  GConf.Client.get_default()
-        close_on_done = gconfclient.get_bool("/apps/update-manager/"
-                                             "autoclose_install_window")
+        gconfclient = SafeGConfClient()
+        close_on_done = gconfclient.get_bool("autoclose-install-window")
         # Get the packages which should be installed and update
         pkgs_install = []
         pkgs_upgrade = []
@@ -973,23 +972,23 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def save_state(self):
     """ save the state  (window-size for now) """
-    (x,y) = self.window_main.get_size()
-    self.gconfclient.set_pair("/apps/update-manager/window_size",
-                              GConf.ValueType.INT, GConf.ValueType.INT, x, y)
+    (w, h) = self.window_main.get_size()
+    self.gconfclient.set_int("window-width", w)
+    self.gconfclient.set_int("window-height", h)
 
   def restore_state(self):
     """ restore the state (window-size for now) """
-    expanded = self.gconfclient.get_bool("/apps/update-manager/show_details")
+    expanded = self.gconfclient.get_bool("show-details")
     self.expander_details.set_expanded(expanded)
     self.vbox_updates.set_child_packing(self.expander_details,
                                         expanded,
                                         True,
                                         0,
                                         True)
-    (x,y) = self.gconfclient.get_pair("/apps/update-manager/window_size",
-                                      GConf.ValueType.INT, GConf.ValueType.INT)
-    if x > 0 and y > 0:
-      self.window_main.resize(x,y)
+    w = self.gconfclient.get_int("window-width")
+    h = self.gconfclient.get_int("window-height")
+    if w > 0 and h > 0:
+      self.window_main.resize(w, h)
 
   def fillstore(self):
     # use the watch cursor
@@ -1167,7 +1166,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform
       # the user about the need of manual "reloads"
-      remind = self.gconfclient.get_bool("/apps/update-manager/remind_reload")
+      remind = self.gconfclient.get_bool("remind-reload")
       if remind == False:
           return
 
@@ -1206,8 +1205,8 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
       # check if we are interessted in dist-upgrade information
       # (we are not by default on dapper)
-      if self.options.check_dist_upgrades or \
-             gconfclient.get_bool("/apps/update-manager/check_dist_upgrades"):
+      if (self.options.check_dist_upgrades or
+          gconfclient.get_bool("check-dist-upgrades")):
           self.meta.connect("new_dist_available",self.new_dist_available)
       
 

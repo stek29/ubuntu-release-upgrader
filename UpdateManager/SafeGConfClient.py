@@ -21,15 +21,16 @@
 
 from gi.repository import GConf
 from gi.repository import GObject
+from gi.repository import Gio
 
 class SafeGConfClient(object):
     """A gconfclient that does not crash if gconf is not avaialble"""
     def __init__(self):
-        self.gconfclient = GConf.Client.get_default()
+        self.gconfclient = Gio.Settings("com.ubuntu.update-manager")
 
     def get_bool(self, key, default=False):
         try:
-            return self.gconfclient.get_bool(key)
+            return self.gconfclient.get_boolean(key)
         except GObject.GError, e:
             return default
     def get_int(self, key, default=0):
@@ -37,13 +38,6 @@ class SafeGConfClient(object):
             return self.gconfclient.get_int(key)
         except GObject.GError, e:
             return default
-    def get_pair(self, key, vtype1, vtype2):
-        # FIXME
-        #try:
-        #    return self.gconfclient.get_pair(key, vtype1, vtype2)
-        #except GObject.GError, e:
-        #    return (0, 0)
-        return (0, 0)
     def get_string(self, key, default=""):
         try:
             return self.gconfclient.get_string(key)
@@ -56,12 +50,7 @@ class SafeGConfClient(object):
             pass
     def set_bool(self, key, value):
         try:
-            self.gconfclient.set_bool(key, value)
-        except GObject.GError, e:
-            pass
-    def set_pair(self, key, vtype1, vtype2, value1, value2):
-        try:
-            self.gconfclient.set_pair(key, vtype1, vtype2, value1, value2)
+            self.gconfclient.set_boolean(key, value)
         except GObject.GError, e:
             pass
     def set_string(self, key, value):

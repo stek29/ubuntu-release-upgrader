@@ -81,8 +81,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def new_dist_available(self, meta_release, new_dist):
     logging.debug("new_dist_available: %s" % new_dist)
     self.new_dist = new_dist
-    client = GConf.Client.get_default()
-    ignore_dist = client.get_string("/apps/update-manager/check_new_release_ignore")
+    client =  Gio.Settings("com.ubuntu.update-manager")
+    ignore_dist = client.get_string("check_new_release_ignore")
     # only honor the ignore list if the distro is still supported, otherwise
     # go into nag mode
     if (ignore_dist == new_dist.name and
@@ -125,8 +125,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     logging.debug("ask me later")
     # check again in a week
     next_check = time.time() + 7*24*60*60
-    client = GConf.Client.get_default()
-    client.set_int("/apps/update-notifier/release_check_time", next_check)
+    client = Gio.Settings("com.ubuntu.update-manager")
+    client.set_int("release_check_time", next_check)
     Gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):
@@ -134,9 +134,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     s = _("You have declined the upgrade to Ubuntu %s") % self.new_dist.version
     self.dialog_really_do_not_upgrade.set_markup("<b>%s</b>" % s)
     if self.dialog_really_do_not_upgrade.run() == Gtk.ResponseType.OK:
-        client = GConf.Client.get_default()
-        client.set_string("/apps/update-manager/check_new_release_ignore",
-                          self.new_dist.name)
+        client = Gio.Settings("com.ubuntu.update-manager")
+        client.set_string("check_new_release_ignore", self.new_dist.name)
     Gtk.main_quit()
 
   def on_linkbutton_release_notes_clicked(self, linkbutton):

@@ -283,12 +283,18 @@ class UpdateManager(SimpleGtkbuilderApp):
     # get the install backend
     self.install_backend = backend.get_backend(self.window_main)
     self.install_backend.connect("action-done", self._on_backend_done)
+
+    # Create Unity launcher quicklist
+    # FIXME: instead of passing parent we really should just send signals
+    self.unity = UnitySupport(parent=self)
+
     # it can only the iconified *after* it is shown (even if the docs
     # claim otherwise)
     if options.no_focus_on_map:
         self.window_main.iconify()
         self.window_main.stick()
         self.window_main.set_urgency_hint(True)
+        self.unity.set_urgency(True)
         self.initial_focus_id = self.window_main.connect(
             "focus-in-event", self.on_initial_focus_in)
     
@@ -298,9 +304,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.alert_watcher.connect("battery-alert", self._on_battery_alert)
     self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
 
-    # Create Unity launcher quicklist
-    # FIXME: instead of passing parent we really should just send signals
-    self.unity = UnitySupport(parent=self)
 
   def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)
@@ -310,6 +313,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       """callback run on initial focus-in (if started unmapped)"""
       widget.unstick()
       widget.set_urgency_hint(False)
+      self.unity.set_urgency(False)
       self.window_main.disconnect(self.initial_focus_id)
       return False
 

@@ -491,18 +491,23 @@ class UpdateManager(SimpleGtkbuilderApp):
     Show a context menu if a right click was performed on an update entry
     """
     if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
-        menu = Gtk.Menu()
-        item_select_none = Gtk.MenuItem(_("_Uncheck All"))
+        # need to keep a reference here of menu, otherwise it gets
+        # deleted when it goes out of scope and no menu is visible
+        # (bug #806949)
+        self.menu = menu = Gtk.Menu()
+        item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Uncheck All"))
         item_select_none.connect("activate", self.select_none_updgrades)
-        menu.add(item_select_none)
+        menu.append(item_select_none)
         num_updates = self.cache.installCount
         if num_updates == 0:
             item_select_none.set_property("sensitive", False)
-        item_select_all = Gtk.MenuItem(_("_Check All"))
+        item_select_all = Gtk.MenuItem.new_with_mnemonic(_("_Check All"))
         item_select_all.connect("activate", self.select_all_updgrades)
-        menu.add(item_select_all)
-        menu.popup(None, None, None, 0, event.time)
+        menu.append(item_select_all)
         menu.show_all()
+        menu.popup_for_device(
+            None, None, None, None, None, event.button, event.time)
+        menu.show()
         return True
 
   def select_all_updgrades(self, widget):
@@ -719,7 +724,10 @@ class UpdateManager(SimpleGtkbuilderApp):
     cmd = ["/usr/bin/gksu", 
            "--desktop", "/usr/share/applications/software-properties-Gtk.desktop", 
            "--", "/usr/bin/software-properties-gtk","--open-tab","2",
-           "--toplevel", "%s" % self.window_main.window.xid ]
+           ]
+           # FIXME: once get_xid() is available via introspections, add 
+           #        this back
+           #"--toplevel", "%s" % self.window_main.get_window().get_xid() ]
     self.window_main.set_sensitive(False)
     p = subprocess.Popen(cmd)
     while p.poll() is None:
@@ -793,7 +801,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # set window to insensitive
     self.window_main.set_sensitive(False)
-    self.window_main.window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+    self.window_main.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 #
     # do it
     if action == UPDATE:
@@ -830,7 +838,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         allow_sleep(self.sleep_dev, self.sleep_cookie)
         self.sleep_cookie = self.sleep_dev = None
     self.window_main.set_sensitive(True)
-    self.window_main.window.set_cursor(None)
+    self.window_main.get_window().set_cursor(None)
 
   def _on_network_alert(self, watcher, state):
       # do not set the buttons to sensitive/insensitive until NM

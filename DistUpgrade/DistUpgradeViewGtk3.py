@@ -19,10 +19,13 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import glib
-from gi.repository import Gtk, Gdk, Vte
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Vte
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
+
 import sys
 import locale
 import logging
@@ -629,7 +632,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
                                                 [parent_text % len(details_list)])
                 for pkg in details_list:
                     self.details_list.append(node, ["<b>%s</b> - %s" % (
-                          pkg.name, glib.markup_escape_text(pkg.summary))])
+                          pkg.name, GLib.markup_escape_text(pkg.summary,
+                                                            len(pkg.summary)))])
         # prepare dialog
         self.dialog_changes.realize()
         self.dialog_changes.set_transient_for(self.window_main)

@@ -26,12 +26,15 @@
 import apt
 from gi.repository import GConf
 from gi.repository import GObject
-import glib
 from gi.repository import Gtk
 import locale
 import logging
 import sys
 import time
+
+# mvo: current we can't use introspection on this, timeout_add_seconds
+#      is not introspectable yet
+import glib
 
 import UpdateManager.GtkProgress
 
@@ -42,7 +45,7 @@ from DistUpgrade.utils import init_proxy
 
 from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
-from UpdateManager.SimpleGtkbuilderApp import SimpleGtkbuilderApp
+from UpdateManager.SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 GObject.threads_init()
 

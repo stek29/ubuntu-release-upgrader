@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 import apt
 import apt_pkg
 from gettext import gettext as _
@@ -89,7 +89,7 @@ class GtkOpProgressWindow(apt.OpProgress):
         # Do not show the close button 
         self._window.realize()
         self._window.set_title("")
-        host_window.window.set_functions(Gdk.FUNC_MOVE)
+        host_window.get_window().set_functions(Gdk.WMFunction.MOVE)
         self._window.set_transient_for(parent)
 
     def update(self, percent):
@@ -138,7 +138,7 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         self.window_fetch = parent.window_fetch
         self.window_fetch.set_transient_for(parent.window_main)
         self.window_fetch.realize()
-        self.window_fetch.window.set_functions(Gdk.FUNC_MOVE)
+        self.window_fetch.get_window().set_functions(Gdk.WMFunction.MOVE)
         # set summary
         if summary != "":
             self.summary.set_markup("<big><b>%s</b></big> \n\n%s" %

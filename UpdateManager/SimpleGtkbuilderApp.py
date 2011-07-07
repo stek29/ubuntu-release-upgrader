@@ -24,19 +24,19 @@ import os
 import sys
 import re
 
-import gtk
+from gi.repository import Gtk
 
 # based on SimpleGladeApp
 class SimpleGtkbuilderApp:
 
     def __init__(self, path, domain):
-        self.builder = gtk.Builder()
+        self.builder = Gtk.Builder()
         self.builder.set_translation_domain(domain)
         self.builder.add_from_file(path)
         self.builder.connect_signals(self)
         for o in self.builder.get_objects():
-            if issubclass(type(o), gtk.Buildable):
-                name = gtk.Buildable.get_name(o)
+            if issubclass(type(o), Gtk.Buildable):
+                name = Gtk.Buildable.get_name(o)
                 setattr(self, name, o)
             else:
                 logging.debug("WARNING: can not get name for '%s'" % o)
@@ -51,7 +51,7 @@ class SimpleGtkbuilderApp:
         Use this method for starting programs.
         """
         try:
-            gtk.main()
+            Gtk.main()
         except KeyboardInterrupt:
             self.on_keyboard_interrupt()
 

@@ -17,9 +17,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import pygtk
-pygtk.require('2.0')
-import gobject
+from gi.repository import GObject
 import thread
 import urllib2
 import os
@@ -30,27 +28,27 @@ import rfc822
 from subprocess import Popen,PIPE
 from Core.MetaRelease import MetaReleaseCore
 
-import gtk
+from gi.repository import Gtk
 
 
-class MetaRelease(MetaReleaseCore,gobject.GObject):
+class MetaRelease(MetaReleaseCore,GObject.GObject):
 
     __gsignals__ = { 
-        'new_dist_available' : (gobject.SIGNAL_RUN_LAST,
-                                gobject.TYPE_NONE,
-                                (gobject.TYPE_PYOBJECT,)),
-        'dist_no_longer_supported' : (gobject.SIGNAL_RUN_LAST,
-                                      gobject.TYPE_NONE,
+        'new_dist_available' : (GObject.SignalFlags.RUN_LAST,
+                                None,
+                                (GObject.TYPE_PYOBJECT,)),
+        'dist_no_longer_supported' : (GObject.SignalFlags.RUN_LAST,
+                                      None,
                                       ())
 
         }
 
     def __init__(self, useDevelopmentRelease=False, useProposed=False):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         MetaReleaseCore.__init__(self, useDevelopmentRelease, useProposed)
         # in the gtk space to test if the download already finished
         # this is needed because gtk is not thread-safe
-        gobject.timeout_add(1000, self.check)
+        GObject.timeout_add(1000, self.check)
 
     def check(self):
         # check if we have a metarelease_information file

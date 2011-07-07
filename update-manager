@@ -23,10 +23,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import pygtk
+from gi.repository import Gtk
 import os
-pygtk.require('2.0')
-import gtk
 import sys
 
 from UpdateManager.UpdateManager import UpdateManager
@@ -38,7 +36,7 @@ if __name__ == "__main__":
   APP="update-manager"
   DIR="/usr/share/locale"
 
-  gtk.init_check()
+  Gtk.init_check(sys.argv)
 
   gettext.install(APP, DIR, unicode=True)
   try:
@@ -95,11 +93,11 @@ if __name__ == "__main__":
   if options.dist_upgrade == True:
     #import logging
     #logging.basicConfig(level=logging.DEBUG)
-    from DistUpgrade.DistUpgradeViewGtk import DistUpgradeViewGtk
+    from DistUpgrade.DistUpgradeViewGtk3 import DistUpgradeViewGtk3
     from DistUpgrade.DistUpgradeController import DistUpgradeController
     # FIXME: Having a "partial upgrade" view here would make it possible
     #        to get rid of the ugly hideStep() stuff
-    view = DistUpgradeViewGtk(data_dir)
+    view = DistUpgradeViewGtk3(data_dir)
     view.label_title.set_markup("<b><big>%s</big></b>" % _("Running partial upgrade"))
     controler = DistUpgradeController(view, datadir=data_dir)
     controler.doPartialUpgrade()

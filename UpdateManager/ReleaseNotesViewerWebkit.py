@@ -4,7 +4,7 @@
 #  
 #  Author: Michael Vogt <mvo@ubutnu.com>
 #
-#  This modul provides an inheritance of the gtk.TextView that is 
+#  This modul provides an inheritance of the Gtk.TextView that is 
 #  aware of http URLs and allows to open them in a browser.
 #  It is based on the pygtk-demo "hypertext".
 # 
@@ -23,8 +23,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import gtk
-import webkit
+from gi.repository import Gtk
+from gi.repository import WebKit
 
 from ReleaseNotesViewer import open_url
 
@@ -40,13 +40,13 @@ class ReleaseNotesViewerWebkit(webkit.WebView):
         
     
 if __name__ == "__main__":
-    win = gtk.Window()
+    win = Gtk.Window()
     win.set_size_request(600, 400)
-    scroll = gtk.ScrolledWindow()
+    scroll = Gtk.ScrolledWindow()
     rv = ReleaseNotesViewerWebkit("http://archive.ubuntu.com/ubuntu/dists/natty/main/dist-upgrader-all/0.150/ReleaseAnnouncement.html")
     scroll.add(rv)
     win.add(scroll)
     win.show_all()
-    gtk.main()
+    Gtk.main()
 
 

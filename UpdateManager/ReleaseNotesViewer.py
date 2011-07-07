@@ -4,7 +4,7 @@
 #  
 #  Author: Sebastian Heinlein <sebastian.heinlein@web.de>
 #
-#  This modul provides an inheritance of the gtk.TextView that is 
+#  This modul provides an inheritance of the Gtk.TextView that is 
 #  aware of http URLs and allows to open them in a browser.
 #  It is based on the pygtk-demo "hypertext".
 # 
@@ -24,8 +24,8 @@
 #  USA
 
 import logging
-import pango
-import gtk
+from gi.repository import Pango
+from gi.repository import Gtk
 import pygtk
 import os
 import subprocess
@@ -47,20 +47,20 @@ def open_url(url):
     subprocess.Popen(command)
 
 
-class ReleaseNotesViewer(gtk.TextView):
+class ReleaseNotesViewer(Gtk.TextView):
     def __init__(self, notes):
-        """Init the ReleaseNotesViewer as an Inheritance of the gtk.TextView.
+        """Init the ReleaseNotesViewer as an Inheritance of the Gtk.TextView.
            Load the notes into the buffer and make links clickable"""
         # init the parent
-        gtk.TextView.__init__(self)
+        GObject.GObject.__init__(self)
         # global hovering over link state
         self.hovering = False
         self.first = True
         # setup the buffer and signals
         self.set_property("editable", False)
         self.set_cursor_visible(False)
-        self.modify_font(pango.FontDescription("monospace"))
-        self.buffer = gtk.TextBuffer()
+        self.modify_font(Pango.FontDescription("monospace"))
+        self.buffer = Gtk.TextBuffer()
         self.set_buffer(self.buffer)
         self.buffer.set_text(notes)
         self.connect("event-after", self.event_after)
@@ -72,7 +72,7 @@ class ReleaseNotesViewer(gtk.TextView):
     def tag_link(self, start, end, url):
         """Apply the tag that marks links to the specified buffer selection"""
         tag = self.buffer.create_tag(None, foreground="blue",
-                                     underline=pango.UNDERLINE_SINGLE)
+                                     underline=Pango.Underline.SINGLE)
         tag.set_data("url", url)
         self.buffer.apply_tag(tag , start, end)
 
@@ -83,7 +83,7 @@ class ReleaseNotesViewer(gtk.TextView):
         iter = self.buffer.get_iter_at_offset(0)
         while 1:
             # search for the next URL in the buffer
-            ret = iter.forward_search("http://", gtk.TEXT_SEARCH_VISIBLE_ONLY,
+            ret = iter.forward_search("http://", Gtk.TextSearchFlags.VISIBLE_ONLY,
                                       None)
             # if we reach the end break the loop
             if not ret:
@@ -109,7 +109,7 @@ class ReleaseNotesViewer(gtk.TextView):
     def event_after(self, text_view, event):
         """callback for mouse click events"""
         # we only react on left mouse clicks
-        if event.type != gtk.gdk.BUTTON_RELEASE:
+        if event.type != Gdk.BUTTON_RELEASE:
             return False
         if event.button != 1:
             return False
@@ -124,7 +124,7 @@ class ReleaseNotesViewer(gtk.TextView):
                 return False
 
         # get the iter at the mouse position
-        (x, y) = self.window_to_buffer_coords(gtk.TEXT_WINDOW_WIDGET,
+        (x, y) = self.window_to_buffer_coords(Gtk.TextWindowType.WIDGET,
                                               int(event.x), int(event.y))
         iter = self.get_iter_at_location(x, y)
         
@@ -139,7 +139,7 @@ class ReleaseNotesViewer(gtk.TextView):
     def motion_notify_event(self, text_view, event):
         """callback for the mouse movement event, that calls the
            check_hovering method with the mouse postition coordiantes"""
-        x, y = text_view.window_to_buffer_coords(gtk.TEXT_WINDOW_WIDGET,
+        x, y = text_view.window_to_buffer_coords(Gtk.TextWindowType.WIDGET,
                                                  int(event.x), int(event.y))
         self.check_hovering(x, y)
         self.window.get_pointer()
@@ -150,7 +150,7 @@ class ReleaseNotesViewer(gtk.TextView):
            that calls the check_hovering method with the mouse position
            coordinates"""
         (wx, wy, mod) = text_view.window.get_pointer()
-        (bx, by) = text_view.window_to_buffer_coords(gtk.TEXT_WINDOW_WIDGET, wx,
+        (bx, by) = text_view.window_to_buffer_coords(Gtk.TextWindowType.WIDGET, wx,
                                                      wy)
         self.check_hovering(bx, by)
         return False
@@ -176,16 +176,16 @@ class ReleaseNotesViewer(gtk.TextView):
             self.hovering = _hovering
             # Set the appropriate cursur icon
             if self.hovering:
-                self.get_window(gtk.TEXT_WINDOW_TEXT).\
-                        set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
+                self.get_window(Gtk.TextWindowType.TEXT).\
+                        set_cursor(Gdk.Cursor.new(Gdk.HAND2))
             else:
-                self.get_window(gtk.TEXT_WINDOW_TEXT).\
-                        set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+                self.get_window(Gtk.TextWindowType.TEXT).\
+                        set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
 
 if __name__ == "__main__":
     # some simple test code
-    win = gtk.Window()
+    win = Gtk.Window()
     rv = ReleaseNotesViewer(open("../DistUpgrade/ReleaseAnnouncement").read())
     win.add(rv)
     win.show_all()
-    gtk.main()
+    Gtk.main()

@@ -6,17 +6,17 @@
 import os
 import os.path
 
-import gobject
+from gi.repository import GObject
 
 
-class InstallBackend(gobject.GObject):
+class InstallBackend(GObject.GObject):
     """The abstract backend that can install/remove packages"""
 
-    __gsignals__ = {"action-done": (gobject.SIGNAL_RUN_FIRST,
-                                    gobject.TYPE_NONE, 
-                                    (gobject.TYPE_INT,     # action id
-                                     gobject.TYPE_BOOLEAN, # authorized
-                                     gobject.TYPE_BOOLEAN) # success
+    __gsignals__ = {"action-done": (GObject.SignalFlags.RUN_FIRST,
+                                    None, 
+                                    (GObject.TYPE_INT,     # action id
+                                     GObject.TYPE_BOOLEAN, # authorized
+                                     GObject.TYPE_BOOLEAN) # success
                                     ),
                     }
 
@@ -26,7 +26,7 @@ class InstallBackend(gobject.GObject):
         """init backend
         takes a gtk main window as parameter
         """
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.window_main = window_main
 
     def commit(self, pkgs_install, pkgs_upgrade, close_on_done):

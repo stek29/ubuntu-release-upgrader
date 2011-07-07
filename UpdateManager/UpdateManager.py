@@ -78,7 +78,7 @@ from SafeGConfClient import SafeGConfClient
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
-from SimpleGtkbuilderApp import SimpleGtkbuilderApp
+from SimpleGtk3builderApp import SimpleGtkbuilderApp
 from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
 from UnitySupport import UnitySupport

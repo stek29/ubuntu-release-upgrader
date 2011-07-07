@@ -26,10 +26,12 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GConf
 from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import Gio
 GObject.threads_init()
 from gi.repository import Pango
 
@@ -74,7 +76,6 @@ from Core.UpdateList import UpdateList
 from Core.MyCache import MyCache, NotEnoughFreeSpaceError
 from Core.MetaRelease import Dist
 from Core.AlertWatcher import AlertWatcher
-from SafeGConfClient import SafeGConfClient
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
@@ -252,14 +253,14 @@ class UpdateManager(SimpleGtkbuilderApp):
     if not os.path.exists("/usr/bin/software-properties-gtk"):
         self.button_settings.set_sensitive(False)
 
-    self.gconfclient = SafeGConfClient()
-    init_proxy(self.gconfclient)
+    self.settings =  Gio.Settings("com.ubuntu.update-manager")
+    init_proxy(self.settings)
     # init show version
-    self.show_versions = self.gconfclient.get_bool("show-versions")
+    self.show_versions = self.settings.get_boolean("show-versions")
     # init summary_before_name
-    self.summary_before_name = self.gconfclient.get_bool("summary-before-name")
+    self.summary_before_name = self.settings.get_boolean("summary-before-name")
     # keep track when we run (for update-notifier)
-    self.gconfclient.set_int("launch-time", int(time.time()))
+    self.settings.set_int("launch-time", int(time.time()))
 
     # get progress object
     self.progress = GtkProgress.GtkOpProgressInline(
@@ -363,7 +364,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
 
   def on_checkbutton_reminder_toggled(self, checkbutton):
-    self.gconfclient.set_bool("remind-reload",
+    self.settings.set_boolean("remind-reload",
                               not checkbutton.get_active())
 
   def close(self, widget, data=None):
@@ -673,14 +674,14 @@ class UpdateManager(SimpleGtkbuilderApp):
           glib.timeout_add_seconds(10, self.update_last_updated_text)
       else:
           # show different text on first run (UX team suggestion)
-          firstrun = self.gconfclient.get_bool("first-run")
+          firstrun = self.settings.get_boolean("first-run")
           if firstrun:
               text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
               if is_unity_running():
                   text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
               else:   
                   text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
-              self.gconfclient.set_bool("first-run", False)
+              self.settings.set_boolean("first-run", False)
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
               if is_unity_running():
@@ -703,7 +704,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                         True,
                                         0,
                                         True)
-    self.gconfclient.set_bool("show-details",expanded)
+    self.settings.set_boolean("show-details",expanded)
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
 
@@ -808,8 +809,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.install_backend.update()
     elif action == INSTALL:
         # If the progress dialog should be closed automatically afterwards
-        gconfclient = SafeGConfClient()
-        close_on_done = gconfclient.get_bool("autoclose-install-window")
+        settings = Gio.Settings("com.ubuntu.update-manager")
+        close_on_done = settings.get_boolean("autoclose-install-window")
         # Get the packages which should be installed and update
         pkgs_install = []
         pkgs_upgrade = []
@@ -973,20 +974,20 @@ class UpdateManager(SimpleGtkbuilderApp):
   def save_state(self):
     """ save the state  (window-size for now) """
     (w, h) = self.window_main.get_size()
-    self.gconfclient.set_int("window-width", w)
-    self.gconfclient.set_int("window-height", h)
+    self.settings.set_int("window-width", w)
+    self.settings.set_int("window-height", h)
 
   def restore_state(self):
     """ restore the state (window-size for now) """
-    expanded = self.gconfclient.get_bool("show-details")
+    expanded = self.settings.get_boolean("show-details")
     self.expander_details.set_expanded(expanded)
     self.vbox_updates.set_child_packing(self.expander_details,
                                         expanded,
                                         True,
                                         0,
                                         True)
-    w = self.gconfclient.get_int("window-width")
-    h = self.gconfclient.get_int("window-height")
+    w = self.settings.get_int("window-width")
+    h = self.settings.get_int("window-height")
     if w > 0 and h > 0:
       self.window_main.resize(w, h)
 
@@ -1166,7 +1167,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def check_auto_update(self):
       # Check if automatic update is enabled. If not show a dialog to inform
       # the user about the need of manual "reloads"
-      remind = self.gconfclient.get_bool("remind-reload")
+      remind = self.settings.get_boolean("remind-reload")
       if remind == False:
           return
 
@@ -1199,14 +1200,14 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def check_metarelease(self):
       " check for new meta-release information "
-      gconfclient = SafeGConfClient()
+      settings = Gio.Settings("com.ubuntu.update-manager")
       self.meta = MetaRelease(self.options.devel_release,
                               self.options.use_proposed)
       self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
       # check if we are interessted in dist-upgrade information
       # (we are not by default on dapper)
       if (self.options.check_dist_upgrades or
-          gconfclient.get_bool("check-dist-upgrades")):
+          settings.get_boolean("check-dist-upgrades")):
           self.meta.connect("new_dist_available",self.new_dist_available)
       
 

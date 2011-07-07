@@ -222,7 +222,7 @@ def url_downloadable(uri, debug_func=None):
       return False
   return False
 
-def init_proxy(gconfclient=None):
+def init_proxy(gsettings=None):
   """ init proxy settings 
 
   * first check for http_proxy environment (always wins),

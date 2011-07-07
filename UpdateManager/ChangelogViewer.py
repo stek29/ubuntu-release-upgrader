@@ -158,11 +158,8 @@ class ChangelogViewer(Gtk.TextView):
                 match_tmp = match_end.copy()
                 while True:
                     # extend the selection to the complete search item
-                    print "crahses next!", match_tmp, dir(match_tmp)
                     if match_tmp.forward_char():
-                        print "here"
                         text =  match_end.get_text(match_tmp)
-                        print text
                         if text in end_list:
                             break
                         # move one char futher to get two char
@@ -257,7 +254,7 @@ class ChangelogViewer(Gtk.TextView):
             # Set the appropriate cursur icon
             if self.hovering:
                 self.get_window(Gtk.TextWindowType.TEXT).\
-                        set_cursor(Gdk.Cursor.new(Gdk.HAND2))
+                        set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
             else:
                 self.get_window(Gtk.TextWindowType.TEXT).\
                         set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))

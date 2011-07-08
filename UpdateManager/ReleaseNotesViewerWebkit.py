@@ -28,7 +28,7 @@ from gi.repository import WebKit
 
 from ReleaseNotesViewer import open_url
 
-class ReleaseNotesViewerWebkit(webkit.WebView):
+class ReleaseNotesViewerWebkit(WebKit.WebView):
     def __init__(self, notes_url):
         super(ReleaseNotesViewerWebkit, self).__init__()
         self.load_uri(notes_url)

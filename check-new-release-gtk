@@ -24,14 +24,17 @@
 #  USA
 
 import apt
-import gconf
-import gobject
-import glib
-import gtk
+from gi.repository import GConf
+from gi.repository import GObject
+from gi.repository import Gtk
 import locale
 import logging
 import sys
 import time
+
+# mvo: current we can't use introspection on this, timeout_add_seconds
+#      is not introspectable yet
+import glib
 
 import UpdateManager.GtkProgress
 
@@ -42,9 +45,9 @@ from DistUpgrade.utils import init_proxy
 
 from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
-from UpdateManager.SimpleGtkbuilderApp import SimpleGtkbuilderApp
+from UpdateManager.SimpleGtk3builderApp import SimpleGtkbuilderApp
 
-gobject.threads_init()
+GObject.threads_init()
 
 # overwrite default upgrade fetcher and make it not show the
 # release notes by default
@@ -78,14 +81,14 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def new_dist_available(self, meta_release, new_dist):
     logging.debug("new_dist_available: %s" % new_dist)
     self.new_dist = new_dist
-    client = gconf.client_get_default()
-    ignore_dist = client.get_string("/apps/update-manager/check_new_release_ignore")
+    client =  Gio.Settings("com.ubuntu.update-manager")
+    ignore_dist = client.get_string("check_new_release_ignore")
     # only honor the ignore list if the distro is still supported, otherwise
     # go into nag mode
     if (ignore_dist == new_dist.name and
         meta_release.no_longer_supported is None):
         logging.warn("found new dist '%s' but it is on the ignore list" % new_dist.name)
-        gtk.main_quit()
+        Gtk.main_quit()
     self.build_ui()
     self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
     self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
@@ -101,12 +104,12 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         show_dist_no_longer_supported_dialog(self.window_main)
   
   def build_ui(self):
-    import webkit
-    self.webkit_view = webkit.WebView()
+    from gi.repository import WebKit
+    self.webkit_view = WebKit.WebView()
     self.webkit_view.show()
     settings = self.webkit_view.get_settings()
     settings.set_property("enable-plugins", False)
-    # FIXME: do we want to have it in a gtk.ScrolledWindow ?
+    # FIXME: do we want to have it in a Gtk.ScrolledWindow ?
     #self.alignment_webkit_view.add(self.webkit_view)
     self.scrolledwindow_webkit_view.add(self.webkit_view)
 
@@ -122,26 +125,25 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     logging.debug("ask me later")
     # check again in a week
     next_check = time.time() + 7*24*60*60
-    client = gconf.client_get_default()
-    client.set_int("/apps/update-notifier/release_check_time", next_check)
-    gtk.main_quit()
+    client = Gio.Settings("com.ubuntu.update-manager")
+    client.set_int("release_check_time", next_check)
+    Gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):
     #print "don't upgrade"
     s = _("You have declined the upgrade to Ubuntu %s") % self.new_dist.version
     self.dialog_really_do_not_upgrade.set_markup("<b>%s</b>" % s)
-    if self.dialog_really_do_not_upgrade.run() == gtk.RESPONSE_OK:
-        client = gconf.client_get_default()
-        client.set_string("/apps/update-manager/check_new_release_ignore",
-                          self.new_dist.name)
-    gtk.main_quit()
+    if self.dialog_really_do_not_upgrade.run() == Gtk.ResponseType.OK:
+        client = Gio.Settings("com.ubuntu.update-manager")
+        client.set_string("check_new_release_ignore", self.new_dist.name)
+    Gtk.main_quit()
 
   def on_linkbutton_release_notes_clicked(self, linkbutton):
     # gtk will do the right thing if uri is set
     pass
 
   def window_delete_event_cb(self, window, event):
-    gtk.main_quit()
+    Gtk.main_quit()
 
   def show_uri(self, uri):
     logging.debug("using uri '%s'" % uri)
@@ -154,13 +156,13 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def timeout(self):
     if self.new_dist is None:
       logging.warn("timeout reached, exiting")
-      gtk.main_quit()
+      Gtk.main_quit()
 
 if __name__ == "__main__":
   APP="update-manager"
   DIR="/usr/share/locale"
 
-  gtk.init_check()
+  Gtk.init_check(sys.argv)
 
   gettext.install(APP, DIR, unicode=True)
   try:
@@ -192,5 +194,5 @@ if __name__ == "__main__":
   # create object
   cnr = CheckNewReleaseGtk(options)
  
-  gtk.main()
+  Gtk.main()
 

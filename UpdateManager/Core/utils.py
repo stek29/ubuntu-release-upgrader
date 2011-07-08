@@ -222,7 +222,7 @@ def url_downloadable(uri, debug_func=None):
       return False
   return False
 
-def init_proxy(gconfclient=None):
+def init_proxy(gsettings=None):
   """ init proxy settings 
 
   * first check for http_proxy environment (always wins),
@@ -245,22 +245,22 @@ def init_proxy(gconfclient=None):
       proxy_port = str(cnf.find_i("Synaptic::httpProxyPort"))
       if proxy_host and proxy_port:
         proxy = "http://%s:%s/" % (proxy_host, proxy_port)
-  # then gconf
-  elif gconfclient:
-    try: # see LP: #281248
-      if gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
-        host = gconfclient.get_string("/system/http_proxy/host")
-        port = gconfclient.get_int("/system/http_proxy/port")
-        use_auth = gconfclient.get_bool("/system/http_proxy/use_authentication")
-        if host and port:
-          if use_auth:
-            auth_user = gconfclient.get_string("/system/http_proxy/authentication_user")
-            auth_pw = gconfclient.get_string("/system/http_proxy/authentication_password")
-            proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
-          else:
-            proxy = "http://%s:%s/" % (host, port)
-    except Exception, e:
-      print "error from gconf: %s" % e
+  # gconf is no more
+  # elif gconfclient:
+  #   try: # see LP: #281248
+  #     if gconfclient.get_bool("/system/http_proxy/use_http_proxy"):
+  #       host = gconfclient.get_string("/system/http_proxy/host")
+  #       port = gconfclient.get_int("/system/http_proxy/port")
+  #       use_auth = gconfclient.get_bool("/system/http_proxy/use_authentication")
+  #       if host and port:
+  #         if use_auth:
+  #           auth_user = gconfclient.get_string("/system/http_proxy/authentication_user")
+  #           auth_pw = gconfclient.get_string("/system/http_proxy/authentication_password")
+  #           proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
+  #         else:
+  #           proxy = "http://%s:%s/" % (host, port)
+  #   except Exception, e:
+  #     print "error from gconf: %s" % e
   # if we have a proxy, set it
   if proxy:
     # basic verification
@@ -367,14 +367,14 @@ def get_lang():
         return None
 
 def error(parent, summary, message):
-  import gtk
-  d = gtk.MessageDialog(parent=parent,
-                        flags=gtk.DIALOG_MODAL,
-                        type=gtk.MESSAGE_ERROR,
-                        buttons=gtk.BUTTONS_CLOSE)
+  from gi.repository import Gtk
+  d = Gtk.MessageDialog(parent=parent,
+                        flags=Gtk.DialogFlags.MODAL,
+                        type=Gtk.MessageType.ERROR,
+                        buttons=Gtk.ButtonsType.CLOSE)
   d.set_markup("<big><b>%s</b></big>\n\n%s" % (summary, message))
   d.realize()
-  d.window.set_functions(gtk.gdk.FUNC_MOVE)
+  d.window.set_functions(Gdk.FUNC_MOVE)
   d.set_title("")
   res = d.run()
   d.destroy()

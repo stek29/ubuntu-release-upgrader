@@ -7,7 +7,7 @@ import os
 import tempfile
 from gettext import gettext as _
 
-import gobject
+from gi.repository import GObject
 
 from UpdateManager.backend import InstallBackend
 
@@ -27,9 +27,9 @@ class InstallBackendSynaptic(InstallBackend):
                "--non-interactive", "--parent-window-id",
                "%s" % self.window_main.window.xid ]
         cmd.extend(opt)
-        flags = gobject.SPAWN_DO_NOT_REAP_CHILD
-        (pid, stdin, stdout, stderr) = gobject.spawn_async(cmd, flags=flags)
-        gobject.child_watch_add(pid, self._on_synaptic_exit, (action, tempf))
+        flags = GObject.SPAWN_DO_NOT_REAP_CHILD
+        (pid, stdin, stdout, stderr) = GObject.spawn_async(cmd, flags=flags)
+        GObject.child_watch_add(pid, self._on_synaptic_exit, (action, tempf))
 
     def _on_synaptic_exit(self, pid, condition, data):
         action, tempf = data

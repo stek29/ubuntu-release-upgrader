@@ -19,9 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-import pygtk
-pygtk.require('2.0')
-import gtk
+from gi.repository import Gtk, Gdk
 import apt
 import apt_pkg
 from gettext import gettext as _
@@ -64,8 +62,8 @@ class GtkOpProgressInline(apt.progress.base.OpProgress):
         if abs(percent-self._progressbar.get_fraction()*100.0) > 0.5:
             self._progressbar.set_text("%s" % self.op)
             self._progressbar.set_fraction(progress/100.0)
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
     def done(self):
         """ one sub-step is done """
         pass
@@ -91,7 +89,7 @@ class GtkOpProgressWindow(apt.OpProgress):
         # Do not show the close button 
         self._window.realize()
         self._window.set_title("")
-        host_window.window.set_functions(gtk.gdk.FUNC_MOVE)
+        host_window.get_window().set_functions(Gdk.WMFunction.MOVE)
         self._window.set_transient_for(parent)
 
     def update(self, percent):
@@ -100,7 +98,7 @@ class GtkOpProgressWindow(apt.OpProgress):
         #print self.SubOp
         # only show progress bar if the parent is not iconified (#353195)
         state = self._parent.window.get_state()
-        if not (state  & gtk.gdk.WINDOW_STATE_ICONIFIED):
+        if not (state  & Gdk.WINDOW_STATE_ICONIFIED):
             self._window.show()
         self._parent.set_sensitive(False)
         # if the old percent was higher, a new progress was started
@@ -116,8 +114,8 @@ class GtkOpProgressWindow(apt.OpProgress):
         if abs(percent-self._progressbar.get_fraction()*100.0) > 0.1:
             self._status.set_markup("<i>%s</i>" % self.op)
             self._progressbar.set_fraction(progress/100.0)
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
 
     def done(self):
         self._parent.set_sensitive(True)
@@ -140,7 +138,7 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         self.window_fetch = parent.window_fetch
         self.window_fetch.set_transient_for(parent.window_main)
         self.window_fetch.realize()
-        self.window_fetch.window.set_functions(gtk.gdk.FUNC_MOVE)
+        self.window_fetch.get_window().set_functions(Gdk.WMFunction.MOVE)
         # set summary
         if summary != "":
             self.summary.set_markup("<big><b>%s</b></big> \n\n%s" %
@@ -173,8 +171,8 @@ class GtkFetchProgress(apt.progress.FetchProgress):
 	# FIXME: show remaining time
         self.progress.set_text("")
 
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
         return self._continue
 
 if __name__ == "__main__":

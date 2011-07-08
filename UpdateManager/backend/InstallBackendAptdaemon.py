@@ -4,7 +4,7 @@
 
 from aptdaemon import client, errors
 from defer import inline_callbacks
-from aptdaemon.gtkwidgets import AptProgressDialog
+from aptdaemon.gtk3widgets import AptProgressDialog
 from aptdaemon.enums import EXIT_SUCCESS
 
 from UpdateManager.backend import InstallBackend
@@ -86,5 +86,5 @@ if __name__ == "__main__":
     b = InstallBackendAptdaemon(None)
     b.commit(["2vcard"], [], False)
 
-    import gtk
-    gtk.main()
+    from gi.repository import Gtk
+    Gtk.main()

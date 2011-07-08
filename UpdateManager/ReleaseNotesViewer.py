@@ -63,7 +63,7 @@ class ReleaseNotesViewer(Gtk.TextView):
         self.buffer = Gtk.TextBuffer()
         self.set_buffer(self.buffer)
         self.buffer.set_text(notes)
-        self.connect("event-after", self.event_after)
+        self.connect("button-press-event", self.button_press_event)
         self.connect("motion-notify-event", self.motion_notify_event)
         self.connect("visibility-notify-event", self.visibility_notify_event)
         # search for links in the notes and make them clickable
@@ -106,11 +106,8 @@ class ReleaseNotesViewer(Gtk.TextView):
             # set the starting point for the next search
             iter = match_end
 
-    def event_after(self, text_view, event):
+    def button_press_event(self, text_view, event):
         """callback for mouse click events"""
-        # we only react on left mouse clicks
-        if event.type != Gdk.EventType.BUTTON_RELEASE:
-            return False
         if event.button != 1:
             return False
 

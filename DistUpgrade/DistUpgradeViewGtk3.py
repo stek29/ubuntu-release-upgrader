@@ -19,6 +19,10 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+import gi
+gi.require_version("Gtk", "3.0")
+gi.require_version("Vte", "2.90")
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Vte

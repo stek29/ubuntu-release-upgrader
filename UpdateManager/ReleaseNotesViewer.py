@@ -25,7 +25,7 @@
 
 import logging
 from gi.repository import Pango
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject, Gdk
 import pygtk
 import os
 import subprocess
@@ -109,7 +109,7 @@ class ReleaseNotesViewer(Gtk.TextView):
     def event_after(self, text_view, event):
         """callback for mouse click events"""
         # we only react on left mouse clicks
-        if event.type != Gdk.BUTTON_RELEASE:
+        if event.type != Gdk.EventType.BUTTON_RELEASE:
             return False
         if event.button != 1:
             return False
@@ -142,16 +142,16 @@ class ReleaseNotesViewer(Gtk.TextView):
         x, y = text_view.window_to_buffer_coords(Gtk.TextWindowType.WIDGET,
                                                  int(event.x), int(event.y))
         self.check_hovering(x, y)
-        self.window.get_pointer()
+        self.get_window(Gtk.TextWindowType.TEXT).get_pointer()
         return False
     
     def visibility_notify_event(self, text_view, event):
         """callback if the widgets gets visible (e.g. moves to the foreground)
            that calls the check_hovering method with the mouse position
            coordinates"""
-        (wx, wy, mod) = text_view.window.get_pointer()
-        (bx, by) = text_view.window_to_buffer_coords(Gtk.TextWindowType.WIDGET, wx,
-                                                     wy)
+        (screen, wx, wy, mod) = text_view.get_window(Gtk.TextWindowType.TEXT).get_pointer()
+        (bx, by) = text_view.window_to_buffer_coords(
+            Gtk.TextWindowType.WIDGET, wx, wy)
         self.check_hovering(bx, by)
         return False
 
@@ -177,7 +177,7 @@ class ReleaseNotesViewer(Gtk.TextView):
             # Set the appropriate cursur icon
             if self.hovering:
                 self.get_window(Gtk.TextWindowType.TEXT).\
-                        set_cursor(Gdk.Cursor.new(Gdk.HAND2))
+                        set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
             else:
                 self.get_window(Gtk.TextWindowType.TEXT).\
                         set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))

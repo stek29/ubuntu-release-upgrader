@@ -24,6 +24,7 @@
 #  USA
 
 import apt
+from gi.repository import GLib
 from gi.repository import GConf
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -76,7 +77,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         self.build_ui()
         self.show_uri(options.test_uri)
     else:
-        glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
+        GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, self.FETCH_TIMEOUT, self.timeout, None)
 
   def new_dist_available(self, meta_release, new_dist):
     logging.debug("new_dist_available: %s" % new_dist)
@@ -153,7 +154,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def _on_load_finished(self, view, frame):
     self.window_main.show_all()
 
-  def timeout(self):
+  def timeout(self, user_data):
     if self.new_dist is None:
       logging.warn("timeout reached, exiting")
       Gtk.main_quit()

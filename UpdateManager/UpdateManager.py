@@ -632,7 +632,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           return _("The package information was last updated less than one hour ago.")
       return None
 
-  def update_last_updated_text(self):
+  def update_last_updated_text(self, user_data):
       """timer that updates the last updated text """
       #print "update_last_updated_text"
       num_updates = self.cache.installCount
@@ -671,7 +671,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 			text_header = "<big><b>%s</b></big>"  % _("Software updates may be available for your computer.")
           # add timer to ensure we update the information when the 
           # last package count update was performed
-          glib.timeout_add_seconds(10, self.update_last_updated_text)
+          GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 10, self.update_last_updated_text, None)
       else:
           # show different text on first run (UX team suggestion)
           firstrun = self.settings.get_boolean("first-run")

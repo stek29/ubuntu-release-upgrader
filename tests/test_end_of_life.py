@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
+from gi.repository import GLib, Gtk
+
 import apt
 import apt_pkg
-import glib
-import gtk
 import hashlib
 import mock
 import os
@@ -31,7 +31,7 @@ class TestDistroEndOfLife(unittest.TestCase):
             # and that it 
             dialog = checker.window_main.get_data("no-longer-supported-nag")
             self.assertNotEqual(dialog, None)
-            dialog.response(gtk.RESPONSE_DELETE_EVENT)
+            dialog.response(Gtk.ResponseType.DELETE_EVENT)
             self.dialog_called = True
         # ----
         from check_new_release_gtk import CheckNewReleaseGtk
@@ -52,7 +52,8 @@ class TestDistroEndOfLife(unittest.TestCase):
         new_dist.releaseNotesHtmlUri = "http://www.ubuntu.com/html"
         new_dist.releaseNotesURI = "http://www.ubuntu.com/text"
         # schedule a close event in 1 s
-        glib.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
+        GLib.timeout_add_seconds(
+            GLib.PRIORITY_DEFAULT, 1, _nag_dialog_close_helper, checker)
         # run the dialog, this will also run a gtk mainloop so that the 
         # timeout works
         self.dialog_called = False
@@ -61,8 +62,8 @@ class TestDistroEndOfLife(unittest.TestCase):
 
 
     def _p(self):
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
 
 if __name__ == "__main__":
     import logging

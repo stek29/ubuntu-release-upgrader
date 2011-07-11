@@ -24,6 +24,8 @@
 #  USA
 
 import apt
+from gi.repository import GLib
+from gi.repository import Gio
 from gi.repository import GConf
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -31,10 +33,6 @@ import locale
 import logging
 import sys
 import time
-
-# mvo: current we can't use introspection on this, timeout_add_seconds
-#      is not introspectable yet
-import glib
 
 import UpdateManager.GtkProgress
 
@@ -46,6 +44,8 @@ from DistUpgrade.utils import init_proxy
 from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
 from UpdateManager.SimpleGtk3builderApp import SimpleGtkbuilderApp
+
+from gettext import gettext as _
 
 GObject.threads_init()
 
@@ -76,13 +76,13 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         self.build_ui()
         self.show_uri(options.test_uri)
     else:
-        glib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout)
+        GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, self.FETCH_TIMEOUT, self.timeout, None)
 
   def new_dist_available(self, meta_release, new_dist):
     logging.debug("new_dist_available: %s" % new_dist)
     self.new_dist = new_dist
     client =  Gio.Settings("com.ubuntu.update-manager")
-    ignore_dist = client.get_string("check_new_release_ignore")
+    ignore_dist = client.get_string("check-new-release-ignore")
     # only honor the ignore list if the distro is still supported, otherwise
     # go into nag mode
     if (ignore_dist == new_dist.name and
@@ -126,7 +126,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # check again in a week
     next_check = time.time() + 7*24*60*60
     client = Gio.Settings("com.ubuntu.update-manager")
-    client.set_int("release_check_time", next_check)
+    client.set_int("release-check-time", next_check)
     Gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):
@@ -135,7 +135,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     self.dialog_really_do_not_upgrade.set_markup("<b>%s</b>" % s)
     if self.dialog_really_do_not_upgrade.run() == Gtk.ResponseType.OK:
         client = Gio.Settings("com.ubuntu.update-manager")
-        client.set_string("check_new_release_ignore", self.new_dist.name)
+        client.set_string("check-new-release-ignore", self.new_dist.name)
     Gtk.main_quit()
 
   def on_linkbutton_release_notes_clicked(self, linkbutton):
@@ -153,7 +153,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def _on_load_finished(self, view, frame):
     self.window_main.show_all()
 
-  def timeout(self):
+  def timeout(self, user_data):
     if self.new_dist is None:
       logging.warn("timeout reached, exiting")
       Gtk.main_quit()

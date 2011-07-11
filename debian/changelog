@@ -1,6 +1,12 @@
 update-manager (1:0.152.1) UNRELEASED; urgency=low
 
   * fix release upgrade view dialog in gtk3
+  * UpdateManager/UpdateManager.py, check-new-release-gtk:
+    - use GLib.timeout_add(priority, timeout, func, data) instead
+      of the old glib.timeout_add()
+      thanks to Michael Terry (lp:~mterry/update-manager/pygi-cleanups)
+  * check-new-release-gtk, tests/test_end_of_life.py:
+    - fix test failures
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 08 Jul 2011 13:06:14 +0200
 

@@ -30,6 +30,10 @@ def get_maintenance_status(cache, pkgname, supported_tag):
     # updated regularly)
     releasef = get_release_filename_for_pkg(cache, pkgname, 
                                             "Ubuntu", CODENAME)
+    if not releasef:
+        releasef = get_release_filename_for_pkg(cache, pkgname, 
+                                            "Ubuntu", CODENAME + "-updates")
+
     time_t = get_release_date_from_release_file(releasef)
     # check the release date and show support information
     # based on this

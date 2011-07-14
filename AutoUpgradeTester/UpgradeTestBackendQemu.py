@@ -78,9 +78,10 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
                                    "--ssh-key", "%s.pub" % self.ssh_key ,
                                    "--components", "main,restricted",
                                    "--rootsize", "80000",
+                                   "--addpkg", "openssh-server",
                                    "--arch", "i386"])
             # move the disk in place
-            shutil.move("ubuntu-kvm/disk0.qcow2",self.baseimage)
+            shutil.move(glob.glob("ubuntu-kvm/*.qcow2")[0],self.baseimage)
             if ret != 0:
                 raise NoImageFoundException
         # check if we want virtio here and default to yes

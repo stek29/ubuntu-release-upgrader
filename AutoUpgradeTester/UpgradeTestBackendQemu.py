@@ -71,7 +71,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("KVM","BaseImage")
         if not os.path.exists(self.baseimage):
-            ret = subprocess.call(["ubuntu-vm-builder","kvm", self.fromDist,
+            print "Missing '%s' base image, need to build it now" % self.baseimage
+            ret = subprocess.call(["sudo",
+                                   "ubuntu-vm-builder","kvm", self.fromDist,
                                    "--kernel-flavour", "generic",
                                    "--ssh-key", "%s.pub" % self.ssh_key ,
                                    "--components", "main,restricted",

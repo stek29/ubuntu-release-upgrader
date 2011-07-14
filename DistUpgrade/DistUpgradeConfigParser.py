@@ -7,7 +7,8 @@ import glob
 CONFIG_OVERRIDE_DIR =  "/etc/update-manager/release-upgrades.d"
 
 class DistUpgradeConfig(SafeConfigParser):
-    def __init__(self, datadir, name="DistUpgrade.cfg"):
+    def __init__(self, datadir, name="DistUpgrade.cfg", 
+                 override_dir=CONFIG_OVERRIDE_DIR):
         SafeConfigParser.__init__(self)
         # we support a config overwrite, if DistUpgrade.cfg.dapper exists
         # and the user runs dapper, that one will be used
@@ -17,7 +18,6 @@ class DistUpgradeConfig(SafeConfigParser):
         if os.path.exists(name+"."+from_release):
             name = name+"."+from_release
         maincfg = os.path.join(datadir,name)
-        override_dir = CONFIG_OVERRIDE_DIR
         self.config_files = [maincfg]
         for cfg in glob.glob(override_dir+"/*.cfg"):
             self.config_files.append(cfg)

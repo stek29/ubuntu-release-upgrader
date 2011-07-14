@@ -49,9 +49,11 @@ class UpgradeTestBackend(object):
             self.post_upgrade_tests_dir = "/usr/share/auto-upgrade-tester/post_upgrade_tests/"
         # init the rest
         if os.path.exists(profile):
+            global_cfg_d = os.path.join(profiledir, "..", "global.cfg.d")
             self.profile = os.path.abspath(profile)
             self.config = DistUpgradeConfig(datadir=os.path.dirname(profile),
-                                            name=os.path.basename(profile))
+                                            name=os.path.basename(profile),
+                                            override_dir=global_cfg_d)
         else:
             raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
         if resultdir:

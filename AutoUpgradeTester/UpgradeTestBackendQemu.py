@@ -432,10 +432,15 @@ iface eth0 inet static
         if not self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
             print "Disabling ForceOverwrite"
             cmd_prefix = ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]
-        if os.path.exists(self.upgradefilesdir):
+        if (os.path.exists(self.upgradefilesdir) and
+            self.config.getWithDefault("NonInteractive", 
+                                       "UseUpgraderFromBzr", 
+                                       True)):
+            print "Using ./DistUpgrade/* for the upgrade"
             self._copyUpgraderFilesFromBzrCheckout()
             ret = self._runBzrCheckoutUpgrade(cmd_prefix)
         else:
+            print "Using do-release-upgrade for the upgrade"
             ret = self._runInImage(cmd_prefix+["do-release-upgrade","-d",
                                     "-f","DistUpgradeViewNonInteractive"])
         print "dist-upgrade.py returned: %i" % ret

@@ -289,7 +289,10 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
 
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader
-        if os.path.exists(self.upgradefilesdir):
+        if (os.path.exists(self.upgradefilesdir) and
+            self.config.getWithDefault("NonInteractive", 
+                                       "UseUpgraderFromBzr", 
+                                       True)):
             self._copyUpgraderFilesFromBzrCheckout()
             ret = self._runBzrCheckoutUpgrade()
         else:

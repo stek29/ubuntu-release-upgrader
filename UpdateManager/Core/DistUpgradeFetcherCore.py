@@ -22,12 +22,8 @@
 from string import Template
 import os
 import apt_pkg
-import apt
 import logging
 import tarfile
-import socket
-import urlparse
-import urllib2
 import tempfile
 import shutil
 import sys
@@ -35,7 +31,7 @@ import GnuPGInterface
 from gettext import gettext as _
 from aptsources.sourceslist import SourcesList
 
-from utils import *
+from utils import get_dist, url_downloadable, country_mirror
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "
@@ -209,11 +205,15 @@ class DistUpgradeFetcherCore(object):
             af1 = apt_pkg.AcquireFile(fetcher, 
                                      uri, 
                                      descr=_("Upgrade tool signature"))
+            # reference it here to shut pyflakes up
+            af1
         if self.new_dist.upgradeTool != None:
             self.uri = self._expandUri(self.new_dist.upgradeTool)
             af2 = apt_pkg.AcquireFile(fetcher, 
                                      self.uri, 
                                      descr=_("Upgrade tool"))
+            # reference it here to shut pyflakes up
+            af2
             result = fetcher.run()
             if result != fetcher.RESULT_CONTINUE:
                 logging.warn("fetch result != continue (%s)" % result)

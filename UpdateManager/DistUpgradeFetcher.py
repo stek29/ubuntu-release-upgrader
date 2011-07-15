@@ -19,14 +19,13 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 from ReleaseNotesViewer import ReleaseNotesViewer
-from Core.utils import *
+from Core.utils import error, inhibit_sleep, allow_sleep
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 import urllib2
-import dbus
 import os
 import socket
 

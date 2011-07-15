@@ -21,6 +21,7 @@
 #  USA
 
 import logging
+from gettext import gettext as _
 
 HAVE_UNITY_SUPPORT=False
 try:

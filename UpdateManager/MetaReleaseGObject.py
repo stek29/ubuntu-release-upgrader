@@ -18,18 +18,7 @@
 #  USA
 
 from gi.repository import GObject
-import thread
-import urllib2
-import os
-import string
-import apt_pkg
-import time
-import rfc822
-from subprocess import Popen,PIPE
 from Core.MetaRelease import MetaReleaseCore
-
-from gi.repository import Gtk
-
 
 class MetaRelease(MetaReleaseCore,GObject.GObject):
 

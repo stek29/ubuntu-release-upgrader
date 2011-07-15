@@ -63,7 +63,7 @@ class AlertWatcher(GObject.GObject):
             self._power_changed()
             # 3g
             self._update_3g_state()
-        except dbus.exceptions.DBusException, e:
+        except dbus.exceptions.DBusException:
             pass
 
     def _on_network_state_changed(self, state):

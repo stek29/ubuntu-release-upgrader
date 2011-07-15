@@ -25,15 +25,12 @@ import httplib
 import logging
 import rfc822
 import os
-import string
 import sys
 import time
 import thread
 import urllib2
 
-from subprocess import Popen,PIPE
-
-from utils import *
+from utils import get_lang, get_dist
 
 class Dist(object):
     def __init__(self, name, version, date, supported):
@@ -133,7 +130,7 @@ class MetaReleaseCore(object):
             self._debug("_buildMetaReleaseFile failed")
             return
         # we start the download thread here and we have a timeout
-        t=thread.start_new_thread(self.download, ())
+        thread.start_new_thread(self.download, ())
         #t=thread.start_new_thread(self.check, ())
 
     def _buildMetaReleaseFile(self):

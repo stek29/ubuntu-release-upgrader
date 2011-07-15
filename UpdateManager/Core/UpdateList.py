@@ -23,11 +23,8 @@ import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
 
 from gettext import gettext as _
-from gettext import ngettext
 import os
 import sys
-
-from utils import ExecutionTime
 
 class UpdateOrigin(object):
   def __init__(self, desc, importance):
@@ -79,7 +76,7 @@ class UpdateList(object):
     # do the upgrade
     self.distUpgradeWouldDelete = cache.saveDistUpgrade()
 
-    dselect_upgrade_origin = UpdateOrigin(_("Previous selected"), 1)
+    #dselect_upgrade_origin = UpdateOrigin(_("Previous selected"), 1)
 
     # sort by origin
     for pkg in cache:

@@ -20,9 +20,6 @@
 # USA
 
 import logging
-import os
-import sys
-import re
 
 from gi.repository import Gtk
 

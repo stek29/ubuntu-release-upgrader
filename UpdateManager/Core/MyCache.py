@@ -31,10 +31,8 @@ import httplib
 import socket
 import re
 import DistUpgrade.DistUpgradeCache
-from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 from gettext import gettext as _
 from UpdateList import UpdateOrigin
-from utils import ExecutionTime
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"
@@ -174,7 +172,6 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         section = pkg._pcache._depcache.get_candidate_ver(pkg._pkg).section
 
         # get the source version, start with the binaries version
-        binver = pkg.candidateVersion
         srcver_epoch = pkg.candidateVersion
         srcver = self._strip_epoch(srcver_epoch)
         #print "bin: %s" % binver
@@ -203,7 +200,6 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         alllines = ""
         regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
         
-        i=0
         while True:
             line = changelog.readline()
             if line == "":
@@ -276,7 +272,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         " get the NEWS.Debian file from the changelogs location "
         try:
             news = self._get_changelog_or_news(name, "NEWS.Debian", True)
-        except Exception, e:
+        except Exception:
             return
         if news:
             self.all_news[name] = news

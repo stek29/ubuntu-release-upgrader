@@ -29,7 +29,6 @@ from Core.utils import *
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 import urllib2
-import dbus
 import os
 
 from Core.MetaRelease import MetaReleaseCore

@@ -20,7 +20,7 @@
 #  USA
 
 from gettext import gettext as _
-from stat import *
+from stat import (S_IMODE, ST_MODE, S_IXUSR)
 
 import apt_pkg
 apt_pkg.init_config()
@@ -333,10 +333,10 @@ def inhibit_sleep():
   """
   try:
     return _inhibit_sleep_old_interface()
-  except Exception, e:
+  except Exception:
     try:
       return _inhibit_sleep_new_interface()
-    except Exception, e:
+    except Exception:
       #print "could not send the dbus Inhibit signal: %s" % e
       return (False, False)
 
@@ -362,12 +362,12 @@ def get_lang():
     try:
         (locale_s, encoding) = locale.getdefaultlocale()
         return locale_s
-    except Exception, e: 
+    except Exception: 
         logging.exception("gedefaultlocale() failed")
         return None
 
 def error(parent, summary, message):
-  from gi.repository import Gtk
+  from gi.repository import Gtk, Gdk
   d = Gtk.MessageDialog(parent=parent,
                         flags=Gtk.DialogFlags.MODAL,
                         type=Gtk.MessageType.ERROR,
@@ -376,7 +376,7 @@ def error(parent, summary, message):
   d.realize()
   d.window.set_functions(Gdk.FUNC_MOVE)
   d.set_title("")
-  res = d.run()
+  d.run()
   d.destroy()
   return False
 

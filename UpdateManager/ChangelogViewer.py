@@ -26,13 +26,10 @@
 #  USA
 
 
-import pygtk
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
-import subprocess
-import os
 from gettext import gettext as _
 
 from ReleaseNotesViewer import open_url
@@ -94,7 +91,6 @@ class ChangelogViewer(Gtk.TextView):
 
     def tag_link(self, start, end, url):
         """Apply the tag that marks links to the specified buffer selection"""
-        tagged = False
         tags = start.get_tags()
         for tag in tags:
             url = tag.get_data("url")
@@ -141,7 +137,6 @@ class ChangelogViewer(Gtk.TextView):
                        ]
         # init
         iter = buffer.get_iter_at_offset(iter_end.get_offset() - len(text))
-        iter_real_end = buffer.get_end_iter()
 
         # search for the next match in the buffer
         for (start_str, end_list, url_prefix) in search_items:

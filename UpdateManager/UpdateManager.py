@@ -36,12 +36,10 @@ from gi.repository import Pango
 
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
-import apt
+
 import apt_pkg
 
 import gettext
-import copy
-import string
 import sys
 import os
 import os.path
@@ -49,12 +47,7 @@ import stat
 import re
 import locale
 import logging
-import tempfile
 import subprocess
-import pwd
-import urllib2
-import httplib
-import socket
 import time
 import thread
 import xml.sax.saxutils
@@ -70,16 +63,20 @@ from gettext import gettext as _
 from gettext import ngettext
 
 
-from Core.utils import *
+from Core.utils import (is_unity_running,
+                        humanize_size, 
+                        init_proxy, 
+                        on_battery,
+                        inhibit_sleep,
+                        allow_sleep)
 from Core.UpdateList import UpdateList
-from Core.MyCache import MyCache, NotEnoughFreeSpaceError
-from Core.MetaRelease import Dist
+from Core.MyCache import MyCache
+from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 from Core.AlertWatcher import AlertWatcher
 
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
 from ChangelogViewer import ChangelogViewer
 from SimpleGtk3builderApp import SimpleGtkbuilderApp
-from HelpViewer import HelpViewer
 from MetaReleaseGObject import MetaRelease
 from UnitySupport import UnitySupport
 
@@ -356,7 +353,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         iface.bringToFront()
         #print "send bringToFront"
         sys.exit(0)
-    except dbus.DBusException, e:
+    except dbus.DBusException:
          #print "no listening object (%s) "% e
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
          self.dbusController = UpdateManagerDbusController(self, bus_name)
@@ -387,7 +384,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       author_match = re.match("^.*--.*<.*@.*>.*$", line)
       if version_match:
         version = version_match.group(1)
-	upload_archive = version_match.group(2).strip()
+	#upload_archive = version_match.group(2).strip()
         version_text = _("Version %s: \n") % version
         changes_buffer.insert_with_tags_by_name(end_iter, version_text, "versiontag")
       elif (author_match):
@@ -451,7 +448,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       if self.expander_details.get_expanded():
         lock = thread.allocate_lock()
         lock.acquire()
-        t=thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
+        thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
         changes_buffer.set_text("%s\n" % _("Downloading list of changes..."))
         iter = changes_buffer.get_iter_at_line(1)
         anchor = changes_buffer.create_child_anchor(iter)
@@ -787,7 +784,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                    "/org/freedesktop/ConsoleKit/Manager")
         iface = dbus.Interface(proxy_obj, "org.freedesktop.ConsoleKit.Manager")
         iface.Restart()
-    except dbus.DBusException, e:
+    except dbus.DBusException:
         pass
 
   def invoke_manager(self, action):
@@ -1117,7 +1114,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     # get the lock
     try:
         apt_pkg.pkgsystem_lock()
-    except SystemError, e:
+    except SystemError:
         pass
         #d = Gtk.MessageDialog(parent=self.window_main,
         #                      flags=Gtk.DialogFlags.MODAL,

@@ -81,8 +81,6 @@ class InstallBackendAptdaemon(InstallBackend):
                   True, dialog._transaction.exit == EXIT_SUCCESS)
 
 if __name__ == "__main__":
-    import apt
-
     b = InstallBackendAptdaemon(None)
     b.commit(["2vcard"], [], False)
 

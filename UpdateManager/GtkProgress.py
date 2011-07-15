@@ -23,7 +23,7 @@ from gi.repository import Gtk, Gdk
 import apt
 import apt_pkg
 from gettext import gettext as _
-from Core.utils import *
+from Core.utils import humanize_size
 
 # intervals of the start up progress
 # 3x caching and menu creation
@@ -177,7 +177,6 @@ class GtkFetchProgress(apt.progress.FetchProgress):
 
 if __name__ == "__main__":
     import apt
-    import apt_pkg
     from SimpleGtkbuilderApp import SimpleGtkbuilderApp
 
     class MockParent(SimpleGtkbuilderApp):

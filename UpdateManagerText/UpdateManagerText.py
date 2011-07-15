@@ -2,17 +2,22 @@
 # -*- coding: utf-8 -*-
 
 import apt
+import apt_pkg
 import sys
 import thread
 import time
-import atexit
 from gettext import gettext as _
 
 from UpdateManager.Core.UpdateList import UpdateList
-from UpdateManager.Core.MyCache import MyCache, NotEnoughFreeSpaceError
-from UpdateManager.Core.utils import *
+from UpdateManager.Core.MyCache import MyCache
 
-from snack import *
+from snack import (SnackScreen,
+                   ButtonBar,
+                   Textbox,
+                   CheckboxTree,
+                   GridForm,
+                   snackArgs,
+                   )
 
 class UpdateManagerText(object):
     DEBUG = False
@@ -117,7 +122,7 @@ This can be caused by:
             self.textview_changes.setText(_("Downloading changelog"))
             lock = thread.allocate_lock()
             lock.acquire()
-            t=thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
+            thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
             # this lock should never take more than 2s even with network down
             while lock.locked():
                 time.sleep(0.03)

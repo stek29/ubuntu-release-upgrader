@@ -173,7 +173,7 @@ def setupAufsChroot(rw_dir, chroot_dir):
                     return False
 
     # create binds for the systemdirs
-    needs_bind_mount = set()
+    #needs_bind_mount = set()
     for line in map(string.strip, mounts.split("\n")):
         if not line: continue
         (device, mountpoint, fstype, options, a, b) = line.split()

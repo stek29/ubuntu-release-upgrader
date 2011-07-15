@@ -279,7 +279,7 @@ class AptCdrom(object):
         apt_pkg.Config.Set("Acquire::cdrom::mount",self.cdrompath)
         apt_pkg.Config.Set("APT::CDROM::NoMount","true")
         # FIXME: add cdrom progress here for the view
-        progress = self.view.getCdromProgress()
+        #progress = self.view.getCdromProgress()
         try:
             res = self._doAdd()
         except (SystemError, AptCdromError), e:

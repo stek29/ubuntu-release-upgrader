@@ -22,12 +22,9 @@
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
 
-import apt
-import apt_pkg
 import atexit
 import glob
 import logging
-import re
 import os
 import shutil
 import subprocess

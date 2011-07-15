@@ -39,7 +39,6 @@ import pty
 
 from DistUpgradeApport import *
 
-from DistUpgradeController import DistUpgradeController
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 
 import select

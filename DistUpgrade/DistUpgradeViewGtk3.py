@@ -40,7 +40,7 @@ import apt
 import apt_pkg
 import os
 
-from DistUpgradeApport import *
+from DistUpgradeApport import run_apport, apport_crash
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 from SimpleGtk3builderApp import SimpleGtkbuilderApp
@@ -308,7 +308,7 @@ class GtkInstallProgressAdapter(InstallProgress):
 
     def child_exited(self, term):
         # we need to capture the full status here (not only the WEXITSTATUS)
-        self.apt_status = status = term.get_child_exit_status()
+        self.apt_status =  term.get_child_exit_status()
         self.finished = True
 
     def wait_child(self):
@@ -500,7 +500,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
 
         try:
             self._terminal_log = open(os.path.join(self.logdir,"term.log"),"w")
-        except Exception, e:
+        except Exception:
             # if something goes wrong (permission denied etc), use stdout
             self._terminal_log = sys.stdout
         return self._term
@@ -519,7 +519,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     def hideStep(self, step):
         image = getattr(self,"image_step%i" % step)
         label = getattr(self,"label_step%i" % step)
-        arrow = getattr(self,"arrow_step%i" % step)
+        #arrow = getattr(self,"arrow_step%i" % step)
         image.hide()
         label.hide()
     def showStep(self, step):

@@ -66,13 +66,13 @@ def run_apport():
                 ret = -1
                 try:
                     ret = subprocess.call(p)
-                except Exception, e:
+                except Exception:
                     logging.exception("Unable to launch '%s' " % p)
                 return (ret == 0)
     elif os.path.exists("/usr/bin/apport-cli"):
         try:
             return (subprocess.call("/usr/bin/apport-cli") == 0)
-        except Exception, e:
+        except Exception:
             logging.exception("Unable to launch '/usr/bin/apport-cli'")
             return False
     logging.debug("can't find apport")

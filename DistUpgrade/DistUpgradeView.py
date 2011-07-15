@@ -21,17 +21,16 @@
 
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
-import subprocess
-from subprocess import Popen, PIPE
 import apt
+import errno
 import os
 import apt_pkg 
+import logging
 import signal
-import glob
 import select
 
 from DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
-from DistUpgradeApport import *
+from DistUpgradeApport import apport_pkgfailure
 
 
 def FuzzyTimeToStr(sec):

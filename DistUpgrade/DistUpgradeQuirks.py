@@ -29,14 +29,11 @@ import shutil
 import string
 import sys
 import subprocess
-from subprocess import PIPE, Popen, call
+from subprocess import PIPE, Popen
 from hashlib import md5
 from utils import lsmod, get_arch
 
 from DistUpgradeGettext import gettext as _
-from DistUpgradeGettext import ngettext
-import gettext
-
 from computerjanitor.plugin import PluginManager
 
 class DistUpgradeQuirks(object):
@@ -835,7 +832,7 @@ class DistUpgradeQuirks(object):
                 continue
             try:
                 (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
+            except Exception:
                 logging.error("can't parse line '%s'" % line)
                 continue
             if "evms" in device:
@@ -870,7 +867,7 @@ class DistUpgradeQuirks(object):
                 continue
             try:
                 (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
+            except Exception:
                 logging.error("can't parse line '%s'" % line)
                 lines.append(line)
                 continue
@@ -906,7 +903,7 @@ class DistUpgradeQuirks(object):
                 continue
             try:
                 (device, mount_point, fstype, options, fdump, fpass) = line.split()
-            except Exception, e:
+            except Exception:
                 logging.error("can't parse line '%s'" % line)
                 lines.append(line)
                 continue
@@ -945,7 +942,7 @@ class DistUpgradeQuirks(object):
                 continue
             try:
                 (device, mount_point, fstype, options, a, b) = line.split()
-            except Exception, e:
+            except Exception:
                 logging.error("can't parse line '%s'" % line)
                 lines.append(line)
                 continue
@@ -1063,7 +1060,7 @@ class DistUpgradeQuirks(object):
             try:
                 patch(path, os.path.join(patchdir, f), result_md5sum)
                 logging.info("applied '%s' successfully" % f)
-            except Exception, e:
+            except Exception:
                 logging.exception("ed failed for '%s'" % f)
                     
     def _supportInModaliases(self, pkgname, lspci=None):

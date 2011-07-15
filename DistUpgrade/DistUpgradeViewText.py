@@ -31,8 +31,7 @@ import apt.progress
 
 import gettext
 from DistUpgradeGettext import gettext as _
-from utils import wrap, twrap
-import subprocess
+from utils import  twrap
 
 class TextFetchProgress(FetchProgress, apt.progress.text.AcquireProgress):
     def __init__(self):

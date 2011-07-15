@@ -30,7 +30,6 @@ import logging
 import string
 import statvfs
 import time
-import gettext
 import datetime
 import threading
 import ConfigParser
@@ -38,8 +37,6 @@ from subprocess import Popen, PIPE
 
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
-from DistUpgradeConfigParser import DistUpgradeConfig
-from DistUpgradeView import FuzzyTimeToStr
 
 from utils import inside_chroot, estimate_kernel_size_in_boot
 
@@ -302,6 +299,9 @@ class MyCache(apt.Cache):
     def restore_snapshot(self):
         """ restore a snapshot """
         actiongroup = apt_pkg.ActionGroup(self._depcache)
+        # just make pyflakes shut up, later we need to use
+        # with self.actiongroup():
+        actiongroup
         self.clear()
         for name in self.to_remove:
             pkg = self[name]
@@ -839,7 +839,6 @@ class MyCache(apt.Cache):
 
         # every meta-pkg that is installed currently, will be marked
         # install (that result in a upgrade and removes a markDelete)
-        installed_a_metapkg = False
         for key in metapkgs:
             try:
                 if (self.has_key(key) and
@@ -926,6 +925,9 @@ class MyCache(apt.Cache):
         # if it dosn't remove other packages depending on it
         # that are not obsolete as well
         actiongroup = apt_pkg.ActionGroup(self._depcache)
+        # just make pyflakes shut up, later we should use
+        # with self.actiongroup():
+        actiongroup
         self.create_snapshot()
         try:
             self[pkgname].markDelete(purge=purge)
@@ -1152,18 +1154,20 @@ class MyCache(apt.Cache):
 
 
 if __name__ == "__main__":
-	import DistUpgradeConfigParser
-        import DistUpgradeView
-        print "foo"
-	c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
-                    DistUpgradeView.DistUpgradeView(), None)
-        #c.checkForNvidia()
-        #print c._identifyObsoleteKernels()
-        print c.checkFreeSpace()
-        sys.exit()
-	c.clear()
-        c.create_snapshot()
-        c.installedTasks
-        c.installTasks(["ubuntu-desktop"])
-        print c.get_changes()
-        c.restore_snapshot()
+    import sys
+    import DistUpgradeConfigParser
+    import DistUpgradeView
+    print "foo"
+    c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
+                DistUpgradeView.DistUpgradeView(), None)
+    #c.checkForNvidia()
+    #print c._identifyObsoleteKernels()
+    print c.checkFreeSpace()
+    sys.exit()
+
+    c.clear()
+    c.create_snapshot()
+    c.installedTasks
+    c.installTasks(["ubuntu-desktop"])
+    print c.get_changes()
+    c.restore_snapshot()

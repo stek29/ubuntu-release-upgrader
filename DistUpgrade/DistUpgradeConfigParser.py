@@ -31,12 +31,12 @@ class DistUpgradeConfig(SafeConfigParser):
             elif type(default) == int:
                 return self.getint(section, option)
             return self.get(section, option)
-        except (NoSectionError, NoOptionError),e:
+        except (NoSectionError, NoOptionError):
             return default
     def getlist(self, section, option):
         try:
             tmp = self.get(section, option)
-        except (NoSectionError,NoOptionError),e:
+        except (NoSectionError,NoOptionError):
             return []
         items = [x.strip() for x in tmp.split(",")]
         return items

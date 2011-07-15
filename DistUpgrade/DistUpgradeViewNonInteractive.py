@@ -27,15 +27,12 @@ import sys
 import os
 import pty
 import select
-import fcntl
-import string
-import re
 import subprocess
 import copy
 import apt.progress
 
 from ConfigParser import NoSectionError, NoOptionError
-from subprocess import call, PIPE, Popen
+from subprocess import PIPE, Popen
 
 from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
 from DistUpgradeConfigParser import DistUpgradeConfig
@@ -71,7 +68,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         try:
             if self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
                 apt_pkg.config.set("DPkg::Options::","--force-overwrite")
-        except (NoSectionError, NoOptionError), e:
+        except (NoSectionError, NoOptionError):
             pass
         # more debug
         #apt_pkg.Config.Set("Debug::pkgOrderList","true")
@@ -80,7 +77,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         self.timeout = 2400
         try:
             self.timeout = self.config.getint("NonInteractive","TerminalTimeout")
-        except Exception, e:
+        except Exception:
             pass
 
     def error(self, pkg, errormsg):
@@ -220,7 +217,7 @@ class NonInteractiveInstallProgress(InstallProgress):
            try:
                s = os.read(self.master_fd, 1)
                sys.stdout.write("%s" % s)
-           except OSError,e:
+           except OSError:
                # happens after we are finished because the fd is closed
                return
            res = select.select([self.master_fd],[],[],0.1)

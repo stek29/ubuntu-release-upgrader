@@ -29,33 +29,38 @@ import os
 import subprocess
 import locale
 import logging
-import re
-import statvfs
 import shutil
 import glob
 import time
 import copy
 import ConfigParser
-from stat import *
-from utils import country_mirror, url_downloadable, check_and_fix_xbit, ExecutionTime, get_arch, iptables_active, is_child_of_process_name
+#from stat import *
+from utils import (country_mirror, 
+                   url_downloadable, 
+                   check_and_fix_xbit, 
+                   get_arch, 
+                   iptables_active, 
+                   is_child_of_process_name)
 from string import Template
 
 import DistUpgradeView
+from DistUpgradeCache import MyCache
 from DistUpgradeConfigParser import DistUpgradeConfig
-from DistUpgradeFetcherCore import country_mirror
 from DistUpgradeQuirks import DistUpgradeQuirks
 from DistUpgradeAptCdrom import AptCdrom
 from DistUpgradeAufs import setupAufs, aufsOptionsAndEnvironmentSetup
 
-from sourceslist import SourcesList, SourceEntry, is_mirror
-from distro import Distribution, get_distro, NoDistroTemplateException
+from sourceslist import SourcesList, is_mirror
+from distro import get_distro, NoDistroTemplateException
 
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
 import gettext
 
-from DistUpgradeCache import *
-from DistUpgradeApport import *
+from DistUpgradeCache import (CacheExceptionDpkgInterrupted,
+                              CacheExceptionLockingFailed,
+                              NotEnoughFreeSpaceError)
+from DistUpgradeApport import run_apport
 
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
@@ -72,7 +77,6 @@ class DistUpgradeController(object):
         if datadir == None:
             datadir = os.getcwd()
             localedir = os.path.join(datadir,"mo")
-            gladedir = datadir
         self.datadir = datadir
         self.options = options
 
@@ -480,7 +484,7 @@ class DistUpgradeController(object):
                         distro = get_distro()
                         distro.get_sources(self.sources)
                         distro.enable_component("main")
-                    except NoDistroTemplateException,e :
+                    except NoDistroTemplateException:
                         # fallback if everything else does not work,
                         # we replace the sources.list with a single
                         # line to ubuntu-main
@@ -806,7 +810,7 @@ class DistUpgradeController(object):
             maxRetries = self.config.getint("Network","MaxRetries")
         while currentRetry < maxRetries:
             try:
-                res = self.cache.update(progress)
+                self.cache.update(progress)
             except (SystemError, IOError), e:
                 logging.error("IOError/SystemError in cache.update(): '%s'. Retrying (currentRetry: %s)" % (e,currentRetry))
                 currentRetry += 1
@@ -909,7 +913,7 @@ class DistUpgradeController(object):
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
-        iprogress = self._view.getInstallProgress(self.cache)
+        #iprogress = self._view.getInstallProgress(self.cache)
         # start slideshow
         url = self.config.getWithDefault("Distro","SlideshowUrl",None)
         if url:
@@ -939,7 +943,7 @@ class DistUpgradeController(object):
             try:
                 pm = apt_pkg.PackageManager(self.cache._depcache)
                 fetcher = apt_pkg.Acquire(fprogress)
-                res = self.cache._fetch_archives(fetcher, pm)
+                self.cache._fetch_archives(fetcher, pm)
             except apt.cache.FetchCancelledException, e:
                 logging.info("user canceled")
                 user_canceled = True
@@ -1006,7 +1010,7 @@ class DistUpgradeController(object):
             self._maybe_create_apt_btrfs_snapshot()
         while currentRetry < maxRetries:
             try:
-                res = self.cache.commit(fprogress,iprogress)
+                self.cache.commit(fprogress,iprogress)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
                 # if its a ordering bug we can cleanly revert to
@@ -1165,7 +1169,7 @@ class DistUpgradeController(object):
             fprogress = self._view.getFetchProgress()
             iprogress = self._view.getInstallProgress(self.cache)
             try:
-                res = self.cache.commit(fprogress,iprogress)
+                self.cache.commit(fprogress,iprogress)
             except (SystemError, IOError), e:
                 logging.error("cache.commit() in doPostUpgrade() failed: %s" % e)
                 self._view.error(_("Error during commit"),
@@ -1287,7 +1291,7 @@ class DistUpgradeController(object):
             b = self.config.getboolean("Distro","AllowUnauthenticated")
             if b:
                 return True
-        except ConfigParser.NoOptionError, e:
+        except ConfigParser.NoOptionError:
             pass
         for pkgname in backportslist:
             pkg = self.cache[pkgname]
@@ -1633,7 +1637,7 @@ class DistUpgradeController(object):
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
         if self._view.confirmRestart():
-            p = subprocess.Popen("/sbin/reboot")
+            subprocess.Popen("/sbin/reboot")
             sys.exit(0)
         return True
         
@@ -1676,7 +1680,7 @@ class DistUpgradeController(object):
         if os.path.exists(REBOOT_REQUIRED_FILE):
             # we can not talk to session management here, we run as root
             if self._view.confirmRestart():
-                p = subprocess.Popen("/sbin/reboot")
+                subprocess.Popen("/sbin/reboot")
         else:
             self._view.information(_("Upgrade complete"),
                                    _("The partial upgrade was completed."))
@@ -1684,9 +1688,7 @@ class DistUpgradeController(object):
 
 
 if __name__ == "__main__":
-    from DistUpgradeView import DistUpgradeView
     from DistUpgradeViewText import DistUpgradeViewText
-    from DistUpgradeCache import MyCache
     logging.basicConfig(level=logging.DEBUG)
     v = DistUpgradeViewText()
     dc = DistUpgradeController(v)

@@ -3,24 +3,19 @@
 from UpgradeTestBackendSSH import UpgradeTestBackendSSH
 from UpgradeTestBackend import UpgradeTestBackend
 
-from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgrade.sourceslist import SourcesList
 
 from boto.ec2.connection import EC2Connection
 
 import ConfigParser
-import subprocess
 import os
 import sys
 import os.path
-import shutil
 import glob
 import time
-import copy
 import atexit
 import apt_pkg
 
-from subprocess import Popen, PIPE
 
 # images created with EC2
 class NoCredentialsFoundException(Exception):
@@ -125,7 +120,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         # prepare the sources.list (needed because a AMI may have any
         # sources.list)
         sources = self.getSourcesListFile()
-        mirror = self.config.get("NonInteractive","Mirror")
         ret = self._copyToImage(sources.name, "/etc/apt/sources.list")
         assert(ret == 0)
 
@@ -251,8 +245,6 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
 
     def upgrade(self):
         print "upgrade()"
-        upgrader_args = ""
-        upgrader_env = ""
 
         # clean from any leftover pyc files
         for f in glob.glob("%s/*.pyc" %  self.upgradefilesdir):

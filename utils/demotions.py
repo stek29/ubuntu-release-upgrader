@@ -10,22 +10,13 @@
 #   abiword, abiword-gnome, abiword-gtk
 
 import os
-import tarfile
 import sys
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
-import apt_inst
 #import xdg.Menu
 import os.path
-import re
-import tempfile
-import subprocess
-import string
-import shutil
-import urllib
-import logging
 
 ARCHES = ["i386","amd64"]
 #ARCHES = ["i386"]
@@ -51,7 +42,6 @@ def get_replace(cache, pkgname):
     if not depends.has_key(t):
       continue
     for depVerList in depends[t]:
-      base_deps = []
       for depOr in depVerList:
         replaces.add(depOr.target_pkg.name)
   return replaces

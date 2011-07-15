@@ -1,7 +1,6 @@
 # qemu backend
 
 from UpgradeTestBackendSSH import UpgradeTestBackendSSH
-from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 from DistUpgrade.sourceslist import SourcesList
 
 import ConfigParser
@@ -12,11 +11,7 @@ import os.path
 import shutil
 import glob
 import time
-import signal
-import signal
-import crypt
 import tempfile
-import copy
 import atexit
 import apt_pkg
 
@@ -87,7 +82,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         # check if we want virtio here and default to yes
         try:
             self.virtio = self.config.getboolean("KVM","Virtio")
-        except ConfigParser.NoOptionError,e:
+        except ConfigParser.NoOptionError:
             self.virtio = True
         if self.virtio:
             self.qemu_options.extend(["-net","nic,model=virtio"])
@@ -131,12 +126,12 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         """
         # generate ls -R output of test-image (
         self.start()
-        ret = self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
-                                "/initrd", "/lib", "/root", "/sbin/",
-                                "/srv", "/usr", "/var"],
-                               stdout=open(self.resultdir+"/upgrade_install.files","w"))
-        ret = self._runInImage(["dpkg","--get-selections"],
-                               stdout=open(self.resultdir+"/upgrade_install.pkgs","w"))
+        self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
+                          "/initrd", "/lib", "/root", "/sbin/",
+                          "/srv", "/usr", "/var"],
+                         stdout=open(self.resultdir+"/upgrade_install.files","w"))
+        self._runInImage(["dpkg","--get-selections"],
+                         stdout=open(self.resultdir+"/upgrade_install.pkgs","w"))
         self._runInImage(["tar","cvf","/tmp/etc-upgrade.tar","/etc"])
         self._copyFromImage("/tmp/etc-upgrade.tar", self.resultdir)
         self.stop()
@@ -159,12 +154,12 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         print "bootstrap finshsed"
         self.start()
         print "generating file diff list"
-        ret = self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
-                                "/initrd", "/lib", "/root", "/sbin/",
-                                "/srv", "/usr", "/var"],
-                               stdout=open(self.resultdir+"/fresh_install","w"))
-        ret = self._runInImage(["dpkg","--get-selections"],
-                               stdout=open(self.resultdir+"/fresh_install.pkgs","w"))
+        self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
+                          "/initrd", "/lib", "/root", "/sbin/",
+                          "/srv", "/usr", "/var"],
+                         stdout=open(self.resultdir+"/fresh_install","w"))
+        self._runInImage(["dpkg","--get-selections"],
+                         stdout=open(self.resultdir+"/fresh_install.pkgs","w"))
         self._runInImage(["tar","cvf","/tmp/etc-fresh.tar","/etc"])
         self._copyFromImage("/tmp/etc-fresh.tar", self.resultdir)
         self.stop()
@@ -194,7 +189,6 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         shutil.copy(self.baseimage, self.image)
 
         # get common vars
-        mirror = self.config.get("NonInteractive","Mirror")
         basepkg = self.config.get("NonInteractive","BasePkg")
         additional_base_pkgs = self.config.getlist("Distro","BaseMetaPkgs")
 
@@ -459,7 +453,6 @@ iface eth0 inet static
         
 
 if __name__ == "__main__":
-    import sys
     
     # FIXME: very rough proof of conecpt, unify with the chroot
     #        and automatic-upgrade code

@@ -3,11 +3,6 @@
 # test backend
 #
 
-from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
-
-import ConfigParser
-import os
-import os.path
 import tempfile
 
 from UpgradeTestBackend import UpgradeTestBackend

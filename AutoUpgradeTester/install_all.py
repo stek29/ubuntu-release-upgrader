@@ -3,7 +3,6 @@
 
 import apt
 import apt_pkg
-import logging
 import re
 import os
 import string

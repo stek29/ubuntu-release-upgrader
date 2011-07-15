@@ -71,10 +71,11 @@ from Core.utils import (is_unity_running,
                         allow_sleep)
 from Core.UpdateList import UpdateList
 from Core.MyCache import MyCache
-from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 from Core.AlertWatcher import AlertWatcher
 
+from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
 from DistUpgradeFetcher import DistUpgradeFetcherGtk
+
 from ChangelogViewer import ChangelogViewer
 from SimpleGtk3builderApp import SimpleGtkbuilderApp
 from MetaReleaseGObject import MetaRelease

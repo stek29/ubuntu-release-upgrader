@@ -1,22 +1,12 @@
 # abstract backend that is based around ssh login
 
 from UpgradeTestBackend import UpgradeTestBackend
-from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
-from DistUpgrade.sourceslist import SourcesList
 
-import ConfigParser
-
-import crypt
-import copy
 import glob
 import logging
 import os
 import os.path
-import shutil
 import subprocess
-import sys
-import tempfile
-import time
 
 
 class UpgradeTestBackendSSH(UpgradeTestBackend):
@@ -41,6 +31,8 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         print "login"
         self.start()
         ret = self._runInImage(["/bin/sh"])
+        if ret != 0:
+            logging.warn("_runInImage returned: %s" % ret)
         self.stop()
 
     def ping(self, user="root"):

@@ -8,8 +8,7 @@ import time
 import sys
 sys.path.insert(0, "../DistUpgrade")
 
-from UpgradeTestBackend import UpgradeTestBackend
-from UpgradeTestBackendQemu import *
+from UpgradeTestBackendQemu import UpgradeTestBackendQemu
 
 import apt
 import apt_pkg

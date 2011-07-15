@@ -3,15 +3,12 @@ import sys
 import os
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
-import apt
 
-from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 from UpgradeTestBackend import UpgradeTestBackend
 
 import tempfile
 import subprocess
 import shutil
-import logging
 import glob
 import ConfigParser
 
@@ -87,9 +84,10 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
 
     def _tryRandomPkgInstall(self, amount):
         " install 'amount' packages randomly "
-        self._runApt(tmpdir,"install",["python2.4-apt", "python-apt"])
-        shutil.copy("%s/randomInst.py",tmpdir+"/tmp")
-        ret = subprocess.call(["chroot",tmpdir,"/tmp/randomInst.py","%s" % amount])
+        self._runApt(self.tmpdir,"install",["python2.4-apt", "python-apt"])
+        shutil.copy("%s/randomInst.py",self.tmpdir+"/tmp")
+        ret = subprocess.call(["chroot",self.tmpdir,"/tmp/randomInst.py","%s" % amount])
+        print ret
 
     def _cacheDebs(self, tmpdir):
         # see if the debs should be cached
@@ -315,6 +313,8 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                    "--divert",d+".thereal",
                    "--rename",d]
             ret = subprocess.call(cmd)
+            if ret != 0:
+                print "dpkg-divert returned: %s" % ret
             shutil.copy(tmpdir+"/bin/true",tmpdir+d)
 
     def test(self):
@@ -326,7 +326,7 @@ if __name__ == "__main__":
         profilename = sys.argv[1]
     else:
 	profilename = "default"
-    chroot = Chroot(profilename)
+    chroot = UpgradeTestBackendChroot(profilename)
     tarball = "%s/tarball/dist-upgrade-%s.tar.gz" % (os.getcwd(),profilename)
     if not os.path.exists(tarball):
         print "No existing tarball found, creating a new one"

@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import glob
-import hashlib
 import os
 import subprocess
 import sys

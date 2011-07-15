@@ -1,19 +1,14 @@
 #!/usr/bin/python
 
 
-import apt
 import logging
-import mock
 import glob
-import os
-import os.path
 import sys
-import time
 import unittest
-import urllib2
 
 sys.path.insert(0, "../")
-from UpdateManager.Core.utils import *
+from UpdateManager.Core.utils import (is_child_of_process_name, 
+                                      estimate_kernel_size_in_boot)
 
 class TestUtils(unittest.TestCase):
 

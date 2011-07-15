@@ -6,7 +6,6 @@ sys.path.insert(0,"../")
 
 import shutil
 import subprocess
-import apt
 import apt_pkg
 import unittest
 from DistUpgrade.DistUpgradeController import DistUpgradeController

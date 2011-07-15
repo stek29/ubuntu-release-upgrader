@@ -7,7 +7,6 @@ import logging
 import os
 import os.path
 import sys
-import time
 
 sys.path.insert(0, "../")
 from UpdateManager.Core.utils import init_proxy

@@ -8,7 +8,7 @@ import os.path
 import apt_pkg
 sys.path.insert(0,"../")
 
-from DistUpgrade.DistUpgradeController import *
+from DistUpgrade.DistUpgradeController import DistUpgradeController, NoBackportsFoundException
 from DistUpgrade.DistUpgradeView import DistUpgradeView
 
 class testPreRequists(unittest.TestCase):
@@ -67,6 +67,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
         exp = False
         try:
             res = self.dc._verifyBackports()
+            print res
         except NoBackportsFoundException:
             exp = True
         self.assert_(exp == True)
@@ -117,7 +118,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
         res = self.dc._verifyBackports()
         self.assert_(res == True)
 
-    def disabled__because_of_jaunty_EOL_testVerifyBackportsNoValidMirror(self):
+    def disabled__because_of_jaunty_EOL_testVerifyBackportsNoValidMirror2(self):
         " test the backport verification with no valid mirror "
         # only minimal stuff in sources.list to speed up tests
         shutil.copy(os.path.join(self.testdir,"sources.list.no_valid_mirror"),

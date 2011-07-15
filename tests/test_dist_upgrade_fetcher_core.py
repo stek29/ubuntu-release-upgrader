@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import apt
+import apt_pkg
 import logging
 import os
 import os.path
@@ -8,8 +10,8 @@ import time
 import unittest
 sys.path.insert(0, "../")
 
-from UpdateManager.Core.MetaRelease import *
-from UpdateManager.Core.DistUpgradeFetcherCore import *
+from UpdateManager.Core.MetaRelease import MetaReleaseCore
+from UpdateManager.Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 
 # make sure we have a writable location for the meta-release file
 os.environ["XDG_CACHE_HOME"] = "/tmp"

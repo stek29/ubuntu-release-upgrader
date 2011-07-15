@@ -3,11 +3,7 @@
 
 import apt
 import logging
-import mock
-import os
-import os.path
 import sys
-import time
 import unittest
 import urllib2
 

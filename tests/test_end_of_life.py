@@ -2,16 +2,10 @@
 
 from gi.repository import GLib, Gtk
 
-import apt
-import apt_pkg
-import hashlib
 import mock
-import os
 import unittest
-import shutil
 import subprocess
 import sys
-import tempfile
 
 sys.path.insert(0,"../")
 

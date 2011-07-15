@@ -4,10 +4,8 @@ import apt
 import apt_pkg
 import hashlib
 import mock
-import os
 import unittest
 import shutil
-import subprocess
 import sys
 import tempfile
 

@@ -7,12 +7,10 @@ import os.path
 import sys
 sys.path = [os.path.normpath(os.path.join(os.getcwd(),"../"))] + sys.path
 
-import dbus
-
 from UpdateManager.GtkProgress import GtkFetchProgress
 from UpdateManager.UpdateManager import UpdateManager
-from UpdateManager.MetaReleaseGObject import *
-from UpdateManager.DistUpgradeFetcher import *
+from UpdateManager.MetaReleaseGObject import MetaRelease
+from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 
 def _(s): return s
 

@@ -3,7 +3,6 @@
 import apt_pkg
 import os
 import os.path
-import shutil
 import sys
 import tempfile
 import unittest

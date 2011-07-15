@@ -1,13 +1,10 @@
 #!/usr/bin/python
 
-import os
 import sys
 sys.path.insert(0,"../")
 
-import apt
 import unittest
 import shutil
-import subprocess
 import re
 
 from DistUpgrade.xorg_fix_proprietary import comment_out_driver_from_xorg, replace_driver_from_xorg, is_multiseat

@@ -4,7 +4,6 @@ import os
 import sys
 sys.path.insert(0, "../")
 
-import apt
 import unittest
 
 from UpdateManager.Core.DistUpgradeFetcherCore import country_mirror

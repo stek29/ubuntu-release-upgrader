@@ -12,7 +12,6 @@ import unittest
 
 
 from BaseHTTPServer import BaseHTTPRequestHandler
-from SimpleHTTPServer import SimpleHTTPRequestHandler
 from SocketServer import TCPServer
 
 class SillyProxyRequestHandler(BaseHTTPRequestHandler):
@@ -35,8 +34,8 @@ httpd = TCPServer(("", PORT), Handler)
 
 
 sys.path.insert(0, "../")
-from UpdateManager.Core.MetaRelease import *
-from UpdateManager.Core.DistUpgradeFetcherCore import *
+from UpdateManager.Core.MetaRelease import MetaReleaseCore
+#from UpdateManager.Core.DistUpgradeFetcherCore import 
 
 
 def get_new_dist(current_release):

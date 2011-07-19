@@ -366,6 +366,21 @@ def get_lang():
         logging.exception("gedefaultlocale() failed")
         return None
 
+def get_ubuntu_flavor():
+    """ try to guess the flavor based on the running desktop """
+    # this will (of course) not work in a server environment, 
+    # but the main use case for this is to show the right
+    # release notes
+    denv = os.environ.get("DESKTOP_SESSION", "")
+    if "gnome" in denv:
+        return "ubuntu"
+    elif "kde" in denv:
+        return "kubuntu"
+    elif "xfce" in denv or "xubuntu" in denv:
+        return "xubuntu"
+    # default to ubuntu if nothing more specific is found
+    return "ubuntu"
+
 def error(parent, summary, message):
   from gi.repository import Gtk, Gdk
   d = Gtk.MessageDialog(parent=parent,

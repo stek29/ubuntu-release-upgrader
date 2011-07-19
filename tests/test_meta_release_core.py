@@ -10,6 +10,7 @@ import time
 import urllib2
 import unittest
 
+from urllib2 import urlopen
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 from SocketServer import TCPServer
@@ -34,7 +35,7 @@ httpd = TCPServer(("", PORT), Handler)
 
 
 sys.path.insert(0, "../")
-from UpdateManager.Core.MetaRelease import MetaReleaseCore
+from UpdateManager.Core.MetaRelease import MetaReleaseCore, Dist
 #from UpdateManager.Core.DistUpgradeFetcherCore import 
 
 
@@ -104,6 +105,27 @@ class TestMetaReleaseCore(unittest.TestCase):
         self.assertFalse(url_downloadable("http://www.ubuntu.com/xxx",
                         logging.debug),
                         "download with no proxy failed")
+
+    def test_get_uri_query_string(self):
+        # test with fake data
+        d = Dist("oneiric", "11.10", "2011-10-10", True)
+        meta = MetaReleaseCore()
+        q = meta._get_release_notes_uri_query_string(d)
+        self.assertTrue("os=ubuntu" in q)
+        self.assertTrue("ver=11.10" in q)
+
+    def test_html_uri_real(self):
+        os.environ["http_proxy"]=""
+        os.environ["META_RELEASE_FAKE_CODENAME"] = "maverick"
+        meta = MetaReleaseCore(forceDownload=True)
+        while meta.downloading:
+            time.sleep(0.1)
+        uri = meta.new_dist.releaseNotesHtmlUri
+        f = urlopen(uri)
+        data = f.read()
+        self.assertTrue(len(data) > 0)
+        self.assertTrue("<html>" in data)
+        del os.environ["META_RELEASE_FAKE_CODENAME"]
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == "-v":

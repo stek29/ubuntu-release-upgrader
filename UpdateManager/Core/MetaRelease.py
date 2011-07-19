@@ -30,7 +30,7 @@ import time
 import thread
 import urllib2
 
-from utils import get_lang, get_dist
+from utils import get_lang, get_dist, get_ubuntu_flavor
 
 class Dist(object):
     def __init__(self, name, version, date, supported):
@@ -60,8 +60,11 @@ class MetaReleaseCore(object):
     def __init__(self, 
                  useDevelopmentRelease=False, 
                  useProposed=False,
-                 forceLTS=False):
+                 forceLTS=False,
+                 forceDownload=False):
         self._debug("MetaRelease.__init__() useDevel=%s useProposed=%s" % (useDevelopmentRelease, useProposed))
+        # force download instead of sending if-modified-since
+        self.forceDownload = forceDownload
         # information about the available dists
         self.downloading = True
         self.new_dist = None
@@ -198,9 +201,9 @@ class MetaReleaseCore(object):
                         dist.releaseNotesURI += "?lang=%s" % lang
                 if "ReleaseNotesHtml" in index_tag.section:
                     dist.releaseNotesHtmlUri = index_tag.section["ReleaseNotesHtml"]
-                    lang = get_lang()
-                    if lang:
-                        dist.releaseNotesHtmlUri += "?lang=%s" % lang
+                    query = self._get_release_notes_uri_query_string(dist)
+                    if query:
+                        dist.releaseNotesHtmlUri += query
                 if "UpgradeTool" in index_tag.section:
                     dist.upgradeTool =  index_tag.section["UpgradeTool"]
                 if "UpgradeToolSignature" in index_tag.section:
@@ -251,7 +254,7 @@ class MetaReleaseCore(object):
                 lastmodified = os.stat(self.METARELEASE_FILE).st_mtime
             except OSError, e:
                 pass
-        if lastmodified > 0:
+        if lastmodified > 0 and not self.forceDownload:
             req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
         try:
             # open
@@ -304,6 +307,19 @@ class MetaReleaseCore(object):
         else:
             self._debug("NO self.metarelease_information")
         self.downloading = False
+
+    def _get_release_notes_uri_query_string(self, dist):
+        q = "?"
+        # get the lang
+        lang = get_lang()
+        if lang:
+            q += "lang=%s&" % lang
+        # get the os
+        os = get_ubuntu_flavor()
+        q += "os=%s&" % os
+        # get the version to upgrade to
+        q += "ver=%s" % dist.version
+        return q
 
     def _debug(self, msg):
         if self.DEBUG:

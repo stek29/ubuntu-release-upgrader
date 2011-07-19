@@ -843,8 +843,9 @@ class DistUpgradeController(object):
             logging.warning("free space check skipped via config override")
             return True
         # do the check
+        with_snapshots = self._is_apt_btrfs_snapshot_supported()
         try:
-            self.cache.checkFreeSpace()
+            self.cache.checkFreeSpace(with_snapshots)
         except NotEnoughFreeSpaceError, e:
             # ok, showing multiple error dialog sucks from the UI
             # perspective, but it means we do not need to break the
@@ -980,16 +981,23 @@ class DistUpgradeController(object):
         # "force_start" environment for this
         subprocess.call(["service","apport","start","force_start=1"])
 
-    def _maybe_create_apt_btrfs_snapshot(self):
-        """ create btrfs snapshot (if btrfs layout is there) """
+    def _is_apt_btrfs_snapshot_supported(self):
+        """ check if apt-btrfs-snapshot is usable """
         try:
             import apt_btrfs_snapshot
         except ImportError:
             return
         apt_btrfs = apt_btrfs_snapshot.AptBtrfsSnapshot()
-        if not apt_btrfs.snapshots_supported():
-            logging.debug("btrfs snapshots not supported")
+        res = apt_btrfs.snapshots_supported()
+        logging.debug("apt btrfs snapshots supported: %s" % res)
+        return res
+
+    def _maybe_create_apt_btrfs_snapshot(self):
+        """ create btrfs snapshot (if btrfs layout is there) """
+        if not self._is_apt_btrfs_snapshot_supported():
             return
+        import apt_btrfs_snapshot
+        apt_btrfs = apt_btrfs_snapshot.AptBtrfsSnapshot()
         prefix = "release-upgrade-%s-" % self.toDist
         res = apt_btrfs.create_btrfs_root_snapshot(prefix)
         logging.info("creating snapshot '%s' (success=%s)" % (prefix, res))

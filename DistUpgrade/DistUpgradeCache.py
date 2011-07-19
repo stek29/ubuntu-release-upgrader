@@ -1019,7 +1019,7 @@ class MyCache(apt.Cache):
                     foreign_pkgs.add(pkg.name)
         return foreign_pkgs
 
-    def checkFreeSpace(self):
+    def checkFreeSpace(self, snapshots_in_use=False):
         """
         this checks if we have enough free space on /var, /boot and /usr
         with the given cache 
@@ -1119,7 +1119,16 @@ class MyCache(apt.Cache):
             # the overlay dir
             for pkg in self:
                 if pkg.marked_upgrade or pkg.marked_install:
-                    required_for_aufs += self._depcache.get_candidate_ver(pkg._pkg).Size
+                    required_for_aufs += pkg.candidate.size
+
+        # add old size of the package if we use snapshots
+        required_for_snapshots = 0.0
+        if snapshots_in_use:
+            for pkg in self:
+                if (pkg.is_installed and 
+                    (pkg.marked_upgrade or pkg.marked_delete)):
+                    required_for_snapshots += pkg.installed.size
+            logging.debug("additional space for the snapshots: %s" % required_for_snapshots)
                     
         # sum up space requirements
         for (dir, size) in [(archivedir, self.requiredDownload),
@@ -1130,11 +1139,14 @@ class MyCache(apt.Cache):
                             ("/tmp", 5*1024*1024),   # /tmp for dkms LP: #427035
                             ("/", 10*1024*1024),     # small safety buffer /
                             (aufs_rw_dir, required_for_aufs),
+                            # if snapshots are in use
+                            ("/usr", required_for_snapshots),
                            ]:
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
             fs_free[dir].need += size
+
 
         # check for space required violations
         required_list = {}

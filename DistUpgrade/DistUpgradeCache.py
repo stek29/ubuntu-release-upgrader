@@ -1119,7 +1119,7 @@ class MyCache(apt.Cache):
             # the overlay dir
             for pkg in self:
                 if pkg.marked_upgrade or pkg.marked_install:
-                    required_for_aufs += pkg.candidate.size
+                    required_for_aufs += pkg.candidate.installed_size
 
         # add old size of the package if we use snapshots
         required_for_snapshots = 0.0
@@ -1127,7 +1127,7 @@ class MyCache(apt.Cache):
             for pkg in self:
                 if (pkg.is_installed and 
                     (pkg.marked_upgrade or pkg.marked_delete)):
-                    required_for_snapshots += pkg.installed.size
+                    required_for_snapshots += pkg.installed.installed_size
             logging.debug("additional space for the snapshots: %s" % required_for_snapshots)
                     
         # sum up space requirements

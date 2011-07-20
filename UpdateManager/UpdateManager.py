@@ -1008,7 +1008,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                    0, Gtk.MessageType.ERROR,
                                    Gtk.ButtonsType.CLOSE,"")
         dialog.set_markup(msg)
-        dialog.vbox.set_spacing(6)
+        dialog.get_content_area().set_spacing(6)
         dialog.run()
         dialog.destroy()
         sys.exit(1)
@@ -1037,7 +1037,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                    0, Gtk.MessageType.ERROR,
                                    Gtk.ButtonsType.CLOSE,"")
         dialog.set_markup(msg)
-        dialog.vbox.set_spacing(6)
+        dialog.get_content_area().set_spacing(6)
         dialog.run()
         dialog.destroy()
     if self.list.num_updates > 0:
@@ -1088,7 +1088,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                  0, Gtk.MessageType.ERROR,
                                  Gtk.ButtonsType.CLOSE,"")
       dialog.set_markup(msg)
-      dialog.vbox.set_spacing(6)
+      dialog.get_content_area().set_spacing(6)
       dialog.run()
       dialog.destroy()
 
@@ -1154,7 +1154,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                                    0, Gtk.MessageType.ERROR,
                                    Gtk.ButtonsType.CLOSE,"")
         dialog.set_markup(msg)
-        dialog.vbox.set_spacing(6)
+        dialog.get_content_area().set_spacing(6)
         dialog.run()
         dialog.destroy()
         sys.exit(1)

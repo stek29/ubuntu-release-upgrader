@@ -10,7 +10,9 @@ TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
 
 override_dh_auto_clean:
 	dh_auto_clean
-	rm -rf ./build
+	rm -rf ./build ./DistUpgrade/$(DEBVER) ./DistUpgrade/mo \
+		./DistUpgrade/$(DIST)  ./DistUpgrade/$(DIST).tar.gz \
+		 ./DistUpgrade/nvidia-obsolete.pkgs ./po/mo
 
 binary: binary-arch binary-indep
 binary-indep:

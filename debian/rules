@@ -8,7 +8,9 @@ TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
 %:
 	dh $@ --with-python2
 
-override_dh_builddeb:
+binary: binary-arch binary-indep
+binary-indep:
+	dh $@
 	# now the dist-upgrader special tarball
 	(cd DistUpgrade/ && \
 	   ./build-tarball.sh && \
@@ -18,5 +20,3 @@ override_dh_builddeb:
 	       $(DEBVER)/*ReleaseAnnouncement* \
                $(DEBVER)/$(DIST).tar.gz )
 	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
-	# build the deb
-	dh_builddeb

@@ -8,6 +8,10 @@ TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
 %:
 	dh $@ --with-python2
 
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf ./build
+
 binary: binary-arch binary-indep
 binary-indep:
 	dh $@

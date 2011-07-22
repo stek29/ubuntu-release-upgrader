@@ -72,7 +72,9 @@ Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}
 Recommends: qemu-kvm|kvm, 
             ubuntu-vm-builder
+Suggests: default-jre-headless | java2-runtime-headless
 Description: Test release upgrades in a virtual environment
  A tool to do QA for release upgrades in ubuntu that performs upgrades
  in a virtual environment. Supported backends are "chroot", "kvm" and
- "EC2".
+ "EC2". It will also install a hudson/jenkins slave (disabled by 
+ default).

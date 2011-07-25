@@ -675,9 +675,9 @@ class UpdateManager(SimpleGtkbuilderApp):
           if firstrun:
               text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
               if is_unity_running():
-                  text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
+                  text_label_main = _("These software updates have been issued since this version of Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
               else:   
-                  text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
+                  text_label_main = _("These software updates have been issued since this version of Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
               self.settings.set_boolean("first-run", False)
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")

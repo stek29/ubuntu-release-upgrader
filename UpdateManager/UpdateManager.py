@@ -493,13 +493,13 @@ class UpdateManager(SimpleGtkbuilderApp):
         # deleted when it goes out of scope and no menu is visible
         # (bug #806949)
         self.menu = menu = Gtk.Menu()
-        item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Uncheck All"))
+        item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Deselect All"))
         item_select_none.connect("activate", self.select_none_updgrades)
         menu.append(item_select_none)
         num_updates = self.cache.installCount
         if num_updates == 0:
             item_select_none.set_property("sensitive", False)
-        item_select_all = Gtk.MenuItem.new_with_mnemonic(_("_Check All"))
+        item_select_all = Gtk.MenuItem.new_with_mnemonic(_("Select _All"))
         item_select_all.connect("activate", self.select_all_updgrades)
         menu.append(item_select_all)
         menu.show_all()

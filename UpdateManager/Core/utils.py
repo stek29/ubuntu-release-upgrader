@@ -406,7 +406,7 @@ def humanize_size(bytes):
         # TRANSLATORS: download size of very small updates
         return _("1 kB")
     elif bytes < 1000 * 1000:
-        # TRANSLATORS: download size of small updates, e.g. "250 KB"
+        # TRANSLATORS: download size of small updates, e.g. "250 kB"
         return locale.format_string(_("%.0f kB"), bytes/1000)
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"

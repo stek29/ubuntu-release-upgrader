@@ -401,16 +401,16 @@ def humanize_size(bytes):
     """
     if bytes == 0:
         # TRANSLATORS: download size is 0
-        return _("0 KB")
-    elif bytes < 1024:
+        return _("0 kB")
+    elif bytes < 1000:
         # TRANSLATORS: download size of very small updates
-        return _("1 KB")
-    elif bytes < 1024 * 1024:
+        return _("1 kB")
+    elif bytes < 1000 * 1000:
         # TRANSLATORS: download size of small updates, e.g. "250 KB"
-        return locale.format_string(_("%.0f KB"), bytes/1024)
+        return locale.format_string(_("%.0f kB"), bytes/1000)
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
-        return locale.format_string(_("%.1f MB"), float(bytes) / 1024 / 1024)
+        return locale.format_string(_("%.1f MB"), bytes / 1000.0 / 1000.0)
 
 def get_arch():
     return apt_pkg.Config.find("APT::Architecture")

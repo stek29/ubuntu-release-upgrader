@@ -280,7 +280,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
         origins = self[name].candidateOrigin
-        self.all_changes[name] = _("Changes for the versions:\n%s\n%s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
+        self.all_changes[name] = _("Changes for the versions:\nInstalled version: %s\nAvailable version: %s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
         if not self.CHANGELOG_ORIGIN in [o.origin for o in origins]:
             # Try non official changelog location
             changelogs_uri_binary = self._guess_third_party_changelogs_uri_by_binary(name)

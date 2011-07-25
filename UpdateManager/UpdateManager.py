@@ -493,13 +493,13 @@ class UpdateManager(SimpleGtkbuilderApp):
         # deleted when it goes out of scope and no menu is visible
         # (bug #806949)
         self.menu = menu = Gtk.Menu()
-        item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Uncheck All"))
+        item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Deselect All"))
         item_select_none.connect("activate", self.select_none_updgrades)
         menu.append(item_select_none)
         num_updates = self.cache.installCount
         if num_updates == 0:
             item_select_none.set_property("sensitive", False)
-        item_select_all = Gtk.MenuItem.new_with_mnemonic(_("_Check All"))
+        item_select_all = Gtk.MenuItem.new_with_mnemonic(_("Select _All"))
         item_select_all.connect("activate", self.select_all_updgrades)
         menu.append(item_select_all)
         menu.show_all()
@@ -675,9 +675,9 @@ class UpdateManager(SimpleGtkbuilderApp):
           if firstrun:
               text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
               if is_unity_running():
-                  text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
+                  text_label_main = _("These software updates have been issued since this version of Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
               else:   
-                  text_label_main = _("These software updates have been issued since Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
+                  text_label_main = _("These software updates have been issued since this version of Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
               self.settings.set_boolean("first-run", False)
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")

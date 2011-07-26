@@ -437,6 +437,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         column.pack_start(render, True)
         column.add_attribute(render, "markup", 0)
         self.treeview_details.append_column(column)
+        self.details_list.set_sort_column_id(0, gtk.SORT_ASCENDING)
         self.treeview_details.set_model(self.details_list)
         # Use italic style in the status labels
         attrlist=pango.AttrList()

@@ -386,7 +386,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
             gladedir=os.getcwd()
         else:
             localedir="/usr/share/locale/"
-            gladedir=os.path.join(datadir, "glade")
+            gladedir=os.path.join(datadir, "gtkbuilder")
 
         # check if we have a display etc
         Gtk.init_check(sys.argv)

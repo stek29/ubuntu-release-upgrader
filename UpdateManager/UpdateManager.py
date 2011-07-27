@@ -175,7 +175,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.setupDbus()
     Gtk.Window.set_default_icon_name("update-manager")
     self.datadir = datadir
-    SimpleGtkbuilderApp.__init__(self, datadir+"glade/UpdateManager.ui",
+    SimpleGtkbuilderApp.__init__(self, datadir+"gtkbuilder/UpdateManager.ui",
                                  "update-manager")
     gettext.bindtextdomain("update-manager", "/usr/share/locale")
     gettext.textdomain("update-manager")

@@ -182,7 +182,7 @@ if __name__ == "__main__":
     class MockParent(SimpleGtkbuilderApp):
         """Mock parent for the fetcher that just loads the UI file"""
         def __init__(self):
-            SimpleGtkbuilderApp.__init__(self, "../data/glade/UpdateManager.ui", "update-manager")
+            SimpleGtkbuilderApp.__init__(self, "../data/gtkbuilder/UpdateManager.ui", "update-manager")
 
     # create mock parent and fetcher
     parent = MockParent()

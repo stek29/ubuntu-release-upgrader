@@ -51,8 +51,8 @@ setup(name='update-manager',
                "AutoUpgradeTester/auto-upgrade-tester",
                ],
       data_files=[
-                  ('share/update-manager/glade',
-                   glob.glob("data/glade/*.ui")+
+                  ('share/update-manager/gtkbuilder',
+                   glob.glob("data/gtkbuilder/*.ui")+
                    glob.glob("DistUpgrade/*.ui")
                   ),
                   ('share/update-manager/',

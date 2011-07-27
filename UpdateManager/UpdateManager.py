@@ -953,23 +953,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     """
     self.toggled(None, path)
 
-  def on_window_main_size_allocate(self,arg1,arg2):
-    """ 
-    recalculates headline labels on window resize to work around
-    problems with gtk word wrapping 
-    (http://bugzilla.gnome.org/show_bug.cgi?id=101968)
-    """
-    # this number is based on border width 
-    # (2*main_border_with + icon width + 2*icon_border_with)
-    #     2*18 + 48 + 2*12 
-    border_space = 96
-    width, height = self.window_main.get_size()
-    #print "on_window_main_size_allocate", width, height
-    self.label_main_details.set_size_request(width - border_space ,-1)
-    self.label_header.set_size_request(width - border_space,-1)
-    self.label_downsize.set_size_request(width - border_space,-1)
-    self.label_roaming.set_size_request(width - border_space,-1)
-
   def exit(self):
     """ exit the application, save the state """
     self.save_state()

@@ -301,14 +301,14 @@ def on_battery():
 
 def _inhibit_sleep_old_interface():
   """
-  Send a dbus signal to org.gnome.PowerManager to not suspend
+  Send a dbus signal to org.gnome.SettingsDaemon.Power to not suspend
   the system, this is to support upgrades from pre-gutsy g-p-m
   """
   import dbus
   bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
-  devobj = bus.get_object('org.gnome.PowerManager', 
-                          '/org/gnome/PowerManager')
-  dev = dbus.Interface(devobj, "org.gnome.PowerManager")
+  devobj = bus.get_object('org.gnome.SettingsDaemon', 
+                          '/org/gnome/SettingsDaemon/Power')
+  dev = dbus.Interface(devobj, "org.gnome.SettingsDaemon.Power")
   cookie = dev.Inhibit('UpdateManager', 'Updating system')
   return (dev, cookie)
 

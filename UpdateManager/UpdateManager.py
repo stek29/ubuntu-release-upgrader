@@ -587,9 +587,9 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_downsize.show()
           self.vbox_alerts.show()
 
-  def _get_last_apt_get_update_hours(self):
+  def _get_last_apt_get_update_minutes(self):
       """
-      Return the number of hours since the last successful apt-get update
+      Return the number of minutes since the last successful apt-get update
       
       If the date is unknown, return "None"
       """
@@ -598,19 +598,20 @@ class UpdateManager(SimpleGtkbuilderApp):
       # calculate when the last apt-get update (or similar operation)
       # was performed
       mtime = os.stat("/var/lib/apt/periodic/update-success-stamp")[stat.ST_MTIME]
-      ago_hours = int((time.time() - mtime) / (60*60) )
-      return ago_hours
+      ago_minutes = int((time.time() - mtime) / 60 )
+      return ago_minutes
 
   def _get_last_apt_get_update_text(self):
       """
       return a human readable string with the information when
       the last apt-get update was run
       """
-      ago_hours = self._get_last_apt_get_update_hours()
-      if ago_hours is None:
+      ago_minutes = self._get_last_apt_get_update_minutes()
+      if ago_minutes is None:
           return _("It is unknown when the package information was "
                    "updated last. Please try clicking on the 'Check' "
                    "button to update the information.")
+      ago_hours = int( ago_minutes / 60 )
       ago_days = int( ago_hours / 24 )
       if ago_days > self.NO_UPDATE_WARNING_DAYS:
 	  return _("The package information was last updated %(days_ago)s "
@@ -625,8 +626,15 @@ class UpdateManager(SimpleGtkbuilderApp):
           return ngettext("The package information was last updated %(hours_ago)s hour ago.",
                           "The package information was last updated %(hours_ago)s hours ago.",
                           ago_hours) % { "hours_ago" : ago_hours, }
+      elif ago_minutes >= 45:
+          # TRANSLATORS: only in plural form, as %s minutes ago is one of 15, 30, 45 minutes ago
+          return _("The package information was last updated about %s minutes ago.")%45
+      elif ago_minutes >= 30:
+          return _("The package information was last updated about %s minutes ago.")%30
+      elif ago_minutes >= 15:
+          return _("The package information was last updated about %s minutes ago.")%15
       else:
-          return _("The package information was last updated less than one hour ago.")
+          return _("The package information was just updated.")
       return None
 
   def update_last_updated_text(self, user_data):
@@ -664,7 +672,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.textview_descr.get_buffer().set_text("")
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
-	      if self._get_last_apt_get_update_hours() > self.NO_UPDATE_WARNING_DAYS*24:
+	      if int(self._get_last_apt_get_update_minutes() / 60) > self.NO_UPDATE_WARNING_DAYS*24:
 			text_header = "<big><b>%s</b></big>"  % _("Software updates may be available for your computer.")
           # add timer to ensure we update the information when the 
           # last package count update was performed

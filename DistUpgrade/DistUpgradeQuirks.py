@@ -409,6 +409,21 @@ class DistUpgradeQuirks(object):
         self._killKBluetooth()
         self._killScreensaver()
         self._stopDocvertConverter()
+    def oneiricStartUpgrade(self):
+        logging.debug("oneiric StartUpgrade quirks")
+        cache = self.controller.cache
+        if (os.path.exists("/usr/sbin/update-grub") and
+            not os.path.exists("/etc/kernel/postinst.d/zz-update-grub")):
+            # create a version of zz-update-grub to avoid depending on
+            # the upgrade order. if that file is missing, we may end
+            # up generating a broken grub.cfg
+            targetdir = "/etc/kernel/postinst.d"
+            if not os.path.exists(targetdir):
+                os.makedirs(targetdir)
+            logging.debug("copying zz-update-grub into %s" % targetdir)
+            shutil.copy("zz-update-grub", targetdir)
+            os.chmod(os.path.join(targetdir, "zz-update-grub"), 0755)
+            
     def from_hardyStartUpgrade(self):
         logging.debug("from_hardyStartUpgrade quirks")
         self._stopApparmor()

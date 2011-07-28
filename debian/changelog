@@ -4,6 +4,10 @@ update-manager (1:0.152.9) UNRELEASED; urgency=low
   * rename data/glade to data/gtkbuilder
   * merged lp:~rodrigo-moya/update-manager/use-new-power-interface, 
     thanks to Rodrigo Moya
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - when upgrading, ensure that zz-update-grub is early in
+      /etc/kernel/postinst.d to ensure we always have a good grub
+      config and not depend on the package upgrade ordering for that
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 27 Jul 2011 10:47:58 +0200
 

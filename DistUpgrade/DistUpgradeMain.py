@@ -53,7 +53,7 @@ def do_commandline():
                       help=_("Use frontend. Currently available: \n"\
                              "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"))
     parser.add_option("--mode", dest="mode",default="desktop",
-                      help=_("*DEPRECATED* this option will be ignore"))
+                      help=_("*DEPRECATED* this option will be ignored"))
     parser.add_option("--partial", dest="partial", default=False,
                       action="store_true", 
                       help=_("Perform a partial upgrade only (no sources.list rewriting)"))

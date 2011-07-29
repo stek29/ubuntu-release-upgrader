@@ -598,6 +598,8 @@ class DistUpgradeController(object):
                     foundToDist |= validTo
                     entry.dist = toDists[fromDists.index(entry.dist)]
                     logging.debug("entry '%s' updated to new dist" % entry)
+                elif entry.type == 'deb-src':
+                    continue
                 else:
                     # disable all entries that are official but don't
                     # point to either "to" or "from" dist
@@ -969,7 +971,7 @@ class DistUpgradeController(object):
                              _("The upgrade has aborted. Please check your "
                                "Internet connection or "
                                "installation media and try again. All files "
-                               "downloaded so far are kept."),
+                               "downloaded so far have been kept."),
                              "%s" % e)
         # abort here because we want our sources.list back
         self._enableAptCronJob()

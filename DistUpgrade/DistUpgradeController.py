@@ -40,6 +40,7 @@ from utils import (country_mirror,
                    check_and_fix_xbit, 
                    get_arch, 
                    iptables_active, 
+                   inside_chroot,
                    is_child_of_process_name)
 from string import Template
 
@@ -1646,7 +1647,8 @@ class DistUpgradeController(object):
         self._view.setStep(DistUpgradeView.STEP_REBOOT)
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
-        if self._view.confirmRestart():
+        if (not inside_chroot() and
+            self._view.confirmRestart()):
             subprocess.Popen("/sbin/reboot")
             sys.exit(0)
         return True

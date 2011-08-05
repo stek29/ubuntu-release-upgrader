@@ -609,7 +609,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       ago_minutes = self._get_last_apt_get_update_minutes()
       if ago_minutes is None:
           return _("It is unknown when the package information was "
-                   "updated last. Please try clicking on the 'Check' "
+                   "updated last. Please click the 'Check' "
                    "button to update the information.")
       ago_hours = int( ago_minutes / 60 )
       ago_days = int( ago_hours / 24 )

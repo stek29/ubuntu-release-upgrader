@@ -256,9 +256,9 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if res == Gtk.ResponseType.YES:
-            self.term.feed_child("y\n")
+            self.term.feed_child("y\n", -1)
         else:
-            self.term.feed_child("n\n")
+            self.term.feed_child("n\n", -1)
 
     def fork(self):
         pty = Vte.Pty.new(Vte.PtyFlags.DEFAULT)

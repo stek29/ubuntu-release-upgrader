@@ -343,7 +343,7 @@ class DistUpgradeVteTerminal(object):
         self.parent = parent
     def call(self, cmd, hidden=False):
         def wait_for_child(widget):
-        #print "wait for child finished"
+            #print "wait for child finished"
             self.finished=True
         self.term.show()
         self.term.connect("child-exited", wait_for_child)
@@ -351,8 +351,15 @@ class DistUpgradeVteTerminal(object):
         if hidden==False:
             self.parent.expander_terminal.set_expanded(True)
         self.finished = False
-        pid = self.term.fork_command(command=cmd[0],argv=cmd)
-        if pid < 0:
+        (success, pid) = self.term.fork_command_full(Vte.PtyFlags.DEFAULT,
+                                                     "/",
+                                                     cmd,
+                                                     None,
+                                                     0,    # GLib.SpawnFlags
+                                                     None, # child_setup
+                                                     None, # child_setup_data
+                                                     )
+        if not success or pid < 0:
             # error
             return
         while not self.finished:
@@ -706,6 +713,10 @@ if __name__ == "__main__":
     fp = GtkFetchProgressAdapter(view)
     ip = GtkInstallProgressAdapter(view)
 
+    view.getTerminal().call(["/usr/bin/dpkg","--configure","-a"])
+    Gtk.main()
+    sys.exit(0)
+
     cache = apt.Cache()
     for pkg in sys.argv[1:]:
         if cache[pkg].is_installed:
@@ -714,11 +725,10 @@ if __name__ == "__main__":
             cache[pkg].mark_install()
     cache.commit(fp,ip)
     Gtk.main()
-    sys.exit(0)
 
     #sys.exit(0)
     ip.conffile("TODO","TODO~")
-    view.getTerminal().call(["dpkg","--configure","-a"])
+    view.getTerminal().call(["/usr/bin/dpkg","--configure","-a"])
     #view.getTerminal().call(["ls","-R","/usr"])
     view.error("short","long",
                "asfds afsdj af asdf asdf asf dsa fadsf asdf as fasf sextended\n"

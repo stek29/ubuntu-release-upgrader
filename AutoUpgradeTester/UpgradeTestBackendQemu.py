@@ -419,6 +419,10 @@ iface eth0 inet static
                     print "adding %s to mirrors" % entry.uri
                     self._runInImage(["echo '%s' >> /upgrade-tester/new_mirrors.cfg" % entry.uri])
                     
+            # upgrade *before* the regular upgrade runs 
+            if self.config.getWithDefault("NonInteractive", "AddRepoUpgradeImmediately", False):
+                self._runInImage(["apt-get", "update"])
+                self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade", "--allow-unauthenticated"])
 
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader

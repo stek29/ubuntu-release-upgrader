@@ -424,6 +424,11 @@ iface eth0 inet static
                 self._runInImage(["apt-get", "update"])
                 self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade", "--allow-unauthenticated"])
 
+        apt_conf = self.config.getWithDefault("NonInteractive","AddAptConf","")
+        if apt_conf:
+            apt_conf = os.path.join(os.path.dirname(self.profile), apt_conf)
+            self._copyToImage(apt_conf, "/etc/apt/apt.conf.d")
+
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader
         cmd_prefix=[]

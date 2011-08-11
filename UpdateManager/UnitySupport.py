@@ -32,7 +32,7 @@ except ImportError as e:
 
 class IUnitySupport(object):
     """ interface for unity support """
-    def __init__(self, parent): pass
+    def __init__(self, parent=None): pass
     def set_updates_count(self, num_updates): pass
     def set_urgency(self, urgent): pass
     def set_install_menuitem_visible(self, visible): pass

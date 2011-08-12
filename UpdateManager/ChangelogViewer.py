@@ -65,12 +65,15 @@ class ChangelogViewer(Gtk.TextView):
         self.menu = Gtk.Menu()
         
         # create menu items
-        item_grey_link = Gtk.MenuItem(url)
+        item_grey_link = Gtk.MenuItem()
+        item_grey_link.set_label(url)
         item_grey_link.connect("activate", self.handle_context_menu, "open", url)
         item_seperator = Gtk.MenuItem()
-        item_open_link = Gtk.MenuItem(_("Open Link in Browser"))
+        item_open_link = Gtk.MenuItem()
+        item_open_link.set_label(_("Open Link in Browser"))
         item_open_link.connect("activate", self.handle_context_menu, "open", url)
-        item_copy_link = Gtk.MenuItem(_("Copy Link to Clipboard"))
+        item_copy_link = Gtk.MenuItem()
+        item_copy_link.set_label(_("Copy Link to Clipboard"))
         item_copy_link.connect("activate", self.handle_context_menu, "copy", url)
         
         # add menu items
@@ -205,7 +208,7 @@ class ChangelogViewer(Gtk.TextView):
                     break
                 if event.button == 3:
                     self.create_context_menu(url)
-                    self.menu.popup(None, None, None, event.button, event.time)
+                    self.menu.popup(None, None, None, None, event.button, event.time)
                     return True
 
     def motion_notify_event(self, text_view, event):

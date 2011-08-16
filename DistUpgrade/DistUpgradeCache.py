@@ -583,6 +583,8 @@ class MyCache(apt.Cache):
             if (pkg.candidateDownloadable and
                 not (pkg.is_installed or pkg.marked_install) and
                 not pkg.name in removeEssentialOk and
+                # ignore multiarch priority required packages
+                not ":" in pkg.name and
                 pkg.priority in need):
                 self.mark_install(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
 

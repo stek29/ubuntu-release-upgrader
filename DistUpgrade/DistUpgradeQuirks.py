@@ -411,6 +411,7 @@ class DistUpgradeQuirks(object):
         self._stopDocvertConverter()
     def oneiricStartUpgrade(self):
         logging.debug("oneiric StartUpgrade quirks")
+        # fix grub issue
         cache = self.controller.cache
         if (os.path.exists("/usr/sbin/update-grub") and
             not os.path.exists("/etc/kernel/postinst.d/zz-update-grub")):
@@ -423,6 +424,9 @@ class DistUpgradeQuirks(object):
             logging.debug("copying zz-update-grub into %s" % targetdir)
             shutil.copy("zz-update-grub", targetdir)
             os.chmod(os.path.join(targetdir, "zz-update-grub"), 0755)
+        # enable multiarch permanently
+        if apt_pkg.config.find("Apt::Architecture") == "amd64":
+            self._enable_multiarch(foreign_arch="i386")
             
     def from_hardyStartUpgrade(self):
         logging.debug("from_hardyStartUpgrade quirks")
@@ -1183,6 +1187,16 @@ class DistUpgradeQuirks(object):
                     "foomatic-db-gutenprint -> ijsgutenprint-ppds rule")
         except:
             logging.exception("_gutenprint_fixup failed")
+
+    def _enable_multiarch(self, foreign_arch="i386"):
+        """ enable multiarch via /etc/dpkg/dpkg.cfg.d/multiarch """
+        cfg = "/etc/dpkg/dpkg.cfg.d/multiarch"
+        if not os.path.exists(cfg):
+            try:
+                os.makedirs("/etc/dpkg/dpkg.cfg.d/")
+            except OSError:
+                pass
+            open(cfg, "w").write("foreign-architecture %s\n" % foreign_arch)
 
     def _add_kdegames_card_extra_if_installed(self):
         """ test if kdegames-card-data is installed and if so,

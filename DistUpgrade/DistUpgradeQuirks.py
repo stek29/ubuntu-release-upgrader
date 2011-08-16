@@ -443,7 +443,7 @@ class DistUpgradeQuirks(object):
             shutil.copy("zz-update-grub", targetdir)
             os.chmod(os.path.join(targetdir, "zz-update-grub"), 0755)
         # enable multiarch permanently
-        if apt_pkg.config.find("Apt::Architecture") == "amd64":
+        if apt.apt_pkg.config.find("Apt::Architecture") == "amd64":
             self._enable_multiarch(foreign_arch="i386")
             
     def from_hardyStartUpgrade(self):

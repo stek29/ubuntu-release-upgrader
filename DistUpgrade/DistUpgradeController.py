@@ -166,7 +166,9 @@ class DistUpgradeController(object):
 
     def openCache(self, lock=True):
         logging.debug("openCache()")
-        if self.cache is not None:
+        if self.cache is None:
+            self.quirks.run("PreCacheOpen")
+        else:
             self.cache.releaseLock()
             self.cache.unlockListsDir()
         try:

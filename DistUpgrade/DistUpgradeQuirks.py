@@ -19,6 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+import apt
 import glob
 import logging
 import os
@@ -58,6 +59,8 @@ class DistUpgradeQuirks(object):
     def run(self, quirksName):
         """
         Run the specific quirks handler, the follow handlers are supported:
+        - PreCacheOpen: run *before* the apt cache is opened the first time
+                        to set options that affect the cache
         - PostInitialUpdate: run *before* the sources.list is rewritten but
                              after a initial apt-get update
         - PostDistUpgradeCache: run *after* the dist-upgrade was calculated
@@ -102,6 +105,21 @@ class DistUpgradeQuirks(object):
         if func is not None:
             logging.debug("quirks: running %s" % funcname)
             func()
+
+    # individual quirks handler that run *before* the cache is opened
+    def PreCacheOpen(self):
+        """ run before the apt cache is opened the first time """
+        logging.debug("running Quirks.PreCacheOpen")
+
+    def oneiricPreCacheOpen(self):
+        logging.debug("running Quirks.oneiricPreCacheOpen")
+        # enable i386 multiach temporarely during the upgrade if on amd64
+        # this needs to be done very early as libapt caches the result
+        # of the "getArchitectures()" call in aptconfig and its not possible
+        # currently to invalidate this cache
+        if apt.apt_pkg.config.find("Apt::Architecture") == "amd64":
+            logging.debug("multiarch: enabling i386 as a additional architecture")
+            apt.apt_pkg.config.set("Apt::Architectures::", "i386")
 
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):

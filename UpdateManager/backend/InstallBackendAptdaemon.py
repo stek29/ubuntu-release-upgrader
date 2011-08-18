@@ -10,7 +10,7 @@ from aptdaemon.enums import EXIT_SUCCESS
 from UpdateManager.backend import InstallBackend
 from UpdateManager.UnitySupport import UnitySupport
 
-import apt_pkg
+import apt
 import dbus
 
 class InstallBackendAptdaemon(InstallBackend):
@@ -26,7 +26,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def update(self):
         """Refresh the package list"""
         try:
-            apt_pkg.pkgsystem_unlock()
+            apt.apt_pkg.pkgsystem_unlock()
         except SystemError:
             pass
         try:
@@ -42,7 +42,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def commit(self, pkgs_install, pkgs_upgrade, close_on_done):
         """Commit a list of package adds and removes"""
         try:
-            apt_pkg.pkgsystem_unlock()
+            apt.apt_pkg.pkgsystem_unlock()
         except SystemError:
             pass
         try:
@@ -55,6 +55,7 @@ class InstallBackendAptdaemon(InstallBackend):
         except errors.NotAuthorizedError as e:
             self.emit("action-done", self.INSTALL, False, False)
         except dbus.DBusException as e:
+            print e, e.get_dbus_name()
             if e.get_dbus_name() != "org.freedesktop.DBus.Error.NoReply":
                 raise
             self.emit("action-done", self.INSTALL, False, False)

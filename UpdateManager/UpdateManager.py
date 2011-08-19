@@ -727,13 +727,12 @@ class UpdateManager(SimpleGtkbuilderApp):
         apt_pkg.pkgsystem_unlock()
     except SystemError:
         pass
-    cmd = ["/usr/bin/gksu", 
-           "--desktop", "/usr/share/applications/software-properties-Gtk.desktop", 
-           "--", "/usr/bin/software-properties-gtk","--open-tab","2",
-           ]
+    cmd = ["/usr/bin/software-properties-gtk",
+           "--open-tab","2",
            # FIXME: once get_xid() is available via introspections, add 
            #        this back
-           #"--toplevel", "%s" % self.window_main.get_window().get_xid() ]
+           #"--toplevel", "%s" % self.window_main.get_window().get_xid() 
+          ]
     self.window_main.set_sensitive(False)
     p = subprocess.Popen(cmd)
     while p.poll() is None:

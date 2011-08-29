@@ -22,6 +22,7 @@ def apport_crash(type, value, tb):
     if os.path.exists('/var/crash/_usr_bin_update-manager.0.crash'):
         report = Report()
         report.setdefault('Tags', 'dist-upgrade')
+        report['Tags'] += ' dist-upgrade'
         for fname in os.listdir("/var/log/dist-upgrade/"):
             f = os.path.join("/var/log/dist-upgrade",fname)
             if not os.path.isfile(f) or os.path.getsize(f) == 0:

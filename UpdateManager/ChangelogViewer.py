@@ -88,8 +88,10 @@ class ChangelogViewer(Gtk.TextView):
         if action == "open":
             open_url(url)
         if action == "copy":
-            cb = Gtk.Clipboard()
-            cb.set_text(url)
+            display = Gdk.Display.get_default()
+            selection = Gdk.Atom.intern ("CLIPBOARD", False)
+            cb = Gtk.Clipboard.get_for_display(display, selection)
+            cb.set_text(url, -1)
             cb.store()
 
     def tag_link(self, start, end, url):

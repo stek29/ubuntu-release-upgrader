@@ -465,7 +465,8 @@ class UpdateManager(SimpleGtkbuilderApp):
             Gtk.main_iteration()
         # download finished (or canceld, or time-out)
         button.hide()
-        button.disconnect(id);
+        if button.handler_is_connected(id):
+            button.disconnect(id)
     # check if we still are in the right pkg (the download may have taken
     # some time and the user may have clicked on a new pkg)
     path  = widget.get_cursor()[0]

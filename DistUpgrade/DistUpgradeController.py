@@ -581,7 +581,7 @@ class DistUpgradeController(object):
             validMirror = self.isMirror(entry.uri)
             if validMirror or not mirror_check:
                 validMirror = True
-                # disabled/security/commercial are special cases
+                # disabled/security/commercial/extras are special cases
                 # we use validTo/foundToDist to figure out if we have a 
                 # main archive mirror in the sources.list or if we 
                 # need to add one
@@ -590,7 +590,8 @@ class DistUpgradeController(object):
                     entry.type == "deb-src" or
                     "/security.ubuntu.com" in entry.uri or
                     "%s-security" % self.fromDist in entry.dist or
-                    "/archive.canonical.com" in entry.uri):
+                    "/archive.canonical.com" in entry.uri or
+                    "/extras.ubuntu.com" in entry.uri):
                     validTo = False
                 if entry.dist in toDists:
                     # so the self.sources.list is already set to the new

@@ -4,9 +4,9 @@ ARCH=all
 DIST=$(shell lsb_release -c -s)
 DEBVER=$(shell LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
-
+DH_ARGS=--with=python2
 %:
-	dh $@ --with=python2
+	dh $@ $(DH_ARGS)
 
 override_dh_auto_clean:
 	dh_auto_clean
@@ -16,7 +16,7 @@ override_dh_auto_clean:
 
 binary: binary-arch binary-indep
 binary-indep:
-	dh $@
+	dh $@ $(DH_ARGS)
 	# now the dist-upgrader special tarball
 	(cd DistUpgrade/ && \
 	   ./build-tarball.sh && \

@@ -120,6 +120,10 @@ class DistUpgradeQuirks(object):
         if apt.apt_pkg.config.find("Apt::Architecture") == "amd64":
             logging.debug("multiarch: enabling i386 as a additional architecture")
             apt.apt_pkg.config.set("Apt::Architectures::", "i386")
+            # increase case size to workaround bug in natty apt that
+            # may cause segfault on cache grow
+            apt.apt_pkg.config.set("APT::Cache-Start", str(32*1024*1024))
+
 
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):

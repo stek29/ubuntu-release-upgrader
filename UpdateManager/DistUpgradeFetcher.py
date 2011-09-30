@@ -85,7 +85,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
       if self.new_dist.releaseNotesURI != None:
           uri = self._expandUri(self.new_dist.releaseNotesURI)
           self.window_main.set_sensitive(False)
-          self.window_main.window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+          self.window_main.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
           while Gtk.events_pending():
               Gtk.main_iteration()
 
@@ -127,7 +127,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               dialog.destroy()
           socket.setdefaulttimeout(timeout)              
           self.window_main.set_sensitive(True)
-          self.window_main.window.set_cursor(None)
+          self.window_main.get_window().set_cursor(None)
           # user clicked cancel
           if res == Gtk.ResponseType.OK:
               return True

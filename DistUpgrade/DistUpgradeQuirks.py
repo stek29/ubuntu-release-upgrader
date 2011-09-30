@@ -122,7 +122,7 @@ class DistUpgradeQuirks(object):
             apt.apt_pkg.config.set("Apt::Architectures::", "i386")
             # increase case size to workaround bug in natty apt that
             # may cause segfault on cache grow
-            apt.apt_pkg.config.set("APT::Cache-Start", str(32*1024*1024))
+            apt.apt_pkg.config.set("APT::Cache-Start", str(48*1024*1024))
 
 
     # individual quirks handler when the dpkg run is finished ---------

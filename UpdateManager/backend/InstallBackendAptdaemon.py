@@ -55,7 +55,7 @@ class InstallBackendAptdaemon(InstallBackend):
         except errors.NotAuthorizedError as e:
             self.emit("action-done", self.INSTALL, False, False)
         except dbus.DBusException as e:
-            print e, e.get_dbus_name()
+            #print e, e.get_dbus_name()
             if e.get_dbus_name() != "org.freedesktop.DBus.Error.NoReply":
                 raise
             self.emit("action-done", self.INSTALL, False, False)

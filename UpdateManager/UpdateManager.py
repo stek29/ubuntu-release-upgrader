@@ -941,7 +941,10 @@ class UpdateManager(SimpleGtkbuilderApp):
             Fix = apt_pkg.ProblemResolver(self.cache._depcache)
             Fix.resolve_by_keep()
     else:
-        pkg.mark_install()
+        try:
+            pkg.mark_install()
+        except SystemError:
+            pass
     self.treeview_update.queue_draw()
     self.refresh_updates_count()
     self.setBusy(False)

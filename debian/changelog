@@ -6,6 +6,9 @@ update-manager (1:0.152.20) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgradeController.py, UpdateManager/Core/utils.py:
     - do not leak password from sources.list entries into the logfile
       (LP: #839094)
+  * UpdateManager/UpdateManager.py:
+    - do not crash if a package can not be put into "install" state,
+      instead, just keep the old (unmarked) state (LP: #850482)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 27 Sep 2011 15:03:32 +0200
 

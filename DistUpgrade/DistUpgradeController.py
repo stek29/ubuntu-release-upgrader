@@ -41,6 +41,7 @@ from utils import (country_mirror,
                    get_arch, 
                    iptables_active, 
                    inside_chroot,
+                   get_string_with_no_auth_from_source_entry,
                    is_child_of_process_name)
 from string import Template
 
@@ -576,7 +577,7 @@ class DistUpgradeController(object):
                         entry.uri = uri
                         break
 
-            logging.debug("examining: '%s'" % entry)
+            logging.debug("examining: '%s'" %  get_string_with_no_auth_from_source_entry(entry))
             # check if it's a mirror (or official site)
             validMirror = self.isMirror(entry.uri)
             if validMirror or not mirror_check:
@@ -596,12 +597,12 @@ class DistUpgradeController(object):
                 if entry.dist in toDists:
                     # so the self.sources.list is already set to the new
                     # distro
-                    logging.debug("entry '%s' is already set to new dist" % entry)
+                    logging.debug("entry '%s' is already set to new dist" % get_string_with_no_auth_from_source_entry(entry))
                     foundToDist |= validTo
                 elif entry.dist in fromDists:
                     foundToDist |= validTo
                     entry.dist = toDists[fromDists.index(entry.dist)]
-                    logging.debug("entry '%s' updated to new dist" % entry)
+                    logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
                 elif entry.type == 'deb-src':
                     continue
                 else:
@@ -609,7 +610,7 @@ class DistUpgradeController(object):
                     # point to either "to" or "from" dist
                     entry.disabled = True
                     self.sources_disabled = True
-                    logging.debug("entry '%s' was disabled (unknown dist)" % entry)
+                    logging.debug("entry '%s' was disabled (unknown dist)" % get_string_with_no_auth_from_source_entry(entry))
 
                 # if we make it to this point, we have a official mirror
 
@@ -644,7 +645,7 @@ class DistUpgradeController(object):
                 entry.comment += " " + _("disabled on upgrade to %s") % self.toDist
                 entry.disabled = True
                 self.sources_disabled = True
-                logging.debug("entry '%s' was disabled (unknown mirror)" % entry)
+                logging.debug("entry '%s' was disabled (unknown mirror)" % get_string_with_no_auth_from_source_entry(entry))
 
         # now go over the list again and check for missing components 
         # in $dist-updates and $dist-security and add them
@@ -657,9 +658,9 @@ class DistUpgradeController(object):
             if self.found_components.has_key(entry.dist):
                 component_diff = self.found_components[self.toDist]-self.found_components[entry.dist]
                 if component_diff:
-                    logging.info("fixing components inconsistency from '%s'" % entry)
+                    logging.info("fixing components inconsistency from '%s'" % get_string_with_no_auth_from_source_entry(entry))
                     entry.comps.extend(list(component_diff))
-                    logging.info("to new entry '%s'" % entry)
+                    logging.info("to new entry '%s'" % get_string_with_no_auth_from_source_entry(entry))
                     del self.found_components[entry.dist]
         return foundToDist
 

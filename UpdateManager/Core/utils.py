@@ -37,6 +37,9 @@ import time
 import urllib2
 import urlparse
 
+from copy import copy
+from urlparse import urlsplit
+
 
 class ExecutionTime(object):
     """
@@ -51,6 +54,15 @@ class ExecutionTime(object):
         self.now = time.time()
     def __exit__(self, type, value, stack):
         print "%s: %s" % (self.info, time.time() - self.now)
+
+def get_string_with_no_auth_from_source_entry(entry):
+    tmp = copy(entry)
+    url_parts = urlsplit(tmp.uri)
+    if url_parts.username:
+        tmp.uri = tmp.uri.replace(url_parts.username, "hidden-u")
+    if url_parts.password:
+        tmp.uri = tmp.uri.replace(url_parts.password, "hidden-p")
+    return str(tmp)
 
 def estimate_kernel_size_in_boot():
     """ estimate the amount of space that the current kernel takes in /boot """

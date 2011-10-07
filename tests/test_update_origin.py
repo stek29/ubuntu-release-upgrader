@@ -64,6 +64,9 @@ class testOriginMatcher(unittest.TestCase):
         # find test packages set
         test_pkgs = set()
         for pkg in self.cache:
+            # only test on native arch
+            if ":" in pkg.name:
+                continue
             if pkg.candidateOrigin:
                 for v in pkg.candidateOrigin:
                     if (v.archive == "lucid-updates" and

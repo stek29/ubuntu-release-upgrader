@@ -116,7 +116,10 @@ class PluginManager(object):
         
         names = []
         
+
         for dirname in self._plugin_dirs:
+            if not os.path.exists(dirname):
+                continue
             basenames = [x for x in os.listdir(dirname) 
                             if x.endswith("_plugin.py")]
             logging.debug("Plugin modules in %s: %s" % 

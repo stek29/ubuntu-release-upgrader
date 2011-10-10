@@ -52,6 +52,14 @@ from DistUpgradeQuirks import DistUpgradeQuirks
 from DistUpgradeAptCdrom import AptCdrom
 from DistUpgradeAufs import setupAufs, aufsOptionsAndEnvironmentSetup
 
+# workaround broken relative import in python-apt (LP: #871007), we
+# want the local version of distinfo.py from oneiric, but because of
+# a bug in python-apt we will get the natty version that does not
+# know about "Component.parent_component" leading to a crash
+import distinfo
+import sourceslist
+sourceslist.DistInfo = distinfo.DistInfo
+
 from sourceslist import SourcesList, is_mirror
 from distro import get_distro, NoDistroTemplateException
 

@@ -438,7 +438,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     # (even if currently disconnected)
     if self.cache.all_changes.has_key(name):
       changes = self.cache.all_changes[name]
-      self.set_changes_buffer(changes_buffer, changes[0], name, changes[1])
+      srcpkg = self.cache[name].sourcePackageName
+      self.set_changes_buffer(changes_buffer, changes, name, srcpkg)
     # if not connected, do not even attempt to get the changes
     elif not self.connected:
         changes_buffer.set_text(

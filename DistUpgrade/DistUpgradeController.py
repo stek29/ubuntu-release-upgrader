@@ -1002,8 +1002,12 @@ class DistUpgradeController(object):
             import apt_btrfs_snapshot
         except ImportError:
             return
-        apt_btrfs = apt_btrfs_snapshot.AptBtrfsSnapshot()
-        res = apt_btrfs.snapshots_supported()
+        try:
+            apt_btrfs = apt_btrfs_snapshot.AptBtrfsSnapshot()
+            res = apt_btrfs.snapshots_supported()
+        except:
+            logging.exception("failed to check btrfs support")
+            return False
         logging.debug("apt btrfs snapshots supported: %s" % res)
         return res
 

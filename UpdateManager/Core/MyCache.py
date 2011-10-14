@@ -96,11 +96,13 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         return self._depcache.keep_count
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
+        self._apply_dselect_upgrade()
         self._depcache.upgrade(True)
         wouldDelete = self._depcache.del_count
         if self._depcache.del_count > 0:
             self.clear()
         assert self._depcache.broken_count == 0 and self._depcache.del_count == 0
+        self._apply_dselect_upgrade()
         self._depcache.upgrade()
         return wouldDelete
     def matchPackageOrigin(self, pkg, matcher):

@@ -120,6 +120,15 @@ class MyCache(apt.Cache):
             not "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
             apt_pkg.Config.set("APT::Install-Recommends","true")
 
+    def _apply_dselect_upgrade(self):
+        """ honor the dselect install state """
+        for pkg in self:
+            if pkg.is_installed:
+                continue
+            if pkg._pkg.selected_state == apt_pkg.SELSTATE_INSTALL:
+                # upgrade() will take care of this
+                pkg.mark_install(auto_inst=False, auto_fix=False)
+
     @property
     def reqReinstallPkgs(self):
         " return the packages not downloadable packages in reqreinst state "
@@ -608,6 +617,8 @@ class MyCache(apt.Cache):
         t = threading.Thread(target=self.updateGUI, args=(self.view, lock,))
         t.start()
         try:
+            self._apply_dselect_upgrade()
+
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)
 

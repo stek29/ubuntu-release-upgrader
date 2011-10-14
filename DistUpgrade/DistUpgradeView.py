@@ -374,7 +374,7 @@ class DistUpgradeView(object):
         # Show an error if no actions are planned
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
           # FIXME: this should go into DistUpgradeController
-          summary = _("Your system is up-to-date")
+          summary = _("The software on this computer is up to date.")
           msg = _("There are no upgrades available for your system. "
                   "The upgrade will now be canceled.")
           self.error(summary, msg)

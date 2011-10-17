@@ -662,7 +662,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.unity.set_updates_count(num_updates)
 
       if num_updates == 0:
-          text_header= "<big><b>%s</b></big>"  % _("The software on this computer is up to date")
+          text_header= "<big><b>%s</b></big>"  % _("The software on this computer is up to date.")
           self.label_downsize.set_text("\n")
           if self.cache.keepCount() == 0:
               self.notebook_details.set_sensitive(False)

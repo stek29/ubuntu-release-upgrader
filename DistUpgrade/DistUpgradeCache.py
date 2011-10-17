@@ -682,13 +682,13 @@ class MyCache(apt.Cache):
             if pkg.marked_delete:
                 continue
             # special case because of a bug in pkg.candidateOrigin
-            if pkg.marked_downgrade:
+            if pkg.marked_upgrade:
                 for ver in pkg._pkg.version_list:
                     # version is lower than installed one
                     if apt_pkg.version_compare(
                         ver.ver_str, pkg.installed.version) < 0:
                         for (verFileIter, index) in ver.file_list:
-                            indexfile = pkg._list.find_index(verFileIter)
+                            indexfile = pkg._pcache._list.find_index(verFileIter)
                             if indexfile and not indexfile.is_trusted:
                                 untrusted.append(pkg.name)
                                 break

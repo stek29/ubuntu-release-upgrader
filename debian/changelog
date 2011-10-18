@@ -1,18 +1,20 @@
-update-manager (1:0.152.25.3) UNRELEASEDoneiric-proposed; urgency=low
+update-manager (1:0.152.25.3) oneiric-proposed; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
     - fix crash when packages needs downgrading
   * UpdateManager/Core/utils.py:
     - do not crash if iptables does not exist, thanks to Daniel
-      Holbach for reporting the issue
+      Holbach for reporting the issue (LP: #877514)
   * DistUpgrade/DistUpgradeQuirks.py:
     - keep poking the screensaver to ensure that it really won't
       activate during the upgrade (thanks to Jonathan Davies for
       the report)
+  * tests/test_sources_list.py:
+    - fix test (archive.ubuntu.com no longer listens to ftp)
   * po/*:
     - refresh again to fix regression (LP: #877461)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 17 Oct 2011 10:25:46 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 18 Oct 2011 17:06:40 +0200
 
 update-manager (1:0.152.25.2) oneiric-proposed; urgency=low
 

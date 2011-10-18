@@ -828,14 +828,20 @@ class DistUpgradeQuirks(object):
     def _pokeScreensaver(self):
         if os.path.exists("/usr/bin/xdg-screensaver"):
             logging.debug("setup poke timer for the scrensaver")
-            self._poke = subprocess.Popen(
-                "while true; do /usr/bin/xdg-screensaver reset; sleep 30; done",
-                shell=True)
-            atexit.register(self._stopPokeScreensaver)
+            try:
+                self._poke = subprocess.Popen(
+                    "while true; do /usr/bin/xdg-screensaver reset; sleep 30; done",
+                    shell=True)
+                atexit.register(self._stopPokeScreensaver)
+            except:
+                logging.exception("failed to setup screensaver poke")
     def _stopPokeScreensaver(self):
         if self._poke:
-            self._poke.terminate()
-            res = self._poke.wait()
+            try:
+                self._poke.terminate()
+                res = self._poke.wait()
+            except:
+                logging.exception("failed to stop screensaver poke")
             self._poke = None
             return res
     def _removeBadMaintainerScripts(self):

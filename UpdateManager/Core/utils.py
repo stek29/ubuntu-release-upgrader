@@ -442,6 +442,8 @@ target     prot opt source               destination
 """
     if os.getuid() != 0:
         raise OSError, "Need root to check the iptables state"
+    if not os.path.exists("/sbin/iptables"):
+        return False
     out = subprocess.Popen(["iptables", "-L"], 
                            stdout=subprocess.PIPE).communicate()[0]
     if out == iptables_empty:

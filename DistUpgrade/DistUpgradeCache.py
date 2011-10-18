@@ -682,7 +682,7 @@ class MyCache(apt.Cache):
             if pkg.marked_delete:
                 continue
             # special case because of a bug in pkg.candidateOrigin
-            if pkg.marked_upgrade:
+            if pkg.marked_downgrade:
                 for ver in pkg._pkg.version_list:
                     # version is lower than installed one
                     if apt_pkg.version_compare(

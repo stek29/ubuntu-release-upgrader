@@ -699,7 +699,7 @@ class MyCache(apt.Cache):
                     if apt_pkg.version_compare(
                         ver.ver_str, pkg.installed.version) < 0:
                         for (verFileIter, index) in ver.file_list:
-                            indexfile = pkg._list.find_index(verFileIter)
+                            indexfile = pkg._pcache._list.find_index(verFileIter)
                             if indexfile and not indexfile.is_trusted:
                                 untrusted.append(pkg.name)
                                 break

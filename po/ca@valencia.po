@@ -1,15 +1,20 @@
+# Catalan translation for update-manager
+# Copyright (C) 2006
+# This file is distributed under the same license as the update-manager package.
+# Jordi Irazuzta Cardús <irazuzta@gmail.com>, 2006.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: update-manager 0.41.1\n"
+"Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-18 03:11+0000\n"
-"PO-Revision-Date: 2011-10-14 00:51+0000\n"
-"Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) <zh-l10n@linux.org.tw>\n"
+"PO-Revision-Date: 2011-10-09 06:20+0000\n"
+"Last-Translator: Joan Duran <jodufi@gmail.com>\n"
+"Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-10-18 14:52+0000\n"
 "X-Generator: Launchpad (build 14157)\n"
 
@@ -39,7 +44,7 @@ msgstr "%.1f MB"
 #: ../DistUpgrade/distro.py:210 ../DistUpgrade/distro.py:438
 #, python-format
 msgid "Server for %s"
-msgstr "%s伺服器"
+msgstr "Servidor per %s"
 
 #. More than one server is used. Since we don't handle this case
 #. in the user interface we set "custom servers" to true and
@@ -47,25 +52,27 @@ msgstr "%s伺服器"
 #: ../DistUpgrade/distro.py:228 ../DistUpgrade/distro.py:234
 #: ../DistUpgrade/distro.py:250
 msgid "Main server"
-msgstr "主伺服器"
+msgstr "Servidor principal"
 
 #: ../DistUpgrade/distro.py:254
 msgid "Custom servers"
-msgstr "自訂伺服器"
+msgstr "Servidors personalitzats"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:141
 msgid "Could not calculate sources.list entry"
-msgstr "無法計算 sources.list 項目"
+msgstr "No s'ha pogut calcular l'entrada del fitxer sources.list"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:244
 msgid ""
 "Unable to locate any package files, perhaps this is not a Ubuntu Disc or the "
 "wrong architecture?"
-msgstr "找不到套件檔，也許此非 Ubuntu 光碟，或處理器架構不對。"
+msgstr ""
+"No s'ha pogut trobar cap paquet, esteu utilitzat un disc de l'Ubuntu per a "
+"l'arquitectura adequada?"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:287
 msgid "Failed to add the CD"
-msgstr "無法加入光碟"
+msgstr "No s'ha pogut afegir el CD"
 
 #: ../DistUpgrade/DistUpgradeAptCdrom.py:288
 #, python-format
@@ -76,15 +83,17 @@ msgid ""
 "The error message was:\n"
 "'%s'"
 msgstr ""
-"加入光碟時發生錯誤，升級將終止。若您確定光碟沒有問題，請將此匯報為臭蟲。\n"
+"S'ha produït un error en afegir el CD i l'actualització s'ha cancel·lat. "
+"Informeu d'este error si això ha passat amb un CD d'Ubuntu vàlid.\n"
 "\n"
-"錯誤訊息：\n"
-"「%s」"
+"El missatge d'error ha estat:\n"
+"«%s»"
 
 #: ../DistUpgrade/DistUpgradeCache.py:138
 msgid "Remove package in bad state"
 msgid_plural "Remove packages in bad state"
-msgstr[0] "移除有問題套件"
+msgstr[0] "Elimina el paquet en mal estat"
+msgstr[1] "Elimina els paquets en mal estat"
 
 #: ../DistUpgrade/DistUpgradeCache.py:141
 #, python-format
@@ -96,23 +105,32 @@ msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
 "but no archives can be found for them. Do you want to remove these packages "
 "now to continue?"
-msgstr[0] "「%s」套件狀態不一致而需要重新安裝，但找不到其存檔。是否移除此套件並繼續？"
+msgstr[0] ""
+"El paquet «%s» es troba en un estat inconsistent i s'ha de tornar a "
+"instal·lar, però no s'ha trobat l'arxiu per a fer-ho. Voleu eliminar este "
+"paquet i continuar?"
+msgstr[1] ""
+"Els paquets «%s» es troben en un estat inconsistent i s'han de tornar a "
+"instal·lar, però no s'ha trobat els arxius per a fer-ho. Voleu eliminar "
+"estos paquets i continuar?"
 
 #. FIXME: not ideal error message, but we just reuse a
 #. existing one here to avoid a new string
 #: ../DistUpgrade/DistUpgradeCache.py:239
 msgid "The server may be overloaded"
-msgstr "伺服器可能負載過大"
+msgstr "Pot ser que el servidor estiga sobrecarregat"
 
 #: ../DistUpgrade/DistUpgradeCache.py:352
 msgid "Broken packages"
-msgstr "損毀套件"
+msgstr "Paquets trencats"
 
 #: ../DistUpgrade/DistUpgradeCache.py:353
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
-msgstr "本軟體無法修正閣下系統某有損毀套件。請先使用 synaptic 或 apt-get 修正才繼續。"
+msgstr ""
+"El vostre sistema conté paquets trencats que no es poden arreglar amb esta "
+"aplicació. Utilitzeu el Synaptic o l'apt-get abans de continuar."
 
 #. FIXME: change the text to something more useful
 #: ../DistUpgrade/DistUpgradeCache.py:648
@@ -127,72 +145,83 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
-"準備升級時發生不能解決的問題：\n"
+"S'ha produït un problema irresoluble mentre es calculava l'actualització:\n"
 "%s\n"
 "\n"
-" 這可能由以下原因造成：\n"
-" * 正升級至非正式發佈版本的 Ubuntu\n"
-" * 正使用非正式發佈版本的 Ubuntu\n"
-" * 安裝了非由 Ubuntu 官方提供的軟體套件\n"
+"Això pot ser degut a:\n"
+" * l'actualització a una versió en desenvolupament de l'Ubuntu\n"
+" * l'execució de l'actual versió en desenvolupament de l'Ubuntu\n"
+" * la instal·lació de paquets no oficials de programari i no proporcionats "
+"per l'Ubuntu\n"
 "\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:658
 msgid "This is most likely a transient problem, please try again later."
-msgstr "很可能只是暫時有問題。請稍候再試。"
+msgstr ""
+"Això és probablement un problema transitori, torneu a provar-ho més tard."
 
 #: ../DistUpgrade/DistUpgradeCache.py:661
 msgid ""
 "If none of this applies, then please report this bug using the command "
 "'ubuntu-bug update-manager' in a terminal."
-msgstr "如全都不對，請在終端機內輸入指令「ubuntu-bug update-manager」回報錯誤。"
+msgstr ""
+"Si cap d'estes s'aplica, llavors informeu d'este error utilitzant l'orde "
+"«ubuntu-bug update-manager» en un terminal."
 
 #: ../DistUpgrade/DistUpgradeCache.py:666
 #: ../UpdateManager/UpdateManager.py:1023
 msgid "Could not calculate the upgrade"
-msgstr "無法計算升級"
+msgstr "No s'ha pogut calcular l'actualització"
 
 #: ../DistUpgrade/DistUpgradeCache.py:717
 msgid "Error authenticating some packages"
-msgstr "認證一些套件時發生錯誤"
+msgstr "S'ha produït un error en autenticar alguns paquets"
 
 #: ../DistUpgrade/DistUpgradeCache.py:718
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
 "unauthenticated packages."
-msgstr "無法驗證部份套件。可能是因為短時間的網路問題。您可以稍候再試一次。下面是未被驗證的套件清單。"
+msgstr ""
+"No s'han pogut autenticar alguns paquets. Potser hi ha un problema temporal "
+"amb la xarxa. Podeu provar-ho més tard. A continuació es mostra la llista "
+"amb els paquets no autenticats."
 
 #: ../DistUpgrade/DistUpgradeCache.py:738
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
-msgstr "套件「%s」標記作移除，但它在移除黑名單中。"
+msgstr ""
+"El paquet «%s» està marcat per a eliminar-lo, però apareix a la llista negra "
+"de fitxers a eliminar."
 
 #: ../DistUpgrade/DistUpgradeCache.py:742
 #, python-format
 msgid "The essential package '%s' is marked for removal."
-msgstr "必要套件「%s」被標記作移除。"
+msgstr "El paquet essencial «%s» està marcat per a ésser eliminat."
 
 #: ../DistUpgrade/DistUpgradeCache.py:751
 #, python-format
 msgid "Trying to install blacklisted version '%s'"
-msgstr "正在嘗試安裝黑名單版本「%s」"
+msgstr "S'està intentant instal·lar la versió «%s» de la llista negra"
 
 #: ../DistUpgrade/DistUpgradeCache.py:869
 #, python-format
 msgid "Can't install '%s'"
-msgstr "無法安裝「%s」"
+msgstr "No s'ha pogut instal·lar «%s»"
 
 #: ../DistUpgrade/DistUpgradeCache.py:870
 msgid ""
 "It was impossible to install a required package. Please report this as a bug "
 "using 'ubuntu-bug update-manager' in a terminal."
-msgstr "無法安裝必要的套件。請在終端機內輸入「ubuntu-bug update-manager」回報錯誤。"
+msgstr ""
+"Ha sigut impossible instal·lar el paquet necessari. Informeu d'este error "
+"utilitzant l'orde «ubuntu-bug update-manager» en un terminal."
 
 #. FIXME: provide a list
 #: ../DistUpgrade/DistUpgradeCache.py:881
 msgid "Can't guess meta-package"
-msgstr "無法估計元套件 (meta-package)"
+msgstr "No s'ha pogut conjecturar el metapaquet"
 
 #: ../DistUpgrade/DistUpgradeCache.py:882
 msgid ""
@@ -202,27 +231,31 @@ msgid ""
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"您的系統沒有安裝 ubuntu-desktop，kubuntu-desktop 或 edubuntu-desktop "
-"套件，因此無法偵測正在使用那個版本的 Ubuntu。\n"
-" 請先使用 synaptic 或 apt-get 安裝上述其中一個套件再繼續作業"
+"No teniu instal·lats el paquet ubuntu-desktop, kubuntu-desktop, xubuntu-"
+"desktop o edubuntu-desktop i no s'ha pogut detectar la versió de l'Ubuntu "
+"que esteu utilitzant.\n"
+"Instal·leu un d'estos paquets abans de continuar; per fer-ho podeu utilitzar "
+"el Synaptic o l'apt-get"
 
 #: ../DistUpgrade/DistUpgradeController.py:100
 msgid "Reading cache"
-msgstr "正在讀取快取"
+msgstr "S'està llegint la memòria cau"
 
 #: ../DistUpgrade/DistUpgradeController.py:205
 msgid "Unable to get exclusive lock"
-msgstr "無法取得(使用)排他鎖定"
+msgstr "No s'ha pogut obtindre un bloqueig exclusiu"
 
 #: ../DistUpgrade/DistUpgradeController.py:206
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
-msgstr "這通常表示有其他的套件管理員程式（如 apt-get 或 aptitude）正在執行。請先關閉這些應用程式。"
+msgstr ""
+"Normalment això es deu al fet que teniu un altre gestor de paquets en "
+"execució (com  ara l'apt-get o l'aptitude) i cal que abans el tanqueu."
 
 #: ../DistUpgrade/DistUpgradeController.py:239
 msgid "Upgrading over remote connection not supported"
-msgstr "不支援透過遠端連線升級"
+msgstr "No és possible actualitzar a través d'una connexió remota"
 
 #: ../DistUpgrade/DistUpgradeController.py:240
 msgid ""
@@ -232,13 +265,15 @@ msgid ""
 "\n"
 "The upgrade will abort now. Please try without ssh."
 msgstr ""
-"您正在透過遠端 ssh 連線的前端介面執行更新，而此介面不支援。請試試純文字模式下以 'do-release-upgrade' 進行更新。\n"
+"Esteu duent a terme l'actualització a través d'una connexió SSH remota amb "
+"un frontal que no admet esta funció. Intenteu realitzar una actualització en "
+"mode text amb l'orde «do-release-upgrade». \n"
 "\n"
-"目前更新將會中止。請透過非 ssh 連線重試。"
+"S'interromprà l'actualització. Torneu-ho a intentar sense SSH."
 
 #: ../DistUpgrade/DistUpgradeController.py:254
 msgid "Continue running under SSH?"
-msgstr "繼續執行於 SSH 中？"
+msgstr "Voleu continuar treballant via SSH?"
 
 #: ../DistUpgrade/DistUpgradeController.py:255
 #, python-format
@@ -250,14 +285,16 @@ msgid ""
 "If you continue, an additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"此連線階段似乎是在 ssh 下執行。目前不建議在 ssh 連線下進行升級，因為若發生失敗將會較難以修復。\n"
+"Pareix ser que esta sessió s'està executant amb SSH. Actualment no és "
+"recomanable realitzar una actualització a través d'SSH, atès que en cas de "
+"fallada la recuperació és més difícil.\n"
 "\n"
-"若您繼續，一個額外的 ssh 背景程序將會啟動在 '%s' 連接埠。\n"
-"您想要繼續嗎？"
+"Si continueu, s'iniciarà un dimoni addicional al port «%s».\n"
+"Voleu continuar?"
 
 #: ../DistUpgrade/DistUpgradeController.py:269
 msgid "Starting additional sshd"
-msgstr "啟動後備 sshd 中"
+msgstr "S'està iniciant un sshd addicional"
 
 #: ../DistUpgrade/DistUpgradeController.py:270
 #, python-format
@@ -265,7 +302,10 @@ msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
 "started on port '%s'. If anything goes wrong with the running ssh you can "
 "still connect to the additional one.\n"
-msgstr "為在失敗時更易進行修復，一個後備 sshd 將在‘%s’埠被啟動。如果使用中的 ssh 有任何問題，您仍可以連接後備的 sshd 。\n"
+msgstr ""
+"Per facilitar la recuperació en cas de fallada, s'iniciarà un sshd "
+"addicional al port «%s». Si alguna cosa anés malament amb l'ssh en ús, podeu "
+"fer servir l'addicional.\n"
 
 #: ../DistUpgrade/DistUpgradeController.py:278
 #, python-format
@@ -275,30 +315,32 @@ msgid ""
 "with e.g.:\n"
 "'%s'"
 msgstr ""
-"若您有執行防火牆，您可能需要暫時開啟此連接埠。由於此動作存在潛在危險，系統不會自動執行。您可以這樣開啟連接埠：\n"
-"「%s」"
+"Si feu servir un tallafocs, necessitareu obrir temporalment este port. Atès "
+"que això és potencialment perillós, no es fa automàticament. Per exemple, "
+"podeu obrir el port amb:\n"
+"«%s»"
 
 #: ../DistUpgrade/DistUpgradeController.py:349
 #: ../DistUpgrade/DistUpgradeController.py:394
 msgid "Can not upgrade"
-msgstr "無法升級"
+msgstr "No es pot actualitzar"
 
 #: ../DistUpgrade/DistUpgradeController.py:350
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
-msgstr "這個工具不支援從‘%s’到‘%s’的升級"
+msgstr "Esta eina no permet l'actualització de «%s» a «%s»."
 
 #: ../DistUpgrade/DistUpgradeController.py:359
 msgid "Sandbox setup failed"
-msgstr "沙堆(Sandbox)架設失敗"
+msgstr "Ha fallat la configuració d'un entorn de proves"
 
 #: ../DistUpgrade/DistUpgradeController.py:360
 msgid "It was not possible to create the sandbox environment."
-msgstr "不可能建立沙堆(sandbox)環境。"
+msgstr "No ha estat possible crear un entorn de proves."
 
 #: ../DistUpgrade/DistUpgradeController.py:366
 msgid "Sandbox mode"
-msgstr "沙堆(Sandbox)模式"
+msgstr "Mode de prova"
 
 #: ../DistUpgrade/DistUpgradeController.py:367
 #, python-format
@@ -309,18 +351,21 @@ msgid ""
 "*No* changes written to a systemdir from now until the next reboot are "
 "permanent."
 msgstr ""
-"這次升級是在沙堆(sandbox, 測試)模式中執行。所有更動都會寫入至「%s」並且會在下次重新開機時消失。\n"
+"L'actualització s'està executant en mode de prova. Tots els canvis "
+"s'efectuen a «%s» i es perdran en reiniciar el sistema.\n"
 "\n"
-"現在起到下次重新開機前將*不會*有任何變更寫入至系統目錄。"
+"Cap canvi efectuat des d'ara fins que es reinicie el sistema serà permanent."
 
 #: ../DistUpgrade/DistUpgradeController.py:395
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
-msgstr "您的 python 安裝已毀損。請修正 ‘/usr/bin/python’ 的符號連結。"
+msgstr ""
+"La vostra instal·lació del Python està malmesa. Reviseu l'enllaç simbòlic "
+"«/usr/bin/python»."
 
 #: ../DistUpgrade/DistUpgradeController.py:421
 msgid "Package 'debsig-verify' is installed"
-msgstr "套件 'debsig-verify' 安裝完成。"
+msgstr "El paquet «debsig-verify» està instal·lat"
 
 #: ../DistUpgrade/DistUpgradeController.py:422
 msgid ""
@@ -328,11 +373,13 @@ msgid ""
 "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
 "run the upgrade again."
 msgstr ""
-"此已安裝的套件令升級無法繼續，請使用 synaptic 或命令 'apt-get remove debsig-verify' 移除它後再次進行升級。"
+"L'actualització no pot continuar amb este paquet instal·lat.\n"
+"Elimineu-lo amb el Synaptic o amb l'orde «apt-get remove debsig-verify» i "
+"torneu a executar l'actualització."
 
 #: ../DistUpgrade/DistUpgradeController.py:432
 msgid "Include latest updates from the Internet?"
-msgstr "要否包括來自網際網路的最新更新？"
+msgstr "Voleu incloure les darreres actualitzacions d'Internet?"
 
 #: ../DistUpgrade/DistUpgradeController.py:433
 msgid ""
@@ -345,19 +392,23 @@ msgid ""
 "latest updates soon after upgrading.\n"
 "If you answer 'no' here, the network is not used at all."
 msgstr ""
-"升級系統可自動由網際網路下載最新更新並於升級時安裝。如您有網路連線，建議使用這方法。\n"
+"El sistema d'actualitzacions pot utilitzar Internet per baixar i instal·lar "
+"automàticament les darreres actualitzacions. Si disposeu d'una connexió de "
+"xarxa, esta opció és molt recomanable.\n"
 "\n"
-"升級時間會較長，但完成後，您的系統就會完全在最新狀態。您可以選擇現在不進行這工作，但是在升級後，您應該要盡快安裝最新的更新。\n"
-"如果您在此回答「否」，將完全不會使用網路。"
+"L'actualització trigarà més, però en acabar tindreu un sistema completament "
+"actualitzat. Podeu optar per no fer-ho, però en breu haureu d'actualitzar el "
+"sistema.\n"
+"Si responeu «no» la xarxa no s'utilitzarà per a res."
 
 #: ../DistUpgrade/DistUpgradeController.py:653
 #, python-format
 msgid "disabled on upgrade to %s"
-msgstr "停用升級至 %s"
+msgstr "desactivat en actualitzar a %s"
 
 #: ../DistUpgrade/DistUpgradeController.py:680
 msgid "No valid mirror found"
-msgstr "找不到有效的鏡像站"
+msgstr "No s'ha trobat cap rèplica vàlida"
 
 #: ../DistUpgrade/DistUpgradeController.py:681
 #, python-format
@@ -370,15 +421,19 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
-"掃描閣下套件庫時沒有發現升級映射項目資訊。如果您運行內部映射或者映射資訊已經過期，就會發生這種情況。\n"
+"No s'ha trobat cap entrada de rèplica per a l'actualització a la vostra "
+"informació sobre els dipòsits. Això pot ésser degut a què estigueu executant "
+"una rèplica interna o que les dades de les rèpliques no estiguen "
+"actualitzades.\n"
 "\n"
-"是否無論如何都希望覆寫您的「sources.list」檔案？如選「是」則將會將所有「%s」更新成「%s」項目。\n"
-"如選「否」則會取消更新。"
+"Voleu sobreescriure el fitxer «sources.list» de totes maneres? Si trieu que "
+"«Sí», totes les entrades «%s» s'actualitzaran a «%s». Si trieu que «No», es "
+"cancel·larà l'actualització."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:701
 msgid "Generate default sources?"
-msgstr "產生預設的來源？"
+msgstr "Voleu generar les fonts per defecte?"
 
 #: ../DistUpgrade/DistUpgradeController.py:702
 #, python-format
@@ -388,24 +443,29 @@ msgid ""
 "Should default entries for '%s' be added? If you select 'No', the upgrade "
 "will cancel."
 msgstr ""
-"在掃描您的「sources.list」後，沒找到與「%s」有效的項目。\n"
+"No s'ha trobat cap entrada vàlida per a «%s» en analitzar el fitxer "
+"«sources.list».\n"
 "\n"
-"要新增「%s」的預設項目嗎？如果您選擇「否」則會取消升級。"
+"Voleu que s'afigen entrades per a «%s»? Si trieu que «No», es cancel·larà "
+"l'actualització."
 
 #: ../DistUpgrade/DistUpgradeController.py:737
 msgid "Repository information invalid"
-msgstr "套件庫資料無效"
+msgstr "La informació dels dipòsits no és vàlida"
 
 #: ../DistUpgrade/DistUpgradeController.py:738
 msgid ""
 "Upgrading the repository information resulted in a invalid file. Please "
 "report this as a bug using the command 'ubuntu-bug update-manager' in a "
 "terminal."
-msgstr "升級套件庫時導致無效的檔案。請在終端機內輸入指令「ubuntu-bug update-manager」回報錯誤。"
+msgstr ""
+"El resultat de l'actualització de la informació del dipòsit ha sigut un "
+"fitxer no vàlid. Informeu d'este error utilitzant l'orde «ubuntu-bug update-"
+"manager» en un terminal."
 
 #: ../DistUpgrade/DistUpgradeController.py:746
 msgid "Third party sources disabled"
-msgstr "已停用第三方來源"
+msgstr "S'han desactivat les fonts de tercers"
 
 #: ../DistUpgrade/DistUpgradeController.py:747
 msgid ""
@@ -413,12 +473,15 @@ msgid ""
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
 msgstr ""
-"sources.list 中的某些第三方項目已停用。以「軟體屬性（software-properties）」工具或套件管理員升級後可將之重新啟用。"
+"S'han desactivat algunes entrades de tercers. Les podeu reactivar després de "
+"l'actualització des de l'eina «software-properties» en el vostre gestor de "
+"paquets."
 
 #: ../DistUpgrade/DistUpgradeController.py:787
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
-msgstr[0] "套件在不一致狀態"
+msgstr[0] "Paquet en estat inconsistent"
+msgstr[1] "Paquets en estat inconsistent"
 
 #: ../DistUpgrade/DistUpgradeController.py:790
 #, python-format
@@ -430,23 +493,33 @@ msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
 "but no archive can be found for them. Please reinstall the packages manually "
 "or remove them from the system."
-msgstr[0] "這個套件 '%s' 狀態不一致而需要重新安裝，但找不到它的套件。請手動地重新安裝套件或將它由系統中移除。"
+msgstr[0] ""
+"El paquet «%s» es troba en un estat inconsistent i s'ha de tornar a "
+"instal·lar, però no s'ha trobat l'arxiu per a fer-ho. Torneu-lo a instal·lar "
+"manualment o suprimiu-lo del sistema."
+msgstr[1] ""
+"Els paquets «%s» es troben en un estat inconsistent i s'han de tornar a "
+"instal·lar, però no s'ha trobat els arxius per a fer-ho. Torneu-los a "
+"instal·lar manualment o suprimiu-los del sistema."
 
 #: ../DistUpgrade/DistUpgradeController.py:838
 msgid "Error during update"
-msgstr "更新時發生錯誤"
+msgstr "S'ha produït un error en l'actualització"
 
 #: ../DistUpgrade/DistUpgradeController.py:839
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
-msgstr "更新時發生錯誤。這可能是某些網路問題，試檢查網路連線後再試。"
+msgstr ""
+"S'ha produït un error mentre s'actualitzava el vostre sistema. Normalment "
+"això es degut a problemes de xarxa. Comproveu la vostra connexió de xarxa i "
+"torneu a intentar-ho."
 
 #. print "on_button_install_clicked"
 #: ../DistUpgrade/DistUpgradeController.py:848
 #: ../UpdateManager/UpdateManager.py:747
 msgid "Not enough free disk space"
-msgstr "磁碟空間不足"
+msgstr "No disposeu de suficient espai al disc"
 
 #: ../DistUpgrade/DistUpgradeController.py:849
 #, python-format
@@ -456,41 +529,48 @@ msgid ""
 "your trash and remove temporary packages of former installations using 'sudo "
 "apt-get clean'."
 msgstr ""
-"已放棄升級。升級程序總共需要  %s 可用空間於磁碟「%s」。請釋放至少額外 %s 的磁碟空間於磁碟「%s」。清理您的回收筒，並使用 'sudo apt-"
-"get clean' 來移除之前安裝時的暫時性套件。"
+"S'ha interromput l'actualització. Cal un total de %s d'espai lliure al disc "
+"«%s», per la qual cosa hauríeu d'alliberar un mínim de %s d'espai addicional "
+"al disc «%s». Buideu la paperera i suprimiu els paquets temporals "
+"d'anteriors instal·lacions utilitzant l'orde «sudo apt-get clean»."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
 #: ../DistUpgrade/DistUpgradeController.py:878
 #: ../DistUpgrade/DistUpgradeController.py:1630
 msgid "Calculating the changes"
-msgstr "正在計算所有的更動"
+msgstr "S'estan calculant els canvis"
 
 #. ask the user
 #: ../DistUpgrade/DistUpgradeController.py:910
 msgid "Do you want to start the upgrade?"
-msgstr "要開始升級嗎？"
+msgstr "Voleu iniciar l'actualització?"
 
 #: ../DistUpgrade/DistUpgradeController.py:976
 msgid "Upgrade canceled"
-msgstr "升級取消了"
+msgstr "S'ha cancel·lat l'actualització"
 
 #: ../DistUpgrade/DistUpgradeController.py:977
 msgid ""
 "The upgrade will cancel now and the original system state will be restored. "
 "You can resume the upgrade at a later time."
-msgstr "現在將取消升級，並且還原至原始系統。您可以在之後繼續升級。"
+msgstr ""
+"Ara es cancel·larà l'actualització i es restaurarà a l'estat original del "
+"sistema. Podeu continuar l'actualització més tard."
 
 #: ../DistUpgrade/DistUpgradeController.py:983
 #: ../DistUpgrade/DistUpgradeController.py:1109
 msgid "Could not download the upgrades"
-msgstr "無法下載升級套件"
+msgstr "No s'han pogut baixar les actualitzacions"
 
 #: ../DistUpgrade/DistUpgradeController.py:984
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far have been kept."
-msgstr "升級已中止。請檢查您的網際網路連線，或安裝媒體並重試。所有目前已下載的檔案都會被保留。"
+msgstr ""
+"S'ha interromput l'actualització. Comproveu la connexió a Internet o els "
+"suports d'instal·lació i torneu-ho a provar. S'han mantingut tots els "
+"fitxers baixats fins ara."
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
@@ -498,27 +578,30 @@ msgstr "升級已中止。請檢查您的網際網路連線，或安裝媒體並
 #: ../DistUpgrade/DistUpgradeController.py:1097
 #: ../DistUpgrade/DistUpgradeController.py:1202
 msgid "Error during commit"
-msgstr "提交時發生錯誤"
+msgstr "S'ha produït un error durant l'enviament"
 
 #. generate a new cache
 #: ../DistUpgrade/DistUpgradeController.py:1062
 #: ../DistUpgrade/DistUpgradeController.py:1099
 #: ../DistUpgrade/DistUpgradeController.py:1241
 msgid "Restoring original system state"
-msgstr "回復原有系統狀態"
+msgstr "S'està restaurant l'estat original del sistema"
 
 #: ../DistUpgrade/DistUpgradeController.py:1063
 #: ../DistUpgrade/DistUpgradeController.py:1078
 #: ../DistUpgrade/DistUpgradeController.py:1100
 msgid "Could not install the upgrades"
-msgstr "無法安裝升級"
+msgstr "No s'han pogut instal·lar les actualitzacions"
 
 #. invoke the frontend now and show a error message
 #: ../DistUpgrade/DistUpgradeController.py:1068
 msgid ""
 "The upgrade has aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
-msgstr "已放棄升級。您的系統可能處於不穩定狀態。現在將執行復原程序 (dpkg --configure -a)。"
+msgstr ""
+"S'ha interromput l'actualització. Pot ser que el vostre sistema haja quedat "
+"en un estat inestable. Ara s'executarà un procés de recuperació (dpkg --"
+"configure -a)."
 
 #: ../DistUpgrade/DistUpgradeController.py:1073
 #, python-format
@@ -531,56 +614,61 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"請在終端機內輸入指令「ubuntu-bug update-manager」回報錯誤，並在錯誤報告中附上 /var/log/dist-upgrade/ "
-"內之檔案。\n"
+"Informeu d'este error utilitzant l'orde «ubuntu-bug update-manager» en un "
+"terminal i incloeu els fitxers a /var/log/dist-upgrade/ en l'informe "
+"d'error.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1110
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. "
-msgstr "已放棄升級。請檢查您的網際網路連線或安裝媒體，接著再試一次。 "
+msgstr ""
+"S'ha interromput l'actualització. Verifiqueu la vostra connexió a Internet o "
+"el suport d'instal·lació i torneu-ho a intentar. "
 
 #: ../DistUpgrade/DistUpgradeController.py:1190
 msgid "Remove obsolete packages?"
-msgstr "移除廢棄的套件？"
+msgstr "Voleu suprimir els paquets obsolets?"
 
 #: ../DistUpgrade/DistUpgradeController.py:1191
 #: ../DistUpgrade/DistUpgrade.ui.h:22
 msgid "_Keep"
-msgstr "保留(_K)"
+msgstr "_Manté"
 
 #: ../DistUpgrade/DistUpgradeController.py:1191
 msgid "_Remove"
-msgstr "移除(_R)"
+msgstr "Sup_rimeix"
 
 #: ../DistUpgrade/DistUpgradeController.py:1203
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
-msgstr "在清理時發生一些問題。詳情請參閱以下訊息。 "
+msgstr ""
+"S'ha produït un error durant el procés de neteja. Vegeu el següent missatge "
+"per a més informació. "
 
 #. FIXME: instead of error out, fetch and install it
 #. here
 #: ../DistUpgrade/DistUpgradeController.py:1279
 msgid "Required depends is not installed"
-msgstr "必需的相依套件未被安裝"
+msgstr "Les dependències requerides no estan instal·lades"
 
 #: ../DistUpgrade/DistUpgradeController.py:1280
 #, python-format
 msgid "The required dependency '%s' is not installed. "
-msgstr "必需的相依套件‘%s’未被安裝。 "
+msgstr "La dependència requerida «%s» no està instal·lada. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
 #: ../DistUpgrade/DistUpgradeController.py:1527
 #: ../DistUpgrade/DistUpgradeController.py:1597
 msgid "Checking package manager"
-msgstr "正在檢查套件管理員"
+msgstr "S'està comprovant el gestor de paquets"
 
 #: ../DistUpgrade/DistUpgradeController.py:1532
 msgid "Preparing the upgrade failed"
-msgstr "準備升級失敗"
+msgstr "S'ha produït un error en la preparació de l'actualització"
 
 #: ../DistUpgrade/DistUpgradeController.py:1533
 msgid ""
@@ -588,12 +676,14 @@ msgid ""
 "command 'ubuntu-bug update-manager' in a terminal and include the files in "
 "/var/log/dist-upgrade/ in the bug report."
 msgstr ""
-"準備系統升級失敗。請在終端機內輸入指令「ubuntu-bug update-manager」回報錯誤，並在錯誤報告中附上 /var/log/dist-"
-"upgrade/ 內之檔案。"
+"Ha fallat la preparació del sistema per a l'actualització. Informeu d'este "
+"error utilitzant l'orde «ubuntu-bug update-manager» en un terminal i incloeu "
+"els fitxers a /var/log/dist-upgrade/ en l'informe d'error."
 
 #: ../DistUpgrade/DistUpgradeController.py:1549
 msgid "Getting upgrade prerequisites failed"
-msgstr "取得升級先決元件失敗"
+msgstr ""
+"S'ha produït un error en obtindre els prerequisits de l'actualització"
 
 #: ../DistUpgrade/DistUpgradeController.py:1550
 msgid ""
@@ -603,26 +693,27 @@ msgid ""
 "Please report this as a bug using the command 'ubuntu-bug update-manager' in "
 "a terminal and include the files in /var/log/dist-upgrade/ in the bug report."
 msgstr ""
-"此系統無法達到升級之要求。現在將中斷升級並回復系統至原始狀態。\n"
+"El sistema no ha pogut obtindre els requisits previs per a l'actualització. "
+"S'interromprà l'actualització i es restaurarà l'estat original del sistema.\n"
 "\n"
-"請在終端機內輸入指令「ubuntu-bug update-manager」回報錯誤，並在錯誤報告中附上 /var/log/dist-upgrade/ "
-"內之檔案。"
+"Informeu d'este error utilitzant l'orde «ubuntu-bug update-manager» en un "
+"terminal i incloeu els fitxers a /var/log/dist-upgrade/ en l'informe d'error."
 
 #: ../DistUpgrade/DistUpgradeController.py:1581
 msgid "Updating repository information"
-msgstr "正在更新套件庫資訊"
+msgstr "S'està actualitzant la informació dels dipòsits"
 
 #: ../DistUpgrade/DistUpgradeController.py:1588
 msgid "Failed to add the cdrom"
-msgstr "無法加入光碟"
+msgstr "No s'ha pogut afegir el CD-ROM"
 
 #: ../DistUpgrade/DistUpgradeController.py:1589
 msgid "Sorry, adding the cdrom was not successful."
-msgstr "很抱歉，沒有成功加入光碟。"
+msgstr "No s'ha pogut afegir el CD-ROM correctament."
 
 #: ../DistUpgrade/DistUpgradeController.py:1617
 msgid "Invalid package information"
-msgstr "無效的套件資訊"
+msgstr "La informació dels paquets no és valida"
 
 #: ../DistUpgrade/DistUpgradeController.py:1618
 #, python-format
@@ -633,19 +724,21 @@ msgid ""
 "'ubuntu-bug update-manager' in a terminal and include the files in "
 "/var/log/dist-upgrade/ in the bug report."
 msgstr ""
-"套件資訊更新後無法找到必要套件「%s」。\n"
-"此為嚴重錯誤，請在終端機內輸入指令「ubuntu-bug update-manager」回報錯誤，並在錯誤報告中附上 /var/log/dist-"
-"upgrade/ 內的檔案。"
+"Després de que s'haja actualitzat la informació del paquet ja no es pot "
+"trobar el paquet essencial «%s».\n"
+"Això indica un error greu, informeu d'este error utilitzant l'orde «ubuntu-"
+"bug update-manager» en un terminal i incloeu els fitxers a /var/log/dist-"
+"upgrade/ en l'informe d'error."
 
 #: ../DistUpgrade/DistUpgradeController.py:1636
 #: ../DistUpgrade/DistUpgradeController.py:1689
 msgid "Fetching"
-msgstr "接收中"
+msgstr "S'està recollint"
 
 #: ../DistUpgrade/DistUpgradeController.py:1642
 #: ../DistUpgrade/DistUpgradeController.py:1693
 msgid "Upgrading"
-msgstr "升級中"
+msgstr "S'està actualitzant"
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:1647
@@ -653,30 +746,31 @@ msgstr "升級中"
 #: ../DistUpgrade/DistUpgradeController.py:1702
 #: ../DistUpgrade/DistUpgradeController.py:1713
 msgid "Upgrade complete"
-msgstr "升級完成"
+msgstr "S'ha completat l'actualització"
 
 #: ../DistUpgrade/DistUpgradeController.py:1648
 #: ../DistUpgrade/DistUpgradeController.py:1696
 #: ../DistUpgrade/DistUpgradeController.py:1703
 msgid ""
 "The upgrade has completed but there were errors during the upgrade process."
-msgstr "升級已經完成，但在升級過程中有發生錯誤。"
+msgstr ""
+"S'ha completat l'actualització, però s'han produït errors durant este procés."
 
 #: ../DistUpgrade/DistUpgradeController.py:1655
 msgid "Searching for obsolete software"
-msgstr "搜尋廢棄的軟體中"
+msgstr "S'està cercant programari obsolet"
 
 #: ../DistUpgrade/DistUpgradeController.py:1664
 msgid "System upgrade is complete."
-msgstr "系統升級完成。"
+msgstr "S'ha completat l'actualització del sistema."
 
 #: ../DistUpgrade/DistUpgradeController.py:1714
 msgid "The partial upgrade was completed."
-msgstr "部份升級完成。"
+msgstr "L'actualització parcial s'ha completat."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:201
 msgid "evms in use"
-msgstr "有軟體正使用 evms"
+msgstr "S'està utilitzant l'evms"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:202
 msgid ""
@@ -684,18 +778,25 @@ msgid ""
 "software is no longer supported, please switch it off and run the upgrade "
 "again when this is done."
 msgstr ""
-"您的系統於 /proc/mounts 使用 'evms' volume 管理程式。'evms' 軟體已不受支援，請將其關閉再執行升級工作。"
+"El vostre sistema utilitza el gestor de volum «evms» a /proc/mounts. Este "
+"programari no es mantindrà més, desconnecteu-lo i torneu a executar "
+"l'actualització."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:506
 msgid "Your graphics hardware may not be fully supported in Ubuntu 11.04."
-msgstr "您的繪圖硬體可能無法在 Ubuntu 11.04 獲得完整的支援。"
+msgstr ""
+"Pareix que el vostre maquinari gràfic no és totalment compatible amb "
+"l'Ubuntu 11.04."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:508
 msgid ""
 "The support in Ubuntu 11.04 for your intel graphics hardware is limited and "
 "you may encounter problems after the upgrade. Do you want to continue with "
 "the upgrade?"
-msgstr "您的 Intel 繪圖硬體在 Ubuntu 11.04 內的支援有限，且可能會在升級之後碰到一些問題。您要繼續進行升級嗎？"
+msgstr ""
+"La compatibilitat a l'Ubuntu 11.04 per al vostre maquinari gràfic Intel és "
+"limitat i podríeu tindre problemes després d'actualitzar. Voleu continuar "
+"amb l'actualització?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:528
 #: ../DistUpgrade/DistUpgradeQuirks.py:556
@@ -703,7 +804,9 @@ msgstr "您的 Intel 繪圖硬體在 Ubuntu 11.04 內的支援有限，且可能
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
-msgstr "升級可能減低桌面特效和遊戲及其他著重圖形程式的表現。"
+msgstr ""
+"L'actualització pot reduir els efectes d'escriptori i el rendiment en jocs i "
+"altres programes que facen un ús exhaustiu de processament gràfic."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:532
 #: ../DistUpgrade/DistUpgradeQuirks.py:560
@@ -714,9 +817,11 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"這個電腦目前正使用 NVIDIA 的「nvidia」圖形驅動程式。這個驅動程式沒有任何版本可在 Ubuntu 10.04 LTS 中正常驅動您的硬體。\n"
+"Este ordinador utilitza el controlador gràfic «nvidia» d'NVIDIA. No hi ha "
+"cap versió disponible d'este controlador que funcione amb el vostre "
+"maquinari a l'Ubuntu 10.04 LTS.\n"
 "\n"
-"是否要繼續？"
+"Voleu continuar?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:587
 msgid ""
@@ -726,13 +831,15 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"這個電腦目前正使用 AMD 的「fglrx」圖形驅動程式。這個驅動程式沒有任何版本可在 Ubuntu 10.04 LTS 中正常驅動您的硬體。\n"
+"Este ordinador utilitza el controlador gràfic «fglrx» d'AMD. No hi ha cap "
+"versió disponible d'este controlador que funcione amb el vostre maquinari a "
+"l'Ubuntu 10.04 LTS.\n"
 "\n"
-"是否要繼續？"
+"Voleu continuar?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:617
 msgid "No i686 CPU"
-msgstr "無 i686 CPU"
+msgstr "Sense CPU i686"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:618
 msgid ""
@@ -741,12 +848,14 @@ msgid ""
 "minimal architecture. It is not possible to upgrade your system to a new "
 "Ubuntu release with this hardware."
 msgstr ""
-"您的系統使用 i586 CPU，或是不支援 'cmov' 擴充功能的 CPU。所有套件都以 i686 架構為最佳化目標來建置，所以 CPU 至少需要有 "
-"i686 等級。對於您目前的硬體來說，您無法將系統升級到最新的 Ubuntu 發行。"
+"El vostre sistema utilitza una CPU i586 o una CPU que no té l'extensió "
+"«cmov». Tots els paquets s'han construït amb optimitzacions que requereixen "
+"un i686 com a arquitectura mínima. No és possible actualitzar el sistema a "
+"una versió nova de l'Ubuntu amb este maquinari."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:654
 msgid "No ARMv6 CPU"
-msgstr "無 ARMv6 處理器"
+msgstr "No és una CPU ARMv6"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:655
 msgid ""
@@ -755,12 +864,14 @@ msgid ""
 "minimal architecture. It is not possible to upgrade your system to a new "
 "Ubuntu release with this hardware."
 msgstr ""
-"您系統使用的 ARM 處理器舊於 ARMv6 架構。所有 karmic 套件都是以 ARMv6 "
-"為最低架構優化建造的。所以伴隨此硬體無法升級您的系統到新的 Ubuntu 版本。"
+"El vostre sistema utilitza una CPU ARM que és més antiga que l'arquitectura "
+"ARMv6. Tots els paquets del Karmic s'han creat amb optimitzacions que "
+"requereixen l'ARMv6 com a arquitectura mínima. No és possible actualitzar el "
+"vostre sistema a una versió nova de l'Ubuntu amb este maquinari."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:675
 msgid "No init available"
-msgstr "無法初始化"
+msgstr "No hi ha cap sistema d'inicialització disponible"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:676
 msgid ""
@@ -771,43 +882,46 @@ msgid ""
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
-"您的系統似乎處於虛擬化環境且無初始化程序，例如 Linux-VServer。Ubuntu 10.04 LTS "
-"無法於此環境執行，需要先更新您的虛擬機器設定。\n"
+"Pareix ser que el vostre sistema és un entorn virtual sense un dimoni "
+"d'inicialització «init», com ara un servidor virtual de Linux (Linux-"
+"VServer). L'Ubuntu 10.04 no pot funcionar en este tipus d'entorn - abans cal "
+"fer una actualització de la configuració de la màquina virtual.\n"
 "\n"
-"您確定想要繼續？"
+"Segur que voleu continuar?"
 
 #: ../DistUpgrade/DistUpgradeMain.py:45
 msgid "Sandbox upgrade using aufs"
-msgstr "使用 aufs 作為沙堆升級"
+msgstr "Actualització en entorn de proves utilitzant aufs"
 
 #: ../DistUpgrade/DistUpgradeMain.py:47
 msgid "Use the given path to search for a cdrom with upgradable packages"
-msgstr "使用指定路徑搜尋附有升級套件的光碟"
+msgstr ""
+"Utilitza el camí especificat per cercar un CDROM amb paquets actualitzables"
 
 #: ../DistUpgrade/DistUpgradeMain.py:53
 msgid ""
 "Use frontend. Currently available: \n"
 "DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 msgstr ""
-"使用前端介面。可供選擇的有： \n"
-"DistUpgradeViewText (純文字), DistUpgradeViewGtk (GTK+), DistUpgradeViewKDE "
-"(KDE)"
+"Utilitzeu un frontal. Actualment es disposa de: \n"
+"DistUpgradeViewText, DistUpgradeViewGtk, DistUpgradeViewKDE"
 
 #: ../DistUpgrade/DistUpgradeMain.py:56
 msgid "*DEPRECATED* this option will be ignored"
-msgstr "*已棄用* 這個選項會被忽略"
+msgstr "*OBSOLET* esta opció s'ignorarà"
 
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr "只進行部份升級 (無須修改 sources.list)"
+msgstr ""
+"Realitza només una actualització parcial (sense reescriure el sources.list)"
 
 #: ../DistUpgrade/DistUpgradeMain.py:62
 msgid "Disable GNU screen support"
-msgstr "停用 GNU 螢幕支援"
+msgstr "Inhabilita la compatibilitat amb el GNU screen"
 
 #: ../DistUpgrade/DistUpgradeMain.py:64
 msgid "Set datadir"
-msgstr "設定資料目錄"
+msgstr "Estableix el «datadir» (directori de dades)"
 
 #. print "mediaChange %s %s" % (medium, drive)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:114
@@ -816,20 +930,20 @@ msgstr "設定資料目錄"
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:147
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
-msgstr "請將‘%s’放入光碟機‘%s’"
+msgstr "Inseriu «%s» a la unitat «%s»"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:135
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:138
 #: ../DistUpgrade/DistUpgradeViewKDE.py:203
 msgid "Fetching is complete"
-msgstr "接收完成"
+msgstr "S'ha completat el recull"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:146
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:149
 #: ../DistUpgrade/DistUpgradeViewKDE.py:216
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
-msgstr "接收第 %li 個檔案 (共 %li 個檔案，速度為 %sB/s)"
+msgstr "S'està obtenint el fitxer %li de %li a %s B/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:149
 #: ../DistUpgrade/DistUpgradeViewGtk.py:295
@@ -839,14 +953,14 @@ msgstr "接收第 %li 個檔案 (共 %li 個檔案，速度為 %sB/s)"
 #: ../DistUpgrade/DistUpgradeViewKDE.py:361
 #, python-format
 msgid "About %s remaining"
-msgstr "大約剩下 %s"
+msgstr "Queden %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:152
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:155
 #: ../DistUpgrade/DistUpgradeViewKDE.py:219
 #, python-format
 msgid "Fetching file %li of %li"
-msgstr "接收第 %li 個檔案 (共 %li 個)"
+msgstr "S'està obtenint el fitxer %li de %li"
 
 #. FIXME: add support for the timeout
 #. of the terminal (to display something useful then)
@@ -855,21 +969,21 @@ msgstr "接收第 %li 個檔案 (共 %li 個)"
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:186
 #: ../DistUpgrade/DistUpgradeViewKDE.py:253
 msgid "Applying changes"
-msgstr "正在套用變更"
+msgstr "S'estan aplicant els canvis"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk.py:208
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:211
 #: ../DistUpgrade/DistUpgradeViewKDE.py:266
 msgid "dependency problems - leaving unconfigured"
-msgstr "相依問題 - 保留為未設定"
+msgstr "problemes de dependències - es deixarà sense configurar"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:213
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:216
 #: ../DistUpgrade/DistUpgradeViewKDE.py:268
 #, python-format
 msgid "Could not install '%s'"
-msgstr "無法安裝‘%s’"
+msgstr "No s'ha pogut instal·lar «%s»"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:214
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:217
@@ -878,7 +992,10 @@ msgstr "無法安裝‘%s’"
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
 "state. Please consider submitting a bug report about it."
-msgstr "此次更新將繼續但是 '%s' 套件可能無法運作。請考慮提交關於該套件的臭蟲報告。"
+msgstr ""
+"L'actualització continuarà, però pot ser que el paquet «%s» no siga "
+"funcional. Hauríeu de considerar l'enviament d'un informe d'error sobre este "
+"fet."
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk.py:231
@@ -889,8 +1006,8 @@ msgid ""
 "Replace the customized configuration file\n"
 "'%s'?"
 msgstr ""
-"是否要覆蓋自訂的設定檔案\n"
-"‘%s’?"
+"Voleu reemplaçar el fitxer de\n"
+"configuració personalitzat «%s»?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:232
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:235
@@ -898,19 +1015,21 @@ msgstr ""
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
-msgstr "如果選擇以新版覆蓋，那麼將會失去您改變過的設定。"
+msgstr ""
+"Perdreu tots els canvis realitzats en el fitxer de configuració si trieu "
+"reemplaçar-lo per una versió més nova."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:250
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:253
 #: ../DistUpgrade/DistUpgradeViewKDE.py:313
 msgid "The 'diff' command was not found"
-msgstr "找不到‘diff’指令"
+msgstr "No s'ha trobat l'orde «diff»"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:463
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:469
 #: ../DistUpgrade/DistUpgradeViewText.py:90
 msgid "A fatal error occurred"
-msgstr "發生嚴重錯誤"
+msgstr "S'ha produït un error greu"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:464
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:470
@@ -920,148 +1039,155 @@ msgid ""
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"請回報此錯誤 (若您尚未回報) 並將檔案 /var/log/dist-upgrade/main.log 與 /var/log/dist-"
-"upgrade/apt.log 附在您的報告中。升級程序已取消。\n"
-"您原先的 sources.list 儲存於 /etc/apt/sources.list.distUpgrade。"
+"Informeu d'això com un error (si no és que ja ho heu fet) i adjunteu els "
+"fitxers /var/log/dist-upgrade/main.log i /var/log/dist-upgrade/apt.log al "
+"vostre informe. S'ha interromput l'actualització.\n"
+"S'ha alçat el vostre fitxer sources.list original a "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:481
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:487
 msgid "Ctrl-c pressed"
-msgstr "按下 Ctrl+c"
+msgstr "S'ha premut Ctrl+C"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:482
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:488
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
-msgstr "操作將被中止。這可能會造成系統的不完整。你確定要進行嗎?"
+msgstr ""
+"Això interromprà l'operació, amb la qual cosa pot ser que es malmeti el "
+"sistema. Esteu segur que ho voleu fer?"
 
 #. append warning
 #: ../DistUpgrade/DistUpgradeViewGtk.py:630
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:621
 msgid "To prevent data loss close all open applications and documents."
-msgstr "為避免遺失資料，請關閉所有開啟的程式及文件。"
+msgstr ""
+"Per a evitar una possible pèrdua de dades, tanqueu tots els documents i "
+"aplicacions."
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:644
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:635
 #, python-format
 msgid "No longer supported by Canonical (%s)"
-msgstr "不再受 Canonical 支援 (%s)"
+msgstr "Ja no mantinguts per Canonical (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:645
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:636
 #, python-format
 msgid "<b>Downgrade (%s)</b>"
-msgstr "<b>降級 (%s)</b>"
+msgstr "<b>Es desactualitzaran (%s)</b>"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:646
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:637
 #, python-format
 msgid "Remove (%s)"
-msgstr "移除 (%s)"
+msgstr "Se suprimiran (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:647
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:638
 #, python-format
 msgid "No longer needed (%s)"
-msgstr "不再需要 (%s)"
+msgstr "Ja no són necessaris (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:648
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:639
 #, python-format
 msgid "Install (%s)"
-msgstr "安裝 (%s)"
+msgstr "S'instal·laran (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk.py:649
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:640
 #, python-format
 msgid "Upgrade (%s)"
-msgstr "升級 (%s)"
+msgstr "S'actualitzaran (%s)"
 
 #. change = QMessageBox.question(None, _("Media Change"), msg, QMessageBox.Ok, QMessageBox.Cancel)
 #: ../DistUpgrade/DistUpgradeViewKDE.py:190
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:149
 msgid "Media Change"
-msgstr "媒體變更"
+msgstr "Canvi de suport"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:325
 msgid "Show Difference >>>"
-msgstr "顯示差異 >>>"
+msgstr "Mostra les diferències >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:328
 msgid "<<< Hide Difference"
-msgstr "<<< 隱藏差異"
+msgstr "<<< Oculta les diferències"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:543
 msgid "Error"
-msgstr "錯誤"
+msgstr "S'ha produït un error"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:555
 msgid "&Cancel"
-msgstr "取消(&C)"
+msgstr "&Cancel·la"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:557
 #: ../DistUpgrade/DistUpgradeViewKDE.py:799
 msgid "&Close"
-msgstr "關閉(&C)"
+msgstr "&Tanca"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:603
 msgid "Show Terminal >>>"
-msgstr "顯示終端畫面 >>>"
+msgstr "Mostra el terminal >>>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:606
 msgid "<<< Hide Terminal"
-msgstr "<<< 隱藏終端畫面"
+msgstr "<<< Oculta el terminal"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:686
 msgid "Information"
-msgstr "資訊"
+msgstr "Informació"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:737
 #: ../DistUpgrade/DistUpgradeViewKDE.py:782
 #: ../DistUpgrade/DistUpgradeViewKDE.py:785 ../DistUpgrade/DistUpgrade.ui.h:11
 msgid "Details"
-msgstr "詳情"
+msgstr "Detalls"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:763
 #, python-format
 msgid "No longer supported %s"
-msgstr "不再支援 %s"
+msgstr "Ja no es mantenen %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:765
 #, python-format
 msgid "Remove %s"
-msgstr "移除 %s"
+msgstr "Suprimeix %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:767
 #: ../DistUpgrade/DistUpgradeViewText.py:179
 #, python-format
 msgid "Remove (was auto installed) %s"
-msgstr "移除 (曾是自動安裝的) %s"
+msgstr "Suprimeix %s (s'havia instal·lat automàticament)"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:769
 #, python-format
 msgid "Install %s"
-msgstr "安裝 %s"
+msgstr "Instal·la %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:771
 #, python-format
 msgid "Upgrade %s"
-msgstr "升級 %s"
+msgstr "Actualitza %s"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:795
 #: ../DistUpgrade/DistUpgradeViewText.py:227
 msgid "Restart required"
-msgstr "需要重新開機"
+msgstr "Cal que reinicieu el sistema"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:795
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr "<b><big>重新啟動系統以完成更新</big></b>"
+msgstr ""
+"<b><big>Reinicieu el sistema per a completar l'actualització</big></b>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:798 ../DistUpgrade/DistUpgrade.ui.h:25
 #: ../data/gtkbuilder/UpdateManager.ui.h:32
 msgid "_Restart Now"
-msgstr "現在重新啟動(_R)"
+msgstr "_Reinicia"
 
 #. FIXME make this user friendly
 #: ../DistUpgrade/DistUpgradeViewKDE.py:816
@@ -1071,37 +1197,42 @@ msgid ""
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly advised to resume the upgrade."
 msgstr ""
-"<b><big>是否取消正進行的升級？</big></b>\n"
+"<b><big>Voleu cancel·lar l'actualització en curs?</big></b>\n"
 "\n"
-"如果您取消升級，系統可能會在不穩定的狀態。強烈建議您繼續升級工作。"
+"El sistema pot quedar inusable si la cancel·leu. És molt recomanable "
+"continuar amb l'actualització."
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:820
 msgid "Cancel Upgrade?"
-msgstr "要取消升級嗎？"
+msgstr "Voleu cancel·lar l'actualització?"
 
 #: ../DistUpgrade/DistUpgradeView.py:59
 #, python-format
 msgid "%li day"
 msgid_plural "%li days"
-msgstr[0] "%li 日"
+msgstr[0] "%li dia"
+msgstr[1] "%li dies"
 
 #: ../DistUpgrade/DistUpgradeView.py:61
 #, python-format
 msgid "%li hour"
 msgid_plural "%li hours"
-msgstr[0] "%li 小時"
+msgstr[0] "%li hora"
+msgstr[1] "%li hores"
 
 #: ../DistUpgrade/DistUpgradeView.py:63
 #, python-format
 msgid "%li minute"
 msgid_plural "%li minutes"
-msgstr[0] "%li 分"
+msgstr[0] "%li minut"
+msgstr[1] "%li minuts"
 
 #: ../DistUpgrade/DistUpgradeView.py:64
 #, python-format
 msgid "%li second"
 msgid_plural "%li seconds"
-msgstr[0] "%li 秒"
+msgstr[0] "%li segon"
+msgstr[1] "%li segons"
 
 #. TRANSLATORS: you can alter the ordering of the remaining time
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
@@ -1138,33 +1269,35 @@ msgstr "%(str_hours)s %(str_minutes)s"
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem."
-msgstr "這次下載所需時間在 1M DSL 連線大約要 %s，用 56k 數據機大約要 %s。"
+msgstr ""
+"La baixada trigarà aproximadament %s amb una connexió ADSL d'1Mb, i "
+"aproximadament %s amb un mòdem de 56k"
 
 #. if we have a estimated speed, use it
 #: ../DistUpgrade/DistUpgradeView.py:151
 #, python-format
 msgid "This download will take about %s with your connection. "
-msgstr "依照您的連線速率，此下載將要約 %s 的時間。 "
+msgstr "La baixada trigarà aproximadament %s amb la vostra connexió. "
 
 #: ../DistUpgrade/DistUpgradeView.py:253 ../DistUpgrade/DistUpgrade.ui.h:16
 msgid "Preparing to upgrade"
-msgstr "準備升級中"
+msgstr "S'està preparant l'actualització"
 
 #: ../DistUpgrade/DistUpgradeView.py:254
 msgid "Getting new software channels"
-msgstr "正取得新軟體頻道"
+msgstr "S'estan obtenint canals de programari nous"
 
 #: ../DistUpgrade/DistUpgradeView.py:255 ../DistUpgrade/DistUpgrade.ui.h:14
 msgid "Getting new packages"
-msgstr "取得新套件"
+msgstr "S'estan obtenint els paquets nous"
 
 #: ../DistUpgrade/DistUpgradeView.py:256 ../DistUpgrade/DistUpgrade.ui.h:15
 msgid "Installing the upgrades"
-msgstr "安裝升級中"
+msgstr "S'estan instal·lant les actualitzacions"
 
 #: ../DistUpgrade/DistUpgradeView.py:257 ../DistUpgrade/DistUpgrade.ui.h:10
 msgid "Cleaning up"
-msgstr "清理中"
+msgstr "S'està netejant"
 
 #: ../DistUpgrade/DistUpgradeView.py:342
 #, python-format
@@ -1174,7 +1307,12 @@ msgid ""
 msgid_plural ""
 "%(amount)d installed packages are no longer supported by Canonical. You can "
 "still get support from the community."
-msgstr[0] "%(amount)d 個已安裝套件不再受 Canonical 支援。您仍可以取得來自社群的支援。"
+msgstr[0] ""
+"%(amount)d paquet instal·lat ja no està mantingut per Canonical. Així i tot, "
+"encara podeu obtindre assistència de la comunitat."
+msgstr[1] ""
+"%(amount)d dels paquets instal·lats ja no estan mantinguts per Canonical. "
+"Així i tot, encara podeu obtindre assistència de la comunitat."
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
@@ -1182,19 +1320,22 @@ msgstr[0] "%(amount)d 個已安裝套件不再受 Canonical 支援。您仍可�
 #, python-format
 msgid "%d package is going to be removed."
 msgid_plural "%d packages are going to be removed."
-msgstr[0] "即將移除 %d 個套件。"
+msgstr[0] "Se suprimirà %d paquet."
+msgstr[1] "Se suprimiran %d paquets."
 
 #: ../DistUpgrade/DistUpgradeView.py:356
 #, python-format
 msgid "%d new package is going to be installed."
 msgid_plural "%d new packages are going to be installed."
-msgstr[0] "即將安裝 %d 個新套件。"
+msgstr[0] "S'instal·larà %d paquet nou"
+msgstr[1] "S'instal·laran %d paquets nous"
 
 #: ../DistUpgrade/DistUpgradeView.py:362
 #, python-format
 msgid "%d package is going to be upgraded."
 msgid_plural "%d packages are going to be upgraded."
-msgstr[0] "即將升級 %d 個套件。"
+msgstr[0] "S'actualitzarà %d paquet"
+msgstr[1] "S'actualitzaran %d paquets"
 
 #: ../DistUpgrade/DistUpgradeView.py:367
 #, python-format
@@ -1205,123 +1346,141 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"要下載共%s。 "
+"Heu de baixar un total de %s. "
 
 #: ../DistUpgrade/DistUpgradeView.py:371
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be cancelled."
-msgstr "下載和安裝升級會花上數小時。一旦下載完成，程序將不能取消。"
+msgstr ""
+"La baixada i l'actualització poden durar algunes hores, i no podreu "
+"cancel·lar esta última un cop haja començat."
 
 #. FIXME: this should go into DistUpgradeController
 #: ../DistUpgrade/DistUpgradeView.py:377 ../UpdateManager/UpdateManager.py:664
 msgid "Your system is up-to-date"
-msgstr "系統已經在最新狀態"
+msgstr "El vostre sistema està actualitzat"
 
 #: ../DistUpgrade/DistUpgradeView.py:378
 msgid ""
 "There are no upgrades available for your system. The upgrade will now be "
 "canceled."
-msgstr "您的系統已在最新狀態。現在將取消升級動作。"
+msgstr ""
+"No hi ha actualitzacions disponibles per al vostre sistema. L'actualització "
+"es cancel·larà"
 
 #: ../DistUpgrade/DistUpgradeView.py:391
 msgid "Reboot required"
-msgstr "需要重新開機"
+msgstr "Cal que reinicieu el sistema"
 
 #: ../DistUpgrade/DistUpgradeView.py:392
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
-msgstr "升級已經完成並需要重新開機。是否現在重新開機？"
+msgstr ""
+"L'actualització ha finalitzat i cal reiniciar el sistema. Voleu fer-ho ara?"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:131
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:132
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:131
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:132
 msgid "Could not run the upgrade tool"
-msgstr "無法執行升級工具"
+msgstr "No es pot executar l'eina d'actualització"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:132
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:132
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug "
 "using the command 'ubuntu-bug update-manager'."
-msgstr "這可能是升級工具的錯誤，請使用指令「ubuntu-bug update-manager」回報錯誤。"
+msgstr ""
+"Pareix que hi ha un error en l'eina d'actualització. Informeu d'este error "
+"utilitzant l'orde «ubuntu-bug update-manager» en un terminal."
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:207
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:207
 msgid "Upgrade tool signature"
-msgstr "升級工具簽署"
+msgstr "Signatura de l'eina d'actualització"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:214
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:214
 msgid "Upgrade tool"
-msgstr "升級工具"
+msgstr "Eina d'actualització"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:248
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:248
 msgid "Failed to fetch"
-msgstr "接收失敗"
+msgstr "Ha fallat la baixada"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:249
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:249
 msgid "Fetching the upgrade failed. There may be a network problem. "
-msgstr "接收升級套件失敗。可能是網路問題。 "
+msgstr ""
+"Ha fallat l'obtenció de l'actualització. Pot ser que hi haja algun problema "
+"a la xarxa. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:253
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:253
 msgid "Failed to extract"
-msgstr "解壓失敗"
+msgstr "Ha fallat l'extracció"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:254
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:254
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
-msgstr "升級套件解壓失敗。可能是因為網路或伺服器出現問題。 "
+msgstr ""
+"Ha fallat l'extracció de l'actualització. Pot ser que hi haja algun problema "
+"a la xarxa o al servidor. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:259
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:259
 msgid "Verification failed"
-msgstr "檢驗失敗"
+msgstr "Ha fallat la verificació"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:260
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:260
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
-msgstr "檢驗升級套件失敗。可能是因為網路或伺服器出現問題。 "
+msgstr ""
+"Ha fallat la verificació de l'actualització. Pot ser que hi haja algun "
+"problema a la xarxa o al servidor. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:265
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:265
 msgid "Authentication failed"
-msgstr "認證失敗"
+msgstr "Ha fallat l'autenticació"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:266
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:266
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
-msgstr "認證升級套件失敗。可能是因為跟伺服器的網路連線出現問題。 "
+msgstr ""
+"Ha fallat l'autenticació de l'actualització. Pot ser que hi haja algun "
+"problema a la xarxa o al servidor. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:280
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:286
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:280
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:286
 msgid "Can not run the upgrade"
-msgstr "不能進行升級"
+msgstr "No es pot executar l'actualització"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:281
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:281
 msgid ""
 "This usually is caused by a system where /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
-msgstr "這通常是由使用 noexec 掛載 /tmp 的系統引致的。請不要使用 noexec 重新掛載，並再次進行升級。"
+msgstr ""
+"Normalment això està provocat per un sistema on /tmp s'ha muntat com a no "
+"executable. Torneu-lo a muntar sense l'opció de no executable i torneu a "
+"executar l'actualització."
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:287
 #: ../UpdateManager/Core/DistUpgradeFetcherCore.py:287
 #, python-format
 msgid "The error message is '%s'."
-msgstr "錯誤訊息 '%s'。"
+msgstr "El missatge d'error és «%s»."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:91
 msgid ""
@@ -1330,39 +1489,41 @@ msgid ""
 "upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"請回報此錯誤並將檔案 /var/log/dist-upgrade/main.log 與 /var/log/dist-upgrade/apt.log "
-"附在您的報告中。升級程序已取消。\n"
-"您原先的 sources.list 儲存於 /etc/apt/sources.list.distUpgrade。"
+"Informeu d'això com un error i adjunteu els fitxers /var/log/dist-"
+"upgrade/main.log i /var/log/dist-upgrade/apt.log al vostre informe. S'ha "
+"interromput l'actualització.\n"
+"S'ha alçat el vostre fitxer sources.list original a "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:115
 msgid "Aborting"
-msgstr "正在中止"
+msgstr "S'està interrompent"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:120
 msgid "Demoted:\n"
-msgstr "降級：\n"
+msgstr "Degradat:\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:127
 msgid "To continue please press [ENTER]"
-msgstr "若要繼續請按 [ENTER]"
+msgstr "Premeu la tecla de retorn per continuar"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../DistUpgrade/DistUpgradeViewText.py:193
 #: ../DistUpgrade/DistUpgradeViewText.py:200
 msgid "Continue [yN] "
-msgstr "繼續 [yN] "
+msgstr "Continua [sN] "
 
 #: ../DistUpgrade/DistUpgradeViewText.py:155
 #: ../DistUpgrade/DistUpgradeViewText.py:193
 msgid "Details [d]"
-msgstr "詳情 [d]"
+msgstr "Detalls [d]"
 
 #. TRANSLATORS: the "y" is "yes"
 #. TRANSLATORS: first letter of a positive (yes) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:159
 #: ../DistUpgrade/DistUpgradeViewText.py:203
 msgid "y"
-msgstr "y"
+msgstr "s"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer
@@ -1379,34 +1540,34 @@ msgstr "d"
 #: ../DistUpgrade/DistUpgradeViewText.py:170
 #, python-format
 msgid "No longer supported: %s\n"
-msgstr "不再支援：%s\n"
+msgstr "Ja no es mantenen: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:175
 #, python-format
 msgid "Remove: %s\n"
-msgstr "移除： %s\n"
+msgstr "Suprimeix: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:185
 #, python-format
 msgid "Install: %s\n"
-msgstr "安裝： %s\n"
+msgstr "Instal·la: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:190
 #, python-format
 msgid "Upgrade: %s\n"
-msgstr "升級： %s\n"
+msgstr "Actualitza: %s\n"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:207
 msgid "Continue [Yn] "
-msgstr "繼續 [Yn] "
+msgstr "Continua [Sn] "
 
 #: ../DistUpgrade/DistUpgradeViewText.py:228
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
 msgstr ""
-"需要重新開機才能完成升級。\n"
-"如果您選擇「y」系統將會重新開機。"
+"Cal reiniciar el sistema per a finalitzar l'actualització.\n"
+"Si seleccioneu «s», es reiniciarà el sistema."
 
 #: ../DistUpgrade/DistUpgrade.ui.h:1
 msgid "    "
@@ -1419,9 +1580,10 @@ msgid ""
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly adviced to resume the upgrade."
 msgstr ""
-"<b><big>是否取消正執行的升級？</big></b>\n"
+"<b><big>Voleu cancel·lar l'actualització?</big></b>\n"
 "\n"
-"如果取消升級可能會導致系統不穩定。強烈建議您繼續升級。"
+"Si ho feu, pot ser que el sistema siga inutilitzable. És extremament "
+"recomanable continuar amb l'actualització."
 
 #: ../DistUpgrade/DistUpgrade.ui.h:5
 msgid ""
@@ -1429,191 +1591,198 @@ msgid ""
 "\n"
 "Please save your work before continuing."
 msgstr ""
-"<b><big>重新啟動系統以完成升級</big></b>\n"
+"<b><big>Reinicieu el sistema per a completar l'actualització</big></b>\n"
 "\n"
-"請在繼續前先儲存您的作業。"
+"Alceu la vostra faena abans de continuar."
 
 #: ../DistUpgrade/DistUpgrade.ui.h:8
 msgid "<b><big>Start the upgrade?</big></b>"
-msgstr "<b><big>開始升級嗎？</big></b>"
+msgstr "<b><big>Voleu iniciar l'actualització?</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:9
 msgid "<b><big>Upgrading Ubuntu to version 11.10</big></b>"
-msgstr "<b><big>將 Ubuntu 升級至 11.10 版</big></b>"
+msgstr "<b><big>S'està actualitzant l'Ubuntu a la versió 11.10</big></b>"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:12
 msgid "Difference between the files"
-msgstr "檔案間的差別"
+msgstr "Diferències entre els fitxers"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:13
 msgid "Distribution Upgrade"
-msgstr "發行版升級"
+msgstr "Actualització de la distribució"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:17
 msgid "Restarting the computer"
-msgstr "重新啟動系統"
+msgstr "S'està reiniciant l'ordinador"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:18
 msgid "Setting new software channels"
-msgstr "設定新軟體頻道"
+msgstr "S'estan configurant els canals de programari nous"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:19
 msgid "Terminal"
-msgstr "終端"
+msgstr "Terminal"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:20
 msgid "_Cancel Upgrade"
-msgstr "取消升級(_C)"
+msgstr "_Cancel·la l'actualització"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:21
 msgid "_Continue"
-msgstr "繼續(_C)"
+msgstr "_Continua"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:23
 msgid "_Replace"
-msgstr "取代(_R)"
+msgstr "_Reemplaça"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:24
 msgid "_Report Bug"
-msgstr "回報錯誤(_R)"
+msgstr "_Informa de l'error"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:26
 msgid "_Resume Upgrade"
-msgstr "繼續升級(_R)"
+msgstr "_Reprén l'actualització"
 
 #: ../DistUpgrade/DistUpgrade.ui.h:27
 msgid "_Start Upgrade"
-msgstr "開始升級(_S)"
+msgstr "_Comença l'actualització"
 
 #: ../UpdateManager/backend/InstallBackendSynaptic.py:55
 msgid "Please wait, this can take some time."
-msgstr "請稍候，這需要一點時間。"
+msgstr "Espereu un moment, això pot tardar una estona."
 
 #: ../UpdateManager/backend/InstallBackendSynaptic.py:57
 msgid "Update is complete"
-msgstr "更新完成"
+msgstr "S'ha completat l'actualització"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:108
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:102
 msgid "Could not find the release notes"
-msgstr "找不到發行公告"
+msgstr "No s'han trobat les notes de la versió"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:109
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:103
 msgid "The server may be overloaded. "
-msgstr "伺服器可能負荷過重。 "
+msgstr "El servidor potser està sobrecarregat. "
 
 #: ../UpdateManager/DistUpgradeFetcher.py:119
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:107
 msgid "Could not download the release notes"
-msgstr "無法下載發行公告"
+msgstr "No s'han pogut baixar les notes de la versió"
 
 #: ../UpdateManager/DistUpgradeFetcher.py:120
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:108
 msgid "Please check your internet connection."
-msgstr "請檢查您的網際網路連線。"
+msgstr "Comproveu la vostra connexió a Internet"
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:61
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:84
 msgid "Upgrade"
-msgstr "升級"
+msgstr "Actualització"
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:88
 #: ../data/gtkbuilder/UpdateManager.ui.h:13
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:4
 msgid "Release Notes"
-msgstr "發行公告"
+msgstr "Notes de la versió"
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:127
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:140
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:142
 msgid "Downloading additional package files..."
-msgstr "正在下載額外的套件檔案..."
+msgstr "S'estan baixant els fitxers de paquet addicionals..."
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:140
 #, python-format
 msgid "File %s of %s at %sB/s"
-msgstr "檔案 %s / %s (速度：%s 位元組/秒)"
+msgstr "Fitxer %s de %s a %s B/s"
 
 #: ../UpdateManager/DistUpgradeFetcherKDE.py:142
 #, python-format
 msgid "File %s of %s"
-msgstr "檔案 %s / %s"
+msgstr "Fitxer %s de %s"
 
 #: ../UpdateManager/ChangelogViewer.py:73
 msgid "Open Link in Browser"
-msgstr "用瀏覽器開啟連結"
+msgstr "Obri l'enllaç al navegador"
 
 #: ../UpdateManager/ChangelogViewer.py:76
 msgid "Copy Link to Clipboard"
-msgstr "複製連結至剪貼簿"
+msgstr "Copia l'enllaç al porta-retalls"
 
 #: ../UpdateManager/GtkProgress.py:159
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr "共 %(total)li 個檔案，正下載第 %(current)li 個 (速度: %(speed)s/秒)"
+msgstr "S'està baixant el fitxer %(current)li de %(total)li a %(speed)s/s"
 
 #: ../UpdateManager/GtkProgress.py:164
 #, python-format
 msgid "Downloading file %(current)li of %(total)li"
-msgstr "共 %(total)li 個檔案，正下載第 %(current)li 個"
+msgstr "S'està baixant el fitxer %(current)li de %(total)li"
 
 #: ../UpdateManager/UpdateManager.py:105 ../do-release-upgrade:90
 msgid "Your Ubuntu release is not supported anymore."
-msgstr "您的 Ubuntu 發行版本已經不再支援。"
+msgstr "La vostra versió de l'Ubuntu ja no està mantinguda."
 
 #: ../UpdateManager/UpdateManager.py:106
 msgid ""
 "You will not get any further security fixes or critical updates. Please "
 "upgrade to a later version of Ubuntu Linux."
-msgstr "您將無法再取得安全性修正與重大更新。請升級至新版 Ubuntu Linux。"
+msgstr ""
+"No rebeu cap més actualització de seguretat o actualitzacions crítiques. És "
+"recomanable que actualitzeu el sistema a una versió més nova de l'Ubuntu."
 
 #: ../UpdateManager/UpdateManager.py:114
 msgid "Upgrade information"
-msgstr "升級資訊"
+msgstr "Informació de l'actualització"
 
 #. upload_archive = version_match.group(2).strip()
 #: ../UpdateManager/UpdateManager.py:389
 #, python-format
 msgid "Version %s: \n"
-msgstr "版本 %s： \n"
+msgstr "Versió %s: \n"
 
 #: ../UpdateManager/UpdateManager.py:445
 msgid ""
 "No network connection detected, you can not download changelog information."
-msgstr "未偵測到網路連線，您無法下載更動紀錄資訊。"
+msgstr ""
+"No s'ha detectat cap connexió de xarxa, no podeu baixar informació del "
+"registre de canvis."
 
 #: ../UpdateManager/UpdateManager.py:453
 msgid "Downloading list of changes..."
-msgstr "正下載更動清單..."
+msgstr "S'està descarregant la llista de canvis..."
 
 #: ../UpdateManager/UpdateManager.py:497
 msgid "_Deselect All"
-msgstr "全部不選(_D)"
+msgstr "_Desselecciona-ho tot"
 
 #: ../UpdateManager/UpdateManager.py:503
 msgid "Select _All"
-msgstr "全部選取(_A)"
+msgstr "Seleccion_a-ho tot"
 
 #: ../UpdateManager/UpdateManager.py:552
 #, python-format
 msgid "%(count)s update has been selected."
 msgid_plural "%(count)s updates have been selected."
-msgstr[0] "已選取 %(count)s 項更新。"
+msgstr[0] "S'ha seleccionat %(count)s actualització."
+msgstr[1] "S'han seleccionat %(count)s actualitzacions."
 
 #: ../UpdateManager/UpdateManager.py:556
 #, python-format
 msgid "%s will be downloaded."
-msgstr "將下載 %s。"
+msgstr "Es baixaran %s."
 
 #: ../UpdateManager/UpdateManager.py:568
 msgid "The update has already been downloaded, but not installed"
 msgid_plural "The updates have already been downloaded, but not installed"
-msgstr[0] "更新已下載，但尚未安裝"
+msgstr[0] "L'actualització ja s'ha baixat, però encara no s'ha instal·lat"
+msgstr[1] ""
+"Les actualitzacions ja s'han baixat, però encara no s'han instal·lat"
 
 #: ../UpdateManager/UpdateManager.py:573
 msgid "There are no updates to install"
-msgstr "沒有要安裝的更新"
+msgstr "No hi ha actualitzacions a instal·lar"
 
 #. TRANSLATORS: this allows to switch the order of the count of
 #. updates and the download size string (if needed)
@@ -1624,13 +1793,15 @@ msgstr "%(count_str)s %(download_str)s"
 
 #: ../UpdateManager/UpdateManager.py:586
 msgid "Unknown download size."
-msgstr "未知下載大小。"
+msgstr "No s'ha pogut determinar la mida de la baixada."
 
 #: ../UpdateManager/UpdateManager.py:612
 msgid ""
 "It is unknown when the package information was updated last. Please click "
 "the 'Check' button to update the information."
-msgstr "未知套件資訊的上次更新時間。請點擊「檢查」按鈕來更新資訊。"
+msgstr ""
+"No se sap quan s'ha actualitzat la informació del paquet per últim cop. Feu "
+"clic al botó «Comprova» per actualitzar la informació."
 
 #: ../UpdateManager/UpdateManager.py:618
 #, python-format
@@ -1638,78 +1809,98 @@ msgid ""
 "The package information was last updated %(days_ago)s days ago.\n"
 "Press the 'Check' button below to check for new software updates."
 msgstr ""
-"%(days_ago)s 天前更新過套件資訊。\n"
-"請按下方「檢查」鈕看看有否新資訊。"
+"La informació dels paquets s'actualitzà fa %(days_ago)s dies.\n"
+"Premeu el botó «Comprova» de més avall per comprovar si hi ha "
+"actualitzacions noves."
 
 #: ../UpdateManager/UpdateManager.py:623
 #, python-format
 msgid "The package information was last updated %(days_ago)s day ago."
 msgid_plural ""
 "The package information was last updated %(days_ago)s days ago."
-msgstr[0] "%(days_ago)s 天前更新過套件資訊。"
+msgstr[0] "La informació dels paquets es va actualitzar fa %(days_ago)s dia."
+msgstr[1] ""
+"La informació dels paquets es va actualitzar fa %(days_ago)s dies."
 
 #: ../UpdateManager/UpdateManager.py:627
 #, python-format
 msgid "The package information was last updated %(hours_ago)s hour ago."
 msgid_plural ""
 "The package information was last updated %(hours_ago)s hours ago."
-msgstr[0] "%(hours_ago)s 小時前更新過套件資訊。"
+msgstr[0] ""
+"La informació dels paquets es va actualitzar fa %(hours_ago)s hora."
+msgstr[1] ""
+"La informació dels paquets es va actualitzar fa %(hours_ago)s hores."
 
 #. TRANSLATORS: only in plural form, as %s minutes ago is one of 15, 30, 45 minutes ago
 #: ../UpdateManager/UpdateManager.py:632 ../UpdateManager/UpdateManager.py:634
 #: ../UpdateManager/UpdateManager.py:636
 #, python-format
 msgid "The package information was last updated about %s minutes ago."
-msgstr "套件資訊約 %s 分鐘前更新。"
+msgstr ""
+"La informació del paquet es va actualitzar per últim cop fa %s minuts."
 
 #: ../UpdateManager/UpdateManager.py:638
 msgid "The package information was just updated."
-msgstr "套件資訊剛更新。"
+msgstr "La informació del paquet s'acaba d'actualitzar."
 
 #: ../UpdateManager/UpdateManager.py:658
 #: ../data/gtkbuilder/UpdateManager.ui.h:22
 msgid ""
 "Software updates correct errors, eliminate security vulnerabilities and "
 "provide new features."
-msgstr "軟體更新會修正錯誤、消除安全隱患並提供新功能。"
+msgstr ""
+"Les actualitzacions de programari corregeixen errors, eliminen problemes de "
+"seguretat i proporcionen prestacions noves."
 
 #: ../UpdateManager/UpdateManager.py:677
 msgid "Software updates may be available for your computer."
-msgstr "可能有軟體更新提供予閣下之電腦。"
+msgstr ""
+"Pot ser que hi haja actualitzacions de programari per a este ordinador."
 
 #: ../UpdateManager/UpdateManager.py:685
 msgid "Welcome to Ubuntu"
-msgstr "歡迎使用 Ubuntu"
+msgstr "Benvingut a l'Ubuntu"
 
 #: ../UpdateManager/UpdateManager.py:687
 msgid ""
 "These software updates have been issued since this version of Ubuntu was "
 "released. If you don't want to install them now, choose \"Update Manager\" "
 "from Applications later."
-msgstr "自從這個 Ubuntu 版本發行後已經發布這些軟體更新。如果您現在還不想安裝它們，請稍後從「應用程式」選單選擇「更新管理員」。"
+msgstr ""
+"S'han publicat estes actualitzacions de programari després del llançament "
+"d'esta versió de l'Ubuntu. Si no les voleu instal·lar ara, obriu més tard el "
+"«Gestor d'actualitzacions» des de les Aplicacions."
 
 #: ../UpdateManager/UpdateManager.py:689
 msgid ""
 "These software updates have been issued since this version of Ubuntu was "
 "released. If you don't want to install them now, choose \"Update Manager\" "
 "from the Administration Menu later."
-msgstr "自從這個 Ubuntu 版本發行後已經發布這些軟體更新。如果您現在還不想安裝它們，請稍後從「管理」選單選擇「更新管理員」。"
+msgstr ""
+"S'han publicat estes actualitzacions de programari després del llançament "
+"d'esta versió de l'Ubuntu. Si no les voleu instal·lar ara, obriu més tard el "
+"«Gestor d'actualitzacions» del menú d'Administració."
 
 #: ../UpdateManager/UpdateManager.py:692
 msgid "Software updates are available for this computer"
-msgstr "有軟體更新提供予此電腦。"
+msgstr "Hi ha actualitzacions de programari per a este ordinador"
 
 #: ../UpdateManager/UpdateManager.py:694
 msgid ""
 "If you don't want to install them now, choose \"Update Manager\" from "
 "Applications later."
-msgstr "若現在您不想要安裝它們，您可以稍後從「應用程式」選擇「更新管理員」再安裝。"
+msgstr ""
+"Si no voleu instal·lar-les ara, trieu el «Gestor d'actualitzacions» en el "
+"menú d'aplicacions més avant."
 
 #: ../UpdateManager/UpdateManager.py:696
 msgid ""
 "If you don't want to install them now, choose \"Update Manager\" from the "
 "Administration menu later."
-msgstr "若目前不想安裝，可稍後於管理選單開啟「更新管理員」。"
+msgstr ""
+"Si no les voleu instal·lar ara, trieu «Gestor d'actualitzacions» al menú "
+"Sistema > Administració més avant."
 
 #: ../UpdateManager/UpdateManager.py:748
 #, python-format
@@ -1718,30 +1909,35 @@ msgid ""
 "least an additional %s of disk space on '%s'. Empty your trash and remove "
 "temporary packages of former installations using 'sudo apt-get clean'."
 msgstr ""
-"升級工作需要總共 %s 可用空間於硬碟 ‘%s’。請額外空出最少 %s 的空間於 ‘%s’。清理清理您的回收筒或使用 ‘sudo apt-get "
-"clean’ 移除上次安裝的暫存套件。"
+"L'actualització requereix %s d'espai lliure al disc «%s». Hauríeu "
+"d'alliberar almenys %s d'espai de disc a «%s». Buideu la vostra paperera i "
+"esborreu els paquets temporals utilitzant «sudo apt-get clean»."
 
 #: ../UpdateManager/UpdateManager.py:773
 msgid ""
 "The computer needs to restart to finish installing updates. Please save your "
 "work before continuing."
-msgstr "必須重啟電腦以完成安裝更新。繼續前請先儲存工作。"
+msgstr ""
+"Cal reiniciar l'ordinador per a finalitzar la instaŀlació de les "
+"actualitzacions. Alceu la vostra faena abans de continuar."
 
 #: ../UpdateManager/UpdateManager.py:837
 msgid "Reading package information"
-msgstr "正在讀取套件資訊"
+msgstr "S'està llegint la informació dels paquets"
 
 #: ../UpdateManager/UpdateManager.py:852
 msgid "Connecting..."
-msgstr "連線中..."
+msgstr "S'està connectant..."
 
 #: ../UpdateManager/UpdateManager.py:869
 msgid "You may not be able to check for updates or download new updates."
-msgstr "您可能無法檢查是否有更新，或是下載新的更新。"
+msgstr ""
+"Pot ser que no pugueu comprovar si hi ha actualitzacions o baixar-ne de "
+"noves."
 
 #: ../UpdateManager/UpdateManager.py:994
 msgid "Could not initialize the package information"
-msgstr "無法初始化套件資訊"
+msgstr "No es pot inicialitzar la informació dels paquets"
 
 #: ../UpdateManager/UpdateManager.py:995
 msgid ""
@@ -1751,9 +1947,10 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:\n"
 msgstr ""
-"初始套件資訊時發生不能解決的問題。\n"
+"S'ha produït un error irresoluble mentre s'inicialitzava la informació de "
+"paquets.\n"
 "\n"
-"請匯報此為『update-manager』套件的問題並附上以下的錯誤訊息：\n"
+"Informeu d'este error de l'update-manager i incloeu el missatge següent:\n"
 
 #: ../UpdateManager/UpdateManager.py:1024
 msgid ""
@@ -1762,81 +1959,86 @@ msgid ""
 "Please report this bug against the 'update-manager' package and include the "
 "following error message:"
 msgstr ""
-"計算升級時發生不能解決的問題。\n"
+"S'ha produït un error irresoluble mentre es calculava l'actualització.\n"
 "\n"
-"請匯報此為『update-manager』套件的問題並附上以下的錯誤訊息："
+"Informeu d'este error de l'update-manager i incloeu el missatge següent:"
 
 #: ../UpdateManager/UpdateManager.py:1049
 msgid " (New install)"
-msgstr " (新安裝)"
+msgstr " (Instal·lació nova)"
 
 #. TRANSLATORS: the b stands for Bytes
 #: ../UpdateManager/UpdateManager.py:1056
 #, python-format
 msgid "(Size: %s)"
-msgstr "(大小：%s)"
+msgstr "(Mida: %s)"
 
 #: ../UpdateManager/UpdateManager.py:1058
 #, python-format
 msgid "From version %(old_version)s to %(new_version)s"
-msgstr "由版本 %(old_version)s 更新至 %(new_version)s"
+msgstr "De la versió %(old_version)s a la %(new_version)s"
 
 #: ../UpdateManager/UpdateManager.py:1062
 #, python-format
 msgid "Version %s"
-msgstr "版本 %s"
+msgstr "Versió %s"
 
 #: ../UpdateManager/UpdateManager.py:1093 ../do-release-upgrade:102
 msgid "Release upgrade not possible right now"
-msgstr "目前不能升級發行版"
+msgstr "En estos moments no es pot efectuar l'actualització de versió"
 
 #: ../UpdateManager/UpdateManager.py:1094 ../do-release-upgrade:103
 #, c-format, python-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
 "The server reported: '%s'"
-msgstr "發行版升級升級目前無法執行，請稍後重試。該伺服器回報：「%s」。"
+msgstr ""
+"En estos moments no es pot efectuar l'actualització de versió. Torneu-ho a "
+"provar més tard. El servidor ha respost: «%s»"
 
 #: ../UpdateManager/UpdateManager.py:1096 ../check-new-release-gtk:116
 msgid "Downloading the release upgrade tool"
-msgstr "正下載發行版更新工具"
+msgstr "S'està baixant l'eina d'actualització a una versió nova"
 
 #: ../UpdateManager/UpdateManager.py:1103
 #, python-format
 msgid "<b>New Ubuntu release '%s' is available</b>"
-msgstr "<b>有新 Ubuntu 發行版 '%s' 可供升級</b>"
+msgstr "<b>La versió nova de l'Ubuntu «%s» està disponible</b>"
 
 #. we assert a clean cache
 #: ../UpdateManager/UpdateManager.py:1142
 msgid "Software index is broken"
-msgstr "軟體索引損壞"
+msgstr "L'índex de programari està trencat"
 
 #: ../UpdateManager/UpdateManager.py:1143
 msgid ""
 "It is impossible to install or remove any software. Please use the package "
 "manager \"Synaptic\" or run \"sudo apt-get install -f\" in a terminal to fix "
 "this issue at first."
-msgstr "無法安裝或移除軟體。請先用 Synaptic 套件管理員或在終端機執行「sudo apt-get install -f」修正。"
+msgstr ""
+"No és possible instal·lar o desinstal·lar programari. Per a arreglar-ho, "
+"utilitzeu el gestor de paquets «Synaptic» o executeu «sudo apt-get install -"
+"f» en un terminal."
 
 #: ../UpdateManager/UnitySupport.py:57
 msgid "Check for Updates"
-msgstr "檢查更新"
+msgstr "Comprova si hi ha actualitzacions"
 
 #: ../UpdateManager/UnitySupport.py:66
 msgid "Install All Available Updates"
-msgstr "安裝所有可進行的更新"
+msgstr "Instal·la totes les actualitzacions disponibles"
 
 #: ../UpdateManagerText/UpdateManagerText.py:31
 msgid "Cancel"
-msgstr "取消"
+msgstr "Cancel·la"
 
 #: ../UpdateManagerText/UpdateManagerText.py:32
 msgid "Install"
-msgstr "安裝"
+msgstr "Instal·la"
 
 #: ../UpdateManagerText/UpdateManagerText.py:50
 msgid "Building Updates List"
-msgstr "正建立更新清單"
+msgstr "S'està construint la llista d'actualitzacions"
 
 #: ../UpdateManagerText/UpdateManagerText.py:53
 msgid ""
@@ -1852,24 +2054,24 @@ msgid ""
 " * Normal changes of a pre-release version of Ubuntu"
 msgstr ""
 "\n"
-"無法計算標準升級，請執行： \n"
+"No es pot calcular una actualització normal, executeu: \n"
 "  sudo apt-get dist-upgrade\n"
 "\n"
 "\n"
-" 這可能由以下原因造成：\n"
-" * 前次升級程序未完成\n"
-" * 某些已安裝的軟體有問題\n"
-" * 安裝了非由 Ubuntu 官方提供的軟體套件\n"
-" * Ubuntu 非正式發佈版本的正常更動"
+"Les causes d'això poden ser:\n"
+" * Una actualització prèvia no s'ha completat\n"
+" * Problemes amb programari instal·lat\n"
+" * Paquets de programari no oficial que no estan proveïts per l'Ubuntu\n"
+" * Canvis normals en una versió de desenvolupament de l'Ubuntu"
 
 #: ../UpdateManagerText/UpdateManagerText.py:122
 msgid "Downloading changelog"
-msgstr "正下載變更記錄"
+msgstr "S'està baixant el registre de canvis"
 
 #: ../UpdateManager/Core/MyCache.py:128
 #, python-format
 msgid "Other updates (%s)"
-msgstr "其他更新 (%s)"
+msgstr "Altres actualitzacions (%s)"
 
 #: ../UpdateManager/Core/MyCache.py:283
 #, python-format
@@ -1879,22 +2081,23 @@ msgid ""
 "Available version: %s\n"
 "\n"
 msgstr ""
-"版本的更動情況：\n"
-"已安裝版本：%s\n"
-"可用的版本：%s\n"
+"Canvis de les versions:\n"
+"Versió instal·lada: %s\n"
+"Versió disponible: %s\n"
 "\n"
 
 #: ../UpdateManager/Core/MyCache.py:297
 msgid "This update does not come from a source that supports changelogs."
-msgstr "這份更新的來源不支援變更記錄 (changelog)。"
+msgstr ""
+"Esta actualització no prové d'una font que funcione amb registres de canvis."
 
 #: ../UpdateManager/Core/MyCache.py:303 ../UpdateManager/Core/MyCache.py:324
 msgid ""
 "Failed to download the list of changes. \n"
 "Please check your Internet connection."
 msgstr ""
-"下載更動清單失敗。\n"
-"請檢查網際網路連線。"
+"S'ha produït un error en baixar la llista de canvis. \n"
+"Comproveu la vostra connexió a Internet."
 
 #: ../UpdateManager/Core/MyCache.py:313
 #, python-format
@@ -1904,10 +2107,10 @@ msgid ""
 "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "until the changes become available or try again later."
 msgstr ""
-"變更記錄並未包含相關更動。\n"
+"El fitxer de canvis no conté canvis rellevants.\n"
 "\n"
-"有變更記錄提供前請至 http://launchpad.net/ubuntu/+source/%s/%s/+changelog，\n"
-"或稍候再試。"
+"Vegeu http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"mentre els canvis no estan disponobles o torneu a provar-ho més tard."
 
 #: ../UpdateManager/Core/MyCache.py:318
 #, python-format
@@ -1917,43 +2120,45 @@ msgid ""
 "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
 "until the changes become available or try again later."
 msgstr ""
-"仍未有更動清單。\n"
+"La llista de canvis encara no està disponible.\n"
 "\n"
-"有更動清單提供前請至 http://launchpad.net/ubuntu/+source/%s/%s/+changelog，\n"
-"或稍候再試。"
+"Utilitzeu http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
+"mentre els canvis no estiguen disponibles o torneu a provar-ho més tard."
 
 #: ../UpdateManager/Core/UpdateList.py:49
 msgid "Failed to detect distribution"
-msgstr "無法偵測出版本"
+msgstr "No s'ha pogut detectar la distribució"
 
 #: ../UpdateManager/Core/UpdateList.py:50
 #, python-format
 msgid "A error '%s' occurred while checking what system you are using."
-msgstr "當檢查您所使用的系統時有錯誤 \"%s\" 發生。"
+msgstr ""
+"S'ha produït un error «%s» mentre es comprovava el sistema que esteu "
+"utilitzant."
 
 #: ../UpdateManager/Core/UpdateList.py:61
 msgid "Important security updates"
-msgstr "重要的安全性更新"
+msgstr "Actualitzacions de seguretat importants"
 
 #: ../UpdateManager/Core/UpdateList.py:62
 msgid "Recommended updates"
-msgstr "推薦更新"
+msgstr "Actualitzacions recomanades"
 
 #: ../UpdateManager/Core/UpdateList.py:63
 msgid "Proposed updates"
-msgstr "建議更新"
+msgstr "Actualitzacions proposades"
 
 #: ../UpdateManager/Core/UpdateList.py:64
 msgid "Backports"
-msgstr "回殖套件 (Backports)"
+msgstr "Backports"
 
 #: ../UpdateManager/Core/UpdateList.py:65
 msgid "Distribution updates"
-msgstr "發行版更新"
+msgstr "Actualitzacions de la distribució"
 
 #: ../UpdateManager/Core/UpdateList.py:70
 msgid "Other updates"
-msgstr "其他更新"
+msgstr "Altres actualitzacions"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:1
 msgid ""
@@ -1962,45 +2167,50 @@ msgid ""
 "Your system does not check for updates automatically. You can configure this "
 "behavior in <i>Software Sources</i> on the <i>Updates</i> tab."
 msgstr ""
-"<b><big>您必須手動檢查更新</big></b>\n"
+"<b><big>Heu de comprovar les actualitzacions manualment</big></b>\n"
 "\n"
-"您的系統不會自動檢查更新。您可以 <i>更新</i> 分頁之 <i>軟體來源</i> 設定。"
+"El vostre sistema no comprova les actualitzacions automàticament. Si voleu "
+"que ho faça, configureu-ho a <i>Fonts de programari</i> a la pestanya "
+"<i>Actualitzacions</i>."
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:4
 msgid "<big><b>Not all updates can be installed</b></big>"
-msgstr "<big><b>並非所有更新都可安裝</b></big>"
+msgstr ""
+"<big><b>No s'han pogut instal·lar totes les actualitzacions</b></big>"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:5
 msgid "<big><b>Running on battery</b></big>"
-msgstr "<big><b>使用電池運行</b></big>"
+msgstr "<big><b>S'està utilitzant la bateria</b></big>"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:6
 msgid "<big><b>Starting Update Manager</b></big>"
-msgstr "<big><b>啟動更新管理員</b></big>"
+msgstr "<big><b>S'està iniciant el gestor d'actualitzacions</b></big>"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:7
 msgid "Changes"
-msgstr "變更"
+msgstr "Canvis"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:8
 msgid "Chec_k"
-msgstr "檢查(_K)"
+msgstr "Compro_va"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:9
 msgid "Co_ntinue"
-msgstr "繼續(_N)"
+msgstr "Co_ntinua"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:10
 msgid "Description"
-msgstr "說明"
+msgstr "Descripció"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:11
 msgid "Description of update"
-msgstr "更新說明"
+msgstr "Descripció de l'actualització"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:12
 msgid "It’s safer to connect the computer to AC power before updating."
-msgstr "在更新前先將電腦接上 AC 電源比較安全。"
+msgstr ""
+"És més segur connectar l'ordinador a la xarxa elèctrica abans de començar "
+"l'actualització."
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:14
 msgid ""
@@ -2012,148 +2222,163 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 " * Normal changes of a pre-release version of Ubuntu"
 msgstr ""
-"執行部份升級，將儘可能安裝最多的更新。 \n"
-" 這可能由以下原因造成：\n"
-" * 前次升級程序未完成\n"
-" * 某些已安裝的軟體有問題\n"
-" * 安裝了非由 Ubuntu 官方提供的軟體套件\n"
-" * Ubuntu 非正式發佈版本的正常更動"
+"Duu a terme una actualització parcial per instal·lar tantes actualitzacions "
+"com siga possible. \n"
+"\n"
+"Això pot ser degut a:\n"
+" * Una actualització anterior que no es va completar\n"
+" * Problemes amb alguns dels programes instal·lats\n"
+" * Paquets de programari no oficials, no proporcionats per l'Ubuntu\n"
+" * Canvis normals d'una versió no final de l'Ubuntu"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:21
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:5
 msgid "Show progress of individual files"
-msgstr "顯示單一檔案的進度"
+msgstr "Mostra el progrés dels fitxers individuals"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:23
 msgid "Starting Update Manager"
-msgstr "正在啟動更新管理員"
+msgstr "S'està iniciant el Gestor d'actualitzacions"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:24
 msgid "U_pgrade"
-msgstr "升級(_P)"
+msgstr "_Actualitza"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:25
 #: ../data/update-manager.desktop.in.h:3
 msgid "Update Manager"
-msgstr "更新管理員"
+msgstr "Gestor d'actualitzacions"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:26
 msgid "You are connected via a wireless modem."
-msgstr "您正透過無線數據機連線。"
+msgstr "Esteu connectat a través d'un mòdem sense fil."
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:27
 msgid ""
 "You are connected via roaming and may be charged for the data consumed by "
 "this update."
-msgstr "您已透過漫遊連上網路，可能要對本次更新所下載的資料量付費。"
+msgstr ""
+"Esteu connectat per itinerància i potser vos cobraran per les dades baixades "
+"per l'actualització."
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:28
 msgid "Your system is running on battery. Are you sure you want to continue?"
-msgstr "您的系統正在使用電池。確定要繼續嗎？"
+msgstr ""
+"El sistema està funcionant amb l'energia de la bateria. Segur que voleu "
+"continuar?"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:29
 msgid "_Hide this information in the future"
-msgstr "以後不要再顯示此訊息(_H)"
+msgstr "_En el futur oculta esta informació"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:30
 msgid "_Install Updates"
-msgstr "安裝更新套件(_I)"
+msgstr "_Instal·la les actualitzacions"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:31
 msgid "_Partial Upgrade"
-msgstr "部份升級(_P)"
+msgstr "Actualització _parcial"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:33
 msgid "_Settings..."
-msgstr "設定(_S)..."
+msgstr "_Paràmetres..."
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:34
 msgid "_Upgrade"
-msgstr "升級(_U)"
+msgstr "_Actualitza"
 
 #: ../data/gtkbuilder/UpdateManager.ui.h:35
 msgid "updates"
-msgstr "更新"
+msgstr "actualitzacions"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
 msgid ""
 "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
-msgstr "<b>有新版本 Ubuntu。要否升級？</b>"
+msgstr ""
+"<b>Hi ha disponible una versió nova de l'Ubuntu. Voleu actualitzar el vostre "
+"sistema?</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
 msgid "Ask Me Later"
-msgstr "稍後再問我"
+msgstr "Demana-m'ho més tard"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:3
 msgid "Don't Upgrade"
-msgstr "不升級"
+msgstr "No actualitzis"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:6
 msgid "Yes, Upgrade Now"
-msgstr "是，現在升級"
+msgstr "Actualitza"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:7
 msgid ""
 "You can upgrade at a later time by opening Update Manager and click on "
 "\"Upgrade\"."
-msgstr "您稍後仍可以透過開啟更新管理員並按下『升級』進行升級。"
+msgstr ""
+"Podeu actualitzar més avant obrint el Gestor d'actualitzacions i fent clic a "
+"«Actualitza»."
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:8
 msgid "You have declined to upgrade to the new Ubuntu"
-msgstr "您已拒絕升級至新的 Ubuntu"
+msgstr "Heu triat no actualitzar a la versió nova de l'Ubuntu"
 
 #: ../data/update-manager.desktop.in.h:1
 msgid "Show and install available updates"
-msgstr "顯示並安裝現有軟體更新"
+msgstr "Mostra i instal·la les actualitzacions disponibles"
 
 #: ../data/update-manager.desktop.in.h:2
 msgid "Software Updates"
-msgstr "軟體更新"
+msgstr "Actualitzacions de programari"
 
 #: ../update-manager:54 ../do-release-upgrade:41
 msgid "Show version and exit"
-msgstr "顯示版本後結束"
+msgstr "Mostra la versió i ix"
 
 #: ../update-manager:57
 msgid "Directory that contains the data files"
-msgstr "含有資料檔案的目錄"
+msgstr "El directori que conté els fitxers de dades"
 
 #: ../update-manager:60
 msgid "Check if a new Ubuntu release is available"
-msgstr "檢查有否新 Ubuntu 發行版可供升級"
+msgstr "Comprova si hi ha una versió nova de l'Ubuntu disponible"
 
 #: ../update-manager:63 ../do-release-upgrade:44 ../check-new-release-gtk:176
 msgid "Check if upgrading to the latest devel release is possible"
-msgstr "檢查能否升級至最新開發發行版"
+msgstr ""
+"Comprova si és possible actualitzar a la darrera versió de desenvolupament"
 
 #: ../update-manager:67
 msgid "Upgrade using the latest proposed version of the release upgrader"
-msgstr "使用最新建議版本的發行升級工具升級"
+msgstr ""
+"Duu a terme l'actualització utilitzant la darrera versió proposada de "
+"l'actualitzador"
 
 #: ../update-manager:74
 msgid "Do not focus on map when starting"
-msgstr "啟動時不預先選取圖錄"
+msgstr "No passes a primer pla en iniciar"
 
 #: ../update-manager:77
 msgid "Try to run a dist-upgrade"
-msgstr "試著執行 dist-upgrade"
+msgstr "Prova d'executar un dist-upgrade"
 
 #: ../update-manager:80
 msgid "Do not check for updates when starting"
-msgstr "當啟動時不要檢查更新"
+msgstr "No comprovis si hi ha actualitzacions en iniciar"
 
 #: ../update-manager:84 ../do-release-upgrade:60
 msgid "Test upgrade with a sandbox aufs overlay"
-msgstr "使用沙堆 aufs 層測試升級"
+msgstr "Prova d'actualitzar en un entorn de proves amb aufs"
 
 #: ../update-manager:104
 msgid "Running partial upgrade"
-msgstr "執行部份升級"
+msgstr "S'està executant una actualització parcial"
 
 #: ../do-release-upgrade:48 ../check-new-release-gtk:180
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
-msgstr "試著使用 $distro-proposed 的套件升級程式來升級到最新的發行版本"
+msgstr ""
+"Proveu d'actualitzar a l'última versió fent servir l'actualitzador de "
+"$distro-proposed"
 
 #: ../do-release-upgrade:52
 msgid ""
@@ -2161,162 +2386,341 @@ msgid ""
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
 "for server systems are supported."
 msgstr ""
-"在特殊升級模式執行。\n"
-"目前只支援以 'desktop' 模式升級桌面版本的系統，以及以 'server' 模式升級伺服器版的系統。"
+"Executeu un mode d'actualització especial.\n"
+"Actualment disposeu del mode «desktop» per a actualitzacions de sistemes "
+"d'escriptori i del mode «server» per a sistemes servidors."
 
 #: ../do-release-upgrade:58
 msgid "Run the specified frontend"
-msgstr "執行指定的前端"
+msgstr "Executa el frontal especificat"
 
 #: ../do-release-upgrade:63
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
-msgstr "檢查有否新發行版並以結束碼報告結果"
+msgstr ""
+"Només verifica si hi ha disponible una versió nova i informa del resultat "
+"mitjançant el codi d'eixida"
 
 #: ../do-release-upgrade:77
 msgid "Checking for a new ubuntu release"
-msgstr "檢查有沒有新的 ubuntu 發行版"
+msgstr "S'està comprovant si hi ha una versió nova de l'Ubuntu"
 
 #: ../do-release-upgrade:91
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
 msgstr ""
-"若要取得升級資訊，請參訪：\n"
+"Per obtindre més informació sobre actualitzacions, aneu a:\n"
 "%(url)s\n"
 
 #: ../do-release-upgrade:97
 msgid "No new release found"
-msgstr "沒找到新發行版"
+msgstr "No s'ha trobat cap versió nova"
 
 #: ../do-release-upgrade:109
 #, c-format
 msgid "New release '%s' available."
-msgstr "有新版「%s」提供。"
+msgstr "La versió nova «%s» ja està disponible"
 
 #: ../do-release-upgrade:110
 msgid "Run 'do-release-upgrade' to upgrade to it."
-msgstr "執行 ‘do-release-upgrade’ 進行升級工作。"
+msgstr "Executeu «do-release-upgrade» per actualitzar a la nova versió."
 
 #: ../check-new-release-gtk:91
 msgid "Ubuntu %(version)s Upgrade Available"
-msgstr "可以升級至 Ubuntu %(version)s"
+msgstr "Hi ha disponible una actualitzacio de l'Ubuntu %(version)s"
 
 #: ../check-new-release-gtk:132
 #, c-format
 msgid "You have declined the upgrade to Ubuntu %s"
-msgstr "您已拒絕升級至 Ubuntu %s"
+msgstr "Heu triat no actualitzar a l'Ubuntu %s"
 
 #: ../Janitor/computerjanitor/exc.py:30
 #, python-format
 msgid "Unimplemented method: %s"
-msgstr "未實作的方法： %s"
+msgstr "El mètode %s no està implementat"
 
 #: ../Janitor/computerjanitor/file_cruft.py:46
 msgid "A file on disk"
-msgstr "磁碟上之檔案"
+msgstr "Un fitxer en disc"
 
 #: ../Janitor/computerjanitor/package_cruft.py:45
 msgid ".deb package"
-msgstr ".deb 套件"
+msgstr "Paquet .deb"
 
 #: ../Janitor/computerjanitor/missing_package_cruft.py:33
 msgid "Install missing package."
-msgstr "安裝缺少的套件。"
+msgstr "Instal·la el paquet que falta."
 
 #: ../Janitor/computerjanitor/missing_package_cruft.py:42
 #, python-format
 msgid "Package %s should be installed."
-msgstr "應安裝 %s 套件。"
+msgstr "El paquet %s s'hauria d'instal·lar."
 
 #. pragma: no cover
 #: ../Janitor/plugins/dpkg_status_plugin.py:36
 #, python-format
 msgid "%i obsolete entries in the status file"
-msgstr "狀態檔有 %i 個廢棄條目"
+msgstr "%i entrades obsoletes en el fitxer status"
 
 #: ../Janitor/plugins/dpkg_status_plugin.py:39
 msgid "Obsolete entries in dpkg status"
-msgstr "dpkg 狀態中之廢棄條目"
+msgstr "Entrades obsoletes a dpkg status"
 
 #. pragma: no cover
 #: ../Janitor/plugins/dpkg_status_plugin.py:42
 msgid "Obsolete dpkg status entries"
-msgstr "廢棄的 dpkg 狀態條目"
+msgstr "Entrades obsoletes a dpkg status"
 
 #: ../Janitor/plugins/kdelibs4to5_plugin.py:39
 msgid ""
 "When upgrading, if kdelibs4-dev is installed, kdelibs5-dev needs to be "
 "installed. See bugs.launchpad.net, bug #279621 for details."
 msgstr ""
-"在升級時，如果有安裝 kdelibs4-dev，那 kdelibs5-dev 就必須安裝。詳情請見 bugs.launchpad.net， bug "
-"#279621。"
+"En dur a terme l'actualització, si el paquet kdelibs4-dev està instal·lat "
+"caldrà instal·lar el paquet kdelibs5-dev. Vegeu l'informe d'error número "
+"279621 a bugs.launchpad.net per a obtindre'n més detalls."
 
 #: ../Janitor/plugins/langpack_manual_plugin.py:34
 #, python-format
 msgid "%s needs to be marked as manually installed."
-msgstr "%s 要標記為手動安裝。"
+msgstr "%s s'ha de marcar com a instal·lat manualment."
 
 #: ../Janitor/plugins/remove_lilo_plugin.py:28
 msgid ""
 "Remove lilo since grub is also installed.(See bug #314004 for details.)"
-msgstr "因已安裝 grub，移除 lilo。（詳情見 bug #314004。）"
+msgstr ""
+"Esborra el lilo ja que el grub també està instal·lat (Si voleu més detalls "
+"vegeu l'error #314004)"
 
-#~ msgid ""
-#~ "Upgrading the repository information resulted in a invalid file. Please "
-#~ "report this as a bug."
-#~ msgstr "升級套件庫時導致無效的檔案。請匯報問題。"
+#~ msgid "0 KB"
+#~ msgstr "0 KB"
 
-#~ msgid "Previous selected"
-#~ msgstr "上次選擇的"
-
-#~ msgid ""
-#~ "This usually is caused by a system were /tmp is mounted noexec. Please "
-#~ "remount without noexec and run the upgrade again."
-#~ msgstr "這個通常是由使用 noexec 掛載 /tmp 的系統引致的。請不使用 noexec 重新掛載並再進行升級。"
-
-#~ msgid "*DEPRECATED* this option will be ignore"
-#~ msgstr "*無效* 這個選項將被忽略"
-
-#~ msgid "The window size"
-#~ msgstr "視窗大小"
-
-#~ msgid "Stores the size of the update-manager dialog"
-#~ msgstr "儲存 update-manager 對話視窗的大小"
-
-#~ msgid "Remind to reload the channel list"
-#~ msgstr "提示重新載入頻道列表"
-
-#~ msgid ""
-#~ "If this key is set the install window will be automatically closed on "
-#~ "successful installation."
-#~ msgstr "如果設定此設定鍵，安裝視窗會在安裝成功後自動關閉。"
-
-#~ msgid "*deprecated* Check for new distribution releases"
-#~ msgstr "*不建議* 檢查有沒有新的發行版本"
-
-#~ msgid ""
-#~ "This is most likely a bug in the upgrade tool. Please report it as a bug"
-#~ msgstr "這可能是升級工具的錯誤，請匯報問題"
-
-#~ msgid ""
-#~ "It was impossible to install a required package. Please report this as a "
-#~ "bug. "
-#~ msgstr "無法安裝必要的套件，請匯報問題。 "
-
-#~ msgid "Auto close the install window after successful install"
-#~ msgstr "安裝成功後自動關閉安裝視窗"
+#~ msgid "1 KB"
+#~ msgstr "1 KB"
 
 #, python-format
 #~ msgid "%.0f KB"
 #~ msgstr "%.0f KB"
 
-#~ msgid "1 KB"
-#~ msgstr "1 KB"
+#~ msgid ""
+#~ "If none of this applies, then please report this bug against the 'update-"
+#~ "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+#~ "report."
+#~ msgstr ""
+#~ "Si res d'això funciona, informeu de l'error del gestor d'actualitzacions (al "
+#~ "paquet «update-manager») i adjunteu els fitxers de /var/log/dist-upgrade/ en "
+#~ "l'informe."
+
+#~ msgid ""
+#~ "It was impossible to install a required package. Please report this as a "
+#~ "bug. "
+#~ msgstr ""
+#~ "No s'ha pogut instal·lar un dels paquets requerits. Hauríeu d'enviar un "
+#~ "informe d'error. "
+
+#~ msgid ""
+#~ "Upgrading the repository information resulted in a invalid file. Please "
+#~ "report this as a bug."
+#~ msgstr ""
+#~ "S'ha produït un error en actualitzar la informació dels dipòsits. Hauríeu "
+#~ "d'informar-ne."
+
+#~ msgid ""
+#~ "Preparing the system for the upgrade failed. Please report this as a bug "
+#~ "against the 'update-manager' package and include the files in /var/log/dist-"
+#~ "upgrade/ in the bug report."
+#~ msgstr ""
+#~ "S'ha produït un error mentre es preparava el sistema per a l'actualització. "
+#~ "Informeu de l'error del gestor d'actualitzacions (al paquet «update-"
+#~ "manager») i adjunteu els fitxers de /var/log/dist-upgrade/ en l'informe."
+
+#~ msgid ""
+#~ "This is most likely a bug in the upgrade tool. Please report it as a bug"
+#~ msgstr ""
+#~ "El més probable és que es tracti d'un error de l'eina d'actualització del "
+#~ "qual n'hauríeu d'informar"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 11.04</big></b>"
+#~ msgstr "<b><big>S'està actualitzant l'Ubuntu a la versió 11.04</big></b>"
+
+#~ msgid "_Uncheck All"
+#~ msgstr "_Desmarca-ho tot"
+
+#~ msgid "_Check All"
+#~ msgstr "_Marca-ho tot"
+
+#~ msgid ""
+#~ "It is unknown when the package information was updated last. Please try "
+#~ "clicking on the 'Check' button to update the information."
+#~ msgstr ""
+#~ "No s'ha pogut determinar quan es va actualitzar la informació dels paquets "
+#~ "per darrera vegada. Feu clic al botó «Comprova» per a actualitzar-la."
+
+#~ msgid "The package information was last updated less than one hour ago."
+#~ msgstr ""
+#~ "La informació dels paquets s'ha actualitzat per darrer cop fa menys d'un "
+#~ "hora."
+
+#, python-format
+#~ msgid ""
+#~ "Changes for the versions:\n"
+#~ "%s\n"
+#~ "%s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Canvis per a les versions:\n"
+#~ "%s\n"
+#~ "%s\n"
+#~ "\n"
+
+#~ msgid "Previous selected"
+#~ msgstr "Seleccionat prèviament"
+
+#~ msgid "Settings..."
+#~ msgstr "Paràmetres..."
+
+#~ msgid "*deprecated* Check for new distribution releases"
+#~ msgstr "*en desús* Comprova si hi ha distribucions noves"
+
+#~ msgid "Auto close the install window after successful install"
+#~ msgstr ""
+#~ "Tanca automàticament la finestra de l'instal·lador després d'una "
+#~ "instal·lació satisfactòria"
 
 #~ msgid "First run welcome message"
-#~ msgstr "首次執行歡迎訊息"
+#~ msgstr "Missatge de benvinguda en executar per primer cop"
+
+#~ msgid "Remind to reload the channel list"
+#~ msgstr "Recorda'm de recarregar la llista de canals"
+
+#~ msgid "Show details of an update"
+#~ msgstr "Mostra els detalls d'una actualització"
+
+#~ msgid "Show package summary before package name in update list"
+#~ msgstr ""
+#~ "Mostra el resum del paquet abans del seu nom a la llista d'actualitzacions"
+
+#~ msgid "Show version in update list"
+#~ msgstr "Mostra la versió a la llista d'actualització"
+
+#~ msgid "Stores the size of the update-manager dialog"
+#~ msgstr "Emmagatzema la mida del diàleg del gestor d'actualitzacions"
+
+#~ msgid ""
+#~ "Stores the state of the expander that contains the list of changes and the "
+#~ "description"
+#~ msgstr ""
+#~ "Emmagatzema l'estat de l'expansor que conté la llista de canvis i la "
+#~ "descripció"
+
+#~ msgid "The window size"
+#~ msgstr "La mida de la finestra"
+
+#~ msgid "make check-new-release-gtk ignore a given new release"
+#~ msgstr "Fes que el check-new-release-gtk ignori una versió nova en concret"
+
+#~ msgid ""
+#~ "If this key is set the main update list window will show version information "
+#~ "(from version to version)."
+#~ msgstr ""
+#~ "Si establiu aquesta clau, la finestra principal amb la llista "
+#~ "d'actualització mostrarà la informació de versió (de la versió a la versió)."
+
+#~ msgid ""
+#~ "This usually is caused by a system were /tmp is mounted noexec. Please "
+#~ "remount without noexec and run the upgrade again."
+#~ msgstr ""
+#~ "Normalment això és degut al fet que /tmp estigui muntat amb l'opció noexec. "
+#~ "Torneu a muntar-lo sense aquesta opció i proveu d'executar l'actualització."
+
+#~ msgid "*DEPRECATED* this option will be ignore"
+#~ msgstr "*EN DESÚS* aquesta opció serà ignorada"
+
+#~ msgid ""
+#~ "This key is deprecated in favor of the file /etc/update-manager/release-"
+#~ "upgrades Check automatically if a new version of the current distribution is "
+#~ "available and offer to upgrade (if possible)."
+#~ msgstr ""
+#~ "Aquesta clau és obsoleta en favor del fitxer /etc/update-manager/release-"
+#~ "upgrades. Comprova automàticament si es disposa d'una nova versió de la "
+#~ "distribució actual i, si és possible, n'ofereix l'actualització"
+
+#~ msgid ""
+#~ "If this key is set the install window will be automatically closed on "
+#~ "successful installation."
+#~ msgstr ""
+#~ "Si es defineix aquesta clau, la finestra de l'instal·lador es tancarà de "
+#~ "manera automàtica després d'una instal·lació satisfactòria."
+
+#~ msgid ""
+#~ "If automatic checking for updates is disabled, you have to reload the "
+#~ "channel list manually. This option allows to hide the reminder shown in this "
+#~ "case."
+#~ msgstr ""
+#~ "Si no activeu la comprovació automàtica d'actualitzacions, haureu de "
+#~ "recarregar manualment la llista de canals. Aquesta opció us permet ocultar "
+#~ "la notificació que es mostra en aquest cas."
+
+#~ msgid ""
+#~ "The system was unable to get the prerequisites for the upgrade. The upgrade "
+#~ "will abort now and restore the original system state.\n"
+#~ "\n"
+#~ "Please report this as a bug against the 'update-manager' package and include "
+#~ "the files in /var/log/dist-upgrade/ in the bug report."
+#~ msgstr ""
+#~ "El sistema no ha pogut obtenir els prerequisits per a l'actualizació. "
+#~ "L'actualització és cancel·larà i es restaurarà el sistema previ a "
+#~ "l'actualització.\n"
+#~ "\n"
+#~ "Informeu d'aquest error del paquet update-manager i afegiu els fitxers de "
+#~ "/var/log/dist-upgrade/ en l'informe."
+
+#~ msgid "If this key is set a first run welcome message will be presented."
+#~ msgstr ""
+#~ "Si seleccioneu aquesta opció, es presentarà un missatge de benvinguda en "
+#~ "iniciar per primer cop."
+
+#~ msgid "This change is not coming from a source that supports changelogs."
+#~ msgstr "Aquest canvi no prové d'una font que implementi registres de canvis."
+
+#~ msgid ""
+#~ "This will permanently hide the new release prompt from check-new-release-"
+#~ "gtk. Note that the small button in the main update-manager UI will still be "
+#~ "there."
+#~ msgstr ""
+#~ "Aquesta acció ocultarà permanentment l'avís de versió nova del check-new-"
+#~ "release-gtk. Tot i això, encara apareixerà el botó petit a la interfície "
+#~ "d'usuari principal de l'update-manager."
+
+#~ msgid ""
+#~ "If this key is set, the main update list window will show the package "
+#~ "summary before the package name."
+#~ msgstr ""
+#~ "Si es marca aquesta opció, la llista principal d'actualització mostrarà el "
+#~ "resum del paquet abans del seu nom."
+
+#~ msgid ""
+#~ "The upgrade has aborted. Please check your Internet connection or "
+#~ "installation media and try again. All files downloaded so far are kept."
+#~ msgstr ""
+#~ "S'ha interromput l'actualització. Verifiqueu la vostra connexió a Internet o "
+#~ "el suport d'instal·lació i torneu-ho a intentar. Es conservaran tots els "
+#~ "fitxers que s'hagin baixat."
+
+#, python-format
+#~ msgid ""
+#~ "After your package information was updated the essential package '%s' can "
+#~ "not be found anymore.\n"
+#~ "This indicates a serious error, please report this bug against the 'update-"
+#~ "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
+#~ "report."
+#~ msgstr ""
+#~ "No s'ha trobat «%s» després d'actualitzar la informació dels paquets.\n"
+#~ "Això suposa un error greu; informeu d'aquest error del gestor "
+#~ "d'actualitzacions (al paquet «update-manager») i adjunteu els fitxers de  "
+#~ "/var/log/dist-upgrade/ en l'informe."
 
 #, python-format
 #~ msgid ""
@@ -2328,145 +2732,24 @@ msgstr "因已安裝 grub，移除 lilo。（詳情見 bug #314004。）"
 #~ msgstr ""
 #~ "\n"
 #~ "\n"
-#~ "請匯報此為 'update-manager' 套件臭蟲並於臭蟲報告中附上 /var/log/dist-upgrade/ 內之檔案。\n"
+#~ "Informeu d'aquest error del gestor d'actualitzacions (al paquet «update-"
+#~ "manager») i adjunteu els fitxers de /var/log/dist-upgrade/ en l'informe.\n"
 #~ "%s"
-
-#, python-format
-#~ msgid ""
-#~ "After your package information was updated the essential package '%s' can "
-#~ "not be found anymore.\n"
-#~ "This indicates a serious error, please report this bug against the 'update-"
-#~ "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
-#~ "report."
-#~ msgstr ""
-#~ "套件資訊更新後無法找到必要套件 '%s'。\n"
-#~ "此為嚴重錯誤，請匯報此為 'update-manager' 套件臭蟲並於臭蟲報告中附上 /var/log/dist-upgrade/ 內之檔案。"
-
-#~ msgid ""
-#~ "Preparing the system for the upgrade failed. Please report this as a bug "
-#~ "against the 'update-manager' package and include the files in /var/log/dist-"
-#~ "upgrade/ in the bug report."
-#~ msgstr ""
-#~ "準備系統升級失敗。請匯報此為 'update-manager' 套件臭蟲並於臭蟲報告中附上 /var/log/dist-upgrade/ 內之檔案。"
-
-#~ msgid ""
-#~ "The system was unable to get the prerequisites for the upgrade. The upgrade "
-#~ "will abort now and restore the original system state.\n"
-#~ "\n"
-#~ "Please report this as a bug against the 'update-manager' package and include "
-#~ "the files in /var/log/dist-upgrade/ in the bug report."
-#~ msgstr ""
-#~ "此系統無法達到升級之要求。現在將中斷升級並回復系統原始狀態。\n"
-#~ "\n"
-#~ "請匯報此為 'update-manager' 套件臭蟲並於臭蟲報告中附上 /var/log/dist-upgrade/ 內之檔案。"
-
-#~ msgid "Settings..."
-#~ msgstr "設定..."
-
-#~ msgid "If this key is set a first run welcome message will be presented."
-#~ msgstr "若設定此選項則首次執行時會顯示歡迎訊息。"
-
-#~ msgid "0 KB"
-#~ msgstr "0 KB"
-
-#~ msgid "make check-new-release-gtk ignore a given new release"
-#~ msgstr "令 check-new-release-gtk 忽略有新的版本推出"
-
-#~ msgid ""
-#~ "The upgrade has aborted. Please check your Internet connection or "
-#~ "installation media and try again. All files downloaded so far are kept."
-#~ msgstr "已放棄升級。請檢查您的網際網路連線或安裝媒體，接著再試一次。所有目前為止已下載的檔案將會保留。"
-
-#~ msgid ""
-#~ "This key is deprecated in favor of the file /etc/update-manager/release-"
-#~ "upgrades Check automatically if a new version of the current distribution is "
-#~ "available and offer to upgrade (if possible)."
-#~ msgstr ""
-#~ "此鍵之功能改以 /etc/update-manager/release-upgrades 檔案提供。會自動檢查有否新發行版，可以的話並提供升級 。"
-
-#~ msgid "<b><big>Upgrading Ubuntu to version 11.04</big></b>"
-#~ msgstr "<b><big>將 Ubuntu 升級至 11.04 版</big></b>"
-
-#~ msgid ""
-#~ "If none of this applies, then please report this bug against the 'update-"
-#~ "manager' package and include the files in /var/log/dist-upgrade/ in the bug "
-#~ "report."
-#~ msgstr ""
-#~ "如全都不對，請為「update-manager」套件回報錯誤，並在程式錯誤報告附上 /var/log/dist-upgrade/ 裡的檔案。"
-
-#~ msgid "_Check All"
-#~ msgstr "全部勾選(_C)"
-
-#~ msgid "_Uncheck All"
-#~ msgstr "全部取消(_U)"
-
-#~ msgid ""
-#~ "It is unknown when the package information was updated last. Please try "
-#~ "clicking on the 'Check' button to update the information."
-#~ msgstr "套件資訊不知是否合時。請按「檢查」鈕更新。"
-
-#~ msgid "The package information was last updated less than one hour ago."
-#~ msgstr "不足一小時前更新過套件資訊。"
-
-#, python-format
-#~ msgid ""
-#~ "Changes for the versions:\n"
-#~ "%s\n"
-#~ "%s\n"
-#~ "\n"
-#~ msgstr ""
-#~ "版本變更：\n"
-#~ "%s\n"
-#~ "%s\n"
-#~ "\n"
-
-#~ msgid "This change is not coming from a source that supports changelogs."
-#~ msgstr "此變更並非來自支援變更記錄之來源。"
-
-#~ msgid ""
-#~ "This will permanently hide the new release prompt from check-new-release-"
-#~ "gtk. Note that the small button in the main update-manager UI will still be "
-#~ "there."
-#~ msgstr "這會永久隱藏來自 check-new-release-gtk 的新發行版提示。但留意 update-manager 主介面的小按鈕仍在。"
 
 #~ msgid ""
 #~ "These software updates have been issued since Ubuntu was released. If you "
 #~ "don't want to install them now, choose \"Update Manager\" from the "
 #~ "Administration Menu later."
-#~ msgstr "此等軟體更新已於 Ubuntu 釋出後發佈。若目前不想安裝，可稍後於管理選單開啟「更新管理員」。"
-
-#~ msgid "Show package summary before package name in update list"
-#~ msgstr "更新清單套件名稱前方顯示套件摘要"
-
-#~ msgid "Show details of an update"
-#~ msgstr "顯示更新套件詳情"
-
-#~ msgid "Show version in update list"
-#~ msgstr "更新清單顯示版本"
-
-#~ msgid ""
-#~ "If automatic checking for updates is disabled, you have to reload the "
-#~ "channel list manually. This option allows to hide the reminder shown in this "
-#~ "case."
-#~ msgstr "若停用自動更新檢查功能，則您必須自行更新頻道列表。此功能同時可隱藏更新提示。"
-
-#~ msgid ""
-#~ "If this key is set the main update list window will show version information "
-#~ "(from version to version)."
-#~ msgstr "如設定此鍵，主更新清單視窗會顯示版本資訊（由何版本至何版本）"
-
-#~ msgid ""
-#~ "If this key is set, the main update list window will show the package "
-#~ "summary before the package name."
-#~ msgstr "若設定此鍵，主更新清單視窗會在套件名稱前方顯示套件摘要。"
-
-#~ msgid ""
-#~ "Stores the state of the expander that contains the list of changes and the "
-#~ "description"
-#~ msgstr "記著要否顯示詳情，如套件更動清單和詳細說明"
+#~ msgstr ""
+#~ "Aquestes actualitzacions de programari són posteriors al llançament de "
+#~ "l'Ubuntu. Si no voleu instal·lar-les ara, trieu més tard «Gestor "
+#~ "d'actualitzacions» al menú Sistema > Administració."
 
 #~ msgid ""
 #~ "These software updates have been issued since Ubuntu was released. If you "
 #~ "don't want to install them now, choose \"Update Manager\" from Applications "
 #~ "later."
-#~ msgstr "這些軟體更新已經於 Ubuntu 發行後發布。若現在您不想要安裝它們，您可以稍後從「應用程式」選擇「更新管理員」再安裝。"
+#~ msgstr ""
+#~ "Aquestes actualitzacions de programari s'han publicat després del llançament "
+#~ "de l'Ubuntu. Si no voleu instal·lar-les ara, trieu el «Gestor "
+#~ "d'actualitzacions» en el menú d'aplicacions més endavant."

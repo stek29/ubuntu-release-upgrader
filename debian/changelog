@@ -1,4 +1,4 @@
-yupdate-manager (1:0.152.26) UNRELEASED; urgency=low
+update-manager (1:0.153) UNRELEASEDprecise; urgency=low
 
   * lp:~barcc/update-manager/all_changes-wrong-use:
     - Fixed wrong use of self.cache.all_changes[name] in
@@ -10,8 +10,47 @@ yupdate-manager (1:0.152.26) UNRELEASED; urgency=low
   * UpdateManager/Core/MyCache.py, DistUpgrade/DistUpgradeCache.py:
     - honor dselect request install state when calcuating the upgrade
       thanks to Evan for suggesting this
+  * merge fixes from oneiric-proposed
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 12 Oct 2011 10:38:21 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 19 Oct 2011 16:14:01 +0200
+
+update-manager (1:0.152.25.4) oneiric-proposed; urgency=low
+
+  * DistUpgrade/removal_blacklist.cfg:
+    - ensure that postgresql does not get removed (LP: #871893)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 19 Oct 2011 09:52:08 +0200
+
+update-manager (1:0.152.25.3) oneiric-proposed; urgency=low
+
+  * DistUpgrade/DistUpgradeCache.py:
+    - fix crash when packages needs downgrading
+  * UpdateManager/Core/utils.py:
+    - do not crash if iptables does not exist, thanks to Daniel
+      Holbach for reporting the issue (LP: #877514)
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - keep poking the screensaver to ensure that it really won't
+      activate during the upgrade (thanks to Jonathan Davies for
+      the report)
+  * tests/test_sources_list.py:
+    - fix test (archive.ubuntu.com no longer listens to ftp)
+  * po/*:
+    - refresh again to fix regression (LP: #877461)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 18 Oct 2011 17:06:40 +0200
+
+update-manager (1:0.152.25.2) oneiric-proposed; urgency=low
+
+  * refresh translation for the release-upgrader (LP: #873905)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 14 Oct 2011 15:19:51 +0200
+
+update-manager (1:0.152.25.1) oneiric-proposed; urgency=low
+
+  * DistUpgrade/DistUpgradeController.py:
+    - do not crash if apt-btrfs-snapshot fails to run (LP: #873411)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 13 Oct 2011 17:29:34 +0200
 
 update-manager (1:0.152.25) oneiric; urgency=low
 

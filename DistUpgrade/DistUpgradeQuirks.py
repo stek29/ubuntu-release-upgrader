@@ -20,6 +20,7 @@
 #  USA
 
 import apt
+import atexit
 import glob
 import logging
 import os
@@ -430,6 +431,7 @@ class DistUpgradeQuirks(object):
         self._killUpdateNotifier()
         self._killKBluetooth()
         self._killScreensaver()
+        self._pokeScreensaver()
         self._stopDocvertConverter()
     def oneiricStartUpgrade(self):
         logging.debug("oneiric StartUpgrade quirks")
@@ -823,6 +825,25 @@ class DistUpgradeQuirks(object):
         if os.path.exists("/usr/bin/killall"):
             logging.debug("killing gnome-screensaver")
             subprocess.call(["killall", "-q", "gnome-screensaver"])
+    def _pokeScreensaver(self):
+        if os.path.exists("/usr/bin/xdg-screensaver"):
+            logging.debug("setup poke timer for the scrensaver")
+            try:
+                self._poke = subprocess.Popen(
+                    "while true; do /usr/bin/xdg-screensaver reset; sleep 30; done",
+                    shell=True)
+                atexit.register(self._stopPokeScreensaver)
+            except:
+                logging.exception("failed to setup screensaver poke")
+    def _stopPokeScreensaver(self):
+        if self._poke:
+            try:
+                self._poke.terminate()
+                res = self._poke.wait()
+            except:
+                logging.exception("failed to stop screensaver poke")
+            self._poke = None
+            return res
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

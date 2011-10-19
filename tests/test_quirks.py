@@ -160,6 +160,18 @@ class TestQuirks(unittest.TestCase):
         # verify that the quirks handler is now installing it
         self.assertTrue(cache["kdegames-card-data-extra"].marked_install)  
 
+    def test_screensaver_poke(self):
+        # fake nothing is installed
+        empty_status = tempfile.NamedTemporaryFile()
+        apt_pkg.config.set("Dir::state::status", empty_status.name)
+
+        # create quirks class
+        controller = mock.Mock()
+        config = mock.Mock()
+        quirks = DistUpgradeQuirks(controller, config)
+        quirks._pokeScreensaver()
+        res = quirks._stopPokeScreensaver()
+
 if __name__ == "__main__":
     import logging
     logging.basicConfig(level=logging.DEBUG)

@@ -3,7 +3,7 @@
 set -e
 
 # update demotions
-(cd utils && ./demotions.py natty oneiric > demoted.cfg)
+(cd utils && ./demotions.py oneiric precise > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
 #(cd utils && ./demotions.py hardy lucid > demoted.cfg.hardy)
 

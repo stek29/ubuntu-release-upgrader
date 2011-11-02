@@ -293,7 +293,8 @@ class DistUpgradeController(object):
         forceLTS=False
         if (self.release == "dapper" or
             self.release == "hardy" or
-            self.release == "lucid"):
+            self.release == "lucid" or
+            self.release == "precise"):
             forceLTS=True
         m = MetaReleaseCore(useDevelopmentRelease=False,
                             forceLTS=forceLTS)

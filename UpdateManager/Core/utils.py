@@ -337,15 +337,30 @@ def _inhibit_sleep_new_interface():
   cookie = dev.Inhibit('UpdateManager', 'Updating system')
   return (dev, cookie)
 
+def detect_gnome_desktop_enviroment():
+    #check if the user is running gnome
+    if ("gnome" in os.environ.get("XDG_CURRENT_DESKTOP","") or 
+       "gnome" in os.environ.get("DESKTOP_SESSION","")):
+        return True
+    return False
+
 def inhibit_sleep():
   """
   Send a dbus signal to power-manager to not suspend
   the system, try both the new freedesktop and the
   old gnome dbus interface
   """
-  try:
-    return _inhibit_sleep_old_interface()
-  except Exception:
+  #only try old gnome dbus interface if gnome is running
+  if detect_gnome_desktop_enviroment():
+    try:
+      return _inhibit_sleep_old_interface()
+    except Exception:
+      try:
+        return _inhibit_sleep_new_interface()
+      except Exception:
+        #print "could not send the dbus Inhibit signal: %s" % e
+        return (False, False)
+  else:
     try:
       return _inhibit_sleep_new_interface()
     except Exception:

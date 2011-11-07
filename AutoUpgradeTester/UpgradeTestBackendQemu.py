@@ -66,7 +66,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         # get the kvm binary
         self.qemu_binary = self.config.getWithDefault("KVM","KVM","kvm")
         # setup mount dir/imagefile location
-        self.baseimage = self.config.get("KVM","BaseImage")
+        self.baseimage = self.config.get("KVM", "BaseImage")
         if not os.path.exists(self.baseimage):
             print "Missing '%s' base image, need to build it now" % self.baseimage
             arch = self.config.getWithDefault("KVM", "Arch", "i386")

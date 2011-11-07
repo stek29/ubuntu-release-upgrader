@@ -12,9 +12,11 @@ systemdirs = ["/bin",
               "/initrd",
               "/lib",
               "/lib32", # ???
+              "/lib64", # ???
               "/sbin",
               "/usr",
-              "/var"]
+              "/var",
+              ]
 
 
 def aufsOptionsAndEnvironmentSetup(options, config):
@@ -82,11 +84,20 @@ def _aufsOverlayMount(target, rw_dir, chroot_dir="/"):
         os.makedirs(rw_dir+target)
     if not os.path.exists(chroot_dir+target):
         os.makedirs(chroot_dir+target)
-    cmd = ["mount",
-           "-t","aufs",
-           "-o","br:%s:%s=ro" % (rw_dir+target, target),
-           "none",
-           chroot_dir+target]
+    # FIXME: figure out when to use aufs and when to use overlayfs
+    use_overlayfs = False
+    if use_overlayfs:
+        cmd = ["mount",
+               "-t","overlayfs",
+               "-o","upperdir=%s,lowerdir=%s" % (rw_dir+target, target),
+               "none",
+               chroot_dir+target]
+    else:
+        cmd = ["mount",
+               "-t","aufs",
+               "-o","br:%s:%s=ro" % (rw_dir+target, target),
+               "none",
+               chroot_dir+target]
     res = subprocess.call(cmd)
     if res != 0:
         # FIXME: revert already mounted stuff

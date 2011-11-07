@@ -62,7 +62,7 @@ def createBackend(backend_name, profile):
         backend_modul = __import__(backend_full_name, fromlist="AutoUpgradeTester")
         backend_class = getattr(backend_modul, backend_name)
     except (ImportError, AttributeError, TypeError), e:
-        print "Can not import: %s (%s) " % (backend_name, e)
+        logging.exception("can not import '%s'" % backend_name)
         return None
     return backend_class(profile)
 

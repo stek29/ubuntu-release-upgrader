@@ -60,13 +60,16 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         UpgradeTestBackendSSH.__init__(self, profile)
         self.qemu_options = self.QEMU_DEFAULT_OPTIONS[:]
         self.qemu_pid = None
-        self.profiledir = os.path.dirname(profile)
+        self.profiledir = profile
+        self.profile_override = os.path.join(
+            self.profiledir, "..", "override.cfg.d")
         # get the kvm binary
         self.qemu_binary = self.config.getWithDefault("KVM","KVM","kvm")
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("KVM","BaseImage")
         if not os.path.exists(self.baseimage):
             print "Missing '%s' base image, need to build it now" % self.baseimage
+            arch = self.config.getWithDefault("KVM", "Arch", "i386")
             ret = subprocess.call(["sudo",
                                    "ubuntu-vm-builder","kvm", self.fromDist,
                                    "--kernel-flavour", "generic",
@@ -74,7 +77,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
                                    "--components", "main,restricted",
                                    "--rootsize", "80000",
                                    "--addpkg", "openssh-server",
-                                   "--arch", "i386"])
+                                   "--arch", arch])
             # move the disk in place
             shutil.move(glob.glob("ubuntu-kvm/*.qcow2")[0],self.baseimage)
             if ret != 0:
@@ -398,6 +401,11 @@ iface eth0 inet static
             print "Copying '%s' to image overrides" % self.profile
             self._runInImage(["mkdir","-p","/etc/update-manager/release-upgrades.d"])
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
+            for override_cfg in glob.glob(
+                os.path.abspath(os.path.join(self.profile_override, "*.cfg"))):
+                print "Copying '%s' to image overrides" % override_cfg
+                self._copyToImage(
+                      override_cfg, "/etc/update-manager/release-upgrades.d/")
 
         # copy test repo sources.list (if needed) 
         test_repo = self.config.getWithDefault("NonInteractive","AddRepo","")

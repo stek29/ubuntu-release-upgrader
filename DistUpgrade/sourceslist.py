@@ -1,1 +1,1 @@
-/usr/lib/python2.6/dist-packages/aptsources/sourceslist.py
+/usr/lib/python2.7/dist-packages/aptsources/sourceslist.py

@@ -43,7 +43,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
     def _copyToImage(self, fromF, toF, recursive=False):
         "copy a file (or a list of files) to the given toF image location"
         cmd = ["scp",
-               "-P",self.ssh_port,
+               "-P", self.ssh_port,
                "-q","-q", # shut it up
                "-i",self.ssh_key,
                "-o", "StrictHostKeyChecking=no",

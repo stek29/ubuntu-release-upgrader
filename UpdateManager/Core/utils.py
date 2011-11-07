@@ -428,6 +428,32 @@ def get_arch():
     return apt_pkg.Config.find("APT::Architecture")
 
 
+def is_port_already_listening(port):
+    """ check if the current system is listening on the given tcp port """
+    # index in the line
+    INDEX_LOCAL_ADDR = 1
+    INDEX_REMOTE_ADDR = 2
+    INDEX_STATE = 3
+    # state (st) that we care about
+    STATE_LISTENING = '0A'
+    # read the data
+    for line in open("/proc/net/tcp"):
+        line = line.strip()
+        if not line:
+            continue
+        # split, values are:
+        #   sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
+        values = line.split()
+        state = values[INDEX_STATE]
+        if state != STATE_LISTENING:
+            continue
+        local_port_str = values[INDEX_LOCAL_ADDR].split(":")[1]
+        local_port = int(local_port_str, 16)
+        if local_port == port:
+            return True
+    return False
+
+
 def iptables_active():
     """ Return True if iptables is active """
     # FIXME: is there a better way?

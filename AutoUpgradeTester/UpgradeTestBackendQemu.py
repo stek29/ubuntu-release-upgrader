@@ -15,6 +15,8 @@ import tempfile
 import atexit
 import apt_pkg
 
+from DistUpgrade.utils import is_port_already_listening
+
 # images created with http://bazaar.launchpad.net/~mvo/ubuntu-jeos/mvo
 #  ./ubuntu-jeos-builder --vm kvm --kernel-flavor generic --suite feisty --ssh-key `pwd`/ssh-key.pub  --components main,restricted --rootsize 20G
 # 
@@ -99,14 +101,22 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         imagedir = self.config.get("KVM","ImageDir")
         self.image = os.path.join(imagedir, "test-image.%s" % profilename)
         # make ssh login possible (localhost 54321) available
-        self.ssh_port = self.config.getWithDefault("KVM","SshPort","54321")
+        ssh_port = int(self.config.getWithDefault("KVM","SshPort","54321"))
+        while is_port_already_listening(ssh_port):
+            ssh_port += 1
+        self.ssh_port = str(ssh_port)
+        print "using ssh port: %s" % self.ssh_port
         self.ssh_hostname = "localhost"
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
         # vnc port/display
-        vncport = self.config.getWithDefault("KVM","VncNum","0")
+        VNC_BASE_PORT = 5900
+        vncport = int(self.config.getWithDefault("KVM","VncNum", "0"))
+        while is_port_already_listening(VNC_BASE_PORT + vncport):
+            vncport += 1
+        print "using VncNum: %s" % vncport
         self.qemu_options.append("-vnc")
-        self.qemu_options.append("localhost:%s" % vncport)
+        self.qemu_options.append("localhost:%s" % str(vncport))
 
         # make the memory configurable
         mem = self.config.getWithDefault("KVM","VirtualRam","768")

@@ -23,6 +23,10 @@ class TestUtils(unittest.TestCase):
         for e in glob.glob("/proc/[0-9]*"):
             pid = int(e[6:])
             is_child_of_process_name("gdm", pid)
+    
+    def test_is_port_listening(self):
+        from DistUpgrade.utils import is_port_already_listening
+        self.assertTrue(is_port_already_listening(22))
 
     def test_strip_auth_from_source_entry(self):
         from aptsources.sourceslist import SourceEntry

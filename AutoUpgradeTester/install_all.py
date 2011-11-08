@@ -149,6 +149,9 @@ sorted_pkgs.sort()
 
 for comp in comps:
    for pkgname in sorted_pkgs[i:]:
+      # skip multiarch packages
+      if ":" in pkgname:
+         continue
       pkg = cache[pkgname]
       i += 1
       percent = (float(i)/len(cache))*100.0

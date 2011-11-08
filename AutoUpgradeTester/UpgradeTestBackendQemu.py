@@ -72,6 +72,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         if not os.path.exists(self.baseimage):
             print "Missing '%s' base image, need to build it now" % self.baseimage
             arch = self.config.getWithDefault("KVM", "Arch", "i386")
+            destdir = "ubuntu-kvm-%s-%s" % (arch, self.fromDist)
             ret = subprocess.call(["sudo",
                                    "ubuntu-vm-builder","kvm", self.fromDist,
                                    "--kernel-flavour", "generic",
@@ -79,11 +80,13 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
                                    "--components", "main,restricted",
                                    "--rootsize", "80000",
                                    "--addpkg", "openssh-server",
+                                   "--destdir", destdir,
                                    "--arch", arch])
-            # move the disk in place
-            shutil.move(glob.glob("ubuntu-kvm/*.qcow2")[0], self.baseimage)
+            # move the disk in place, ubuntu-vm-builder uses a random filename
+            shutil.move(glob.glob("%s/*.qcow2" % destdir)[0], 
+                        self.baseimage)
             # remove old tree to ensure that subsequent runs work
-            shutil.rmtree("ubuntu-kvm")
+            shutil.rmtree(destdir)
             if ret != 0:
                 raise NoImageFoundException
         # check if we want virtio here and default to yes

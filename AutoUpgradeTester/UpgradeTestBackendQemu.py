@@ -81,7 +81,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
                                    "--addpkg", "openssh-server",
                                    "--arch", arch])
             # move the disk in place
-            shutil.move(glob.glob("ubuntu-kvm/*.qcow2")[0],self.baseimage)
+            shutil.move(glob.glob("ubuntu-kvm/*.qcow2")[0], self.baseimage)
+            # remove old tree to ensure that subsequent runs work
+            shutil.rmtree("ubuntu-kvm")
             if ret != 0:
                 raise NoImageFoundException
         # check if we want virtio here and default to yes

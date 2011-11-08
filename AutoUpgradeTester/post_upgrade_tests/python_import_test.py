@@ -27,6 +27,8 @@ blacklist = ["speechd_config",
              "ropemacs",
              # needs X
              "keyring",
+             "invest",
+             "Onboard",
              ]
 
 def get_module_from_path(path):

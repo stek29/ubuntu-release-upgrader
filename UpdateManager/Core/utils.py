@@ -311,61 +311,22 @@ def on_battery():
     #print >>sys.stderr, "on_battery returned error: ", e
     return False
 
-def _inhibit_sleep_old_interface():
-  """
-  Send a dbus signal to org.gnome.SettingsDaemon.Power to not suspend
-  the system, this is to support upgrades from pre-gutsy g-p-m
-  """
-  import dbus
-  bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
-  devobj = bus.get_object('org.gnome.SettingsDaemon', 
-                          '/org/gnome/SettingsDaemon/Power')
-  dev = dbus.Interface(devobj, "org.gnome.SettingsDaemon.Power")
-  cookie = dev.Inhibit('UpdateManager', 'Updating system')
-  return (dev, cookie)
-
-def _inhibit_sleep_new_interface():
-  """
-  Send a dbus signal to gnome-power-manager to not suspend
-  the system
-  """
-  import dbus
-  bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
-  devobj = bus.get_object('org.freedesktop.PowerManagement', 
-                          '/org/freedesktop/PowerManagement/Inhibit')
-  dev = dbus.Interface(devobj, "org.freedesktop.PowerManagement.Inhibit")
-  cookie = dev.Inhibit('UpdateManager', 'Updating system')
-  return (dev, cookie)
-
-def detect_gnome_desktop_enviroment():
-    #check if the user is running gnome
-    if ("gnome" in os.environ.get("XDG_CURRENT_DESKTOP","") or 
-       "gnome" in os.environ.get("DESKTOP_SESSION","")):
-        return True
-    return False
-
 def inhibit_sleep():
   """
   Send a dbus signal to power-manager to not suspend
-  the system, try both the new freedesktop and the
-  old gnome dbus interface
+  the system, using the freedesktop common interface
   """
-  #only try old gnome dbus interface if gnome is running
-  if detect_gnome_desktop_enviroment():
-    try:
-      return _inhibit_sleep_old_interface()
-    except Exception:
-      try:
-        return _inhibit_sleep_new_interface()
-      except Exception:
-        #print "could not send the dbus Inhibit signal: %s" % e
-        return (False, False)
-  else:
-    try:
-      return _inhibit_sleep_new_interface()
-    except Exception:
-      #print "could not send the dbus Inhibit signal: %s" % e
-      return (False, False)
+  try:
+    import dbus
+    bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
+    devobj = bus.get_object('org.freedesktop.PowerManagement', 
+                          '/org/freedesktop/PowerManagement/Inhibit')
+    dev = dbus.Interface(devobj, "org.freedesktop.PowerManagement.Inhibit")
+    cookie = dev.Inhibit('UpdateManager', 'Updating system')
+    return (dev, cookie)
+  except Exception:
+    #print "could not send the dbus Inhibit signal: %s" % e
+    return (False, False)
 
 def allow_sleep(dev, cookie):
   """Send a dbus signal to gnome-power-manager to allow a suspending

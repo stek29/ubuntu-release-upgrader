@@ -21,11 +21,16 @@ class InstallBackendSynaptic(InstallBackend):
             apt_pkg.pkgsystem_unlock()
         except SystemError:
             pass
+        win = self.window_main.get_window()
+        try:
+            xid = win.get_xid()
+        except AttributeError:
+            xid = 0
         cmd = ["/usr/bin/gksu", 
                "--desktop", "/usr/share/applications/update-manager.desktop", 
                "--", "/usr/sbin/synaptic", "--hide-main-window",  
                "--non-interactive", "--parent-window-id",
-               "%s" % self.window_main.window.xid ]
+               "%s" % xid ]
         cmd.extend(opt)
         flags = GObject.SPAWN_DO_NOT_REAP_CHILD
         (pid, stdin, stdout, stderr) = GObject.spawn_async(cmd, flags=flags)

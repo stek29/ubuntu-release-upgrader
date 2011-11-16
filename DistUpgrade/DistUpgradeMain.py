@@ -34,8 +34,25 @@ from datetime import datetime
 from optparse import OptionParser
 from gettext import gettext as _
 
+# dirs that the packages will touch, this is needed for AUFS/overlayfs
+# and also for the sanity check before the upgrade
+SYSTEM_DIRS = ["/bin",
+              "/boot",
+              "/etc",
+              "/initrd",
+              "/lib",
+              "/lib32", # ???
+              "/lib64", # ???
+              "/sbin",
+              "/usr",
+              "/var",
+              ]
+
+
+
 from DistUpgradeController import DistUpgradeController
 from DistUpgradeConfigParser import DistUpgradeConfig
+
 
 def do_commandline():
     " setup option parser and parse the commandline "

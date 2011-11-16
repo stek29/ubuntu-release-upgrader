@@ -5,18 +5,7 @@ import os.path
 import subprocess
 import tempfile
 
-# dirs that the packages will touch
-systemdirs = ["/bin",
-              "/boot",
-              "/etc",
-              "/initrd",
-              "/lib",
-              "/lib32", # ???
-              "/lib64", # ???
-              "/sbin",
-              "/usr",
-              "/var",
-              ]
+from DistUpgradeMain import SYSTEM_DIRS
 
 
 def aufsOptionsAndEnvironmentSetup(options, config):
@@ -137,7 +126,7 @@ def doAufsChrootRsync(aufs_chroot_dir):
     helper that rsyncs the changes in the aufs chroot back to the
     real system
     """
-    for d in systemdirs:
+    for d in SYSTEM_DIRS:
         if not os.path.exists(d):
             continue
         # its important to have the "/" at the end of source
@@ -169,7 +158,8 @@ def setupAufsChroot(rw_dir, chroot_dir):
 
     # get the mount points before the aufs buisiness starts
     mounts = open("/proc/mounts").read()
-
+    systemdirs = SYSTEM_DIRS
+    
     # aufs mount or bind mount required dirs
     for d in os.listdir("/"):
         d = os.path.join("/",d)
@@ -208,6 +198,7 @@ def setupAufs(rw_dir):
         logging.debug("no /proc/mounts, can not do aufs overlay")
         return False
 
+    systemdirs = SYSTEM_DIRS
     # verify that there are no submounts of a systemdir and collect
     # the stuff that needs bind mounting (because a aufs does not
     # include sub mounts)

@@ -427,6 +427,20 @@ class DistUpgradeController(object):
                                "and run the upgrade again."))
             self.abort()
 
+        from DistUpgradeMain import SYSTEM_DIRS
+        for systemdir in SYSTEM_DIRS:
+            if os.path.exists(systemdir) and not os.access(systemdir, os.W_OK):
+                logging.error("%s not writable" % systemdir)
+                self._view.error(
+                    _("Can not write to '%s'") % systemdir,
+                    _("Its not possible to write to the systemdir "
+                      "'%s' on your system. The upgrade can not "
+                      "continue.\n"
+                      "Please make sure that the system dir is "
+                      "writable.") % systemdir)
+                self.abort()
+            
+
         # FIXME: we may try to find out a bit more about the network
         # connection here and ask more  intelligent questions
         if self.aptcdrom and self.options and self.options.withNetwork == None:

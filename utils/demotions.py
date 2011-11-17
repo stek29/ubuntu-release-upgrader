@@ -76,7 +76,10 @@ if __name__ == "__main__":
         prog = apt.progress.base.AcquireProgress() 
         cache.update(prog)
         cache.open(apt.progress.base.OpProgress())
-        map(lambda pkg: dist.pkgs_in_comp[comp].add(pkg.name), cache)
+        for pkg in cache:
+          if ":" in pkg.name:
+            continue
+          dist.pkgs_in_comp[comp].add(pkg.name)
 
   # check what is no longer in main
   no_longer_main = old.pkgs_in_comp["main"] - new.pkgs_in_comp["main"]

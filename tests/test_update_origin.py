@@ -67,11 +67,22 @@ class testOriginMatcher(unittest.TestCase):
             # only test on native arch
             if ":" in pkg.name:
                 continue
+            # check if the candidate origin is -updates (but not also
+            # -security, often packages are available in both)
             if pkg.candidateOrigin:
+                # ensure that the origin is not -updates and -security
+                is_in_updates = False
+                is_in_security = False
                 for v in pkg.candidateOrigin:
-                    if (v.archive == "lucid-updates" and
-                        len(pkg._pkg.version_list) > 2):
-                        test_pkgs.add(pkg.name)
+                    # test if the package is not in both updates and secu
+                    if v.archive == "lucid-updates":
+                        is_in_updates = True
+                    elif v.archive == "lucid-security":
+                        is_in_security = True
+                if (is_in_updates and 
+                    not is_in_security and
+                    len(pkg._pkg.version_list) > 2):
+                    test_pkgs.add(pkg.name)
         self.assert_(len(test_pkgs) > 0,
                      "no suitable test package found that has a version in both -security and -updates and where -updates is newer")
 
@@ -104,7 +115,7 @@ class testOriginMatcher(unittest.TestCase):
             self.assert_(pkg._pkg.current_ver != None,
                          "no package '%s' installed" % pkg.name)
             self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
-                             matcher[("lucid-updates","Ubuntu")],
+                             matcher[("lucid-updates", "Ubuntu")],
                              "package '%s' (%s) from lucid-updates is labeld '%s' even though we have marked this version as installed already" % (pkg.name, pkg.candidateVersion, self.cache.matchPackageOrigin(pkg, matcher).description))
 
 

@@ -167,6 +167,11 @@ class DistUpgradeController(object):
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
         # list of valid mirrors that we can add
         self.valid_mirrors = self.config.getListFromFile("Sources","ValidMirrors")
+        # third party mirrors
+        self.valid_3p_mirrors = []
+        if self.config.has_section('ThirdPartyMirrors'):
+            self.valid_3p_mirrors = [pair[1] for pair in
+                                     self.config.items('ThirdPartyMirrors')]
         # debugging
         #apt_pkg.Config.set("DPkg::Options::","--debug=0077")
 
@@ -603,8 +608,8 @@ class DistUpgradeController(object):
             logging.debug("examining: '%s'" %  get_string_with_no_auth_from_source_entry(entry))
             # check if it's a mirror (or official site)
             validMirror = self.isMirror(entry.uri)
-            if validMirror or not mirror_check:
-                validMirror = True
+            thirdPartyMirror = not mirror_check or self.isThirdPartyMirror(entry.uri)
+            if validMirror or thirdPartyMirror:
                 # disabled/security/commercial/extras are special cases
                 # we use validTo/foundToDist to figure out if we have a 
                 # main archive mirror in the sources.list or if we 
@@ -628,14 +633,14 @@ class DistUpgradeController(object):
                     logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
                 elif entry.type == 'deb-src':
                     continue
-                else:
+                elif validMirror:
                     # disable all entries that are official but don't
                     # point to either "to" or "from" dist
                     entry.disabled = True
                     self.sources_disabled = True
                     logging.debug("entry '%s' was disabled (unknown dist)" % get_string_with_no_auth_from_source_entry(entry))
 
-                # if we make it to this point, we have a official mirror
+                # if we make it to this point, we have a official or third-party mirror
 
                 # check if the arch is powerpc or sparc and if so, transition
                 # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
@@ -660,9 +665,9 @@ class DistUpgradeController(object):
                             if not comp in sync_components:
                                 continue
                             self.found_components[d].add(comp)
-                    
-            # disable anything that is not from a official mirror
-            if not validMirror:
+
+            else:
+                # disable anything that is not from a official mirror or a whitelisted third party
                 if entry.dist == self.fromDist:
                     entry.dist = self.toDist
                 entry.comment += " " + _("disabled on upgrade to %s") % self.toDist
@@ -1359,6 +1364,15 @@ class DistUpgradeController(object):
             mirror_host_part = mirror.split("//")[1]
             if uri.endswith(mirror_host_part):
                 logging.debug("found apt-cacher/apt-torrent style uri %s" % uri)
+                return True
+        return False
+
+    def isThirdPartyMirror(self, uri):
+        " check if uri is a whitelisted third-party mirror "
+        uri = uri.rstrip("/")
+        for mirror in self.valid_3p_mirrors:
+            mirror = mirror.rstrip("/")
+            if is_mirror(mirror, uri):
                 return True
         return False
 

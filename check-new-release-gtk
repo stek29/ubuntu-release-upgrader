@@ -157,12 +157,12 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
       Gtk.main_quit()
 
 if __name__ == "__main__":
-  APP="update-manager"
-  DIR="/usr/share/locale"
 
   Gtk.init_check(sys.argv)
 
-  gettext.install(APP, DIR, unicode=True)
+  gettext.bindtextdomain("update-manager", "/usr/share/locale")
+  gettext.textdomain("update-manager")
+
   try:
     locale.setlocale(locale.LC_ALL, "")
   except:
@@ -171,19 +171,23 @@ if __name__ == "__main__":
   init_proxy()
 
   parser = OptionParser()
+  #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+  #       correctly, see http://bugs.python.org/issue4391
+  #       Shoudl be resolved by Python3
+  enc = locale.getpreferredencoding()
   parser.add_option ("-d", "--devel-release", action="store_true",
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
-                          "is possible"))
+                          "is possible").decode(enc))
   parser.add_option ("-p", "--proposed", action="store_true",
                      dest="proposed_release", default=False,
                      help=_("Try upgrading to the latest release using "
-                            "the upgrader from $distro-proposed"))
+                            "the upgrader from $distro-proposed").decode(enc))
   # mostly useful for development
   parser.add_option ("", "--datadir", default="/usr/share/update-manager")
   parser.add_option ("", "--test-uri")
   parser.add_option ("", "--debug", action="store_true", default=False,
-                     help="Add debug output")
+                     help=_("Add debug output").decode(enc))
   (options, args) = parser.parse_args()
 
   if options.debug:

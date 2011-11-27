@@ -62,19 +62,31 @@ def get_maintenance_status(cache, pkgname, supported_tag):
     return (True, "%(support_end_month_str)s %(support_end_year)s (%(support_tag)s)" % d)
             
 if __name__ == "__main__":
+    gettext.bindtextdomain("update-manager", "/usr/share/locale")
+    gettext.textdomain("update-manager")
+
+    try:
+        locale.setlocale(locale.LC_ALL, "")
+    except:
+        pass
+
     parser = OptionParser()
+    #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+    #       correctly, see http://bugs.python.org/issue4391
+    #       Should be resolved by Python3
+    enc = locale.getpreferredencoding()
     parser.add_option("", "--show-unsupported",
                       action="store_true", default=False,
-                      help=_("Show unsupported packages on this machine"))
+                      help=_("Show unsupported packages on this machine").decode(enc))
     parser.add_option("", "--show-supported",
                       action="store_true", default=False,
-                      help=_("Show supported packages on this machine"))
+                      help=_("Show supported packages on this machine").decode(enc))
     parser.add_option("", "--show-all",
                       action="store_true", default=False,
-                      help=_("Show all packages with their status"))
+                      help=_("Show all packages with their status").decode(enc))
     parser.add_option("", "--list",
                       action="store_true", default=False,
-                      help=_("Show all packages in a list"))
+                      help=_("Show all packages in a list").decode(enc))
 
     (options, args) = parser.parse_args()
 

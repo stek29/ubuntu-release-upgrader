@@ -67,7 +67,9 @@ class DistUpgradeFetcherCore(object):
         if self.new_dist.upgradeToolSig:
             f = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeTool)
             sig = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeToolSig)
-            print "authenticate '%s' against '%s' " % (os.path.basename(f),os.path.basename(sig))
+            print _("authenticate '%(file)s' against '%(signature)s' ") % {
+		'file' : os.path.basename(f),
+		'signature' : os.path.basename(sig)}
             if self.gpgauthenticate(f, sig):
                 return True
         return False
@@ -105,7 +107,7 @@ class DistUpgradeFetcherCore(object):
     def extractDistUpgrader(self):
           # extract the tarbal
           fname = os.path.join(self.tmpdir,os.path.basename(self.uri))
-          print "extracting '%s'" % os.path.basename(fname)
+          print _("extracting '%s'") % os.path.basename(fname)
           if not os.path.exists(fname):
               return False
           try:

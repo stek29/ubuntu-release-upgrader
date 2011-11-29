@@ -25,6 +25,7 @@ from UpdateManagerText.UpdateManagerText import UpdateManagerText
 import sys
 
 from DistUpgrade.DistUpgradeVersion import VERSION
+import locale
 import gettext
 from gettext import gettext as _
 
@@ -39,14 +40,18 @@ if __name__ == "__main__":
 
   # Begin parsing of options
   parser = OptionParser()
+  #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+  #       correctly, see http://bugs.python.org/issue4391
+  #       Should be resolved by Python3
+  enc = locale.getpreferredencoding()
   parser.add_option ("-V", "--version", action="store_true",
                      dest="show_version", default=False,
-                     help=_("Show version and exit"))
+                     help=_("Show version and exit").decode(enc))
   parser.add_option ("--show-description", "--show-description", 
                      action="store_true",
                      dest="show_description", default=False,
                      help=_("Show description of the package instead of "
-                            "the changelog"))
+                            "the changelog").decode(enc))
 
   (options, args) = parser.parse_args()
 

@@ -1,9 +1,16 @@
 update-manager (1:0.154.4) UNRELEASED; urgency=low
 
+  [ Nicholas Skaggs ]
   * lp:~nskaggs/update-manager/fix-for-702418:
     - Removed gnome-power-manager dbus interface completely and
       only use freedesktop interface.
       Thanks to Nicholas Skaggs (LP: #702418)
+  
+  [ Gabor Kelemen ]
+  * Replace gettext.install() with bindtextdomain() calls.
+    Work around crash in OptionParser when displaying
+    localized --help text, to not regress on bug LP: #557804
+  * Extract strings for translation from u-m-t and u-s-s executables
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 22 Nov 2011 13:30:36 +0100
 

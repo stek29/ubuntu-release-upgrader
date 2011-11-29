@@ -9,7 +9,9 @@ from DistUpgrade.DistUpgradeVersion import VERSION
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
 from UpdateManager.Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from optparse import OptionParser
+import locale
 import gettext
+from gettext import gettext as _
 
 import os
 import sys
@@ -21,10 +23,10 @@ RELEASE_AVAILABLE=0
 NO_RELEASE_AVAILABLE=1
 
 if __name__ == "__main__":
-  APP="update-manager"
-  DIR="/usr/share/locale"
 
-  gettext.install(APP, DIR, unicode=True)
+  gettext.bindtextdomain("update-manager", "/usr/share/locale")
+  gettext.textdomain("update-manager")
+
   try:
     locale.setlocale(locale.LC_ALL, "")
   except:
@@ -36,33 +38,37 @@ if __name__ == "__main__":
   check_only = sys.argv[0].endswith("check-new-release")
 
   parser = OptionParser()
+  #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+  #       correctly, see http://bugs.python.org/issue4391
+  #       Should be resolved by Python3
+  enc = locale.getpreferredencoding()
   parser.add_option ("-V", "--version", action="store_true",
                      dest="show_version", default=False,
-                     help=_("Show version and exit"))
+                     help=_("Show version and exit").decode(enc))
   parser.add_option ("-d", "--devel-release", action="store_true",
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
-                          "is possible"))
+                          "is possible").decode(enc))
   parser.add_option ("-p", "--proposed", action="store_true",
                      dest="proposed_release", default=False,
                      help=_("Try upgrading to the latest release using "
-                            "the upgrader from $distro-proposed"))
+                            "the upgrader from $distro-proposed").decode(enc))
   parser.add_option ("-m", "--mode", default="server",
                      dest="mode", 
                      help=_("Run in a special upgrade mode.\n"
                             "Currently 'desktop' for regular upgrades of "
                             "a desktop system and 'server' for server "
-                            "systems are supported."))
+                            "systems are supported.").decode(enc))
   parser.add_option ("-f", "--frontend", default="DistUpgradeViewText",
                      dest="frontend", 
-                     help=_("Run the specified frontend"))
+                     help=_("Run the specified frontend").decode(enc))
   parser.add_option ("-s","--sandbox", action="store_true", default=False,
-                     help=_("Test upgrade with a sandbox aufs overlay"))
+                     help=_("Test upgrade with a sandbox aufs overlay").decode(enc))
   parser.add_option ("-c", "--check-dist-upgrade-only", action="store_true",
                      default=check_only,
                      help=_("Check only if a new distribution release is "
                             "available and report the result via the "
-                            "exit code"))
+                            "exit code").decode(enc))
   parser.add_option ("-q", "--quiet", default=False, action="store_true",
                      dest="quiet")
 

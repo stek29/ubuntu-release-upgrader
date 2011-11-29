@@ -32,16 +32,19 @@ import sys
 
 from UpdateManager.UpdateManager import UpdateManager
 from DistUpgrade.DistUpgradeVersion import VERSION
+import locale
 import gettext
+from gettext import gettext as _
+
 from optparse import OptionParser
 
 if __name__ == "__main__":
-  APP="update-manager"
-  DIR="/usr/share/locale"
 
   Gtk.init_check(sys.argv)
+  
+  gettext.bindtextdomain("update-manager", "/usr/share/locale")
+  gettext.textdomain("update-manager")
 
-  gettext.install(APP, DIR, unicode=True)
   try:
     locale.setlocale(locale.LC_ALL, "")
   except:
@@ -49,39 +52,43 @@ if __name__ == "__main__":
 
   # Begin parsing of options
   parser = OptionParser()
+  #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+  #       correctly, see http://bugs.python.org/issue4391
+  #       Should be resolved by Python3
+  enc = locale.getpreferredencoding()
   parser.add_option ("-V", "--version", action="store_true",
                      dest="show_version", default=False,
-                     help=_("Show version and exit"))
+                     help=_("Show version and exit").decode(enc))
   parser.add_option ("--data-dir", "", 
                      default="/usr/share/update-manager/",
-                     help=_("Directory that contains the data files"))
+                     help=_("Directory that contains the data files").decode(enc))
   parser.add_option ("-c", "--check-dist-upgrades", action="store_true",
                      dest="check_dist_upgrades", default=False,
-                     help=_("Check if a new Ubuntu release is available"))
+                     help=_("Check if a new Ubuntu release is available").decode(enc))
   parser.add_option ("-d", "--devel-release", action="store_true",
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
-                          "is possible"))
+                          "is possible").decode(enc))
   parser.add_option ("-p","--proposed", action="store_true",
                      dest="use_proposed", default=False,
-                     help=_("Upgrade using the latest proposed version of the release upgrader"))
+                     help=_("Upgrade using the latest proposed version of the release upgrader").decode(enc))
   parser.add_option ("--no-focus-on-map", action="store_true",
                      dest="no_focus_on_map", default=False,
                      # TRANSLATORS: this describes the "focus-on-map" gtk
                      # property that controls if a new window takes the
                      # input focus control when it is displayed for the
                      # first time (see also the gtk devhelp page)
-                     help=_("Do not focus on map when starting"))
+                     help=_("Do not focus on map when starting").decode(enc))
   parser.add_option ("--dist-upgrade", action="store_true",
                      dest="dist_upgrade", default=False,
-                     help=_("Try to run a dist-upgrade"))
+                     help=_("Try to run a dist-upgrade").decode(enc))
   parser.add_option ("--no-update", action="store_true",
                      dest="no_update", default=False,
-                     help=_("Do not check for updates when starting"))
+                     help=_("Do not check for updates when starting").decode(enc))
   parser.add_option ("-s","--sandbox", action="store_true", default=False,
                      # TRANSLATORS: aufs is the name of the filesystem
                      # that is used to create the overlay
-                     help=_("Test upgrade with a sandbox aufs overlay"))
+                     help=_("Test upgrade with a sandbox aufs overlay").decode(enc))
 
   (options, args) = parser.parse_args()
 

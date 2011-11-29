@@ -510,12 +510,22 @@ class UpdateManager(SimpleGtkbuilderApp):
         menu.show()
         return True
 
+  # we need this for select all/unselect all
+  def _toggle_origin_headers(self, new_selection_value):
+    """ small helper that will set/unset the origin headers
+    """
+    model = self.treeview_update.get_model()
+    for row in model:
+        if not model.get_value(row.iter, LIST_PKG):
+            model.set_value(row.iter, LIST_TOGGLE_CHECKED, new_selection_value)
+
   def select_all_updgrades(self, widget):
     """
     Select all updates
     """
     self.setBusy(True)
     self.cache.saveDistUpgrade()
+    self._toggle_origin_headers(True)
     self.treeview_update.queue_draw()
     self.refresh_updates_count()
     self.setBusy(False)
@@ -526,6 +536,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     """
     self.setBusy(True)
     self.cache.clear()
+    self._toggle_origin_headers(False)
     self.treeview_update.queue_draw()
     self.refresh_updates_count()
     self.setBusy(False)
@@ -926,7 +937,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     # make sure that we don't allow to toggle deactivated updates
     # this is needed for the call by the row activation callback
     if pkg is None:
-	
 	toggled_value = not self.store.get_value(iter, LIST_TOGGLE_CHECKED)
 	self.toggle_from_origin(pkg, origin, toggled_value)
 	self.store.set_value(iter, LIST_TOGGLE_CHECKED, toggled_value )

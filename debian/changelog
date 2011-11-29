@@ -11,6 +11,16 @@ update-manager (1:0.154.4) UNRELEASED; urgency=low
     Work around crash in OptionParser when displaying
     localized --help text, to not regress on bug LP: #557804
   * Extract strings for translation from u-m-t and u-s-s executables
+  
+  [ Marc Deslauriers ]
+  * SECURITY UPDATE: arbitrary code execution via directory traversal
+    (LP: #881548)
+    - UpdateManager/Core/DistUpgradeFetcherCore.py: verify signature before
+      unpacking the tarball.
+    - CVE-2011-3152
+  * SECURITY UPDATE: information leak via insecure temp file (LP: #881541)
+    - DistUpgrade/DistUpgradeViewKDE.py: use mkstemp instead of mktemp.
+    - CVE-2011-3154
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 22 Nov 2011 13:30:36 +0100
 

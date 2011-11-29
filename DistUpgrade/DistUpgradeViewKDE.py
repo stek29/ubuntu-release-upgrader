@@ -490,7 +490,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
 
         #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
-        copyXauth = tempfile.mktemp("", "adept")
+        copyXauth = tempfile.mkstemp("", "adept")
         if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
             shutil.copy(os.environ['XAUTHORITY'], copyXauth)
             os.environ["XAUTHORITY"] = copyXauth

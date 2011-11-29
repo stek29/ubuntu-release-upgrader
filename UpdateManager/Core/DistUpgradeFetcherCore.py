@@ -68,12 +68,9 @@ class DistUpgradeFetcherCore(object):
             f = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeTool)
             sig = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeToolSig)
             print "authenticate '%s' against '%s' " % (os.path.basename(f),os.path.basename(sig))
-            if not self.gpgauthenticate(f, sig):
-                return False
-
-        # we may return False here by default if we want to make a sig
-        # mandatory
-        return True
+            if self.gpgauthenticate(f, sig):
+                return True
+        return False
 
     def gpgauthenticate(self, file, signature,
                         keyring='/etc/apt/trusted.gpg'):
@@ -249,6 +246,12 @@ class DistUpgradeFetcherCore(object):
                   _("Fetching the upgrade failed. There may be a network "
                     "problem. "))
             return
+        if not self.authenticate():
+            self.error(_("Authentication failed"),
+                  _("Authenticating the upgrade failed. There may be a problem "
+                    "with the network or with the server. "))
+            self.cleanup()
+            return
         if not self.extractDistUpgrader():
             self.error(_("Failed to extract"),
                   _("Extracting the upgrade failed. There may be a problem "
@@ -258,12 +261,6 @@ class DistUpgradeFetcherCore(object):
         if not self.verifyDistUprader():
             self.error(_("Verification failed"),
                   _("Verifying the upgrade failed.  There may be a problem "
-                    "with the network or with the server. "))
-            self.cleanup()
-            return
-        if not self.authenticate():
-            self.error(_("Authentication failed"),
-                  _("Authenticating the upgrade failed. There may be a problem "
                     "with the network or with the server. "))
             self.cleanup()
             return

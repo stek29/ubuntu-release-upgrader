@@ -837,6 +837,7 @@ class DistUpgradeQuirks(object):
                 logging.exception("failed to setup screensaver poke")
     def _stopPokeScreensaver(self):
         if self._poke:
+            res = False
             try:
                 self._poke.terminate()
                 res = self._poke.wait()

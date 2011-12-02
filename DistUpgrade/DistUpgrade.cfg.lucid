@@ -32,6 +32,8 @@ EnableApport=yes
 BadVersions=blcr-dkms_0.8.2-13
 # ubiquity slideshow
 #SlideshowUrl=http://people.canonical.com/~mvo/ubiquity-slideshow-upgrade/slides/
+# useful for e.g. testing
+;AllowUnauthenticated=yes
 
 [KernelRemoval]
 Version=2.6.35
@@ -84,9 +86,9 @@ Components=main,restricted,universe,multiverse
 Pockets=security,updates,proposed,backports
 ;AllowThirdParty=False
 
-;[PreRequists]
-;Packages=release-upgrader-apt,release-upgrader-dpkg
-;SourcesList=prerequists-sources.list
+[PreRequists]
+Packages=libapt-pkg4.11,libapt-inst1.3,python-apt-common,python-apt
+SourcesList=prerequists-sources.list
 ;SourcesList-ia64=prerequists-sources.ports.list
 ;SourcesList-hppa=prerequists-sources.ports.list
 

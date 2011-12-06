@@ -1437,7 +1437,7 @@ class DistUpgradeController(object):
             if not set(backportslist) == found_pkgs:
                 logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
-            return self.setupRequiredBackports(backportsdir)
+            return self.setupRequiredBackports()
 
         # we support PreRequists/SourcesList-$arch sections here too
         # 
@@ -1509,7 +1509,13 @@ class DistUpgradeController(object):
 
         if res == False:
             logging.warning("_fetchArchives for backports returned False")
+        return self.setupRequiredBackports()
 
+    # used by both cdrom/http fetcher
+    def setupRequiredBackports(self):
+        # ensure that the new release upgrader uses the latest python-apt
+        # from the backport path
+        os.environ["PYTHONPATH"] = "/usr/share/release-upgrader-python-apt"
         # copy log so that it gets not overwritten
         logging.shutdown()
         shutil.copy("/var/log/dist-upgrade/main.log",

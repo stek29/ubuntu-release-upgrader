@@ -22,6 +22,7 @@
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
 
+import apt
 import atexit
 import glob
 import logging
@@ -106,6 +107,7 @@ def setup_logging(options, config):
     # changes
     logging.info("Using config files '%s'" % config.config_files)
     logging.info("uname information: '%s'" % " ".join(os.uname()))
+    logging.info("apt version: '%s'" % apt.apt_pkg.VERSION)
     return logdir
 
 def save_system_state(logdir):

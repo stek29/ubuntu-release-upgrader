@@ -1384,15 +1384,20 @@ class DistUpgradeController(object):
             if entry.invalid or entry.disabled:
                 continue
             if (entry.type == "deb" and 
+                entry.disabled == False and
                 self.isMirror(entry.uri) and
+                "main" in entry.comps and
+                "%s-updates" % self.fromDist in entry.dist and
                 not entry.uri.startswith("http://security.ubuntu.com") and
                 not entry.uri.startswith("http://archive.ubuntu.com") ):
-                new_line = "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
+                # FIXME: this will have to be -updates eventually
+                new_line = "deb %s %s-proposed main\n" % (entry.uri, self.fromDist)
                 if not new_line in lines:
                     lines += new_line
-            if (dumb and entry.type == "deb" and
-                "main" in entry.comps):
-                lines += "deb %s %s-backports main/debian-installer\n" % (entry.uri, self.fromDist)
+            # FIXME: do we really need "dumb" mode?
+            #if (dumb and entry.type == "deb" and
+            #    "main" in entry.comps):
+            #    lines += "deb %s %s-proposed main\n" % (entry.uri, self.fromDist)
         return lines
 
     def _addPreRequistsSourcesList(self, template, out, dumb=False):
@@ -1419,6 +1424,7 @@ class DistUpgradeController(object):
             os.mkdir(backportsdir)
         backportslist = self.config.getlist("PreRequists","Packages")
 
+        # FIXME: this needs to be ported
         # if we have them on the CD we are fine
         if self.aptcdrom and not self.useNetwork:
             logging.debug("Searching for pre-requists on CDROM")
@@ -1433,7 +1439,7 @@ class DistUpgradeController(object):
             if not set(backportslist) == found_pkgs:
                 logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
-            return self.setupRequiredBackports(backportsdir)
+            return self.setupRequiredBackports()
 
         # we support PreRequists/SourcesList-$arch sections here too
         # 
@@ -1474,14 +1480,6 @@ class DistUpgradeController(object):
                 logging.warning("no backport for '%s' found" % e)
             return False
         
-        # save cachedir and setup new one
-        cachedir = apt_pkg.Config.find("Dir::Cache::archives")
-        cwd = os.getcwd()
-        if not os.path.exists(os.path.join(backportsdir,"partial")):
-            os.mkdir(os.path.join(backportsdir,"partial"))
-        os.chdir(backportsdir)
-        apt_pkg.Config.set("Dir::Cache::archives",backportsdir)
-
         # FIXME: sanity check the origin (just for safety)
         for pkgname in backportslist:
             pkg = self.cache[pkgname]
@@ -1496,46 +1494,30 @@ class DistUpgradeController(object):
                 os.unlink(outpath)
                 return False
             logging.debug("marking '%s' for install" % pkgname)
-            # mvo: autoInst is not available on dapper
-            #pkg.markInstall(auto_inst=False, auto_fix=False)
-            pkg.mark_install(auto_fix=False)
-
-        # mark the backports for upgrade and get them
-        fetcher = apt_pkg.GetAcquire(self._view.getFetchProgress())
-        pm = apt_pkg.GetPackageManager(self.cache._depcache)
+            # mark install
+            pkg.mark_install(auto_inst=False, auto_fix=False)
 
         # now get it
+        res = False
         try:
-            res = True
-            self.cache._fetchArchives(fetcher, pm)
+            res = self.cache.commit(self._view.getFetchProgress(),
+                                    self._view.getInstallProgress())
         except IOError, e:
-            logging.error("_fetchArchives returned '%s'" % e)
+            logging.error("fetchArchives returned '%s'" % e)
+            res = False
+        except SystemError as e:
+            logging.error("installArchives returned '%s'" % e)
             res = False
 
         if res == False:
             logging.warning("_fetchArchives for backports returned False")
+        return self.setupRequiredBackports()
 
-        # reset the cache dir
-        os.unlink(outpath)
-        apt_pkg.Config.set("Dir::Cache::archives",cachedir)
-        os.chdir(cwd)
-        return self.setupRequiredBackports(backportsdir)
-
-    def setupRequiredBackports(self, backportsdir):
-        " setup the required backports in a evil way "
-        if not glob.glob(backportsdir+"/*.udeb"):
-            logging.error("no backports found in setupRequiredBackports()")
-            return False
-        # unpack the backports first
-        for deb in glob.glob(backportsdir+"/*.udeb"):
-            logging.debug("extracting udeb '%s' " % deb)
-            if os.system("dpkg-deb -x %s %s" % (deb, backportsdir)) != 0:
-                return False
-        # setup some paths to make sure the new stuff is used
-        os.environ["LD_LIBRARY_PATH"] = backportsdir+"/usr/lib"
-        os.environ["PYTHONPATH"] = backportsdir+"/usr/lib/python%s.%s/site-packages/" % (sys.version_info[0], sys.version_info[1])
-        os.environ["PATH"] = "%s:%s" % (backportsdir+"/usr/bin",
-                                        os.environ["PATH"])
+    # used by both cdrom/http fetcher
+    def setupRequiredBackports(self):
+        # ensure that the new release upgrader uses the latest python-apt
+        # from the backport path
+        os.environ["PYTHONPATH"] = "/usr/share/release-upgrader-python-apt"
         # copy log so that it gets not overwritten
         logging.shutdown()
         shutil.copy("/var/log/dist-upgrade/main.log",
@@ -1546,6 +1528,8 @@ class DistUpgradeController(object):
             args.append("--with-network")
         else:
             args.append("--without-network")
+        logging.info("restarting upgrader")
+        #print "restarting upgrader to make use of the backports"
         # work around kde being clever and removing the x bit
         check_and_fix_xbit(sys.argv[0])
         os.execve(sys.argv[0],args, os.environ)

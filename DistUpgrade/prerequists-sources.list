@@ -1,4 +1,6 @@
 # sources.list fragment for pre-requists (mirror from sources.list + fallback)
 # this is safe to remove after the upgrade
 ${mirror}
-deb http://archive.ubuntu.com/ubuntu/ feisty-backports main/debian-installer
+# when this changes from -proposed to -updates, ensure to update
+# DistUpgradeController.py:1393 as well
+deb http://archive.ubuntu.com/ubuntu/ lucid-proposed main

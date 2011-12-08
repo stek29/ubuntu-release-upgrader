@@ -31,10 +31,10 @@ class UpdateManagerText(object):
 				    ( (_("Cancel"), "cancel"),
 				      (_("Install"), "ok")), 
 				    compact = True)
-	self.textview_changes = Textbox(72, 8, "Changelog", True, True)
+	self.textview_changes = Textbox(72, 8, _("Changelog"), True, True)
 	self.checkbox_tree_updates = CheckboxTree(height=8, width=72, scroll=1)
 	self.checkbox_tree_updates.setCallback(self.checkbox_changed)
-	self.layout = GridForm(self.screen, "Updates", 1, 5)
+	self.layout = GridForm(self.screen, _("Updates"), 1, 5)
 	self.layout.add(self.checkbox_tree_updates, 0, 0)
 	# empty line to make it look less crowded
 	self.layout.add(Textbox(60, 1," ",False, False), 0, 1)

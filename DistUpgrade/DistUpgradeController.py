@@ -1501,7 +1501,7 @@ class DistUpgradeController(object):
         res = False
         try:
             res = self.cache.commit(self._view.getFetchProgress(),
-                                    self._view.getInstallProgress())
+                                    self._view.getInstallProgress(self.cache))
         except IOError, e:
             logging.error("fetchArchives returned '%s'" % e)
             res = False

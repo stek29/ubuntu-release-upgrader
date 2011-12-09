@@ -1517,7 +1517,7 @@ class DistUpgradeController(object):
     def setupRequiredBackports(self):
         # ensure that the new release upgrader uses the latest python-apt
         # from the backport path
-        os.environ["PYTHONPATH"] = "/usr/share/release-upgrader-python-apt"
+        os.environ["PYTHONPATH"] = "/usr/lib/release-upgrader-python-apt"
         # copy log so that it gets not overwritten
         logging.shutdown()
         shutil.copy("/var/log/dist-upgrade/main.log",

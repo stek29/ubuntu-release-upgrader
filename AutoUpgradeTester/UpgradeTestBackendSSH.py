@@ -7,6 +7,7 @@ import logging
 import os
 import os.path
 import subprocess
+import time
 
 
 class UpgradeTestBackendSSH(UpgradeTestBackend):
@@ -170,7 +171,6 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                                                              upgrader_args)])
         return ret
 
- 
     def test(self):
         # - generate diff of upgrade vs fresh install
         # ...
@@ -181,9 +181,16 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         crashfiles = glob.glob(self.resultdir+"/*.crash")
         # run stuff in post_upgrade_tests dir
         ok = True
+        results = []
         for script in glob.glob(self.post_upgrade_tests_dir+"*"):
             if not os.access(script, os.X_OK):
                 continue
+            result = {'name':os.path.basename(script),
+                      'result':'pass',
+                      'time':0,
+                      'message':''
+                     }
+            start_time = time.time()
             logging.info("running '%s' post_upgrade_test" % script)
             self._copyToImage(script, "/tmp/")
             ret = self._runInImage(["/tmp/%s" % os.path.basename(script)])
@@ -192,9 +199,14 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                 ok = False
                 log=open(self.resultdir+"/test-%s.FAIL" % os.path.basename(script), "w")
                 log.write("FAIL")
+                result['result'] = 'fail'
+                result['message'] = "post_upgrade_test '%s' failed" % script
+            result['time'] = time.time() - start_time
+            results.append(result)
 
         # check for conffiles (the copy is done via a post upgrade script)
         self._copyFromImage("/tmp/*.dpkg-dist", self.resultdir)
+        self.resultsToJunitXML(results, os.path.join(self.resultdir, 'results.xml'))
 
         self.stop()
         if len(crashfiles) > 0:
@@ -202,4 +214,3 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             print crashfiles
             return False
         return ok
-        

@@ -16,13 +16,14 @@ def is_process_running(procname):
 if __name__ == "__main__":
     if os.path.exists("/usr/bin/X") or glob.glob("/var/log/Xorg*.log"):
         #print "Checking for running Xorg"
-        if not is_process_running("Xorg"):
-            print "Xorg not running yet, waiting"
-            # wait a bit to and see if it comes up
-            time.sleep(20)
+	for i in range(10):
             if not is_process_running("Xorg"):
-                print "WARNING: /usr/bin/X found but no Xorg running"
-                sys.exit(1)
+                print "Xorg not running yet, waiting"
+                # wait a bit to and see if it comes up
+                time.sleep(10)
+                if not is_process_running("Xorg"):
+                    print "WARNING: /usr/bin/X found but no Xorg running"
+                    sys.exit(1)
 
             
     

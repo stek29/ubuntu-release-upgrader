@@ -9,6 +9,7 @@ import ConfigParser
 import os
 import os.path
 import tempfile
+from shutil import rmtree
 
 # refactor the code so that we have
 # UpgradeTest - the controler object
@@ -65,8 +66,11 @@ class UpgradeTestBackend(object):
                 "NonInteractive", "ResultDir", "results-upgrade-tester")
         self.resultdir = os.path.abspath(
             os.path.join(base_resultdir, profiledir.split("/")[-1]))
-        if not os.path.exists(self.resultdir):
-            os.makedirs(self.resultdir)
+
+        # Cleanup result directory before new run
+        if os.path.exists(self.resultdir):
+            rmtree(self.resultdir)
+        os.makedirs(self.resultdir)
         
         self.fromDist = self.config.get("Sources","From")
         if "http_proxy" in os.environ and not self.config.has_option("NonInteractive","Proxy"):
@@ -117,3 +121,47 @@ class UpgradeTestBackend(object):
     def test(self):
         " test if the upgrade was successful "
         pass
+
+    def resultsToJunitXML(self, results, outputfile = None):
+        """
+        Filter results to get Junit XML output
+
+        :param results: list of results. Each result is a dictionary of the form
+            name: name of the test
+            result: (pass, fail, error)
+            time: execution time of the test in seconds
+            message: optional message in case of failure or error
+        :param output: Output XML to this file instead of returning the value
+        """
+        from xml.sax.saxutils import escape
+
+        output = ""
+        testsuite_name = ''
+        res = [x['result'] for x in results]
+        pass_count = res.count('pass')
+        fail_count = res.count('fail')
+        error_count = res.count('error')
+        total_count = len(res)
+        total_time = sum([x['time'] for x in results])
+
+        output = """<testsuite errors="%d" failures="%d" name="%s" tests="%d" time="%.3f">\n""" % (
+            error_count, fail_count, testsuite_name, total_count,total_time)
+
+        for result in results:
+            output += """<testcase classname="%s" name="%s" time="%.3f">\n""" % (
+                self.profilename, result['name'], result['time'])
+            if 'fail' in result['result']:
+                output += """<failure type="%s">%s\n</failure>\n""" % (
+                    'exception', escape(result['message']))
+            elif 'error' in result['result']:
+                output += """<error type="%s">%s\n</error>\n""" % (
+                    'exception', escape(result['message']))
+
+            output += "</testcase>\n"
+        output += "</testsuite>\n"
+
+        if outputfile:
+            with open(outputfile, 'w') as f:
+                f.write(output)
+        else:
+            return output

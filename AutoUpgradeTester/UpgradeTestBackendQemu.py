@@ -102,9 +102,9 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
             self.qemu_options.append("-hdb")
             self.qemu_options.append(self.config.get("KVM","SwapImage"))
         # regular image
-        profilename = self.config.get("NonInteractive","ProfileName")
+        self.profilename = self.config.get("NonInteractive","ProfileName")
         imagedir = self.config.get("KVM","ImageDir")
-        self.image = os.path.join(imagedir, "test-image.%s" % profilename)
+        self.image = os.path.join(imagedir, "test-image.%s" % self.profilename)
         # make ssh login possible (localhost 54321) available
         ssh_port = int(self.config.getWithDefault("KVM","SshPort","54321"))
         while is_port_already_listening(ssh_port):

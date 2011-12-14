@@ -374,7 +374,7 @@ class DistUpgradeController(object):
                                      "(test) mode. All changes are written "
                                      "to '%s' and will be lost on the next "
                                      "reboot.\n\n"
-                                     "*No* changes written to a systemdir "
+                                     "*No* changes written to a system directory "
                                      "from now until the next reboot are "
                                      "permanent.") % aufs_rw_dir)
 
@@ -438,10 +438,10 @@ class DistUpgradeController(object):
                 logging.error("%s not writable" % systemdir)
                 self._view.error(
                     _("Can not write to '%s'") % systemdir,
-                    _("Its not possible to write to the systemdir "
+                    _("Its not possible to write to the system directory "
                       "'%s' on your system. The upgrade can not "
                       "continue.\n"
-                      "Please make sure that the system dir is "
+                      "Please make sure that the system directory is "
                       "writable.") % systemdir)
                 self.abort()
             

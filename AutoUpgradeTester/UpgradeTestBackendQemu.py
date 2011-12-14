@@ -368,6 +368,10 @@ iface eth0 inet static
         # spin here until ssh has come up and we can login
         now = time.time()
         while True:
+            if self.qemu_pid.poll():
+                res = self.qemu_pid.wait()
+                print "qemu stopped unexpecedtly with exit code '%s'" % res
+                return False
             time.sleep(1)
             if self._runInImage(["/bin/true"]) == 0:
                 break

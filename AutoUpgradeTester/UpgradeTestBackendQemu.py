@@ -124,7 +124,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         self.qemu_options.append("localhost:%s" % str(vncport))
 
         # make the memory configurable
-        mem = self.config.getWithDefault("KVM","VirtualRam","768")
+        mem = self.config.getWithDefault("KVM","VirtualRam","1536")
         self.qemu_options.append("-m")
         self.qemu_options.append(str(mem))
 

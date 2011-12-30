@@ -72,13 +72,14 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         if not os.path.exists(self.baseimage):
             print "Missing '%s' base image, need to build it now" % self.baseimage
             arch = self.config.getWithDefault("KVM", "Arch", "i386")
+            rootsize = self.config.getWithDefault("KVM", "RootSize", "80000")
             destdir = "ubuntu-kvm-%s-%s" % (arch, self.fromDist)
             ret = subprocess.call(["sudo",
                                    "ubuntu-vm-builder","kvm", self.fromDist,
                                    "--kernel-flavour", "generic",
                                    "--ssh-key", "%s.pub" % self.ssh_key ,
                                    "--components", "main,restricted",
-                                   "--rootsize", "80000",
+                                   "--rootsize", rootsize,
                                    "--addpkg", "openssh-server",
                                    "--destdir", destdir,
                                    "--arch", arch])

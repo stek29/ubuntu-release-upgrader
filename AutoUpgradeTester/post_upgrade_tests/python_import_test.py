@@ -29,6 +29,7 @@ blacklist = ["speechd_config",
              "keyring",
              "invest",
              "Onboard",
+             "goocanvasmodule.so",
              ]
 
 def get_module_from_path(path):

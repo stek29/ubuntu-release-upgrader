@@ -9,7 +9,7 @@ from apport.hookutils import *
 
 def add_info(report, ui):
 
-    attach_gconf(report, 'update-manager')
+    attach_gsettings_package(report, 'update-manager')
     response = ui.yesno("Is the issue you are reporting one you encountered when upgrading Ubuntu from one release to another?")
     if response:
         report.setdefault('Tags', 'dist-upgrade')

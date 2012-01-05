@@ -13,6 +13,8 @@ import os
 import shutil
 import sys
 import time
+import subprocess
+from ConfigParser import SafeConfigParser
 
 # check if we run from a bzr checkout
 if os.path.exists("./UpgradeTestBackend.py"):
@@ -209,6 +211,52 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
     os.dup2(old_stderr, 2)
     return result
 
+def profileFromAptClone(aptclonefile):
+    """ Create a profile from an apt-clone archive
+
+    :param aptclonefile: Path to an apt-clone archive
+    :return: path to profile or None if it fails to recognize the clone file
+    """
+    profile = None
+    try:
+        cmd = ('apt-clone', 'info', aptclonefile)
+        output = subprocess.check_output(cmd)
+        clone_properties = {}
+        for k, v in [ line.split(': ') for line in output.split('\n') if ': ' in line]:
+            clone_properties[k] = v
+        try:
+            clone_date = datetime.datetime.strptime(clone_properties['Date'], '%c').strftime('_%Y%m%d-%H%M%S')
+        except:
+            clone_date = ''
+        profilename = "%s_%s_%s%s" % (
+            clone_properties['Distro'],
+            clone_properties['Arch'],
+            clone_properties['Hostname'],
+            clone_date)
+
+        # Generate configuration file for this profile
+        # FIXME:
+        # update packaging to grant write access on base for upgrade-tester user
+        ppath = 'profile' if os.path.exists("./UpgradeTestBackend.py") else base
+        profile = os.path.join(ppath, profilename)
+        profilecfg = SafeConfigParser()
+        if not os.path.exists(profile):
+            os.makedirs(profile)
+
+        profilecfg.set('DEFAULT', 'SourceRelease', clone_properties['Distro'])
+        profilecfg.add_section('NonInteractive')
+        profilecfg.set('NonInteractive', 'ProfileName', profilename)
+        profilecfg.set('NonInteractive', 'AptcloneFile', os.path.abspath(aptclonefile))
+        profilecfg.add_section('KVM')
+        profilecfg.set('KVM', 'Arch', clone_properties['Arch'])
+        with open(os.path.join(profile, 'DistUpgrade.cfg'), 'wb') as profilefile:
+            profilecfg.write(profilefile)
+
+    except subprocess.CalledProcessError:
+        return None
+
+    return profile
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
@@ -279,6 +327,16 @@ if __name__ == "__main__":
     html_output = HtmlOutputStream(options.html_output_dir)
     html_output.write_html_header(time_started)
     for profile in profiles:
+
+        # case of an apt-clone archive
+        if os.path.isfile(profile):
+            profilename = profileFromAptClone(profile)
+            if not profilename:
+                print "File is not a valid apt-clone image: %s" % profilename
+                continue
+            profile = profilename
+            print "Using generated profile: %s" % profile
+
         if not "/" in profile:
             profile = base + profile
         try:

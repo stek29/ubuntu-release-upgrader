@@ -263,18 +263,35 @@ iface eth0 inet static
         tzone.flush()
         self._copyToImage(tzone.name, "/etc/timezone")
 
-        # create /etc/apt/sources.list
-        sources = self.getSourcesListFile()
-        self._copyToImage(sources.name, "/etc/apt/sources.list")
+        aptclone = self.config.getWithDefault('NonInteractive', 'AptCloneFile', '')
 
-        # install some useful stuff
-        ret = self._runInImage(["apt-get","update"])
-        assert ret == 0
-        # FIXME: instead of this retrying (for network errors with 
-        #        proxies) we should have a self._runAptInImage() 
-        for i in range(3):
-            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
-        assert ret == 0
+        if not aptclone:
+            # create /etc/apt/sources.list
+            sources = self.getSourcesListFile()
+            self._copyToImage(sources.name, "/etc/apt/sources.list")
+
+            # install some useful stuff
+            ret = self._runInImage(["apt-get","update"])
+            assert ret == 0
+            # FIXME: instead of this retrying (for network errors with 
+            #        proxies) we should have a self._runAptInImage() 
+            for i in range(3):
+                ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
+            assert ret == 0
+        else:
+            dst_clonename = '/tmp/apt-clone.tgz'
+            self._copyToImage(aptclone, dst_clonename)
+            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive", "apt-get",
+                                    "install", "-y", "apt-clone"])
+            assert ret == 0
+            print "Restoring clone from %s" % aptclone
+            ret = self._runInImage(['DEBIAN_FRONTEND=noninteractive',
+                                    'apt-clone', 'restore', dst_clonename])
+            # FIXME: what action should be taken when a package failed
+            #        to restore?
+            if ret != 0:
+                print "WARNING: Some packages failed to restore. Continuing anyway!"
+            #assert ret == 0
 
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")

@@ -577,12 +577,12 @@ class UpdateManager(SimpleGtkbuilderApp):
               self.unity.set_install_menuitem_visible(True)
           else:
               if inst_count > 0:
-                  download_str = ngettext("The update has already been downloaded, but not installed",
-                  "The updates have already been downloaded, but not installed", inst_count)
+                  download_str = ngettext("The update has already been downloaded, but not installed.",
+                  "The updates have already been downloaded, but not installed.", inst_count)
                   self.button_install.set_sensitive(True)
                   self.unity.set_install_menuitem_visible(True)
               else:
-                  download_str = _("There are no updates to install")
+                  download_str = _("There are no updates to install.")
                   self.button_install.set_sensitive(False)
                   self.unity.set_install_menuitem_visible(False)
               self.image_downsize.set_sensitive(False)

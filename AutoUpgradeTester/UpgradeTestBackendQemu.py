@@ -72,13 +72,14 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         if not os.path.exists(self.baseimage):
             print "Missing '%s' base image, need to build it now" % self.baseimage
             arch = self.config.getWithDefault("KVM", "Arch", "i386")
+            rootsize = self.config.getWithDefault("KVM", "RootSize", "80000")
             destdir = "ubuntu-kvm-%s-%s" % (arch, self.fromDist)
             ret = subprocess.call(["sudo",
                                    "ubuntu-vm-builder","kvm", self.fromDist,
                                    "--kernel-flavour", "generic",
                                    "--ssh-key", "%s.pub" % self.ssh_key ,
                                    "--components", "main,restricted",
-                                   "--rootsize", "80000",
+                                   "--rootsize", rootsize,
                                    "--addpkg", "openssh-server",
                                    "--destdir", destdir,
                                    "--arch", arch])
@@ -124,7 +125,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         self.qemu_options.append("localhost:%s" % str(vncport))
 
         # make the memory configurable
-        mem = self.config.getWithDefault("KVM","VirtualRam","768")
+        mem = self.config.getWithDefault("KVM","VirtualRam","1536")
         self.qemu_options.append("-m")
         self.qemu_options.append(str(mem))
 
@@ -262,18 +263,35 @@ iface eth0 inet static
         tzone.flush()
         self._copyToImage(tzone.name, "/etc/timezone")
 
-        # create /etc/apt/sources.list
-        sources = self.getSourcesListFile()
-        self._copyToImage(sources.name, "/etc/apt/sources.list")
+        aptclone = self.config.getWithDefault('NonInteractive', 'AptCloneFile', '')
 
-        # install some useful stuff
-        ret = self._runInImage(["apt-get","update"])
-        assert ret == 0
-        # FIXME: instead of this retrying (for network errors with 
-        #        proxies) we should have a self._runAptInImage() 
-        for i in range(3):
-            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
-        assert ret == 0
+        if not aptclone:
+            # create /etc/apt/sources.list
+            sources = self.getSourcesListFile()
+            self._copyToImage(sources.name, "/etc/apt/sources.list")
+
+            # install some useful stuff
+            ret = self._runInImage(["apt-get","update"])
+            assert ret == 0
+            # FIXME: instead of this retrying (for network errors with 
+            #        proxies) we should have a self._runAptInImage() 
+            for i in range(3):
+                ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install", "-y",basepkg]+additional_base_pkgs)
+            assert ret == 0
+        else:
+            dst_clonename = '/tmp/apt-clone.tgz'
+            self._copyToImage(aptclone, dst_clonename)
+            ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive", "apt-get",
+                                    "install", "-y", "apt-clone"])
+            assert ret == 0
+            print "Restoring clone from %s" % aptclone
+            ret = self._runInImage(['DEBIAN_FRONTEND=noninteractive',
+                                    'apt-clone', 'restore', dst_clonename])
+            # FIXME: what action should be taken when a package failed
+            #        to restore?
+            if ret != 0:
+                print "WARNING: Some packages failed to restore. Continuing anyway!"
+            #assert ret == 0
 
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")

@@ -29,6 +29,7 @@ blacklist = ["speechd_config",
              "keyring",
              "invest",
              "Onboard",
+             "goocanvasmodule.so",
              ]
 
 def get_module_from_path(path):
@@ -82,10 +83,13 @@ def py_module_filter(pymodule):
 if __name__ == "__main__":
     #logging.basicConfig(level=logging.DEBUG)
 
-    old_modules = set(filter(py_module_filter, os.listdir(OLD_BASEPATH)))
-    new_modules = set(filter(py_module_filter, os.listdir(NEW_BASEPATH)))
-    print "Available for the old version, but *not* the new: %s\n" % (
-        ", ".join(old_modules - new_modules))
+    # Only compare if old and new paths exists
+    # When previous version of python is dropped then only new exists
+    if os.path.exists(OLD_BASEPATH) and os.path.exists(NEW_BASEPATH):
+        old_modules = set(filter(py_module_filter, os.listdir(OLD_BASEPATH)))
+        new_modules = set(filter(py_module_filter, os.listdir(NEW_BASEPATH)))
+        print "Available for the old version, but *not* the new: %s\n" % (
+            ", ".join(old_modules - new_modules))
 
     res = True
     # FIXME: instead os os.listdir() use os.walk() to catch subdirs

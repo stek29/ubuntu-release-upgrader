@@ -1390,8 +1390,7 @@ class DistUpgradeController(object):
                 "%s-updates" % self.fromDist in entry.dist and
                 not entry.uri.startswith("http://security.ubuntu.com") and
                 not entry.uri.startswith("http://archive.ubuntu.com") ):
-                # FIXME: this will have to be -updates eventually
-                new_line = "deb %s %s-proposed main\n" % (entry.uri, self.fromDist)
+                new_line = "deb %s %s-updates main\n" % (entry.uri, self.fromDist)
                 if not new_line in lines:
                     lines += new_line
             # FIXME: do we really need "dumb" mode?

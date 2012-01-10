@@ -756,10 +756,9 @@ class DistUpgradeController(object):
             logging.error("Repository information invalid after updating (we broke it!)")
             self._view.error(_("Repository information invalid"),
                              _("Upgrading the repository information "
-                               "resulted in a invalid file. Please "
-                               "report this as a bug using the command "
-                               "'ubuntu-bug update-manager' in a "
-                               "terminal."))
+                               "resulted in a invalid file so a bug "
+                               "reporting process is being started."))
+            subprocess.Popen(["apport-bug", "update-manager"])
             return False
 
         if self.sources_disabled:
@@ -1090,10 +1089,10 @@ class DistUpgradeController(object):
                         "will run now (dpkg --configure -a).")
                 if not self._partialUpgrade:
                     if not run_apport():
-                        msg += _("\n\nPlease report this bug using the command "
-                                 "'ubuntu-bug update-manager' in a terminal and "
-                                 "include the files in /var/log/dist-upgrade/ "
-                                 "in the bug report.\n"
+                        msg += _("\n\nPlease report this bug in a browser at "
+                                 "http://bugs.launchpad.net/ubuntu/+source/update-manager/+filebug "
+                                 "and attach the files in /var/log/dist-upgrade/ "
+                                 "to the bug report.\n"
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
@@ -1543,11 +1542,9 @@ class DistUpgradeController(object):
             logging.error("self.prepared() failed")
             self._view.error(_("Preparing the upgrade failed"),
                              _("Preparing the system for the upgrade "
-                               "failed. Please report this using the "
-                               "command 'ubuntu-bug update-manager' "
-                               "in a terminal and include the files "
-                               "in /var/log/dist-upgrade/ "
-                               "in the bug report."))
+                               "failed so a bug reporting process is"
+                               "being started."))
+            subprocess.Popen(["apport-bug", "update-manager"])
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -1564,12 +1561,9 @@ class DistUpgradeController(object):
                                    "The upgrade will abort now and restore "
                                    "the original system state.\n"
                                    "\n"
-                                   "Please report this as a bug "
-                                   "using the command "
-                                   "'ubuntu-bug update-manager' in a "
-                                   "terminal and include the files in "
-                                   "/var/log/dist-upgrade/ "
-                                   "in the bug report."))
+                                   "Additionally, a bug reporting process is "
+                                   "being started."))
+                subprocess.Popen(["apport-bug", "update-manager"])
                 self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
@@ -1625,16 +1619,14 @@ class DistUpgradeController(object):
                 #        but we need to be careful to not duplicate them
                 #        (i.e. the error here could be something else than
                 #        missing sources entries but network errors etc)
-                logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg) 
+                logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg)
                 self._view.error(_("Invalid package information"),
                                  _("After your package information was "
                                    "updated the essential package '%s' can "
-                                   "not be found anymore.\n"
-                                   "This indicates a serious error, please "
-                                   "report this bug using the command "
-                                   "'ubuntu-bug update-manager' in a terminal "
-                                   "and include the files in /var/log/dist-upgrade/ "
-                                   "in the bug report.") % pkg)
+                                   "not be found anymore so "
+                                   "a bug reporting process is being "
+                                   "started." % pkg)
+                subprocess.Popen(["apport-bug", "update-manager"])
                 self.abort()
 
         # calc the dist-upgrade and see if the removals are ok/expected

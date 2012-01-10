@@ -3,7 +3,9 @@
 from distutils.core import setup, Extension
 import glob
 import os
-from DistUtilsExtra.command import *
+
+from DistUtilsExtra.command import (
+    build_extra, build_i18n, build_help, build_icons)
 
 
 disabled = []

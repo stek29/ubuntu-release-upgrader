@@ -408,7 +408,7 @@ def is_port_already_listening(port):
     """ check if the current system is listening on the given tcp port """
     # index in the line
     INDEX_LOCAL_ADDR = 1
-    INDEX_REMOTE_ADDR = 2
+    #INDEX_REMOTE_ADDR = 2
     INDEX_STATE = 3
     # state (st) that we care about
     STATE_LISTENING = '0A'

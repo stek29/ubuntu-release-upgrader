@@ -14,8 +14,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
-
 import computerjanitor
 import apt
 
@@ -37,7 +35,7 @@ class DebPlugin(computerjanitor.Plugin):
         try:
             self.app.apt_cache.commit(apt.progress.text.AcquireProgress(),
                                       apt.progress.base.InstallProgress())
-        except Exception, e: # pragma: no cover
+        except Exception: # pragma: no cover
             raise
         finally:
             self.app.refresh_apt_cache()

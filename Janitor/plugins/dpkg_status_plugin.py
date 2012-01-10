@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from apt_pkg import TagFile, PkgSystemLock, PkgSystemUnLock
+from apt_pkg import TagFile
 import subprocess
 import logging
 

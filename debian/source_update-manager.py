@@ -4,7 +4,8 @@
 Author: Brian Murray <brian@ubuntu.com>
 '''
 
-from apport.hookutils import *
+from apport.hookutils import (
+    attach_gsettings_package, attach_root_command_outputs, attach_file_if_exists)
 
 
 def add_info(report, ui):

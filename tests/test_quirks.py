@@ -171,6 +171,7 @@ class TestQuirks(unittest.TestCase):
         quirks = DistUpgradeQuirks(controller, config)
         quirks._pokeScreensaver()
         res = quirks._stopPokeScreensaver()
+        res # pyflakes
 
 if __name__ == "__main__":
     import logging

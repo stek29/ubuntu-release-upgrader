@@ -436,7 +436,6 @@ class DistUpgradeQuirks(object):
     def oneiricStartUpgrade(self):
         logging.debug("oneiric StartUpgrade quirks")
         # fix grub issue
-        cache = self.controller.cache
         if (os.path.exists("/usr/sbin/update-grub") and
             not os.path.exists("/etc/kernel/postinst.d/zz-update-grub")):
             # create a version of zz-update-grub to avoid depending on
@@ -468,17 +467,6 @@ class DistUpgradeQuirks(object):
             if md5(open(ap).read()).hexdigest() == md5sum:
                 logging.debug("removing bad script '%s'" % ap)
                 os.unlink(ap)
-    def dapperStartUpgrade(self):
-        # check theme, crux is known to fail badly when upgraded 
-        # from dapper
-        if "DISPLAY" in os.environ and "SUDO_USER" in os.environ:
-            out = subprocess.Popen(["sudo","-u", os.environ["SUDO_USER"],
-                                    "./theme-switch-helper.py", "-g"],
-                                    stdout=subprocess.PIPE).communicate()[0]
-            if "Crux" in out:
-                subprocess.call(["sudo","-u", os.environ["SUDO_USER"],
-                                    "./theme-switch-helper.py", "--defaults"])
-        return True
 
     # helpers
     def _get_pci_ids(self):
@@ -653,7 +641,7 @@ class DistUpgradeQuirks(object):
         """
         if self.arch == "armel":
             if not self._checkArmCPU():
-                res = self._view.error(_("No ARMv6 CPU"),
+                self._view.error(_("No ARMv6 CPU"),
                     _("Your system uses an ARM CPU that is older "
                       "than the ARMv6 architecture. "
                       "All packages in karmic were built with "

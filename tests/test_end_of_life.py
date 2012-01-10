@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from gi.repository import GLib, Gtk
+from gi.repository import Gtk, GObject
 
 import mock
 import unittest

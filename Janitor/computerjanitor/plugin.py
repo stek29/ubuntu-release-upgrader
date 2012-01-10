@@ -21,7 +21,6 @@ import os
 
 import computerjanitor
 _ = computerjanitor.setup_gettext()
-import logging
 
 class Plugin(object):
 

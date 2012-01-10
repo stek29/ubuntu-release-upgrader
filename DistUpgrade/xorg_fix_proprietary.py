@@ -4,7 +4,6 @@
 # transition from broken proprietary drivers to the free ones
 #
 
-import apt
 import sys
 import os
 import os.path

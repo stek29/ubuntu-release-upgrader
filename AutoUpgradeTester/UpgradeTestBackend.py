@@ -138,7 +138,7 @@ class UpgradeTestBackend(object):
         output = ""
         testsuite_name = ''
         res = [x['result'] for x in results]
-        pass_count = res.count('pass')
+        #pass_count = res.count('pass')
         fail_count = res.count('fail')
         error_count = res.count('error')
         total_count = len(res)

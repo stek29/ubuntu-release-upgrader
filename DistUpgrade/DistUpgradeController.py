@@ -34,7 +34,6 @@ import glob
 import time
 import copy
 import ConfigParser
-#from stat import *
 from utils import (country_mirror, 
                    url_downloadable, 
                    check_and_fix_xbit, 

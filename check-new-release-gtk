@@ -124,7 +124,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # check again in a week
     next_check = time.time() + 7*24*60*60
     client = Gio.Settings("com.ubuntu.update-manager")
-    client.set_int("release-check-time", next_check)
+    client.set_int("release-check-time", int(next_check))
     Gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):
@@ -150,6 +150,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def _on_load_finished(self, view, frame):
     self.window_main.show_all()
+    # hide redundant release notes button
+    self.linkbutton_release_notes.hide()
 
   def timeout(self, user_data):
     if self.new_dist is None:

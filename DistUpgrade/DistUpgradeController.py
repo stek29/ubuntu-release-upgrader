@@ -1624,7 +1624,7 @@ class DistUpgradeController(object):
                                    "updated the essential package '%s' can "
                                    "not be found anymore so "
                                    "a bug reporting process is being "
-                                   "started." % pkg)
+                                   "started.") % pkg)
                 subprocess.Popen(["apport-bug", "update-manager"])
                 self.abort()
 

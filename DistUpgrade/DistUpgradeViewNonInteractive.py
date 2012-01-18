@@ -59,7 +59,8 @@ class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self, logdir):
         InstallProgress.__init__(self)
         logging.debug("setting up environ for non-interactive use")
-        os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+        if not os.environ.has_key("DEBIAN_FRONTEND"):
+            os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         os.environ["RELEASE_UPRADER_NO_APPORT"] = "1"
         self.config = DistUpgradeConfig(".")

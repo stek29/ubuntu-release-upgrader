@@ -463,7 +463,7 @@ iface eth0 inet static
                     entry.type == "deb"):
                     print "adding %s to mirrors" % entry.uri
                     self._runInImage(["echo '%s' >> /upgrade-tester/new_mirrors.cfg" % entry.uri])
-                    
+
             # upgrade *before* the regular upgrade runs 
             if self.config.getWithDefault("NonInteractive", "AddRepoUpgradeImmediately", False):
                 self._runInImage(["apt-get", "update"])
@@ -477,12 +477,17 @@ iface eth0 inet static
         # check if we have a bzr checkout dir to run against or
         # if we should just run the normal upgrader
         cmd_prefix=[]
+        debconf_log = self.config.getWithDefault(
+            'NonInteractive', 'DebconfLog', '')
+        if debconf_log:
+            cmd_prefix=['export DEBIAN_FRONTEND=editor EDITOR="cat>>%s";' % debconf_log]
+            print "Logging debconf prompts to %s" % debconf_log
         if not self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
             print "Disabling ForceOverwrite"
-            cmd_prefix = ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]
+            cmd_prefix += ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]
         if (os.path.exists(self.upgradefilesdir) and
-            self.config.getWithDefault("NonInteractive", 
-                                       "UseUpgraderFromBzr", 
+            self.config.getWithDefault("NonInteractive",
+                                       "UseUpgraderFromBzr",
                                        True)):
             print "Using ./DistUpgrade/* for the upgrade"
             self._copyUpgraderFilesFromBzrCheckout()

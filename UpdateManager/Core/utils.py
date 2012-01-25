@@ -44,8 +44,8 @@ from urlparse import urlsplit
 class ExecutionTime(object):
     """
     Helper that can be used in with statements to have a simple
-    measure of the timming of a particular block of code, e.g.
-    with ExecutinTime("db flush"):
+    measure of the timing of a particular block of code, e.g.
+    with ExecutionTime("db flush"):
         db.flush()
     """
     def __init__(self, info=""):

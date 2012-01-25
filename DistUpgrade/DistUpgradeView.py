@@ -370,7 +370,7 @@ class DistUpgradeView(object):
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
           msg += "\n\n%s" % _( "Fetching and installing the upgrade "
                                "can take several hours. Once the download "
-                               "has finished, the process cannot be cancelled.")
+                               "has finished, the process cannot be canceled.")
         # Show an error if no actions are planned
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
           # FIXME: this should go into DistUpgradeController

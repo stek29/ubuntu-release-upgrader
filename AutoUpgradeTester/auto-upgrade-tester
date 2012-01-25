@@ -193,6 +193,11 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
         print "Logs can be found here:"
         for n in ["bootstrap.log", "main.log", "apt.log"]:
             print " %s/%s" % (backend.resultdir, n)
+
+        time_ended = datetime.datetime.now()
+        print "%s log ended." % time_ended
+        print "Duration: %s" % (time_ended - time_started)
+
         # give the output time to settle and kill the daemon
         time.sleep(2)
         if out.is_alive():

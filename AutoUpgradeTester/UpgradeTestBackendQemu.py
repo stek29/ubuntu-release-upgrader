@@ -305,11 +305,21 @@ iface eth0 inet static
                 return False
             pkgs = pkgs[CMAX+1:]
 
+        # Copy additional data to the image that can the be used by the
+        # post bootstrap script
+        # Data is copied to /upgrade-tester/data
+        # Value is a list of files separated by commas
+        datadir = '/upgrade-tester/data'
+        self._runInImage(["mkdir", "-p", datadir])
+        if self.config.has_option("NonInteractive", "PostBootstrapData"):
+            data = self.config.get("NonInteractive", "PostBootstrapData")
+            for datafile in data.split(','):
+                self._copyToImage(datafile, datadir)
+
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
             print "have PostBootstrapScript: %s" % script
             if os.path.exists(script):
-                self._runInImage(["mkdir","/upgrade-tester"])
                 self._copyToImage(script, "/upgrade-tester")
                 self._copyToImage(glob.glob(os.path.dirname(
                             self.profile)+"/*.cfg"), "/upgrade-tester")

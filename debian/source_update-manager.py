@@ -17,19 +17,27 @@ def add_info(report, ui):
     if response:
         report.setdefault('Tags', 'dist-upgrade')
         report['Tags'] += ' dist-upgrade'
-        attach_root_command_outputs(report,
-            {'VarLogDistupgradeAptclonesystemstatetargz': 'cat /var/log/dist-upgrade/apt-clone_system_state.tar.gz',
-             'VarLogDistupgradeAptlog': 'cat /var/log/dist-upgrade/apt.log',
-             'VarLogDistupgradeApttermlog': 'cat /var/log/dist-upgrade/apt-term.log',
-             'VarLogDistupgradeHistorylog': 'cat /var/log/dist-upgrade/history.log',
-             'VarLogDistupgradeLspcitxt': 'cat /var/log/dist-upgrade/lspci.txt',
-             'VarLogDistupgradeMainlog': 'cat /var/log/dist-upgrade/main.log',
-             'VarLogDistupgradeSystemstatetargz': 'cat /var/log/dist-upgrade/system_state.tar.gz',
-             'VarLogDistupgradeTermlog': 'cat /var/log/dist-upgrade/term.log'})
+        attach_file_if_exists(report, '/var/log/dist-upgrade/apt-clone_system_state.tar.gz',
+            'VarLogDistupgradeAptclonesystemstate.tar.gz')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/apt.log',
+            'VarLogDistupgradeAptlog')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/apt-term.log',
+            'VarLogDistupgradeApttermlog')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/history.log',
+            'VarLogDistupgradeAptHistorylog')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/lspci.txt',
+            'VarLogDistupgradeLspcitxt')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/main.log',
+            'VarLogDistupgradeMainlog')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/system_state.tar.gz',
+            'VarLogDistupgradeSystemstate.tar.gz')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/term.log',
+            'VarLogDistupgradeTermlog')
     elif response is None or response is False:
         attach_file_if_exists(report, '/var/log/apt/history.log',
             'DpkgHistoryLog.txt')
+        attach_file_if_exists(report, '/var/log/apt/term.log',
+            'DpkgTerminalLog.txt')
         attach_root_command_outputs(report,
-            {'DpkgTerminalLog.txt': 'cat /var/log/apt/term.log',
-             'CurrentDmesg.txt': 'dmesg | comm -13 --nocheck-order /var/log/dmesg -'})
+            {'CurrentDmesg.txt': 'dmesg | comm -13 --nocheck-order /var/log/dmesg -'})
         report["Aptdaemon"] = recent_syslog(re.compile("AptDaemon"))

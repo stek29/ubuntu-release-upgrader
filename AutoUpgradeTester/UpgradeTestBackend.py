@@ -138,7 +138,6 @@ class UpgradeTestBackend(object):
         output = ""
         testsuite_name = ''
         res = [x['result'] for x in results]
-        #pass_count = res.count('pass')
         fail_count = res.count('fail')
         error_count = res.count('error')
         total_count = len(res)
@@ -149,7 +148,8 @@ class UpgradeTestBackend(object):
 
         for result in results:
             output += """<testcase classname="%s" name="%s" time="%.3f">\n""" % (
-                self.profilename, result['name'], result['time'])
+                self.profilename + '.PostUpgradeTest',
+                result['name'][:-3], result['time'])
             if 'fail' in result['result']:
                 output += """<failure type="%s">%s\n</failure>\n""" % (
                     'exception', escape(result['message']))

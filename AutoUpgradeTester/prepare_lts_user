@@ -1,0 +1,116 @@
+#!/bin/sh
+# This script sets some popular user configuration settings in an Ubuntu 10.04
+# LTS GNOME system. Run this, then upgrade to 12.04 LTS (or later), and run
+# test_lts_upgrade_user.py to confirm that settings were migrated properly. In
+# particular this checks for gconf -> gsettings migration (and sometimes
+# changing the format of the values) for popular settings, as well as custom
+# panel/desktop launchers.
+#
+# You need to run this script in a fully running GNOME desktop session.
+
+#
+# (C) 2012 Canonical Ltd.
+# Author: Martin Pitt <martin.pitt@ubuntu.com>
+# License: GPL v2 or higher
+
+set -e
+
+echo "Setting custom background..."
+cp `ls /usr/share/backgrounds/*.jpg | head -n1` $HOME/mybackground.jpg
+gconftool -s /desktop/gnome/background/picture_filename --type string $HOME/mybackground.jpg
+
+echo "Setting Radiance theme..."
+gconftool -s /desktop/gnome/interface/gtk_theme --type string Radiance
+
+echo "Adding custom panel launchers..."
+# add launcher for system desktop file (gedit)
+gconftool -s /apps/panel/objects/object_0/menu_path --type string 'applications:/'
+gconftool -s /apps/panel/objects/object_0/launcher_location --type string '/usr/share/applications/gedit.desktop'
+gconftool -s /apps/panel/objects/object_0/bonobo_iid --type string ''
+gconftool -s /apps/panel/objects/object_0/custom_icon --type string ''
+gconftool -s /apps/panel/objects/object_0/locked --type bool false
+gconftool -s /apps/panel/objects/object_0/panel_right_stick --type bool false
+gconftool -s /apps/panel/objects/object_0/object_type --type string 'launcher-object'
+gconftool -s /apps/panel/objects/object_0/use_custom_icon --type bool false
+gconftool -s /apps/panel/objects/object_0/tooltip --type string ''
+gconftool -s /apps/panel/objects/object_0/toplevel_id --type string 'top_panel_screen0'
+gconftool -s /apps/panel/objects/object_0/action_type --type string 'lock'
+gconftool -s /apps/panel/objects/object_0/use_menu_path --type bool false
+gconftool -s /apps/panel/objects/object_0/position --type int 60
+gconftool -s /apps/panel/objects/object_0/attached_toplevel_id --type string ''
+
+# add launcher for custom desktop file
+mkdir -p $HOME/.gnome2/panel2.d/default/launchers/
+mkdir -p $HOME/Desktop
+
+cat <<EOF > $HOME/.gnome2/panel2.d/default/launchers/echo-1.desktop
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Icon[en_US]=partner
+Name[en_US]=hello
+Exec=echo hello
+Name=hello
+Icon=gnome-panel-launcher
+EOF
+chmod 755 $HOME/.gnome2/panel2.d/default/launchers/echo-1.desktop
+gconftool -s /apps/panel/objects/object_1/menu_path --type string 'applications:/'
+gconftool -s /apps/panel/objects/object_1/launcher_location --type string 'echo-1.desktop'
+gconftool -s /apps/panel/objects/object_1/bonobo_iid --type string ''
+gconftool -s /apps/panel/objects/object_1/custom_icon --type string ''
+gconftool -s /apps/panel/objects/object_1/locked --type bool false
+gconftool -s /apps/panel/objects/object_1/panel_right_stick --type bool false
+gconftool -s /apps/panel/objects/object_1/object_type --type string 'launcher-object'
+gconftool -s /apps/panel/objects/object_1/use_custom_icon --type bool false
+gconftool -s /apps/panel/objects/object_1/tooltip --type string ''
+gconftool -s /apps/panel/objects/object_1/toplevel_id --type string 'top_panel_screen0'
+gconftool -s /apps/panel/objects/object_1/action_type --type string 'lock'
+gconftool -s /apps/panel/objects/object_1/use_menu_path --type bool false
+gconftool -s /apps/panel/objects/object_1/position --type int 90
+gconftool -s /apps/panel/objects/object_1/attached_toplevel_id --type string ''
+
+# add the two new launchers to the panel object list
+old_list=`gconftool -g /apps/panel/general/object_id_list | sed 's/]$//'`
+gconftool -s /apps/panel/general/object_id_list --type list --list-type string "$old_list,object_0,object_1]"
+
+echo "Adding custom desktop launchers ..."
+cat <<EOF > $HOME/Desktop/gucharmap.desktop
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Character Map
+Comment=Insert special characters into documents
+Exec=gucharmap
+Icon=accessories-character-map
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Utility;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=gucharmap
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Version=2.30.0
+StartupNotify=true
+X-Ubuntu-Gettext-Domain=gucharmap
+EOF
+chmod 755 $HOME/Desktop/gucharmap.desktop
+
+cat <<EOF > $HOME/Desktop/termcalc.desktop
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Icon[en_US]=/usr/share/icons/gnome/scalable/apps/calc.svg
+Name[en_US]=termcalc
+Exec=bc -l
+Name=termcalc
+Icon=/usr/share/icons/gnome/scalable/apps/calc.svg
+EOF
+chmod 755 $HOME/Desktop/termcalc.desktop
+
+echo "Setting custom keyboard layouts..."
+gconftool -s /desktop/gnome/peripherals/keyboard/kbd/layouts --type list --list-type string "[us,de	nodeadkeys,gb,gb	dvorak]"
+
+echo 'Success. Now upgrade to 12.04 LTS and run test_lts_upgrade_user.py'

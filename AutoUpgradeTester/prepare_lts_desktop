@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Setup Autologin
+cat > /etc/gdm/custom.conf <<EOF
+
+[daemon]
+TimedLoginEnable=false
+AutomaticLoginEnable=true
+TimedLogin=ubuntu
+AutomaticLogin=ubuntu
+TimedLoginDelay=30
+DefaultSession=gnome
+EOF
+
+# Execute User setup script
+USERSETUP="/upgrade-tester/data/prepare_lts_user"
+TARGETUSER="ubuntu"
+
+if [ -f "$USERSETUP" ]; then
+    chmod +x $USERSETUP
+    sudo -i -u $TARGETUSER sh $USERSETUP
+fi

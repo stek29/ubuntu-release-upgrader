@@ -23,6 +23,14 @@ rm -rf base-installer*
 if [ ! -d $BASEDIR/archives/partial ]; then
     mkdir -p $BASEDIR/archives/partial
 fi
+if [ ! -d $BASEDIR/preferences.d ]; then
+    mkdir -p $BASEDIR/preferences.d
+fi
+
+cp /etc/apt/trusted.gpg $BASEDIR/
+
+# create status file
+touch $BASEDIR/status
 
 # put right sources.list in
 echo "deb-src http://archive.ubuntu.com/ubuntu $DIST main" > $BASEDIR/sources.list

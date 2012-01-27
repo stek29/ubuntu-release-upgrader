@@ -12,6 +12,10 @@ set -e
 
 # update apt_btrfs_snapshot.py copy, this nees a installed
 # apt-btrfs-snapshot on the build machine
+if [ ! -e /usr/share/pyshared/apt_btrfs_snapshot.py ]; then
+    echo "please sudo apt-get install apt-btrfs-snapshot"
+    exit 1
+fi
 cp /usr/share/pyshared/apt_btrfs_snapshot.py DistUpgrade
 
 # (auto) generate the required html

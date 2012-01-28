@@ -679,6 +679,11 @@ class MyCache(apt.Cache):
             # the withResolverLog decorator
             self._startAptResolverLog()            
             logging.error("Dist-upgrade failed: '%s'", e)
+            if self.broken_count > 0:
+                logging.error("Broken packages:")
+                for pkg in self:
+                    if pkg.is_inst_broken:
+                        logging.error("  %s" % pkg.name)
             return False
         # would be nice to be able to use finally: here, but we need
         # to run on python2.4 too 

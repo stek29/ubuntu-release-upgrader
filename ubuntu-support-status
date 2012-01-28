@@ -5,7 +5,6 @@ import locale
 import datetime
 import os
 import subprocess
-import sys
 import gettext
 
 from apt.utils import *
@@ -42,7 +41,6 @@ def get_maintenance_status(cache, pkgname, supported_tag):
         raise Exception("No date tag found")
     release_date = datetime.datetime.fromtimestamp(time_t)
     now = datetime.datetime.now()
-    release_age = (now - release_date).days
     
     # mvo: we do not define the end date very precisely
     #      currently this is why it will just display a end

@@ -20,7 +20,9 @@
 #  USA
 
 from gettext import gettext as _
+from gettext import ngettext
 from stat import (S_IMODE, ST_MODE, S_IXUSR)
+from math import ceil
 
 import apt_pkg
 apt_pkg.init_config()
@@ -387,15 +389,12 @@ def humanize_size(bytes):
     """
     Convert a given size in bytes to a nicer better readable unit
     """
-    if bytes == 0:
-        # TRANSLATORS: download size is 0
-        return _("0 kB")
-    elif bytes < 1000:
-        # TRANSLATORS: download size of very small updates
-        return _("1 kB")
-    elif bytes < 1000 * 1000:
+
+    if bytes < 1000 * 1000:
+        # to have 0 for 0 bytes, 1 for 0-1000 bytes and for 1 and above round up
+        size_in_kb = int(ceil(bytes/float(1000)));
         # TRANSLATORS: download size of small updates, e.g. "250 kB"
-        return locale.format_string(_("%.0f kB"), bytes/1000)
+        return ngettext("%(size).0f kB", "%(size).0f kB", size_in_kb) % { "size" : size_in_kb }
     else:
         # TRANSLATORS: download size of updates, e.g. "2.3 MB"
         return locale.format_string(_("%.1f MB"), bytes / 1000.0 / 1000.0)

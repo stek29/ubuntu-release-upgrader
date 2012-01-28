@@ -99,6 +99,8 @@ def setup_logging(options, config):
     # do not overwrite the default main.log
     if options.partial:
         fname += ".partial"
+    with open(fname, "a"):
+        pass
     logging.basicConfig(level=logging.DEBUG,
                         filename=fname,
                         format='%(asctime)s %(levelname)s %(message)s',

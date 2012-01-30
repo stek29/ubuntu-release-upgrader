@@ -14,6 +14,7 @@ import time
 import tempfile
 import atexit
 import apt_pkg
+import fcntl
 
 from DistUpgrade.utils import is_port_already_listening
 
@@ -108,8 +109,10 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         self.image = os.path.join(imagedir, "test-image.%s" % self.profilename)
         # make ssh login possible (localhost 54321) available
         ssh_port = int(self.config.getWithDefault("KVM","SshPort","54321"))
-        while is_port_already_listening(ssh_port):
-            ssh_port += 1
+        (self.ssh_lock, ssh_port) = self.getFreePort(port_base = ssh_port)
+        if not self.ssh_lock:
+            print "ERROR: Couldn't allocate SSH port. Exiting!"
+            sys.exit(1)
         self.ssh_port = str(ssh_port)
         print "using ssh port: %s" % self.ssh_port
         self.ssh_hostname = "localhost"
@@ -117,12 +120,14 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
         # vnc port/display
         VNC_BASE_PORT = 5900
-        vncport = int(self.config.getWithDefault("KVM","VncNum", "0"))
-        while is_port_already_listening(VNC_BASE_PORT + vncport):
-            vncport += 1
+        vncport = int(self.config.getWithDefault("KVM","VncNum", "0")) + VNC_BASE_PORT
+        (self.vnc_lock, vncport) = self.getFreePort(port_base = vncport)
+        if not self.vnc_lock:
+            print "ERROR: Couldn't allocate VNC port. Exiting!"
+            sys.exit(1)
         print "using VncNum: %s" % vncport
         self.qemu_options.append("-vnc")
-        self.qemu_options.append("localhost:%s" % str(vncport))
+        self.qemu_options.append("localhost:%s" % str(vncport - VNC_BASE_PORT))
 
         # make the memory configurable
         mem = self.config.getWithDefault("KVM","VirtualRam","1536")
@@ -136,8 +141,19 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         # register exit handler to ensure that we quit kvm on exit
         atexit.register(self.stop)
 
+    def __del__(self):
+        """
+        Destructor
+        Clean-up lockfiles
+        """
+        for lock in (self.ssh_lock, self.vnc_lock):
+            lockpath = lock.name
+            print "Releasing lock: %s" % lockpath
+            lock.close()
+            os.unlink(lockpath)
+
     def genDiff(self):
-        """ 
+        """
         generate a diff that compares a fresh install to a upgrade.
         ideally that should be empty
         Ensure that we always run this *after* the regular upgrade was
@@ -519,14 +535,42 @@ iface eth0 inet static
         print "Shuting down the VM"
         self.stop()
         return (ret == 0)
-        
+
+    def getFreePort(self, port_base=1025, prefix='auto-upgrade-tester'):
+        """ Find a free port and lock it when found
+        :param port_base: Base port number.
+        :param prefix: Prefix name for the lock
+        :return: (lockfile, portnumber)
+        """
+
+        lockdir = '/var/lock'
+
+        for port_inc in range(0, 100):
+            port_num = port_base + port_inc
+            if is_port_already_listening(port_num):
+                print "Port %d already in use. Skipping!" % port_num
+                continue
+
+            lockfilepath = os.path.join(lockdir, '%s.%d.lock' % (prefix, port_num))
+            if not os.path.exists(lockfilepath):
+                open(lockfilepath, 'w').close()
+            lock = open(lockfilepath, 'r+')
+            try:
+                fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
+                return (lock, port_num)
+            except IOError:
+                print "Port %d already locked. Skipping!" % port_num
+                lock.close()
+
+        print "No free port found. Aborting!"
+        return (None, None)
 
 if __name__ == "__main__":
-    
+
     # FIXME: very rough proof of conecpt, unify with the chroot
     #        and automatic-upgrade code
     # see also /usr/sbin/qemu-make-debian-root
-    
+
     qemu = UpgradeTestBackendQemu(sys.argv[1],".")
     #qemu.bootstrap()
     #qemu.start()

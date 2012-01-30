@@ -12,7 +12,9 @@ RESULT_DIR = '/tmp'
 
 # Prompts in this list won't generate a test failure
 # i.e WHITELIST = ['libraries/restart-without-asking']
-WHITELIST = []
+WHITELIST = [
+    'glibc/restart-services',
+    'libraries/restart-without-asking' ]
 
 def run_test(logfile, resultdir):
     """ Run the test and slice debconf log

@@ -47,9 +47,14 @@ from missing_package_cruft import MissingPackageCruft
 from exc import ComputerJanitorException as Exception, UnimplementedMethod
 from plugin import Plugin, PluginManager
 
+# reference it here to make pyflakes happy
+Cruft
+FileCruft
+PackageCruft
+Exception
+UnimplementedMethod
+MissingPackageCruft
+Plugin
+PluginManager
 
-# The following is a kludge to silence python-apt's warning about
-# the API being unstable.
-import warnings
-warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
-import apt
+

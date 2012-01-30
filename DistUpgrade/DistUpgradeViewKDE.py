@@ -19,8 +19,12 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt4.QtCore import QUrl, Qt, SIGNAL, QTimer
+from PyQt4.QtGui import (
+    QDesktopServices, QDialog, QPixmap, QTreeWidgetItem, QMessageBox, 
+    QApplication, QTextEdit, QTextOption, QTextCursor, QPushButton, 
+    QWidget, QIcon, QHBoxLayout, QLabel
+    )
 from PyQt4 import uic
 
 import sys
@@ -37,7 +41,7 @@ import shutil
 
 import pty
 
-from DistUpgradeApport import *
+from DistUpgradeApport import run_apport, apport_crash
 
 from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 

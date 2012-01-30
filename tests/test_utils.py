@@ -9,9 +9,23 @@ import unittest
 sys.path.insert(0, "../")
 from UpdateManager.Core.utils import (is_child_of_process_name, 
                                       get_string_with_no_auth_from_source_entry,
+                                      humanize_size,
                                       estimate_kernel_size_in_boot)
 
 class TestUtils(unittest.TestCase):
+
+    def test_humanize_size(self):
+        # humanize size is a bit funny, it rounds up to kB as the meaningful
+        # unit for users
+        self.assertEqual(humanize_size(1000), "1 kB")
+        self.assertEqual(humanize_size(10), "1 kB")
+        self.assertEqual(humanize_size(1200), "2 kB")
+        # but not for MB as well
+        self.assertEqual(humanize_size(1200*1000), "1.2 MB")
+        self.assertEqual(humanize_size(1478*1000), "1.5 MB")
+        # and we don't go to Gb  just yet (as its not really needed
+        # in a upgrade context most of the time
+        self.assertEqual(humanize_size(1000*1000*1000), "1000.0 MB")
 
     def test_estimate_kernel_size(self):
         estimate = estimate_kernel_size_in_boot()

@@ -139,6 +139,8 @@ class FetchProgress(apt.progress.base.AcquireProgress):
       self.eta = ((self.total_bytes - self.current_bytes) /
                   float(self.current_cps))
     return True
+  def isDownloadSpeedEstimated(self):
+    return (self.est_speed != 0)
   def estimatedDownloadTime(self, requiredDownload):
     """ get the estimated download time """
     if self.est_speed == 0:
@@ -367,10 +369,19 @@ class DistUpgradeView(object):
           msg += _("\n\nYou have to download a total of %s. ") %\
               apt_pkg.SizeToStr(downloadSize)
           msg += self.getFetchProgress().estimatedDownloadTime(downloadSize)
-        if (pkgs_upgrade + pkgs_inst + pkgs_remove) > 100:
-          msg += "\n\n%s" % _( "Fetching and installing the upgrade "
-                               "can take several hours. Once the download "
-                               "has finished, the process cannot be canceled.")
+        if ((pkgs_upgrade + pkgs_inst) > 0) and ((pkgs_upgrade + pkgs_inst + pkgs_remove) > 100):
+          if self.getFetchProgress().isDownloadSpeedEstimated():
+            msg += "\n\n%s" % _( "Installing the upgrade "
+                                 "can take several hours. Once the download "
+                                 "has finished, the process cannot be canceled.")
+          else:
+            msg += "\n\n%s" % _( "Fetching and installing the upgrade "
+                                 "can take several hours. Once the download "
+                                 "has finished, the process cannot be canceled.")
+        else:
+          if pkgs_remove > 100:
+            msg += "\n\n%s" % _( "Removing the packages "
+                                 "can take several hours. ")
         # Show an error if no actions are planned
         if (pkgs_upgrade + pkgs_inst + pkgs_remove) < 1:
           # FIXME: this should go into DistUpgradeController

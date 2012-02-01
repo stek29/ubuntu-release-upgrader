@@ -617,7 +617,8 @@ class MyCache(apt.Cache):
         t = threading.Thread(target=self.updateGUI, args=(self.view, lock,))
         t.start()
         try:
-            self._apply_dselect_upgrade()
+            # mvo: disabled as it casues to many errornous installs
+            #self._apply_dselect_upgrade()
 
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)

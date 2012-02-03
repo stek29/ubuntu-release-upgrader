@@ -254,12 +254,6 @@ class DistUpgradeFetcherCore(object):
                     "with the network or with the server. "))
             self.cleanup()
             return
-        if not self.authenticate():
-            self.error(_("Authentication failed"),
-                  _("Authenticating the upgrade failed. There may be a problem "
-                    "with the network or with the server. "))
-            self.cleanup()
-            return
         if not self.extractDistUpgrader():
             self.error(_("Failed to extract"),
                   _("Extracting the upgrade failed. There may be a problem "

@@ -33,6 +33,8 @@ def add_info(report, ui):
             'VarLogDistupgradeSystemstate.tar.gz')
         attach_file_if_exists(report, '/var/log/dist-upgrade/term.log',
             'VarLogDistupgradeTermlog')
+        attach_file_if_exists(report, '/var/log/dist-upgrade/screenlog.0',
+            'VarLogDistupgradeScreenlog')
     elif response is None or response is False:
         attach_file_if_exists(report, '/var/log/apt/history.log',
             'DpkgHistoryLog.txt')

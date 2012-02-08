@@ -123,7 +123,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     logging.debug("ask me later")
     # check again in a week
     next_check = time.time() + 7*24*60*60
-    client = Gio.Settings("com.ubuntu.update-manager")
+    client = Gio.Settings("com.ubuntu.update-notifier")
     client.set_int("release-check-time", int(next_check))
     Gtk.main_quit()
 

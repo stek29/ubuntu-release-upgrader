@@ -63,7 +63,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def __init__(self, options):
     SimpleGtkbuilderApp.__init__(self, options.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "update-manager")
     self.new_dist = None
-    logging.debug("runnign with devel=%s proposed=%s" % (
+    logging.debug("running with devel=%s proposed=%s" % (
             options.devel_release, options.proposed_release))
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)

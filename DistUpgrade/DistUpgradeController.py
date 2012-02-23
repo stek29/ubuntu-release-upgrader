@@ -1541,7 +1541,7 @@ class DistUpgradeController(object):
             logging.error("self.prepared() failed")
             self._view.error(_("Preparing the upgrade failed"),
                              _("Preparing the system for the upgrade "
-                               "failed so a bug reporting process is"
+                               "failed so a bug reporting process is "
                                "being started."))
             subprocess.Popen(["apport-bug", "update-manager"])
             sys.exit(1)

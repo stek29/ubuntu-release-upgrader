@@ -494,12 +494,11 @@ class MyCache(apt.Cache):
         try:
             # get new detection module and use the modalises files
             # from within the release-upgrader
-            nv = NvidiaDetection(datadir="./modaliases/",
-                                 obsolete="./nvidia-obsolete.pkgs")
+            nv = NvidiaDetection(obsolete="./nvidia-obsolete.pkgs")
             #nv = NvidiaDetection()
             # check if a binary driver is installed now
             for oldDriver in nv.oldPackages:
-                if self.has_key(oldDriver) and self[oldDriver].is_installed:
+                if oldDriver in self and self[oldDriver].is_installed:
                     self.mark_remove(oldDriver, "old nvidia driver")
                     break
             else:
@@ -508,7 +507,7 @@ class MyCache(apt.Cache):
             # check which one to use
             driver = nv.selectDriver()
             logging.debug("nv.selectDriver() returned '%s'" % driver)
-            if not self.has_key(driver):
+            if not driver in self:
                 logging.warning("no '%s' found" % driver)
                 return False
             if not (self[driver].marked_install or self[driver].marked_upgrade):

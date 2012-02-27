@@ -12,6 +12,7 @@ import time
 import shutil
 import subprocess
 import apt_pkg
+apt_pkg.init()
 
 # main xorg.conf
 XORG_CONF="/etc/X11/xorg.conf"
@@ -157,7 +158,7 @@ if __name__ == "__main__":
     # now run the removeInputDevices() if we have a new xserver
     ver=subprocess.Popen(["dpkg-query","-W","-f=${Version}","xserver-xorg-core"], stdout=subprocess.PIPE).communicate()[0]
     logging.info("xserver-xorg-core version is '%s'" % ver)
-    if ver and apt_pkg.VersionCompare(ver, "2:1.5.0") > 0:
+    if ver and apt_pkg.version_compare(ver, "2:1.5.0") > 0:
         if not is_multiseat():
             remove_input_devices()
         else:

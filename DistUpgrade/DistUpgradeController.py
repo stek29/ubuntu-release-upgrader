@@ -43,6 +43,7 @@ from utils import (country_mirror,
                    get_string_with_no_auth_from_source_entry,
                    is_child_of_process_name)
 from string import Template
+from urlparse import urlsplit
 
 import DistUpgradeView
 from DistUpgradeCache import MyCache
@@ -172,7 +173,7 @@ class DistUpgradeController(object):
             self.valid_3p_mirrors = [pair[1] for pair in
                                      self.config.items('ThirdPartyMirrors')]
         # debugging
-        #apt_pkg.Config.set("DPkg::Options::","--debug=0077")
+        #apt_pkg.config.set("DPkg::Options::","--debug=0077")
 
         # apt cron job
         self._aptCronJobPerms = 0755
@@ -1350,8 +1351,14 @@ class DistUpgradeController(object):
         return True
 
     def isMirror(self, uri):
-        " check if uri is a known mirror "
-        uri = uri.rstrip("/")
+        """ check if uri is a known mirror """
+        # deal with username:password in a netloc
+        raw_uri = uri.rstrip("/")
+        scheme, netloc, path, query, fragment = urlsplit(raw_uri)
+        if "@" in netloc:
+            netloc = netloc.split("@")[1]
+        # construct new mirror url without the username/pw
+        uri = "%s://%s%s" % (scheme, netloc, path)
         for mirror in self.valid_mirrors:
             mirror = mirror.rstrip("/")
             if is_mirror(mirror, uri):

@@ -12,7 +12,7 @@ from DistUpgrade.DistUpgradeController import DistUpgradeController
 from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 import logging
 
-class testSourcesListUpdate(unittest.TestCase):
+class TestSourcesListUpdate(unittest.TestCase):
 
     testdir = os.path.abspath("./data-sources-list-test/")
 
@@ -109,7 +109,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
 deb http://ports.ubuntu.com/ubuntu-ports/ gutsy main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
 
-deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted universe multiverse
 """)
         apt_pkg.config.set("APT::Architecture",arch)
 
@@ -134,7 +134,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted
 deb http://ports.ubuntu.com/ubuntu-ports/ hardy main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
 
-deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted universe multiverse
 """)
         apt_pkg.config.set("APT::Architecture",arch)
 
@@ -173,7 +173,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted
 deb http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse universe
 deb-src http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse
 
-deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted
+deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted universe multiverse
 """)
 
     def testEOL2SupportedWithMirrorUpgrade(self):
@@ -196,7 +196,7 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted
 deb http://de.archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
 deb-src http://de.archive.ubuntu.com/ubuntu hardy main restricted multiverse
 
-deb http://de.archive.ubuntu.com/ubuntu hardy-security main restricted
+deb http://de.archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
 """)
 
     def testEOL2SupportedUpgrade(self):
@@ -219,7 +219,7 @@ deb http://de.archive.ubuntu.com/ubuntu hardy-security main restricted
 deb http://archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu hardy main restricted multiverse
 
-deb http://archive.ubuntu.com/ubuntu hardy-security main restricted
+deb http://archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
 """)
 
     def test_partner_update(self):
@@ -245,6 +245,33 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe m
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
+    def test_private_ppa_transition(self):
+        shutil.copy(
+            os.path.join(self.testdir,"sources.list.commercial-ppa-uploaders"),
+            os.path.join(self.testdir,"sources.list"))
+        apt_pkg.config.set(
+            "Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v,datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assert_(res == True)
+
+        # now test the result
+        self._verifySources("""
+deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
+
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe multiverse
+
+# random one
+# deb http://user:pass@private-ppa.launchpad.net/random-ppa gutsy main # disabled on upgrade to gutsy
+
+# commercial PPA
+deb https://user:pass@private-ppa.launchpad.net/commercial-ppa-uploaders gutsy main
+""")
+        
+
     def test_apt_cacher_and_apt_bittorent(self):
         """
         test transition of apt-cacher/apt-torrent uris
@@ -260,7 +287,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
 
         # now test the result
         self._verifySources("""
-deb http://localhost:9977/security.ubuntu.com/ubuntu gutsy-security main restricted
+deb http://localhost:9977/security.ubuntu.com/ubuntu gutsy-security main restricted universe multiverse
 deb http://localhost:9977/archive.canonical.com/ubuntu gutsy partner
 deb http://localhost:9977/us.archive.ubuntu.com/ubuntu/ gutsy main
 deb http://localhost:9977/archive.ubuntu.com/ubuntu/ gutsy main
@@ -278,7 +305,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
     def _verifySources(self, expected):
         sources_list = open(apt_pkg.config.find_file("Dir::Etc::sourcelist")).read()
         for l in expected.split("\n"):
-            self.assert_(l in sources_list,
+            self.assert_(l in sources_list.split("\n"),
                          "expected entry '%s' in sources.list missing. got:\n'''%s'''" % (l, sources_list))
         
 

@@ -1234,7 +1234,7 @@ class DistUpgradeController(object):
     def runPostInstallScripts(self):
         """ 
         scripts that are run in any case after the distupgrade finished 
-        whether or not it was successfull
+        whether or not it was successful
         """
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):

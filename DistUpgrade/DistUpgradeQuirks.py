@@ -491,13 +491,15 @@ class DistUpgradeQuirks(object):
                         "8086:2572", # i865
                         ]
         lspci = self._get_pci_ids()
-        if set(I8XX_PCI_IDS).intersection(lspci):
+        if True or set(I8XX_PCI_IDS).intersection(lspci):
             res = self._view.askYesNoQuestion(
                 _("Your graphics hardware may not be fully supported in "
-                  "Ubuntu 11.04."),
-                _("The support in Ubuntu 11.04 for your intel graphics "
+                  "Ubuntu 12.04."),
+                _("The support in Ubuntu 12.04 for your intel graphics "
                   "hardware is limited "
                   "and you may encounter problems after the upgrade. "
+                  "For more information see "
+                  "https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarning "
                   "Do you want to continue with the upgrade?")
                 )
             if res == False:

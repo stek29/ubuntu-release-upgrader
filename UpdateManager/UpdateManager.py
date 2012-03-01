@@ -62,8 +62,7 @@ from gettext import gettext as _
 from gettext import ngettext
 
 
-from Core.utils import (is_unity_running,
-                        humanize_size, 
+from Core.utils import (humanize_size, 
                         init_proxy, 
                         on_battery,
                         inhibit_sleep,
@@ -104,7 +103,7 @@ def show_dist_no_longer_supported_dialog(parent=None):
         _("Your Ubuntu release is not supported anymore."),
         _("You will not get any further security fixes or critical "
           "updates. "
-          "Please upgrade to a later version of Ubuntu Linux."))
+          "Please upgrade to a later version of Ubuntu."))
     dialog = Gtk.MessageDialog(parent, 0, Gtk.MessageType.WARNING,
                                Gtk.ButtonsType.CLOSE,"")
     dialog.set_title("")
@@ -694,22 +693,14 @@ class UpdateManager(SimpleGtkbuilderApp):
           firstrun = self.settings.get_boolean("first-run")
           if firstrun:
               text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
-              if is_unity_running():
-                  text_label_main = _("These software updates have been issued since this version of Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from Applications later.")
-              else:   
-                  text_label_main = _("These software updates have been issued since this version of Ubuntu was released. If you don't want to install them now, choose \"Update Manager\" from the Administration Menu later.")
+              text_label_main = _("These software updates have been issued since this version of Ubuntu was released.")
               self.settings.set_boolean("first-run", False)
           else:
               text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
-              if is_unity_running():
-                  text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from Applications later.")
-              else:
-                  text_label_main = _("If you don't want to install them now, choose \"Update Manager\" from the Administration menu later.")
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()
-          self.treeview_update.set_cursor(
-              Gtk.TreePath.new_from_string("1"), None, False)
+          self.treeview_update.set_cursor(Gtk.TreePath.new_from_string("1"), None, False)
       self.label_header.set_markup(text_header)
       self.label_main_details.set_text(text_label_main)
       return True

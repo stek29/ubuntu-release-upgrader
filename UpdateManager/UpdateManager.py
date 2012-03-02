@@ -696,7 +696,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               text_label_main = _("These software updates have been issued since this version of Ubuntu was released.")
               self.settings.set_boolean("first-run", False)
           else:
-              text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer")
+              text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer.")
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()

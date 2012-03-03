@@ -368,6 +368,8 @@ def get_ubuntu_flavor():
         return "kubuntu"
     elif "xfce" in denv or "xubuntu" in denv:
         return "xubuntu"
+    elif "LXDE" in denv or "Lubuntu" in denv:
+        return "lubuntu"
     # default to ubuntu if nothing more specific is found
     return "ubuntu"
 

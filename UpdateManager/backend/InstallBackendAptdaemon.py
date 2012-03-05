@@ -70,7 +70,7 @@ class InstallBackendAptdaemon(InstallBackend):
     @inline_callbacks
     def _run_in_dialog(self, trans, action):
         dia = AptProgressDialog(trans, parent=self.window_main)
-        dia.set_icon_name("update-manager")
+        dia.set_icon_name("system-software-update")
         dia.connect("finished", self._on_finished, action)
         yield dia.run()
 

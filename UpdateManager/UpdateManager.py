@@ -171,7 +171,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def __init__(self, datadir, options):
     self.setupDbus()
-    Gtk.Window.set_default_icon_name("update-manager")
+    Gtk.Window.set_default_icon_name("system-software-update")
     self.datadir = datadir
     SimpleGtkbuilderApp.__init__(self, datadir+"gtkbuilder/UpdateManager.ui",
                                  "update-manager")
@@ -186,7 +186,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.sleep_cookie = None
     self.sleep_dev = None
 
-    self.image_logo.set_from_icon_name("update-manager", Gtk.IconSize.DIALOG)
+    self.image_logo.set_from_icon_name("system-software-update", Gtk.IconSize.DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
     self.button_close.grab_focus()

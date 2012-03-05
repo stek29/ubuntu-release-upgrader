@@ -393,7 +393,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         
         icons = gtk.icon_theme_get_default()
         try:
-          gtk.window_set_default_icon(icons.load_icon("update-manager", 32, 0))
+          gtk.window_set_default_icon(icons.load_icon("system-software-update", 32, 0))
         except gobject.GError, e:
           logging.debug("error setting default icon, ignoring (%s)" % e)
           pass

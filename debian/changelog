@@ -2,6 +2,13 @@ update-manager (1:0.156.8) UNRELEASED; urgency=low
 
   [ Robert Roth ]
   * Update icon name to use FD.o standard (LP: #921310)
+  
+  [ Julien Lavergne ]
+  * DistUpgrade/DistUpgrade.cfg, DistUpgrade/removal_blacklist.cfg,
+    UpdateManager/Core/utils.py,
+    AutoUpgradeTester/profile/lubuntu/DistUpgrade.cfg:
+   - Add Lubuntu support, and don't upgrade gnome-compoents which have been
+     removed from Lubuntu installation (LP: #945215)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 05 Mar 2012 09:15:40 +0100
 
@@ -22,7 +29,7 @@ update-manager (1:0.156.7) precise; urgency=low
   * DistUpgrade/removal_blacklist.cfg: 
     - Only blacklist unity-2d, not all packages whose names start with
       unity-2d.  (LP: #940196)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 05 Mar 2012 09:02:14 +0100
 
 update-manager (1:0.156.6) precise; urgency=low

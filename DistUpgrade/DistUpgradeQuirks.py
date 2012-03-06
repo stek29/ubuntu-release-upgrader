@@ -816,11 +816,11 @@ class DistUpgradeQuirks(object):
             logging.debug("killing gnome-screensaver")
             subprocess.call(["killall", "-q", "gnome-screensaver"])
     def _pokeScreensaver(self):
-        if os.path.exists("/usr/bin/xdg-screensaver"):
+        if os.path.exists("/usr/bin/xdg-screensaver") and os.environ.get('DISPLAY') :
             logging.debug("setup poke timer for the scrensaver")
             try:
                 self._poke = subprocess.Popen(
-                    "while true; do /usr/bin/xdg-screensaver reset; sleep 30; done",
+                    "while true; do /usr/bin/xdg-screensaver reset >/dev/null 2>&1; sleep 30; done",
                     shell=True)
                 atexit.register(self._stopPokeScreensaver)
             except:

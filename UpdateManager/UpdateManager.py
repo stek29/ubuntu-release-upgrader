@@ -53,7 +53,8 @@ import xml.sax.saxutils
 
 import dbus
 import dbus.service
-import dbus.glib
+from dbus.mainloop.glib import DBusGMainLoop
+DBusGMainLoop(set_as_default=True)
 
 import GtkProgress
 import backend

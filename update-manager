@@ -109,8 +109,8 @@ if __name__ == "__main__":
     #        to get rid of the ugly hideStep() stuff
     view = DistUpgradeViewGtk3(data_dir)
     view.label_title.set_markup("<b><big>%s</big></b>" % _("Running partial upgrade"))
-    controler = DistUpgradeController(view, datadir=data_dir)
-    controler.doPartialUpgrade()
+    controller = DistUpgradeController(view, datadir=data_dir)
+    controller.doPartialUpgrade()
   else:
     app = UpdateManager(data_dir, options)
     app.main(options)

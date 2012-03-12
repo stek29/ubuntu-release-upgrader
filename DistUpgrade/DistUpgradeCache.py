@@ -662,7 +662,7 @@ class MyCache(apt.Cache):
                          " * Upgrading to a pre-release version of Ubuntu\n"
                          " * Running the current pre-release version of Ubuntu\n"
                          " * Unofficial software packages not provided by Ubuntu\n"
-                         "\n" % e)
+                         "\n") % e
             # we never have partialUpgrades (including removes) on a stable system
             # with only ubuntu sources so we do not recommend reporting a bug
             if partialUpgrade:

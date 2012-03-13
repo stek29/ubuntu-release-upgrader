@@ -1044,6 +1044,12 @@ class DistUpgradeController(object):
         # check if we want apport running during the upgrade
         if self.config.getWithDefault("Distro","EnableApport", False):
             self.enableApport()
+
+        # add debug code only here
+        #apt_pkg.config.set("Debug::pkgDpkgPM", "1")
+        #apt_pkg.config.set("Debug::pkgOrderList", "1")
+        #apt_pkg.config.set("Debug::pkgPackageManager", "1")
+  
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getFetchProgress()
@@ -1435,14 +1441,30 @@ class DistUpgradeController(object):
             p = os.path.join(self.aptcdrom.cdrompath,
                              "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.Config.find("APT::Architecture"))
             found_pkgs = set()
-            for udeb in glob.glob(p+"*_*.udeb"):
-                logging.debug("copying pre-req '%s' to '%s'" % (udeb, backportsdir))
-                found_pkgs.add(os.path.basename(udeb).split("_")[0])
-                shutil.copy(udeb, backportsdir)
+            for deb in glob.glob(p+"*_*.deb"):
+                logging.debug("found pre-req '%s' to '%s'" % (deb, backportsdir))
+                found_pkgs.add(os.path.basename(deb).split("_")[0])
             # now check if we got all backports on the CD
             if not set(backportslist) == found_pkgs:
                 logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
+            # now install them
+            self.cache.releaseLock()
+            p = subprocess.Popen(
+                ["/usr/bin/dpkg", "-i", ] + glob.glob(p+"*_*.deb"),
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            res = None
+            while res is None:
+                res = p.poll()
+                self._view.pulseProgress()
+                time.sleep(0.02)
+            self._view.pulseProgress(finished=True)
+            self.cache.getLock()
+            logging.info("installing backport debs exit code '%s'" % res)
+            logging.debug("dpkg output:\n%s" % p.communicate()[0])
+            if res != 0:
+                return False
+            # and re-start itself when it done
             return self.setupRequiredBackports()
 
         # we support PreRequists/SourcesList-$arch sections here too

@@ -1060,9 +1060,11 @@ class DistUpgradeController(object):
             self.quirks.run("StartUpgrade")
             # FIXME: take this into account for diskspace calculation
             self._maybe_create_apt_btrfs_snapshot()
+        res = False
         while currentRetry < maxRetries:
             try:
-                self.cache.commit(fprogress,iprogress)
+                res = self.cache.commit(fprogress,iprogress)
+                logging.debug("cache.commit() returned %s" % res)
             except SystemError, e:
                 logging.error("SystemError from cache.commit(): %s" % e)
                 # if its a ordering bug we can cleanly revert to

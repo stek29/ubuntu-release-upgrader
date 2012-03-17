@@ -223,9 +223,9 @@ class UpdateManager(SimpleGtkbuilderApp):
     cr.set_property("xpad", 6)
     cr.connect("toggled", self.toggled)
 
-    column_install = Gtk.TreeViewColumn("Install", cr, active=LIST_TOGGLE_CHECKED)
+    column_install = Gtk.TreeViewColumn(_("Install"), cr, active=LIST_TOGGLE_CHECKED)
     column_install.set_cell_data_func (cr, self.install_column_view_func)
-    column = Gtk.TreeViewColumn("Name", tr, markup=LIST_CONTENTS)
+    column = Gtk.TreeViewColumn(_("Name"), tr, markup=LIST_CONTENTS)
     column.set_resizable(True)
 
     column_install.set_sizing(Gtk.TreeViewColumnSizing.FIXED)

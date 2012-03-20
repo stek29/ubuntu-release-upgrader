@@ -521,8 +521,11 @@ class MyCache(apt.Cache):
 
     def getKernelsFromBaseInstaller(self):
         """get the list of recommended kernels from base-installer"""
-        kernels = Popen(["/bin/sh", "./get_kernel_list.sh"],
-                        stdout=PIPE).communicate()[0]
+        p = Popen(["/bin/sh", "./get_kernel_list.sh"], stdout=PIPE)
+        res = p.wait()
+        if res != 0:
+            return ""
+        kernels = p.communicate()[0]
         kernels = filter(lambda x : len(x) > 0,
                          map(string.strip, kernels.split("\n")))
         logging.debug("./get_kernel_list.sh returns: %s" % kernels)
@@ -535,7 +538,7 @@ class MyCache(apt.Cache):
         # check if we have a kernel from that list installed first
         kernels = self.getKernelsFromBaseInstaller()
         for kernel in kernels:
-            if not self.has_key(kernel):
+            if not kernel in self:
                 logging.debug("%s not available in cache" % kernel)
                 continue
             # this can happen e.g. on cdrom -> cdrom only upgrades

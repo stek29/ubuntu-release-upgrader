@@ -20,6 +20,8 @@ class TestKernelBaseinstaller(unittest.TestCase):
         config = DistUpgradeConfig(".")
         config.set("Files", "LogDir", "/tmp")
         cache = MyCache(config, None, None, lock=False)
+        cache._has_kernel_headers_installed = Mock()
+        cache._has_kernel_headers_installed.return_value = True
         cache.getKernelsFromBaseInstaller = Mock()
         cache.getKernelsFromBaseInstaller.return_value = \
             ["linux-generic2-pae", "linux-generic2"]

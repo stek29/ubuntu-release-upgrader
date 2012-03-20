@@ -557,11 +557,22 @@ class MyCache(apt.Cache):
         for kernel in kernels:
             if self.mark_install(kernel, 
                                  "Selecting new kernel from base-installer"):
-                prefix, sep, postfix = kernel.partition("-")
-                headers = "%s-header-%s" % (prefix, postfix)
-                self.mark_install(
-                    headers, "Selecting new kernel headers from base-installer")
+                if self._has_kernel_headers_installed():
+                    prefix, sep, postfix = kernel.partition("-")
+                    headers = "%s-header-%s" % (prefix, postfix)
+                    self.mark_install(
+                        headers,
+                        "Selecting new kernel headers from base-installer")
+                else:
+                    logging.debug("no kernel-headers installed")
                 return
+
+    def _has_kernel_headers_installed(self):
+        for pkg in self:
+            if (pkg.name.startswith("linux-headers-") and
+                pkg.is_installed):
+                return True
+        return False
 
     def checkForKernel(self):
         """ check for the running kernel and try to ensure that we have

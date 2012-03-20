@@ -524,6 +524,7 @@ class MyCache(apt.Cache):
         p = Popen(["/bin/sh", "./get_kernel_list.sh"], stdout=PIPE)
         res = p.wait()
         if res != 0:
+            logging.warn("./get_kernel_list.sh returned non-zero exitcode")
             return ""
         kernels = p.communicate()[0]
         kernels = filter(lambda x : len(x) > 0,

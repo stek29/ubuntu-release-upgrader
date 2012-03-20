@@ -27,10 +27,12 @@ class TestKernelBaseinstaller(unittest.TestCase):
         cache.mark_install.return_value = True
         cache._selectKernelFromBaseInstaller()
         #print cache.mark_install.call_args
-        cache.mark_install.assert_called_with(
+        calls = cache.mark_install.call_args_list
+        self.assertEqual(len(calls), 2)
+        cache.mark_install.assert_any_call(
             "linux-generic2-pae", "Selecting new kernel from base-installer")
-        
-
+        cache.mark_install.assert_any_call(
+            "linux-headers-generic2-pae", "Selecting new kernel headers from base-installer")
 if __name__ == "__main__":
     import logging
     logging.basicConfig(level=logging.DEBUG)

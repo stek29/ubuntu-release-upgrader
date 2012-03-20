@@ -555,7 +555,12 @@ class MyCache(apt.Cache):
                 return 
         # if we have not found a kernel yet, use the first one that installs
         for kernel in kernels:
-            if self.mark_install(kernel, "Selecting new kernel from base-installer"):
+            if self.mark_install(kernel, 
+                                 "Selecting new kernel from base-installer"):
+                prefix, sep, postfix = kernel.partition("-")
+                headers = "%s-header-%s" % (prefix, postfix)
+                self.mark_install(
+                    headers, "Selecting new kernel headers from base-installer")
                 return
 
     def checkForKernel(self):

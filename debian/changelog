@@ -18,6 +18,10 @@ update-manager (1:0.156.9) precise; urgency=low
     - update KernelRemoval/Version to match lucids kernel
   * data/release-upgrades:
     - set releae upgrades default to "lts"
+  * DistUpgrade/DistUpgradeCache.py:
+    - when selecting a new default kernel from base-installer, ensure
+      to install the matching kernel headers too if previously kernel
+      headers were installed (LP: #959307)
   
   [ Brian Murray ]
   * debian/source_update-manager.py: pass if attach_gsettings fails like on a

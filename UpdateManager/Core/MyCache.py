@@ -28,6 +28,7 @@ import os
 import string
 import urllib2
 import httplib
+import urlparse
 import socket
 import re
 import DistUpgrade.DistUpgradeCache
@@ -36,6 +37,13 @@ from UpdateList import UpdateOrigin
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"
+
+class HttpsChangelogsUnsupportedError(Exception):
+    """ https changelogs with credentials are unsupported because of the
+        lack of certitifcation validation in urllib2 which allows MITM
+        attacks to steal the credentials
+    """
+    pass
 
 class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
 
@@ -195,6 +203,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         else:
             uri = CHANGELOGS_URI % (src_section,prefix,srcpkg,srcpkg, srcver, fname)
 
+        # https uris are not supported when they contain a username/password
+        # because the urllib2 https implementation will not check certificates
+        # and so its possible to do a man-in-the-middle attack to steal the
+        # credentials
+        res = urlparse.urlsplit(uri)
+        if res.scheme == "https" and res.username != "":
+            raise HttpsChangelogsUnsupportedError(
+                "https locations with username/password are not"
+                "supported to fetch changelogs")
+
         # print "Trying: %s " % uri
         changelog = urllib2.urlopen(uri)
         #print changelog.read()
@@ -279,32 +297,36 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         if news:
             self.all_news[name] = news
                     
+    def _fetch_changelog_for_third_party_package(self, name):
+        # Try non official changelog location
+        changelogs_uri_binary = self._guess_third_party_changelogs_uri_by_binary(name)
+        changelogs_uri_source = self._guess_third_party_changelogs_uri_by_source(name)
+        error_message = ""
+        for changelogs_uri in [changelogs_uri_binary,changelogs_uri_source]:
+            if changelogs_uri:
+                try:
+                    changelog = self._get_changelog_or_news(
+                        name, "changelog", False, changelogs_uri)
+                    self.all_changes[name] += changelog
+                except (urllib2.HTTPError, HttpsChangelogsUnsupportedError) as e:
+                    # no changelogs_uri or 404
+                    error_message = _(
+                        "This update does not come from a "
+                        "source that supports changelogs.")
+                except (IOError, httplib.BadStatusLine, socket.error) as e:
+                    # network errors and others
+                    logging.exception("error on changelog fetching")
+                    error_message = _(
+                        "Failed to download the list of changes. \n"
+                        "Please check your Internet connection.")
+        self.all_changes[name] += error_message
+
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
         origins = self[name].candidateOrigin
         self.all_changes[name] = _("Changes for the versions:\nInstalled version: %s\nAvailable version: %s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
         if not self.CHANGELOG_ORIGIN in [o.origin for o in origins]:
-            # Try non official changelog location
-            changelogs_uri_binary = self._guess_third_party_changelogs_uri_by_binary(name)
-            changelogs_uri_source = self._guess_third_party_changelogs_uri_by_source(name)
-            error_message = ""
-            for changelogs_uri in [changelogs_uri_binary,changelogs_uri_source]:
-                if changelogs_uri:
-                    try:
-                        changelog = self._get_changelog_or_news(name, "changelog", False, changelogs_uri)
-                        self.all_changes[name] += changelog
-                    except urllib2.HTTPError, e:
-                        # no changelogs_uri or 404
-                        error_message = _(
-                            "This update does not come from a "
-                            "source that supports changelogs.")
-                    except (IOError, httplib.BadStatusLine, socket.error), e:
-                        # network errors and others
-                        logging.exception("error on changelog fetching")
-                        error_message = _(
-                            "Failed to download the list of changes. \n"
-                            "Please check your Internet connection.")
-            self.all_changes[name] += error_message
+            self._fetch_changelog_for_third_party_package(name)
             return
         # fixup epoch handling version
         srcpkg = self[name].sourcePackageName

@@ -255,6 +255,8 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def _guess_third_party_changelogs_uri_by_source(self, name):
         pkg = self[name]
         deb_uri = pkg.candidate.uri
+        if deb_uri is None:
+            return None
         srcrec = pkg.candidate.record.get("Source")
         if not srcrec:
             return None

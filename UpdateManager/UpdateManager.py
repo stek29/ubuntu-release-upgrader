@@ -187,6 +187,9 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.sleep_cookie = None
     self.sleep_dev = None
 
+    # workaround for LP: #945536
+    self.clearing_store = False
+
     self.image_logo.set_from_icon_name("system-software-update", Gtk.IconSize.DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
@@ -394,6 +397,11 @@ class UpdateManager(SimpleGtkbuilderApp):
         
 
   def on_treeview_update_cursor_changed(self, widget):
+    if self.clearing_store:
+        # Workaround for LP #945536; discard signals sent
+        # during liststore cleaning.
+        return
+
     path = widget.get_cursor()[0]
     # check if we have a path at all
     if path == None:
@@ -1008,7 +1016,9 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.run()
         dialog.destroy()
         sys.exit(1)
+    self.clearing_store = True
     self.store.clear()
+    self.clearing_store = False
     self.list = UpdateList(self)
     while Gtk.events_pending():
         Gtk.main_iteration()

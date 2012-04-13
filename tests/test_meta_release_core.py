@@ -116,8 +116,10 @@ class TestMetaReleaseCore(unittest.TestCase):
 
     def test_html_uri_real(self):
         os.environ["http_proxy"]=""
-        os.environ["META_RELEASE_FAKE_CODENAME"] = "maverick"
-        meta = MetaReleaseCore(forceDownload=True)
+        os.environ["META_RELEASE_FAKE_CODENAME"] = "lucid"
+        # useDevelopmentRelease=True is only needed until precise is
+        # released
+        meta = MetaReleaseCore(forceDownload=True, useDevelopmentRelease=True)
         while meta.downloading:
             time.sleep(0.1)
         uri = meta.new_dist.releaseNotesHtmlUri

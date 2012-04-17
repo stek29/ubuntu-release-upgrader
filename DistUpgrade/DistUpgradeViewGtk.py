@@ -185,7 +185,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.progress.set_text(" ")
         self.expander.set_sensitive(True)
         self.term.show()
-        # if no libgtk22-perl is installed show the terminal
+        # if no libgtk2-perl is installed show the terminal
         frontend= os.environ.get("DEBIAN_FRONTEND") or "gnome"
         if frontend == "gnome" and self._cache:
           if (not "libgtk2-perl" in self._cache or 

@@ -1,9 +1,31 @@
 update-manager (1:0.156.12) precise; urgency=low
 
-  * Improve the error message when a package cannot be located after
-    updating, probably caused by an overloaded mirror. (LP: #873468)
+  [ Colin Watson ]
+  * data/gtkbuilder/UpgradePromptDialog.ui:
+    - Remove has_separator property from dialog_really_do_not_upgrade
+      (deprecated in GTK+ 2.22, removed in 3.0).
+  * debian/control:
+    - Restore gksu dependency, needed by e.g. check-new-release-gtk
+      (LP: #980637).
+  
+  [ Michael Vogt ]
+  * UpdateManager/UpdateManager.py:
+    - disconnect model and clear store before rebuilding the cache,
+      thanks to Colin Watson
+  * po/*.po:
+    - updated to the latest launchpad (LP: #628157)
+  * DistUpgrade/DistUpgradeController.py:
+    - remove backports sources.list.d file again after its no
+      longer needed (LP: #973717)
+  * DistUpgrade/DistUpgradeController.py:
+    - when checking for the backports, its enough to check is the
+      set of the needed ones is a subset of the found ones (LP: #969182)
+  * DistUpgrade/DistUpgrade.cfg.lucid:
+    - release-upgrader-libapt-pkg-dev is not needed for the upgrade
+      itself
+  * remove skype from the removal blacklist
 
- -- Barry Warsaw <barry@ubuntu.com>  Tue, 17 Apr 2012 14:28:21 -0400
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 17 Apr 2012 21:27:54 +0200
 
 update-manager (1:0.156.11) precise; urgency=low
 

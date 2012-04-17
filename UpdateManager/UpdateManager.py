@@ -397,11 +397,6 @@ class UpdateManager(SimpleGtkbuilderApp):
         
 
   def on_treeview_update_cursor_changed(self, widget):
-    if self.clearing_store:
-        # Workaround for LP #945536; discard signals sent
-        # during liststore cleaning.
-        return
-
     path = widget.get_cursor()[0]
     # check if we have a path at all
     if path == None:
@@ -995,6 +990,10 @@ class UpdateManager(SimpleGtkbuilderApp):
   def fillstore(self):
     # use the watch cursor
     self.setBusy(True)
+    # disconnect the view first
+    self.treeview_update.set_model(None)
+    self.store.clear()
+    
     # clean most objects
     self.dl_size = 0
     try:
@@ -1016,10 +1015,8 @@ class UpdateManager(SimpleGtkbuilderApp):
         dialog.run()
         dialog.destroy()
         sys.exit(1)
-    self.clearing_store = True
-    self.store.clear()
-    self.clearing_store = False
     self.list = UpdateList(self)
+    
     while Gtk.events_pending():
         Gtk.main_iteration()
 
@@ -1080,6 +1077,8 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.treeview_update.set_model(self.store)
     self.update_count()
     self.setBusy(False)
+    while Gtk.events_pending():
+      Gtk.main_iteration()
     self.check_all_updates_installable()
     self.refresh_updates_count()
     return False

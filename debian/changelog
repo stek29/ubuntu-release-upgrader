@@ -1,11 +1,17 @@
 update-manager (1:0.156.12) UNRELEASED; urgency=low
 
+  [ Colin Watson ]
   * data/gtkbuilder/UpgradePromptDialog.ui:
     - Remove has_separator property from dialog_really_do_not_upgrade
       (deprecated in GTK+ 2.22, removed in 3.0).
   * debian/control:
     - Restore gksu dependency, needed by e.g. check-new-release-gtk
       (LP: #980637).
+  
+  [ Michael Vogt ]
+  * UpdateManager/UpdateManager.py:
+    - disconnect model and clear store before rebuilding the cache,
+      thanks to Colin Watson
 
  -- Colin Watson <cjwatson@ubuntu.com>  Fri, 13 Apr 2012 23:33:18 +0100
 

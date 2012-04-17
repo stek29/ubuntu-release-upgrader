@@ -1651,11 +1651,19 @@ class DistUpgradeController(object):
                 #        missing sources entries but network errors etc)
                 logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg)
                 self._view.error(_("Invalid package information"),
-                                 _("After your package information was "
-                                   "updated the essential package '%s' can "
-                                   "not be found anymore so "
-                                   "a bug reporting process is being "
-                                   "started.") % pkg)
+                                 _("After updating your packaging ",
+                                   "information, the essential package '%s' "
+                                   "could not be located. This may be "
+                                   "because you have no official mirrors "
+                                   "listed in your software sources, or "
+                                   "because of excessive load on the mirror "
+                                   "you are using. See /etc/apt/sources.list "
+                                   "for the current list of configured "
+                                   "software sources."
+                                   "\n"
+                                   "In the case of an overloaded mirror, you "
+                                   "may want to try the upgrade again later.")
+                                   % pkg)
                 subprocess.Popen(["apport-bug", "update-manager"])
                 self.abort()
 

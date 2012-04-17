@@ -1447,7 +1447,7 @@ class DistUpgradeController(object):
                 logging.debug("found pre-req '%s' to '%s'" % (deb, backportsdir))
                 found_pkgs.add(os.path.basename(deb).split("_")[0])
             # now check if we got all backports on the CD
-            if not set(backportslist) == found_pkgs:
+            if not set(backportslist).issubset(found_pkgs):
                 logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
             # now install them

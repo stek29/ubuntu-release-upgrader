@@ -17,6 +17,12 @@ update-manager (1:0.156.12) UNRELEASED; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - remove backports sources.list.d file again after its no
       longer needed (LP: #973717)
+  * DistUpgrade/DistUpgradeController.py:
+    - when checking for the backports, its enough to check is the
+      set of the needed ones is a subset of the found ones (LP: #969182)
+  * DistUpgrade/DistUpgrade.cfg.lucid:
+    - release-upgrader-libapt-pkg-dev is not needed for the upgrade
+      itself
 
  -- Colin Watson <cjwatson@ubuntu.com>  Fri, 13 Apr 2012 23:33:18 +0100
 

@@ -1539,6 +1539,12 @@ class DistUpgradeController(object):
 
         if res == False:
             logging.warning("_fetchArchives for backports returned False")
+
+        # all backports done, remove the pre-requirests.list file again
+        try:
+            os.unlink(outfile)
+        except Exception as e:
+            logging.error("failed to unlink pre-requists file: '%s'" % e)
         return self.setupRequiredBackports()
 
     # used by both cdrom/http fetcher

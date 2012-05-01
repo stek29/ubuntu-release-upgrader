@@ -40,8 +40,9 @@ class TestChangelogs(unittest.TestCase):
 
     def test_changelog_not_supported(self):
         def monkey_patched_get_changelogs(name, what, ver, uri):
-            raise HTTPError(
-                "url", "code", "msg", "hdrs", open("/dev/zero"))
+            with open("/dev/zero") as zero:
+                raise HTTPError(
+                    "url", "code", "msg", "hdrs", zero)
         pkgname = "update-manager"
         # patch origin
         real_origin = self.cache.CHANGELOG_ORIGIN

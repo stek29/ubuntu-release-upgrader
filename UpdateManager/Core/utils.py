@@ -106,7 +106,8 @@ def is_child_of_process_name(processname, pid=None):
         pid = os.getpid()
     while pid > 0:
         stat_file = "/proc/%s/stat" % pid
-        stat = open(stat_file).read()
+        with open(stat_file) as stat_f:
+            stat = stat_f.read()
         # extract command (inside ())
         command = stat.partition("(")[2].partition(")")[0]
         if command == processname:
@@ -205,6 +206,7 @@ def get_dist():
     sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
     return "unknown distribution"
   dist = p.stdout.readline().strip()
+  p.stdout.close()
   return dist
 
 class HeadRequest(Request):
@@ -430,20 +432,21 @@ def is_port_already_listening(port):
     # state (st) that we care about
     STATE_LISTENING = '0A'
     # read the data
-    for line in open("/proc/net/tcp"):
-        line = line.strip()
-        if not line:
-            continue
-        # split, values are:
-        #   sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
-        values = line.split()
-        state = values[INDEX_STATE]
-        if state != STATE_LISTENING:
-            continue
-        local_port_str = values[INDEX_LOCAL_ADDR].split(":")[1]
-        local_port = int(local_port_str, 16)
-        if local_port == port:
-            return True
+    with open("/proc/net/tcp") as net_tcp:
+        for line in net_tcp:
+            line = line.strip()
+            if not line:
+                continue
+            # split, values are:
+            #   sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
+            values = line.split()
+            state = values[INDEX_STATE]
+            if state != STATE_LISTENING:
+                continue
+            local_port_str = values[INDEX_LOCAL_ADDR].split(":")[1]
+            local_port = int(local_port_str, 16)
+            if local_port == port:
+                return True
     return False
 
 

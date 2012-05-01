@@ -19,16 +19,16 @@ class testOriginMatcher(unittest.TestCase):
     def testSimple(self):
         shutil.copy(self.ORIG, self.NEW)
         replace_driver_from_xorg("fglrx", "ati", self.NEW)
-        self.assert_(open(self.ORIG).read() == open(self.NEW).read())
+        self.assertEqual(open(self.NEW).read(), open(self.ORIG).read())
     def testRemove(self):
         shutil.copy(self.FGLRX, self.NEW)
-        self.assert_("fglrx" in open(self.NEW).read())
+        self.assertTrue("fglrx" in open(self.NEW).read())
         replace_driver_from_xorg("fglrx", "ati", self.NEW)
-        self.assert_(not "fglrx" in open(self.NEW).read())
+        self.assertFalse("fglrx" in open(self.NEW).read())
     def testMultiseat(self):
-        self.assert_(is_multiseat(self.ORIG) == False)
-        self.assert_(is_multiseat(self.FGLRX) == False)
-        self.assert_(is_multiseat(self.MULTISEAT) == True)
+        self.assertFalse(is_multiseat(self.ORIG))
+        self.assertFalse(is_multiseat(self.FGLRX))
+        self.assertTrue(is_multiseat(self.MULTISEAT))
     def testComment(self):
         shutil.copy(self.FGLRX, self.NEW)
         comment_out_driver_from_xorg("fglrx",self.NEW)

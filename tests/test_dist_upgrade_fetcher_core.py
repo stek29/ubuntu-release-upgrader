@@ -51,7 +51,7 @@ class TestMetaReleaseCore(unittest.TestCase):
 
     def testnewdist(self):
         new_dist = get_new_dist()
-        self.assert_(new_dist is not None)
+        self.assertTrue(new_dist is not None)
 
 class TestDistUpgradeFetcherCore(DistUpgradeFetcherCore):
     " subclass of the DistUpgradeFetcherCore class to make it testable "
@@ -84,7 +84,7 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
         #fetcher.DEBUG=True
         res = fetcher.run()
         self.assertTrue(res)
-        self.assert_(fetcher.uri.startswith("ftp://uk.archive.ubuntu.com"))
+        self.assertTrue(fetcher.uri.startswith("ftp://uk.archive.ubuntu.com"))
         self.assertTrue(progress.started)
         self.assertTrue(progress.stopped)
         self.assertTrue(progress.pulsed)

@@ -61,15 +61,13 @@ class TestQuirks(unittest.TestCase):
         controller = mock.Mock()
         controller.cache = cache
         q = DistUpgradeQuirks(controller, config)
-        self.assert_(q._supportInModaliases("fglrx",
-                                            mock_lspci_good) == True)
-        self.assert_(q._supportInModaliases("fglrx",
-                                            mock_lspci_bad) == False)
+        self.assertTrue(q._supportInModaliases("fglrx", mock_lspci_good))
+        self.assertFalse(q._supportInModaliases("fglrx", mock_lspci_bad))
 
     def test_cpuHasSSESupport(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
-        self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse") == True)
-        self.assert_(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-without-sse") == False)
+        self.assertTrue(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse"))
+        self.assertFalse(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-without-sse"))
 
     def test_cpu_is_i686(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)

@@ -31,7 +31,7 @@ class testPreRequists(unittest.TestCase):
         out = os.path.join(self.testdir,"sources.list.d",
                            "prerequists-sources.list")
         self.dc._addPreRequistsSourcesList(template, out)
-        self.assert_(os.path.getsize(out))
+        self.assertTrue(os.path.getsize(out))
         self._verifySources(out, """
 deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installer
 """)
@@ -47,7 +47,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
         out = os.path.join(self.testdir,"sources.list.d",
                            "prerequists-sources.list")
         self.dc._addPreRequistsSourcesList(template, out)
-        self.assert_(os.path.getsize(out))
+        self.assertTrue(os.path.getsize(out))
         self._verifySources(out, """
 deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installer
 """)
@@ -72,7 +72,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
             print(res)
         except NoBackportsFoundException:
             exp = True
-        self.assert_(exp == True)
+        self.assertTrue(exp)
 
     def disabled__because_of_jaunty_EOL_testVerifyBackportsValid(self):
         " test the backport verification "
@@ -95,7 +95,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
         self.dc._addPreRequistsSourcesList(template, out)
         self.dc.openCache(lock=False)
         res = self.dc._verifyBackports()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
     def disabled__because_of_jaunty_EOL_testVerifyBackportsNoValidMirror(self):
         " test the backport verification with no valid mirror "
@@ -118,7 +118,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
         self.dc._addPreRequistsSourcesList(template, out, dumb=True)
         self.dc.openCache(lock=False)
         res = self.dc._verifyBackports()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
     def disabled__because_of_jaunty_EOL_testVerifyBackportsNoValidMirror2(self):
         " test the backport verification with no valid mirror "
@@ -144,14 +144,14 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
             self.dc._verifyBackports()
         except NoBackportsFoundException:
             exp = True
-        self.assert_(exp == True)
+        self.assertTrue(exp)
     
     def _verifySources(self, filename, expected):
         sources_list = open(filename).read()
         for l in expected.split("\n"):
             if l:
-                self.assert_(l in sources_list,
-                             "expected entry '%s' in '%s' missing, got:\n%s" % (l, filename, open(filename).read()))
+                self.assertTrue(l in sources_list,
+                                "expected entry '%s' in '%s' missing, got:\n%s" % (l, filename, open(filename).read()))
 
 if __name__ == "__main__":
     unittest.main()

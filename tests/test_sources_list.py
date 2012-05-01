@@ -35,7 +35,7 @@ class TestSourcesListUpdate(unittest.TestCase):
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
         # now test the result
         self._verifySources("""
@@ -55,7 +55,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
         # now test the result
         #print(open(os.path.join(self.testdir,"sources.list")).read())
@@ -68,11 +68,11 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted multiverse
 deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 """)
         # check that the backup file was created correctly
-        self.assert_(subprocess.call(
+        self.assertEqual(0, subprocess.call(
             ["cmp",
              apt_pkg.config.find_file("Dir::Etc::sourcelist")+".in",
              apt_pkg.config.find_file("Dir::Etc::sourcelist")+".distUpgrade"
-            ]) == 0)
+            ]))
 
     def test_commercial_transition(self):
         """
@@ -85,7 +85,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
         # now test the result
         self._verifySources("""
@@ -105,7 +105,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
         # now test the result
         self._verifySources("""
 deb http://ports.ubuntu.com/ubuntu-ports/ gutsy main restricted multiverse universe
@@ -130,7 +130,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted univers
         d.toDist = "hardy"
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
         # now test the result
         self._verifySources("""
 deb http://ports.ubuntu.com/ubuntu-ports/ hardy main restricted multiverse universe
@@ -169,7 +169,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted univers
         d.toDist = "hoary"
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
         self._verifySources("""
 # main repo
 deb http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse universe
@@ -192,7 +192,7 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted univers
         d.toDist = "hardy"
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
         self._verifySources("""
 # main repo
 deb http://de.archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
@@ -215,7 +215,7 @@ deb http://de.archive.ubuntu.com/ubuntu hardy-security main restricted universe 
         d.toDist = "hardy"
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
         self._verifySources("""
 # main repo
 deb http://archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
@@ -235,7 +235,7 @@ deb http://archive.ubuntu.com/ubuntu hardy-security main restricted universe mul
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
         # now test the result
         self._verifySources("""
@@ -257,7 +257,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
         # now test the result
         self._verifySources("""
@@ -285,7 +285,7 @@ deb https://user:pass@private-ppa.launchpad.net/commercial-ppa-uploaders gutsy m
         d = DistUpgradeController(v,datadir=self.testdir)
         d.openCache(lock=False)
         res = d.updateSourcesList()
-        self.assert_(res == True)
+        self.assertTrue(res)
 
         # now test the result
         self._verifySources("""
@@ -307,8 +307,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
     def _verifySources(self, expected):
         sources_list = open(apt_pkg.config.find_file("Dir::Etc::sourcelist")).read()
         for l in expected.split("\n"):
-            self.assert_(l in sources_list.split("\n"),
-                         "expected entry '%s' in sources.list missing. got:\n'''%s'''" % (l, sources_list))
+            self.assertTrue(l in sources_list.split("\n"),
+                            "expected entry '%s' in sources.list missing. got:\n'''%s'''" % (l, sources_list))
         
 
 if __name__ == "__main__":

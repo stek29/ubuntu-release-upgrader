@@ -81,8 +81,8 @@ class TestMetaReleaseCore(unittest.TestCase):
                                  ("jaunty", "karmic"),
                                  ("karmic", "lucid") ]:
             new_dist = get_new_dist(current)
-            self.assert_(new_dist.name == next,
-                         "New dist name for %s is '%s', but expected '%s''" % (current, new_dist.name, next))
+            self.assertEqual(next, new_dist.name,
+                             "New dist name for %s is '%s', but expected '%s''" % (current, new_dist.name, next))
 
     def test_url_downloadable(self):
         from UpdateManager.Core.utils import url_downloadable

@@ -59,8 +59,9 @@ def do_install(cache):
          break
    # check for failed packages and remove them
    if os.path.exists("install_failures.txt"):
-      failures =  set(map(lambda s: os.path.basename(s.split("_:_")[0]).split("_")[0], 
-                          open("install_failures.txt").readlines()))
+      with open("install_failures.txt") as install_failures:
+         failures = set([os.path.basename(s.split("_:_")[0]).split("_")[0]
+                         for s in install_failures])
       print("failed: ", failures)
       assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
       assert(os.system("dpkg --configure -a") == 0)

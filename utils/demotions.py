@@ -91,11 +91,10 @@ if __name__ == "__main__":
   in_universe = lambda pkg: pkg in new.pkgs_in_comp["universe"] or pkg in new.pkgs_in_comp["multiverse"]
 
   # debug
-  #not_in_universe = lambda pkg: not in_universe(pkg)
-  #print(filter(not_in_universe, no_longer_main))
+  #print([pkg for pkg in no_longer_main if not in_universe(pkg)])
 
-  # this stuff was demoted and is no in universe
-  demoted = filter(in_universe, no_longer_main)
+  # this stuff was demoted and is in universe
+  demoted = [pkg for pkg in no_longer_main if in_universe(pkg)]
   demoted.sort()
 
   # remove items that are now in universe, but are replaced by something

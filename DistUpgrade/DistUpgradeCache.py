@@ -1016,9 +1016,10 @@ class MyCache(apt.Cache):
         demotions = set()
         demotions_file = self.config.get("Distro","Demotions")
         if os.path.exists(demotions_file):
-            map(lambda pkgname: demotions.add(pkgname.strip()),
-                filter(lambda line: not line.startswith("#"),
-                       open(demotions_file).readlines()))
+            with open(demotions_file) as demotions_f:
+                for line in demotions_f:
+                    if not line.startswith("#"):
+                        demotions.add(line.strip())
         installed_demotions = set()
         for demoted_pkgname in demotions:
             if not self.has_key(demoted_pkgname):

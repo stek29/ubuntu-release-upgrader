@@ -59,7 +59,7 @@ class DistUpgradeConfig(SafeConfigParser):
         if not os.path.exists(p):
             logging.error("getListFromFile: no '%s' found" % p)
         items = [x.strip() for x in open(p)]
-        return filter(lambda s: not s.startswith("#") and not s == "", items)
+        return [s for s in items if not s.startswith("#") and not s == ""]
 
 
 if __name__ == "__main__":

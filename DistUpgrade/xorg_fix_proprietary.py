@@ -106,7 +106,8 @@ def is_multiseat(xorg_source=XORG_CONF):
     def is_serverlayout_line(line):
         return (not line.strip().startswith("#") and
                 line.strip().lower().endswith('"serverlayout"'))
-    msl = len(filter(is_serverlayout_line, open(xorg_source)))
+    with open(xorg_source) as xorg_file:
+        msl = len([line for line in xorg_file if is_serverlayout_line(line)])
     logging.debug("is_multiseat: lines %i", msl)
     return msl > 1
 

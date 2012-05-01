@@ -34,7 +34,10 @@ try:
 except ImportError:
     from urllib2 import HTTPError, urlopen
     from urlparse import urlsplit
-import httplib
+try:
+    from http.client import BadStatusLine
+except ImportError:
+    from httplib import BadStatusLine
 import socket
 import re
 import DistUpgrade.DistUpgradeCache
@@ -321,7 +324,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     error_message = _(
                         "This update does not come from a "
                         "source that supports changelogs.")
-                except (IOError, httplib.BadStatusLine, socket.error):
+                except (IOError, BadStatusLine, socket.error):
                     # network errors and others
                     logging.exception("error on changelog fetching")
                     error_message = _(
@@ -351,7 +354,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                           "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                           "until the changes become available or try again "
                           "later.") % (srcpkg, srcver_epoch)
-        except (IOError, httplib.BadStatusLine, socket.error) as e:
+        except (IOError, BadStatusLine, socket.error) as e:
             print("caught exception: ", e)
             changelog = _("Failed to download the list "
                           "of changes. \nPlease "

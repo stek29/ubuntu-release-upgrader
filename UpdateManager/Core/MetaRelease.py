@@ -26,7 +26,10 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
-import httplib
+try:
+    from http.client import BadStatusLine
+except ImportError:
+    from httplib import BadStatusLine
 import logging
 import rfc822
 import os
@@ -297,7 +300,7 @@ class MetaReleaseCore(object):
             else:
                 self._debug("result of meta-release download: '%s'" % e)
         # generic network error
-        except (URLError, httplib.BadStatusLine) as e:
+        except (URLError, BadStatusLine) as e:
             self._debug("result of meta-release download: '%s'" % e)
         # now check the information we have
         if self.metarelease_information != None:

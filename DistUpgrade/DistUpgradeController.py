@@ -196,7 +196,7 @@ class DistUpgradeController(object):
             self.apt_cache = self.cache
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
-        except CacheExceptionDpkgInterrupted, e:
+        except CacheExceptionDpkgInterrupted as e:
             logging.warning("dpkg interrupted, calling dpkg --configure -a")
             cmd = ["/usr/bin/dpkg","--configure","-a"]
             if os.environ.get("DEBIAN_FRONTEND") == "noninteractive":
@@ -206,7 +206,7 @@ class DistUpgradeController(object):
                                  self._view,
                                  self.quirks,
                                  self._view.getOpCacheProgress())
-        except CacheExceptionLockingFailed, e:
+        except CacheExceptionLockingFailed as e:
             logging.error("Cache can not be locked (%s)" % e)
             self._view.error(_("Unable to get exclusive lock"),
                              _("This usually means that another "
@@ -336,7 +336,7 @@ class DistUpgradeController(object):
                 return False
             try:
                 fs_default_version = os.readlink('/usr/bin/python')
-            except OSError, e:
+            except OSError as e:
                 logging.error("os.readlink failed (%s)" % e)
                 return False
             if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)):
@@ -405,7 +405,7 @@ class DistUpgradeController(object):
         # open cache
         try:
             self.openCache()
-        except SystemError, e:
+        except SystemError as e:
             logging.error("openCache() failed: '%s'" % e)
             return False
         if not self.cache.sanityCheck(self._view):
@@ -846,7 +846,7 @@ class DistUpgradeController(object):
         while currentRetry < maxRetries:
             try:
                 self.cache.update(progress)
-            except (SystemError, IOError), e:
+            except (SystemError, IOError) as e:
                 logging.error("IOError/SystemError in cache.update(): '%s'. Retrying (currentRetry: %s)" % (e,currentRetry))
                 currentRetry += 1
                 continue
@@ -881,7 +881,7 @@ class DistUpgradeController(object):
         with_snapshots = self._is_apt_btrfs_snapshot_supported()
         try:
             self.cache.checkFreeSpace(with_snapshots)
-        except NotEnoughFreeSpaceError, e:
+        except NotEnoughFreeSpaceError as e:
             # ok, showing multiple error dialog sucks from the UI
             # perspective, but it means we do not need to break the
             # string freeze
@@ -980,11 +980,11 @@ class DistUpgradeController(object):
                 pm = apt_pkg.PackageManager(self.cache._depcache)
                 fetcher = apt_pkg.Acquire(fprogress)
                 self.cache._fetch_archives(fetcher, pm)
-            except apt.cache.FetchCancelledException, e:
+            except apt.cache.FetchCancelledException as e:
                 logging.info("user canceled")
                 user_canceled = True
                 break
-            except IOError, e:
+            except IOError as e:
                 # fetch failed, will be retried
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
                 currentRetry += 1
@@ -1066,7 +1066,7 @@ class DistUpgradeController(object):
             try:
                 res = self.cache.commit(fprogress,iprogress)
                 logging.debug("cache.commit() returned %s" % res)
-            except SystemError, e:
+            except SystemError as e:
                 logging.error("SystemError from cache.commit(): %s" % e)
                 # if its a ordering bug we can cleanly revert to
                 # the previous release, no packages have been installed
@@ -1111,12 +1111,12 @@ class DistUpgradeController(object):
                 self._view.getTerminal().call(cmd)
                 self._enableAptCronJob()
                 return False
-            except IOError, e:
+            except IOError as e:
                 # fetch failed, will be retried
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
                 currentRetry += 1
                 continue
-            except OSError, e:
+            except OSError as e:
                 logging.exception("cache.commit()")
                 # deal gracefully with:
                 #  OSError: [Errno 12] Cannot allocate memory
@@ -1225,7 +1225,7 @@ class DistUpgradeController(object):
             iprogress = self._view.getInstallProgress(self.cache)
             try:
                 self.cache.commit(fprogress,iprogress)
-            except (SystemError, IOError), e:
+            except (SystemError, IOError) as e:
                 logging.error("cache.commit() in doPostUpgrade() failed: %s" % e)
                 self._view.error(_("Error during commit"),
                                  _("A problem occurred during the clean-up. "
@@ -1255,7 +1255,7 @@ class DistUpgradeController(object):
                 # work around kde tmpfile problem where it eats permissions
                 check_and_fix_xbit(script)
                 self._view.getTerminal().call([script], hidden=True)
-            except Exception, e:
+            except Exception as e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
         
     def abort(self):
@@ -1501,11 +1501,11 @@ class DistUpgradeController(object):
         self._addPreRequistsSourcesList(prereq_template, outfile) 
         try:
             self._verifyBackports()
-        except NoBackportsFoundException, e:
+        except NoBackportsFoundException as e:
             self._addPreRequistsSourcesList(prereq_template, outfile, dumb=True) 
             try:
                 self._verifyBackports()
-            except NoBackportsFoundException, e:
+            except NoBackportsFoundException as e:
                 logging.warning("no backport for '%s' found" % e)
             return False
         
@@ -1531,7 +1531,7 @@ class DistUpgradeController(object):
         try:
             res = self.cache.commit(self._view.getFetchProgress(),
                                     self._view.getInstallProgress(self.cache))
-        except IOError, e:
+        except IOError as e:
             logging.error("fetchArchives returned '%s'" % e)
             res = False
         except SystemError as e:

@@ -217,7 +217,7 @@ def url_downloadable(uri, debug_func=None):
         if http_file.code == 200:
             return True
         return False
-    except Exception, e:
+    except Exception as e:
       debug_func("error from httplib: '%s'" % e)
       return False
   elif scheme == "ftp":
@@ -232,7 +232,7 @@ def url_downloadable(uri, debug_func=None):
         debug_func("ftplib.size() returned: %s" % size)
       if size != 0:
         return True
-    except Exception, e:
+    except Exception as e:
       if debug_func:
         debug_func("error from ftplib: '%s'" % e)
       return False
@@ -275,7 +275,7 @@ def init_proxy(gsettings=None):
   #           proxy = "http://%s:%s@%s:%s/" % (auth_user,auth_pw,host, port)
   #         else:
   #           proxy = "http://%s:%s/" % (host, port)
-  #   except Exception, e:
+  #   except Exception as e:
   #     print("error from gconf: %s" % e)
   # if we have a proxy, set it
   if proxy:
@@ -303,14 +303,14 @@ def on_battery():
                                 '/org/freedesktop/UPower')
         dev = dbus.Interface(devobj, 'org.freedesktop.DBus.Properties')
         return dev.Get('org.freedesktop.UPower', 'OnBattery')
-    except dbus.exceptions.DBusException, e:
+    except dbus.exceptions.DBusException as e:
         if e._dbus_error_name != 'org.freedesktop.DBus.Error.ServiceUnknown':
             raise
         devobj = bus.get_object('org.freedesktop.DeviceKit.Power', 
                                 '/org/freedesktop/DeviceKit/Power')
         dev = dbus.Interface(devobj, "org.freedesktop.DBus.Properties")
         return dev.Get("org.freedesktop.DeviceKit.Power", "on_battery")
-  except Exception, e:
+  except Exception as e:
     #import sys
     #print("on_battery returned error: ", e, file=sys.stderr)
     return False
@@ -337,7 +337,7 @@ def allow_sleep(dev, cookie):
   the system"""
   try:
     dev.UnInhibit(cookie)
-  except Exception, e:
+  except Exception as e:
     print("could not send the dbus UnInhibit signal: %s" % e)
 
 

@@ -342,12 +342,12 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                               "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                               "until the changes become available or try again "
                               "later.") % (srcpkg, srcver_epoch)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             changelog = _("The list of changes is not available yet.\n\n"
                           "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                           "until the changes become available or try again "
                           "later.") % (srcpkg, srcver_epoch)
-        except (IOError, httplib.BadStatusLine, socket.error), e:
+        except (IOError, httplib.BadStatusLine, socket.error) as e:
             print("caught exception: ", e)
             changelog = _("Failed to download the list "
                           "of changes. \nPlease "

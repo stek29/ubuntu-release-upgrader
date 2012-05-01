@@ -282,7 +282,7 @@ class AptCdrom(object):
         #progress = self.view.getCdromProgress()
         try:
             res = self._doAdd()
-        except (SystemError, AptCdromError), e:
+        except (SystemError, AptCdromError) as e:
             logging.error("can't add cdrom: %s" % e)
             self.view.error(_("Failed to add the CD"),
                              _("There was a error adding the CD, the "

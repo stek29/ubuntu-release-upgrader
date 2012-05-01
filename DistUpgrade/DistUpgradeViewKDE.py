@@ -243,7 +243,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.parent = parent
         try:
             self._terminal_log = open("/var/log/dist-upgrade/term.log","w")
-        except Exception, e:
+        except Exception as e:
             # if something goes wrong (permission denied etc), use stdout
             logging.error("Can not open terminal log: '%s'" % e)
             self._terminal_log = sys.stdout
@@ -386,7 +386,7 @@ class KDEInstallProgressAdapter(InstallProgress):
                     self.parent.terminal_text.insertWithTermCodes(utf8(line))
                 else:
                     break
-            except Exception, e:
+            except Exception as e:
                 print(e)
                 logging.debug("error reading from self.master_fd '%s'" % e)
                 break
@@ -394,7 +394,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         # now update the GUI
         try:
           InstallProgress.update_interface(self)
-        except ValueError, e:
+        except ValueError as e:
           logging.error("got ValueError from InstallProgress.update_interface. Line was '%s' (%s)" % (self.read, e))
           # reset self.read so that it can continue reading and does not loop
           self.read = ""
@@ -456,7 +456,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         try:
           gettext.bindtextdomain("update-manager", localedir)
           gettext.textdomain("update-manager")
-        except Exception, e:
+        except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
 
         #about = KAboutData("adept_manager","Upgrader","0.1","Dist Upgrade Tool for Kubuntu",KAboutData.License_GPL,"(c) 2007 Canonical Ltd",

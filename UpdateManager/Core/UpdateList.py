@@ -46,7 +46,7 @@ class UpdateList(object):
         pipe = os.popen("lsb_release -c -s")
         dist = pipe.read().strip()
         del pipe
-    except Exception, e:
+    except Exception as e:
         print("Error in lsb_release: %s" % e)
         parent.error(_("Failed to detect distribution"),
                      _("A error '%s' occurred while checking what system "

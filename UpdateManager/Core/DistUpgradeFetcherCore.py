@@ -92,7 +92,7 @@ class DistUpgradeFetcherCore(object):
         gpgres = proc.handles['status'].read()
         try:
             proc.wait()
-        except IOError,e:
+        except IOError as e:
             # gnupg returned a problem (non-zero exit)
             print("exception from gpg: %s" % e)
             print("Debug information: ")
@@ -117,7 +117,7 @@ class DistUpgradeFetcherCore(object):
               for tarinfo in tar:
                   tar.extract(tarinfo)
               tar.close()
-          except tarfile.ReadError, e:
+          except tarfile.ReadError as e:
               logging.error("failed to open tarfile (%s)" % e)
               return False
           return True
@@ -184,7 +184,7 @@ class DistUpgradeFetcherCore(object):
         try:
             if not url_downloadable(new_uri, self._debug):
               raise Exception("failed to download %s" % new_uri)
-        except Exception,e:
+        except Exception as e:
             self._debug("url '%s' could not be downloaded" % e)
             # else fallback to main server
             new_uri = uri_template.safe_substitute(countrymirror='')
@@ -276,7 +276,7 @@ class DistUpgradeFetcherCore(object):
                 ex.errno = 13
                 raise ex
             self.runDistUpgrader()
-        except OSError, e:
+        except OSError as e:
           if e.errno == 13:
             self.error(_("Can not run the upgrade"),
                        _("This usually is caused by a system where /tmp "

@@ -129,7 +129,7 @@ def save_system_state(logdir):
     try:
         s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]
         open(os.path.join(logdir, "lspci.txt"), "w").write(s)
-    except OSError, e:
+    except OSError as e:
         logging.debug("lspci failed: %s" % e)
     
 def setup_view(options, config, logdir):
@@ -144,7 +144,7 @@ def setup_view(options, config, logdir):
             view_class = getattr(view_modul, requested_view)
             instance = view_class(logdir=logdir)
             break
-        except Exception, e:
+        except Exception as e:
             logging.warning("can't import view '%s' (%s)" % (requested_view,e))
             print("can't load %s (%s)" % (requested_view, e))
     else:

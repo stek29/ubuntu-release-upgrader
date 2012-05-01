@@ -48,12 +48,12 @@ def do_install(cache):
          res = cache.commit(apt.progress.text.AcquireProgress(),
                             InstallProgress())
          break
-      except IOError, e:
+      except IOError as e:
          # fetch failed, will be retried
          current += 1
          print("Retrying to fetch: ", current, e)
          continue
-      except SystemError, e:
+      except SystemError as e:
          print("Error installing packages! ")
          print(e)
          print("Install result: ", res)
@@ -174,7 +174,7 @@ for comp in comps:
                if not (pkg.is_installed or blacklisted(pkg.name)):
                   try:
                      pkg.mark_install()
-                  except SystemError, e:
+                  except SystemError as e:
                      print("Installing '%s' cause problems: %s" % (pkg.name, e))
                      pkg.mark_keep()
                   # check blacklist

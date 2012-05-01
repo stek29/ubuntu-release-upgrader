@@ -12,7 +12,7 @@ def apport_crash(type, value, tb):
     try:
         from apport_python_hook import apport_excepthook
         from apport.report import Report
-    except ImportError, e:
+    except ImportError as e:
         logging.error("failed to import apport python module, can't report bug: %s" % e)
         return False
     # we pretend we are update-manager
@@ -50,7 +50,7 @@ def apport_pkgfailure(pkg, errormsg):
             p.stdin.write("ErrorMessage: %s\n" % errormsg)
             p.stdin.close()
             #p.wait()
-        except Exception, e:
+        except Exception as e:
             logging.warning("Failed to run apport (%s)" % e)
             return False
         return True

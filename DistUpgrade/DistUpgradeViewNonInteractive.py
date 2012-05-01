@@ -179,7 +179,7 @@ class NonInteractiveInstallProgress(InstallProgress):
 	try:
           # don't overwrite
 	  os.write(self.master_fd,"n\n")
- 	except Exception, e:
+ 	except Exception as e:
 	  logging.error("error '%s' when trying to write to the conffile"%e)
 
     def start_update(self):

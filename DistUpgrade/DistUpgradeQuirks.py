@@ -321,7 +321,7 @@ class DistUpgradeQuirks(object):
                 if not (self.controller.cache[kernel].is_installed or self.controller.cache[kernel].marked_install):
                     logging.debug("Selecting new kernel '%s'" % kernel)
                     self.controller.cache[kernel].mark_install()
-        except Exception, e:
+        except Exception as e:
             logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
         # fix feisty->gutsy utils-linux -> nfs-common transition (LP: #141559)
         try:
@@ -330,14 +330,14 @@ class DistUpgradeQuirks(object):
                     continue
                 try:
                     (device, mount_point, fstype, options, a, b) = line.split()
-                except Exception, e:
+                except Exception as e:
                     logging.error("can't parse line '%s'" % line)
                     continue
                 if "nfs" in fstype:
                     logging.debug("found nfs mount in line '%s', marking nfs-common for install " % line)
                     self.controller.cache["nfs-common"].mark_install()
                     break
-        except Exception, e:
+        except Exception as e:
             logging.warning("problem while transitioning util-linux -> nfs-common (%s)" % e)
 
     def feistyPostDistUpgradeCache(self):
@@ -349,7 +349,7 @@ class DistUpgradeQuirks(object):
                 if self.controller.cache[fr].is_installed and not self.controller.cache[to].marked_install:
                     try:
                         self.controller.cache.mark_install(to,"%s->%s quirk upgrade rule" % (fr, to))
-                    except SystemError, e:
+                    except SystemError as e:
                         logging.warning("Failed to apply %s->%s install (%s)" % (fr, to, e))
             
 
@@ -368,7 +368,7 @@ class DistUpgradeQuirks(object):
                     try:
                         self.controller.cache.mark_install(basepkg,
                                          "python2.4->python upgrade rule")
-                    except SystemError, e:
+                    except SystemError as e:
                         logging.debug("Failed to apply python2.4->python install: %s (%s)" % (basepkg, e))
             # xserver-xorg-input-$foo gives us trouble during the upgrade too
             if (pkg.name.startswith("xserver-xorg-input-") and
@@ -376,7 +376,7 @@ class DistUpgradeQuirks(object):
                 not pkg.marked_upgrade):
                 try:
                     self.controller.cache.mark_install(pkg.name, "xserver-xorg-input fixup rule")
-                except SystemError, e:
+                except SystemError as e:
                     logging.debug("Failed to apply fixup: %s (%s)" % (pkg.name, e))
             
         # deal with held-backs that are unneeded
@@ -385,7 +385,7 @@ class DistUpgradeQuirks(object):
                 self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].marked_upgrade):
                 try:
                     self.controller.cache.mark_install(pkgname,"%s quirk upgrade rule" % pkgname)
-                except SystemError, e:
+                except SystemError as e:
                     logging.debug("Failed to apply %s install (%s)" % (pkgname,e))
         # libgl1-mesa-dri from xgl.compiz.info (and friends) breaks the
 	# upgrade, work around this here by downgrading the package
@@ -411,7 +411,7 @@ class DistUpgradeQuirks(object):
                 if self.controller.cache[fr].is_installed and not self.controller.cache[to].marked_install:
                     try:
                         self.controller.cache.mark_install(to,"%s->%s quirk upgrade rule" % (fr, to))
-                    except SystemError, e:
+                    except SystemError as e:
                         logging.debug("Failed to apply %s->%s install (%s)" % (fr, to, e))
                     
     def dapperPostDistUpgradeCache(self):
@@ -864,7 +864,7 @@ class DistUpgradeQuirks(object):
             for f in glob.glob("/var/crash/*.crash"):
                 logging.debug("removing old crash file '%s'" % f)
                 os.unlink(f)
-        except Exception, e:
+        except Exception as e:
             logging.warning("error during unlink of old crash files (%s)" % e)
 
     def _cpuHasSSESupport(self, cpuinfo="/proc/cpuinfo"):
@@ -1035,13 +1035,13 @@ class DistUpgradeQuirks(object):
         import grp
         try:
             admin_group = grp.getgrnam("admin").gr_mem
-        except KeyError, e:
+        except KeyError as e:
             logging.warning("System has no admin group (%s)" % e)
             subprocess.call(["addgroup","--system","admin"])
         # double paranoia
         try:
             admin_group = grp.getgrnam("admin").gr_mem
-        except KeyError, e:
+        except KeyError as e:
             logging.warning("adding the admin group failed (%s)" % e)
             return
         # if the current SUDO_USER is not in the admin group

@@ -84,7 +84,7 @@ class MetaReleaseCore(object):
         if os.path.exists(self.CONF_METARELEASE):
             try:
                 parser.read(self.CONF_METARELEASE)
-            except ConfigParser.Error, e:
+            except ConfigParser.Error as e:
                 sys.stderr.write("ERROR: failed to read '%s':\n%s" % (
                         self.CONF_METARELEASE, e))
                 return
@@ -106,7 +106,7 @@ class MetaReleaseCore(object):
         if os.path.exists(self.CONF):
             try:
                 parser.read(self.CONF)
-            except ConfigParser.Error, e:
+            except ConfigParser.Error as e:
                 sys.stderr.write("ERROR: failed to read '%s':\n%s" % (
                         self.CONF, e))
                 return
@@ -146,14 +146,14 @@ class MetaReleaseCore(object):
         # write to homedir
         try:
             open(self.METARELEASE_FILE,"a")
-        except IOError, e:
+        except IOError as e:
             cache_dir = os.getenv(
                 "XDG_CACHE_HOME", os.path.expanduser("~/.cache"))
             path = os.path.join(cache_dir, 'update-manager-core')
             if not os.path.exists(path):
 		try:
                     os.mkdir(path)
-		except OSError, e:
+		except OSError as e:
                     sys.stderr.write("mkdir() failed: '%s'" % e)
 		    return False
             self.METARELEASE_FILE = os.path.join(path,os.path.basename(self.METARELEASE_URI))
@@ -161,7 +161,7 @@ class MetaReleaseCore(object):
         try:
             if os.path.getsize(self.METARELEASE_FILE) == 0:
                 os.unlink(self.METARELEASE_FILE)
-        except Exception, e:
+        except Exception as e:
             pass
         return True
 
@@ -254,7 +254,7 @@ class MetaReleaseCore(object):
         if os.access(self.METARELEASE_FILE, os.W_OK):
             try:
                 lastmodified = os.stat(self.METARELEASE_FILE).st_mtime
-            except OSError, e:
+            except OSError as e:
                 pass
         if lastmodified > 0 and not self.forceDownload:
             req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
@@ -268,7 +268,7 @@ class MetaReleaseCore(object):
                 not os.access(self.METARELEASE_FILE,os.W_OK)):
                 try:
                     os.unlink(self.METARELEASE_FILE)
-                except OSError,e:
+                except OSError as e:
                     print("Can't unlink '%s' (%s)" % (self.METARELEASE_FILE, e))
             # we may get exception here on e.g. disk full
             try:
@@ -278,11 +278,11 @@ class MetaReleaseCore(object):
                 f.flush()
                 f.seek(0,0)
                 self.metarelease_information=f
-            except IOError, e:
+            except IOError as e:
                 pass
             uri.close()
         # http error
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             # mvo: only reuse local info on "not-modified"
             if e.code == 304 and os.path.exists(self.METARELEASE_FILE):
                 self._debug("reading file '%s'" % self.METARELEASE_FILE)
@@ -290,7 +290,7 @@ class MetaReleaseCore(object):
             else:
                 self._debug("result of meta-release download: '%s'" % e)
         # generic network error
-        except (urllib2.URLError, httplib.BadStatusLine), e:
+        except (urllib2.URLError, httplib.BadStatusLine) as e:
             self._debug("result of meta-release download: '%s'" % e)
         # now check the information we have
         if self.metarelease_information != None:

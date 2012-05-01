@@ -73,7 +73,7 @@ class DistUpgradeViewText(DistUpgradeView):
         try:
           gettext.bindtextdomain("update-manager", localedir)
           gettext.textdomain("update-manager")
-        except Exception, e:
+        except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
         
         self.last_step = 0 # keep a record of the latest step

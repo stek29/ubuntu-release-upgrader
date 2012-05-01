@@ -160,7 +160,7 @@ if __name__ == "__main__":
         # see if we can install/upgrade the pkg
         try:
             pkg.markInstall()
-        except SystemError, e:
+        except SystemError as e:
             pkg.markKeep()
         if not (pkg.markedInstall or pkg.markedUpgrade):
             print("pkg: %s not installable" % pkg.name)

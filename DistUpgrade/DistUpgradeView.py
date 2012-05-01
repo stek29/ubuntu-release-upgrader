@@ -174,18 +174,18 @@ class InstallProgress(apt.progress.base.InstallProgress):
       while True:
           try:
               select.select([self.statusfd], [], [], self.select_timeout)
-          except select.error, (errno_, errstr):
-              if errno_ != errno.EINTR:
+          except select.error as e:
+              if e.args[0] != errno.EINTR:
                   raise
           self.update_interface()
           try:
               (pid, res) = os.waitpid(self.child_pid, os.WNOHANG)
               if pid == self.child_pid:
                   break
-          except OSError, (errno_, errstr):
-              if errno_ != errno.EINTR:
+          except OSError as e:
+              if e.errno != errno.EINTR:
                   raise
-              if errno_ == errno.ECHILD:
+              if e.errno == errno.ECHILD:
                   break
       return res
 
@@ -203,7 +203,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       signal.signal(signal.SIGPIPE,signal.SIG_IGN) 
       try:
         res = pm.do_install(self.writefd)
-      except Exception, e:
+      except Exception as e:
         print("Exception during pm.DoInstall(): ", e)
         logging.exception("Exception during pm.DoInstall()")
         open("/var/run/update-manager-apt-exception","w").write(str(e))

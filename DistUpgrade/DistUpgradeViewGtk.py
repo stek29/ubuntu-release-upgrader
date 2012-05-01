@@ -390,13 +390,13 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         try:
           locale.bindtextdomain("update-manager",localedir)
           gettext.textdomain("update-manager")
-        except Exception, e:
+        except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
         
         icons = gtk.icon_theme_get_default()
         try:
           gtk.window_set_default_icon(icons.load_icon("system-software-update", 32, 0))
-        except gobject.GError, e:
+        except gobject.GError as e:
           logging.debug("error setting default icon, ignoring (%s)" % e)
           pass
         SimpleGtkbuilderApp.__init__(self, 
@@ -416,7 +416,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         try:
           self.svgloader = gtk.gdk.PixbufLoader("svg")
           self.svgloader.close()
-        except gobject.GError, e:
+        except gobject.GError as e:
           logging.debug("svg pixbuf loader failed (%s)" % e)
           pass
         try:

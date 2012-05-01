@@ -597,7 +597,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                   'download_str' : download_str})
           self.hbox_downsize.show()
           self.vbox_alerts.show()
-      except SystemError, e:
+      except SystemError as e:
           print("requiredDownload could not be calculated: %s" % e)
           self.label_downsize.set_markup(_("Unknown download size."))
           self.image_downsize.set_sensitive(False)
@@ -762,14 +762,14 @@ class UpdateManager(SimpleGtkbuilderApp):
     # check free space and error if its not enough
     try:
         self.cache.checkFreeSpace()
-    except NotEnoughFreeSpaceError, e:
+    except NotEnoughFreeSpaceError as e:
         for req in e.free_space_required_list:
             self.error(err_sum, err_long % (req.size_total,
                                             req.dir,
                                             req.size_needed,
                                             req.dir))
         return
-    except SystemError, e:
+    except SystemError as e:
         logging.exception("free space check failed")
     self.invoke_manager(INSTALL)
     
@@ -1000,7 +1000,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.dl_size = 0
     try:
         self.initCache()
-    except SystemError, e:
+    except SystemError as e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not initialize the package information"),
                 _("An unresolvable problem occurred while "
@@ -1029,7 +1029,7 @@ class UpdateManager(SimpleGtkbuilderApp):
             self.list.update(self.cache)
         else:
             self.options.no_update = False
-    except SystemError, e:
+    except SystemError as e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not calculate the upgrade"),
                 _("An unresolvable problem occurred while "

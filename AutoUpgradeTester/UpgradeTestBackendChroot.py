@@ -98,7 +98,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                 if not os.path.exists(self.cachedir+"/"+os.path.basename(f)):
                     try:
                         shutil.copy(f,self.cachedir)
-                    except IOError, e:
+                    except IOError as e:
                         print("Can't copy '%s' (%s)" % (f, e))
 
     def _getTmpDir(self):
@@ -236,7 +236,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
             for f in glob.glob(self.cachedir+"/*.deb"):
                 try:
                     os.link(f, tmpdir+"/var/cache/apt/archives/%s"  % os.path.basename(f))
-                except OSError, e:
+                except OSError as e:
                     print("Can't link: %s (%s)" % (f, e))
         return True
 

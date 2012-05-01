@@ -65,7 +65,7 @@ def createBackend(backend_name, profile):
         backend_full_name = "AutoUpgradeTester.%s" % backend_name
         backend_modul = __import__(backend_full_name, fromlist="AutoUpgradeTester")
         backend_class = getattr(backend_modul, backend_name)
-    except (ImportError, AttributeError, TypeError), e:
+    except (ImportError, AttributeError, TypeError) as e:
         logging.exception("can not import '%s'" % backend_name)
         return None
     return backend_class(profile)
@@ -184,7 +184,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
     except (FailedToBootstrapError, FailedToUpgradeError, FailedPostUpgradeTestError) as e:
         print(e)
         result = e.exitcode
-    except Exception, e:
+    except Exception as e:
         import traceback
         traceback.print_exc()
         print("Caught exception in testUpgrade for '%s' (%s)" % (profile, e))
@@ -370,7 +370,7 @@ if __name__ == "__main__":
                 else:
                     print("Profile '%s' FAILED" % profile)
                 res = max(res, current_res)
-        except Exception, e:
+        except Exception as e:
             import traceback
             print("ERROR: exception caught '%s' " % e)
             html_output.write('<pre class="error">unhandled ERROR %s:\n%s</pre>' % (e, traceback.format_exc()))

@@ -69,12 +69,12 @@ while current < maxRetries:
     try:
         res = cache.commit(apt.progress.text.AcquireProgress(),
                            apt.progress.base.InstallProgress())    
-    except IOError, e:
+    except IOError as e:
         # fetch failed, will be retried
         current += 1
         print("Retrying to fetch: ", current)
         continue
-    except SystemError, e:
+    except SystemError as e:
         print("Error installing packages! ")
         print(e)
     print("Install result: ", res)

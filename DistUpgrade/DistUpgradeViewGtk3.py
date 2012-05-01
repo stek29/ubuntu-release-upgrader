@@ -403,7 +403,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         try:
             locale.bindtextdomain("update-manager",localedir)
             gettext.textdomain("update-manager")
-        except Exception, e:
+        except Exception as e:
             logging.warning("Error setting locales (%s)" % e)
 
         SimpleGtkbuilderApp.__init__(self,
@@ -413,7 +413,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         icons = Gtk.IconTheme.get_default()
         try:
             self.window_main.set_default_icon(icons.load_icon("system-software-update", 32, 0))
-        except GObject.GError, e:
+        except GObject.GError as e:
             logging.debug("error setting default icon, ignoring (%s)" % e)
             pass
 

@@ -445,7 +445,7 @@ iface eth0 inet static
                     os.kill(int(self.qemu_pid.pid), 15)
                     time.sleep(10)
                     os.kill(int(self.qemu_pid.pid), 9)
-                except Exception, e:
+                except Exception as e:
                     print("FAILED to kill %s '%s'" % (self.qemu_pid, e))
             self.qemu_pid = None
             print("qemu stopped")

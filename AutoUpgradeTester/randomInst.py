@@ -15,7 +15,7 @@ for i in range(int(sys.argv[1])):
         try:
             print("Trying to install: '%s'" % pkgname)
             cache[pkgname].mark_install()
-        except SystemError, e:
+        except SystemError as e:
             print("Failed to install '%s' (%s)" % (pkgname, e))
             continue
         break

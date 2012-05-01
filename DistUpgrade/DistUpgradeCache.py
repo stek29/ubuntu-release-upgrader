@@ -107,7 +107,7 @@ class MyCache(apt.Cache):
                 apt_pkg.PkgSystemLock()
                 self.lockListsDir()
                 self.lock = True
-            except SystemError, e:
+            except SystemError as e:
                 # checking for this is ok, its not translatable
                 if "dpkg --configure -a" in str(e):
                     raise CacheExceptionDpkgInterrupted, e
@@ -262,7 +262,7 @@ class MyCache(apt.Cache):
             try:
                 apt_pkg.PkgSystemUnLock()
                 self.lock = False
-            except SystemError, e:
+            except SystemError as e:
                 logging.debug("failed to SystemUnLock() (%s) " % e)
 
     def getLock(self, pkgSystemOnly=True):
@@ -270,7 +270,7 @@ class MyCache(apt.Cache):
             try:
                 apt_pkg.PkgSystemLock()
                 self.lock = True
-            except SystemError, e:
+            except SystemError as e:
                 logging.debug("failed to SystemLock() (%s) " % e)
 
     def downloadable(self, pkg, useCandidate=True):
@@ -490,7 +490,7 @@ class MyCache(apt.Cache):
         # never be able to release
         try:
             from NvidiaDetector.nvidiadetector import NvidiaDetection
-        except ImportError, e:
+        except ImportError as e:
             logging.error("NvidiaDetector can not be imported %s" % e)
             return False
         try:
@@ -516,7 +516,7 @@ class MyCache(apt.Cache):
                 self[driver].mark_install()
                 logging.info("installing %s as suggested by NvidiaDetector" % driver)
                 return True
-        except Exception, e:
+        except Exception as e:
             logging.error("NvidiaDetection returned a error: %s" % e)
         return False
 
@@ -584,7 +584,7 @@ class MyCache(apt.Cache):
         logging.debug("Kernel uname: '%s' " % self.uname)
         try:
             (version, build, flavour) = self.uname.split("-")
-        except Exception, e:
+        except Exception as e:
             logging.warning("Can't parse kernel uname: '%s' (self compiled?)" % e)
             return False
         # now check if we have a SMP system
@@ -672,7 +672,7 @@ class MyCache(apt.Cache):
             # see if it all makes sense, if not this function raises 
             self._verifyChanges()
 
-        except SystemError, e:
+        except SystemError as e:
             # this should go into a finally: line, see below for the 
             # rationale why it doesn't 
             lock.release()
@@ -739,7 +739,7 @@ class MyCache(apt.Cache):
             if b:
                 logging.warning("AllowUnauthenticated set!")
                 return True
-        except ConfigParser.NoOptionError, e:
+        except ConfigParser.NoOptionError as e:
             pass
         if len(untrusted) > 0:
             untrusted.sort()
@@ -881,7 +881,7 @@ class MyCache(apt.Cache):
                     self[key].is_upgradable):
                     logging.debug("Marking '%s' for upgrade" % key)
                     self[key].mark_upgrade()
-            except SystemError, e:
+            except SystemError as e:
                 # warn here, but don't fail, its possible that meta-packages
                 # conflict (like ubuntu-desktop vs xubuntu-desktop) LP: #775411
                 logging.warn("Can't mark '%s' for upgrade (%s)" % (key,e))
@@ -897,7 +897,7 @@ class MyCache(apt.Cache):
                     logging.debug("guessing '%s' as missing meta-pkg" % key)
                     try:
                         self[key].mark_install()
-                    except (SystemError, KeyError), e:
+                    except (SystemError, KeyError) as e:
                         logging.error("failed to mark '%s' for install (%s)" % (key,e))
                         view.error(_("Can't install '%s'") % key,
                                    _("It was impossible to install a "
@@ -953,7 +953,7 @@ class MyCache(apt.Cache):
         # check if we want to purge 
         try:
             purge = self.config.getboolean("Distro","PurgeObsoletes")
-        except ConfigParser.NoOptionError, e:
+        except ConfigParser.NoOptionError as e:
             purge = False
 
         # this is a delete candidate, only actually delete,
@@ -975,7 +975,7 @@ class MyCache(apt.Cache):
                     logging.debug("package '%s' has unwanted removals, skipping" % pkgname)
                     self.restore_snapshot()
                     return False
-        except (SystemError,KeyError),e:
+        except (SystemError, KeyError) as e:
             logging.warning("_tryMarkObsoleteForRemoval failed for '%s' (%s: %s)" % (pkgname, repr(e), e))
             self.restore_snapshot()
             return False
@@ -1090,7 +1090,7 @@ class MyCache(apt.Cache):
         for line in open("/proc/mounts"):
             try:
                 (what, where, fs, options, a, b) = line.split()
-            except ValueError, e:
+            except ValueError as e:
                 logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
                 continue
             if not where in mounted:

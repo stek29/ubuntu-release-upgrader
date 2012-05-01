@@ -31,7 +31,7 @@ try:
 except ImportError:
     from httplib import BadStatusLine
 import logging
-import rfc822
+import email.utils
 import os
 import sys
 import time
@@ -201,7 +201,9 @@ class MetaReleaseCore(object):
                 name = index_tag.section["Dist"]
                 self._debug("found distro name: '%s'" % name)
                 rawdate = index_tag.section["Date"]
-                date = time.mktime(rfc822.parsedate(rawdate))
+                parseddate = list(email.utils.parsedate(rawdate))
+                parseddate[8] = 0  # assume no DST
+                date = time.mktime(parseddate)
                 supported = int(index_tag.section["Supported"])
                 version = index_tag.section["Version"]
                 # add the information to a new date object

@@ -35,7 +35,7 @@ import email.utils
 import os
 import sys
 import time
-import thread
+import threading
 try:
     from urllib.request import Request, urlopen
     from urllib.error import HTTPError, URLError
@@ -145,8 +145,8 @@ class MetaReleaseCore(object):
             self._debug("_buildMetaReleaseFile failed")
             return
         # we start the download thread here and we have a timeout
-        thread.start_new_thread(self.download, ())
-        #t=thread.start_new_thread(self.check, ())
+        threading.Thread(target=self.download).start()
+        #threading.Thread(target=self.check).start()
 
     def _buildMetaReleaseFile(self):
         # build the metarelease_file name

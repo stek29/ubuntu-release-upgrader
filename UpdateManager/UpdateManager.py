@@ -49,7 +49,7 @@ import locale
 import logging
 import subprocess
 import time
-import thread
+import threading
 import xml.sax.saxutils
 
 import dbus
@@ -451,9 +451,11 @@ class UpdateManager(SimpleGtkbuilderApp):
     # else, get it from the entwork
     else:
       if self.expander_details.get_expanded():
-        lock = thread.allocate_lock()
+        lock = threading.Lock()
         lock.acquire()
-        thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
+        changelog_thread = threading.Thread(
+            target=self.cache.get_news_and_changelog, args=(name, lock))
+        changelog_thread.start()
         changes_buffer.set_text("%s\n" % _("Downloading list of changes..."))
         iter = changes_buffer.get_iter_at_line(1)
         anchor = changes_buffer.create_child_anchor(iter)

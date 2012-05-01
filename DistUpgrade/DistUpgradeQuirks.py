@@ -448,7 +448,7 @@ class DistUpgradeQuirks(object):
                 os.makedirs(targetdir)
             logging.debug("copying zz-update-grub into %s" % targetdir)
             shutil.copy("zz-update-grub", targetdir)
-            os.chmod(os.path.join(targetdir, "zz-update-grub"), 0755)
+            os.chmod(os.path.join(targetdir, "zz-update-grub"), 0o755)
         # enable multiarch permanently
         if apt.apt_pkg.config.find("Apt::Architecture") == "amd64":
             self._enable_multiarch(foreign_arch="i386")

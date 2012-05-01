@@ -65,7 +65,7 @@ if len(need_fixup) > 0:
                 outfile.write(str(tagfile.Section)+"\n")
         os.rename(STATE_FILE, STATE_FILE+".fixup-save")
         os.rename(outfile.name, STATE_FILE)
-        os.chmod(STATE_FILE, 0644)
+        os.chmod(STATE_FILE, 0o644)
 
 
 

@@ -27,7 +27,7 @@ def aufsOptionsAndEnvironmentSetup(options, config):
     config.set("Aufs","RWDir",aufs_rw_dir)
     # now the chroot tmpdir
     tmpchroot = tempfile.mkdtemp(prefix="upgrade-chroot-")
-    os.chmod(tmpchroot, 0755)
+    os.chmod(tmpchroot, 0o755)
     aufs_chroot_dir = config.getWithDefault("Aufs","ChrootDir", tmpchroot)
     logging.debug("using '%s' as aufs chroot dir" % aufs_chroot_dir)
     

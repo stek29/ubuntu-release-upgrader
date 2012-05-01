@@ -179,7 +179,7 @@ class MyCache(apt.Cache):
         apt_pkg.Config.set("Dir::Log",logdir)
         apt_pkg.Config.set("Dir::Log::Terminal","apt-term.log")
         self.logfd = os.open(os.path.join(logdir,"apt.log"),
-                             os.O_RDWR|os.O_CREAT|os.O_APPEND, 0644)
+                             os.O_RDWR|os.O_CREAT|os.O_APPEND, 0o644)
         os.write(self.logfd, "Log time: %s\n" % datetime.datetime.now())
         # turn on debugging in the cache
         apt_pkg.Config.set("Debug::pkgProblemResolver","true")

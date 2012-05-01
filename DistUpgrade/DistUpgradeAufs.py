@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import string
 import logging
 import os
 import os.path
@@ -176,7 +175,8 @@ def setupAufsChroot(rw_dir, chroot_dir):
 
     # create binds for the systemdirs
     #needs_bind_mount = set()
-    for line in map(string.strip, mounts.split("\n")):
+    for line in mounts.split("\n"):
+        line = line.strip()
         if not line: continue
         (device, mountpoint, fstype, options, a, b) = line.split()
         if (fstype != "aufs" and

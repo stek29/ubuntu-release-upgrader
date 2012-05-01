@@ -28,7 +28,6 @@ import os.path
 import re
 import hashlib
 import shutil
-import string
 import sys
 import subprocess
 from subprocess import PIPE, Popen
@@ -325,7 +324,8 @@ class DistUpgradeQuirks(object):
             logging.warning("problem while transitioning lowlatency kernel (%s)" % e)
         # fix feisty->gutsy utils-linux -> nfs-common transition (LP: #141559)
         try:
-            for line in map(string.strip, open("/proc/mounts")):
+            for line in open("/proc/mounts"):
+                line = line.strip()
                 if line == '' or line.startswith("#"):
                     continue
                 try:
@@ -1086,7 +1086,7 @@ class DistUpgradeQuirks(object):
                 logging.debug("skipping '%s' (no '.')" % f)
                 continue
             logging.debug("check if patch '%s' needs to be applied" % f)
-            (encoded_path, md5sum, result_md5sum) = string.rsplit(f, ".", 2)
+            (encoded_path, md5sum, result_md5sum) = f.rsplit(".", 2)
             # FIXME: this is not clever and needs quoting support for
             #        filenames with "_" in the name
             path = encoded_path.replace("_","/")

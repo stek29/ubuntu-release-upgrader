@@ -29,7 +29,6 @@ import os
 import os.path
 import re
 import logging
-import string
 import statvfs
 import time
 import datetime
@@ -529,8 +528,8 @@ class MyCache(apt.Cache):
             logging.warn("./get_kernel_list.sh returned non-zero exitcode")
             return ""
         kernels = p.communicate()[0]
-        kernels = filter(lambda x : len(x) > 0,
-                         map(string.strip, kernels.split("\n")))
+        kernels = [x.strip() for x in kernels.split("\n")]
+        kernels = [x for x in kernels if len(x) > 0]
         logging.debug("./get_kernel_list.sh returns: %s" % kernels)
         return kernels
 

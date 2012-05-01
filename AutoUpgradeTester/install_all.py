@@ -7,7 +7,6 @@ import apt
 import apt_pkg
 import re
 import os
-import string
 import sys
 
 # global install blacklist
@@ -74,9 +73,11 @@ def blacklisted(name):
    global pkg_blacklist
    if pkg_blacklist is None and os.path.exists("install_blacklist.cfg"):
       pkg_blacklist = set()
-      for name in map(string.strip, open("install_blacklist.cfg").readlines()):
-         if name and not name.startswith("#"):
-            pkg_blacklist.add(name)
+      with open("install_blacklist.cfg") as blacklist_file:
+         for line in blacklist_file:
+            name = line.strip()
+            if name and not name.startswith("#"):
+               pkg_blacklist.add(name)
       print("blacklist: ", pkg_blacklist)
    if pkg_blacklist:
       for b in pkg_blacklist:
@@ -136,7 +137,8 @@ i=0
 
 # reapply checkpoints
 if os.path.exists("best.txt"):
-   best = map(string.strip, open("best.txt").readlines())
+   with open("best.txt") as best_file:
+      best = [line.strip() for line in best_file]
    reapply(cache, best)
 
 if os.path.exists("pos.txt"):

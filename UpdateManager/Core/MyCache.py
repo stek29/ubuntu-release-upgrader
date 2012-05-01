@@ -27,7 +27,6 @@ import apt
 import apt_pkg
 import logging
 import os
-import string
 import urllib2
 import httplib
 import urlparse
@@ -165,7 +164,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
 
     def _strip_epoch(self, verstr):
         " strip of the epoch "
-        l = string.split(verstr,":")
+        l = verstr.split(":")
         if len(l) > 1:
             verstr = "".join(l[1:])
         return verstr
@@ -280,7 +279,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         pkg = self[name]
         deb_uri = pkg.candidate.uri
         if deb_uri:
-            return "%s.changelog" % string.rsplit(deb_uri, ".", 1)[0]
+            return "%s.changelog" % deb_uri.rsplit(".", 1)[0]
         return None
 
         

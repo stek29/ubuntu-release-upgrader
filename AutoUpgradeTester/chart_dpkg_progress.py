@@ -4,7 +4,6 @@
 from __future__ import print_function
 
 import sys
-import string
 from heapq import heappush, heappop
 
 if __name__ == "__main__":
@@ -16,7 +15,8 @@ if __name__ == "__main__":
     last_pkgname = None
 
     log = open(sys.argv[1])
-    for line in map(string.strip, log):
+    for line in log:
+        line = line.strip()
         line_data = line.split(":")
 
         # special cases

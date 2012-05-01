@@ -203,7 +203,7 @@ class MetaReleaseCore(object):
                 rawdate = index_tag.section["Date"]
                 parseddate = list(email.utils.parsedate(rawdate))
                 parseddate[8] = 0  # assume no DST
-                date = time.mktime(parseddate)
+                date = time.mktime(tuple(parseddate))
                 supported = int(index_tag.section["Supported"])
                 version = index_tag.section["Version"]
                 # add the information to a new date object

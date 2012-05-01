@@ -276,7 +276,7 @@ static char fdsend_sendfds__doc__[] =
 "Send msg across the socket represented by fd, optionally accompanied by a\n"
 "sequence (tuple or list) of open file handles.  For example:\n"
 "\n"
-"  >>> devnull = file(\"/dev/null\")\n"
+"  >>> devnull = open(\"/dev/null\")\n"
 "  >>> sendfds(the_socket, \"null device\", (devnull,))\n"
 "\n"
 "The socket fd and members of the fds sequence may be any representation\n"

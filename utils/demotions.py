@@ -68,7 +68,8 @@ if __name__ == "__main__":
     
     for comp in ["main", "restricted", "universe", "multiverse"]:
       line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (dist.name,comp)
-      file("apt/sources.list","w").write(line)
+      with open("apt/sources.list", "w") as sources_list:
+        sources_list.write(line)
       dist.pkgs_in_comp[comp] = set()
 
       # and the archs
@@ -101,7 +102,8 @@ if __name__ == "__main__":
   # in main (pidgin, gaim) etc
   #print("Looking for replaces")
   line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (new.name, "main")
-  file("apt/sources.list","w").write(line)
+  with open("apt/sources.list", "w") as sources_list:
+    sources_list.write(line)
   dist.pkgs_in_comp[comp] = set()
   for arch in ARCHES:
     apt_pkg.Config.set("APT::Architecture",arch)

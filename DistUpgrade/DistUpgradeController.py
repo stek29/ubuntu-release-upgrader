@@ -328,7 +328,7 @@ class DistUpgradeController(object):
         from ConfigParser import SafeConfigParser, NoOptionError
         if os.path.exists('/usr/share/python/debian_defaults'):
             config = SafeConfigParser()
-            config.readfp(file('/usr/share/python/debian_defaults'))
+            config.readfp(open('/usr/share/python/debian_defaults'))
             try:
                 expected_default = config.get('DEFAULT', 'default-version')
             except NoOptionError:

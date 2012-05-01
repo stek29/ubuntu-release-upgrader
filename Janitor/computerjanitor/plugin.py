@@ -141,7 +141,7 @@ class PluginManager(object):
         """Load a module from a filename."""
         logging.debug("Loading module %s" % filename)
         module_name, dummy = os.path.splitext(os.path.basename(filename))
-        f = file(filename, "r")
+        f = open(filename, "r")
         try:
             module = imp.load_module(module_name, f, filename,
                                      (".py", "r", imp.PY_SOURCE))

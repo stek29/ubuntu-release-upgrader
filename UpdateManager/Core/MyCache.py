@@ -27,9 +27,14 @@ import apt
 import apt_pkg
 import logging
 import os
-import urllib2
+try:
+    from urllib.error import HTTPError
+    from urllib.request import urlopen
+    from urllib.parse import urlsplit
+except ImportError:
+    from urllib2 import HTTPError, urlopen
+    from urlparse import urlsplit
 import httplib
-import urlparse
 import socket
 import re
 import DistUpgrade.DistUpgradeCache
@@ -208,14 +213,14 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         # because the urllib2 https implementation will not check certificates
         # and so its possible to do a man-in-the-middle attack to steal the
         # credentials
-        res = urlparse.urlsplit(uri)
+        res = urlsplit(uri)
         if res.scheme == "https" and res.username != "":
             raise HttpsChangelogsUnsupportedError(
                 "https locations with username/password are not"
                 "supported to fetch changelogs")
 
         # print("Trying: %s " % uri)
-        changelog = urllib2.urlopen(uri)
+        changelog = urlopen(uri)
         #print(changelog.read())
         # do only get the lines that are new
         alllines = ""
@@ -311,7 +316,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     changelog = self._get_changelog_or_news(
                         name, "changelog", False, changelogs_uri)
                     self.all_changes[name] += changelog
-                except (urllib2.HTTPError, HttpsChangelogsUnsupportedError):
+                except (HTTPError, HttpsChangelogsUnsupportedError):
                     # no changelogs_uri or 404
                     error_message = _(
                         "This update does not come from a "
@@ -341,7 +346,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                               "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                               "until the changes become available or try again "
                               "later.") % (srcpkg, srcver_epoch)
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             changelog = _("The list of changes is not available yet.\n\n"
                           "Please use http://launchpad.net/ubuntu/+source/%s/%s/+changelog\n"
                           "until the changes become available or try again "

@@ -5,7 +5,10 @@ import apt
 import logging
 import sys
 import unittest
-import urllib2
+try:
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import HTTPError
 
 sys.path.insert(0, "../")
 from UpdateManager.Core.MyCache import MyCache
@@ -37,7 +40,7 @@ class TestChangelogs(unittest.TestCase):
 
     def test_changelog_not_supported(self):
         def monkey_patched_get_changelogs(name, what, ver, uri):
-            raise urllib2.HTTPError(
+            raise HTTPError(
                 "url", "code", "msg", "hdrs", open("/dev/zero"))
         pkgname = "update-manager"
         # patch origin

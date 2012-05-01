@@ -54,7 +54,10 @@ from utils import (country_mirror,
                    get_string_with_no_auth_from_source_entry,
                    is_child_of_process_name)
 from string import Template
-from urlparse import urlsplit
+try:
+    from urllib.parse import urlsplit
+except ImportError:
+    from urlparse import urlsplit
 
 import DistUpgradeView
 from DistUpgradeCache import MyCache

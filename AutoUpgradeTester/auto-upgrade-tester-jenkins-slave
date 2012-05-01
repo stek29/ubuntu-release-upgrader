@@ -22,7 +22,10 @@
 import logging
 import optparse
 import os
-import urllib
+try:
+    from urllib.request import urlretrieve
+except ImportError:
+    from urllib import urlretrieve
 import sys
 import subprocess
 import socket
@@ -53,7 +56,7 @@ SLAVE_JAR=os.path.expanduser("~/.slave.jar")
 l_hudson_url= HUDSON_URL + HUDSON_PATH % options.nodename
 
 logging.debug("Retrieving hudson slave.jar")
-urllib.urlretrieve(SLAVE_URL, SLAVE_JAR)
+urlretrieve(SLAVE_URL, SLAVE_JAR)
 
 cmd = [ 'java','-jar', SLAVE_JAR, '-jnlpUrl', l_hudson_url ]
 logging.debug("Cmd: %s" % (cmd))

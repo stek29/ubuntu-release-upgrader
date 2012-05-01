@@ -27,7 +27,11 @@ from ReleaseNotesViewer import ReleaseNotesViewer
 from Core.utils import error, inhibit_sleep, allow_sleep
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
-import urllib2
+try:
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import urlopen, HTTPError
 import os
 import socket
 
@@ -97,7 +101,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           timeout = socket.getdefaulttimeout()
           try:
               socket.setdefaulttimeout(5)
-              release_notes = urllib2.urlopen(uri)
+              release_notes = urlopen(uri)
               notes = release_notes.read()
               textview_release_notes = ReleaseNotesViewer(notes)
               textview_release_notes.show()
@@ -105,7 +109,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               self.parent.dialog_release_notes.set_transient_for(self.window_main)
               res = self.parent.dialog_release_notes.run()
               self.parent.dialog_release_notes.hide()
-          except urllib2.HTTPError:
+          except HTTPError:
               primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                         _("Could not find the release notes")
               secondary = _("The server may be overloaded. ")

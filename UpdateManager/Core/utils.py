@@ -37,11 +37,26 @@ import glob
 import subprocess
 import sys
 import time
-import urllib2
-import urlparse
+try:
+    from urllib.request import (
+        ProxyHandler,
+        Request,
+        build_opener,
+        install_opener,
+        urlopen,
+        )
+    from urllib.parse import urlsplit
+except ImportError:
+    from urllib2 import (
+        ProxyHandler,
+        Request,
+        build_opener,
+        install_opener,
+        urlopen,
+        )
+    from urlparse import urlsplit
 
 from copy import copy
-from urlparse import urlsplit
 
 
 class ExecutionTime(object):
@@ -192,7 +207,7 @@ def get_dist():
   dist = p.stdout.readline().strip()
   return dist
 
-class HeadRequest(urllib2.Request):
+class HeadRequest(Request):
     def get_method(self):
         return "HEAD"
 
@@ -207,11 +222,11 @@ def url_downloadable(uri, debug_func=None):
   if not debug_func:
       lambda x: True
   debug_func("url_downloadable: %s" % uri)
-  (scheme, netloc, path, querry, fragment) = urlparse.urlsplit(uri)
+  (scheme, netloc, path, querry, fragment) = urlsplit(uri)
   debug_func("s='%s' n='%s' p='%s' q='%s' f='%s'" % (scheme, netloc, path, querry, fragment))
   if scheme == "http":
     try:
-        http_file = urllib2.urlopen(HeadRequest(uri))
+        http_file = urlopen(HeadRequest(uri))
         http_file.close()
         if http_file.code == 200:
             return True
@@ -282,9 +297,9 @@ def init_proxy(gsettings=None):
     if not re.match("http://\w+", proxy):
       print("proxy '%s' looks invalid" % proxy, file=sys.stderr)
       return
-    proxy_support = urllib2.ProxyHandler({"http":proxy})
-    opener = urllib2.build_opener(proxy_support)
-    urllib2.install_opener(opener)
+    proxy_support = ProxyHandler({"http":proxy})
+    opener = build_opener(proxy_support)
+    install_opener(opener)
     os.putenv("http_proxy",proxy)
   return proxy
 

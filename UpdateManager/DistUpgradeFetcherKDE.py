@@ -29,7 +29,11 @@ import sys
 from Core.utils import inhibit_sleep, allow_sleep
 from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
-import urllib2
+try:
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import urlopen, HTTPError
 import os
 
 from Core.MetaRelease import MetaReleaseCore
@@ -94,11 +98,11 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
           # FIXME: add some progress reporting here
           result = None
           try:
-              release_notes = urllib2.urlopen(uri)
+              release_notes = urlopen(uri)
               notes = release_notes.read()
               self.dialogue.scrolled_notes.setText(notes)
               result = self.dialogue.exec_()
-          except urllib2.HTTPError:
+          except HTTPError:
               primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                           _("Could not find the release notes")
               secondary = _("The server may be overloaded. ")

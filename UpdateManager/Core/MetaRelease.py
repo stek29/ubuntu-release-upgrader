@@ -33,7 +33,11 @@ import os
 import sys
 import time
 import thread
-import urllib2
+try:
+    from urllib.request import Request, urlopen
+    from urllib.error import HTTPError, URLError
+except ImportError:
+    from urllib2 import HTTPError, Request, URLError, urlopen
 
 from utils import get_lang, get_dist, get_ubuntu_flavor
 
@@ -250,7 +254,7 @@ class MetaReleaseCore(object):
     def download(self):
         self._debug("MetaRelease.download()")
         lastmodified = 0
-        req = urllib2.Request(self.METARELEASE_URI)
+        req = Request(self.METARELEASE_URI)
         # make sure that we always get the latest file (#107716)
         req.add_header("Cache-Control", "No-Cache")
         req.add_header("Pragma", "no-cache")
@@ -263,7 +267,7 @@ class MetaReleaseCore(object):
             req.add_header("If-Modified-Since", time.asctime(time.gmtime(lastmodified)))
         try:
             # open
-            uri=urllib2.urlopen(req, timeout=20)
+            uri=urlopen(req, timeout=20)
             # sometime there is a root owned meta-relase file
             # there, try to remove it so that we get it
             # with proper permissions
@@ -285,7 +289,7 @@ class MetaReleaseCore(object):
                 pass
             uri.close()
         # http error
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             # mvo: only reuse local info on "not-modified"
             if e.code == 304 and os.path.exists(self.METARELEASE_FILE):
                 self._debug("reading file '%s'" % self.METARELEASE_FILE)
@@ -293,7 +297,7 @@ class MetaReleaseCore(object):
             else:
                 self._debug("result of meta-release download: '%s'" % e)
         # generic network error
-        except (urllib2.URLError, httplib.BadStatusLine) as e:
+        except (URLError, httplib.BadStatusLine) as e:
             self._debug("result of meta-release download: '%s'" % e)
         # now check the information we have
         if self.metarelease_information != None:

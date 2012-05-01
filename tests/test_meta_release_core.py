@@ -6,10 +6,12 @@ import multiprocessing
 import os
 import sys
 import time
-import urllib2
+try:
+    from urllib.error import HTTPError
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import HTTPError, urlopen
 import unittest
-
-from urllib2 import urlopen
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 from SocketServer import TCPServer
@@ -19,9 +21,9 @@ class SillyProxyRequestHandler(BaseHTTPRequestHandler):
         code = 200
         info = ""
         try:
-            f = urllib2.urlopen(self.path)
+            f = urlopen(self.path)
             info = f.info()
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             code = e.code
         s = "HTTP/1.0 %s OK\n%s" % (code, info)
         self.wfile.write(s)

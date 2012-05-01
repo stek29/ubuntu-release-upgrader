@@ -23,7 +23,7 @@ def blacklisted(name):
             return True
     return False
 
-#apt_pkg.Config.Set("Dir::State::status","./empty")
+#apt_pkg.config.set("Dir::State::status","./empty")
 
 cache = apt.Cache()
 group = apt_pkg.GetPkgActionGroup(cache._depcache)

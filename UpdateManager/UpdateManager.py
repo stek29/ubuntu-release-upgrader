@@ -1176,7 +1176,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       if remind == False:
           return
 
-      update_days = apt_pkg.Config.find_i("APT::Periodic::Update-Package-Lists")
+      update_days = apt_pkg.config.find_i("APT::Periodic::Update-Package-Lists")
       if update_days < 1:
           self.dialog_manual_update.set_transient_for(self.window_main)
           self.dialog_manual_update.set_title("")

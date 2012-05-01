@@ -177,7 +177,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.parent = parent
         # setup the child waiting
         # some options for dpkg to make it die less easily
-        apt_pkg.Config.set("DPkg::StopOnError","False")
+        apt_pkg.config.set("DPkg::StopOnError","False")
 
     def start_update(self):
         InstallProgress.start_update(self)

@@ -271,8 +271,8 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
             test_repo = os.path.join(os.path.dirname(self.profile), test_repo)
             self._copyToImage(test_repo, "/etc/apt/sources.list.d")
             sourcelist = self.getSourcesListFile()
-            apt_pkg.Config.Set("Dir::Etc", os.path.dirname(sourcelist.name))
-            apt_pkg.Config.Set("Dir::Etc::sourcelist", 
+            apt_pkg.config.set("Dir::Etc", os.path.dirname(sourcelist.name))
+            apt_pkg.config.set("Dir::Etc::sourcelist", 
                                os.path.basename(sourcelist.name))
             sources = SourcesList(matcherPath=".")
             sources.load(test_repo)

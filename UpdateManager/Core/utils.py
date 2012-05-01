@@ -418,7 +418,7 @@ def humanize_size(bytes):
         return locale.format_string(_("%.1f MB"), bytes / 1000.0 / 1000.0)
 
 def get_arch():
-    return apt_pkg.Config.find("APT::Architecture")
+    return apt_pkg.config.find("APT::Architecture")
 
 
 def is_port_already_listening(port):

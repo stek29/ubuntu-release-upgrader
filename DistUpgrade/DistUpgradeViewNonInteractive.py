@@ -77,8 +77,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         except (NoSectionError, NoOptionError):
             pass
         # more debug
-        #apt_pkg.Config.Set("Debug::pkgOrderList","true")
-        #apt_pkg.Config.Set("Debug::pkgDPkgPM","true")
+        #apt_pkg.config.set("Debug::pkgOrderList","true")
+        #apt_pkg.config.set("Debug::pkgDPkgPM","true")
         # default to 2400 sec timeout
         self.timeout = 2400
         try:

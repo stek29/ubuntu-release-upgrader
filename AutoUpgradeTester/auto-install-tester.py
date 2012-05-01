@@ -54,7 +54,7 @@ if __name__ == "__main__":
     (options, args) = parser.parse_args()
 
     # create backend
-    apt_pkg.Config.Set("APT::Architecture","i386")
+    apt_pkg.config.set("APT::Architecture","i386")
     basedir = os.path.abspath(os.path.dirname(options.profile))
     aptbasedir = os.path.join(basedir,"auto-install-test")
 

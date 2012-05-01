@@ -99,12 +99,12 @@ def contains_blacklisted_pkg(cache):
 
 # ----------------------------------------------------------------
 
-#apt_pkg.Config.Set("Dir::State::status","./empty")
+#apt_pkg.config.set("Dir::State::status","./empty")
 
 # debug stuff
-#apt_pkg.Config.Set("Debug::pkgProblemResolver","true")
-#apt_pkg.Config.Set("Debug::pkgDepCache::AutoInstall","true")
-#apt_pkg.Config.Set("Debug::pkgDpkgPM","true")
+#apt_pkg.config.set("Debug::pkgProblemResolver","true")
+#apt_pkg.config.set("Debug::pkgDepCache::AutoInstall","true")
+#apt_pkg.config.set("Debug::pkgDpkgPM","true")
 
 # Increase the maxsize limits here
 #

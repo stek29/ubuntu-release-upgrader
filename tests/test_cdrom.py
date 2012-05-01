@@ -19,7 +19,7 @@ class TestAptCdrom(unittest.TestCase):
     
 #    def testAdd(self):
 #        p = "./test-data-cdrom"
-#        apt_pkg.Config.Set("Dir::State::lists","/tmp")
+#        apt_pkg.config.set("Dir::State::lists","/tmp")
 #        cdrom = AptCdrom(None, p)
 #        self.assertTrue(cdrom._doAdd())
 
@@ -29,9 +29,9 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
 """
         p = "./test-data-cdrom/"
         database="./test-data-cdrom/cdrom.list"
-        apt_pkg.Config.Set("Dir::State::cdroms", database)
-        apt_pkg.Config.Set("Acquire::cdrom::mount", p)
-        apt_pkg.Config.Set("APT::CDROM::NoMount","true")
+        apt_pkg.config.set("Dir::State::cdroms", database)
+        apt_pkg.config.set("Acquire::cdrom::mount", p)
+        apt_pkg.config.set("APT::CDROM::NoMount","true")
         if os.path.exists(database):
             os.unlink(database)
         cdrom = AptCdrom(None, p)
@@ -127,5 +127,5 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
 
 if __name__ == "__main__":
     apt_pkg.init()
-    apt_pkg.Config.Set("APT::Architecture","amd64")
+    apt_pkg.config.set("APT::Architecture","amd64")
     unittest.main()

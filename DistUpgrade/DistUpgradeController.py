@@ -145,7 +145,7 @@ class DistUpgradeController(object):
         # we run with --force-overwrite by default
         if not os.environ.has_key("RELEASE_UPGRADE_NO_FORCE_OVERWRITE"):
             logging.debug("enable dpkg --force-overwrite")
-            apt_pkg.Config.set("DPkg::Options::","--force-overwrite")
+            apt_pkg.config.set("DPkg::Options::","--force-overwrite")
 
         # we run in full upgrade mode by default
         self._partialUpgrade = False
@@ -162,19 +162,19 @@ class DistUpgradeController(object):
 
         # set max retries
         maxRetries = self.config.getint("Network","MaxRetries")
-        apt_pkg.Config.set("Acquire::Retries", str(maxRetries))
+        apt_pkg.config.set("Acquire::Retries", str(maxRetries))
         # max sizes for dpkgpm for large installs (see linux/limits.h and 
         #                                          linux/binfmts.h)
-        apt_pkg.Config.set("Dpkg::MaxArgs", str(64*1024))
-        apt_pkg.Config.set("Dpkg::MaxArgBytes", str(128*1024))
+        apt_pkg.config.set("Dpkg::MaxArgs", str(64*1024))
+        apt_pkg.config.set("Dpkg::MaxArgBytes", str(128*1024))
 
         # smaller to avoid hangs
-        apt_pkg.Config.set("Acquire::http::Timeout","20")
-        apt_pkg.Config.set("Acquire::ftp::Timeout","20")
+        apt_pkg.config.set("Acquire::http::Timeout","20")
+        apt_pkg.config.set("Acquire::ftp::Timeout","20")
 
         # no list cleanup here otherwise a "cancel" in the upgrade
         # will not restore the full state (lists will be missing)
-        apt_pkg.Config.set("Apt::Get::List-Cleanup", "false")
+        apt_pkg.config.set("Apt::Get::List-Cleanup", "false")
 
         # forced obsoletes
         self.forced_obsoletes = self.config.getlist("Distro","ForcedObsoletes")
@@ -396,13 +396,13 @@ class DistUpgradeController(object):
             logging.info("using backports in '%s' " % backportsdir)
             logging.debug("have: %s" % glob.glob(backportsdir+"/*.udeb"))
             if os.path.exists(backportsdir+"/usr/bin/dpkg"):
-                apt_pkg.Config.set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
+                apt_pkg.config.set("Dir::Bin::dpkg",backportsdir+"/usr/bin/dpkg");
             if os.path.exists(backportsdir+"/usr/lib/apt/methods"):
-                apt_pkg.Config.set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
+                apt_pkg.config.set("Dir::Bin::methods",backportsdir+"/usr/lib/apt/methods")
             conf = backportsdir+"/etc/apt/apt.conf.d/01ubuntu"
             if os.path.exists(conf):
                 logging.debug("adding config '%s'" % conf)
-                apt_pkg.ReadConfigFile(apt_pkg.Config, conf)
+                apt_pkg.ReadConfigFile(apt_pkg.config, conf)
 
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
@@ -571,7 +571,7 @@ class DistUpgradeController(object):
             # and disable them if not
             elif entry.uri.startswith("cdrom:"):
                 # 
-                listdir = apt_pkg.Config.find_dir("Dir::State::lists")
+                listdir = apt_pkg.config.find_dir("Dir::State::lists")
                 if not os.path.exists("%s/%s%s_%s_%s" % 
                                       (listdir,
                                        apt_pkg.URItoFileName(entry.uri),
@@ -1327,7 +1327,7 @@ class DistUpgradeController(object):
         # when the cache is searched for the backport packages)
         backportslist = self.config.getlist("PreRequists","Packages")
         i=0
-        noCache = apt_pkg.Config.find("Acquire::http::No-Cache","false")
+        noCache = apt_pkg.config.find("Acquire::http::No-Cache","false")
         maxRetries = self.config.getint("Network","MaxRetries")
         while i < maxRetries:
             self.doUpdate(showErrors=False)
@@ -1340,17 +1340,17 @@ class DistUpgradeController(object):
                 break
             # FIXME: move this to some more generic place
             logging.debug("setting a cache control header to turn off caching temporarily")
-            apt_pkg.Config.set("Acquire::http::No-Cache","true")
+            apt_pkg.config.set("Acquire::http::No-Cache","true")
             i += 1
         if i == maxRetries:
             logging.error("pre-requists item is NOT trusted, giving up")
             return False
-        apt_pkg.Config.set("Acquire::http::No-Cache",noCache)
+        apt_pkg.config.set("Acquire::http::No-Cache",noCache)
         return True
 
     def _allBackportsAuthenticated(self, backportslist):
         # check if the user overwrote the check
-        if apt_pkg.Config.find_b("APT::Get::AllowUnauthenticated",False) == True:
+        if apt_pkg.config.find_b("APT::Get::AllowUnauthenticated",False) == True:
             logging.warning("skip authentication check because of APT::Get::AllowUnauthenticated==true")
             return True
         try:
@@ -1453,7 +1453,7 @@ class DistUpgradeController(object):
         if self.aptcdrom and not self.useNetwork:
             logging.debug("Searching for pre-requists on CDROM")
             p = os.path.join(self.aptcdrom.cdrompath,
-                             "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.Config.find("APT::Architecture"))
+                             "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.config.find("APT::Architecture"))
             found_pkgs = set()
             for deb in glob.glob(p+"*_*.deb"):
                 logging.debug("found pre-req '%s' to '%s'" % (deb, backportsdir))
@@ -1507,8 +1507,8 @@ class DistUpgradeController(object):
         if not os.path.exists(prereq_template):
             logging.error("sourceslist not found '%s'" % prereq_template)
             return False
-        outpath = os.path.join(apt_pkg.Config.find_dir("Dir::Etc::sourceparts"), prereq_template)
-        outfile = os.path.join(apt_pkg.Config.find_dir("Dir::Etc::sourceparts"), prereq_template)
+        outpath = os.path.join(apt_pkg.config.find_dir("Dir::Etc::sourceparts"), prereq_template)
+        outfile = os.path.join(apt_pkg.config.find_dir("Dir::Etc::sourceparts"), prereq_template)
         self._addPreRequistsSourcesList(prereq_template, outfile) 
         try:
             self._verifyBackports()

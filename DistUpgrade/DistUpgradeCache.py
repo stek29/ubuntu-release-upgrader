@@ -120,7 +120,7 @@ class MyCache(apt.Cache):
         # transition to the new dist we need to enable them now
         if (config.get("Sources","From") == "hardy" and 
             not "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
-            apt_pkg.Config.set("APT::Install-Recommends","true")
+            apt_pkg.config.set("APT::Install-Recommends","true")
 
     def _apply_dselect_upgrade(self):
         """ honor the dselect install state """
@@ -175,14 +175,14 @@ class MyCache(apt.Cache):
                                             "/var/log/dist-upgrade")
         if not os.path.exists(logdir):
             os.makedirs(logdir)
-        apt_pkg.Config.set("Dir::Log",logdir)
-        apt_pkg.Config.set("Dir::Log::Terminal","apt-term.log")
+        apt_pkg.config.set("Dir::Log",logdir)
+        apt_pkg.config.set("Dir::Log::Terminal","apt-term.log")
         self.logfd = os.open(os.path.join(logdir,"apt.log"),
                              os.O_RDWR|os.O_CREAT|os.O_APPEND, 0o644)
         os.write(self.logfd, "Log time: %s\n" % datetime.datetime.now())
         # turn on debugging in the cache
-        apt_pkg.Config.set("Debug::pkgProblemResolver","true")
-        apt_pkg.Config.set("Debug::pkgDepCache::AutoInstall","true")
+        apt_pkg.config.set("Debug::pkgProblemResolver","true")
+        apt_pkg.config.set("Debug::pkgDepCache::AutoInstall","true")
     def _startAptResolverLog(self):
         if hasattr(self, "old_stdout"):
             os.close(self.old_stdout)
@@ -227,7 +227,7 @@ class MyCache(apt.Cache):
 
     # methods
     def lockListsDir(self):
-        name = apt_pkg.Config.find_dir("Dir::State::Lists") + "lock"
+        name = apt_pkg.config.find_dir("Dir::State::Lists") + "lock"
         self._listsLock = apt_pkg.GetLock(name)
         if self._listsLock < 0:
             e = "Can not lock '%s' " % name
@@ -1098,7 +1098,7 @@ class MyCache(apt.Cache):
                 mounted.append(where)
         # make sure mounted is sorted by longest path
         mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
-        archivedir = apt_pkg.Config.find_dir("Dir::Cache::archives")
+        archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")
         aufs_rw_dir = "/tmp/"
         if (hasattr(self, "config") and
             self.config.getWithDefault("Aufs","Enabled", False)):

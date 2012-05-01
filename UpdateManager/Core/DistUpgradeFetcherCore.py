@@ -197,8 +197,8 @@ class DistUpgradeFetcherCore(object):
         logging.debug("using tmpdir: '%s'" % tmpdir)
         # turn debugging on here (if required)
         if self.DEBUG > 0:
-            apt_pkg.Config.Set("Debug::Acquire::http","1")
-            apt_pkg.Config.Set("Debug::Acquire::ftp","1")
+            apt_pkg.config.set("Debug::Acquire::http","1")
+            apt_pkg.config.set("Debug::Acquire::ftp","1")
         #os.listdir(tmpdir)
         fetcher = apt_pkg.Acquire(self._progress)
         if self.new_dist.upgradeToolSig != None:

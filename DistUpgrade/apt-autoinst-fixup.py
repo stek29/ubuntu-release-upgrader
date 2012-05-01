@@ -47,7 +47,7 @@ for pkg in cache:
 if len(need_fixup) > 0:
     # action is set to zero (reset the auto-flag)
     action = 0
-    STATE_FILE = apt_pkg.Config.FindDir("Dir::State") + "extended_states"
+    STATE_FILE = apt_pkg.config.find_dir("Dir::State") + "extended_states"
     # open the statefile
     if os.path.exists(STATE_FILE):
         tagfile = apt_pkg.ParseTagFile(open(STATE_FILE))

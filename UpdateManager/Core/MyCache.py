@@ -83,14 +83,14 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         (similar to debSystem::CheckUpdates)
         """
         d = os.path.dirname(
-            apt_pkg.Config.find_file("Dir::State::status"))+"/updates"
+            apt_pkg.config.find_file("Dir::State::status"))+"/updates"
         for f in os.listdir(d):
             if re.match("[0-9]+", f):
                 return True
         return False
 
     def _initDepCache(self):
-        #apt_pkg.Config.Set("Debug::pkgPolicy","1")
+        #apt_pkg.config.set("Debug::pkgPolicy","1")
         #self.depcache = apt_pkg.GetDepCache(self.cache)
         #self._depcache = apt_pkg.GetDepCache(self._cache)
         self._depcache.read_pinfile()

@@ -6,7 +6,7 @@ from __future__ import print_function
 import apt
 import apt_pkg
 import sys
-import thread
+import threading
 import time
 from gettext import gettext as _
 
@@ -122,9 +122,11 @@ This can be caused by:
         if (not self.cache.all_changes.has_key(name) and
             not self.cache.all_news.has_key(name)):
             self.textview_changes.setText(_("Downloading changelog"))
-            lock = thread.allocate_lock()
+            lock = threading.Lock()
             lock.acquire()
-            thread.start_new_thread(self.cache.get_news_and_changelog,(name,lock))
+            changelog_thread = threading.Thread(
+                target=self.cache.get_news_and_changelog, args=(name, lock))
+            changelog_thread.start()
             # this lock should never take more than 2s even with network down
             while lock.locked():
                 time.sleep(0.03)

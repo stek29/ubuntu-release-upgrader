@@ -28,7 +28,6 @@ import apt_pkg
 import os
 import re
 import logging
-import statvfs
 import time
 import datetime
 import threading
@@ -1112,7 +1111,7 @@ class MyCache(apt.Cache):
             fs_id = make_fs_id(d)
             if os.path.exists(d):
                 st = os.statvfs(d)
-                free = st[statvfs.F_BAVAIL]*st[statvfs.F_FRSIZE]
+                free = st.f_bavail * st.f_frsize
             else:
                 logging.warn("directory '%s' does not exists" % d)
                 free = 0

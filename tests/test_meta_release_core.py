@@ -13,8 +13,14 @@ except ImportError:
     from urllib2 import HTTPError, urlopen
 import unittest
 
-from BaseHTTPServer import BaseHTTPRequestHandler
-from SocketServer import TCPServer
+try:
+    from http.server import BaseHTTPRequestHandler
+except ImportError:
+    from BaseHTTPServer import BaseHTTPRequestHandler
+try:
+    from socketserver import TCPServer
+except ImportError:
+    from SocketServer import TCPServer
 
 class SillyProxyRequestHandler(BaseHTTPRequestHandler):
     def do_HEAD(self):

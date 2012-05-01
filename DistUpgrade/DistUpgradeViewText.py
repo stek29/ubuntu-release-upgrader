@@ -28,20 +28,20 @@ import subprocess
 import apt
 import os
 
-from .DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
+from .DistUpgradeView import DistUpgradeView, InstallProgress, AcquireProgress
 import apt.progress
 
 import gettext
 from .DistUpgradeGettext import gettext as _
 from .utils import twrap
 
-class TextFetchProgress(FetchProgress, apt.progress.text.AcquireProgress):
+class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
     def __init__(self):
         apt.progress.text.AcquireProgress.__init__(self)
-        FetchProgress.__init__(self)
+        AcquireProgress.__init__(self)
     def pulse(self, owner):
         apt.progress.text.AcquireProgress.pulse(self, owner)
-        FetchProgress.pulse(self, owner)
+        AcquireProgress.pulse(self, owner)
         return True
 
 class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
@@ -50,9 +50,9 @@ class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
         """ update is called regularly so that the gui can be redrawn """
         if text:
           print("%s (%f)" % (text, step/float(self.totalSteps)*100))
-    def askCdromName(self):
+    def ask_cdrom_name(self):
         return (False, "")
-    def changeCdrom(self):
+    def change_cdrom(self):
         return False
 
 
@@ -78,7 +78,7 @@ class DistUpgradeViewText(DistUpgradeView):
         
         self.last_step = 0 # keep a record of the latest step
         self._opCacheProgress = apt.progress.text.OpProgress()
-        self._fetchProgress = TextFetchProgress()
+        self._acquireProgress = TextAcquireProgress()
         self._cdromProgress = TextCdromProgressAdapter()
         self._installProgress = InstallProgress()
         sys.excepthook = self._handleException
@@ -99,8 +99,8 @@ class DistUpgradeViewText(DistUpgradeView):
                    "\n".join(lines))
         sys.exit(1)
 
-    def getFetchProgress(self):
-        return self._fetchProgress
+    def getAcquireProgress(self):
+        return self._acquireProgress
     def getInstallProgress(self, cache):
         self._installProgress._cache = cache
         return self._installProgress
@@ -254,7 +254,7 @@ if __name__ == "__main__":
   view.confirmRestart()
 
   cache = apt.Cache()
-  fp = view.getFetchProgress()
+  fp = view.getAcquireProgress()
   ip = view.getInstallProgress(cache)
 
 

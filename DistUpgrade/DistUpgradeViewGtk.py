@@ -41,7 +41,7 @@ import os
 
 from .DistUpgradeApport import run_apport, apport_crash
 
-from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
+from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, AcquireProgress
 from .SimpleGtkbuilderApp import SimpleGtkbuilderApp
 
 import gettext
@@ -52,7 +52,7 @@ gobject.threads_init()
 def utf8(str):
   return unicode(str, 'latin1').encode('utf-8')
 
-class GtkCdromProgressAdapter(apt.progress.CdromProgress):
+class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress
         Subclass this class to implement cdrom add progress reporting
     """
@@ -67,9 +67,9 @@ class GtkCdromProgressAdapter(apt.progress.CdromProgress):
         self.progress.set_fraction(step/float(self.totalSteps))
         while gtk.events_pending():
           gtk.main_iteration()
-    def askCdromName(self):
+    def ask_cdrom_name(self):
         return (False, "")
-    def changeCdrom(self):
+    def change_cdrom(self):
         return False
 
 class GtkOpProgress(apt.progress.base.OpProgress):
@@ -95,12 +95,12 @@ class GtkOpProgress(apt.progress.base.OpProgress):
       self.progressbar.set_text(" ")
 
 
-class GtkFetchProgressAdapter(FetchProgress):
+class GtkAcquireProgressAdapter(AcquireProgress):
     # FIXME: we really should have some sort of "we are at step"
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
-        super(GtkFetchProgressAdapter, self).__init__()
+        super(GtkAcquireProgressAdapter, self).__init__()
         # if this is set to false the download will cancel
         self.status = parent.label_status
         self.progress = parent.progressbar_cache
@@ -127,7 +127,7 @@ class GtkFetchProgressAdapter(FetchProgress):
         return False
     def start(self):
         #logging.debug("start")
-        super(GtkFetchProgressAdapter, self).start()
+        super(GtkAcquireProgressAdapter, self).start()
         self.progress.set_fraction(0)
         self.status.show()
         self.button_cancel.show()
@@ -137,7 +137,7 @@ class GtkFetchProgressAdapter(FetchProgress):
         self.status.set_text(_("Fetching is complete"))
         self.button_cancel.hide()
     def pulse(self, owner):
-        super(GtkFetchProgressAdapter, self).pulse(owner)
+        super(GtkAcquireProgressAdapter, self).pulse(owner)
         # only update if there is a noticable change
         if abs(self.percent-self.progress.get_fraction()*100.0) > 0.1:
           self.progress.set_fraction(self.percent/100.0)
@@ -429,7 +429,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         self.window_main.realize()
         self.window_main.window.set_functions(gtk.gdk.FUNC_MOVE)
         self._opCacheProgress = GtkOpProgress(self.progressbar_cache)
-        self._fetchProgress = GtkFetchProgressAdapter(self)
+        self._acquireProgress = GtkAcquireProgressAdapter(self)
         self._cdromProgress = GtkCdromProgressAdapter(self)
         self._installProgress = GtkInstallProgressAdapter(self)
         # details dialog
@@ -525,8 +525,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
             except IOError:
               logging.exception("flush()")
         self._terminal_lines = new_lines
-    def getFetchProgress(self):
-        return self._fetchProgress
+    def getAcquireProgress(self):
+        return self._acquireProgress
     def getInstallProgress(self, cache):
         self._installProgress._cache = cache
         return self._installProgress
@@ -720,7 +720,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
 if __name__ == "__main__":
   
   view = DistUpgradeViewGtk()
-  fp = GtkFetchProgressAdapter(view)
+  fp = GtkAcquireProgressAdapter(view)
   ip = GtkInstallProgressAdapter(view)
 
   cache = apt.Cache()

@@ -103,19 +103,19 @@ def FuzzyTimeToStr(sec):
   return map["str_seconds"]
 
 
-class FetchProgress(apt.progress.base.AcquireProgress):
+class AcquireProgress(apt.progress.base.AcquireProgress):
 
   def __init__(self):
-    super(FetchProgress, self).__init__()
+    super(AcquireProgress, self).__init__()
     self.est_speed = 0.0
   def start(self):
-    super(FetchProgress, self).start()
+    super(AcquireProgress, self).start()
     self.est_speed = 0.0
     self.eta = 0.0
     self.percent = 0.0
     self.release_file_download_error = False
   def update_status(self, uri, descr, shortDescr, status):
-    super(FetchProgress, self).update_status(uri, descr, shortDescr, status)
+    super(AcquireProgress, self).update_status(uri, descr, shortDescr, status)
     # FIXME: workaround issue in libapt/python-apt that does not 
     #        raise a exception if *all* files fails to download
     if status == apt_pkg.STAT_FAILED:
@@ -132,7 +132,7 @@ class FetchProgress(apt.progress.base.AcquireProgress):
   def pulse_items(self, arg):
     return True
   def pulse(self, owner=None):
-    super(FetchProgress, self).pulse(owner)
+    super(AcquireProgress, self).pulse(owner)
     self.percent = (((self.current_bytes + self.current_items) * 100.0) /
                     float(self.total_bytes + self.total_items))
     if self.current_cps > self.est_speed:
@@ -269,9 +269,9 @@ class DistUpgradeView(object):
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
         return apt.progress.base.OpProgress()
-    def getFetchProgress(self):
-        " return a fetch progress object "
-        return FetchProgress()
+    def getAcquireProgress(self):
+        " return an acquire progress object "
+        return AcquireProgress()
     def getInstallProgress(self, cache=None):
         " return a install progress object "
         return InstallProgress()
@@ -370,9 +370,9 @@ class DistUpgradeView(object):
         if downloadSize > 0:
           msg += _("\n\nYou have to download a total of %s. ") %\
               apt_pkg.SizeToStr(downloadSize)
-          msg += self.getFetchProgress().estimatedDownloadTime(downloadSize)
+          msg += self.getAcquireProgress().estimatedDownloadTime(downloadSize)
         if ((pkgs_upgrade + pkgs_inst) > 0) and ((pkgs_upgrade + pkgs_inst + pkgs_remove) > 100):
-          if self.getFetchProgress().isDownloadSpeedEstimated():
+          if self.getAcquireProgress().isDownloadSpeedEstimated():
             msg += "\n\n%s" % _( "Installing the upgrade "
                                  "can take several hours. Once the download "
                                  "has finished, the process cannot be canceled.")
@@ -430,5 +430,5 @@ class DistUpgradeView(object):
       self.information(summary, msg, "\n".join(demotions))
 
 if __name__ == "__main__":
-  fp = FetchProgress()
+  fp = AcquireProgress()
   fp.pulse()

@@ -32,8 +32,8 @@ def get_new_dist():
     meta.download()
     return meta.new_dist
 
-class TestFetchProgress(apt.progress.base.AcquireProgress):
-    " class to test if the fetch progress was run "
+class TestAcquireProgress(apt.progress.base.AcquireProgress):
+    " class to test if the acquire progress was run "
     def start(self):
         self.started = True
     def stop(self):
@@ -68,7 +68,7 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list.hardy")
     
     def testfetcher(self):
-        progress = TestFetchProgress()
+        progress = TestAcquireProgress()
         fetcher = TestDistUpgradeFetcherCore(self.new_dist, progress)
         #fetcher.DEBUG=True
         res = fetcher.run()
@@ -78,7 +78,7 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
         self.assertTrue(progress.pulsed)
 
     def disabled_because_ftp_is_not_relaible____testfetcher_ftp(self):
-        progress = TestFetchProgress()
+        progress = TestAcquireProgress()
         fetcher = TestDistUpgradeFetcherCore(self.new_dist, progress)
         fetcher.current_dist_name = "hardy"
         #fetcher.DEBUG=True

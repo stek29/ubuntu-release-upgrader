@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # get a cache
     cache = apt.Cache(rootdir=os.path.abspath(aptbasedir))
     cache.update(apt.progress.text.AcquireProgress())
-    cache.open(apt.progress.OpProgress())
+    cache.open(apt.progress.base.OpProgress())
 
     # now test if we can install stuff
     backend.saveVMSnapshot("clean-base")

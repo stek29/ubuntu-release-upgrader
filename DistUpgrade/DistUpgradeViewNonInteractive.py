@@ -39,12 +39,12 @@ except ImportError:
     from ConfigParser import NoSectionError, NoOptionError
 from subprocess import PIPE, Popen
 
-from .DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
+from .DistUpgradeView import DistUpgradeView, InstallProgress, AcquireProgress
 from .DistUpgradeConfigParser import DistUpgradeConfig
 
-class NonInteractiveFetchProgress(FetchProgress):
+class NonInteractiveAcquireProgress(AcquireProgress):
     def update_status(self, uri, descr, shortDescr, status):
-        FetchProgress.update_status(self, uri, descr, shortDescr, status)
+        AcquireProgress.update_status(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt_pkg.STAT_DONE:
             print("fetched %s (%.2f/100) at %sb/s" % (
@@ -246,7 +246,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     def __init__(self, datadir=None, logdir=None):
         DistUpgradeView.__init__(self)
         self.config = DistUpgradeConfig(".")
-        self._fetchProgress = NonInteractiveFetchProgress()
+        self._acquireProgress = NonInteractiveAcquireProgress()
         self._installProgress = NonInteractiveInstallProgress(logdir)
         self._opProgress = apt.progress.base.OpProgress()
         sys.__excepthook__ = self.excepthook
@@ -258,9 +258,9 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"
         return self._opProgress
-    def getFetchProgress(self):
-        " return a fetch progress object "
-        return self._fetchProgress
+    def getAcquireProgress(self):
+        " return an acquire progress object "
+        return self._acquireProgress
     def getInstallProgress(self, cache=None):
         " return a install progress object "
         return self._installProgress
@@ -308,7 +308,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
 if __name__ == "__main__":
 
   view = DistUpgradeViewNonInteractive()
-  fp = NonInteractiveFetchProgress()
+  ap = NonInteractiveAcquireProgress()
   ip = NonInteractiveInstallProgress()
 
   #ip.error("linux-image-2.6.17-10-generic","post-installation script failed")
@@ -320,6 +320,6 @@ if __name__ == "__main__":
     #  cache[pkg].markDelete()
     #else:
     cache[pkg].mark_install()
-  cache.commit(fp,ip)
+  cache.commit(ap, ip)
   time.sleep(2)
   sys.exit(0)

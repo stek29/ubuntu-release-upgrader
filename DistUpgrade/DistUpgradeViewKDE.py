@@ -45,7 +45,7 @@ import pty
 
 from .DistUpgradeApport import run_apport, apport_crash
 
-from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
+from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, AcquireProgress
 
 import select
 import gettext
@@ -139,7 +139,7 @@ class DumbTerminal(QTextEdit):
         self.moveCursor(QTextCursor.End)
         self._block = False
 
-class KDECdromProgressAdapter(apt.progress.CdromProgress):
+class KDECdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress """
     def __init__(self, parent):
         self.status = parent.window_main.label_status
@@ -153,10 +153,10 @@ class KDECdromProgressAdapter(apt.progress.CdromProgress):
         self.progressbar.setValue(step/float(self.totalSteps))
         QApplication.processEvents()
 
-    def askCdromName(self):
+    def ask_cdrom_name(self):
         return (False, "")
 
-    def changeCdrom(self):
+    def change_cdrom(self):
         return False
 
 class KDEOpProgress(apt.progress.base.OpProgress):
@@ -179,13 +179,13 @@ class KDEOpProgress(apt.progress.base.OpProgress):
   def done(self):
       self.progressbar_label.setText("")
 
-class KDEFetchProgressAdapter(FetchProgress):
+class KDEAcquireProgressAdapter(AcquireProgress):
     """ methods for updating the progress bar while fetching packages """
     # FIXME: we really should have some sort of "we are at step"
     # xy in the gui
     # FIXME2: we need to thing about mediaCheck here too
     def __init__(self, parent):
-        FetchProgress.__init__(self)
+        AcquireProgress.__init__(self)
         # if this is set to false the download will cancel
         self.status = parent.window_main.label_status
         self.progress = parent.window_main.progressbar_cache
@@ -199,7 +199,7 @@ class KDEFetchProgressAdapter(FetchProgress):
       return False
 
     def start(self):
-        FetchProgress.start(self)
+        AcquireProgress.start(self)
         #self.progress.show()
         self.progress.setValue(0)
         self.status.show()
@@ -212,7 +212,7 @@ class KDEFetchProgressAdapter(FetchProgress):
         """ we don't have a mainloop in this application, we just call processEvents here and elsewhere"""
         # FIXME: move the status_str and progress_str into python-apt
         # (python-apt need i18n first for this)
-        FetchProgress.pulse(self, owner)
+        AcquireProgress.pulse(self, owner)
         self.progress.setValue(self.percent)
         current_item = self.current_items + 1
         if current_item > self.total_items:
@@ -484,7 +484,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.prev_step = 0 # keep a record of the latest step
 
         self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache, self.window_main.progress_text)
-        self._fetchProgress = KDEFetchProgressAdapter(self)
+        self._acquireProgress = KDEAcquireProgressAdapter(self)
         self._cdromProgress = KDECdromProgressAdapter(self)
 
         self._installProgress = KDEInstallProgressAdapter(self)
@@ -612,8 +612,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
             self.window_main.showTerminalButton.setText(_("<<< Hide Terminal"))
         self.window_main.resize(self.window_main.sizeHint())
 
-    def getFetchProgress(self):
-        return self._fetchProgress
+    def getAcquireProgress(self):
+        return self._acquireProgress
 
     def getInstallProgress(self, cache):
         self._installProgress._cache = cache
@@ -858,7 +858,7 @@ if __name__ == "__main__":
       cache[pkg].mark_delete(purge=True)
     else:
       cache[pkg].mark_install()
-  cache.commit(view._fetchProgress,view._installProgress)
+  cache.commit(view._acquireProgress,view._installProgress)
 
   # keep the window open
   while True:

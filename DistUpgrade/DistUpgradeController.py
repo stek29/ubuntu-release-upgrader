@@ -324,7 +324,7 @@ class DistUpgradeController(object):
             logging.error("No new dist found")
             return False
         # we have a new dist
-        progress = self._view.getFetchProgress()
+        progress = self._view.getAcquireProgress()
         fetcher = DistUpgradeFetcherSelf(new_dist=m.new_dist,
                                          progress=progress,
                                          options=self.options,
@@ -847,7 +847,7 @@ class DistUpgradeController(object):
             logging.debug("doUpdate() will not use the network because self.useNetwork==false")
             return True
         self.cache._list.read_main_list()
-        progress = self._view.getFetchProgress()
+        progress = self._view.getAcquireProgress()
         # FIXME: also remove all files from the lists partial dir!
         currentRetry = 0
         if forceRetries is not None:
@@ -959,7 +959,7 @@ class DistUpgradeController(object):
         self._disableAptCronJob()
         # get the upgrade
         currentRetry = 0
-        fprogress = self._view.getFetchProgress()
+        fprogress = self._view.getAcquireProgress()
         #iprogress = self._view.getInstallProgress(self.cache)
         # start slideshow
         url = self.config.getWithDefault("Distro","SlideshowUrl",None)
@@ -1064,7 +1064,7 @@ class DistUpgradeController(object):
   
         # get the upgrade
         currentRetry = 0
-        fprogress = self._view.getFetchProgress()
+        fprogress = self._view.getAcquireProgress()
         iprogress = self._view.getInstallProgress(self.cache)
         # retry the fetching in case of errors
         maxRetries = self.config.getint("Network","MaxRetries")
@@ -1232,7 +1232,7 @@ class DistUpgradeController(object):
         #explanation = _("")
         if (len(changes) > 0 and 
             self._view.confirmChanges(summary, changes, [], 0, actions, False)):
-            fprogress = self._view.getFetchProgress()
+            fprogress = self._view.getAcquireProgress()
             iprogress = self._view.getInstallProgress(self.cache)
             try:
                 self.cache.commit(fprogress,iprogress)
@@ -1540,7 +1540,7 @@ class DistUpgradeController(object):
         # now get it
         res = False
         try:
-            res = self.cache.commit(self._view.getFetchProgress(),
+            res = self.cache.commit(self._view.getAcquireProgress(),
                                     self._view.getInstallProgress(self.cache))
         except IOError as e:
             logging.error("fetchArchives returned '%s'" % e)

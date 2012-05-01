@@ -8,7 +8,7 @@ import os
 import sys
 sys.path = [os.path.normpath(os.path.join(os.getcwd(),"../"))] + sys.path
 
-from UpdateManager.GtkProgress import GtkFetchProgress
+from UpdateManager.GtkProgress import GtkAcquireProgress
 from UpdateManager.UpdateManager import UpdateManager
 from UpdateManager.MetaReleaseGObject import MetaRelease
 from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
@@ -65,12 +65,12 @@ class TestReleaseUpgradeFetcherGUI(unittest.TestCase):
         
     def testdownloading(self):
         parent = UpdateManager("/usr/share/update-manager/")
-        progress = GtkFetchProgress(parent,
-                                    _("Downloading the upgrade "
-                                      "tool"),
-                                    _("The upgrade tool will "
-                                      "guide you through the "
-                                      "upgrade process."))
+        progress = GtkAcquireProgress(parent,
+                                      _("Downloading the upgrade "
+                                        "tool"),
+                                      _("The upgrade tool will "
+                                        "guide you through the "
+                                        "upgrade process."))
         fetcher = DistUpgradeFetcherGtk(self.new_dist, parent=parent, progress=progress)
         self.assertTrue(fetcher.showReleaseNotes())
         self.assertTrue(fetcher.fetchDistUpgrader())

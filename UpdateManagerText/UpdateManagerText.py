@@ -70,7 +70,7 @@ This can be caused by:
     
     def openCache(self):
         # open cache
-        progress = apt.progress.OpTextProgress()
+        progress = apt.progress.text.OpProgress()
         if hasattr(self, "cache"):
             self.cache.open(progress)
             self.cache._initDepCache()

@@ -66,7 +66,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         uic.loadUi(self.APPDIR + "/fetch-progress.ui", self.progressDialogue)
         self.progressDialogue.setWindowIcon(KIcon("system-software-update"))
         self.progressDialogue.setWindowTitle(_("Upgrade"))
-        self.progress = KDEFetchProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)
+        self.progress = KDEAcquireProgressAdapter(self.progressDialogue.installationProgress, self.progressDialogue.installingLabel, None)
         DistUpgradeFetcherCore.__init__(self,metaRelease.new_dist,self.progress)
 
     def error(self, summary, message):
@@ -124,7 +124,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
           sys.exit()  #FIXME why does KApplication.kApplication().exit() crash but this doesn't?
       return False
 
-class KDEFetchProgressAdapter(apt.progress.FetchProgress):
+class KDEAcquireProgressAdapter(apt.progress.base.AcquireProgress):
     def __init__(self,progress,label,parent):
         self.progress = progress
         self.label = label
@@ -137,16 +137,17 @@ class KDEFetchProgressAdapter(apt.progress.FetchProgress):
     def stop(self):
         pass
 
-    def pulse(self):
-        apt.progress.FetchProgress.pulse(self)
-        self.progress.setValue(self.percent)
-        currentItem = self.currentItems + 1
-        if currentItem > self.totalItems:
-            currentItem = self.totalItems
-        if self.currentCPS > 0:
-            self.label.setText(_("Downloading additional package files...") + _("File %s of %s at %sB/s") % (self.currentItems,self.totalItems,apt_pkg.SizeToStr(self.currentCPS)))
+    def pulse(self, owner):
+        apt.progress.base.AcquireProgress.pulse(self, owner)
+        self.progress.setValue((self.current_bytes + self.current_items) /
+                               float(self.total_bytes + self.total_items))
+        current_item = self.current_items + 1
+        if current_item > self.total_items:
+            current_item = self.total_items
+        if self.current_cps > 0:
+            self.label.setText(_("Downloading additional package files...") + _("File %s of %s at %sB/s") % (self.current_items,self.total_items,apt_pkg.SizeToStr(self.current_cps)))
         else:
-            self.label.setText(_("Downloading additional package files...") + _("File %s of %s") % (self.currentItems,self.totalItems))
+            self.label.setText(_("Downloading additional package files...") + _("File %s of %s") % (self.current_items,self.total_items))
         KApplication.kApplication().processEvents()
         return True
 

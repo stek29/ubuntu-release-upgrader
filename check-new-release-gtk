@@ -114,7 +114,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    progress=UpdateManager.GtkProgress.GtkFetchProgress(self, _("Downloading the release upgrade tool"))
+    progress=UpdateManager.GtkProgress.GtkAcquireProgress(self, _("Downloading the release upgrade tool"))
     fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
                                  parent=self,
                                  progress=progress)

@@ -75,7 +75,7 @@ class GtkOpProgressInline(apt.progress.base.OpProgress):
         self._progressbar.hide()
         self._init_steps()
 
-class GtkOpProgressWindow(apt.OpProgress):
+class GtkOpProgressWindow(apt.progress.base.OpProgress):
     def __init__(self, host_window, progressbar, status, parent,
                  steps=STEPS_UPDATE_CACHE):
         # used for the "one run progressbar"
@@ -124,7 +124,7 @@ class GtkOpProgressWindow(apt.OpProgress):
     def hide(self):
         self._window.hide()
 
-class GtkFetchProgress(apt.progress.FetchProgress):
+class GtkAcquireProgress(apt.progress.base.AcquireProgress):
     def __init__(self, parent, summary="", descr=""):
         # if this is set to false the download will cancel
         self._continue = True
@@ -152,24 +152,29 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         self.window_fetch.hide()
     def on_button_fetch_cancel_clicked(self, widget):
         self._continue = False
-    def pulse(self):
-        apt.progress.FetchProgress.pulse(self)
-        currentItem = self.currentItems + 1
-        if currentItem > self.totalItems:
-          currentItem = self.totalItems
-        if self.currentCPS > 0:
-            statusText = (_("Downloading file %(current)li of %(total)li with "
-                            "%(speed)s/s") % {"current" : currentItem,
-                                              "total" : self.totalItems,
-                                              "speed" : humanize_size(self.currentCPS)})
+    def pulse(self, owner):
+        apt.progress.base.AcquireProgress.pulse(self, owner)
+        current_item = self.current_items + 1
+        if current_item > self.total_items:
+          current_item = self.total_items
+        if self.current_cps > 0:
+            status_text = (_("Downloading file %(current)li of %(total)li with "
+                             "%(speed)s/s") % {"current" : current_item,
+                                               "total" : self.total_items,
+                                               "speed" : humanize_size(self.current_cps)})
         else:
-            statusText = (_("Downloading file %(current)li of %(total)li") % \
-                          {"current" : currentItem,
-                           "total" : self.totalItems })
-            self.progress.set_fraction(self.percent/100.0)
-        self.status.set_markup("<i>%s</i>" % statusText)
+            status_text = (_("Downloading file %(current)li of %(total)li") % \
+                           {"current" : current_item,
+                            "total" : self.total_items })
+            self.progress.set_fraction((self.current_bytes + self.current_items) /
+                                       float(self.total_bytes + self.total_items))
+        self.status.set_markup("<i>%s</i>" % status_text)
         # TRANSLATORS: show the remaining time in a progress bar:
-        #self.progress.set_text(_("About %s left" % (apt_pkg.TimeToStr(self.eta))))
+        #if self.current_cps > 0:
+        #    eta = ((self.total_bytes + self.current_bytes) / float(self.current_cps))
+        #else:
+        #    eta = 0.0
+        #self.progress.set_text(_("About %s left" % (apt_pkg.TimeToStr(eta))))
         # FIXME: show remaining time
         self.progress.set_text("")
 
@@ -188,16 +193,16 @@ if __name__ == "__main__":
 
     # create mock parent and fetcher
     parent = MockParent()
-    fetch_progress = GtkFetchProgress(parent, "summary", "long detailed description")
-    #fetch_progress = GtkFetchProgress(parent)
+    acquire_progress = GtkAcquireProgress(parent, "summary", "long detailed description")
+    #acquire_progress = GtkAcquireProgress(parent)
 
     # download lists
     cache = apt.Cache()
-    res = cache.update(fetch_progress)
+    res = cache.update(acquire_progress)
     # generate a dist-upgrade (to feed data to the fetcher) and get it
     cache.upgrade()
     pm = apt_pkg.GetPackageManager(cache._depcache)
-    fetcher = apt_pkg.GetAcquire(fetch_progress)
+    fetcher = apt_pkg.GetAcquire(acquire_progress)
     res = cache._fetchArchives(fetcher, pm)
     print(res)
     

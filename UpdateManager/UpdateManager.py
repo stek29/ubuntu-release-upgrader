@@ -57,7 +57,7 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
 
-from .GtkProgress import GtkFetchProgress, GtkOpProgressInline
+from .GtkProgress import GtkAcquireProgress, GtkOpProgressInline
 from .backend import get_backend
 
 from gettext import gettext as _
@@ -1107,7 +1107,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               _("Release upgrade not possible right now"),
               _("The release upgrade can not be performed currently, "
                 "please try again later. The server reported: '%s'") % self.new_dist.upgrade_broken)
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkFetchProgress(self, _("Downloading the release upgrade tool")))
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkAcquireProgress(self, _("Downloading the release upgrade tool")))
       if self.options.sandbox:
           fetcher.run_options.append("--sandbox")
       fetcher.run()

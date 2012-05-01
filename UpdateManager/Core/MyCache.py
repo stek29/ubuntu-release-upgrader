@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
@@ -42,7 +42,7 @@ import socket
 import re
 import DistUpgrade.DistUpgradeCache
 from gettext import gettext as _
-from UpdateList import UpdateOrigin
+from .UpdateList import UpdateOrigin
 
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
 CHANGELOGS_URI="http://changelogs.ubuntu.com/changelogs/pool/%s/%s/%s/%s_%s/%s"

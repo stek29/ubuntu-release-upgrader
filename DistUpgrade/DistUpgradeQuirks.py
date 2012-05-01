@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import absolute_import
+
 import apt
 import atexit
 import glob
@@ -31,9 +33,10 @@ import sys
 import subprocess
 from subprocess import PIPE, Popen
 from hashlib import md5
-from utils import lsmod, get_arch
 
-from DistUpgradeGettext import gettext as _
+from .utils import lsmod, get_arch
+
+from .DistUpgradeGettext import gettext as _
 from computerjanitor.plugin import PluginManager
 
 class DistUpgradeQuirks(object):
@@ -1108,7 +1111,7 @@ class DistUpgradeQuirks(object):
                 logging.warn("unexpected target md5sum, skipping: '%s'" % path)
                 continue
             # patchable, do it
-            from DistUpgradePatcher import patch
+            from .DistUpgradePatcher import patch
             try:
                 patch(path, os.path.join(patchdir, f), result_md5sum)
                 logging.info("applied '%s' successfully" % f)

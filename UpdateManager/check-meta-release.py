@@ -17,9 +17,9 @@
 
 #  Checks for new releases, run by Adept
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from Core.MetaRelease import MetaReleaseCore
+from .Core.MetaRelease import MetaReleaseCore
 import time
 
 metaRelease = MetaReleaseCore(False, False)

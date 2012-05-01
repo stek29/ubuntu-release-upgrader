@@ -23,10 +23,12 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import absolute_import
+
 from gi.repository import Gtk
 from gi.repository import WebKit
 
-from ReleaseNotesViewer import open_url
+from .ReleaseNotesViewer import open_url
 
 class ReleaseNotesViewerWebkit(WebKit.WebView):
     def __init__(self, notes_url):

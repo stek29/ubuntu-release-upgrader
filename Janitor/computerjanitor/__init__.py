@@ -14,6 +14,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import absolute_import
+
 VERSION = "1.11"
 
 
@@ -40,12 +42,12 @@ def setup_gettext():
     return t.ugettext
 
 
-from cruft import Cruft
-from file_cruft import FileCruft
-from package_cruft import PackageCruft
-from missing_package_cruft import MissingPackageCruft
-from exc import ComputerJanitorException as Exception, UnimplementedMethod
-from plugin import Plugin, PluginManager
+from .cruft import Cruft
+from .file_cruft import FileCruft
+from .package_cruft import PackageCruft
+from .missing_package_cruft import MissingPackageCruft
+from .exc import ComputerJanitorException as Exception, UnimplementedMethod
+from .plugin import Plugin, PluginManager
 
 # reference it here to make pyflakes happy
 Cruft

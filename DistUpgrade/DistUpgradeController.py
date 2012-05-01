@@ -20,7 +20,7 @@
 #  USA
 
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
@@ -45,46 +45,46 @@ try:
 except ImportError:
     # < 3.0
     from ConfigParser import SafeConfigParser, NoOptionError
-from utils import (country_mirror, 
-                   url_downloadable, 
-                   check_and_fix_xbit, 
-                   get_arch, 
-                   iptables_active, 
-                   inside_chroot,
-                   get_string_with_no_auth_from_source_entry,
-                   is_child_of_process_name)
+from .utils import (country_mirror,
+                    url_downloadable,
+                    check_and_fix_xbit,
+                    get_arch,
+                    iptables_active,
+                    inside_chroot,
+                    get_string_with_no_auth_from_source_entry,
+                    is_child_of_process_name)
 from string import Template
 try:
     from urllib.parse import urlsplit
 except ImportError:
     from urlparse import urlsplit
 
-import DistUpgradeView
-from DistUpgradeCache import MyCache
-from DistUpgradeConfigParser import DistUpgradeConfig
-from DistUpgradeQuirks import DistUpgradeQuirks
-from DistUpgradeAptCdrom import AptCdrom
-from DistUpgradeAufs import setupAufs, aufsOptionsAndEnvironmentSetup
+from .DistUpgradeView import STEP_PREPARE, STEP_MODIFY_SOURCES, STEP_FETCH, STEP_INSTALL, STEP_CLEANUP, STEP_REBOOT
+from .DistUpgradeCache import MyCache
+from .DistUpgradeConfigParser import DistUpgradeConfig
+from .DistUpgradeQuirks import DistUpgradeQuirks
+from .DistUpgradeAptCdrom import AptCdrom
+from .DistUpgradeAufs import setupAufs, aufsOptionsAndEnvironmentSetup
 
 # workaround broken relative import in python-apt (LP: #871007), we
 # want the local version of distinfo.py from oneiric, but because of
 # a bug in python-apt we will get the natty version that does not
 # know about "Component.parent_component" leading to a crash
-import distinfo
-import sourceslist
+from . import distinfo
+from . import sourceslist
 sourceslist.DistInfo = distinfo.DistInfo
 
-from sourceslist import SourcesList, is_mirror
-from distro import get_distro, NoDistroTemplateException
+from .sourceslist import SourcesList, is_mirror
+from .distro import get_distro, NoDistroTemplateException
 
-from DistUpgradeGettext import gettext as _
-from DistUpgradeGettext import ngettext
+from .DistUpgradeGettext import gettext as _
+from .DistUpgradeGettext import ngettext
 import gettext
 
-from DistUpgradeCache import (CacheExceptionDpkgInterrupted,
-                              CacheExceptionLockingFailed,
-                              NotEnoughFreeSpaceError)
-from DistUpgradeApport import run_apport
+from .DistUpgradeCache import (CacheExceptionDpkgInterrupted,
+                               CacheExceptionLockingFailed,
+                               NotEnoughFreeSpaceError)
+from .DistUpgradeApport import run_apport
 
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
@@ -305,8 +305,8 @@ class DistUpgradeController(object):
             and we have network - we will then try to fetch a update
             of ourself
         """  
-        from MetaRelease import MetaReleaseCore
-        from DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
+        from .MetaRelease import MetaReleaseCore
+        from .DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
         # check if we run from a LTS 
         forceLTS=False
         if (self.release == "dapper" or
@@ -444,7 +444,7 @@ class DistUpgradeController(object):
                                "and run the upgrade again."))
             self.abort()
 
-        from DistUpgradeMain import SYSTEM_DIRS
+        from .DistUpgradeMain import SYSTEM_DIRS
         for systemdir in SYSTEM_DIRS:
             if os.path.exists(systemdir) and not os.access(systemdir, os.W_OK):
                 logging.error("%s not writable" % systemdir)
@@ -1584,7 +1584,7 @@ class DistUpgradeController(object):
     def fullUpgrade(self):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
-        self._view.setStep(DistUpgradeView.STEP_PREPARE)
+        self._view.setStep(STEP_PREPARE)
 
         if not self.prepare():
             logging.error("self.prepared() failed")
@@ -1631,7 +1631,7 @@ class DistUpgradeController(object):
             self.abort()
 
         # update sources.list
-        self._view.setStep(DistUpgradeView.STEP_MODIFY_SOURCES)
+        self._view.setStep(STEP_MODIFY_SOURCES)
         self._view.updateStatus(_("Updating repository information"))
         if not self.updateSourcesList():
             self.abort()
@@ -1692,13 +1692,13 @@ class DistUpgradeController(object):
             self.abort()
 
         # fetch the stuff
-        self._view.setStep(DistUpgradeView.STEP_FETCH)
+        self._view.setStep(STEP_FETCH)
         self._view.updateStatus(_("Fetching"))
         if not self.doDistUpgradeFetching():
             self.abort()
 
         # now do the upgrade
-        self._view.setStep(DistUpgradeView.STEP_INSTALL)
+        self._view.setStep(STEP_INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
             # run the post install scripts (for stuff like UUID conversion)
@@ -1711,7 +1711,7 @@ class DistUpgradeController(object):
             sys.exit(1) 
             
         # do post-upgrade stuff
-        self._view.setStep(DistUpgradeView.STEP_CLEANUP)
+        self._view.setStep(STEP_CLEANUP)
         self._view.updateStatus(_("Searching for obsolete software"))
         self.doPostUpgrade()
 
@@ -1720,7 +1720,7 @@ class DistUpgradeController(object):
             self.aptcdrom.comment_out_cdrom_entry()
 
         # done, ask for reboot
-        self._view.setStep(DistUpgradeView.STEP_REBOOT)
+        self._view.setStep(STEP_REBOOT)
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
         if (not inside_chroot() and
@@ -1735,7 +1735,6 @@ class DistUpgradeController(object):
     
     def doPartialUpgrade(self):
         " partial upgrade mode, useful for repairing "
-        from DistUpgrade.DistUpgradeView import STEP_PREPARE, STEP_MODIFY_SOURCES, STEP_FETCH, STEP_INSTALL, STEP_CLEANUP, STEP_REBOOT
         self._view.setStep(STEP_PREPARE)
         self._view.hideStep(STEP_MODIFY_SOURCES)
         self._view.hideStep(STEP_REBOOT)
@@ -1776,7 +1775,7 @@ class DistUpgradeController(object):
 
 
 if __name__ == "__main__":
-    from DistUpgradeViewText import DistUpgradeViewText
+    from .DistUpgradeViewText import DistUpgradeViewText
     logging.basicConfig(level=logging.DEBUG)
     v = DistUpgradeViewText()
     dc = DistUpgradeController(v)

@@ -3,6 +3,8 @@
 """Integration of package managers into UpdateManager"""
 # (c) 2005-2009 Canonical, GPL
 
+from __future__ import absolute_import
+
 import os
 
 from gi.repository import GObject
@@ -44,7 +46,7 @@ def get_backend(*args, **kwargs):
         not "UPDATE_MANAGER_FORCE_BACKEND_SYNAPTIC" in os.environ):
         # check if the gtkwidgets are installed as well
         try:
-            from InstallBackendAptdaemon import InstallBackendAptdaemon
+            from .InstallBackendAptdaemon import InstallBackendAptdaemon
             return InstallBackendAptdaemon(*args, **kwargs)
         except ImportError:
             import logging
@@ -52,7 +54,7 @@ def get_backend(*args, **kwargs):
     # try synaptic
     if (os.path.exists("/usr/sbin/synaptic") and
         not "UPDATE_MANAGER_FORCE_BACKEND_APTDAEMON" in os.environ):
-        from InstallBackendSynaptic import InstallBackendSynaptic
+        from .InstallBackendSynaptic import InstallBackendSynaptic
         return InstallBackendSynaptic(*args, **kwargs)
     # nothing found, raise
     raise Exception("No working backend found, please try installing "

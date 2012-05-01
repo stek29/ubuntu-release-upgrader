@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import logging
 import os
@@ -123,7 +123,7 @@ def doAufsChrootRsync(aufs_chroot_dir):
     helper that rsyncs the changes in the aufs chroot back to the
     real system
     """
-    from DistUpgradeMain import SYSTEM_DIRS
+    from .DistUpgradeMain import SYSTEM_DIRS
     for d in SYSTEM_DIRS:
         if not os.path.exists(d):
             continue
@@ -156,7 +156,7 @@ def setupAufsChroot(rw_dir, chroot_dir):
 
     # get the mount points before the aufs buisiness starts
     mounts = open("/proc/mounts").read()
-    from DistUpgradeMain import SYSTEM_DIRS
+    from .DistUpgradeMain import SYSTEM_DIRS
     systemdirs = SYSTEM_DIRS
     
     # aufs mount or bind mount required dirs
@@ -198,7 +198,7 @@ def setupAufs(rw_dir):
         logging.debug("no /proc/mounts, can not do aufs overlay")
         return False
 
-    from DistUpgradeMain import SYSTEM_DIRS
+    from .DistUpgradeMain import SYSTEM_DIRS
     systemdirs = SYSTEM_DIRS
     # verify that there are no submounts of a systemdir and collect
     # the stuff that needs bind mounting (because a aufs does not

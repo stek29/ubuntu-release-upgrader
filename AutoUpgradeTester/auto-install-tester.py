@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from optparse import OptionParser
 import os
@@ -9,7 +9,7 @@ import time
 import sys
 sys.path.insert(0, "../DistUpgrade")
 
-from UpgradeTestBackendQemu import UpgradeTestBackendQemu
+from .UpgradeTestBackendQemu import UpgradeTestBackendQemu
 
 import apt
 import apt_pkg

@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from string import Template
 import os
@@ -33,7 +33,7 @@ import GnuPGInterface
 from gettext import gettext as _
 from aptsources.sourceslist import SourcesList
 
-from utils import get_dist, url_downloadable, country_mirror
+from .utils import get_dist, url_downloadable, country_mirror
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "

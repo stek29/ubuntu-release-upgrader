@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
@@ -53,8 +53,8 @@ SYSTEM_DIRS = ["/bin",
 
 
 
-from DistUpgradeController import DistUpgradeController
-from DistUpgradeConfigParser import DistUpgradeConfig
+from .DistUpgradeController import DistUpgradeController
+from .DistUpgradeConfigParser import DistUpgradeConfig
 
 
 def do_commandline():
@@ -117,7 +117,7 @@ def setup_logging(options, config):
 def save_system_state(logdir):
     # save package state to be able to re-create failures
     try:
-        from apt_clone import AptClone
+        from .apt_clone import AptClone
     except ImportError:
         logging.error("failed to import AptClone")
         return
@@ -194,7 +194,7 @@ def main():
     config = DistUpgradeConfig(".")
     logdir = setup_logging(options, config)
 
-    from DistUpgradeVersion import VERSION
+    from .DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)
 
     # create view and app objects

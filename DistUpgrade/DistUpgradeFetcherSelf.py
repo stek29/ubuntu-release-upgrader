@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 import logging
 import shutil
 
-from DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
 
 class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
     def __init__(self, new_dist, progress, options, view):

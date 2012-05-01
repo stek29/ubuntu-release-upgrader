@@ -26,13 +26,15 @@
 #  USA
 
 
+from __future__ import absolute_import
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
 from gettext import gettext as _
 
-from ReleaseNotesViewer import open_url
+from .ReleaseNotesViewer import open_url
 
 class ChangelogViewer(Gtk.TextView):
     def __init__(self, changelog=None):

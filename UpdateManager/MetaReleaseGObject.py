@@ -17,8 +17,10 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import absolute_import
+
 from gi.repository import GObject
-from Core.MetaRelease import MetaReleaseCore
+from .Core.MetaRelease import MetaReleaseCore
 
 class MetaRelease(MetaReleaseCore,GObject.GObject):
 

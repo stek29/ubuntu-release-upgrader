@@ -19,13 +19,13 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk, Gdk
 
-from ReleaseNotesViewer import ReleaseNotesViewer
-from Core.utils import error, inhibit_sleep, allow_sleep
-from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from .ReleaseNotesViewer import ReleaseNotesViewer
+from .Core.utils import error, inhibit_sleep, allow_sleep
+from .Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 try:
     from urllib.request import urlopen
@@ -73,7 +73,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
     def _try_show_release_notes_webkit(self):
       if self.new_dist.releaseNotesHtmlUri is not None:
           try:
-              from ReleaseNotesViewerWebkit import ReleaseNotesViewerWebkit
+              from .ReleaseNotesViewerWebkit import ReleaseNotesViewerWebkit
               webkit_release_notes = ReleaseNotesViewerWebkit(self.new_dist.releaseNotesHtmlUri)
               webkit_release_notes.show()
               self.parent.scrolled_notes.add(webkit_release_notes)

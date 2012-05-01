@@ -1,8 +1,8 @@
 # qemu backend
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from UpgradeTestBackendSSH import UpgradeTestBackendSSH
+from .UpgradeTestBackendSSH import UpgradeTestBackendSSH
 from DistUpgrade.sourceslist import SourcesList
 
 try:

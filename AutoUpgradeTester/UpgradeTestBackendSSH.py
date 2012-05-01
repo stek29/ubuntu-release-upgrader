@@ -1,8 +1,8 @@
 # abstract backend that is based around ssh login
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from UpgradeTestBackend import UpgradeTestBackend
+from .UpgradeTestBackend import UpgradeTestBackend
 
 import glob
 import logging

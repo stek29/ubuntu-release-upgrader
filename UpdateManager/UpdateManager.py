@@ -26,7 +26,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -57,29 +57,29 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
 
-import GtkProgress
-import backend
+from .GtkProgress import GtkFetchProgress, GtkOpProgressInline
+from .backend import get_backend
 
 from gettext import gettext as _
 from gettext import ngettext
 
 
-from Core.utils import (humanize_size, 
-                        init_proxy, 
-                        on_battery,
-                        inhibit_sleep,
-                        allow_sleep)
-from Core.UpdateList import UpdateList
-from Core.MyCache import MyCache
-from Core.AlertWatcher import AlertWatcher
+from .Core.utils import (humanize_size,
+                         init_proxy,
+                         on_battery,
+                         inhibit_sleep,
+                         allow_sleep)
+from .Core.UpdateList import UpdateList
+from .Core.MyCache import MyCache
+from .Core.AlertWatcher import AlertWatcher
 
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
-from DistUpgradeFetcher import DistUpgradeFetcherGtk
+from .DistUpgradeFetcher import DistUpgradeFetcherGtk
 
-from ChangelogViewer import ChangelogViewer
-from SimpleGtk3builderApp import SimpleGtkbuilderApp
-from MetaReleaseGObject import MetaRelease
-from UnitySupport import UnitySupport
+from .ChangelogViewer import ChangelogViewer
+from .SimpleGtk3builderApp import SimpleGtkbuilderApp
+from .MetaReleaseGObject import MetaRelease
+from .UnitySupport import UnitySupport
 
 
 #import pdb
@@ -97,7 +97,7 @@ from UnitySupport import UnitySupport
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
 # NetworkManager enums
-from Core.roam import NetworkManagerHelper
+from .Core.roam import NetworkManagerHelper
 
 def show_dist_no_longer_supported_dialog(parent=None):
     """ show a no-longer-supported dialog """
@@ -263,7 +263,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.settings.set_int("launch-time", int(time.time()))
 
     # get progress object
-    self.progress = GtkProgress.GtkOpProgressInline(
+    self.progress = GtkOpProgressInline(
         self.progressbar_cache_inline, self.window_main)
 
     #set minimum size to prevent the headline label blocking the resize process
@@ -278,7 +278,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     # show the main window
     self.window_main.show()
     # get the install backend
-    self.install_backend = backend.get_backend(self.window_main)
+    self.install_backend = get_backend(self.window_main)
     self.install_backend.connect("action-done", self._on_backend_done)
 
     # Create Unity launcher quicklist
@@ -1107,7 +1107,7 @@ class UpdateManager(SimpleGtkbuilderApp):
               _("Release upgrade not possible right now"),
               _("The release upgrade can not be performed currently, "
                 "please try again later. The server reported: '%s'") % self.new_dist.upgrade_broken)
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkProgress.GtkFetchProgress(self, _("Downloading the release upgrade tool")))
+      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkFetchProgress(self, _("Downloading the release upgrade tool")))
       if self.options.sandbox:
           fetcher.run_options.append("--sandbox")
       fetcher.run()

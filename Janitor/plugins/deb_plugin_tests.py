@@ -14,9 +14,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import absolute_import
+
 import unittest
 
-import deb_plugin
+from .deb_plugin import DebPlugin
 
 
 class MockApplication(object):
@@ -36,7 +38,7 @@ class MockApplication(object):
 class DebPluginTests(unittest.TestCase):
 
     def setUp(self):
-        self.plugin = deb_plugin.DebPlugin()
+        self.plugin = DebPlugin()
         self.app = MockApplication()
         self.plugin.set_application(self.app)
 

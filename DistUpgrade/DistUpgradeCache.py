@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
@@ -38,10 +38,10 @@ except ImportError:
     import ConfigParser as configparser
 from subprocess import Popen, PIPE
 
-from DistUpgradeGettext import gettext as _
-from DistUpgradeGettext import ngettext
+from .DistUpgradeGettext import gettext as _
+from .DistUpgradeGettext import ngettext
 
-from utils import inside_chroot, estimate_kernel_size_in_boot
+from .utils import inside_chroot, estimate_kernel_size_in_boot
 
 class CacheException(Exception):
     pass
@@ -490,7 +490,7 @@ class MyCache(apt.Cache):
         # if the free drivers would give us a equally hard time, we would
         # never be able to release
         try:
-            from NvidiaDetector.nvidiadetector import NvidiaDetection
+            from .NvidiaDetector.nvidiadetector import NvidiaDetection
         except ImportError as e:
             logging.error("NvidiaDetector can not be imported %s" % e)
             return False
@@ -1204,11 +1204,10 @@ class MyCache(apt.Cache):
 
 if __name__ == "__main__":
     import sys
-    import DistUpgradeConfigParser
-    import DistUpgradeView
+    from .DistUpgradeConfigParser import DistUpgradeConfig
+    from .DistUpgradeView import DistUpgradeView
     print("foo")
-    c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
-                DistUpgradeView.DistUpgradeView(), None)
+    c = MyCache(DistUpgradeConfig("."), DistUpgradeView(), None)
     #c.checkForNvidia()
     #print(c._identifyObsoleteKernels())
     print(c.checkFreeSpace())

@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import apt
 import apt_pkg
@@ -39,8 +39,8 @@ except ImportError:
     from ConfigParser import NoSectionError, NoOptionError
 from subprocess import PIPE, Popen
 
-from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
-from DistUpgradeConfigParser import DistUpgradeConfig
+from .DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
+from .DistUpgradeConfigParser import DistUpgradeConfig
 
 class NonInteractiveFetchProgress(FetchProgress):
     def update_status(self, uri, descr, shortDescr, status):

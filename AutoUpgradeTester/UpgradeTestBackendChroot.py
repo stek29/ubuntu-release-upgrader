@@ -1,11 +1,11 @@
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import sys
 import os
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 
-from UpgradeTestBackend import UpgradeTestBackend
+from .UpgradeTestBackend import UpgradeTestBackend
 
 import tempfile
 import subprocess

@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from PyQt4.QtCore import QUrl, Qt, SIGNAL, QTimer
 from PyQt4.QtGui import (
@@ -43,13 +43,13 @@ import shutil
 
 import pty
 
-from DistUpgradeApport import run_apport, apport_crash
+from .DistUpgradeApport import run_apport, apport_crash
 
-from DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
+from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, FetchProgress
 
 import select
 import gettext
-from DistUpgradeGettext import gettext as gett
+from .DistUpgradeGettext import gettext as gett
 
 def _(str):
     return unicode(gett(str), 'UTF-8')

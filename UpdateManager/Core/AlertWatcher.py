@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import absolute_import
+
 from gi.repository import GObject
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
@@ -71,7 +73,7 @@ class AlertWatcher(GObject.GObject):
         self._update_3g_state()
 
     def _update_3g_state(self):
-        from roam import NetworkManagerHelper
+        from .roam import NetworkManagerHelper
         nm = NetworkManagerHelper()
         on_3g = nm.is_active_connection_gsm_or_cdma()
         is_roaming = nm.is_active_connection_gsm_or_cdma_roaming()

@@ -3,11 +3,11 @@
 # test backend
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import tempfile
 
-from UpgradeTestBackend import UpgradeTestBackend
+from .UpgradeTestBackend import UpgradeTestBackend
 
 class UpgradeTestBackendSimulate(UpgradeTestBackend):
 

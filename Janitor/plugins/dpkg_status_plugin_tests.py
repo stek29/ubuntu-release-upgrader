@@ -16,11 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import absolute_import
+
 import os
 import tempfile
 import unittest
 
-import dpkg_status_plugin
+from .dpkg_status_plugin import DpkgStatusPlugin
 
 
 class AutoRemovalPluginTests(unittest.TestCase):
@@ -29,7 +31,7 @@ class AutoRemovalPluginTests(unittest.TestCase):
         fd, self.fname = tempfile.mkstemp()
         os.write(fd, "Status: purge ok not-installed\n")
         os.close(fd)
-        self.plugin = dpkg_status_plugin.DpkgStatusPlugin(self.fname)
+        self.plugin = DpkgStatusPlugin(self.fname)
 
     def tearDown(self):
         os.remove(self.fname)

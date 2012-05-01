@@ -19,10 +19,10 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from DistUpgradeGettext import gettext as _
-from DistUpgradeGettext import ngettext
+from .DistUpgradeGettext import gettext as _
+from .DistUpgradeGettext import ngettext
 import apt
 import errno
 import os
@@ -31,8 +31,8 @@ import logging
 import signal
 import select
 
-from DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
-from DistUpgradeApport import apport_pkgfailure
+from .DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
+from .DistUpgradeApport import apport_pkgfailure
 
 
 def FuzzyTimeToStr(sec):

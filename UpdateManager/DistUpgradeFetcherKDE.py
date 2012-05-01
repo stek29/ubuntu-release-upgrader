@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import
+
 from PyKDE4.kdecore import ki18n, KAboutData, KCmdLineOptions, KCmdLineArgs
 from PyKDE4.kdeui import KIcon, KMessageBox, KApplication, KStandardGuiItem
 from PyQt4.QtCore import QDir, QTimer
@@ -26,8 +28,8 @@ from PyQt4 import uic
 import apt_pkg
 import sys
 
-from Core.utils import inhibit_sleep, allow_sleep
-from Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from .Core.utils import inhibit_sleep, allow_sleep
+from .Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 try:
     from urllib.request import urlopen
@@ -36,7 +38,7 @@ except ImportError:
     from urllib2 import urlopen, HTTPError
 import os
 
-from Core.MetaRelease import MetaReleaseCore
+from .Core.MetaRelease import MetaReleaseCore
 import time
 import apt
 

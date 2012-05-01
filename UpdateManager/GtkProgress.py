@@ -19,13 +19,13 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk, Gdk
 import apt
 import apt_pkg
 from gettext import gettext as _
-from Core.utils import humanize_size
+from .Core.utils import humanize_size
 
 # intervals of the start up progress
 # 3x caching and menu creation
@@ -179,7 +179,7 @@ class GtkFetchProgress(apt.progress.FetchProgress):
 
 if __name__ == "__main__":
     import apt
-    from SimpleGtkbuilderApp import SimpleGtkbuilderApp
+    from .SimpleGtkbuilderApp import SimpleGtkbuilderApp
 
     class MockParent(SimpleGtkbuilderApp):
         """Mock parent for the fetcher that just loads the UI file"""

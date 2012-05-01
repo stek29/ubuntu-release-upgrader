@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import apt_pkg
 try:
@@ -42,7 +42,7 @@ try:
 except ImportError:
     from urllib2 import HTTPError, Request, URLError, urlopen
 
-from utils import get_lang, get_dist, get_ubuntu_flavor
+from .utils import get_lang, get_dist, get_ubuntu_flavor
 
 class Dist(object):
     def __init__(self, name, version, date, supported):

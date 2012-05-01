@@ -19,7 +19,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import sys
 import logging
@@ -28,12 +28,12 @@ import subprocess
 import apt
 import os
 
-from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
+from .DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress
 import apt.progress
 
 import gettext
-from DistUpgradeGettext import gettext as _
-from utils import  twrap
+from .DistUpgradeGettext import gettext as _
+from .utils import twrap
 
 class TextFetchProgress(FetchProgress, apt.progress.text.AcquireProgress):
     def __init__(self):

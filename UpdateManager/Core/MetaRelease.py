@@ -22,7 +22,10 @@
 from __future__ import print_function
 
 import apt_pkg
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import httplib
 import logging
 import rfc822
@@ -80,11 +83,11 @@ class MetaReleaseCore(object):
         self.METARELEASE_URI_PROPOSED_POSTFIX = "-development"
 
         # check the meta-release config first
-        parser = ConfigParser.ConfigParser()
+        parser = configparser.ConfigParser()
         if os.path.exists(self.CONF_METARELEASE):
             try:
                 parser.read(self.CONF_METARELEASE)
-            except ConfigParser.Error as e:
+            except configparser.Error as e:
                 sys.stderr.write("ERROR: failed to read '%s':\n%s" % (
                         self.CONF_METARELEASE, e))
                 return
@@ -102,11 +105,11 @@ class MetaReleaseCore(object):
                         setattr(self, "%s_%s" % (sec, k), parser.get(sec, k))
 
         # check the config file first to figure if we want lts upgrades only
-        parser = ConfigParser.ConfigParser()
+        parser = configparser.ConfigParser()
         if os.path.exists(self.CONF):
             try:
                 parser.read(self.CONF)
-            except ConfigParser.Error as e:
+            except configparser.Error as e:
                 sys.stderr.write("ERROR: failed to read '%s':\n%s" % (
                         self.CONF, e))
                 return

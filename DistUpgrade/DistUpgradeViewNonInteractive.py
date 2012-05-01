@@ -33,7 +33,10 @@ import subprocess
 import copy
 import apt.progress
 
-from ConfigParser import NoSectionError, NoOptionError
+try:
+    from configparser import NoSectionError, NoOptionError
+except ImportError:
+    from ConfigParser import NoSectionError, NoOptionError
 from subprocess import PIPE, Popen
 
 from DistUpgradeView import DistUpgradeView, InstallProgress, FetchProgress

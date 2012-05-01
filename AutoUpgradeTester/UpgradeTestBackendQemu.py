@@ -5,7 +5,10 @@ from __future__ import print_function
 from UpgradeTestBackendSSH import UpgradeTestBackendSSH
 from DistUpgrade.sourceslist import SourcesList
 
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import subprocess
 import os
 import sys
@@ -99,7 +102,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         # check if we want virtio here and default to yes
         try:
             self.virtio = self.config.getboolean("KVM","Virtio")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.virtio = True
         if self.virtio:
             self.qemu_options.extend(["-net","nic,model=virtio"])

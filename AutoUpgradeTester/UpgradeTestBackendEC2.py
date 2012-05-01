@@ -9,7 +9,10 @@ from DistUpgrade.sourceslist import SourcesList
 
 from boto.ec2.connection import EC2Connection
 
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import os
 import sys
 import os.path
@@ -66,7 +69,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
                                   self.config.get("EC2","access_key_id"))
             self.secret_access_key = (os.getenv("AWS_SECRET_ACCESS_KEY") or
                                       self.config.get("EC2","secret_access_key"))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             print("Either export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY or")
             print("set access_key_id and secret_access_key in the profile config")
             print("file.")
@@ -78,7 +81,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         
         try:
             self.security_groups = self.config.getlist("EC2","SecurityGroups")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.security_groups = []
 
         if self.ssh_key.startswith("./"):

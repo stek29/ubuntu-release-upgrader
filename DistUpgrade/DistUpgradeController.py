@@ -35,7 +35,16 @@ import shutil
 import glob
 import time
 import copy
-import ConfigParser
+try:
+    # >= 3.0
+    from configparser import NoOptionError
+    if sys.version >= '3.2':
+        from configparser import ConfigParser as SafeConfigParser
+    else:
+        from configparser import SafeConfigParser
+except ImportError:
+    # < 3.0
+    from ConfigParser import SafeConfigParser, NoOptionError
 from utils import (country_mirror, 
                    url_downloadable, 
                    check_and_fix_xbit, 
@@ -325,7 +334,6 @@ class DistUpgradeController(object):
             breaks stuff in obscure ways (Ubuntu #75557).
         """
         logging.debug("_pythonSymlinkCheck run")
-        from ConfigParser import SafeConfigParser, NoOptionError
         if os.path.exists('/usr/share/python/debian_defaults'):
             config = SafeConfigParser()
             config.readfp(open('/usr/share/python/debian_defaults'))
@@ -1346,7 +1354,7 @@ class DistUpgradeController(object):
             b = self.config.getboolean("Distro","AllowUnauthenticated")
             if b:
                 return True
-        except ConfigParser.NoOptionError:
+        except NoOptionError:
             pass
         for pkgname in backportslist:
             pkg = self.cache[pkgname]

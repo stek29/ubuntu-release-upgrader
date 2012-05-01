@@ -15,7 +15,10 @@ from __future__ import print_function
 
 import unittest
 import os, sys
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 class T(unittest.TestCase):
     @classmethod
@@ -49,13 +52,13 @@ class T(unittest.TestCase):
 
         Return a dictionary with the configuration of the given section.
         '''
-        p = ConfigParser.ConfigParser()
+        p = configparser.ConfigParser()
         p.read(filename)
         config = {}
         try:
             for (key, value) in p.items(section):
                 config[key] = value
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             # just keep an empty config
             pass
         return config

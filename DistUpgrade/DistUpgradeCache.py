@@ -33,7 +33,10 @@ import statvfs
 import time
 import datetime
 import threading
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 from subprocess import Popen, PIPE
 
 from DistUpgradeGettext import gettext as _
@@ -738,7 +741,7 @@ class MyCache(apt.Cache):
             if b:
                 logging.warning("AllowUnauthenticated set!")
                 return True
-        except ConfigParser.NoOptionError as e:
+        except configparser.NoOptionError as e:
             pass
         if len(untrusted) > 0:
             untrusted.sort()
@@ -952,7 +955,7 @@ class MyCache(apt.Cache):
         # check if we want to purge 
         try:
             purge = self.config.getboolean("Distro","PurgeObsoletes")
-        except ConfigParser.NoOptionError as e:
+        except configparser.NoOptionError as e:
             purge = False
 
         # this is a delete candidate, only actually delete,

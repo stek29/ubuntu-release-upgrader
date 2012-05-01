@@ -1,6 +1,16 @@
 from __future__ import print_function
 
-from ConfigParser import SafeConfigParser, NoOptionError, NoSectionError
+import sys
+try:
+    # >= 3.0
+    from configparser import NoOptionError, NoSectionError
+    if sys.version >= '3.2':
+        from configparser import ConfigParser as SafeConfigParser
+    else:
+        from configparser import SafeConfigParser
+except ImportError:
+    # < 3.0
+    from ConfigParser import SafeConfigParser, NoOptionError, NoSectionError
 import subprocess
 import os.path
 import logging

@@ -16,7 +16,15 @@ import shutil
 import sys
 import time
 import subprocess
-from ConfigParser import SafeConfigParser
+try:
+    # >= 3.0
+    if sys.version >= '3.2':
+        from configparser import ConfigParser as SafeConfigParser
+    else:
+        from configparser import SafeConfigParser
+except ImportError:
+    # < 3.0
+    from ConfigParser import SafeConfigParser
 
 # check if we run from a bzr checkout
 if os.path.exists("./UpgradeTestBackend.py"):

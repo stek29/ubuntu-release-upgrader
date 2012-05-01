@@ -100,11 +100,14 @@ def contains_blacklisted_pkg(cache):
    return False
 
 def appinstall_pkgs():
-    import ConfigParser
+    try:
+        import configparser
+    except ImportError:
+        import ConfigParser as configparser
 
     APPINSTALL_DIR = "/usr/share/app-install/desktop"
 
-    content = ConfigParser.ConfigParser()
+    content = configparser.ConfigParser()
     pkgs = []
 
     # List of sections to skip. This must be a valid regular expression

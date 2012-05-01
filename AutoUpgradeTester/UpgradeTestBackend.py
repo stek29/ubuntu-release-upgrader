@@ -5,7 +5,10 @@
 
 from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
 
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import os
 import os.path
 import tempfile
@@ -82,7 +85,7 @@ class UpgradeTestBackend(object):
         self.cachedir = None
         try:
             self.cachedir = self.config.get("NonInteractive","CacheDebs")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             pass
         # init a sensible environment (to ensure proper operation if
         # run from cron)

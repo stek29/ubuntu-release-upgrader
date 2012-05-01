@@ -11,7 +11,10 @@ import tempfile
 import subprocess
 import shutil
 import glob
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 class UpgradeTestBackendChroot(UpgradeTestBackend):
 
@@ -128,7 +131,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                     print("Error extracting tarball")
                     return False
                 return True
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             pass
         
         # bootstrap!
@@ -211,7 +214,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
         try:
             amount = self.config.get("NonInteractive","RandomPkgInstall")
             self._tryRandomPkgInstall(amount)
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             pass
 
         print("Caching debs")

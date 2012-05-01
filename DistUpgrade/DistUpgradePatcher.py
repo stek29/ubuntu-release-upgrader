@@ -52,7 +52,7 @@ def patch(orig, edpatch, result_md5sum=None):
                 # strip away the "s/"
                 line = line[2:]
                 # chop off the flags at the end 
-                subs, flags = line.rsplit(sep="/", maxsplit=1)
+                subs, flags = line.rsplit("/", 1)
                 if flags:
                     raise PatchError("flags for s// not supported yet")
                 # get the actual substitution regexp and replacement and 

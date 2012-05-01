@@ -1,5 +1,7 @@
 # abstract backend that is based around ssh login
 
+from __future__ import print_function
+
 from UpgradeTestBackend import UpgradeTestBackend
 
 import glob
@@ -24,12 +26,12 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                 "/var/cache/auto-upgrade-tester/ssh-key")
             )
         if not os.path.exists(self.ssh_key):
-            print "Creating key: %s" % self.ssh_key
+            print("Creating key: %s" % self.ssh_key)
             subprocess.call(["ssh-keygen","-N","","-f",self.ssh_key])
 
     def login(self):
         " run a shell in the image "
-        print "login"
+        print("login")
         self.start()
         ret = self._runInImage(["/bin/sh"])
         if ret != 0:
@@ -59,7 +61,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         else:
             cmd.append(fromF)
         cmd.append("root@%s:%s" %  (self.ssh_hostname, toF))
-        #print cmd
+        #print(cmd)
         ret = subprocess.call(cmd)
         return ret
 
@@ -74,7 +76,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
                "root@%s:%s" %  (self.ssh_hostname, fromF),
                toF
                ]
-        #print cmd
+        #print(cmd)
         ret = subprocess.call(cmd)
         return ret
 
@@ -114,7 +116,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
 
     def _copyUpgraderFilesFromBzrCheckout(self):
         " copy upgrader files from a bzr checkout "
-        print "copy upgrader into image"
+        print("copy upgrader into image")
         # copy the upgrade into target+/upgrader-tester/
         files = []
         self._runInImage(["mkdir","-p","/upgrade-tester","/etc/update-manager/release-upgrades.d"])
@@ -122,33 +124,33 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             if not os.path.isdir(f):
                 files.append(f)
             elif os.path.islink(f):
-                print "Copying link '%s' to image " % f
+                print("Copying link '%s' to image " % f)
                 self._copyToImage(f, "/upgrade-tester", recursive=True)
         self._copyToImage(files, "/upgrade-tester")
         # and any other cfg files
         for f in glob.glob(os.path.dirname(self.profile)+"/*.cfg"):
             if (os.path.isfile(f) and
                 not os.path.basename(f).startswith("DistUpgrade.cfg")):
-                print "Copying '%s' to image " % f
+                print("Copying '%s' to image " % f)
                 self._copyToImage(f, "/upgrade-tester")
         # base-installer
         bi="%s/base-installer" %  self.upgradefilesdir
-        print "Copying '%s' to image" % bi
+        print("Copying '%s' to image" % bi)
         self._copyToImage(bi, "/upgrade-tester/", recursive=True)
         # copy the patches
         pd="%s/patches" %  self.upgradefilesdir
-        print "Copying '%s' to image" % pd
+        print("Copying '%s' to image" % pd)
         self._copyToImage(pd, "/upgrade-tester/", recursive=True)
         # and prereq lists
         prereq = self.config.getWithDefault("PreRequists","SourcesList",None)
         if prereq is not None:
             prereq = os.path.join(os.path.dirname(self.profile),prereq)
-            print "Copying '%s' to image" % prereq
+            print("Copying '%s' to image" % prereq)
             self._copyToImage(prereq, "/upgrade-tester")
 
     def _runBzrCheckoutUpgrade(self, cmd_prefix):
         # start the upgrader
-        print "running the upgrader now"
+        print("running the upgrader now")
 
         # this is to support direct copying of backport udebs into the 
         # qemu image - useful for testing backports without having to
@@ -160,11 +162,11 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
         if backports:
             self._runInImage(["mkdir -p /upgrade-tester/backports"])
             for f in backports:
-                print "Copying %s" % os.path.basename(f)
+                print("Copying %s" % os.path.basename(f))
                 self._copyToImage(f, "/upgrade-tester/backports/")
                 self._runInImage(["(cd /upgrade-tester/backports ; dpkg-deb -x %s . )" % os.path.basename(f)])
             upgrader_args = " --have-prerequists"
-            upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print \"%s.%s\" % (sys.version_info[0], sys.version_info[1])')/site-packages/ "
+            upgrader_env = "LD_LIBRARY_PATH=/upgrade-tester/backports/usr/lib PATH=/upgrade-tester/backports/usr/bin:$PATH PYTHONPATH=/upgrade-tester/backports//usr/lib/python$(python -c 'import sys; print(\"%s.%s\" % (sys.version_info[0], sys.version_info[1]))')/site-packages/ "
 
         ret = self._runInImage(cmd_prefix+["(cd /upgrade-tester/ ; "
                                 "%s./dist-upgrade.py %s)" % (upgrader_env,
@@ -195,7 +197,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
             self._copyToImage(script, "/tmp/")
             ret = self._runInImage(["/tmp/%s" % os.path.basename(script)])
             if ret != 0:
-                print "WARNING: post_upgrade_test '%s' failed" % script
+                print("WARNING: post_upgrade_test '%s' failed" % script)
                 ok = False
                 log=open(self.resultdir+"/test-%s.FAIL" % os.path.basename(script), "w")
                 log.write("FAIL")
@@ -212,7 +214,7 @@ class UpgradeTestBackendSSH(UpgradeTestBackend):
 
         self.stop()
         if len(crashfiles) > 0:
-            print "WARNING: crash files detected on the upgrade"
-            print crashfiles
+            print("WARNING: crash files detected on the upgrade")
+            print(crashfiles)
             return False
         return ok

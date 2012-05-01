@@ -9,6 +9,8 @@
 # - lots of packages have multiple desktop files for the same application
 #   abiword, abiword-gnome, abiword-gtk
 
+from __future__ import print_function
+
 import os
 import sys
 import warnings
@@ -31,7 +33,7 @@ class Dist(object):
 def get_replace(cache, pkgname):
   replaces = set()
   if not cache.has_key(pkgname):
-    #print "can not find '%s'" % pkgname
+    #print("can not find '%s'" % pkgname)
     return replaces
   pkg = cache[pkgname]
   ver = cache._depcache.get_candidate_ver(pkg._pkg)
@@ -90,7 +92,7 @@ if __name__ == "__main__":
 
   # debug
   #not_in_universe = lambda pkg: not in_universe(pkg)
-  #print filter(not_in_universe, no_longer_main)
+  #print(filter(not_in_universe, no_longer_main))
 
   # this stuff was demoted and is no in universe
   demoted = filter(in_universe, no_longer_main)
@@ -98,7 +100,7 @@ if __name__ == "__main__":
 
   # remove items that are now in universe, but are replaced by something
   # in main (pidgin, gaim) etc
-  #print "Looking for replaces"
+  #print("Looking for replaces")
   line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (new.name, "main")
   file("apt/sources.list","w").write(line)
   dist.pkgs_in_comp[comp] = set()
@@ -114,14 +116,14 @@ if __name__ == "__main__":
       replaces = get_replace(cache, pkgname)
       for r in replaces:
         if r in demoted:
-          #print "found '%s' that is demoted but replaced by '%s'" % (r, pkgname)
+          #print("found '%s' that is demoted but replaced by '%s'" % (r, pkgname))
           demoted.remove(r)
 
   #outfile = "demoted.cfg"
-  #print "writing the demotion info to '%s'" % outfile
+  #print("writing the demotion info to '%s'" % outfile)
   # write it out
   #out = open(outfile,"w")
   #out.write("# demoted packages\n")
   #out.write("\n".join(demoted))
-  print "# demoted packages from %s to %s" % (sys.argv[1], sys.argv[2])
-  print "\n".join(demoted)
+  print("# demoted packages from %s to %s" % (sys.argv[1], sys.argv[2]))
+  print("\n".join(demoted))

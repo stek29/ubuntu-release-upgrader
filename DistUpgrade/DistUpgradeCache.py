@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
@@ -727,7 +729,7 @@ class MyCache(apt.Cache):
             origins = pkg.candidate.origins
             trusted = False
             for origin in origins:
-                #print origin
+                #print(origin)
                 trusted |= origin.trusted
             if not trusted:
                 untrusted.append(pkg.name)
@@ -791,10 +793,10 @@ class MyCache(apt.Cache):
         """ 
         ver = pkg._pcache._depcache.get_candidate_ver(pkg._pkg)
         if ver is None:
-            print "No candidate ver: ", pkg.name
+            print("No candidate ver: ", pkg.name)
             return False
         if ver.file_list is None:
-            print "No FileList for: %s " % self._pkg.Name()
+            print("No FileList for: %s " % self._pkg.Name())
             return False
         f, index = ver.file_list.pop(0)
         pkg._pcache._records.lookup((f, index))
@@ -1202,17 +1204,17 @@ if __name__ == "__main__":
     import sys
     import DistUpgradeConfigParser
     import DistUpgradeView
-    print "foo"
+    print("foo")
     c = MyCache(DistUpgradeConfigParser.DistUpgradeConfig("."),
                 DistUpgradeView.DistUpgradeView(), None)
     #c.checkForNvidia()
-    #print c._identifyObsoleteKernels()
-    print c.checkFreeSpace()
+    #print(c._identifyObsoleteKernels())
+    print(c.checkFreeSpace())
     sys.exit()
 
     c.clear()
     c.create_snapshot()
     c.installedTasks
     c.installTasks(["ubuntu-desktop"])
-    print c.get_changes()
+    print(c.get_changes())
     c.restore_snapshot()

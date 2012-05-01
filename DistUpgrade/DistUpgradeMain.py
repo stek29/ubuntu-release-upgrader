@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
 
@@ -144,10 +146,10 @@ def setup_view(options, config, logdir):
             break
         except Exception, e:
             logging.warning("can't import view '%s' (%s)" % (requested_view,e))
-            print "can't load %s (%s)" % (requested_view, e)
+            print("can't load %s (%s)" % (requested_view, e))
     else:
         logging.error("No view can be imported, aborting")
-        print "No view can be imported, aborting"
+        print("No view can be imported, aborting")
         sys.exit(1)
     return instance
 

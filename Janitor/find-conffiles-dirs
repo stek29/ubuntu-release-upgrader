@@ -19,6 +19,7 @@ sort -u |
 python -c '
 # remove /some/path from input if its parent exists in input too
 # assume sorted input
+from __future__ import print_function
 import sys
 dirs = set()
 for line in sys.stdin:
@@ -29,7 +30,7 @@ for line in sys.stdin:
     else:
         dirs.add(line)
 for dir in sorted(dirs):
-    print dir
+    print(dir)
 '
 
 

@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from gi.repository import Gtk, Gdk
 import apt
 import apt_pkg
@@ -93,9 +95,9 @@ class GtkOpProgressWindow(apt.OpProgress):
         self._window.set_transient_for(parent)
 
     def update(self, percent):
-        #print percent
-        #print self.Op
-        #print self.SubOp
+        #print(percent)
+        #print(self.Op)
+        #print(self.SubOp)
         # only show progress bar if the parent is not iconified (#353195)
         state = self._parent.window.get_state()
         if not (state  & Gdk.WINDOW_STATE_ICONIFIED):
@@ -197,6 +199,6 @@ if __name__ == "__main__":
     pm = apt_pkg.GetPackageManager(cache._depcache)
     fetcher = apt_pkg.GetAcquire(fetch_progress)
     res = cache._fetchArchives(fetcher, pm)
-    print res
+    print(res)
     
     

@@ -1,5 +1,7 @@
 # ec2 backend
 
+from __future__ import print_function
+
 from UpgradeTestBackendSSH import UpgradeTestBackendSSH
 from UpgradeTestBackend import UpgradeTestBackend
 
@@ -65,9 +67,9 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
             self.secret_access_key = (os.getenv("AWS_SECRET_ACCESS_KEY") or
                                       self.config.get("EC2","secret_access_key"))
         except ConfigParser.NoOptionError:
-            print "Either export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY or"
-            print "set access_key_id and secret_access_key in the profile config"
-            print "file."
+            print("Either export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY or")
+            print("set access_key_id and secret_access_key in the profile config")
+            print("file.")
             sys.exit(1)
         self._conn = EC2Connection(self.access_key_id, self.secret_access_key)
         self.ubuntu_official_ami = False
@@ -95,7 +97,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         atexit.register(self._cleanup)
 
     def _cleanup(self):
-        print "_cleanup(): stopping running instance"
+        print("_cleanup(): stopping running instance")
         if self.instance:
             self.instance.stop()
 
@@ -107,9 +109,9 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         return (ret == 0)
 
     def bootstrap(self, force=False):
-        print "bootstrap()"
+        print("bootstrap()")
 
-        print "Building new image based on '%s'" % self.ec2ami
+        print("Building new image based on '%s'" % self.ec2ami)
 
         # get common vars
         basepkg = self.config.get("NonInteractive","BasePkg")
@@ -135,35 +137,35 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
         while(len(pkgs)) > 0:
-            print "installing additonal: %s" % pkgs[:CMAX]
+            print("installing additional: %s" % pkgs[:CMAX])
             ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","--reinstall", "--allow-unauthenticated", "-y"]+pkgs[:CMAX])
-            print "apt(2) returned: %s" % ret
+            print("apt(2) returned: %s" % ret)
             if ret != 0:
                 #self._cacheDebs(tmpdir)
-                print "apt returned a error, stopping"
+                print("apt returned an error, stopping")
                 self.stop_instance()
                 return False
             pkgs = pkgs[CMAX+1:]
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
-            print "have PostBootstrapScript: %s" % script
+            print("have PostBootstrapScript: %s" % script)
             if os.path.exists(script):
                 self._runInImage(["mkdir","/upgrade-tester"])
                 self._copyToImage(script, "/upgrade-tester")
-                print "running script: %s" % os.path.join("/tmp",script)
+                print("running script: %s" % os.path.join("/tmp", script))
                 self._runInImage([os.path.join("/upgrade-tester",script)])
             else:
-                print "WARNING: %s not found" % script
+                print("WARNING: %s not found" % script)
 
         if self.config.getWithDefault("NonInteractive",
                                       "UpgradeFromDistOnBootstrap", False):
-            print "running apt-get upgrade in from dist (after bootstrap)"
+            print("running apt-get upgrade in from dist (after bootstrap)")
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","--allow-unauthenticated", "-y","dist-upgrade"])
             assert(ret == 0)
 
-        print "Cleaning image"
+        print("Cleaning image")
         ret = self._runInImage(["apt-get","clean"])
         assert(ret == 0)
 
@@ -179,7 +181,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         return True
 
     def start_instance(self):
-        print "Starting ec2 instance and wait until its availabe "
+        print("Starting ec2 instance and wait until it's available")
 
         # start the instance
         reservation = self._conn.run_instances(image_id=self.ec2ami,
@@ -187,11 +189,11 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
                                                key_name=self.ssh_key[:-4].split("/")[-1])
         self.instance = reservation.instances[0]
         while self.instance.state == "pending":
-                print "Waiting for instance %s to come up..." % self.instance.id
+                print("Waiting for instance %s to come up..." % self.instance.id)
                 time.sleep(10)
                 self.instance.update()
 
-        print "It's up: hostname =", self.instance.dns_name
+        print("It's up: hostname =", self.instance.dns_name)
         self.ssh_hostname = self.instance.dns_name
         self.ec2instance = self.instance.id
 
@@ -203,22 +205,22 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         for i in range(900):
             time.sleep(1)
             if self.ping(user):
-                print "instance available via ssh ping"
+                print("instance available via ssh ping")
                 break
         else:
-            print "Could not connect to instance after 900s, exiting"
+            print("Could not connect to instance after 900s, exiting")
             return False
         # re-enable root login if needed
         if self.ubuntu_official_ami:
-            print "Re-enabling root login... ",
+            print("Re-enabling root login... ",)
             ret = self._enableRootLogin()
             if ret:
-                print "Done!"
+                print("Done!")
             else:
-                print "Oops, failed to enable root login..."
+                print("Oops, failed to enable root login...")
             assert (ret == True)
             # the official image seems to run a update on startup?!?
-            print "waiting for the official image to leave apt alone"
+            print("waiting for the official image to leave apt alone")
             time.sleep(10)
         return True
     
@@ -230,7 +232,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         time.sleep(5)
         while True:
             if self._runInImage(["/bin/true"]) == 0:
-                print "instance rebootet"
+                print("instance rebooted")
                 break
 
     def stop_instance(self):
@@ -240,24 +242,24 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         # wait until its down
         while True:
             if self._runInImage(["/bin/true"]) != 0:
-                print "instance stopped"
+                print("instance stopped")
                 break
 
     def upgrade(self):
-        print "upgrade()"
+        print("upgrade()")
 
         # clean from any leftover pyc files
         for f in glob.glob("%s/*.pyc" %  self.upgradefilesdir):
             os.unlink(f)
 
-        print "Starting for upgrade"
+        print("Starting for upgrade")
 
         assert(self.ec2instance)
         assert(self.ssh_hostname)
 
         # copy the profile
         if os.path.exists(self.profile):
-            print "Copying '%s' to image overrides" % self.profile
+            print("Copying '%s' to image overrides" % self.profile)
             self._runInImage(["mkdir","-p","/etc/update-manager/release-upgrades.d"])
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
 
@@ -276,7 +278,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
             for entry in sources.list:
                 if (not (entry.invalid or entry.disabled) and
                     entry.type == "deb"):
-                    print "adding %s to mirrors" % entry.uri
+                    print("adding %s to mirrors" % entry.uri)
                     self._runInImage(["echo '%s' >> /upgrade-tester/mirrors.cfg" % entry.uri])
 
         # check if we have a bzr checkout dir to run against or
@@ -290,15 +292,15 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         else:
             ret = self._runInImage(["do-release-upgrade","-d",
                                     "-f","DistUpgradeViewNonInteractive"])
-        print "dist-upgrade.py returned: %i" % ret
+        print("dist-upgrade.py returned: %i" % ret)
         
 
         # copy the result
-        print "coyping the result"
+        print("copying the result")
         self._copyFromImage("/var/log/dist-upgrade/*",self.resultdir)
 
         # stop the machine
-        print "Shuting down the VM"
+        print("Shutting down the VM")
         self.stop_instance()
 
         return True
@@ -320,9 +322,9 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
     def stop(self):
         self.stop_instance()
     def saveVMSnapshot(self):
-        print "saveVMSnapshot not supported yet"
+        print("saveVMSnapshot not supported yet")
     def restoreVMSnapshot(self):
-        print "restoreVMSnapshot not supported yet"
+        print("restoreVMSnapshot not supported yet")
 
     
 # vim:ts=4:sw=4:et

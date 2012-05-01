@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from gettext import gettext as _
 from gettext import ngettext
 from stat import (S_IMODE, ST_MODE, S_IXUSR)
@@ -55,7 +57,7 @@ class ExecutionTime(object):
     def __enter__(self):
         self.now = time.time()
     def __exit__(self, type, value, stack):
-        print "%s: %s" % (self.info, time.time() - self.now)
+        print("%s: %s" % (self.info, time.time() - self.now))
 
 def get_string_with_no_auth_from_source_entry(entry):
     tmp = copy(entry)
@@ -274,12 +276,12 @@ def init_proxy(gsettings=None):
   #         else:
   #           proxy = "http://%s:%s/" % (host, port)
   #   except Exception, e:
-  #     print "error from gconf: %s" % e
+  #     print("error from gconf: %s" % e)
   # if we have a proxy, set it
   if proxy:
     # basic verification
     if not re.match("http://\w+", proxy):
-      print >> sys.stderr, "proxy '%s' looks invalid" % proxy
+      print("proxy '%s' looks invalid" % proxy, file=sys.stderr)
       return
     proxy_support = urllib2.ProxyHandler({"http":proxy})
     opener = urllib2.build_opener(proxy_support)
@@ -310,7 +312,7 @@ def on_battery():
         return dev.Get("org.freedesktop.DeviceKit.Power", "on_battery")
   except Exception, e:
     #import sys
-    #print >>sys.stderr, "on_battery returned error: ", e
+    #print("on_battery returned error: ", e, file=sys.stderr)
     return False
 
 def inhibit_sleep():
@@ -327,7 +329,7 @@ def inhibit_sleep():
     cookie = dev.Inhibit('UpdateManager', 'Updating system')
     return (dev, cookie)
   except Exception:
-    #print "could not send the dbus Inhibit signal: %s" % e
+    #print("could not send the dbus Inhibit signal: %s" % e)
     return (False, False)
 
 def allow_sleep(dev, cookie):
@@ -336,7 +338,7 @@ def allow_sleep(dev, cookie):
   try:
     dev.UnInhibit(cookie)
   except Exception, e:
-    print "could not send the dbus UnInhibit signal: %s" % e
+    print("could not send the dbus UnInhibit signal: %s" % e)
 
 
 def str_to_bool(str):
@@ -455,7 +457,7 @@ target     prot opt source               destination
 
 
 if __name__ == "__main__":
-  #print mirror_from_sources_list()
-  #print on_battery()
-  #print inside_chroot()
-  print iptables_active()
+  #print(mirror_from_sources_list())
+  #print(on_battery())
+  #print(inside_chroot())
+  print(iptables_active())

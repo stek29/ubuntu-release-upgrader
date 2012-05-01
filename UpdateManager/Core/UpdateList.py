@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
 
@@ -45,7 +47,7 @@ class UpdateList(object):
         dist = pipe.read().strip()
         del pipe
     except Exception, e:
-        print "Error in lsb_release: %s" % e
+        print("Error in lsb_release: %s" % e)
         parent.error(_("Failed to detect distribution"),
                      _("A error '%s' occurred while checking what system "
                        "you are using.") % e)
@@ -84,7 +86,7 @@ class UpdateList(object):
         if pkg.candidateOrigin == None:
             # can happen for e.g. locked packages
             # FIXME: do something more sensible here (but what?)
-            print "WARNING: upgradable but no canidateOrigin?!?: ", pkg.name
+            print("WARNING: upgradable but no canidateOrigin?!?: ", pkg.name)
             continue
         # check where the package belongs
         origin_node = cache.matchPackageOrigin(pkg, self.matcher)

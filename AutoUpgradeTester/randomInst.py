@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import sys
 import apt
 from random import choice
@@ -11,10 +13,10 @@ for i in range(int(sys.argv[1])):
         if cache[pkgname].is_installed:
             continue
         try:
-            print "Trying to install: '%s'" % pkgname
+            print("Trying to install: '%s'" % pkgname)
             cache[pkgname].mark_install()
         except SystemError, e:
-            print "Failed to install '%s' (%s)" % (pkgname,e)
+            print("Failed to install '%s' (%s)" % (pkgname, e))
             continue
         break
 cache.commit(apt.progress.text.AcquireProgress(), 

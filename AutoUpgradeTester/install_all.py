@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 
+from __future__ import print_function
+
 import apt
 import apt_pkg
 import re
@@ -41,7 +43,7 @@ def do_install(cache):
    current = 0
    maxRetries = 5
    while current < maxRetries:
-      print "Retry: ", current
+      print("Retry: ", current)
       try:
          res = cache.commit(apt.progress.text.AcquireProgress(),
                             InstallProgress())
@@ -49,18 +51,18 @@ def do_install(cache):
       except IOError, e:
          # fetch failed, will be retried
          current += 1
-         print "Retrying to fetch: ", current, e
+         print("Retrying to fetch: ", current, e)
          continue
       except SystemError, e:
-         print "Error installing packages! "
-         print e
-         print "Install result: ",res
+         print("Error installing packages! ")
+         print(e)
+         print("Install result: ", res)
          break
    # check for failed packages and remove them
    if os.path.exists("install_failures.txt"):
       failures =  set(map(lambda s: os.path.basename(s.split("_:_")[0]).split("_")[0], 
                           open("install_failures.txt").readlines()))
-      print "failed: ", failures
+      print("failed: ", failures)
       assert(os.system("dpkg -r %s" % " ".join(failures)) == 0)
       assert(os.system("dpkg --configure -a") == 0)
       # remove pos.txt and best.txt to force recalculation
@@ -75,7 +77,7 @@ def blacklisted(name):
       for name in map(string.strip, open("install_blacklist.cfg").readlines()):
          if name and not name.startswith("#"):
             pkg_blacklist.add(name)
-      print "blacklist: ", pkg_blacklist
+      print("blacklist: ", pkg_blacklist)
    if pkg_blacklist:
       for b in pkg_blacklist:
 	   if re.match(b, name):
@@ -114,7 +116,7 @@ def contains_blacklisted_pkg(cache):
 apt_pkg.config.set("Dpkg::MaxArgs",str(16*1024))
 apt_pkg.config.set("Dpkg::MaxArgBytes",str(64*1024))
 
-print "install_all.py"
+print("install_all.py")
 os.environ["DEBIAN_FRONTEND"] = "noninteractive"
 os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
 
@@ -122,7 +124,7 @@ cache = apt.Cache()
 
 # dapper does not have this yet 
 group = cache.actiongroup()
-#print [pkg.name for pkg in cache if pkg.is_installed]
+#print([pkg.name for pkg in cache if pkg.is_installed])
 
 # see what gives us problems
 troublemaker = set()
@@ -155,15 +157,15 @@ for comp in comps:
       pkg = cache[pkgname]
       i += 1
       percent = (float(i)/len(cache))*100.0
-      print "\r%.3f     " % percent,
+      print("\r%.3f     " % percent, end="")
       sys.stdout.flush()
       # ignore stuff that does not match the whitelist pattern
       # (if we use this)
       if pkg_whitelist:
          if not re.match(pkg_whitelist, pkg.name):
-            #print "skipping '%s' (not in whitelist)" % pkg.name
+            #print("skipping '%s' (not in whitelist)" % pkg.name)
             continue
-      print "looking at ", pkg.name
+      print("looking at ", pkg.name)
       # only work on stuff that has a origin
       if pkg.candidate:
          for c in pkg.candidate.origins:
@@ -173,7 +175,7 @@ for comp in comps:
                   try:
                      pkg.mark_install()
                   except SystemError, e:
-                     print "Installing '%s' cause problems: %s" % (pkg.name, e)
+                     print("Installing '%s' cause problems: %s" % (pkg.name, e))
                      pkg.mark_keep()
                   # check blacklist
                   if contains_blacklisted_pkg(cache):
@@ -183,10 +185,10 @@ for comp in comps:
                   new = set([p.name for p in cache if p.marked_install])
                   #if not pkg.marked_install or len(new) < len(current):
                   if not (pkg.is_installed or pkg.marked_install):
-                     print "Can't install: %s" % pkg.name
+                     print("Can't install: %s" % pkg.name)
                   if len(current-new) > 0:
                      troublemaker.add(pkg.name)
-                     print "Installing '%s' caused removals %s" % (pkg.name, current - new)
+                     print("Installing '%s' caused removals %s" % (pkg.name, current - new))
                   # FIXME: instead of len() use score() and score packages
                   #        according to criteria like "in main", "priority" etc
                   if len(new) >= len(best):
@@ -194,13 +196,13 @@ for comp in comps:
                      open("best.txt","w").write("\n".join(best))
                      open("pos.txt","w").write("%s %s" % (comp, i))
                   else:
-                     print "Installing '%s' reduced the set (%s < %s)" % (pkg.name, len(new), len(best))
+                     print("Installing '%s' reduced the set (%s < %s)" % (pkg.name, len(new), len(best)))
                      cache.clear()
                      reapply(cache, best)
    i=0
 
 # make sure that the ubuntu base packages are installed (and a bootloader)
-print len(troublemaker)
+print(len(troublemaker))
 for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard", "grub-pc"]:
     cache[pkg].mark_install()
 
@@ -210,17 +212,17 @@ for pkg in cache:
 		pkg.mark_keep()
 
 # install it
-print "We can install:", len([pkg.name for pkg in cache if pkg.marked_install])
+print("We can install:", len([pkg.name for pkg in cache if pkg.marked_install]))
 # get size
 pm = apt_pkg.PackageManager(cache._depcache)
 fetcher = apt_pkg.Acquire()
 pm.get_archives(fetcher, cache._list, cache._records)
-print "Download: ", apt_pkg.size_to_str(fetcher.fetch_needed)
-print "Total space: ", apt_pkg.size_to_str(cache._depcache.usr_size)
+print("Download: ", apt_pkg.size_to_str(fetcher.fetch_needed))
+print("Total space: ", apt_pkg.size_to_str(cache._depcache.usr_size))
 
 # write out file with all pkgs
 outf = "all_pkgs.cfg"
-print "writing out file with the selected package names to '%s'" % outf
+print("writing out file with the selected package names to '%s'" % outf)
 f = open(outf, "w")
 f.write("\n".join([pkg.name for pkg in cache if pkg.marked_install]))
 f.close()

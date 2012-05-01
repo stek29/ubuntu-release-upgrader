@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 # (c) 2005-2009 Canonical, GPL
 
+from __future__ import print_function
+
 from aptdaemon import client, errors
 from defer import inline_callbacks
 from aptdaemon.gtk3widgets import AptProgressDialog
@@ -55,7 +57,7 @@ class InstallBackendAptdaemon(InstallBackend):
         except errors.NotAuthorizedError as e:
             self.emit("action-done", self.INSTALL, False, False)
         except dbus.DBusException as e:
-            #print e, e.get_dbus_name()
+            #print(e, e.get_dbus_name())
             if e.get_dbus_name() != "org.freedesktop.DBus.Error.NoReply":
                 raise
             self.emit("action-done", self.INSTALL, False, False)
@@ -64,7 +66,7 @@ class InstallBackendAptdaemon(InstallBackend):
             raise
 
     def _on_progress_changed(self, trans, progress):
-        #print "_on_progress_changed", progress
+        #print("_on_progress_changed", progress)
         self.unity.set_progress(progress)
 
     @inline_callbacks

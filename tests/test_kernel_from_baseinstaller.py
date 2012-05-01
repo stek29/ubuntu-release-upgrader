@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import os
 import subprocess
 import sys
@@ -28,7 +30,7 @@ class TestKernelBaseinstaller(unittest.TestCase):
         cache.mark_install = Mock()
         cache.mark_install.return_value = True
         cache._selectKernelFromBaseInstaller()
-        #print cache.mark_install.call_args
+        #print(cache.mark_install.call_args)
         calls = cache.mark_install.call_args_list
         self.assertEqual(len(calls), 2)
         cache.mark_install.assert_any_call(

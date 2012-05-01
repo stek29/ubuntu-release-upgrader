@@ -20,6 +20,8 @@
 #  USA
 
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
@@ -1562,7 +1564,7 @@ class DistUpgradeController(object):
         else:
             args.append("--without-network")
         logging.info("restarting upgrader")
-        #print "restarting upgrader to make use of the backports"
+        #print("restarting upgrader to make use of the backports")
         # work around kde being clever and removing the x bit
         check_and_fix_xbit(sys.argv[0])
         os.execve(sys.argv[0],args, os.environ)

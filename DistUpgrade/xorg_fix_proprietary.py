@@ -4,6 +4,8 @@
 # transition from broken proprietary drivers to the free ones
 #
 
+from __future__ import print_function
+
 import sys
 import os
 import os.path
@@ -110,7 +112,7 @@ def is_multiseat(xorg_source=XORG_CONF):
 
 if __name__ == "__main__":
     if not os.getuid() == 0:
-        print "Need to run as root"
+        print("Need to run as root")
         sys.exit(1)
 
     # we pretend to be update-manger so that apport picks up when we crash

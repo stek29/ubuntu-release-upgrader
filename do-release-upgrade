@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
@@ -75,11 +77,11 @@ if __name__ == "__main__":
 
 
   if options.show_version:
-    print "%s: version %s" % (os.path.basename(sys.argv[0]), VERSION)
+    print("%s: version %s" % (os.path.basename(sys.argv[0]), VERSION))
     sys.exit(0)
 
   if not options.quiet:
-    print _("Checking for a new Ubuntu release")
+    print(_("Checking for a new Ubuntu release"))
 
   m = MetaReleaseCore(useDevelopmentRelease=options.devel_release,
                       useProposed=options.proposed_release)
@@ -92,27 +94,27 @@ if __name__ == "__main__":
   #  chech-new-release mode)
   if m.no_longer_supported is not None:
     url = "http://www.ubuntu.com/releaseendoflife"
-    print _("Your Ubuntu release is not supported anymore.")
-    print _("For upgrade information, please visit:\n"
-            "%(url)s\n") % { 'url' : url }
+    print(_("Your Ubuntu release is not supported anymore."))
+    print(_("For upgrade information, please visit:\n"
+            "%(url)s\n") % { 'url' : url })
 
   # now inform about a new release
   if m.new_dist is None:
     if not options.quiet:
-      print _("No new release found")
+      print(_("No new release found"))
     sys.exit(NO_RELEASE_AVAILABLE)
 
   if m.new_dist.upgrade_broken:
     if not options.quiet:
-      print _("Release upgrade not possible right now") 
-      print _("The release upgrade can not be performed currently, "
-              "please try again later. The server reported: '%s'") % m.new_dist.upgrade_broken
+      print(_("Release upgrade not possible right now"))
+      print(_("The release upgrade can not be performed currently, "
+              "please try again later. The server reported: '%s'") % m.new_dist.upgrade_broken)
     sys.exit(NO_RELEASE_AVAILABLE)
 
   # we have a new dist
   if options.check_dist_upgrade_only:
-    print _("New release '%s' available.") % m.new_dist.version
-    print _("Run 'do-release-upgrade' to upgrade to it.")
+    print(_("New release '%s' available.") % m.new_dist.version)
+    print(_("Run 'do-release-upgrade' to upgrade to it."))
     sys.exit(RELEASE_AVAILABLE)
 
   progress = apt.progress.text.AcquireProgress()

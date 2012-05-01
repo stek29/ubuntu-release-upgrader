@@ -26,6 +26,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -347,17 +349,17 @@ class UpdateManager(SimpleGtkbuilderApp):
     try:
         bus = dbus.SessionBus()
     except:
-        print "warning: could not initiate dbus"
+        print("warning: could not initiate dbus")
         return
     try:
         proxy_obj = bus.get_object('org.freedesktop.UpdateManager', 
                                    '/org/freedesktop/UpdateManagerObject')
         iface = dbus.Interface(proxy_obj, 'org.freedesktop.UpdateManagerIFace')
         iface.bringToFront()
-        #print "send bringToFront"
+        #print("send bringToFront")
         sys.exit(0)
     except dbus.DBusException:
-         #print "no listening object (%s) "% e
+         #print("no listening object (%s) " % e)
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
          self.dbusController = UpdateManagerDbusController(self, bus_name)
 
@@ -596,7 +598,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_downsize.show()
           self.vbox_alerts.show()
       except SystemError, e:
-          print "requiredDownload could not be calculated: %s" % e
+          print("requiredDownload could not be calculated: %s" % e)
           self.label_downsize.set_markup(_("Unknown download size."))
           self.image_downsize.set_sensitive(False)
           self.hbox_downsize.show()
@@ -654,7 +656,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def update_last_updated_text(self, user_data):
       """timer that updates the last updated text """
-      #print "update_last_updated_text"
+      #print("update_last_updated_text")
       num_updates = self.cache.installCount
       if num_updates == 0:
           if self._get_last_apt_get_update_text() is not None:
@@ -721,7 +723,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.on_treeview_update_cursor_changed(self.treeview_update)
 
   def on_button_reload_clicked(self, widget, menuitem = None, data = None):
-    #print "on_button_reload_clicked"
+    #print("on_button_reload_clicked")
     self.check_metarelease()
     self.invoke_manager(UPDATE)
 
@@ -729,7 +731,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   #  self.help_viewer.run()
 
   def on_button_settings_clicked(self, widget):
-    #print "on_button_settings_clicked"
+    #print("on_button_settings_clicked")
     try:
         apt_pkg.pkgsystem_unlock()
     except SystemError:
@@ -749,7 +751,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     self.fillstore()
 
   def on_button_install_clicked(self, widget):
-    #print "on_button_install_clicked"
+    #print("on_button_install_clicked")
     err_sum = _("Not enough free disk space")
     err_long= _("The upgrade needs a total of %s free space on disk '%s'. "
                 "Please free at least an additional %s of disk "
@@ -886,7 +888,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_battery.hide()    
 
   def _on_network_3g_alert(self, watcher, on_3g, is_roaming):
-      #print "on 3g: %s; roaming: %s" % (on_3g, is_roaming)
+      #print("on 3g: %s; roaming: %s" % (on_3g, is_roaming))
       if is_roaming:
           self.hbox_roaming.show()
           self.hbox_on_3g.hide()
@@ -909,10 +911,10 @@ class UpdateManager(SimpleGtkbuilderApp):
       actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
       for pkg in self.list.pkgs[origin]:
           if pkg.marked_install or pkg.marked_upgrade:
-              #print "marking keep: ", pkg.name
+              #print("marking keep: ", pkg.name)
               pkg.mark_keep()
           elif not (pkg.name in self.list.held_back):
-              #print "marking install: ", pkg.name
+              #print("marking install: ", pkg.name)
               pkg.mark_install(auto_fix=False,auto_inst=False)
       # check if we left breakage
       if self.cache._depcache.broken_count:
@@ -1098,7 +1100,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       dialog.destroy()
 
   def on_button_dist_upgrade_clicked(self, button):
-      #print "on_button_dist_upgrade_clicked"
+      #print("on_button_dist_upgrade_clicked")
       if self.new_dist.upgrade_broken:
           return self.error(
               _("Release upgrade not possible right now"),
@@ -1131,7 +1133,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         #      "run at the same time"),
         #    _("Please close the other application e.g. 'aptitude' "
         #      "or 'Synaptic' first.")))
-        #print "error from apt: '%s'" % e
+        #print("error from apt: '%s'" % e)
         #d.set_title("")
         #res = d.run()
         #d.destroy()

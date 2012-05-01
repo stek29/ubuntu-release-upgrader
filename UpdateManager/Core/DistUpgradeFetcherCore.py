@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from string import Template
 import os
 import apt_pkg
@@ -59,17 +61,17 @@ class DistUpgradeFetcherCore(object):
         """ dummy implementation for error display, should be overwriten
             by subclasses that want to more fancy method
         """
-        print summary
-        print message
+        print(summary)
+        print(message)
         return False
 
     def authenticate(self):
         if self.new_dist.upgradeToolSig:
             f = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeTool)
             sig = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeToolSig)
-            print _("authenticate '%(file)s' against '%(signature)s' ") % {
+            print(_("authenticate '%(file)s' against '%(signature)s' ") % {
 		'file' : os.path.basename(f),
-		'signature' : os.path.basename(sig)}
+		'signature' : os.path.basename(sig)})
             if self.gpgauthenticate(f, sig):
                 return True
         return False
@@ -92,22 +94,22 @@ class DistUpgradeFetcherCore(object):
             proc.wait()
         except IOError,e:
             # gnupg returned a problem (non-zero exit)
-            print "exception from gpg: %s" % e
-            print "Debug information: "
-            print proc.handles['status'].read()
-            print proc.handles['stderr'].read()
-            print proc.handles['logger'].read()
+            print("exception from gpg: %s" % e)
+            print("Debug information: ")
+            print(proc.handles['status'].read())
+            print(proc.handles['stderr'].read())
+            print(proc.handles['logger'].read())
             return False
         if "VALIDSIG" in gpgres:
             return True
-        print "invalid result from gpg:"
-        print gpgres
+        print("invalid result from gpg:")
+        print(gpgres)
         return False
 
     def extractDistUpgrader(self):
           # extract the tarbal
           fname = os.path.join(self.tmpdir,os.path.basename(self.uri))
-          print _("extracting '%s'") % os.path.basename(fname)
+          print(_("extracting '%s'") % os.path.basename(fname))
           if not os.path.exists(fname):
               return False
           try:
@@ -288,5 +290,5 @@ class DistUpgradeFetcherCore(object):
 
 if __name__ == "__main__":
     d = DistUpgradeFetcherCore(None,None)
-#    print d.authenticate('/tmp/Release','/tmp/Release.gpg')
-    print "got mirror: '%s'" % d.mirror_from_sources_list("http://archive.ubuntu.com/ubuntu/dists/intrepid-proposed/main/dist-upgrader-all/0.93.34/intrepid.tar.gz", "http://archive.ubuntu.com/ubuntu")
+#    print(d.authenticate('/tmp/Release','/tmp/Release.gpg'))
+    print("got mirror: '%s'" % d.mirror_from_sources_list("http://archive.ubuntu.com/ubuntu/dists/intrepid-proposed/main/dist-upgrader-all/0.93.34/intrepid.tar.gz", "http://archive.ubuntu.com/ubuntu"))

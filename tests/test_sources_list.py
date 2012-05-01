@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import os
 import sys
 sys.path.insert(0,"../")
@@ -56,7 +58,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         self.assert_(res == True)
 
         # now test the result
-        #print open(os.path.join(self.testdir,"sources.list")).read()
+        #print(open(os.path.join(self.testdir,"sources.list")).read())
         self._verifySources("""
 # main repo
 deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse universe

@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import apt_pkg
 import os
 import os.path
@@ -43,7 +45,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         (p,s,i18n) = cdrom._scanCD()
         self.assert_(len(p) > 0 and len(s) > 0 and len(i18n) > 0,
                      "failed to scan packages files (%s) (%s)" % (p,s))
-        #print p,s,i18n
+        #print(p,s,i18n)
     
     def testDropArch(self):
         p = "./test-data-cdrom"
@@ -64,7 +66,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         (p,s,i18n) = cdrom._scanCD()
         p = cdrom._dropArch(p)
         line = cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
-        #print line
+        #print(line)
         self.assert_(line == "deb cdrom:[Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)]/ intrepid restricted",
                      "deb line wrong (got %s)" % line)
 

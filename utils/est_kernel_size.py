@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import apt_pkg
 import glob
 import os
@@ -10,4 +12,4 @@ sum = 0
 for entry in glob.glob("/boot/*%s*" % krelease):
     sum += os.path.getsize(entry)
 
-print "Sum of kernel releated files: ",sum, apt_pkg.SizeToStr(sum)
+print("Sum of kernel related files: ", sum, apt_pkg.SizeToStr(sum))

@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import glob
 import os
 import subprocess
@@ -15,5 +17,5 @@ for f in glob.glob(basepath):
         ok = False
 
 if not ok:
-    print "WARNING: at least one md5sum mismatch"
+    print("WARNING: at least one md5sum mismatch")
     sys.exit(1)

@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 from optparse import OptionParser
 import os
 import os.path
@@ -15,22 +17,22 @@ import apt_pkg
 
 def do_install_remove(backend, pkgname):
     """ install a package in the backend """
-    #print "watchdog_runing: ", backend.watchdog_running
+    #print("watchdog_runing: ", backend.watchdog_running)
     if not backend.watchdog_running:
-        print "starting watchdog"
+        print("starting watchdog")
         backend._runInImage(["/bin/apt-watchdog"])
         backend.watchdog_running = True
 #    ret = backend._runInImage(["DEBIAN_FRONTEND=text","DEBIAN_PRIORITY=low",
 #                               "apt-get","install","-q","-y",pkg.name])
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
                                "apt-get","install","-q","-y",pkg.name])
-    print "apt returned: ", ret
+    print("apt returned: ", ret)
     if ret != 0:
         return False
     # now remove it again
     ret = backend._runInImage(["DEBIAN_FRONTEND=noninteractive",
                                "apt-get","autoremove", "-y",pkg.name])
-    print "apt returned: ", ret
+    print("apt returned: ", ret)
     if ret != 0:
         return False
     return True
@@ -38,7 +40,7 @@ def do_install_remove(backend, pkgname):
 def test_downloadable(backend, pkgname):
     """ test if the pkg is downloadable or gives a 404 """ 
     ret = backend._runInImage(["apt-get","install","-q","--download-only","-y",pkg.name])
-    print "apt --download-only returned: ", ret
+    print("apt --download-only returned: ", ret)
     if ret != 0:
         return False
     return True
@@ -73,12 +75,12 @@ if __name__ == "__main__":
 
     # copy status file from image to aptbasedir
     backend.start()
-    print "copy apt-watchdog"
+    print("copy apt-watchdog")
     backend._copyToImage("apt-watchdog", "/bin/")
-    print "copy status file"
+    print("copy status file")
     backend._copyFromImage("/var/lib/dpkg/status",
                            os.path.join(aptbasedir,"var/lib/dpkg/","status"))
-    print "run update"
+    print("run update")
     backend._runInImage(["apt-get","-q", "update"])
     backend.stop()
 
@@ -104,7 +106,7 @@ if __name__ == "__main__":
 
     # setup dirs
     resultdir = backend.resultdir
-    print "Using resultdir: '%s'" % resultdir
+    print("Using resultdir: '%s'" % resultdir)
     failures = open(os.path.join(resultdir,"failures.txt"),"w")
 
     # pkg blacklist - only useful for pkg that causes exsessive delays
@@ -112,18 +114,18 @@ if __name__ == "__main__":
     # to a (firewalled) network
     pkgs_blacklisted = set()
     sname = os.path.join(resultdir,"pkgs_blacklisted.txt")
-    print "looking at ", sname
+    print("looking at ", sname)
     if os.path.exists(sname):
         pkgs_blacklisted = set(open(sname).read().split("\n"))
-        print "have '%s' with '%i' entries" % (sname, len(pkgs_blacklisted))
+        print("have '%s' with '%i' entries" % (sname, len(pkgs_blacklisted)))
 
     # set with package that have been tested successfully
     pkgs_tested = set()
     sname = os.path.join(resultdir,"pkgs_done.txt")
-    print "looking at ", sname
+    print("looking at ", sname)
     if os.path.exists(sname):
         pkgs_tested = set(open(sname).read().split("\n"))
-        print "have '%s' with '%i' entries" % (sname, len(pkgs_tested))
+        print("have '%s' with '%i' entries" % (sname, len(pkgs_tested)))
         statusfile = open(sname, "a")
     else:
         statusfile = open(sname, "w")
@@ -135,9 +137,9 @@ if __name__ == "__main__":
 #                                cache["postfix"] ]):
         # clean the cache
         cache._depcache.Init()
-        print "\n\nPackage %s: %i of %i (%f.2)" % (pkg.name, i, len(cache), 
-                                             float(i)/float(len(cache))*100)
-        print "pkgs_tested has %i entries\n\n" % len(pkgs_tested)
+        print("\n\nPackage %s: %i of %i (%f.2)" % (pkg.name, i, len(cache),
+                                             float(i)/float(len(cache))*100))
+        print("pkgs_tested has %i entries\n\n" % len(pkgs_tested))
 
         pkg_failed = False
 
@@ -147,12 +149,12 @@ if __name__ == "__main__":
 
         # skip blacklisted pkg names
         if pkg.name in pkgs_blacklisted:
-            print "blacklisted: ", pkg.name
+            print("blacklisted: ", pkg.name)
             continue
 
         # skip packages we tested already
         if "%s-%s" % (pkg.name, pkg.candidateVersion) in pkgs_tested:
-            print "already tested: ", pkg.name
+            print("already tested: ", pkg.name)
             continue
 
         # see if we can install/upgrade the pkg
@@ -161,7 +163,7 @@ if __name__ == "__main__":
         except SystemError, e:
             pkg.markKeep()
         if not (pkg.markedInstall or pkg.markedUpgrade):
-            print "pkg: %s not installable" % pkg.name
+            print("pkg: %s not installable" % pkg.name)
             failures.write("%s markInstall()\n " % pkg.name)
             continue
         
@@ -178,7 +180,7 @@ if __name__ == "__main__":
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log
             # is more meaningful
-            print "pkg: %s failed, re-testing in a clean(er) environment" % pkg.name
+            print("pkg: %s failed, re-testing in a clean(er) environment" % pkg.name)
             backend.restoreVMSnapshot("clean-base")
             backend.watchdog_running = False
             backend.start()

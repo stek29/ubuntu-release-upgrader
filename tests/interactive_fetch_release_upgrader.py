@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import unittest
 
 import os
@@ -32,9 +34,9 @@ class TestMetaReleaseGUI(unittest.TestCase):
         self.new_dist = None
 
     def new_dist_available(self, meta_release, upgradable_to):
-        #print "new dist: ", upgradable_to.name
-        #print "new dist: ", upgradable_to.version
-        #print "meta release: %s" % meta_release
+        #print("new dist: ", upgradable_to.name)
+        #print("new dist: ", upgradable_to.version)
+        #print("meta release: %s" % meta_release)
         self.new_dist = upgradable_to
 
     def testnewdist(self):

@@ -21,6 +21,8 @@
 #  USA
 
 
+from __future__ import print_function
+
 import dbus
 import sys
 
@@ -191,13 +193,13 @@ if __name__ == "__main__":
     # test code
     if sys.argv[1:] and sys.argv[1] == "--test":
         mmhelper = ModemManagerHelper()
-        print "is_gsm_roaming", mmhelper.is_gsm_roaming()
-        print "is_cdma_romaing", mmhelper.is_cdma_roaming()
+        print("is_gsm_roaming", mmhelper.is_gsm_roaming())
+        print("is_cdma_romaing", mmhelper.is_cdma_roaming())
 
     # roaming?
     nmhelper = NetworkManagerHelper()
     is_roaming = nmhelper.is_active_connection_gsm_or_cdma_roaming()
-    print "roam: ", is_roaming
+    print("roam: ", is_roaming)
     if is_roaming:
         sys.exit(1)
     sys.exit(0)

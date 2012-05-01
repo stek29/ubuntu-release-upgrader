@@ -23,6 +23,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -128,7 +130,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     Gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):
-    #print "don't upgrade"
+    #print("don't upgrade")
     s = _("You have declined the upgrade to Ubuntu %s") % self.new_dist.version
     self.dialog_really_do_not_upgrade.set_markup("<b>%s</b>" % s)
     if self.dialog_really_do_not_upgrade.run() == Gtk.ResponseType.OK:

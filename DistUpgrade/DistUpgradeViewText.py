@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import sys
 import logging
 import subprocess
@@ -47,7 +49,7 @@ class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
     def update(self, text, step):
         """ update is called regularly so that the gui can be redrawn """
         if text:
-          print "%s (%f)" % (text, step/float(self.totalSteps)*100)
+          print("%s (%f)" % (text, step/float(self.totalSteps)*100))
     def askCdromName(self):
         return (False, "")
     def changeCdrom(self):
@@ -84,7 +86,7 @@ class DistUpgradeViewText(DistUpgradeView):
 
     def _handleException(self, type, value, tb):
         import traceback
-        print
+        print()
         lines = traceback.format_exception(type, value, tb)
         logging.error("not handled exception:\n%s" % "\n".join(lines))
         self.error(_("A fatal error occurred"),
@@ -107,31 +109,31 @@ class DistUpgradeViewText(DistUpgradeView):
     def getCdromProgress(self):
         return self._cdromProgress
     def updateStatus(self, msg):
-      print
-      print msg
+      print()
+      print(msg)
       sys.stdout.flush()
     def abort(self):
-      print
-      print _("Aborting")
+      print()
+      print(_("Aborting"))
     def setStep(self, step):
       self.last_step = step
     def showDemotions(self, summary, msg, demotions):
         self.information(summary, msg, 
                          _("Demoted:\n")+twrap(", ".join(demotions)))
     def information(self, summary, msg, extended_msg=None):
-      print
-      print twrap(summary)
-      print twrap(msg)
+      print()
+      print(twrap(summary))
+      print(twrap(msg))
       if extended_msg:
-        print twrap(extended_msg)
-      print _("To continue please press [ENTER]")
+        print(twrap(extended_msg))
+      print(_("To continue please press [ENTER]"))
       sys.stdin.readline()
     def error(self, summary, msg, extended_msg=None):
-      print
-      print twrap(summary)
-      print twrap(msg)
+      print()
+      print(twrap(summary))
+      print(twrap(msg))
       if extended_msg:
-        print twrap(extended_msg)
+        print(twrap(extended_msg))
       return False
     def showInPager(self, output):
       " helper to show output in a pager"
@@ -143,16 +145,16 @@ class DistUpgradeViewText(DistUpgradeView):
               p.wait()
               return
       # if we don't have a pager, just print
-      print output
+      print(output)
 
     def confirmChanges(self, summary, changes, demotions, downloadSize,
                        actions=None, removal_bold=True):
       DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
                                      downloadSize, actions)
-      print
-      print twrap(summary)
-      print twrap(self.confirmChangesMessage)
-      print " %s %s" % (_("Continue [yN] "), _("Details [d]")),
+      print()
+      print(twrap(summary))
+      print(twrap(self.confirmChangesMessage))
+      print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
       while True:
         res = sys.stdin.readline()
         # TRANSLATORS: the "y" is "yes"
@@ -190,21 +192,21 @@ class DistUpgradeViewText(DistUpgradeView):
                   _("Upgrade: %s\n") % " ".join([p.name for p in self.toUpgrade]),
                   subsequent_indent='  ')
           self.showInPager(output)
-        print "%s %s" % (_("Continue [yN] "), _("Details [d]")),
+        print("%s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
 
     def askYesNoQuestion(self, summary, msg, default='No'):
-      print
-      print twrap(summary)
-      print twrap(msg)
+      print()
+      print(twrap(summary))
+      print(twrap(msg))
       if default == 'No':
-          print _("Continue [yN] "),
+          print(_("Continue [yN] "), end="")
           res = sys.stdin.readline()
           # TRANSLATORS: first letter of a positive (yes) answer
           if res.strip().lower().startswith(_("y")):
               return True
           return False
       else:
-          print _("Continue [Yn] "),
+          print(_("Continue [Yn] "), end="")
           res = sys.stdin.readline()
           # TRANSLATORS: first letter of a negative (no) answer
           if res.strip().lower().startswith(_("n")):
@@ -237,12 +239,12 @@ if __name__ == "__main__":
   #while True:
   #    view.processEvents()
   
-  print twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.", subsequent_indent=" ")
+  print(twrap("89 packages are going to be upgraded.\nYou have to download a total of 82.7M.\nThis download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem.", subsequent_indent=" "))
   #sys.exit(1)
 
   view = DistUpgradeViewText()
-  print view.askYesNoQuestion("hello", "Icecream?", "No")
-  print view.askYesNoQuestion("hello", "Icecream?", "Yes")
+  print(view.askYesNoQuestion("hello", "Icecream?", "No"))
+  print(view.askYesNoQuestion("hello", "Icecream?", "Yes"))
   
 
   #view.confirmChangesMessage = "89 packages are going to be upgraded.\n You have to download a total of 82.7M.\n This download will take about 10 minutes with a 1Mbit DSL connection and about 3 hours 12 minutes with a 56k modem."
@@ -273,4 +275,4 @@ if __name__ == "__main__":
              "asfds afsdj af asdf asdf asf dsa fadsf asdf as fasf sextended\n"
              )
   view.confirmChanges("xx",[], 100)
-  print view.askYesNoQuestion("hello", "Icecream?")
+  print(view.askYesNoQuestion("hello", "Icecream?"))

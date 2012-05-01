@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
@@ -149,7 +151,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             # discard is < than installed ver
             if (inst_ver and
                 apt_pkg.VersionCompare(ver.ver_str, inst_ver.ver_str) <= 0):
-                #print "skipping '%s' " % ver.ver_str
+                #print("skipping '%s' " % ver.ver_str)
                 continue
             # check if we have a match
             for(verFileIter,index) in ver.file_list:
@@ -184,7 +186,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         # get the source version, start with the binaries version
         srcver_epoch = pkg.candidateVersion
         srcver = self._strip_epoch(srcver_epoch)
-        #print "bin: %s" % binver
+        #print("bin: %s" % binver)
 
         l = section.split("/")
         if len(l) > 1:
@@ -213,9 +215,9 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                 "https locations with username/password are not"
                 "supported to fetch changelogs")
 
-        # print "Trying: %s " % uri
+        # print("Trying: %s " % uri)
         changelog = urllib2.urlopen(uri)
-        #print changelog.read()
+        #print(changelog.read())
         # do only get the lines that are new
         alllines = ""
         regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
@@ -346,7 +348,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                           "until the changes become available or try again "
                           "later.") % (srcpkg, srcver_epoch)
         except (IOError, httplib.BadStatusLine, socket.error), e:
-            print "caught exception: ", e
+            print("caught exception: ", e)
             changelog = _("Failed to download the list "
                           "of changes. \nPlease "
                           "check your Internet "

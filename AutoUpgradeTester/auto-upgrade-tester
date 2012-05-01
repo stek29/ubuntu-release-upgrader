@@ -5,6 +5,8 @@
 # see also 
 # http://www.faqts.com/knowledge_base/entry/versions/index.phtml?aid=4419
 
+from __future__ import print_function
+
 import datetime
 import glob
 import logging
@@ -47,7 +49,7 @@ class OutputThread(multiprocessing.Process):
             # but return "" ?!?
             s = os.read(self.file, 1024)
             if s:
-                print s,
+                print(s, end="")
             else:
                 time.sleep(0.1)
 
@@ -136,11 +138,11 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
     backend = createBackend(backend_name, profile)
     assert(backend != None)
     if not os.path.exists(profile):
-        print "ERROR: Can't find '%s' " % profile
+        print("ERROR: Can't find '%s' " % profile)
         html_output.write("<tr><td>Can't find profile '%s'</td>" % profile)
         html_output.write(4*"<td></td>")
         return 2
-    print "Storing the result in '%s'" % backend.resultdir
+    print("Storing the result in '%s'" % backend.resultdir)
     profile_name = os.path.split(os.path.normpath(profile))[1]
     # setup output
     outfile = os.path.join(backend.resultdir, "bootstrap.log")
@@ -154,49 +156,49 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
     os.dup2(fd, 1)
     os.dup2(fd, 2)
     time_started = datetime.datetime.now()
-    print "%s log started" % time_started
+    print("%s log started" % time_started)
     result = 0
     try:
         # write what we working on
         html_output.write("<td>%s</td>" % profile_name)
         # init 
         if not backend.bootstrap():
-            print "FAILED: bootstrap for '%s'" % profile
+            print("FAILED: bootstrap for '%s'" % profile)
             html_output.write("<td class=\"error\">Failed to bootstrap</td>")
             raise FailedToBootstrapError("Failed to bootstrap '%s'" % profile)
         if add_pkgs:
             if not backend.installPackages(add_pkgs):
-                print "FAILED: installPacakges '%s'" % add_pkgs
+                print("FAILED: installPacakges '%s'" % add_pkgs)
                 html_output.write("<td class=\"error\">Failed to add pkgs '%s'</td>" % ",".join(add_pkgs))
                 raise Exception, "Failed to install packages '%s'" % add_pkgs
         if not backend.upgrade():
-            print "FAILED: upgrade for '%s'" % profile
+            print("FAILED: upgrade for '%s'" % profile)
             html_output.write("<td class=\"error\">Failed to upgrade</td>")
             raise FailedToUpgradeError("Failed to upgrade %s" % profile)
         if not backend.test():
-            print "FAILED: test for '%s'" % profile
+            print("FAILED: test for '%s'" % profile)
             html_output.write("<td class=\"warning\">Upgraded, but post upgrade test failed</td>")
             raise FailedPostUpgradeTestError("Failed in post upgrade test %s" % profile)
-        print "profile: %s worked" % profile
+        print("profile: %s worked" % profile)
         html_output.write("<td>ok</td>")
     except (FailedToBootstrapError, FailedToUpgradeError, FailedPostUpgradeTestError) as e:
-        print e
+        print(e)
         result = e.exitcode
     except Exception, e:
         import traceback
         traceback.print_exc()
-        print "Caught exception in testUpgrade for '%s' (%s)" % (profile, e)
+        print("Caught exception in testUpgrade for '%s' (%s)" % (profile, e))
         html_output.write("<td class=\"error\">Unknown failure (should not happen)</td>")
         result = 2
     finally:
         # print out result details
-        print "Logs can be found here:"
+        print("Logs can be found here:")
         for n in ["bootstrap.log", "main.log", "apt.log"]:
-            print " %s/%s" % (backend.resultdir, n)
+            print(" %s/%s" % (backend.resultdir, n))
 
         time_ended = datetime.datetime.now()
-        print "%s log ended." % time_ended
-        print "Duration: %s" % (time_ended - time_started)
+        print("%s log ended." % time_ended)
+        print("Duration: %s" % (time_ended - time_started))
 
         # give the output time to settle and kill the daemon
         time.sleep(2)
@@ -304,11 +306,11 @@ if __name__ == "__main__":
     # check if we have something to do
     profiles = args
     if not profiles and not options.auto:
-        print sys.argv[0]
-        print "No profile specified, available default profiles:"
-        print "\n".join(os.listdir(base))
-        print 
-        print "Or use '-a' for 'auto' mode"
+        print(sys.argv[0])
+        print("No profile specified, available default profiles:")
+        print("\n".join(os.listdir(base)))
+        print()
+        print("Or use '-a' for 'auto' mode")
         sys.exit(1)
 
     # generic
@@ -318,11 +320,11 @@ if __name__ == "__main__":
         add_pkgs = options.add_pkgs.split(",")
     # auto mode
     if options.auto:
-        print "running in auto-mode"
+        print("running in auto-mode")
         for d in os.listdir(base):
             os.dup2(fd1, 1)
             os.dup2(fd2, 2)
-            print "Testing '%s'" % d
+            print("Testing '%s'" % d)
             res = max(res, testUpgrade(options.backend, base+d, add_pkgs))
         sys.exit(res)
     # profile mode, test the given profiles
@@ -337,10 +339,10 @@ if __name__ == "__main__":
         if os.path.isfile(profile):
             profilename = profileFromAptClone(profile)
             if not profilename:
-                print "File is not a valid apt-clone image: %s" % profilename
+                print("File is not a valid apt-clone image: %s" % profilename)
                 continue
             profile = profilename
-            print "Using generated profile: %s" % profile
+            print("Using generated profile: %s" % profile)
 
         if not "/" in profile:
             profile = base + profile
@@ -358,19 +360,19 @@ if __name__ == "__main__":
                 backend = createBackend(options.backend, profile)
                 backend.genDiff()
             else:
-                print "Testing '%s'" % profile
+                print("Testing '%s'" % profile)
                 now = datetime.datetime.now()
                 current_res = testUpgrade(options.backend, profile, 
                                           add_pkgs, options.quiet,
                                           html_output)
                 if current_res == 0: 
-                    print "Profile '%s' worked" % profile
+                    print("Profile '%s' worked" % profile)
                 else:
-                    print "Profile '%s' FAILED" % profile
+                    print("Profile '%s' FAILED" % profile)
                 res = max(res, current_res)
         except Exception, e:
             import traceback
-            print "ERROR: exception caught '%s' " % e
+            print("ERROR: exception caught '%s' " % e)
             html_output.write('<pre class="error">unhandled ERROR %s:\n%s</pre>' % (e, traceback.format_exc()))
             traceback.print_exc()
             if hasattr(e, "exitcode"):

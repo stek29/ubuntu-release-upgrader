@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from ConfigParser import SafeConfigParser, NoOptionError, NoSectionError
 import subprocess
 import os.path
@@ -62,9 +64,9 @@ class DistUpgradeConfig(SafeConfigParser):
 
 if __name__ == "__main__":
     c = DistUpgradeConfig(".")
-    print c.getlist("Distro","MetaPkgs")
-    print c.getlist("Distro","ForcedPurges")
-    print c.getListFromFile("Sources","ValidMirrors")
-    print c.getWithDefault("Distro","EnableApport", True)
-    print c.set("Distro","Foo", "False")
-    print c.getWithDefault("Distro","Foo", True)
+    print(c.getlist("Distro","MetaPkgs"))
+    print(c.getlist("Distro","ForcedPurges"))
+    print(c.getListFromFile("Sources","ValidMirrors"))
+    print(c.getWithDefault("Distro","EnableApport", True))
+    print(c.set("Distro","Foo", "False"))
+    print(c.getWithDefault("Distro","Foo", True))

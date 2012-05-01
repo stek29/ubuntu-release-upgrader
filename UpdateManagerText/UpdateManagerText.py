@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import apt
 import apt_pkg
 import sys
@@ -47,10 +49,10 @@ class UpdateManagerText(object):
 	if not self.DEBUG:
             apt_pkg.PkgSystemLock()
 	self.openCache()
-	print _("Building Updates List")
+	print(_("Building Updates List"))
 	self.fillstore()
         if self.list.distUpgradeWouldDelete > 0:
-            print _("""
+            print(_("""
 A normal upgrade can not be calculated, please run: 
   sudo apt-get dist-upgrade
 
@@ -59,7 +61,7 @@ This can be caused by:
  * A previous upgrade which didn't complete
  * Problems with some of the installed software
  * Unofficial software packages not provided by Ubuntu
- * Normal changes of a pre-release version of Ubuntu""")
+ * Normal changes of a pre-release version of Ubuntu"""))
             sys.exit(1)
 	self.screen.resume()
 

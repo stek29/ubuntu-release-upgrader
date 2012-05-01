@@ -1,5 +1,7 @@
 # qemu backend
 
+from __future__ import print_function
+
 from UpgradeTestBackendSSH import UpgradeTestBackendSSH
 from DistUpgrade.sourceslist import SourcesList
 
@@ -74,7 +76,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         # setup mount dir/imagefile location
         self.baseimage = self.config.get("KVM", "BaseImage")
         if not os.path.exists(self.baseimage):
-            print "Missing '%s' base image, need to build it now" % self.baseimage
+            print("Missing '%s' base image, need to build it now" % self.baseimage)
             arch = self.config.getWithDefault("KVM", "Arch", "i386")
             rootsize = self.config.getWithDefault("KVM", "RootSize", "80000")
             destdir = "ubuntu-kvm-%s-%s" % (arch, self.fromDist)
@@ -116,7 +118,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         if not self.ssh_lock:
             raise NoPortsException("Couldn't allocate SSH port.")
         self.ssh_port = str(ssh_port)
-        print "using ssh port: %s" % self.ssh_port
+        print("using ssh port: %s" % self.ssh_port)
         self.ssh_hostname = "localhost"
         self.qemu_options.append("-redir")
         self.qemu_options.append("tcp:%s::22" % self.ssh_port)
@@ -126,7 +128,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         (self.vnc_lock, vncport) = self.getFreePort(port_base=vncport)
         if not self.vnc_lock:
             raise NoPortsException("Couldn't allocate VNC port.")
-        print "using VncNum: %s" % vncport
+        print("using VncNum: %s" % vncport)
         self.qemu_options.append("-vnc")
         self.qemu_options.append("localhost:%s" % str(vncport - VNC_BASE_PORT))
 
@@ -149,7 +151,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         """
         for lock in (self.ssh_lock, self.vnc_lock):
             lockpath = lock.name
-            print "Releasing lock: %s" % lockpath
+            print("Releasing lock: %s" % lockpath)
             lock.close()
             os.unlink(lockpath)
 
@@ -185,11 +187,11 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         self.config.set("NonInteractive","UpgradeFromDistOnBootstrap","true")
         self.baseimage = "jeos/%s-i386.qcow2" % self.config.get("Sources","To")
         self.image = diff_image
-        print "bootstraping into %s" % diff_image
+        print("bootstrapping into %s" % diff_image)
         self.bootstrap()
-        print "bootstrap finshsed"
+        print("bootstrap finished")
         self.start()
-        print "generating file diff list"
+        print("generating file diff list")
         self._runInImage(["find", "/bin", "/boot", "/etc/", "/home",
                           "/initrd", "/lib", "/root", "/sbin/",
                           "/srv", "/usr", "/var"],
@@ -203,7 +205,7 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
         pass
 
     def bootstrap(self, force=False):
-        print "bootstrap()"
+        print("bootstrap()")
 
         # move old crash files away so that test() is not
         # confused by them
@@ -217,11 +219,11 @@ class UpgradeTestBackendQemu(UpgradeTestBackendSSH):
             os.path.exists("%s.%s" % (self.image,self.fromDist)) and 
             self.config.has_option("KVM","CacheBaseImage") and
             self.config.getboolean("KVM","CacheBaseImage")):
-            print "Not bootstraping again, we have a cached BaseImage"
+            print("Not bootstrapping again, we have a cached BaseImage")
             shutil.copy("%s.%s" % (self.image,self.fromDist), self.image)
             return True
 
-        print "Building new image '%s' based on '%s'" % (self.image, self.baseimage)
+        print("Building new image '%s' based on '%s'" % (self.image, self.baseimage))
         shutil.copy(self.baseimage, self.image)
 
         # get common vars
@@ -301,21 +303,21 @@ iface eth0 inet static
             ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive", "apt-get",
                                     "install", "-y", "apt-clone"])
             assert ret == 0
-            print "Restoring clone from %s" % aptclone
+            print("Restoring clone from %s" % aptclone)
             ret = self._runInImage(['DEBIAN_FRONTEND=noninteractive',
                                     'apt-clone', 'restore', dst_clonename])
             # FIXME: what action should be taken when a package failed
             #        to restore?
             if ret != 0:
-                print "WARNING: Some packages failed to restore. Continuing anyway!"
+                print("WARNING: Some packages failed to restore. Continuing anyway!")
             #assert ret == 0
 
         CMAX = 4000
         pkgs =  self.config.getListFromFile("NonInteractive","AdditionalPkgs")
         while(len(pkgs)) > 0:
-            print "installing additonal: %s" % pkgs[:CMAX]
+            print("installing additional: %s" % pkgs[:CMAX])
             ret= self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","install","--reinstall","-y"]+pkgs[:CMAX])
-            print "apt(2) returned: %s" % ret
+            print("apt(2) returned: %s" % ret)
             if ret != 0:
                 #self._cacheDebs(tmpdir)
                 self.stop()
@@ -335,7 +337,7 @@ iface eth0 inet static
 
         if self.config.has_option("NonInteractive","PostBootstrapScript"):
             script = self.config.get("NonInteractive","PostBootstrapScript")
-            print "have PostBootstrapScript: %s" % script
+            print("have PostBootstrapScript: %s" % script)
             if os.path.exists(script):
                 self._copyToImage(script, "/upgrade-tester")
                 self._copyToImage(glob.glob(os.path.dirname(
@@ -343,22 +345,22 @@ iface eth0 inet static
                 script_name = os.path.basename(script)
                 self._runInImage(["chmod","755",
                                   os.path.join("/upgrade-tester",script_name)])
-                print "running script: %s" % script_name
+                print("running script: %s" % script_name)
                 cmd = os.path.join("/upgrade-tester",script_name)
                 ret = self._runInImage(["cd /upgrade-tester; %s" % cmd])
-                print "PostBootstrapScript returned: %s" % ret
+                print("PostBootstrapScript returned: %s" % ret)
                 assert ret == 0, "PostBootstrapScript returned non-zero"
             else:
-                print "WARNING: %s not found" % script
+                print("WARNING: %s not found" % script)
 
         if self.config.getWithDefault("NonInteractive",
                                       "UpgradeFromDistOnBootstrap", False):
-            print "running apt-get upgrade in from dist (after bootstrap)"
+            print("running apt-get upgrade in from dist (after bootstrap)")
             for i in range(3):
                 ret = self._runInImage(["DEBIAN_FRONTEND=noninteractive","apt-get","-y","dist-upgrade"])
             assert ret == 0, "dist-upgrade returned %s" % ret
 
-        print "Cleaning image"
+        print("Cleaning image")
         ret = self._runInImage(["apt-get","clean"])
         assert ret == 0, "apt-get clean returned %s" % ret
 
@@ -374,7 +376,7 @@ iface eth0 inet static
 
     def saveVMSnapshot(self,name):
         # savevm
-        print "savevm"
+        print("savevm")
         self.stop()
         shutil.copy(self.image, self.image+"."+name)
         return
@@ -383,10 +385,10 @@ iface eth0 inet static
         #self.qemu_pid.stdin.write("savevm %s\n" % name)
         #self.qemu_pid.stdin.write("cont\n")
     def delVMSnapshot(self,name):
-        print "delvm"
+        print("delvm")
         self.qemu_pid.stdin.write("delvm %s\n" % name)
     def restoreVMSnapshot(self,name):
-        print "restorevm"
+        print("restorevm")
         self.stop()
         shutil.copy(self.image+"."+name, self.image)
 	return
@@ -398,7 +400,7 @@ iface eth0 inet static
 
     def start(self):
         if self.qemu_pid != None:
-            print "already runing"
+            print("already running")
             return True
         # mvo: disabled for now, hardy->lucid does not work well with it
         #      (random hangs)
@@ -408,66 +410,66 @@ iface eth0 inet static
         drive = ["-hda", self.image]
         # build cmd
         cmd = [self.qemu_binary]+drive+self.qemu_options
-        print "Starting %s" % cmd
+        print("Starting %s" % cmd)
         self.qemu_pid = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         # spin here until ssh has come up and we can login
         now = time.time()
         while True:
             if self.qemu_pid.poll():
                 res = self.qemu_pid.wait()
-                print "qemu stopped unexpecedtly with exit code '%s'" % res
+                print("qemu stopped unexpectedly with exit code '%s'" % res)
                 return False
             time.sleep(1)
             if self._runInImage(["/bin/true"]) == 0:
                 break
             if (time.time() - now) > 900:
-                print "Could not start image after 900s, exiting"
+                print("Could not start image after 900s, exiting")
                 return False
         return True
 
     def stop(self):
         " we stop because we run with -no-reboot"
-        print "stop"
+        print("stop")
         if self.qemu_pid:
-            print "stop pid: ", self.qemu_pid
+            print("stop pid: ", self.qemu_pid)
             self._runInImage(["/sbin/reboot"])
-            print "waiting for qemu to shutdown"
+            print("waiting for qemu to shutdown")
             for i in range(600):
                 if self.qemu_pid.poll() is not None:
-                    print "poll() returned"
+                    print("poll() returned")
                     break
                 time.sleep(1)
             else:
-                print "Not stopped after 600s, killing "
+                print("Not stopped after 600s, killing ")
                 try:
                     os.kill(int(self.qemu_pid.pid), 15)
                     time.sleep(10)
                     os.kill(int(self.qemu_pid.pid), 9)
                 except Exception, e:
-                    print "FAILED to kill %s '%s'" % (self.qemu_pid, e)
+                    print("FAILED to kill %s '%s'" % (self.qemu_pid, e))
             self.qemu_pid = None
-            print "qemu stopped"
+            print("qemu stopped")
 
 
     def upgrade(self):
-        print "upgrade()"
+        print("upgrade()")
 
         # clean from any leftover pyc files
         for f in glob.glob("%s/*.pyc" %  self.upgradefilesdir):
             os.unlink(f)
 
-        print "Starting for upgrade"
+        print("Starting for upgrade")
         if not self.start():
             return False
 
         # copy the profile
         if os.path.exists(self.profile):
-            print "Copying '%s' to image overrides" % self.profile
+            print("Copying '%s' to image overrides" % self.profile)
             self._runInImage(["mkdir","-p","/etc/update-manager/release-upgrades.d"])
             self._copyToImage(self.profile, "/etc/update-manager/release-upgrades.d/")
             for override_cfg in glob.glob(
                 os.path.abspath(os.path.join(self.profile_override, "*.cfg"))):
-                print "Copying '%s' to image overrides" % override_cfg
+                print("Copying '%s' to image overrides" % override_cfg)
                 self._copyToImage(
                       override_cfg, "/etc/update-manager/release-upgrades.d/")
 
@@ -488,7 +490,7 @@ iface eth0 inet static
             for entry in sources.list:
                 if (not (entry.invalid or entry.disabled) and
                     entry.type == "deb"):
-                    print "adding %s to mirrors" % entry.uri
+                    print("adding %s to mirrors" % entry.uri)
                     self._runInImage(["echo '%s' >> /upgrade-tester/new_mirrors.cfg" % entry.uri])
 
             # upgrade *before* the regular upgrade runs 
@@ -508,32 +510,32 @@ iface eth0 inet static
             'NonInteractive', 'DebconfLog', '')
         if debconf_log:
             cmd_prefix=['export DEBIAN_FRONTEND=editor EDITOR="cat>>%s";' % debconf_log]
-            print "Logging debconf prompts to %s" % debconf_log
+            print("Logging debconf prompts to %s" % debconf_log)
         if not self.config.getWithDefault("NonInteractive","ForceOverwrite", False):
-            print "Disabling ForceOverwrite"
+            print("Disabling ForceOverwrite")
             cmd_prefix += ["export RELEASE_UPGRADE_NO_FORCE_OVERWRITE=1;"]
         if (os.path.exists(self.upgradefilesdir) and
             self.config.getWithDefault("NonInteractive",
                                        "UseUpgraderFromBzr",
                                        True)):
-            print "Using ./DistUpgrade/* for the upgrade"
+            print("Using ./DistUpgrade/* for the upgrade")
             self._copyUpgraderFilesFromBzrCheckout()
             ret = self._runBzrCheckoutUpgrade(cmd_prefix)
         else:
-            print "Using do-release-upgrade for the upgrade"
+            print("Using do-release-upgrade for the upgrade")
             ret = self._runInImage(cmd_prefix+["do-release-upgrade","-d",
                                     "-f","DistUpgradeViewNonInteractive"])
-        print "dist-upgrade.py returned: %i" % ret
+        print("dist-upgrade.py returned: %i" % ret)
 
         # copy the result
-        print "coyping the result"
+        print("copying the result")
         self._copyFromImage("/var/log/dist-upgrade/*",self.resultdir)
 
         # give the ssh output extra time
         time.sleep(10)
 
         # stop the machine
-        print "Shuting down the VM"
+        print("Shutting down the VM")
         self.stop()
         return (ret == 0)
 
@@ -550,7 +552,7 @@ iface eth0 inet static
         for port_inc in range(0, 100):
             port_num = port_base + port_inc
             if is_port_already_listening(port_num):
-                print "Port %d already in use. Skipping!" % port_num
+                print("Port %d already in use. Skipping!" % port_num)
                 continue
 
             lockfilepath = os.path.join(lockdir, '%s.%d.lock' % (prefix, port_num))
@@ -562,10 +564,10 @@ iface eth0 inet static
                 fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
                 return (lock, port_num)
             except IOError:
-                print "Port %d already locked. Skipping!" % port_num
+                print("Port %d already locked. Skipping!" % port_num)
                 lock.close()
 
-        print "No free port found. Aborting!"
+        print("No free port found. Aborting!")
         return (None, None)
 
 if __name__ == "__main__":

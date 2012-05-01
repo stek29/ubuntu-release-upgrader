@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from DistUpgradeGettext import gettext as _
 from DistUpgradeGettext import ngettext
 import apt
@@ -35,7 +37,7 @@ from DistUpgradeApport import apport_pkgfailure
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
-  #print "FuzzyTimeToStr: ", sec
+  #print("FuzzyTimeToStr: ", sec)
   sec = int(sec)
 
   days = sec/(60*60*24)
@@ -194,7 +196,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       if "RELEASE_UPGRADE_USE_AUFS_CHROOT" in os.environ:
         if not doAufsChroot(os.environ["RELEASE_UPGRADE_AUFS_RWDIR"],
                             os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
-          print "ERROR: failed to setup aufs chroot overlay"
+          print("ERROR: failed to setup aufs chroot overlay")
           os._exit(1)
       # child, ignore sigpipe, there are broken scripts out there
       # like etckeeper (LP: #283642)
@@ -202,7 +204,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       try:
         res = pm.do_install(self.writefd)
       except Exception, e:
-        print "Exception during pm.DoInstall(): ", e
+        print("Exception during pm.DoInstall(): ", e)
         logging.exception("Exception during pm.DoInstall()")
         open("/var/run/update-manager-apt-exception","w").write(str(e))
         os._exit(pm.ResultFailed)

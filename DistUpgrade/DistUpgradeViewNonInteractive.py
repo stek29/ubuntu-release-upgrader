@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import apt
 import apt_pkg
 import logging
@@ -42,8 +44,8 @@ class NonInteractiveFetchProgress(FetchProgress):
         FetchProgress.update_status(self, uri, descr, shortDescr, status)
         #logging.debug("Fetch: updateStatus %s %s" % (uri, status))
         if status == apt_pkg.STAT_DONE:
-            print "fetched %s (%.2f/100) at %sb/s" % (
-                uri, self.percent, apt_pkg.size_to_str(int(self.current_cps)))
+            print("fetched %s (%.2f/100) at %sb/s" % (
+                uri, self.percent, apt_pkg.size_to_str(int(self.current_cps))))
             if sys.stdout.isatty():
                 sys.stdout.flush()
         
@@ -125,7 +127,7 @@ class NonInteractiveInstallProgress(InstallProgress):
             argument = "remove"
             maintainer_script = "%s/%s.%s" % (prefix, pkg, name)
         else:
-            print "UNKNOWN (trigger?) dpkg/script failure for %s (%s) " % (pkg, errormsg)
+            print("UNKNOWN (trigger?) dpkg/script failure for %s (%s) " % (pkg, errormsg))
             return
 
         # find out about the interpreter

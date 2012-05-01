@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import pygtk
 pygtk.require('2.0')
 import glib
@@ -110,7 +112,7 @@ class GtkFetchProgressAdapter(FetchProgress):
         logging.debug("cancelClicked")
         self.canceled = True
     def media_change(self, medium, drive):
-        #print "mediaChange %s %s" % (medium, drive)
+        #print("mediaChange %s %s" % (medium, drive))
         msg = _("Please insert '%s' into the drive '%s'") % (medium,drive)
         dialog = gtk.MessageDialog(parent=self.parent.window_main,
                                    flags=gtk.DIALOG_MODAL,
@@ -275,7 +277,7 @@ class GtkInstallProgressAdapter(InstallProgress):
     def status_change(self, pkg, percent, status):
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
-          #print "setting start time to %s" % self.start_time
+          #print("setting start time to %s" % self.start_time)
           self.start_time = time.time()
         # only update if there is a noticable change
         if abs(percent-self.progress.get_fraction()*100.0) > 0.1:
@@ -337,7 +339,7 @@ class DistUpgradeVteTerminal(object):
     self.parent = parent
   def call(self, cmd, hidden=False):
     def wait_for_child(widget):
-      #print "wait for child finished"
+      #print("wait for child finished")
       self.finished=True
     self.term.show()
     self.term.connect("child-exited", wait_for_child)

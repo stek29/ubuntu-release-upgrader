@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from gi.repository import Gtk, Gdk
 
 from ReleaseNotesViewer import ReleaseNotesViewer
@@ -136,5 +138,5 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
 if __name__ == "__main__":
     error(None, "summary","message")
     d = DistUpgradeFetcherGtk(None,None)
-    print d.authenticate('/tmp/Release','/tmp/Release.gpg')
+    print(d.authenticate('/tmp/Release','/tmp/Release.gpg'))
 

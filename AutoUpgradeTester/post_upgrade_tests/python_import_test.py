@@ -1,5 +1,7 @@
 #!/usr/bin/python -u
 
+from __future__ import print_function
+
 import logging
 import os
 import subprocess
@@ -62,9 +64,9 @@ def try_import(path):
     ret = subprocess.call(cmd)
     if ret != 0:
         FAIL += 1
-        print "WARNING: failed to import '%s'" % module
+        print("WARNING: failed to import '%s'" % module)
         subprocess.call(["dpkg", "-S", os.path.realpath(path)])
-        print "\n\n"
+        print("\n\n")
         return False
     return True
 
@@ -88,8 +90,8 @@ if __name__ == "__main__":
     if os.path.exists(OLD_BASEPATH) and os.path.exists(NEW_BASEPATH):
         old_modules = set(filter(py_module_filter, os.listdir(OLD_BASEPATH)))
         new_modules = set(filter(py_module_filter, os.listdir(NEW_BASEPATH)))
-        print "Available for the old version, but *not* the new: %s\n" % (
-            ", ".join(old_modules - new_modules))
+        print("Available for the old version, but *not* the new: %s\n" % (
+            ", ".join(old_modules - new_modules)))
 
     res = True
     # FIXME: instead os os.listdir() use os.walk() to catch subdirs
@@ -98,7 +100,7 @@ if __name__ == "__main__":
         logging.debug("looking at '%s'" % f)
         res &= try_import(os.path.join(NEW_BASEPATH, f))
 
-    print "Total imports: %s" % TOTAL
-    print "Failures: %s" % FAIL
+    print("Total imports: %s" % TOTAL)
+    print("Failures: %s" % FAIL)
     if not res:
         sys.exit(1)

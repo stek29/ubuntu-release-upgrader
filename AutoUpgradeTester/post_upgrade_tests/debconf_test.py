@@ -3,6 +3,8 @@
 Parse debconf log file and split in a file per prompt
 Exit with status 1 if there is a debconf prompt not in whitelist
 """
+from __future__ import print_function
+
 import re, os, sys
 
 # Keep this path in sync with the corresponding setting in
@@ -41,9 +43,9 @@ def run_test(logfile, resultdir):
                 # Reached the second separator, write content to result file
                 # One per  prompt
                 if not inprompt:
-                    print "Got debconf prompt for '%s'" % dsetting
+                    print("Got debconf prompt for '%s'" % dsetting)
                     if dsetting in WHITELIST:
-                        print '    But it is in Whitelist. Skipping!'
+                        print('    But it is in Whitelist. Skipping!')
                         continue
                     else:
                         ret = 1

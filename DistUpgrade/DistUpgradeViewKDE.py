@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from PyQt4.QtCore import QUrl, Qt, SIGNAL, QTimer
 from PyQt4.QtGui import (
     QDesktopServices, QDialog, QPixmap, QTreeWidgetItem, QMessageBox, 
@@ -62,7 +64,7 @@ def loadUi(file, parent):
         uic.loadUi(file, parent)
     else:
         #FIXME find file
-        print "error, can't find file: " + file
+        print("error, can't find file: " + file)
 
 class DumbTerminal(QTextEdit):
     """ A very dumb terminal """
@@ -119,7 +121,7 @@ class DumbTerminal(QTextEdit):
             return
         # special handling for backspace
         if ev.key() == Qt.Key_Backspace:
-            #print "sent backspace"
+            #print("sent backspace")
             os.write(self.installProgress.master_fd, chr(8))
             return
         # do nothing for events like "shift" 
@@ -347,7 +349,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         """update progress bar and label"""
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
-          #print "setting start time to %s" % self.start_time
+          #print("setting start time to %s" % self.start_time)
           self.start_time = time.time()
         self.progress.setValue(self.percent)
         self.label_status.setText(unicode(status.strip(), 'UTF-8'))
@@ -385,7 +387,7 @@ class KDEInstallProgressAdapter(InstallProgress):
                 else:
                     break
             except Exception, e:
-                print e
+                print(e)
                 logging.debug("error reading from self.master_fd '%s'" % e)
                 break
 
@@ -536,7 +538,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.app.exec_()
 
     def exitMainLoop(self):
-        print "exitMainLoop"
+        print("exitMainLoop")
         self.app.exit()
 
     def translate_widget_children(self, parentWidget=None):
@@ -844,7 +846,7 @@ if __name__ == "__main__":
   if sys.argv[1] == "--show-in-terminal":
       for c in open(sys.argv[2]).read():
           view.terminal_text.insertWithTermCodes( c )
-          #print c, ord(c)
+          #print(c, ord(c))
           QApplication.processEvents()
           time.sleep(0.05)
       while True:

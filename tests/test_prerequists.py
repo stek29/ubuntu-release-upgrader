@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import unittest
 import tempfile
 import shutil
@@ -67,7 +69,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ feisty-backports main/debian-installe
         exp = False
         try:
             res = self.dc._verifyBackports()
-            print res
+            print(res)
         except NoBackportsFoundException:
             exp = True
         self.assert_(exp == True)

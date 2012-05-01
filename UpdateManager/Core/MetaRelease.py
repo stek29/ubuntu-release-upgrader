@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 import apt_pkg
 import ConfigParser
 import httplib
@@ -267,7 +269,7 @@ class MetaReleaseCore(object):
                 try:
                     os.unlink(self.METARELEASE_FILE)
                 except OSError,e:
-                    print "Can't unlink '%s' (%s)" % (self.METARELEASE_FILE,e)
+                    print("Can't unlink '%s' (%s)" % (self.METARELEASE_FILE, e))
             # we may get exception here on e.g. disk full
             try:
                 f=open(self.METARELEASE_FILE,"w+")

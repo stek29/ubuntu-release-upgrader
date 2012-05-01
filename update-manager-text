@@ -21,6 +21,8 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
+from __future__ import print_function
+
 from UpdateManagerText.UpdateManagerText import UpdateManagerText
 import sys
 import os
@@ -59,7 +61,7 @@ if __name__ == "__main__":
   data_dir="/usr/share/update-manager/"
 
   if options.show_version:
-    print "%s: version %s" % (os.path.basename(sys.argv[0]), VERSION)
+    print("%s: version %s" % (os.path.basename(sys.argv[0]), VERSION))
     sys.exit(0)
 
   app = UpdateManagerText(data_dir)

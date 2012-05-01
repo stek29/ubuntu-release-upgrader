@@ -5,6 +5,8 @@
 # 
 # its probably not useful for anything else
 
+from __future__ import print_function
+
 import os
 import signal 
 import subprocess
@@ -28,12 +30,12 @@ def watchdog_loop():
                 if os.path.getmtime(f) > mtime:
                     break
         else:
-            print "no mtime change for %s seconds, sending SIGINT" % WAKEUP_INTERVAL
+            print("no mtime change for %s seconds, sending SIGINT" % WAKEUP_INTERVAL)
             subprocess.call(["killall","-INT","apt-get"])
         
 
 if __name__ == "__main__":
-    print "Starting apt watchdog daemon for the auto-install-tester"
+    print("Starting apt watchdog daemon for the auto-install-tester")
 
     if len(sys.argv) > 1 and sys.argv[1] == "--no-daemon":
         watchdog_loop()

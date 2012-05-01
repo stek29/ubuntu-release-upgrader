@@ -11,6 +11,8 @@
 # Author: Martin Pitt <martin.pitt@ubuntu.com>
 # License: GPL v2 or higher
 
+from __future__ import print_function
+
 import unittest
 import os, sys
 import ConfigParser
@@ -60,7 +62,7 @@ class T(unittest.TestCase):
 
 # Only run on lts-ubuntu testcases
 if not os.path.exists('/upgrade-tester/prepare_lts_desktop'):
-    print "Not an Ubuntu Desktop LTS upgrade. Skipping!"
+    print("Not an Ubuntu Desktop LTS upgrade. Skipping!")
     sys.exit(0)
 
 unittest.main()

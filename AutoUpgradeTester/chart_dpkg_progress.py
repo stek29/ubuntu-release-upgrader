@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 
+from __future__ import print_function
+
 import sys
 import string
 from heapq import heappush, heappop
@@ -47,5 +49,5 @@ if __name__ == "__main__":
     for pkg in pkgs:
         heappush(heap, (pkgs[pkg], pkg))
     while heap:
-        print "%.6ss: %s" % heappop(heap)
-    print "total: %4.7ss %4.6sm" % (total_time, total_time/60)
+        print("%.6ss: %s" % heappop(heap))
+    print("total: %4.7ss %4.6sm" % (total_time, total_time/60))

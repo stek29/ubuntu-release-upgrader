@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import apt
 import apt_pkg
 import logging
@@ -40,7 +42,7 @@ class TestFetchProgress(apt.progress.base.AcquireProgress):
     def pulse(self, acquire):
         self.pulsed = True
         #for item in acquire.items:
-        #    print item, item.destfile, item.desc_uri
+        #    print(item, item.destfile, item.desc_uri)
         return True
 
 class TestMetaReleaseCore(unittest.TestCase):

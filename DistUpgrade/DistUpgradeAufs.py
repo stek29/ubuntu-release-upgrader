@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import string
 import logging
 import os
@@ -247,6 +249,6 @@ def setupAufs(rw_dir):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    #print setupAufs("/tmp/upgrade-rw")
-    print setupAufsChroot("/tmp/upgrade-chroot-rw",
-                          "/tmp/upgrade-chroot")
+    #print(setupAufs("/tmp/upgrade-rw"))
+    print(setupAufsChroot("/tmp/upgrade-chroot-rw",
+                          "/tmp/upgrade-chroot"))

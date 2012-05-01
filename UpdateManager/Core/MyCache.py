@@ -312,12 +312,12 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                     changelog = self._get_changelog_or_news(
                         name, "changelog", False, changelogs_uri)
                     self.all_changes[name] += changelog
-                except (urllib2.HTTPError, HttpsChangelogsUnsupportedError) as e:
+                except (urllib2.HTTPError, HttpsChangelogsUnsupportedError):
                     # no changelogs_uri or 404
                     error_message = _(
                         "This update does not come from a "
                         "source that supports changelogs.")
-                except (IOError, httplib.BadStatusLine, socket.error) as e:
+                except (IOError, httplib.BadStatusLine, socket.error):
                     # network errors and others
                     logging.exception("error on changelog fetching")
                     error_message = _(

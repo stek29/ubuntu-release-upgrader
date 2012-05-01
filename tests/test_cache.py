@@ -1,14 +1,12 @@
 #!/usr/bin/python
 
 import logging
-import os
 import sys
 import unittest
 
-from mock import patch, Mock
+from mock import Mock
 
 sys.path.insert(0, "../")
-from UpdateManager.Core.MyCache import MyCache
 from UpdateManager.Core.MyCache import MyCache
 
 class TestCache(unittest.TestCase):

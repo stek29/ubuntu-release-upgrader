@@ -3,11 +3,10 @@
 from __future__ import print_function
 
 import os
-import subprocess
 import sys
 import unittest
 
-from mock import Mock,patch
+from mock import Mock
 
 sys.path.insert(0,"../")
 from DistUpgrade.DistUpgradeCache import MyCache

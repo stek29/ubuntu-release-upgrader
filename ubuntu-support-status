@@ -9,7 +9,11 @@ import os
 import subprocess
 import gettext
 
-from apt.utils import *
+from apt.utils import (
+    get_maintenance_end_date,
+    get_release_date_from_release_file,
+    get_release_filename_for_pkg,
+    )
 from gettext import gettext as _
 from optparse import OptionParser
 from UpdateManager.Core.utils import twrap

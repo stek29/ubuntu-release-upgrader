@@ -106,7 +106,7 @@ def get_exclude_patterns_from_dir(name='/usr/share/python/bcep/'):
 
     result = []
     for fn in listdir(name):
-        with open(join(name, fn), 'r') as lines:
+        with file(join(name, fn), 'r') as lines:
             for line in lines:
                 type_, vrange, dname, pattern = line.split('|', 3)
                 vrange = parse_vrange(vrange)

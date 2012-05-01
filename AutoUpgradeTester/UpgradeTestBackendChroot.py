@@ -23,7 +23,7 @@ class UpgradeTestBackendChroot(UpgradeTestBackend):
                "/usr/sbin/invoke-rc.d",
                # install-info has a locking problem quite often
                "/usr/sbin/install-info",
-	       "/sbin/start-stop-daemon"]
+               "/sbin/start-stop-daemon"]
 
     def __init__(self, profile):
         UpgradeTestBackend.__init__(self, profile)
@@ -329,7 +329,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         profilename = sys.argv[1]
     else:
-	profilename = "default"
+        profilename = "default"
     chroot = UpgradeTestBackendChroot(profilename)
     tarball = "%s/tarball/dist-upgrade-%s.tar.gz" % (os.getcwd(),profilename)
     if not os.path.exists(tarball):

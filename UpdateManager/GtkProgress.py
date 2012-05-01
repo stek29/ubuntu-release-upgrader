@@ -170,7 +170,7 @@ class GtkFetchProgress(apt.progress.FetchProgress):
         self.status.set_markup("<i>%s</i>" % statusText)
         # TRANSLATORS: show the remaining time in a progress bar:
         #self.progress.set_text(_("About %s left" % (apt_pkg.TimeToStr(self.eta))))
-	# FIXME: show remaining time
+        # FIXME: show remaining time
         self.progress.set_text("")
 
         while Gtk.events_pending():

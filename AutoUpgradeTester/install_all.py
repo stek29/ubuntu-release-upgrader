@@ -82,7 +82,7 @@ def blacklisted(name):
       print("blacklist: ", pkg_blacklist)
    if pkg_blacklist:
       for b in pkg_blacklist:
-	   if re.match(b, name):
+          if re.match(b, name):
               return True
    return False
 
@@ -211,8 +211,8 @@ for pkg in ["ubuntu-desktop", "ubuntu-minimal", "ubuntu-standard", "grub-pc"]:
 
 # make sure we don't install blacklisted stuff
 for pkg in cache:
-	if blacklisted(pkg.name):
-		pkg.mark_keep()
+    if blacklisted(pkg.name):
+        pkg.mark_keep()
 
 # install it
 print("We can install:", len([pkg.name for pkg in cache if pkg.marked_install]))

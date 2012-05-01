@@ -137,7 +137,7 @@ class DistUpgradeQuirks(object):
         
     def intrepidPostUpgrade(self):
         " this applies rules for the hardy->intrepid upgrade "
-	logging.debug("running Controller.intrepidQuirks handler")
+        logging.debug("running Controller.intrepidQuirks handler")
         self._addRelatimeToFstab()
 
     def gutsyPostUpgrade(self):
@@ -387,7 +387,7 @@ class DistUpgradeQuirks(object):
                 except SystemError as e:
                     logging.debug("Failed to apply %s install (%s)" % (pkgname,e))
         # libgl1-mesa-dri from xgl.compiz.info (and friends) breaks the
-	# upgrade, work around this here by downgrading the package
+        # upgrade, work around this here by downgrading the package
         if self.controller.cache.has_key("libgl1-mesa-dri"):
             pkg = self.controller.cache["libgl1-mesa-dri"]
             # the version from the compiz repo has a "6.5.1+cvs20060824" ver
@@ -396,13 +396,13 @@ class DistUpgradeQuirks(object):
                 for ver in pkg._pkg.VersionList:
                     # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
                     if "~2006" in ver.VerStr:
-			# ensure that it is from a trusted repo
-			for (VerFileIter, index) in ver.FileList:
-				indexfile = self.controller.cache._list.FindIndex(VerFileIter)
-				if indexfile and indexfile.IsTrusted:
-					logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
-		                        self.controller.cache._depcache.SetCandidateVer(pkg._pkg, ver)
-					break
+                        # ensure that it is from a trusted repo
+                        for (VerFileIter, index) in ver.FileList:
+                            indexfile = self.controller.cache._list.FindIndex(VerFileIter)
+                            if indexfile and indexfile.IsTrusted:
+                                logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
+                                self.controller.cache._depcache.SetCandidateVer(pkg._pkg, ver)
+                                break
                                     
         # deal with general if $foo is installed, install $bar
         for (fr, to) in [("xserver-xorg-driver-all","xserver-xorg-video-all")]:

@@ -179,11 +179,11 @@ class NonInteractiveInstallProgress(InstallProgress):
         logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)
         # looks like we have a race here *sometimes*
         time.sleep(5)
-	try:
+        try:
           # don't overwrite
-	  os.write(self.master_fd,"n\n")
- 	except Exception as e:
-	  logging.error("error '%s' when trying to write to the conffile"%e)
+          os.write(self.master_fd,"n\n")
+        except Exception as e:
+          logging.error("error '%s' when trying to write to the conffile"%e)
 
     def start_update(self):
         InstallProgress.start_update(self)
@@ -282,7 +282,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
                        actions=None, removal_bold=True):
         DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
                                        downloadSize, actions)
-	logging.debug("toinstall: '%s'" % [p.name for p in self.toInstall])
+        logging.debug("toinstall: '%s'" % [p.name for p in self.toInstall])
         logging.debug("toupgrade: '%s'" % [p.name for p in self.toUpgrade])
         logging.debug("toremove: '%s'" % [p.name for p in self.toRemove])
         return True
@@ -295,7 +295,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         return True
     def confirmRestart(self):
         " generic ask about the restart, can be overridden "
-	logging.debug("confirmRestart() called")
+        logging.debug("confirmRestart() called")
         # rebooting here makes sense if we run e.g. in qemu
         return self.config.getWithDefault("NonInteractive","RealReboot", False)
     def error(self, summary, msg, extended_msg=None):

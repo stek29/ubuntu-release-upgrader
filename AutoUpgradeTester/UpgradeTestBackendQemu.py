@@ -393,7 +393,7 @@ iface eth0 inet static
         print("restorevm")
         self.stop()
         shutil.copy(self.image+"."+name, self.image)
-	return
+        return
         # loadvm
         # *sigh* buggy :/
         #self.qemu_pid.stdin.write("stop\n")

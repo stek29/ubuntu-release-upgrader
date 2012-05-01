@@ -206,9 +206,9 @@ class GtkInstallProgressAdapter(InstallProgress):
     def error(self, pkg, errormsg):
         InstallProgress.error(self, pkg, errormsg)
         logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
-	# we do not report followup errors from earlier failures
+        # we do not report followup errors from earlier failures
         if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
-	  return False
+          return False
 
         #self.expander_terminal.set_expanded(True)
         self.parent.dialog_error.set_transient_for(self.parent.window_main)
@@ -331,7 +331,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         # process events
         while gtk.events_pending():
             gtk.main_iteration()
-	time.sleep(0.01)
+        time.sleep(0.01)
 
 class DistUpgradeVteTerminal(object):
   def __init__(self, parent, term):
@@ -384,8 +384,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
           localedir="/usr/share/locale/"
           gladedir=os.path.join(datadir, "gtkbuilder")
 
-	# check if we have a display etc
-	gtk.init_check()
+        # check if we have a display etc
+        gtk.init_check()
 
         try:
           locale.bindtextdomain("update-manager",localedir)

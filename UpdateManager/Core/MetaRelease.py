@@ -158,11 +158,11 @@ class MetaReleaseCore(object):
                 "XDG_CACHE_HOME", os.path.expanduser("~/.cache"))
             path = os.path.join(cache_dir, 'update-manager-core')
             if not os.path.exists(path):
-		try:
+                try:
                     os.mkdir(path)
-		except OSError as e:
+                except OSError as e:
                     sys.stderr.write("mkdir() failed: '%s'" % e)
-		    return False
+                    return False
             self.METARELEASE_FILE = os.path.join(path,os.path.basename(self.METARELEASE_URI))
         # if it is empty, remove it to avoid I-M-S hits on empty file
         try:

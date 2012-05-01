@@ -50,11 +50,11 @@ class TestChangelogs(unittest.TestCase):
         self.cache._get_changelog_or_news = monkey_patched_get_changelogs
         # get changelog
         self.cache.get_changelog(pkgname)
-	error = "This update does not come from a source that supports changelogs."
+        error = "This update does not come from a source that supports changelogs."
         # verify that we don't have the lines twice
-	self.assertEqual(self.cache.all_changes[pkgname].split("\n")[-1], error)
-	self.assertEqual(len(self.cache.all_changes[pkgname].split("\n")), 5)
-	self.assertEqual(self.cache.all_changes[pkgname].count(error), 1)
+        self.assertEqual(self.cache.all_changes[pkgname].split("\n")[-1], error)
+        self.assertEqual(len(self.cache.all_changes[pkgname].split("\n")), 5)
+        self.assertEqual(self.cache.all_changes[pkgname].count(error), 1)
         self.cache.CHANGELOG_ORIGIN = real_origin
 
 if __name__ == '__main__':

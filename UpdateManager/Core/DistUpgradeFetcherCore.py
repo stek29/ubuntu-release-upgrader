@@ -70,8 +70,8 @@ class DistUpgradeFetcherCore(object):
             f = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeTool)
             sig = self.tmpdir+"/"+os.path.basename(self.new_dist.upgradeToolSig)
             print(_("authenticate '%(file)s' against '%(signature)s' ") % {
-		'file' : os.path.basename(f),
-		'signature' : os.path.basename(sig)})
+                'file' : os.path.basename(f),
+                'signature' : os.path.basename(sig)})
             if self.gpgauthenticate(f, sig):
                 return True
         return False

@@ -158,7 +158,7 @@ class UpdateManagerDbusController(dbus.service.Object):
 
     @dbus.service.signal('org.freedesktop.UpdateManagerIFace', 'b')
     def updated(self, success):
-        pass	
+        pass
 
     def _on_network_alert(self, watcher, state):
         if state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST:
@@ -327,7 +327,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def install_column_view_func(self, cell_layout, renderer, model, iter, data):
     pkg = model.get_value(iter, LIST_PKG)
     if pkg is None:
-	renderer.set_property("activatable", True)
+        renderer.set_property("activatable", True)
         return
     current_state = renderer.get_property("active")
     to_install = pkg.marked_install or pkg.marked_upgrade
@@ -388,7 +388,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       author_match = re.match("^.*--.*<.*@.*>.*$", line)
       if version_match:
         version = version_match.group(1)
-	#upload_archive = version_match.group(2).strip()
+        #upload_archive = version_match.group(2).strip()
         version_text = _("Version %s: \n") % version
         changes_buffer.insert_with_tags_by_name(end_iter, version_text, "versiontag")
       elif (author_match):
@@ -630,7 +630,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       ago_hours = int( ago_minutes / 60 )
       ago_days = int( ago_hours / 24 )
       if ago_days > self.NO_UPDATE_WARNING_DAYS:
-	  return _("The package information was last updated %(days_ago)s "
+          return _("The package information was last updated %(days_ago)s "
                    "days ago.\n"
                    "Press the 'Check' button below to check for new software "
                    "updates.") % { "days_ago" : ago_days, }
@@ -688,8 +688,8 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.textview_descr.get_buffer().set_text("")
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
-	      if self._get_last_apt_get_update_minutes()> self.NO_UPDATE_WARNING_DAYS*24*60:
-			text_header = "<big><b>%s</b></big>"  % _("Software updates may be available for your computer.")
+              if self._get_last_apt_get_update_minutes()> self.NO_UPDATE_WARNING_DAYS*24*60:
+                  text_header = "<big><b>%s</b></big>"  % _("Software updates may be available for your computer.")
           # add timer to ensure we update the information when the 
           # last package count update was performed
           GObject.timeout_add_seconds(10, self.update_last_updated_text, None)
@@ -932,11 +932,11 @@ class UpdateManager(SimpleGtkbuilderApp):
     # make sure that we don't allow to toggle deactivated updates
     # this is needed for the call by the row activation callback
     if pkg is None:
-	toggled_value = not self.store.get_value(iter, LIST_TOGGLE_CHECKED)
-	self.toggle_from_origin(pkg, origin, toggled_value)
-	self.store.set_value(iter, LIST_TOGGLE_CHECKED, toggled_value )
-	self.treeview_update.queue_draw()
-	return 
+        toggled_value = not self.store.get_value(iter, LIST_TOGGLE_CHECKED)
+        self.toggle_from_origin(pkg, origin, toggled_value)
+        self.store.set_value(iter, LIST_TOGGLE_CHECKED, toggled_value )
+        self.treeview_update.queue_draw()
+        return
     if pkg is None or pkg.name in self.list.held_back:
         return False
     self.setBusy(True)
@@ -1154,8 +1154,8 @@ class UpdateManager(SimpleGtkbuilderApp):
              (_("Software index is broken"),
               _("It is impossible to install or remove any software. "
                 "Please use the package manager \"Synaptic\" or run "
-		"\"sudo apt-get install -f\" in a terminal to fix "
-		"this issue at first.")))
+                "\"sudo apt-get install -f\" in a terminal to fix "
+                "this issue at first.")))
         dialog = Gtk.MessageDialog(self.window_main,
                                    0, Gtk.MessageType.ERROR,
                                    Gtk.ButtonsType.CLOSE,"")

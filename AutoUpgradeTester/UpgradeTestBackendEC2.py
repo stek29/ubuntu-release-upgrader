@@ -15,7 +15,6 @@ except ImportError:
     import ConfigParser as configparser
 import os
 import sys
-import os.path
 import glob
 import time
 import atexit

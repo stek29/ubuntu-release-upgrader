@@ -43,7 +43,6 @@ import apt_pkg
 import gettext
 import sys
 import os
-import os.path
 import stat
 import re
 import locale

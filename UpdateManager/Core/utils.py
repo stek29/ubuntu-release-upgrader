@@ -33,7 +33,6 @@ import locale
 import logging
 import re
 import os
-import os.path
 import glob
 import subprocess
 import sys

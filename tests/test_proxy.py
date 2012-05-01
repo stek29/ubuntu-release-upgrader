@@ -5,7 +5,6 @@ import unittest
 import apt_pkg
 import logging
 import os
-import os.path
 import sys
 
 sys.path.insert(0, "../")

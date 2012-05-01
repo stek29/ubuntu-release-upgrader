@@ -10,7 +10,6 @@ try:
 except ImportError:
     import ConfigParser as configparser
 import os
-import os.path
 import tempfile
 from shutil import rmtree
 

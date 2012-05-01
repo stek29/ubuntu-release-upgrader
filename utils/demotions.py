@@ -18,7 +18,6 @@ warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 #import xdg.Menu
-import os.path
 
 ARCHES = ["i386","amd64"]
 #ARCHES = ["i386"]

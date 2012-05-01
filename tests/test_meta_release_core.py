@@ -4,7 +4,6 @@ import random
 import logging
 import multiprocessing
 import os
-import os.path
 import sys
 import time
 import urllib2

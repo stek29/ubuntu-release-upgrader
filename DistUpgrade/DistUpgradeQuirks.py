@@ -24,7 +24,6 @@ import atexit
 import glob
 import logging
 import os
-import os.path
 import re
 import hashlib
 import shutil

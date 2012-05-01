@@ -4,7 +4,6 @@
 # (c) 2005-2009 Canonical, GPL
 
 import os
-import os.path
 
 from gi.repository import GObject
 

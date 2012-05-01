@@ -7,7 +7,6 @@ from UpgradeTestBackend import UpgradeTestBackend
 import glob
 import logging
 import os
-import os.path
 import subprocess
 import time
 

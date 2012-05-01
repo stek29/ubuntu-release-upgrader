@@ -1,6 +1,5 @@
 
 import os
-import os.path
 import logging
 import subprocess
 import sys

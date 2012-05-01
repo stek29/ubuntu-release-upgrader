@@ -5,7 +5,6 @@ from __future__ import print_function
 import unittest
 
 import os
-import os.path
 import sys
 sys.path = [os.path.normpath(os.path.join(os.getcwd(),"../"))] + sys.path
 

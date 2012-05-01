@@ -12,7 +12,6 @@ except ImportError:
 import subprocess
 import os
 import sys
-import os.path
 import shutil
 import glob
 import time

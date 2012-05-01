@@ -178,7 +178,7 @@ def testUpgrade(backend_name, profile, add_pkgs, quiet=False,
             if not backend.installPackages(add_pkgs):
                 print("FAILED: installPacakges '%s'" % add_pkgs)
                 html_output.write("<td class=\"error\">Failed to add pkgs '%s'</td>" % ",".join(add_pkgs))
-                raise Exception, "Failed to install packages '%s'" % add_pkgs
+                raise Exception("Failed to install packages '%s'" % add_pkgs)
         if not backend.upgrade():
             print("FAILED: upgrade for '%s'" % profile)
             html_output.write("<td class=\"error\">Failed to upgrade</td>")

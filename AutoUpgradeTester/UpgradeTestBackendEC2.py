@@ -96,7 +96,7 @@ class UpgradeTestBackendEC2(UpgradeTestBackendSSH):
         self.ec2instance = ""
         if (self.config.has_option("NonInteractive","RealReboot") and
             self.config.getboolean("NonInteractive","RealReboot")):
-            raise OptionError, "NonInteractive/RealReboot option must be set to False for the ec2 upgrader"
+            raise OptionError("NonInteractive/RealReboot option must be set to False for the ec2 upgrader")
         atexit.register(self._cleanup)
 
     def _cleanup(self):

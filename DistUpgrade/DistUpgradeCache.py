@@ -112,8 +112,8 @@ class MyCache(apt.Cache):
             except SystemError as e:
                 # checking for this is ok, its not translatable
                 if "dpkg --configure -a" in str(e):
-                    raise CacheExceptionDpkgInterrupted, e
-                raise CacheExceptionLockingFailed, e
+                    raise CacheExceptionDpkgInterrupted(e)
+                raise CacheExceptionLockingFailed(e)
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
         self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
@@ -233,7 +233,7 @@ class MyCache(apt.Cache):
         self._listsLock = apt_pkg.GetLock(name)
         if self._listsLock < 0:
             e = "Can not lock '%s' " % name
-            raise CacheExceptionLockingFailed, e
+            raise CacheExceptionLockingFailed(e)
     def unlockListsDir(self):
         if self._listsLock > 0:
             os.close(self._listsLock)
@@ -377,7 +377,7 @@ class MyCache(apt.Cache):
             self[pkg].mark_install()
             if not (self[pkg].marked_install or self[pkg].marked_upgrade):
                 logging.error("Installing/upgrading '%s' failed" % pkg)
-                #raise (SystemError, "Installing '%s' failed" % pkg)
+                #raise SystemError("Installing '%s' failed" % pkg)
                 return False
         return True
     def mark_upgrade(self, pkg, reason=""):
@@ -770,11 +770,11 @@ class MyCache(apt.Cache):
         for pkg in self.get_changes():
             if pkg.marked_delete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
-                raise SystemError, _("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name
+                raise SystemError(_("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name)
             if pkg.marked_delete and (pkg._pkg.Essential == True and
                                      not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's an ESSENTIAL package", pkg.name)
-                raise SystemError, _("The essential package '%s' is marked for removal.") % pkg.name
+                raise SystemError(_("The essential package '%s' is marked for removal.") % pkg.name)
         # check bad-versions blacklist
         badVersions = self.config.getlist("Distro","BadVersions")
         for bv in badVersions:
@@ -783,7 +783,7 @@ class MyCache(apt.Cache):
                 self[pkgname].candidateVersion == ver and
                 (self[pkgname].marked_install or
                  self[pkgname].marked_upgrade)):
-                raise SystemError, _("Trying to install blacklisted version '%s'") % bv
+                raise SystemError(_("Trying to install blacklisted version '%s'") % bv)
         return True
     
     def _lookupPkgRecord(self, pkg):

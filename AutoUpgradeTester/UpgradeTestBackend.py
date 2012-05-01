@@ -61,7 +61,7 @@ class UpgradeTestBackend(object):
                                             override_dir=override_cfg_d,
                                             defaults_dir=defaults_cfg_d)
         else:
-            raise IOError, "Can't find profile '%s' (%s) " % (profile, os.getcwd())
+            raise IOError("Can't find profile '%s' (%s) " % (profile, os.getcwd()))
         if resultdir:
             base_resultdir = resultdir
         else:

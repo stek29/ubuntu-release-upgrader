@@ -138,7 +138,7 @@ class AptCdrom(object):
             # and match(3) the components
             m = re.match("(.*)/dists/([^/]*)/(.*)/binary-*", d)
             if not m:
-                raise AptCdromError, _("Could not calculate sources.list entry")
+                raise AptCdromError(_("Could not calculate sources.list entry"))
             path = m.group(1)
             dist = m.group(2)
             comps.append(m.group(3))
@@ -241,7 +241,7 @@ class AptCdrom(object):
         self.packages = self._dropArch(self.packages)
         if len(self.packages) == 0:
             logging.error("no useable indexes found on CD, wrong ARCH?")
-            raise AptCdromError, _("Unable to locate any package files, perhaps this is not a Ubuntu Disc or the wrong architecture?")
+            raise AptCdromError(_("Unable to locate any package files, perhaps this is not a Ubuntu Disc or the wrong architecture?"))
 
         # CopyAndVerify
         if self._verifyRelease(self.signatures):

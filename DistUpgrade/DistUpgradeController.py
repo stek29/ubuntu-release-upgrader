@@ -1332,7 +1332,7 @@ class DistUpgradeController(object):
             for pkgname in backportslist:
                 if not self.cache.has_key(pkgname):
                     logging.error("Can not find backport '%s'" % pkgname)
-                    raise NoBackportsFoundException, pkgname
+                    raise NoBackportsFoundException(pkgname)
             if self._allBackportsAuthenticated(backportslist):
                 break
             # FIXME: move this to some more generic place

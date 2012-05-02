@@ -39,7 +39,10 @@ def setup_gettext():
     domain = 'update-manager'
     localedir = os.environ.get('LOCPATH', None)
     t = gettext.translation(domain, localedir=localedir, fallback=True)
-    return t.ugettext
+    try:
+        return t.ugettext
+    except AttributeError:
+        return t.gettext
 
 
 from .cruft import Cruft

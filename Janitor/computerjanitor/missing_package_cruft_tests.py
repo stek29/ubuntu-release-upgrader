@@ -41,7 +41,7 @@ class MissingPackageCruftTests(unittest.TestCase):
         self.assertEqual(self.cruft.get_prefix(), "install-deb")
 
     def testReturnsCorrectPrefixDescription(self):
-        self.assert_("Install" in self.cruft.get_prefix_description())
+        self.assertTrue("Install" in self.cruft.get_prefix_description())
 
     def testReturnsCorrectShortname(self):
         self.assertEqual(self.cruft.get_shortname(), "name")
@@ -50,7 +50,7 @@ class MissingPackageCruftTests(unittest.TestCase):
         self.assertEqual(self.cruft.get_name(), "install-deb:name")
 
     def testReturnsCorrectDescription(self):
-        self.assert_("name" in self.cruft.get_description())
+        self.assertTrue("name" in self.cruft.get_description())
 
     def testSetsDescriptionWhenAsked(self):
         pkg = computerjanitor.MissingPackageCruft(self.pkg, "foo")
@@ -58,4 +58,4 @@ class MissingPackageCruftTests(unittest.TestCase):
     
     def testInstallsPackage(self):
         self.cruft.cleanup()
-        self.assert_(self.pkg.installed)
+        self.assertTrue(self.pkg.installed)

@@ -74,7 +74,7 @@ class PluginManagerTests(unittest.TestCase):
         pm = computerjanitor.PluginManager(None, ["testplugins"])
         self.callback_called = False
         pm.get_plugins(callback=self.callback)
-        self.assert_(self.callback_called)
+        self.assertTrue(self.callback_called)
 
 
 class ConditionTests(unittest.TestCase):

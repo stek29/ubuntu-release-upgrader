@@ -47,8 +47,8 @@ class DebPluginTests(unittest.TestCase):
 
     def testPostCleanupCallsCommit(self):
         self.plugin.post_cleanup()
-        self.assert_(self.app.commit_called)
+        self.assertTrue(self.app.commit_called)
         
     def testPostCleanupCallsRefresh(self):
         self.plugin.post_cleanup()
-        self.assert_(self.app.refresh_called)
+        self.assertTrue(self.app.refresh_called)

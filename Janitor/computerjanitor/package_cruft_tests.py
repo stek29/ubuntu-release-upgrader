@@ -58,4 +58,4 @@ class PackageCruftTests(unittest.TestCase):
     
     def testDeletesPackage(self):
         self.cruft.cleanup()
-        self.assert_(self.pkg.deleted)
+        self.assertTrue(self.pkg.deleted)

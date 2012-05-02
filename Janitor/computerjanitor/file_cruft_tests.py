@@ -58,6 +58,6 @@ class FileCruftTests(unittest.TestCase):
         self.assertEqual(self.cruft.get_disk_usage(), du)
     
     def testDeletesPackage(self):
-        self.assert_(os.path.exists(self.pathname))
+        self.assertTrue(os.path.exists(self.pathname))
         self.cruft.cleanup()
         self.assertFalse(os.path.exists(self.pathname))

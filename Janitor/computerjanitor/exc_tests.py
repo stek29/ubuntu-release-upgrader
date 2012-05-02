@@ -31,4 +31,4 @@ class UnimplementedMethodTests(unittest.TestCase):
 
     def testErrorMessageContainsMethodName(self):
         e = computerjanitor.UnimplementedMethod(self.__init__)
-        self.assert_("__init__" in str(e))
+        self.assertTrue("__init__" in str(e))

@@ -29,7 +29,7 @@ import tarfile
 import tempfile
 import shutil
 import sys
-import GnuPGInterface
+import subprocess
 from gettext import gettext as _
 from aptsources.sourceslist import SourcesList
 
@@ -81,30 +81,49 @@ class DistUpgradeFetcherCore(object):
         """ authenticated a file against a given signature, if no keyring
             is given use the apt default keyring
         """
-        gpg = GnuPGInterface.GnuPG()
-        gpg.options.extra_args = ['--no-options',
-                                  '--homedir',self.tmpdir,
-                                  '--no-default-keyring',
-                                  '--ignore-time-conflict',
-                                  '--keyring', keyring]
-        proc = gpg.run(['--verify', signature, file],
-                       create_fhs=['status','logger','stderr'])
-        gpgres = proc.handles['status'].read()
+        status_pipe = os.pipe()
+        logger_pipe = os.pipe()
+        gpg = [
+            "gpg",
+            "--status-fd", "%d" % status_pipe[1],
+            "--logger-fd", "%d" % logger_pipe[1],
+            "--no-options",
+            "--homedir", self.tmpdir,
+            "--no-default-keyring",
+            "--ignore-time-conflict",
+            "--keyring", keyring,
+            "--verify", signature, file,
+            ]
+        def gpg_preexec():
+            os.close(status_pipe[0])
+            os.close(logger_pipe[0])
+        proc = subprocess.Popen(
+            gpg, stderr=subprocess.PIPE, preexec_fn=gpg_preexec,
+            close_fds=False)
+        os.close(status_pipe[1])
+        os.close(logger_pipe[1])
+        status_handle = os.fdopen(status_pipe[0])
+        logger_handle = os.fdopen(logger_pipe[0])
         try:
-            proc.wait()
-        except IOError as e:
-            # gnupg returned a problem (non-zero exit)
-            print("exception from gpg: %s" % e)
-            print("Debug information: ")
-            print(proc.handles['status'].read())
-            print(proc.handles['stderr'].read())
-            print(proc.handles['logger'].read())
+            gpgres = status_handle.read()
+            ret = proc.wait()
+            if ret != 0:
+                # gnupg returned a problem (non-zero exit)
+                print("gpg exited %d" % ret)
+                print("Debug information: ")
+                print(status_handle.read())
+                print(proc.stderr.read())
+                print(logger_handle.read())
+                return False
+            if "VALIDSIG" in gpgres:
+                return True
+            print("invalid result from gpg:")
+            print(gpgres)
             return False
-        if "VALIDSIG" in gpgres:
-            return True
-        print("invalid result from gpg:")
-        print(gpgres)
-        return False
+        finally:
+            status_handle.close()
+            proc.stderr.close()
+            logger_handle.close()
 
     def extractDistUpgrader(self):
           # extract the tarbal

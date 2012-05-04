@@ -188,6 +188,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.progress.set_text(" ")
         self.expander.set_sensitive(True)
         self.term.show()
+        self.term.connect("contents-changed", self._on_term_content_changed)
         # if no libgtk2-perl is installed show the terminal
         frontend= os.environ.get("DEBIAN_FRONTEND") or "gnome"
         if frontend == "gnome" and self._cache:
@@ -278,6 +279,13 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.term.watch_child(pid)
         return pid
 
+    def _on_term_content_changed(self, term):
+	""" helper function that is called when the terminal changed
+            to ensure that we have a accurate idea when something hangs
+        """
+        self.last_activity = time.time()
+        self.activity_timeout_reported = False
+
     def status_change(self, pkg, percent, status):
         # start the timer when the first package changes its status
         if self.start_time == 0.0:
@@ -289,8 +297,6 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.label_status.set_text(status.strip())
         # start showing when we gathered some data
         if percent > 1.0:
-            self.last_activity = time.time()
-            self.activity_timeout_reported = False
             delta = self.last_activity - self.start_time
             # time wasted in conffile questions (or other ui activity)
             delta -= self.time_ui

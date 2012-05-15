@@ -209,6 +209,24 @@ def get_dist():
   p.stdout.close()
   return dist
 
+def get_dist_description():
+  " return the description of the current runing distro "
+  # support debug overwrite
+  desc = os.environ.get("META_RELEASE_FAKE_DESCRIPTION")
+  if desc:
+      logging.warn("using fake release description '%s' (because of META_RELEASE_FAKE_DESCRIPTION environment) " % dist)
+      return desc
+  # then check the real one
+  from subprocess import Popen, PIPE
+  p = Popen(["lsb_release","-d","-s"],stdout=PIPE)
+  res = p.wait()
+  if res != 0:
+    sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
+    return "unknown distribution"
+  desc = p.stdout.readline().strip()
+  p.stdout.close()
+  return desc
+
 class HeadRequest(Request):
     def get_method(self):
         return "HEAD"

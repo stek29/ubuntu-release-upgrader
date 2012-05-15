@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="dialog_cacheprogress">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -22,7 +22,7 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
-            <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Starting Update Manager&lt;/b&gt;&lt;/big&gt;</property>
+            <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Starting Software Updater&lt;/b&gt;&lt;/big&gt;</property>
             <property name="use_markup">True</property>
           </object>
           <packing>
@@ -108,6 +108,7 @@
             <child>
               <object class="GtkButton" id="cancelbutton2">
                 <property name="label" translatable="yes">_Partial Upgrade</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -124,6 +125,7 @@
             <child>
               <object class="GtkButton" id="okbutton3">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -250,6 +252,7 @@ This can be caused by:
             <child>
               <object class="GtkButton" id="cancelbutton1">
                 <property name="label" translatable="yes">Chec_k</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -267,6 +270,7 @@ This can be caused by:
             <child>
               <object class="GtkButton" id="okbutton2">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -336,6 +340,7 @@ Your system does not check for updates automatically. You can configure this beh
                 <child>
                   <object class="GtkCheckButton" id="checkbutton_reminder">
                     <property name="label" translatable="yes">_Hide this information in the future</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -394,6 +399,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkButton" id="button_on_battery_close">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -411,6 +417,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkButton" id="button_on_battery_continue">
                 <property name="label" translatable="yes">Co_ntinue</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -530,6 +537,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkButton" id="okbutton1">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -546,6 +554,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkButton" id="button2">
                 <property name="label" translatable="yes">_Upgrade</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
@@ -735,6 +744,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkButton" id="button_fetch_cancel">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -760,7 +770,7 @@ Your system does not check for updates automatically. You can configure this beh
   </object>
   <object class="GtkWindow" id="window_main">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Update Manager</property>
+    <property name="title" translatable="yes">Software Updater</property>
     <property name="window_position">center</property>
     <property name="default_width">600</property>
     <property name="default_height">500</property>
@@ -804,12 +814,12 @@ Your system does not check for updates automatically. You can configure this beh
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="label" translatable="yes">Starting Update Manager</property>
+                        <property name="label" translatable="yes">Starting Software Updater</property>
                         <property name="use_underline">True</property>
                         <property name="wrap">True</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
-                          <attribute name="scale" value="1"/>
+                          <attribute name="scale" value="1.25"/>
                         </attributes>
                       </object>
                       <packing>
@@ -876,6 +886,7 @@ Your system does not check for updates automatically. You can configure this beh
                         <child>
                           <object class="GtkButton" id="button_dist_upgrade">
                             <property name="label" translatable="yes">U_pgrade</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -933,6 +944,7 @@ Your system does not check for updates automatically. You can configure this beh
                         <child>
                           <object class="GtkButton" id="button_restart_required">
                             <property name="label" translatable="yes">_Restart Now</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1091,7 +1103,7 @@ Your system does not check for updates automatically. You can configure this beh
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">You are connected via a wireless modem.</property>
+                            <property name="label" translatable="yes">You may want to wait until you’re not using a mobile broadband connection.</property>
                             <property name="wrap">True</property>
                           </object>
                           <packing>
@@ -1212,6 +1224,7 @@ Your system does not check for updates automatically. You can configure this beh
                         <child>
                           <object class="GtkButton" id="button_reload">
                             <property name="label" translatable="yes">Chec_k</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1228,7 +1241,8 @@ Your system does not check for updates automatically. You can configure this beh
                         </child>
                         <child>
                           <object class="GtkButton" id="button_install">
-                            <property name="label" translatable="yes">_Install Updates</property>
+                            <property name="label" translatable="yes">_Install Now</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
@@ -1411,6 +1425,7 @@ Your system does not check for updates automatically. You can configure this beh
             <child>
               <object class="GtkButton" id="button_settings">
                 <property name="label" translatable="yes">_Settings...</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -1436,6 +1451,7 @@ Your system does not check for updates automatically. You can configure this beh
                 <child>
                   <object class="GtkButton" id="button_close">
                     <property name="label">gtk-close</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>

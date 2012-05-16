@@ -36,6 +36,10 @@ def apport_pkgfailure(pkg, errormsg):
     s = "/usr/share/apport/package_hook"
 
     # we do not report followup errors from earlier failures
+    # dpkg messages will not be translated if DPKG_UNTRANSLATED_MESSAGES is
+    # set which it is by default so check for the English message first
+    if "dependency problems - leaving unconfigured" in errormsg:
+        return False
     if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
         return False
     # we do not run apport_pkgfailure for full disk errors

@@ -1,3 +1,26 @@
+update-manager (1:0.156.14.5) UNRELEASED; urgency=low
+
+  * 
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 23 May 2012 11:26:59 +0200
+
+update-manager (1:0.156.14.4) precise-security; urgency=low
+
+  * SECURITY UPDATE: Incorrect permissions on system_state archive may
+    expose repo passwords (LP: #954483)
+    - DistUpgrade/DistUpgradeMain.py: create file with proper permissions.
+    - debian/update-manager-core.postinst: clean up permissions on existing
+      files.
+    - CVE-2012-0948
+  * SECURITY UPDATE: Apport hook may upload system_state archive containing
+    repo passwords (LP: #954483)
+    - debian/source_update-manager.py: don't upload system_state archives.
+    - CVE-2012-0949
+  * This package does _not_ contain the changes from (1:0.156.14.2) in
+    precise-proposed.
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 15 May 2012 08:13:39 -0400
+
 update-manager (1:0.156.14.2) precise-proposed; urgency=low
 
   * fix automatic expand of the terminal if no activity happend

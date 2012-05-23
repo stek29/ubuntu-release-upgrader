@@ -20,8 +20,6 @@ def add_info(report, ui):
     if response:
         report.setdefault('Tags', 'dist-upgrade')
         report['Tags'] += ' dist-upgrade'
-        attach_file_if_exists(report, '/var/log/dist-upgrade/apt-clone_system_state.tar.gz',
-            'VarLogDistupgradeAptclonesystemstate.tar.gz')
         attach_file_if_exists(report, '/var/log/dist-upgrade/apt.log',
             'VarLogDistupgradeAptlog')
         attach_file_if_exists(report, '/var/log/dist-upgrade/apt-term.log',
@@ -32,8 +30,6 @@ def add_info(report, ui):
             'VarLogDistupgradeLspcitxt')
         attach_file_if_exists(report, '/var/log/dist-upgrade/main.log',
             'VarLogDistupgradeMainlog')
-        attach_file_if_exists(report, '/var/log/dist-upgrade/system_state.tar.gz',
-            'VarLogDistupgradeSystemstate.tar.gz')
         attach_file_if_exists(report, '/var/log/dist-upgrade/term.log',
             'VarLogDistupgradeTermlog')
         attach_file_if_exists(report, '/var/log/dist-upgrade/screenlog.0',

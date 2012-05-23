@@ -47,6 +47,38 @@ update-manager (1:0.160) UNRELEASED; urgency=low
 
  -- Brian Murray <brian@ubuntu.com>  Wed, 16 May 2012 13:59:05 -0700
 
+update-manager (1:0.156.14.5) UNRELEASED; urgency=low
+
+  * lp:~ember/update-manager/ubuntu.bug1002956:
+    - fix missing ReleaseNotesViewerWebkit.py support, thanks to
+      Pedro Fragoso (LP: #1002956)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 23 May 2012 11:26:59 +0200
+
+update-manager (1:0.156.14.4) precise-security; urgency=low
+
+  * SECURITY UPDATE: Incorrect permissions on system_state archive may
+    expose repo passwords (LP: #954483)
+    - DistUpgrade/DistUpgradeMain.py: create file with proper permissions.
+    - debian/update-manager-core.postinst: clean up permissions on existing
+      files.
+    - CVE-2012-0948
+  * SECURITY UPDATE: Apport hook may upload system_state archive containing
+    repo passwords (LP: #954483)
+    - debian/source_update-manager.py: don't upload system_state archives.
+    - CVE-2012-0949
+  * This package does _not_ contain the changes from (1:0.156.14.2) in
+    precise-proposed.
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 15 May 2012 08:13:39 -0400
+
+update-manager (1:0.156.14.2) precise-proposed; urgency=low
+
+  * fix automatic expand of the terminal if no activity happend
+    for >300s (LP: #993190)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 04 May 2012 11:46:09 -0700
+
 update-manager (1:0.156.14.1) precise-proposed; urgency=low
 
   * DistUpgrade/ReleaseAnnouncement:
@@ -62,7 +94,7 @@ update-manager (1:0.156.14) precise; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - do not set PYCENTRAL_NO_DPKG_QUERY (LP: #986233)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 20 Apr 2012 18:02:51 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 20 Apr 2012 18:26:27 +0200
 
 update-manager (1:0.156.13) precise; urgency=low
 

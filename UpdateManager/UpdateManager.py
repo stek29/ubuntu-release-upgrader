@@ -563,12 +563,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       try:
           inst_count = self.cache.installCount
           self.dl_size = self.cache.requiredDownload
-          count_str = ""
           download_str = ""
-          if inst_count > 0:
-              count_str = ngettext("%(count)s update has been selected.", 
-                                   "%(count)s updates have been selected.",
-                                   inst_count) % { 'count' : inst_count }
           if self.dl_size != 0:
               download_str = _("%s will be downloaded.") % (humanize_size(self.dl_size))
               self.image_downsize.set_sensitive(True)
@@ -582,8 +577,8 @@ class UpdateManager(SimpleGtkbuilderApp):
               self.unity.set_install_menuitem_visible(True)
           else:
               if inst_count > 0:
-                  download_str = ngettext("The update has already been downloaded, but not installed.",
-                  "The updates have already been downloaded, but not installed.", inst_count)
+                  download_str = ngettext("The update has already been downloaded.",
+                  "The updates have already been downloaded.", inst_count)
                   self.button_install.set_sensitive(True)
                   self.unity.set_install_menuitem_visible(True)
               else:
@@ -591,11 +586,7 @@ class UpdateManager(SimpleGtkbuilderApp):
                   self.button_install.set_sensitive(False)
                   self.unity.set_install_menuitem_visible(False)
               self.image_downsize.set_sensitive(False)
-          # TRANSLATORS: this allows to switch the order of the count of
-          #              updates and the download size string (if needed)
-          self.label_downsize.set_text(_("%(count_str)s %(download_str)s") % {
-                  'count_str' : count_str,
-                  'download_str' : download_str})
+          self.label_downsize.set_text(download_str)
           self.hbox_downsize.show()
           self.vbox_alerts.show()
       except SystemError as e:
@@ -672,13 +663,13 @@ class UpdateManager(SimpleGtkbuilderApp):
          the number of available updates"""
       self.refresh_updates_count()
       num_updates = self.cache.installCount
-      text_label_main = _("Software updates correct errors, eliminate security vulnerabilities and provide new features.")
+      text_label_main = ""
 
       # setup unity stuff
       self.unity.set_updates_count(num_updates)
 
       if num_updates == 0:
-          text_header= "<big><b>%s</b></big>"  % _("The software on this computer is up to date.")
+          text_header= _("The software on this computer is up to date.")
           self.label_downsize.set_text("\n")
           if self.cache.keepCount() == 0:
               self.notebook_details.set_sensitive(False)
@@ -691,7 +682,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
               if self._get_last_apt_get_update_minutes()> self.NO_UPDATE_WARNING_DAYS*24*60:
-                  text_header = "<big><b>%s</b></big>"  % _("Software updates may be available for your computer.")
+                  text_header = _("Software updates may be available for your computer.")
           # add timer to ensure we update the information when the 
           # last package count update was performed
           GObject.timeout_add_seconds(10, self.update_last_updated_text, None)
@@ -699,11 +690,10 @@ class UpdateManager(SimpleGtkbuilderApp):
           # show different text on first run (UX team suggestion)
           firstrun = self.settings.get_boolean("first-run")
           if firstrun:
-              text_header = "<big><b>%s</b></big>" % _("Welcome to Ubuntu")
-              text_label_main = _("These software updates have been issued since this version of Ubuntu was released.")
+              text_header = _("Updated software has been issued since %s was released. Do you want to install it now?") % self.meta.current_dist_description
               self.settings.set_boolean("first-run", False)
           else:
-              text_header = "<big><b>%s</b></big>" % _("Software updates are available for this computer.")
+              text_header = _("Updated software is available for this computer. Do you want to install it now?")
           self.notebook_details.set_sensitive(True)
           self.treeview_update.set_sensitive(True)
           self.button_install.grab_default()

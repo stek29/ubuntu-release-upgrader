@@ -14,7 +14,7 @@ except ImportError:
     import sys
     sys.path.insert(0, "..")
 
-from .UpgradeTestBackendQemu import UpgradeTestBackendQemu
+from AutoUpgradeTester.UpgradeTestBackendQemu import UpgradeTestBackendQemu
 
 import apt
 import apt_pkg

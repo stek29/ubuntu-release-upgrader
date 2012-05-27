@@ -42,6 +42,9 @@ update-manager (1:0.160) UNRELEASED; urgency=low
   * Add a DistUpgrade -> . symlink in DistUpgrade/, to make it possible to
     have compatible imports both in update-manager proper and in
     dist-upgrader tarballs.
+  * Use only absolute imports in AutoUpgradeTester/auto-install-tester.py
+    and DistUpgrade/dist-upgrade.py; these have no __package__ and so cannot
+    use relative imports.
 
   [ Michael Vogt ]
   * DistUpgrade/*.py:

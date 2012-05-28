@@ -34,7 +34,7 @@ for pkg in cache:
         logging.debug("Found installed meta-pkg: '%s' " % pkg.name)
         dependsList = pkg._pkg.CurrentVer.DependsList
         for t in ["Depends","PreDepends","Recommends"]:
-            if dependsList.has_key(t):
+            if t in dependsList:
                 for depOr in dependsList[t]:
                     for dep in depOr:
                         depname = dep.TargetPkg.Name

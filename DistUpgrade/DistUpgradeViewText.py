@@ -63,7 +63,7 @@ class DistUpgradeViewText(DistUpgradeView):
         self.needs_screen = True
         # its important to have a debconf frontend for
         # packages like "quagga"
-        if not os.environ.has_key("DEBIAN_FRONTEND"):
+        if "DEBIAN_FRONTEND" not in os.environ:
             os.environ["DEBIAN_FRONTEND"] = "dialog"
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")

@@ -101,7 +101,7 @@ This can be caused by:
         states in the UI based on the cache
         """
         for pkg in self.cache:
-            if not self.checkbox_tree_updates.item2key.has_key(pkg):
+            if pkg not in self.checkbox_tree_updates.item2key:
                 continue
             # update based on the status
             if pkg.markedUpgrade or pkg.markedInstall:
@@ -119,8 +119,8 @@ This can be caused by:
         name = pkg.name
         
         # if we don't have it, get it
-        if (not self.cache.all_changes.has_key(name) and
-            not self.cache.all_news.has_key(name)):
+        if (name not in self.cache.all_changes and
+            name not in self.cache.all_news):
             self.textview_changes.setText(_("Downloading changelog"))
             lock = threading.Lock()
             lock.acquire()
@@ -132,9 +132,9 @@ This can be caused by:
                 time.sleep(0.03)
 
         # build changes from NEWS and changelog
-        if self.cache.all_news.has_key(name):
+        if name in self.cache.all_news:
             changes += self.cache.all_news[name]
-        if self.cache.all_changes.has_key(name):
+        if name in self.cache.all_changes:
             changes += self.cache.all_changes[name]
 
         return changes

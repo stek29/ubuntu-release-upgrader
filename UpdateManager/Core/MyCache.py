@@ -135,7 +135,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         update_origin = matcher[(None,None)]
         verFileIter = None
         for (verFileIter,index) in cand_ver.file_list:
-            if matcher.has_key((verFileIter.archive, verFileIter.origin)):
+            if (verFileIter.archive, verFileIter.origin) in matcher:
                 indexfile = pkg._pcache._list.find_index(verFileIter)
                 if indexfile: # and indexfile.IsTrusted:
                     match = matcher[verFileIter.archive, verFileIter.origin]
@@ -162,7 +162,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                 continue
             # check if we have a match
             for(verFileIter,index) in ver.file_list:
-                if matcher.has_key((verFileIter.archive, verFileIter.origin)):
+                if (verFileIter.archive, verFileIter.origin) in matcher:
                     indexfile = pkg._pcache._list.find_index(verFileIter)
                     if indexfile: # and indexfile.IsTrusted:
                         match = matcher[verFileIter.archive, verFileIter.origin]

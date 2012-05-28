@@ -23,7 +23,7 @@ class HelloPlugin(computerjanitor.Plugin):
 
     def get_cruft(self):
         cache = self.app.apt_cache
-        if cache.has_key("hello"):
+        if "hello" in cache:
             pkg = cache["hello"]
             if pkg.is_installed:
                 yield computerjanitor.PackageCruft(cache["hello"],

@@ -50,7 +50,8 @@ class DistUpgradeQuirks(object):
         self.controller = controller
         self._view = controller._view
         self.config = config
-        self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.uname = Popen(["uname","-r"], stdout=PIPE,
+                           universal_newlines=True).communicate()[0].strip()
         self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
 
@@ -475,7 +476,8 @@ class DistUpgradeQuirks(object):
         """ return a set of pci ids of the system (using lspci -n) """
         lspci = set()
         try:
-            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+            p = subprocess.Popen(["lspci","-n"], stdout=subprocess.PIPE,
+                                 universal_newlines=True)
         except OSError:
             return lspci
         for line in p.communicate()[0].split("\n"):
@@ -767,7 +769,8 @@ class DistUpgradeQuirks(object):
         if not os.path.exists("/usr/bin/check-language-support"):
             logging.debug("no check-language-support available")
             return
-        p = subprocess.Popen(["check-language-support"],stdout=subprocess.PIPE)
+        p = subprocess.Popen(["check-language-support"],
+                             stdout=subprocess.PIPE, universal_newlines=True)
         for pkgname in p.communicate()[0].split():
             if (self.controller.cache.has_key(pkgname) and
                 not self.controller.cache[pkgname].is_installed):

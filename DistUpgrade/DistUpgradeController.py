@@ -360,7 +360,8 @@ class DistUpgradeController(object):
         """ initial cache opening, sanity checking, network checking """
         # first check if that is a good upgrade
         self.release = release = subprocess.Popen(["lsb_release","-c","-s"],
-                                   stdout=subprocess.PIPE).communicate()[0].strip()
+                                   stdout=subprocess.PIPE,
+                                   universal_newlines=True).communicate()[0].strip()
         logging.debug("lsb-release: '%s'" % release)
         if not (release == self.fromDist or release == self.toDist):
             logging.error("Bad upgrade: '%s' != '%s' " % (release, self.fromDist))
@@ -1466,7 +1467,8 @@ class DistUpgradeController(object):
             self.cache.releaseLock()
             p = subprocess.Popen(
                 ["/usr/bin/dpkg", "-i", ] + glob.glob(p+"*_*.deb"),
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                universal_newlines=True)
             res = None
             while res is None:
                 res = p.poll()

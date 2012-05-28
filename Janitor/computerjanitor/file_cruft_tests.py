@@ -52,7 +52,7 @@ class FileCruftTests(unittest.TestCase):
 
     def testReturnsCorrectDiskUsage(self):
         p = subprocess.Popen(["du", "-s", "-B", "1", self.pathname], 
-                             stdout=subprocess.PIPE)
+                             stdout=subprocess.PIPE, universal_newlines=True)
         stdout, stderr = p.communicate()
         du = int(stdout.splitlines()[0].split("\t")[0])
         self.assertEqual(self.cruft.get_disk_usage(), du)

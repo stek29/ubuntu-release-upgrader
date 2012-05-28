@@ -132,7 +132,8 @@ def save_system_state(logdir):
     os.umask(old_umask)
     # lspci output
     try:
-        s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]
+        s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE,
+                           universal_newlines=True).communicate()[0]
         open(os.path.join(logdir, "lspci.txt"), "w").write(s)
     except OSError as e:
         logging.debug("lspci failed: %s" % e)
@@ -167,7 +168,8 @@ def run_new_gnu_screen_window_or_reattach():
     # get the active screen sockets
     try:
         out = subprocess.Popen(
-            ["screen","-ls"], stdout=subprocess.PIPE).communicate()[0]
+            ["screen","-ls"], stdout=subprocess.PIPE,
+            universal_newlines=True).communicate()[0]
         logging.debug("screen returned: '%s'" % out)
     except OSError:
         logging.info("screen could not be run")

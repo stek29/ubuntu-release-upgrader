@@ -168,7 +168,9 @@ if __name__ == "__main__":
                 comment_out_driver_from_xorg("nvidia")
 
     # now run the removeInputDevices() if we have a new xserver
-    ver=subprocess.Popen(["dpkg-query","-W","-f=${Version}","xserver-xorg-core"], stdout=subprocess.PIPE).communicate()[0]
+    ver=subprocess.Popen(["dpkg-query","-W","-f=${Version}","xserver-xorg-core"],
+                         stdout=subprocess.PIPE,
+                         universal_newlines=True).communicate()[0]
     logging.info("xserver-xorg-core version is '%s'" % ver)
     if ver and apt_pkg.version_compare(ver, "2:1.5.0") > 0:
         if not is_multiseat():

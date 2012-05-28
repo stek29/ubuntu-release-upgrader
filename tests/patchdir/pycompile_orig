@@ -71,7 +71,7 @@ def get_directory_files(dname):
 def get_package_files(package_name):
     """Generate *.py file names available in given package."""
     process = Popen("/usr/bin/dpkg -L %s" % package_name,\
-                    shell=True, stdout=PIPE)
+                    shell=True, stdout=PIPE, universal_newlines=True)
     stdout, stderr = process.communicate()
     if process.returncode != 0:
         log.error('cannot get content of %s', package_name)

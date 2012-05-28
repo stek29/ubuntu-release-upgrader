@@ -37,7 +37,8 @@ class TestDistroEndOfLife(unittest.TestCase):
         # pretend the current distro is no longer supported
         meta_release.no_longer_supported = subprocess.Popen(
             ["lsb_release","-c","-s"], 
-            stdout=subprocess.PIPE).communicate()[0].strip()
+            stdout=subprocess.PIPE,
+            universal_newlines=True).communicate()[0].strip()
         # build new release mock
         new_dist = mock.Mock()
         new_dist.name = "zaphod"

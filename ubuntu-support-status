@@ -19,7 +19,8 @@ from optparse import OptionParser
 from UpdateManager.Core.utils import twrap
 
 CODENAME = subprocess.Popen(["lsb_release","-c","-s"],
-                            stdout=subprocess.PIPE).communicate()[0].strip()
+                            stdout=subprocess.PIPE,
+                            universal_newlines=True).communicate()[0].strip()
 
 def get_maintenance_status(cache, pkgname, supported_tag):
     if supported_tag.endswith("y"):

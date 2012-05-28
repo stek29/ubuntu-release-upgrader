@@ -114,7 +114,8 @@ class MyCache(apt.Cache):
                 raise CacheExceptionLockingFailed(e)
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
-        self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.uname = Popen(["uname","-r"], stdout=PIPE,
+                           universal_newlines=True).communicate()[0].strip()
         self._initAptLog()
         # from hardy on we use recommends by default, so for the 
         # transition to the new dist we need to enable them now
@@ -523,7 +524,8 @@ class MyCache(apt.Cache):
 
     def getKernelsFromBaseInstaller(self):
         """get the list of recommended kernels from base-installer"""
-        p = Popen(["/bin/sh", "./get_kernel_list.sh"], stdout=PIPE)
+        p = Popen(["/bin/sh", "./get_kernel_list.sh"],
+                  stdout=PIPE, universal_newlines=True)
         res = p.wait()
         if res != 0:
             logging.warn("./get_kernel_list.sh returned non-zero exitcode")
@@ -589,7 +591,7 @@ class MyCache(apt.Cache):
             return False
         # now check if we have a SMP system
         dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
-        if "WARNING: NR_CPUS limit" in dmesg:
+        if b"WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
         # use base-installer to get the kernel we want (if it exists)
         if os.path.exists("./get_kernel_list.sh"):

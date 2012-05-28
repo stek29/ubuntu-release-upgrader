@@ -235,7 +235,7 @@ def profileFromAptClone(aptclonefile):
     profile = None
     try:
         cmd = ('apt-clone', 'info', aptclonefile)
-        output = subprocess.check_output(cmd)
+        output = subprocess.check_output(cmd, universal_newlines=True)
         clone_properties = {}
         for k, v in [ line.split(': ') for line in output.split('\n') if ': ' in line]:
             clone_properties[k] = v

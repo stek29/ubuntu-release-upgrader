@@ -9,7 +9,8 @@ import sys
 import time
 
 def is_process_running(procname):
-    proclist = subprocess.Popen(["ps","-eo","comm"], stdout=subprocess.PIPE).communicate()[0]
+    proclist = subprocess.Popen(["ps","-eo","comm"], stdout=subprocess.PIPE,
+                                universal_newlines=True).communicate()[0]
     for line in proclist.split("\n"):
         if line == procname:
             return True

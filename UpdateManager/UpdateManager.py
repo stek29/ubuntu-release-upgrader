@@ -168,9 +168,6 @@ class UpdateManagerDbusController(dbus.service.Object):
 
 class UpdateManager(SimpleGtkbuilderApp):
 
-  # how many days until u-m warns about manual pressing "check"
-  NO_UPDATE_WARNING_DAYS = 7
-
   def __init__(self, datadir, options):
     self.setupDbus()
     Gtk.Window.set_default_icon_name("system-software-update")
@@ -361,10 +358,6 @@ class UpdateManager(SimpleGtkbuilderApp):
          bus_name = dbus.service.BusName('org.freedesktop.UpdateManager',bus)
          self.dbusController = UpdateManagerDbusController(self, bus_name)
 
-
-  def on_checkbutton_reminder_toggled(self, checkbutton):
-    self.settings.set_boolean("remind-reload",
-                              not checkbutton.get_active())
 
   def close(self, widget, data=None):
     if self.window_main.get_property("sensitive") is False:
@@ -595,74 +588,11 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_downsize.show()
           self.vbox_alerts.show()
 
-  def _get_last_apt_get_update_minutes(self):
-      """
-      Return the number of minutes since the last successful apt-get update
-      
-      If the date is unknown, return "None"
-      """
-      if not os.path.exists("/var/lib/apt/periodic/update-success-stamp"):
-          return None
-      # calculate when the last apt-get update (or similar operation)
-      # was performed
-      mtime = os.stat("/var/lib/apt/periodic/update-success-stamp")[stat.ST_MTIME]
-      ago_minutes = int((time.time() - mtime) / 60 )
-      return ago_minutes
-
-  def _get_last_apt_get_update_text(self):
-      """
-      return a human readable string with the information when
-      the last apt-get update was run
-      """
-      ago_minutes = self._get_last_apt_get_update_minutes()
-      if ago_minutes is None:
-          return _("It is unknown when the package information was "
-                   "updated last. Please click the 'Check' "
-                   "button to update the information.")
-      ago_hours = int( ago_minutes / 60 )
-      ago_days = int( ago_hours / 24 )
-      if ago_days > self.NO_UPDATE_WARNING_DAYS:
-          return _("The package information was last updated %(days_ago)s "
-                   "days ago.\n"
-                   "Press the 'Check' button below to check for new software "
-                   "updates.") % { "days_ago" : ago_days, }
-      elif ago_days > 0:
-          return ngettext("The package information was last updated %(days_ago)s day ago.",
-                          "The package information was last updated %(days_ago)s days ago.",
-                          ago_days) % { "days_ago" : ago_days, }
-      elif ago_hours > 0:
-          return ngettext("The package information was last updated %(hours_ago)s hour ago.",
-                          "The package information was last updated %(hours_ago)s hours ago.",
-                          ago_hours) % { "hours_ago" : ago_hours, }
-      elif ago_minutes >= 45:
-          # TRANSLATORS: only in plural form, as %s minutes ago is one of 15, 30, 45 minutes ago
-          return _("The package information was last updated about %s minutes ago.")%45
-      elif ago_minutes >= 30:
-          return _("The package information was last updated about %s minutes ago.")%30
-      elif ago_minutes >= 15:
-          return _("The package information was last updated about %s minutes ago.")%15
-      else:
-          return _("The package information was just updated.")
-      return None
-
-  def update_last_updated_text(self, user_data):
-      """timer that updates the last updated text """
-      #print("update_last_updated_text")
-      num_updates = self.cache.installCount
-      if num_updates == 0:
-          if self._get_last_apt_get_update_text() is not None:
-              text_label_main = self._get_last_apt_get_update_text()
-              self.label_main_details.set_text(text_label_main)
-          return True
-      # stop the timer if there are upgrades now
-      return False
-
   def update_count(self):
       """activate or disable widgets and show dialog texts correspoding to
          the number of available updates"""
       self.refresh_updates_count()
       num_updates = self.cache.installCount
-      text_label_main = ""
 
       # setup unity stuff
       self.unity.set_updates_count(num_updates)
@@ -678,13 +608,6 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.button_close.grab_default()
           self.textview_changes.get_buffer().set_text("")
           self.textview_descr.get_buffer().set_text("")
-          if self._get_last_apt_get_update_text() is not None:
-              text_label_main = self._get_last_apt_get_update_text()
-              if self._get_last_apt_get_update_minutes()> self.NO_UPDATE_WARNING_DAYS*24*60:
-                  text_header = _("Software updates may be available for your computer.")
-          # add timer to ensure we update the information when the 
-          # last package count update was performed
-          GObject.timeout_add_seconds(10, self.update_last_updated_text, None)
       else:
           # show different text on first run (UX team suggestion)
           firstrun = self.settings.get_boolean("first-run")
@@ -698,7 +621,6 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.button_install.grab_default()
           self.treeview_update.set_cursor(Gtk.TreePath.new_from_string("1"), None, False)
       self.label_header.set_markup(text_header)
-      self.label_main_details.set_text(text_label_main)
       return True
 
   # Before we shrink the window, capture the size
@@ -714,8 +636,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.restore_state()
     self.window_main.set_resizable(expanded)
 
-  def on_button_reload_clicked(self, widget, menuitem = None, data = None):
-    #print("on_button_reload_clicked")
+  def start_reload(self):
     self.check_metarelease()
     self.invoke_manager(UPDATE)
 
@@ -850,7 +771,6 @@ class UpdateManager(SimpleGtkbuilderApp):
       # can deal with dialup connections properly
       if state in NetworkManagerHelper.NM_STATE_CONNECTING_LIST:
           self.label_offline.set_text(_("Connecting..."))
-          #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()
@@ -858,7 +778,6 @@ class UpdateManager(SimpleGtkbuilderApp):
       # in doubt (STATE_UNKNOWN), assume connected
       elif (state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST or 
            state == NetworkManagerHelper.NM_STATE_UNKNOWN):
-          #self.button_reload.set_sensitive(True)
           self.refresh_updates_count()
           self.hbox_offline.hide()
           self.connected = True
@@ -867,7 +786,6 @@ class UpdateManager(SimpleGtkbuilderApp):
       else:
           self.connected = False
           self.label_offline.set_text(_("You may not be able to check for updates or download new updates."))
-          #self.button_reload.set_sensitive(False)
           self.refresh_updates_count()
           self.hbox_offline.show()
           self.vbox_alerts.show()
@@ -1155,22 +1073,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     else:
         self.progress.all_done()
 
-  def check_auto_update(self):
-      # Check if automatic update is enabled. If not show a dialog to inform
-      # the user about the need of manual "reloads"
-      remind = self.settings.get_boolean("remind-reload")
-      if remind == False:
-          return
-
-      update_days = apt_pkg.config.find_i("APT::Periodic::Update-Package-Lists")
-      if update_days < 1:
-          self.dialog_manual_update.set_transient_for(self.window_main)
-          self.dialog_manual_update.set_title("")
-          res = self.dialog_manual_update.run()
-          self.dialog_manual_update.hide()
-          if res == Gtk.ResponseType.YES:
-              self.on_button_reload_clicked(None)
-
   def check_all_updates_installable(self):
     """ Check if all available updates can be installed and suggest
         to run a distribution upgrade if not """
@@ -1212,6 +1114,5 @@ class UpdateManager(SimpleGtkbuilderApp):
       Gtk.main_iteration()
 
     self.fillstore()
-    self.check_auto_update()
     self.alert_watcher.check_alert_state()
     Gtk.main()

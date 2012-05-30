@@ -51,15 +51,6 @@ class UnitySupportImpl(IUnitySupport):
 
     def _add_quicklist(self, parent):
             quicklist = Dbusmenu.Menuitem.new()
-            # update
-            update_dbusmenuitem = Dbusmenu.Menuitem.new()
-            update_dbusmenuitem.property_set(
-                Dbusmenu.MENUITEM_PROP_LABEL, _("Check for Updates"))
-            update_dbusmenuitem.property_set_bool(
-                Dbusmenu.MENUITEM_PROP_VISIBLE, True)
-            update_dbusmenuitem.connect (
-                "item-activated", parent.on_button_reload_clicked, None)
-            quicklist.child_append(update_dbusmenuitem)
             # install 
             self.install_dbusmenuitem = Dbusmenu.Menuitem.new()
             self.install_dbusmenuitem.property_set (Dbusmenu.MENUITEM_PROP_LABEL,

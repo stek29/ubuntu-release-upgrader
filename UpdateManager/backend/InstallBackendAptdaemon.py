@@ -12,6 +12,8 @@ from aptdaemon.enums import EXIT_SUCCESS
 from UpdateManager.backend import InstallBackend
 from UpdateManager.UnitySupport import UnitySupport
 
+from gettext import gettext as _
+
 import apt
 import dbus
 
@@ -33,7 +35,7 @@ class InstallBackendAptdaemon(InstallBackend):
             pass
         try:
             trans = yield self.client.update_cache(defer=True)
-            yield self._run_in_dialog(trans, self.UPDATE)
+            yield self._run_in_dialog(trans, self.UPDATE, False)
         except errors.NotAuthorizedError:
             self.emit("action-done", self.UPDATE, False, False)
         except:
@@ -53,7 +55,7 @@ class InstallBackendAptdaemon(InstallBackend):
                 pkgs_install, reinstall, remove, purge, pkgs_upgrade, 
                 downgrade, defer=True)
             trans.connect("progress-changed", self._on_progress_changed)
-            yield self._run_in_dialog(trans, self.INSTALL)
+            yield self._run_in_dialog(trans, self.INSTALL, True)
         except errors.NotAuthorizedError as e:
             self.emit("action-done", self.INSTALL, False, False)
         except dbus.DBusException as e:
@@ -70,9 +72,13 @@ class InstallBackendAptdaemon(InstallBackend):
         self.unity.set_progress(progress)
 
     @inline_callbacks
-    def _run_in_dialog(self, trans, action):
+    def _run_in_dialog(self, trans, action, show_details):
         dia = AptProgressDialog(trans, parent=self.window_main)
         dia.set_icon_name("system-software-update")
+        dia.set_title(_("Software Updater"))
+        if not show_details:
+            dia.expander.set_no_show_all(True)
+            dia.expander.hide()
         dia.connect("finished", self._on_finished, action)
         yield dia.run()
 

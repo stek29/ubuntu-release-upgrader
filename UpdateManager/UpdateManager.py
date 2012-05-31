@@ -40,12 +40,10 @@ warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWar
 
 import apt_pkg
 
-import gettext
 import sys
 import os
 import stat
 import re
-import locale
 import logging
 import subprocess
 import time
@@ -65,7 +63,6 @@ from gettext import ngettext
 
 
 from .Core.utils import (humanize_size,
-                         init_proxy,
                          on_battery,
                          inhibit_sleep,
                          allow_sleep)
@@ -170,16 +167,9 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def __init__(self, datadir, options):
     self.setupDbus()
-    Gtk.Window.set_default_icon_name("system-software-update")
     self.datadir = datadir
     SimpleGtkbuilderApp.__init__(self, datadir+"gtkbuilder/UpdateManager.ui",
                                  "update-manager")
-    gettext.bindtextdomain("update-manager", "/usr/share/locale")
-    gettext.textdomain("update-manager")
-    try:
-        locale.setlocale(locale.LC_ALL, "")
-    except:
-        logging.exception("setlocale failed")
 
     # Used for inhibiting power management
     self.sleep_cookie = None
@@ -252,13 +242,10 @@ class UpdateManager(SimpleGtkbuilderApp):
         self.button_settings.set_sensitive(False)
 
     self.settings =  Gio.Settings("com.ubuntu.update-manager")
-    init_proxy(self.settings)
     # init show version
     self.show_versions = self.settings.get_boolean("show-versions")
     # init summary_before_name
     self.summary_before_name = self.settings.get_boolean("summary-before-name")
-    # keep track when we run (for update-notifier)
-    self.settings.set_int("launch-time", int(time.time()))
 
     # get progress object
     self.progress = GtkOpProgressInline(
@@ -635,10 +622,6 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.on_treeview_update_cursor_changed(self.treeview_update)
       self.restore_state()
     self.window_main.set_resizable(expanded)
-
-  def start_reload(self):
-    self.check_metarelease()
-    self.invoke_manager(UPDATE)
 
   #def on_button_help_clicked(self, widget):
   #  self.help_viewer.run()

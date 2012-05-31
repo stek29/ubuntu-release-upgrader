@@ -50,7 +50,7 @@ def apport_pkgfailure(pkg, errormsg):
     if os.path.exists(s):
         try:
             p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
-            p.stdin.write("ErrorMessage: %s\n" % errormsg)
+            p.stdin.write("%s\n" % errormsg)
             p.stdin.close()
             #p.wait()
         except Exception as e:

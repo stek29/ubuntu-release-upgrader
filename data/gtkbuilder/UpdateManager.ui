@@ -803,42 +803,36 @@ This can be caused by:
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkPaned" id="details_pane">
-                        <property name="height_request">200</property>
+                      <object class="GtkScrolledWindow" id="scrolledwindow_update">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="position">2147483647</property>
-                        <property name="position_set">True</property>
+                        <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow_update">
+                          <object class="GtkTreeView" id="treeview_update">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="shadow_type">in</property>
-                            <child>
-                              <object class="GtkTreeView" id="treeview_update">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="headers_visible">False</property>
-                                <property name="rules_hint">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="treeview_update-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">updates</property>
-                                  </object>
-                                </child>
-                                <signal name="cursor-changed" handler="on_treeview_update_cursor_changed" swapped="no"/>
-                                <signal name="row-activated" handler="on_treeview_update_row_activated" swapped="no"/>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection"/>
-                                </child>
+                            <property name="headers_visible">False</property>
+                            <property name="rules_hint">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="treeview_update-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">updates</property>
                               </object>
                             </child>
+                            <signal name="cursor-changed" handler="on_treeview_update_cursor_changed" swapped="no"/>
+                            <signal name="row-activated" handler="on_treeview_update_row_activated" swapped="no"/>
                           </object>
-                          <packing>
-                            <property name="resize">True</property>
-                            <property name="shrink">True</property>
-                          </packing>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkExpander" id="expander_desc">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
                         <child>
                           <object class="GtkNotebook" id="notebook_details">
                             <property name="visible">True</property>
@@ -923,16 +917,19 @@ This can be caused by:
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="resize">True</property>
-                            <property name="shrink">True</property>
-                          </packing>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label13">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Description</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>

@@ -208,6 +208,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     # expander
     self.expander_details.connect("activate", self.pre_activate_details)
     self.expander_details.connect("notify::expanded", self.activate_details)
+    self.expander_desc.connect("notify::expanded", self.activate_desc)
 
     # useful exit stuff
     self.window_main.connect("delete_event", self.close)
@@ -269,6 +270,8 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     #set minimum size to prevent the headline label blocking the resize process
     self.window_main.set_size_request(500,-1) 
+    # restore details state, which will trigger a resize if necessary
+    self.expander_details.set_expanded(self.settings.get_boolean("show-details"))
     # deal with no-focus-on-map
     if options.no_focus_on_map:
         self.window_main.set_focus_on_map(False)
@@ -709,10 +712,15 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def activate_details(self, expander, data):
     expanded = self.expander_details.get_expanded()
+    self.settings.set_boolean("show-details",expanded)
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
       self.restore_state()
     self.window_main.set_resizable(expanded)
+
+  def activate_desc(self, expander, data):
+    expanded = self.expander_desc.get_expanded()
+    self.expander_desc.set_vexpand(expanded)
 
   def on_button_reload_clicked(self, widget, menuitem = None, data = None):
     #print("on_button_reload_clicked")

@@ -87,9 +87,6 @@ from .UnitySupport import UnitySupport
 # list constants
 (LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN, LIST_TOGGLE_CHECKED) = range(5)
 
-# actions for "invoke_manager"
-(INSTALL, UPDATE) = range(2)
-
 # file that signals if we need to reboot
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
@@ -136,26 +133,13 @@ class UpdateManagerDbusController(dbus.service.Object):
         return True
 
     @dbus.service.method('org.freedesktop.UpdateManagerIFace')
-    def update(self):
-        try:
-            self.alert_watcher.check_alert_state ()
-            self.parent.invoke_manager(UPDATE)
-            return self.connected
-        except:
-            return False
-
-    @dbus.service.method('org.freedesktop.UpdateManagerIFace')
     def upgrade(self):
         try:
             self.parent.cache.checkFreeSpace()
-            self.parent.invoke_manager(INSTALL)
+            self.parent.invoke_manager()
             return True
         except:
             return False
-
-    @dbus.service.signal('org.freedesktop.UpdateManagerIFace', 'b')
-    def updated(self, success):
-        pass
 
     def _on_network_alert(self, watcher, state):
         if state in NetworkManagerHelper.NM_STATE_CONNECTED_LIST:
@@ -675,7 +659,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         return
     except SystemError as e:
         logging.exception("free space check failed")
-    self.invoke_manager(INSTALL)
+    self.invoke_manager()
     
   def on_button_restart_required_clicked(self, button=None):
       self._request_reboot_via_session_manager()
@@ -708,7 +692,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     except dbus.DBusException:
         pass
 
-  def invoke_manager(self, action):
+  def invoke_manager(self):
     # check first if no other package manager is runing
 
     # don't display apt-listchanges, we already showed the changelog
@@ -720,30 +704,23 @@ class UpdateManager(SimpleGtkbuilderApp):
     # set window to insensitive
     self.window_main.set_sensitive(False)
     self.window_main.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
-#
-    # do it
-    if action == UPDATE:
-        self.install_backend.update()
-    elif action == INSTALL:
-        # If the progress dialog should be closed automatically afterwards
-        settings = Gio.Settings("com.ubuntu.update-manager")
-        close_on_done = settings.get_boolean("autoclose-install-window")
-        # Get the packages which should be installed and update
-        pkgs_install = []
-        pkgs_upgrade = []
-        for pkg in self.cache:
-            if pkg.marked_install:
-                pkgs_install.append(pkg.name)
-            elif pkg.marked_upgrade:
-                pkgs_upgrade.append(pkg.name)
-        self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
+
+    # If the progress dialog should be closed automatically afterwards
+    settings = Gio.Settings("com.ubuntu.update-manager")
+    close_on_done = settings.get_boolean("autoclose-install-window")
+    # Get the packages which should be installed and update
+    pkgs_install = []
+    pkgs_upgrade = []
+    for pkg in self.cache:
+        if pkg.marked_install:
+            pkgs_install.append(pkg.name)
+        elif pkg.marked_upgrade:
+            pkgs_upgrade.append(pkg.name)
+    self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
   def _on_backend_done(self, backend, action, authorized, success):
-    if (action == UPDATE):
-        self.dbusController.updated(success)
     # check if there is a new reboot required notification
-    if (action == INSTALL and
-        os.path.exists(REBOOT_REQUIRED_FILE)):
+    if os.path.exists(REBOOT_REQUIRED_FILE):
         self.show_reboot_required_info()
     if authorized:
         msg = _("Reading package information")

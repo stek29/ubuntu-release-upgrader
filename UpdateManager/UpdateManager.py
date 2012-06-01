@@ -206,7 +206,9 @@ class UpdateManager(SimpleGtkbuilderApp):
     changes_buffer.create_tag("versiontag", weight=Pango.Weight.BOLD)
 
     # expander
+    self.expander_details.connect("activate", self.pre_activate_details)
     self.expander_details.connect("notify::expanded", self.activate_details)
+    self.expander_desc.connect("notify::expanded", self.activate_desc)
 
     # useful exit stuff
     self.window_main.connect("delete_event", self.close)
@@ -268,8 +270,8 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     #set minimum size to prevent the headline label blocking the resize process
     self.window_main.set_size_request(500,-1) 
-    # restore state
-    self.restore_state()
+    # restore details state, which will trigger a resize if necessary
+    self.expander_details.set_expanded(self.settings.get_boolean("show-details"))
     # deal with no-focus-on-map
     if options.no_focus_on_map:
         self.window_main.set_focus_on_map(False)
@@ -702,16 +704,23 @@ class UpdateManager(SimpleGtkbuilderApp):
       self.label_main_details.set_text(text_label_main)
       return True
 
+  # Before we shrink the window, capture the size
+  def pre_activate_details(self, expander):
+    expanded = self.expander_details.get_expanded()
+    if expanded:
+      self.save_state()
+
   def activate_details(self, expander, data):
     expanded = self.expander_details.get_expanded()
-    self.vbox_updates.set_child_packing(self.expander_details,
-                                        expanded,
-                                        True,
-                                        0,
-                                        True)
     self.settings.set_boolean("show-details",expanded)
     if expanded:
       self.on_treeview_update_cursor_changed(self.treeview_update)
+      self.restore_state()
+    self.window_main.set_resizable(expanded)
+
+  def activate_desc(self, expander, data):
+    expanded = self.expander_desc.get_expanded()
+    self.expander_desc.set_vexpand(expanded)
 
   def on_button_reload_clicked(self, widget, menuitem = None, data = None):
     #print("on_button_reload_clicked")
@@ -962,23 +971,18 @@ class UpdateManager(SimpleGtkbuilderApp):
 
   def save_state(self):
     """ save the state  (window-size for now) """
-    (w, h) = self.window_main.get_size()
-    self.settings.set_int("window-width", w)
-    self.settings.set_int("window-height", h)
+    if self.expander_details.get_expanded():
+      (w, h) = self.window_main.get_size()
+      self.settings.set_int("window-width", w)
+      self.settings.set_int("window-height", h)
 
   def restore_state(self):
     """ restore the state (window-size for now) """
-    expanded = self.settings.get_boolean("show-details")
-    self.expander_details.set_expanded(expanded)
-    self.vbox_updates.set_child_packing(self.expander_details,
-                                        expanded,
-                                        True,
-                                        0,
-                                        True)
     w = self.settings.get_int("window-width")
     h = self.settings.get_int("window-height")
-    if w > 0 and h > 0:
+    if w > 0 and h > 0 and self.expander_details.get_expanded():
       self.window_main.resize(w, h)
+    return False
 
   def fillstore(self):
     # use the watch cursor

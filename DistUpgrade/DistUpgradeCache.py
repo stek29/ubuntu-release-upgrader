@@ -104,7 +104,7 @@ class MyCache(apt.Cache):
         self._listsLock = -1
         if lock:
             try:
-                apt_pkg.PkgSystemLock()
+                apt_pkg.pkgsystem_lock()
                 self.lockListsDir()
                 self.lock = True
             except SystemError as e:
@@ -137,7 +137,8 @@ class MyCache(apt.Cache):
         " return the packages not downloadable packages in reqreinst state "
         reqreinst = set()
         for pkg in self:
-            if (not pkg.candidateDownloadable and 
+            if ((not pkg.candidate or not pkg.candidate.downloadable)
+                and
                 (pkg._pkg.inst_state == self.ReInstReq or
                  pkg._pkg.inst_state == self.HoldReInstReq)):
                 reqreinst.add(pkg.name)
@@ -180,7 +181,10 @@ class MyCache(apt.Cache):
         apt_pkg.config.set("Dir::Log::Terminal","apt-term.log")
         self.logfd = os.open(os.path.join(logdir,"apt.log"),
                              os.O_RDWR|os.O_CREAT|os.O_APPEND, 0o644)
-        os.write(self.logfd, "Log time: %s\n" % datetime.datetime.now())
+        now = datetime.datetime.now()
+        header = "Log time: %s\n" % now
+        os.write(self.logfd, header.encode("utf-8"))
+
         # turn on debugging in the cache
         apt_pkg.config.set("Debug::pkgProblemResolver","true")
         apt_pkg.config.set("Debug::pkgDepCache::AutoInstall","true")
@@ -229,7 +233,7 @@ class MyCache(apt.Cache):
     # methods
     def lockListsDir(self):
         name = apt_pkg.config.find_dir("Dir::State::Lists") + "lock"
-        self._listsLock = apt_pkg.GetLock(name)
+        self._listsLock = apt_pkg.get_lock(name)
         if self._listsLock < 0:
             e = "Can not lock '%s' " % name
             raise CacheExceptionLockingFailed(e)
@@ -261,7 +265,7 @@ class MyCache(apt.Cache):
     def releaseLock(self, pkgSystemOnly=True):
         if self.lock:
             try:
-                apt_pkg.PkgSystemUnLock()
+                apt_pkg.pkgsystem_unlock()
                 self.lock = False
             except SystemError as e:
                 logging.debug("failed to SystemUnLock() (%s) " % e)
@@ -269,7 +273,7 @@ class MyCache(apt.Cache):
     def getLock(self, pkgSystemOnly=True):
         if not self.lock:
             try:
-                apt_pkg.PkgSystemLock()
+                apt_pkg.pkgsystem_lock()
                 self.lock = True
             except SystemError as e:
                 logging.debug("failed to SystemLock() (%s) " % e)
@@ -422,14 +426,17 @@ class MyCache(apt.Cache):
             # now the KeepInstalledSection code
             for section in self.config.getlist("Distro","KeepInstalledSection"):
                 for pkg in self:
-                    if pkg.candidateDownloadable and pkg.marked_delete and pkg.section == section:
+                    if (pkg.candidate and pkg.candidate.downloadable 
+                        and pkg.marked_delete and pkg.section == section):
                         self._keepInstalled(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
                 if key in self and (self[key].is_installed or
                                     self[key].marked_install):
                     for section in self.config.getlist(key,"KeepInstalledSection"):
                         for pkg in self:
-                            if pkg.candidateDownloadable and pkg.marked_delete and pkg.section == section:
+                            if (pkg.candidate and pkg.candidate.downloadable
+                                and pkg.marked_delete and
+                                pkg.section == section):
                                 self._keepInstalled(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
         
 
@@ -549,7 +556,8 @@ class MyCache(apt.Cache):
             # this can happen e.g. on cdrom -> cdrom only upgrades
             # where on hardy we have linux-386 but on the lucid CD 
             # we only have linux-generic
-            if not self[kernel].candidateDownloadable:
+            if (not self[kernel].candidate or
+                not self[kernel].candidate.downloadable):
                 logging.debug("%s not downloadable" % kernel)
                 continue
             # check if installed
@@ -612,7 +620,7 @@ class MyCache(apt.Cache):
             if ver and ver.Priority == 0:
                 logging.error("Package %s has no priority set" % pkg.name)
                 continue
-            if (pkg.candidateDownloadable and
+            if (pkg.candidate and pkg.candidate.downloadable and
                 not (pkg.is_installed or pkg.marked_install) and
                 not pkg.name in removeEssentialOk and
                 # ignore multiarch priority required packages
@@ -1042,10 +1050,12 @@ class MyCache(apt.Cache):
         foreign_pkgs=set()        
         for pkg in self:
             if pkg.is_installed and self.downloadable(pkg):
+                if not pkg.candidate:
+                    continue
                 # assume it is foreign and see if it is from the 
                 # official archive
                 foreign=True
-                for origin in pkg.candidateOrigin:
+                for origin in pkg.candidate.origins:
                     # FIXME: use some better metric here
                     if fromDist in origin.archive and \
                            origin.origin == allowed_origin:

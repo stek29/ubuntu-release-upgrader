@@ -282,7 +282,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         return pid
 
     def _on_term_content_changed(self, term):
-	""" helper function that is called when the terminal changed
+        """ helper function that is called when the terminal changed
             to ensure that we have a accurate idea when something hangs
         """
         self.last_activity = time.time()

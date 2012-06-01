@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import unicode_literals
 
 import computerjanitor
 _ = computerjanitor.setup_gettext()
@@ -48,7 +49,7 @@ class PackageCruft(computerjanitor.Cruft):
         return self._pkg.name
 
     def get_description(self):
-        return u"%s\n\n%s" % (self._description, self._pkg.summary)
+        return "%s\n\n%s" % (self._description, self._pkg.summary)
 
     def get_disk_usage(self):
         return self._pkg.installedSize

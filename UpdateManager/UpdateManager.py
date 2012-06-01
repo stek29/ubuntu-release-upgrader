@@ -163,7 +163,6 @@ class UpdateManager(SimpleGtkbuilderApp):
     # workaround for LP: #945536
     self.clearing_store = False
 
-    self.image_logo.set_from_icon_name("system-software-update", Gtk.IconSize.DIALOG)
     self.window_main.set_sensitive(False)
     self.window_main.grab_focus()
     self.button_close.grab_focus()

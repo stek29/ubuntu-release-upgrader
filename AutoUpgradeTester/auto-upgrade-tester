@@ -71,7 +71,7 @@ def createBackend(backend_name, profile):
     """ create a backend of the given name for the given profile """
     try:
         backend_full_name = "AutoUpgradeTester.%s" % backend_name
-        backend_modul = __import__(backend_full_name, fromlist="AutoUpgradeTester")
+        backend_modul = __import__(backend_full_name, globals(), fromlist="AutoUpgradeTester")
         backend_class = getattr(backend_modul, backend_name)
     except (ImportError, AttributeError, TypeError) as e:
         logging.exception("can not import '%s'" % backend_name)

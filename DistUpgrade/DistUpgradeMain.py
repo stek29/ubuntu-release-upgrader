@@ -146,7 +146,7 @@ def setup_view(options, config, logdir):
         if not requested_view:
             continue
         try:
-            view_modul = __import__(requested_view)
+            view_modul = __import__(requested_view, globals())
             view_class = getattr(view_modul, requested_view)
             instance = view_class(logdir=logdir)
             break

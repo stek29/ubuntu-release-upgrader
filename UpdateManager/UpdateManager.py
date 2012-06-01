@@ -898,11 +898,7 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # fill them again
     try:
-        # This is  a quite nasty hack to stop the initial update 
-        if not self.options.no_update:
-            self.list.update(self.cache)
-        else:
-            self.options.no_update = False
+        self.list.update(self.cache)
     except SystemError as e:
         msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
                (_("Could not calculate the upgrade"),

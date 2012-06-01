@@ -152,6 +152,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def __init__(self, datadir, options):
     self.setupDbus()
     self.datadir = datadir
+    self.options = options
     SimpleGtkbuilderApp.__init__(self, datadir+"gtkbuilder/UpdateManager.ui",
                                  "update-manager")
 
@@ -1072,9 +1073,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.meta.connect("new_dist_available",self.new_dist_available)
       
 
-  def main(self, options):
-    self.options = options
-
+  def main(self):
     # check for new distributin information
     self.check_metarelease()
 
@@ -1083,4 +1082,3 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     self.fillstore()
     self.alert_watcher.check_alert_state()
-    Gtk.main()

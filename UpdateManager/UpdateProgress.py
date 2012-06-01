@@ -29,6 +29,7 @@
 from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk
+from gi.repository import GLib
 
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
@@ -41,12 +42,16 @@ from .backend import get_backend
 from gettext import gettext as _
 from gettext import ngettext
 
+from UpdateManager.UpdateManager import UpdateManager
 from .Core.utils import (inhibit_sleep,
                          allow_sleep)
 
 class UpdateProgress(object):
 
-  def __init__(self):
+  def __init__(self, datadir, options):
+    self.datadir = datadir
+    self.options = options
+
     # Used for inhibiting power management
     self.sleep_cookie = None
     self.sleep_dev = None
@@ -70,12 +75,14 @@ class UpdateProgress(object):
       allow_sleep(self.sleep_dev, self.sleep_cookie)
       self.sleep_cookie = self.sleep_dev = None
 
-    # Either quit the current blocking loop and continue or quit altogether
+    # Either launch main dialog and continue or quit altogether
     if success:
-      Gtk.main_quit()
+      app = UpdateManager(self.datadir, self.options)
+      # Run app.main at idle time so the progress dialog can close before we
+      # do lengthy recalculation in app.main
+      GLib.idle_add(app.main)
     else:
       sys.exit(0)
 
   def main(self):
     self.invoke_manager()
-    Gtk.main()

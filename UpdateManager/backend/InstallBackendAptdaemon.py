@@ -80,14 +80,14 @@ class InstallBackendAptdaemon(InstallBackend):
             dia.expander.set_no_show_all(True)
             dia.expander.hide()
         dia.connect("finished", self._on_finished, action)
-        yield dia.run()
+        yield dia.run(close_on_finished=False)
 
     def _on_finished(self, dialog, action):
-        dialog.hide()
         # tell unity to hide the progress again
         self.unity.set_progress(-1)
         self.emit("action-done", action, 
                   True, dialog._transaction.exit == EXIT_SUCCESS)
+        dialog.hide()
 
 if __name__ == "__main__":
     b = InstallBackendAptdaemon(None)

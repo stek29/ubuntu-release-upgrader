@@ -125,7 +125,7 @@ def save_system_state(logdir):
     logging.debug("creating statefile: '%s'" % target)
     # this file may contain sensitive data so ensure we create with the
     # right umask
-    old_umask = os.umask(0066)
+    old_umask = os.umask(0o0066)
     clone = AptClone()
     clone.save_state(sourcedir="/", target=target, with_dpkg_status=True)
     # reset umask
@@ -146,7 +146,12 @@ def setup_view(options, config, logdir):
         if not requested_view:
             continue
         try:
-            view_modul = __import__(requested_view, globals())
+            # this should work with py3 and py2.7
+            from importlib import import_module
+            # use relative imports
+            view_modul = import_module("."+requested_view, "DistUpgrade")
+            # won't work with py3
+            #view_modul = __import__(requested_view, globals())
             view_class = getattr(view_modul, requested_view)
             instance = view_class(logdir=logdir)
             break

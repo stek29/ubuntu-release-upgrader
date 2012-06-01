@@ -504,7 +504,7 @@ class MyCache(apt.Cache):
         try:
             # get new detection module and use the modalises files
             # from within the release-upgrader
-            nv = NvidiaDetection(obsolete="./nvidia-obsolete.pkgs")
+            nv = NvidiaDetection(obsolete="./ubuntu-drivers-obsolete.pkgs")
             #nv = NvidiaDetection()
             # check if a binary driver is installed now
             for oldDriver in nv.oldPackages:

@@ -28,7 +28,7 @@ if [ ! -h $DIST ]; then
 fi
 
 # copy nvidia obsoleted drivers data
-cp /usr/share/nvidia-common/obsolete nvidia-obsolete.pkgs
+cp /usr/share/ubuntu-drivers-common/obsolete ubuntu-drivers-obsolete.pkgs
 
 # create the tarball, copy links in place 
 tar -c -h -z -v --exclude=$DIST.tar.gz --exclude=$0 -X build-exclude.txt -f $DIST.tar.gz  ./*

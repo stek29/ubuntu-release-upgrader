@@ -125,14 +125,15 @@ def save_system_state(logdir):
     logging.debug("creating statefile: '%s'" % target)
     # this file may contain sensitive data so ensure we create with the
     # right umask
-    old_umask = os.umask(0066)
+    old_umask = os.umask(0o0066)
     clone = AptClone()
     clone.save_state(sourcedir="/", target=target, with_dpkg_status=True)
     # reset umask
     os.umask(old_umask)
     # lspci output
     try:
-        s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE).communicate()[0]
+        s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE,
+                           universal_newlines=True).communicate()[0]
         open(os.path.join(logdir, "lspci.txt"), "w").write(s)
     except OSError as e:
         logging.debug("lspci failed: %s" % e)
@@ -145,7 +146,12 @@ def setup_view(options, config, logdir):
         if not requested_view:
             continue
         try:
-            view_modul = __import__(requested_view)
+            # this should work with py3 and py2.7
+            from importlib import import_module
+            # use relative imports
+            view_modul = import_module("."+requested_view, "DistUpgrade")
+            # won't work with py3
+            #view_modul = __import__(requested_view, globals())
             view_class = getattr(view_modul, requested_view)
             instance = view_class(logdir=logdir)
             break
@@ -167,7 +173,8 @@ def run_new_gnu_screen_window_or_reattach():
     # get the active screen sockets
     try:
         out = subprocess.Popen(
-            ["screen","-ls"], stdout=subprocess.PIPE).communicate()[0]
+            ["screen","-ls"], stdout=subprocess.PIPE,
+            universal_newlines=True).communicate()[0]
         logging.debug("screen returned: '%s'" % out)
     except OSError:
         logging.info("screen could not be run")

@@ -406,7 +406,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     
     # check if we have the changes already and if so, display them 
     # (even if currently disconnected)
-    if self.cache.all_changes.has_key(name):
+    if name in self.cache.all_changes:
       changes = self.cache.all_changes[name]
       srcpkg = self.cache[name].sourcePackageName
       self.set_changes_buffer(changes_buffer, changes, name, srcpkg)
@@ -451,9 +451,9 @@ class UpdateManager(SimpleGtkbuilderApp):
     # display NEWS.Debian first, then the changelog
     changes = ""
     srcpkg = self.cache[name].sourcePackageName
-    if self.cache.all_news.has_key(name):
+    if name in self.cache.all_news:
         changes += self.cache.all_news[name]
-    if self.cache.all_changes.has_key(name):
+    if name in self.cache.all_changes:
         changes += self.cache.all_changes[name]
     if changes:
         self.set_changes_buffer(changes_buffer, changes, name, srcpkg)

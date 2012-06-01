@@ -50,7 +50,8 @@ class DistUpgradeQuirks(object):
         self.controller = controller
         self._view = controller._view
         self.config = config
-        self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.uname = Popen(["uname","-r"], stdout=PIPE,
+                           universal_newlines=True).communicate()[0].strip()
         self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
 
@@ -251,18 +252,18 @@ class DistUpgradeQuirks(object):
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # bug 332328 - make sure pidgin-libnotify is upgraded
         for pkg in ["pidgin-libnotify"]:
-            if (self.controller.cache.has_key(pkg) and
+            if (pkg in self.controller.cache and
                 self.controller.cache[pkg].is_installed and
                 not self.controller.cache[pkg].marked_upgrade):
                 logging.debug("forcing '%s' upgrade" % pkg)
                 self.controller.cache[pkg].mark_upgrade()
         # deal with kipi/gwenview/kphotoalbum
         for pkg in ["gwenview","digikam"]:
-            if (self.controller.cache.has_key(pkg) and
+            if (pkg in self.controller.cache and
                 self.controller.cache[pkg].is_installed and
                 not self.controller.cache[pkg].marked_upgrade):
                 logging.debug("forcing libkipi '%s' upgrade" % pkg)
-                if self.controller.cache.has_key("libkipi0"):
+                if "libkipi0" in self.controller.cache:
                     logging.debug("removing  libkipi0)")
                     self.controller.cache["libkipi0"].mark_delete()
                 self.controller.cache[pkg].mark_upgrade()
@@ -276,9 +277,9 @@ class DistUpgradeQuirks(object):
         # kdelibs4-dev is unhappy (#279621)
         fromp = "kdelibs4-dev"
         to = "kdelibs5-dev"
-        if (self.controller.cache.has_key(fromp) and 
+        if (fromp in self.controller.cache and
             self.controller.cache[fromp].is_installed and
-            self.controller.cache.has_key(to)):
+            to in self.controller.cache):
             self.controller.cache.mark_install(to, "kdelibs4-dev -> kdelibs5-dev transition")
 
     def hardyPostDistUpgradeCache(self):
@@ -288,14 +289,14 @@ class DistUpgradeQuirks(object):
         """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # deal with gnome-translator and help apt with the breaks
-        if (self.controller.cache.has_key("nautilus") and
+        if ("nautilus" in self.controller.cache and
             self.controller.cache["nautilus"].is_installed and
             not self.controller.cache["nautilus"].marked_upgrade):
             # uninstallable and gutsy apt is unhappy about this
             # breaks because it wants to upgrade it and gives up
             # if it can't
             for broken in ("link-monitor-applet"):
-                if self.controller.cache.has_key(broken) and self.controller.cache[broken].is_installed:
+                if broken in self.controller.cache and self.controller.cache[broken].is_installed:
                     self.controller.cache[broken].mark_delete()
             self.controller.cache["nautilus"].mark_install()
         # evms gives problems, remove it if it is not in use
@@ -347,7 +348,7 @@ class DistUpgradeQuirks(object):
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
         # ndiswrapper changed again *sigh*
         for (fr, to) in [("ndiswrapper-utils-1.8","ndiswrapper-utils-1.9")]:
-            if self.controller.cache.has_key(fr) and self.controller.cache.has_key(to):
+            if fr in self.controller.cache and to in self.controller.cache:
                 if self.controller.cache[fr].is_installed and not self.controller.cache[to].marked_install:
                     try:
                         self.controller.cache.mark_install(to,"%s->%s quirk upgrade rule" % (fr, to))
@@ -364,7 +365,7 @@ class DistUpgradeQuirks(object):
                 pkg.is_installed and
                 not pkg.marked_upgrade):
                 basepkg = "python-"+pkg.name[len("python2.4-"):]
-                if (self.controller.cache.has_key(basepkg) and 
+                if (basepkg in self.controller.cache and
                     self.controller.cache[basepkg].candidateDownloadable and
                     not self.controller.cache[basepkg].marked_install):
                     try:
@@ -383,7 +384,7 @@ class DistUpgradeQuirks(object):
             
         # deal with held-backs that are unneeded
         for pkgname in ["hpijs", "bzr", "tomboy"]:
-            if (self.controller.cache.has_key(pkgname) and self.controller.cache[pkgname].is_installed and
+            if (pkgname in self.controller.cache and self.controller.cache[pkgname].is_installed and
                 self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].marked_upgrade):
                 try:
                     self.controller.cache.mark_install(pkgname,"%s quirk upgrade rule" % pkgname)
@@ -391,7 +392,7 @@ class DistUpgradeQuirks(object):
                     logging.debug("Failed to apply %s install (%s)" % (pkgname,e))
         # libgl1-mesa-dri from xgl.compiz.info (and friends) breaks the
         # upgrade, work around this here by downgrading the package
-        if self.controller.cache.has_key("libgl1-mesa-dri"):
+        if "libgl1-mesa-dri" in self.controller.cache:
             pkg = self.controller.cache["libgl1-mesa-dri"]
             # the version from the compiz repo has a "6.5.1+cvs20060824" ver
             if (pkg.candidateVersion == pkg.installedVersion and
@@ -409,7 +410,7 @@ class DistUpgradeQuirks(object):
                                     
         # deal with general if $foo is installed, install $bar
         for (fr, to) in [("xserver-xorg-driver-all","xserver-xorg-video-all")]:
-            if self.controller.cache.has_key(fr) and self.controller.cache.has_key(to):
+            if fr in self.controller.cache and to in self.controller.cache:
                 if self.controller.cache[fr].is_installed and not self.controller.cache[to].marked_install:
                     try:
                         self.controller.cache.mark_install(to,"%s->%s quirk upgrade rule" % (fr, to))
@@ -419,8 +420,8 @@ class DistUpgradeQuirks(object):
     def dapperPostDistUpgradeCache(self):
         """ this function works around quirks in the breezy->dapper upgrade """
         logging.debug("running %s" %  sys._getframe().f_code.co_name)
-        if (self.controller.cache.has_key("nvidia-glx") and self.controller.cache["nvidia-glx"].is_installed and
-            self.controller.cache.has_key("nvidia-settings") and self.controller.cache["nvidia-settings"].is_installed):
+        if ("nvidia-glx" in self.controller.cache and self.controller.cache["nvidia-glx"].is_installed and
+            "nvidia-settings" in self.controller.cache and self.controller.cache["nvidia-settings"].is_installed):
             logging.debug("nvidia-settings and nvidia-glx is installed")
             self.controller.cache.mark_remove("nvidia-settings")
             self.controller.cache.mark_install("nvidia-glx")
@@ -475,7 +476,8 @@ class DistUpgradeQuirks(object):
         """ return a set of pci ids of the system (using lspci -n) """
         lspci = set()
         try:
-            p = subprocess.Popen(["lspci","-n"],stdout=subprocess.PIPE)
+            p = subprocess.Popen(["lspci","-n"], stdout=subprocess.PIPE,
+                                 universal_newlines=True)
         except OSError:
             return lspci
         for line in p.communicate()[0].split("\n"):
@@ -513,7 +515,7 @@ class DistUpgradeQuirks(object):
         # check if we have sse
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-180", "nvidia-glx-185", "nvidia-glx-195"]:
-            if (cache.has_key(pkgname) and 
+            if (pkgname in cache and
                 cache[pkgname].marked_install and
                 self._checkVideoDriver("nvidia")):
                 logging.debug("found %s video driver" % pkgname)
@@ -543,7 +545,7 @@ class DistUpgradeQuirks(object):
         # now check for nvidia and show a warning if needed
         cache = self.controller.cache
         for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
-            if (cache.has_key(pkgname) and 
+            if (pkgname in cache and
                 cache[pkgname].marked_install and
                 self._checkVideoDriver("nvidia")):
                 logging.debug("found %s video driver" % pkgname)
@@ -688,7 +690,7 @@ class DistUpgradeQuirks(object):
         if self.config.getlist(frompkg,"KeyDependencies"):
             deps_found = True
             for pkg in self.config.getlist(frompkg,"KeyDependencies"):
-                deps_found &= (self.controller.cache.has_key(pkg) and
+                deps_found &= (pkg in self.controller.cache and
                                self.controller.cache[pkg].is_installed)
         if deps_found:
             logging.debug("transitioning %s to %s (via key depends)" % (frompkg, topkg))
@@ -700,7 +702,7 @@ class DistUpgradeQuirks(object):
         if it is (LP: #450837)
         """
         logging.debug("_mysqlClusterCheck")
-        if (self.controller.cache.has_key("mysql-server") and
+        if ("mysql-server" in self.controller.cache and
             self.controller.cache["mysql-server"].is_installed):
             # taken from the mysql-server-5.1.preinst
             ret = subprocess.call([
@@ -767,9 +769,10 @@ class DistUpgradeQuirks(object):
         if not os.path.exists("/usr/bin/check-language-support"):
             logging.debug("no check-language-support available")
             return
-        p = subprocess.Popen(["check-language-support"],stdout=subprocess.PIPE)
+        p = subprocess.Popen(["check-language-support"],
+                             stdout=subprocess.PIPE, universal_newlines=True)
         for pkgname in p.communicate()[0].split():
-            if (self.controller.cache.has_key(pkgname) and
+            if (pkgname in self.controller.cache and
                 not self.controller.cache[pkgname].is_installed):
                 logging.debug("language support package '%s' missing" % pkgname)
                 # check if kde/gnome and copy language-selector note
@@ -906,7 +909,7 @@ class DistUpgradeQuirks(object):
                     "evms-bootdebug",
                     "evms-gui", "evms-cli",
                     "linux-patch-evms"]:
-            if self.controller.cache.has_key(pkg) and self.controller.cache[pkg].is_installed:
+            if pkg in self.controller.cache and self.controller.cache[pkg].is_installed:
                 self.controller.cache[pkg].mark_delete()
         return True
 
@@ -1050,7 +1053,7 @@ class DistUpgradeQuirks(object):
         # we add him - this is no security issue because
         # the user is already root so adding him to the admin group
         # does not change anything
-        if (os.environ.has_key("SUDO_USER") and
+        if ("SUDO_USER" in os.environ and
             not os.environ["SUDO_USER"] in admin_group):
             admin_user = os.environ["SUDO_USER"]
             logging.info("SUDO_USER=%s is not in admin group" % admin_user)
@@ -1170,7 +1173,7 @@ class DistUpgradeQuirks(object):
         # (we get that from base-installer) and try to installed
         #  that)
         for pkgname in ["linux-386", "linux-image-386"]:
-            if (self.controller.cache.has_key(pkgname) and
+            if (pkgname in self.controller.cache and
                 self.controller.cache[pkgname].is_installed):
                 working_kernels = self.controller.cache.getKernelsFromBaseInstaller()
                 upgrade_to = ["linux-generic", "linux-image-generic"]

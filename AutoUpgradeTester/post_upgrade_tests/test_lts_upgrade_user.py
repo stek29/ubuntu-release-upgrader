@@ -79,7 +79,7 @@ class T(unittest.TestCase):
 # NO DISPLAY IN AUTOMATED TEST
 #        # verify that they get applied to the X server correctly
 #        xprop = subprocess.Popen(['xprop', '-root', '_XKB_RULES_NAMES'],
-#                stdout=subprocess.PIPE)
+#                stdout=subprocess.PIPE, universal_newlines=True)
 #        out = xprop.communicate()[0]
 #        self.assertEqual(xprop.returncode, 0)
 #

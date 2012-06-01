@@ -9,6 +9,7 @@ echo "Cleaning up"
 
 for d in ./ plugins/ computerjanitor/; do
     rm -f $d/*~ $d/*.bak $d/*.pyc $d/*.moved $d/'#'* $d/*.rej $d/*.orig
+    rm -rf $d/__pycache__
 done
 
 #sudo rm -rf backports/ profile/ result/ tarball/ *.deb

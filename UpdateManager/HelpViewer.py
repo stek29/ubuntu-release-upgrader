@@ -27,7 +27,7 @@ class HelpViewer:
     def run(self):
         """open the documentation in the viewer"""
         # avoid running the help viewer as root
-        if os.getuid() == 0 and os.environ.has_key('SUDO_USER'):
+        if os.getuid() == 0 and 'SUDO_USER' in os.environ:
             self.command = ['sudo', '-u', os.environ['SUDO_USER']] +\
                            self.command
         subprocess.Popen(self.command)

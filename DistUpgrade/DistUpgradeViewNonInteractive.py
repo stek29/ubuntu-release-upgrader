@@ -64,7 +64,7 @@ class NonInteractiveInstallProgress(InstallProgress):
     def __init__(self, logdir):
         InstallProgress.__init__(self)
         logging.debug("setting up environ for non-interactive use")
-        if not os.environ.has_key("DEBIAN_FRONTEND"):
+        if "DEBIAN_FRONTEND" not in os.environ:
             os.environ["DEBIAN_FRONTEND"] = "noninteractive"
         os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
         os.environ["RELEASE_UPRADER_NO_APPORT"] = "1"
@@ -161,13 +161,17 @@ class NonInteractiveInstallProgress(InstallProgress):
 
         # check if we need to pass a version
         if name == "postinst":
-            version = Popen("dpkg-query -s %s|grep ^Config-Version" % pkg,shell=True, stdout=PIPE).communicate()[0]
+            version = Popen("dpkg-query -s %s|grep ^Config-Version" % pkg,
+                            shell=True, stdout=PIPE,
+                            universal_newlines=True).communicate()[0]
             if version:
                 cmd.append(version.split(":",1)[1].strip())
         elif name == "preinst":
             pkg = os.path.basename(pkg)
             pkg = pkg.split("_")[0]
-            version = Popen("dpkg-query -s %s|grep ^Version" % pkg,shell=True, stdout=PIPE).communicate()[0]
+            version = Popen("dpkg-query -s %s|grep ^Version" % pkg,
+                            shell=True, stdout=PIPE,
+                            universal_newlines=True).communicate()[0]
             if version:
                 cmd.append(version.split(":",1)[1].strip())
 

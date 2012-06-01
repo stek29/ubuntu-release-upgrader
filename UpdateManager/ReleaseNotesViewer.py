@@ -40,7 +40,7 @@ def open_url(url):
     else:
         command = ['x-www-browser', url]
     # Avoid to run the browser as user root
-    if os.getuid() == 0 and os.environ.has_key('SUDO_USER'):
+    if os.getuid() == 0 and 'SUDO_USER' in os.environ:
         command = ['sudo', '-u', os.environ['SUDO_USER']] + command
     subprocess.Popen(command)
 

@@ -26,7 +26,8 @@ class DistUpgradeConfig(SafeConfigParser):
         # we support a config overwrite, if DistUpgrade.cfg.dapper exists
         # and the user runs dapper, that one will be used
         from_release = subprocess.Popen(["lsb_release","-c","-s"],
-                                        stdout=subprocess.PIPE).communicate()[0].strip()
+                                        stdout=subprocess.PIPE,
+                                        universal_newlines=True).communicate()[0].strip()
         self.datadir=datadir
         if os.path.exists(name+"."+from_release):
             name = name+"."+from_release

@@ -90,7 +90,7 @@ class UpdateList(object):
             continue
         # check where the package belongs
         origin_node = cache.matchPackageOrigin(pkg, self.matcher)
-        if not self.pkgs.has_key(origin_node):
+        if origin_node not in self.pkgs:
           self.pkgs[origin_node] = []
         self.pkgs[origin_node].append(pkg)
         self.num_updates = self.num_updates + 1

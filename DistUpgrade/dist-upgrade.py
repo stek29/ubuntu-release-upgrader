@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from .DistUpgradeMain import main
+from DistUpgrade.DistUpgradeMain import main
 import sys
 
 if __name__ == "__main__":

@@ -104,7 +104,7 @@ class MyCache(apt.Cache):
         self._listsLock = -1
         if lock:
             try:
-                apt_pkg.PkgSystemLock()
+                apt_pkg.pkgsystem_lock()
                 self.lockListsDir()
                 self.lock = True
             except SystemError as e:
@@ -114,7 +114,8 @@ class MyCache(apt.Cache):
                 raise CacheExceptionLockingFailed(e)
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
-        self.uname = Popen(["uname","-r"],stdout=PIPE).communicate()[0].strip()
+        self.uname = Popen(["uname","-r"], stdout=PIPE,
+                           universal_newlines=True).communicate()[0].strip()
         self._initAptLog()
         # from hardy on we use recommends by default, so for the 
         # transition to the new dist we need to enable them now
@@ -136,7 +137,8 @@ class MyCache(apt.Cache):
         " return the packages not downloadable packages in reqreinst state "
         reqreinst = set()
         for pkg in self:
-            if (not pkg.candidateDownloadable and 
+            if ((not pkg.candidate or not pkg.candidate.downloadable)
+                and
                 (pkg._pkg.inst_state == self.ReInstReq or
                  pkg._pkg.inst_state == self.HoldReInstReq)):
                 reqreinst.add(pkg.name)
@@ -179,7 +181,10 @@ class MyCache(apt.Cache):
         apt_pkg.config.set("Dir::Log::Terminal","apt-term.log")
         self.logfd = os.open(os.path.join(logdir,"apt.log"),
                              os.O_RDWR|os.O_CREAT|os.O_APPEND, 0o644)
-        os.write(self.logfd, "Log time: %s\n" % datetime.datetime.now())
+        now = datetime.datetime.now()
+        header = "Log time: %s\n" % now
+        os.write(self.logfd, header.encode("utf-8"))
+
         # turn on debugging in the cache
         apt_pkg.config.set("Debug::pkgProblemResolver","true")
         apt_pkg.config.set("Debug::pkgDepCache::AutoInstall","true")
@@ -228,7 +233,7 @@ class MyCache(apt.Cache):
     # methods
     def lockListsDir(self):
         name = apt_pkg.config.find_dir("Dir::State::Lists") + "lock"
-        self._listsLock = apt_pkg.GetLock(name)
+        self._listsLock = apt_pkg.get_lock(name)
         if self._listsLock < 0:
             e = "Can not lock '%s' " % name
             raise CacheExceptionLockingFailed(e)
@@ -260,7 +265,7 @@ class MyCache(apt.Cache):
     def releaseLock(self, pkgSystemOnly=True):
         if self.lock:
             try:
-                apt_pkg.PkgSystemUnLock()
+                apt_pkg.pkgsystem_unlock()
                 self.lock = False
             except SystemError as e:
                 logging.debug("failed to SystemUnLock() (%s) " % e)
@@ -268,7 +273,7 @@ class MyCache(apt.Cache):
     def getLock(self, pkgSystemOnly=True):
         if not self.lock:
             try:
-                apt_pkg.PkgSystemLock()
+                apt_pkg.pkgsystem_lock()
                 self.lock = True
             except SystemError as e:
                 logging.debug("failed to SystemLock() (%s) " % e)
@@ -337,14 +342,14 @@ class MyCache(apt.Cache):
         metapkgs = self.config.getlist("Distro","MetaPkgs")
         for key in metapkgs:
             # if it is installed we are done
-            if self.has_key(key) and self[key].is_installed:
+            if key in self and self[key].is_installed:
                 logging.debug("needServerMode(): run in 'desktop' mode, (because of pkg '%s')" % key)
                 return False
             # if it is not installed, but its key depends are installed 
             # we are done too (we auto-select the package later)
             deps_found = True
             for pkg in self.config.getlist(key,"KeyDependencies"):
-                deps_found &= self.has_key(pkg) and self[pkg].is_installed
+                deps_found &= pkg in self and self[pkg].is_installed
             if deps_found:
                 logging.debug("needServerMode(): run in 'desktop' mode, (because of key deps for '%s')" % key)
                 return False
@@ -371,7 +376,7 @@ class MyCache(apt.Cache):
 
     def mark_install(self, pkg, reason=""):
         logging.debug("Installing '%s' (%s)" % (pkg, reason))
-        if self.has_key(pkg):
+        if pkg in self:
             self[pkg].mark_install()
             if not (self[pkg].marked_install or self[pkg].marked_upgrade):
                 logging.error("Installing/upgrading '%s' failed" % pkg)
@@ -380,7 +385,7 @@ class MyCache(apt.Cache):
         return True
     def mark_upgrade(self, pkg, reason=""):
         logging.debug("Upgrading '%s' (%s)" % (pkg, reason))
-        if self.has_key(pkg) and self[pkg].is_installed:
+        if pkg in self and self[pkg].is_installed:
             self[pkg].mark_upgrade()
             if not self[pkg].marked_upgrade:
                 logging.error("Upgrading '%s' failed" % pkg)
@@ -388,15 +393,15 @@ class MyCache(apt.Cache):
         return True
     def mark_remove(self, pkg, reason=""):
         logging.debug("Removing '%s' (%s)" % (pkg, reason))
-        if self.has_key(pkg):
+        if pkg in self:
             self[pkg].mark_delete()
     def mark_purge(self, pkg, reason=""):
         logging.debug("Purging '%s' (%s)" % (pkg, reason))
-        if self.has_key(pkg):
+        if pkg in self:
             self._depcache.mark_delete(self[pkg]._pkg,True)
 
     def _keepInstalled(self, pkgname, reason):
-        if (self.has_key(pkgname)
+        if (pkgname in self
             and self[pkgname].is_installed
             and self[pkgname].marked_delete):
             self.mark_install(pkgname, reason)
@@ -409,8 +414,8 @@ class MyCache(apt.Cache):
             self._keepInstalled(pkgname, "Distro KeepInstalledPkgs rule")
         # the the per-metapkg rules
         for key in self.metapkgs:
-            if self.has_key(key) and (self[key].is_installed or
-                                      self[key].marked_install):
+            if key in self and (self[key].is_installed or
+                                self[key].marked_install):
                 for pkgname in self.config.getlist(key,"KeepInstalledPkgs"):
                     self._keepInstalled(pkgname, "%s KeepInstalledPkgs rule" % key)
 
@@ -421,14 +426,17 @@ class MyCache(apt.Cache):
             # now the KeepInstalledSection code
             for section in self.config.getlist("Distro","KeepInstalledSection"):
                 for pkg in self:
-                    if pkg.candidateDownloadable and pkg.marked_delete and pkg.section == section:
+                    if (pkg.candidate and pkg.candidate.downloadable 
+                        and pkg.marked_delete and pkg.section == section):
                         self._keepInstalled(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
-                if self.has_key(key) and (self[key].is_installed or
-                                          self[key].marked_install):
+                if key in self and (self[key].is_installed or
+                                    self[key].marked_install):
                     for section in self.config.getlist(key,"KeepInstalledSection"):
                         for pkg in self:
-                            if pkg.candidateDownloadable and pkg.marked_delete and pkg.section == section:
+                            if (pkg.candidate and pkg.candidate.downloadable
+                                and pkg.marked_delete and
+                                pkg.section == section):
                                 self._keepInstalled(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
         
 
@@ -442,8 +450,8 @@ class MyCache(apt.Cache):
             for pkg in self.config.getlist("Distro","PostUpgrade%s" % rule):
                 action(pkg, "Distro PostUpgrade%s rule" % rule)
             for key in self.metapkgs:
-                if self.has_key(key) and (self[key].is_installed or
-                                          self[key].marked_install):
+                if key in self and (self[key].is_installed or
+                                    self[key].marked_install):
                     for pkg in self.config.getlist(key,"PostUpgrade%s" % rule):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
         # run the quirks handlers
@@ -523,7 +531,8 @@ class MyCache(apt.Cache):
 
     def getKernelsFromBaseInstaller(self):
         """get the list of recommended kernels from base-installer"""
-        p = Popen(["/bin/sh", "./get_kernel_list.sh"], stdout=PIPE)
+        p = Popen(["/bin/sh", "./get_kernel_list.sh"],
+                  stdout=PIPE, universal_newlines=True)
         res = p.wait()
         if res != 0:
             logging.warn("./get_kernel_list.sh returned non-zero exitcode")
@@ -547,7 +556,8 @@ class MyCache(apt.Cache):
             # this can happen e.g. on cdrom -> cdrom only upgrades
             # where on hardy we have linux-386 but on the lucid CD 
             # we only have linux-generic
-            if not self[kernel].candidateDownloadable:
+            if (not self[kernel].candidate or
+                not self[kernel].candidate.downloadable):
                 logging.debug("%s not downloadable" % kernel)
                 continue
             # check if installed
@@ -589,7 +599,7 @@ class MyCache(apt.Cache):
             return False
         # now check if we have a SMP system
         dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
-        if "WARNING: NR_CPUS limit" in dmesg:
+        if b"WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
         # use base-installer to get the kernel we want (if it exists)
         if os.path.exists("./get_kernel_list.sh"):
@@ -610,7 +620,7 @@ class MyCache(apt.Cache):
             if ver and ver.Priority == 0:
                 logging.error("Package %s has no priority set" % pkg.name)
                 continue
-            if (pkg.candidateDownloadable and
+            if (pkg.candidate and pkg.candidate.downloadable and
                 not (pkg.is_installed or pkg.marked_install) and
                 not pkg.name in removeEssentialOk and
                 # ignore multiarch priority required packages
@@ -777,7 +787,7 @@ class MyCache(apt.Cache):
         badVersions = self.config.getlist("Distro","BadVersions")
         for bv in badVersions:
             (pkgname, ver) = bv.split("_")
-            if (self.has_key(pkgname) and
+            if (pkgname in self and
                 self[pkgname].candidateVersion == ver and
                 (self[pkgname].marked_install or
                  self[pkgname].marked_upgrade)):
@@ -814,7 +824,7 @@ class MyCache(apt.Cache):
                 if line.startswith("Task:"):
                     for task in (line[len("Task:"):]).split(","):
                         task = task.strip()
-                        if not tasks.has_key(task):
+                        if task not in tasks:
                             tasks[task] = set()
                         tasks[task].add(pkg.name)
         for task in tasks:
@@ -856,7 +866,7 @@ class MyCache(apt.Cache):
             installed or marked install
             """
             for key in metapkgs:
-                if self.has_key(key):
+                if key in self:
                     pkg = self[key]
                     if pkg.is_installed and pkg.marked_delete:
                         logging.debug("metapkg '%s' installed but marked_delete" % pkg.name)
@@ -876,7 +886,7 @@ class MyCache(apt.Cache):
         # install (that result in a upgrade and removes a markDelete)
         for key in metapkgs:
             try:
-                if (self.has_key(key) and
+                if (key in self and
                     self[key].is_installed and
                     self[key].is_upgradable):
                     logging.debug("Marking '%s' for upgrade" % key)
@@ -892,7 +902,7 @@ class MyCache(apt.Cache):
             for key in metapkgs:
                 deps_found = True
                 for pkg in self.config.getlist(key,"KeyDependencies"):
-                    deps_found &= self.has_key(pkg) and self[pkg].is_installed
+                    deps_found &= pkg in self and self[pkg].is_installed
                 if deps_found:
                     logging.debug("guessing '%s' as missing meta-pkg" % key)
                     try:
@@ -942,12 +952,12 @@ class MyCache(apt.Cache):
             return False
         # ensure we honor KeepInstalledSection here as well
         for section in self.config.getlist("Distro","KeepInstalledSection"):
-            if self.has_key(pkgname) and self[pkgname].section == section:
+            if pkgname in self and self[pkgname].section == section:
                 logging.debug("skipping '%s' (in KeepInstalledSection)" % pkgname)
                 return False
         # if we don't have the package anyway, we are fine (this can
         # happen when forced_obsoletes are specified in the config file)
-        if not self.has_key(pkgname):
+        if pkgname not in self:
             #logging.debug("package '%s' not in cache" % pkgname)
             return True
         # check if we want to purge 
@@ -1023,7 +1033,7 @@ class MyCache(apt.Cache):
                         demotions.add(line.strip())
         installed_demotions = set()
         for demoted_pkgname in demotions:
-            if not self.has_key(demoted_pkgname):
+            if demoted_pkgname not in self:
                 continue
             pkg = self[demoted_pkgname]
             if (not pkg.is_installed or
@@ -1040,10 +1050,12 @@ class MyCache(apt.Cache):
         foreign_pkgs=set()        
         for pkg in self:
             if pkg.is_installed and self.downloadable(pkg):
+                if not pkg.candidate:
+                    continue
                 # assume it is foreign and see if it is from the 
                 # official archive
                 foreign=True
-                for origin in pkg.candidateOrigin:
+                for origin in pkg.candidate.origins:
                     # FIXME: use some better metric here
                     if fromDist in origin.archive and \
                            origin.origin == allowed_origin:

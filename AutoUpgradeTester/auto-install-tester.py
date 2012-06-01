@@ -6,10 +6,15 @@ from optparse import OptionParser
 import os
 import time
 
-import sys
-sys.path.insert(0, "../DistUpgrade")
+try:
+    import imp
+    imp.find_module("AutoUpgradeTester")
+except ImportError:
+    # Running from build tree?
+    import sys
+    sys.path.insert(0, "..")
 
-from .UpgradeTestBackendQemu import UpgradeTestBackendQemu
+from AutoUpgradeTester.UpgradeTestBackendQemu import UpgradeTestBackendQemu
 
 import apt
 import apt_pkg

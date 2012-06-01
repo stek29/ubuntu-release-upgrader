@@ -143,7 +143,7 @@ class DistUpgradeController(object):
         self.arch = get_arch()
 
         # we run with --force-overwrite by default
-        if not os.environ.has_key("RELEASE_UPGRADE_NO_FORCE_OVERWRITE"):
+        if "RELEASE_UPGRADE_NO_FORCE_OVERWRITE" not in os.environ:
             logging.debug("enable dpkg --force-overwrite")
             apt_pkg.config.set("DPkg::Options::","--force-overwrite")
 
@@ -360,7 +360,8 @@ class DistUpgradeController(object):
         """ initial cache opening, sanity checking, network checking """
         # first check if that is a good upgrade
         self.release = release = subprocess.Popen(["lsb_release","-c","-s"],
-                                   stdout=subprocess.PIPE).communicate()[0].strip()
+                                   stdout=subprocess.PIPE,
+                                   universal_newlines=True).communicate()[0].strip()
         logging.debug("lsb-release: '%s'" % release)
         if not (release == self.fromDist or release == self.toDist):
             logging.error("Bad upgrade: '%s' != '%s' " % (release, self.fromDist))
@@ -695,7 +696,7 @@ class DistUpgradeController(object):
                 entry.uri.startswith("cdrom:") or entry.dist == self.toDist):
                 continue
             # now check for "$dist-updates" and "$dist-security" and add any inconsistencies
-            if self.found_components.has_key(entry.dist):
+            if entry.dist in self.found_components:
                 component_diff = self.found_components[self.toDist]-self.found_components[entry.dist]
                 if component_diff:
                     logging.info("fixing components inconsistency from '%s'" % get_string_with_no_auth_from_source_entry(entry))
@@ -1181,7 +1182,7 @@ class DistUpgradeController(object):
 
         # now get the meta-pkg specific obsoletes and purges
         for pkg in self.config.getlist("Distro","MetaPkgs"):
-            if self.cache.has_key(pkg) and self.cache[pkg].is_installed:
+            if pkg in self.cache and self.cache[pkg].is_installed:
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
         # now add the obsolete kernels to the forced obsoletes
         self.forced_obsoletes.extend(self.cache.identifyObsoleteKernels())
@@ -1290,7 +1291,7 @@ class DistUpgradeController(object):
                 depname = dep[0]
                 ver = dep[1]
                 oper = dep[2]
-                if not self.cache.has_key(depname):
+                if depname not in self.cache:
                     logging.error("_checkDep: '%s' not in cache" % depname)
                     return False
                 inst = self.cache[depname]
@@ -1333,7 +1334,7 @@ class DistUpgradeController(object):
             self.doUpdate(showErrors=False)
             self.openCache()
             for pkgname in backportslist:
-                if not self.cache.has_key(pkgname):
+                if pkgname not in self.cache:
                     logging.error("Can not find backport '%s'" % pkgname)
                     raise NoBackportsFoundException(pkgname)
             if self._allBackportsAuthenticated(backportslist):
@@ -1466,7 +1467,8 @@ class DistUpgradeController(object):
             self.cache.releaseLock()
             p = subprocess.Popen(
                 ["/usr/bin/dpkg", "-i", ] + glob.glob(p+"*_*.deb"),
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                universal_newlines=True)
             res = None
             while res is None:
                 res = p.poll()
@@ -1661,7 +1663,7 @@ class DistUpgradeController(object):
         # (this happend e.g. during the intrepid->jaunty upgrade for some
         #  users when de.archive.ubuntu.com was overloaded)
         for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
-            if (not self.cache.has_key(pkg) or
+            if (pkg not in self.cache or
                 not self.cache.anyVersionDownloadable(self.cache[pkg])):
                 # FIXME: we could offer to add default source entries here,
                 #        but we need to be careful to not duplicate them

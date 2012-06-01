@@ -35,10 +35,29 @@ update-manager (1:0.160) UNRELEASED; urgency=low
     since it's almost just as easy to call gpg directly via subprocess, do
     so.
   * Use gettext if ugettext does not exist (as in Python 3).
-  
+  * Ignore __pycache__ directories, and exclude them from dist-upgrader
+    tarballs.
+  * Fix up module path when running AutoUpgradeTester/auto-install-tester.py
+    from the build tree.
+  * Add a DistUpgrade -> . symlink in DistUpgrade/, to make it possible to
+    have compatible imports both in update-manager proper and in
+    dist-upgrader tarballs.
+  * Use only absolute imports in AutoUpgradeTester/auto-install-tester.py
+    and DistUpgrade/dist-upgrade.py; these have no __package__ and so cannot
+    use relative imports.
+  * Open subprocesses with universal_newlines=True when expecting to read
+    text from them.  On Python 2, this only enables \r\n conversion and the
+    like, but on Python 3 this also causes subprocess-related file objects
+    to read str rather than bytes.
+  * Use "key in dict" rather than "dict.has_key(key)".
+  * Pass globals() to __import__ so that relative imports work.
+
   [ Michael Vogt ]
   * DistUpgrade/*.py:
     - update for the 12.04 -> 12.10 upgrade
+  * AutoUpgradeTester/profile/defaults.cfg.d/defaults.cfg:
+    - update for precise->quantal
+  * fix some remaining python-apt 0.8+ API issues
 
   [ Brian Murray ]
   * DistUpgrade/DistUpgradeApport.py
@@ -48,6 +67,8 @@ update-manager (1:0.160) UNRELEASED; urgency=low
   [ Michael Terry ]
   * Rename to Software Updater and fix some other strings to match mpt's
     spec.
+  * lp:~mterry/update-manager/move-changelogs:
+    - implement new page layout
 
  -- Michael Terry <mterry@ubuntu.com>  Wed, 23 May 2012 10:10:15 -0400
 

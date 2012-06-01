@@ -196,7 +196,7 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.expander.set_expanded(True)
         self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,
                     "APT_LISTCHANGES_FRONTEND=none"]
-        if not os.environ.has_key("DEBIAN_FRONTEND"):
+        if "DEBIAN_FRONTEND" not in os.environ:
           self.env.append("DEBIAN_FRONTEND=%s" % frontend)
         # do a bit of time-keeping
         self.start_time = 0.0

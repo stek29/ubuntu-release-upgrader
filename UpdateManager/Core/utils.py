@@ -151,7 +151,8 @@ def lsmod():
   # FIXME raise?
   if not os.path.exists("/sbin/lsmod"):
     return []
-  p=subprocess.Popen(["/sbin/lsmod"], stdout=subprocess.PIPE)
+  p=subprocess.Popen(["/sbin/lsmod"], stdout=subprocess.PIPE,
+                     universal_newlines=True)
   lines=p.communicate()[0].split("\n")
   # remove heading line: "Modules Size Used by"
   del lines[0]
@@ -200,7 +201,7 @@ def get_dist():
       return dist
   # then check the real one
   from subprocess import Popen, PIPE
-  p = Popen(["lsb_release","-c","-s"],stdout=PIPE)
+  p = Popen(["lsb_release","-c","-s"], stdout=PIPE, universal_newlines=True)
   res = p.wait()
   if res != 0:
     sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
@@ -218,7 +219,7 @@ def get_dist_description():
       return desc
   # then check the real one
   from subprocess import Popen, PIPE
-  p = Popen(["lsb_release","-d","-s"],stdout=PIPE)
+  p = Popen(["lsb_release","-d","-s"], stdout=PIPE, universal_newlines=True)
   res = p.wait()
   if res != 0:
     sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
@@ -485,7 +486,8 @@ target     prot opt source               destination
     if not os.path.exists("/sbin/iptables"):
         return False
     out = subprocess.Popen(["iptables", "-L"], 
-                           stdout=subprocess.PIPE).communicate()[0]
+                           stdout=subprocess.PIPE,
+                           universal_newlines=True).communicate()[0]
     if out == iptables_empty:
         return False
     return True

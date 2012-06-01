@@ -99,7 +99,7 @@ class DistUpgradeFetcherCore(object):
             os.close(logger_pipe[0])
         proc = subprocess.Popen(
             gpg, stderr=subprocess.PIPE, preexec_fn=gpg_preexec,
-            close_fds=False)
+            close_fds=False, universal_newlines=True)
         os.close(status_pipe[1])
         os.close(logger_pipe[1])
         status_handle = os.fdopen(status_pipe[0])

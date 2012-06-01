@@ -31,7 +31,7 @@ class Dist(object):
 
 def get_replace(cache, pkgname):
   replaces = set()
-  if not cache.has_key(pkgname):
+  if pkgname not in cache:
     #print("can not find '%s'" % pkgname)
     return replaces
   pkg = cache[pkgname]
@@ -40,7 +40,7 @@ def get_replace(cache, pkgname):
     return replaces
   depends = ver.depends_list
   for t in ["Replaces"]:
-    if not depends.has_key(t):
+    if t not in depends:
       continue
     for depVerList in depends[t]:
       for depOr in depVerList:

@@ -70,16 +70,3 @@ Depends: ${python:Depends},
 Description: Support modules for Muon Notifier and Apper
  Support modules for Muon Notifier and Apper to check for new distro releases 
  and download the dist-upgrade tool.
-
-Package: auto-upgrade-tester
-Architecture: all
-Section: devel
-Depends: ${python:Depends}, ${misc:Depends}
-Recommends: qemu-kvm|kvm, 
-            ubuntu-vm-builder
-Suggests: default-jre-headless | java2-runtime-headless
-Description: Test release upgrades in a virtual environment
- A tool to do QA for release upgrades in ubuntu that performs upgrades
- in a virtual environment. Supported backends are "chroot", "kvm" and
- "EC2". It will also install a hudson/jenkins slave (disabled by 
- default).

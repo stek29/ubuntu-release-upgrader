@@ -10,6 +10,7 @@ echo "Cleaning up"
 for d in ./ plugins/ computerjanitor/; do
     rm -f $d/*~ $d/*.bak $d/*.pyc $d/*.moved $d/'#'* $d/*.rej $d/*.orig
     rm -rf $d/__pycache__
+    rm -f *.tar.gz *.tar
 done
 
 #sudo rm -rf backports/ profile/ result/ tarball/ *.deb
@@ -31,6 +32,10 @@ fi
 cp /usr/share/ubuntu-drivers-common/obsolete ubuntu-drivers-obsolete.pkgs
 
 # create the tarball, copy links in place 
-tar -c -h -z -v --exclude=$DIST.tar.gz --exclude=$0 -X build-exclude.txt -f $DIST.tar.gz  ./*
+tar -c -h -v --exclude DistUpgrade --exclude=$DIST.tar --exclude=$0 -X build-exclude.txt -f $DIST.tar  ./*
 
+# add "DistUpgrade"  symlink as symlink
+tar --append -v -f $DIST.tar ./DistUpgrade
 
+# and compress it
+gzip -9 $DIST.tar

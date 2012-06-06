@@ -388,8 +388,8 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
         gtk.init_check()
 
         try:
-          locale.bindtextdomain("update-manager",localedir)
-          gettext.textdomain("update-manager")
+          locale.bindtextdomain("ubuntu-release-upgrader",localedir)
+          gettext.textdomain("ubuntu-release-upgrader")
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
         
@@ -401,7 +401,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
           pass
         SimpleGtkbuilderApp.__init__(self, 
                                      gladedir+"/DistUpgrade.ui", 
-                                     "update-manager")
+                                     "ubuntu-release-upgrader")
         # terminal stuff
         self.create_terminal()
 

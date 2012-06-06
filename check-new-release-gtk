@@ -63,7 +63,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   FETCH_TIMEOUT = 20
 
   def __init__(self, options):
-    SimpleGtkbuilderApp.__init__(self, options.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "update-manager")
+    SimpleGtkbuilderApp.__init__(self, options.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "ubuntu-release-upgrader")
     self.new_dist = None
     logging.debug("running with devel=%s proposed=%s" % (
             options.devel_release, options.proposed_release))
@@ -164,8 +164,8 @@ if __name__ == "__main__":
 
   Gtk.init_check(sys.argv)
 
-  gettext.bindtextdomain("update-manager", "/usr/share/locale")
-  gettext.textdomain("update-manager")
+  gettext.bindtextdomain("ubuntu-release-upgrader", "/usr/share/locale")
+  gettext.textdomain("ubuntu-release-upgrader")
 
   try:
     locale.setlocale(locale.LC_ALL, "")
@@ -188,7 +188,7 @@ if __name__ == "__main__":
                      help=_("Try upgrading to the latest release using "
                             "the upgrader from $distro-proposed").decode(enc))
   # mostly useful for development
-  parser.add_option ("", "--datadir", default="/usr/share/update-manager")
+  parser.add_option ("", "--datadir", default="/usr/share/ubuntu-release-upgrader")
   parser.add_option ("", "--test-uri")
   parser.add_option ("", "--debug", action="store_true", default=False,
                      help=_("Add debug output").decode(enc))

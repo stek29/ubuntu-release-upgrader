@@ -150,7 +150,7 @@ class DistUpgradeFetcherCore(object):
         if not os.path.exists(script):
             return self.error(_("Could not run the upgrade tool"),
                          _("Could not run the upgrade tool") + ".  " + _("This is most likely a bug in the upgrade tool. "
-                          "Please report it as a bug using the command 'ubuntu-bug update-manager'."))
+                          "Please report it as a bug using the command 'ubuntu-bug ubuntu-release-upgrader'."))
         return True
 
     def mirror_from_sources_list(self, uri, default_uri):
@@ -211,7 +211,7 @@ class DistUpgradeFetcherCore(object):
 
     def fetchDistUpgrader(self):
         " download the tarball with the upgrade script "
-        self.tmpdir = tmpdir = tempfile.mkdtemp(prefix="update-manager-")
+        self.tmpdir = tmpdir = tempfile.mkdtemp(prefix="ubuntu-release-upgrader-")
         os.chdir(tmpdir)
         logging.debug("using tmpdir: '%s'" % tmpdir)
         # turn debugging on here (if required)

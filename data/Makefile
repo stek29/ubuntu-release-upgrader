@@ -1,5 +1,5 @@
 
-DOMAIN=update-manager
+DOMAIN=ubuntu-release-upgrader
 DESKTOP_IN_FILES := $(wildcard *.desktop.in)
 DESKTOP_FILES := $(patsubst %.desktop.in,%.desktop,$(wildcard *.desktop.in))
 

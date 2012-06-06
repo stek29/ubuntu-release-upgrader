@@ -42,8 +42,7 @@ httpd = TCPServer(("", PORT), Handler)
 
 
 sys.path.insert(0, "../")
-from UpdateManager.Core.MetaRelease import MetaReleaseCore, Dist
-#from UpdateManager.Core.DistUpgradeFetcherCore import 
+from DistUpgrade.MetaRelease import MetaReleaseCore, Dist
 
 
 def get_new_dist(current_release):

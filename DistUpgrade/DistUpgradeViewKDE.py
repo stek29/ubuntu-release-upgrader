@@ -450,12 +450,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:
-          localedir="/usr/share/locale/update-manager"
+          localedir="/usr/share/locale/ubuntu-release-upgrader"
 
         # FIXME: i18n must be somewhere relative do this dir
         try:
-          gettext.bindtextdomain("update-manager", localedir)
-          gettext.textdomain("update-manager")
+          gettext.bindtextdomain("ubuntu-release-upgrader", localedir)
+          gettext.textdomain("ubuntu-release-upgrader")
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
 
@@ -469,7 +469,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # exception when run without DISPLAY but dies instead
         if not "DISPLAY" in os.environ:
             raise Exception("No DISPLAY in os.environ found")
-        self.app = QApplication(["update-manager"])
+        self.app = QApplication(["ubuntu-release-upgrader"])
 
         if os.path.exists("/usr/share/icons/oxygen/48x48/apps/system-software-update.png"):
             messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/apps/system-software-update.png")
@@ -519,8 +519,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         subprocess.call(["killall", "adept_updater"])
 
         # init gettext
-        gettext.bindtextdomain("update-manager",localedir)
-        gettext.textdomain("update-manager")
+        gettext.bindtextdomain("ubuntu-release-upgrader",localedir)
+        gettext.textdomain("ubuntu-release-upgrader")
         self.translate_widget_children()
         self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", "Kubuntu"))
 
@@ -601,7 +601,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         """start konqueror"""
         #need to run this else kdesu can't run Konqueror
         #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
-        QDesktopServices.openUrl(QUrl("https://launchpad.net/ubuntu/+source/update-manager/+filebug"))
+        QDesktopServices.openUrl(QUrl("https://launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug"))
 
     def showTerminal(self):
         if self.window_main.konsole_frame.isVisible():

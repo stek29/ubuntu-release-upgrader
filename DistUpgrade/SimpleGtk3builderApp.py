@@ -1,1 +1,1 @@
-../UpdateManager/SimpleGtk3builderApp.py
+/usr/share/pyshared/UpdateManager/SimpleGtk3builderApp.py

@@ -68,11 +68,11 @@ class DistUpgradeViewText(DistUpgradeView):
         if not datadir:
           localedir=os.path.join(os.getcwd(),"mo")
         else:
-          localedir="/usr/share/locale/update-manager"
+          localedir="/usr/share/locale/ubuntu-release-upgrader"
 
         try:
-          gettext.bindtextdomain("update-manager", localedir)
-          gettext.textdomain("update-manager")
+          gettext.bindtextdomain("ubuntu-release-upgrader", localedir)
+          gettext.textdomain("ubuntu-release-upgrader")
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
         

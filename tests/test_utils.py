@@ -7,10 +7,10 @@ import sys
 import unittest
 
 sys.path.insert(0, "../")
-from UpdateManager.Core.utils import (is_child_of_process_name, 
-                                      get_string_with_no_auth_from_source_entry,
-                                      humanize_size,
-                                      estimate_kernel_size_in_boot)
+from DistUpgrade.utils import (is_child_of_process_name, 
+                               get_string_with_no_auth_from_source_entry,
+                               humanize_size,
+                               estimate_kernel_size_in_boot)
 
 class TestUtils(unittest.TestCase):
 

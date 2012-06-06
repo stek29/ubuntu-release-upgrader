@@ -1,7 +1,7 @@
 
 top_srcdir=`pwd`/..
 
-DOMAIN=update-manager
+DOMAIN=ubuntu-release-upgrader
 PO_FILES := $(wildcard *.po)
 CONTACT=sebastian.heinlein@web.de
 

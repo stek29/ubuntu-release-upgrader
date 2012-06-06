@@ -206,7 +206,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       except Exception as e:
         print("Exception during pm.DoInstall(): ", e)
         logging.exception("Exception during pm.DoInstall()")
-        open("/var/run/update-manager-apt-exception","w").write(str(e))
+        open("/var/run/ubuntu-release-upgrader-apt-exception","w").write(str(e))
         os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid

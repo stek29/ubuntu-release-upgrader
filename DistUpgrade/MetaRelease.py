@@ -1,1 +1,1 @@
-../UpdateManager/Core/MetaRelease.py
+/usr/share/pyshared/UpdateManager/Core/MetaRelease.py

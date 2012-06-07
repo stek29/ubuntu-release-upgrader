@@ -31,7 +31,7 @@ setup(name='ubuntu-release-upgrader',
                   ('share/man/man8',
                    glob.glob('data/*.8')
                   ),
-                  ('../etc/ubuntu-release-upgrader/',
+                  ('../etc/update-manager/', # intentionally use old name
                    ['data/release-upgrades', 'data/meta-release']),
                   ],
       cmdclass = { "build" : build_extra.build_extra,

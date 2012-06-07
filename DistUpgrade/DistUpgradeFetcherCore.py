@@ -150,7 +150,7 @@ class DistUpgradeFetcherCore(object):
         if not os.path.exists(script):
             return self.error(_("Could not run the upgrade tool"),
                          _("Could not run the upgrade tool") + ".  " + _("This is most likely a bug in the upgrade tool. "
-                          "Please report it as a bug using the command 'ubuntu-bug ubuntu-release-upgrader'."))
+                          "Please report it as a bug using the command 'ubuntu-bug ubuntu-release-upgrader-core'."))
         return True
 
     def mirror_from_sources_list(self, uri, default_uri):

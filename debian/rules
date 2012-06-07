@@ -14,9 +14,6 @@ override_dh_auto_clean:
 		./DistUpgrade/$(DIST)  ./DistUpgrade/$(DIST).tar.gz \
 		 ./DistUpgrade/ubuntu-drivers-obsolete.pkgs ./po/mo
 
-override_dh_auto_install:
-	dh_auto_install --destdir=debian/tmp
-
 binary-indep:
 	dh $@ $(DH_ARGS)
 	# now the dist-upgrader special tarball

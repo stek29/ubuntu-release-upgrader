@@ -16,7 +16,7 @@ Standards-Version: 3.9.3
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-core-dev/ubuntu-release-upgrader/trunk
 X-Python-Version: >= 2.6
 
-Package: ubuntu-release-upgrader
+Package: ubuntu-release-upgrader-core
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${python:Depends},
@@ -31,4 +31,25 @@ Breaks: update-manager (<< 1:0.163),
         update-manager-core (<< 1:0.163),
         computer-janitor (<= 1.11-0ubuntu1)
 Description: manage release upgrades
- This is the release upgrader
+ This is the core of the Ubuntu Release Upgrader
+
+Package: ubuntu-release-upgrader-gtk
+Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${python:Depends},
+         ${misc:Depends},
+         ubuntu-release-upgrader-core,
+         python
+Description: manage release upgrades
+ This is the GTK+ frontend of the Ubuntu Release Upgrader
+
+Package: ubuntu-release-upgrader-qt
+Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${python:Depends},
+         ${misc:Depends},
+         ubuntu-release-upgrader-core,
+         python-kde4, 
+         kdesudo
+Description: manage release upgrades
+ This is the Qt frontend of the Ubuntu Release Upgrader

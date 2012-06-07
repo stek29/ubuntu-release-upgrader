@@ -702,7 +702,7 @@ class MyCache(apt.Cache):
                              "please try again later.")
             else:
                 details += _("If none of this applies, then please report this bug using "
-                             "the command 'ubuntu-bug ubuntu-release-upgrader' in a terminal.")
+                             "the command 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal.")
             # make the error text available again on stdout for the
             # text frontend
             self._stopAptResolverLog()
@@ -913,7 +913,7 @@ class MyCache(apt.Cache):
                                    _("It was impossible to install a "
                                      "required package. Please report "
                                      "this as a bug using "
-                                     "'ubuntu-bug ubuntu-release-upgrader' in "
+                                     "'ubuntu-bug ubuntu-release-upgrader-core' in "
                                      "a terminal."))
                         return False
                     logging.debug("marked_install: '%s' -> '%s'" % (key, self[key].marked_install))

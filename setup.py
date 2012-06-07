@@ -11,9 +11,10 @@ from DistUtilsExtra.command import (
 disabled = []
 
 def plugins():
-    return [os.path.join('Janitor/plugins', name)
-            for name in os.listdir('Janitor/plugins')
-            if name.endswith('_plugin.py') and name not in disabled]
+    return []
+    ## return [os.path.join('Janitor/plugins', name)
+    ##         for name in os.listdir('Janitor/plugins')
+    ##         if name.endswith('_plugin.py') and name not in disabled]
 
 def profiles():
     profiles = []
@@ -36,13 +37,13 @@ setup(name='update-manager',
                 'UpdateManager.Core',
                 'UpdateManagerText',
                 'DistUpgrade',
-                'computerjanitor',
+                #'computerjanitor',
                 'AutoUpgradeTester',
                 ],
-      package_dir={
-                   '': '.',
-                   'computerjanitor': 'Janitor/computerjanitor',
-                  },
+      ## package_dir={
+      ##              '': '.',
+      ##              'computerjanitor': 'Janitor/computerjanitor',
+      ##             },
       scripts=[
                'update-manager', 
                'ubuntu-support-status', 
@@ -68,8 +69,8 @@ setup(name='update-manager',
                    ['data/update-manager.convert']),
                   ('../etc/update-manager/',
                    ['data/release-upgrades', 'data/meta-release']),
-                  ('share/computerjanitor/plugins',
-                   plugins()),
+                  ## ('share/computerjanitor/plugins',
+                  ##  plugins()),
                   ('share/auto-upgrade-tester/post_upgrade_tests',
                    glob.glob("AutoUpgradeTester/post_upgrade_tests/*")),
                   ]+profiles(),

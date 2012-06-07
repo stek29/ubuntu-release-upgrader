@@ -17,7 +17,6 @@ override_dh_auto_clean:
 override_dh_auto_install:
 	dh_auto_install --destdir=debian/tmp
 
-binary: binary-arch binary-indep
 binary-indep:
 	dh $@ $(DH_ARGS)
 	# now the dist-upgrader special tarball

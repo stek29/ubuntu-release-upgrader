@@ -2,8 +2,8 @@ Source: ubuntu-release-upgrader
 Section: admin
 Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Build-Depends: debhelper (>= 7.0.50~), 
-               python-all-dev,
+Build-Depends: debhelper (>= 9), 
+               python-all,
                python-distutils-extra (>= 1.90), 
                python-apt (>= 0.7.5),
                lsb-release,
@@ -12,20 +12,23 @@ Build-Depends: debhelper (>= 7.0.50~),
 Build-Depends-Indep: libxml-parser-perl, 
                      scrollkeeper, 
                      intltool
-Standards-Version: 3.8.0
-Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-core-dev/ubuntu-release-upgrader/main
+Standards-Version: 3.9.3
+Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-core-dev/ubuntu-release-upgrader/trunk
 X-Python-Version: >= 2.6
 
 Package: ubuntu-release-upgrader
-Architecture: any
+Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
 Depends: ${python:Depends},
          ${misc:Depends},
          python-apt (>= 0.7.13.4ubuntu3),
          lsb-release,
          update-manager
 Recommends: libpam-modules (>= 1.0.1-9ubuntu3)
-Replaces: update-manager (<< 1:0.146.2)
-Breaks: update-manager (<< 1:0.146.2), 
+Replaces: update-manager (<< 1:0.163),
+          update-manager-core (<< 1:0.163)
+Breaks: update-manager (<< 1:0.163),
+        update-manager-core (<< 1:0.163),
         computer-janitor (<= 1.11-0ubuntu1)
 Description: manage release upgrades
- This is the core of update-manager and the release upgrader
+ This is the release upgrader

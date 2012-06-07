@@ -124,7 +124,7 @@ class TestQuirks(unittest.TestCase):
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
-        shutil.copy("./test-data/fstab.ntfs.orig", "./test-data/fstab.ntfs")
+        shutil.copy("./test-data/fstab.ntfs.original", "./test-data/fstab.ntfs")
         self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open("./test-data/fstab.ntfs").read())
         q._ntfsFstabFixup(fstab="./test-data/fstab.ntfs")
         self.assertTrue(open("./test-data/fstab.ntfs").read().endswith("0\n"))

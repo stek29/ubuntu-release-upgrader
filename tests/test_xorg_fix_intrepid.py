@@ -10,7 +10,7 @@ import re
 from DistUpgrade.xorg_fix_proprietary import comment_out_driver_from_xorg, replace_driver_from_xorg, is_multiseat
 
 class testOriginMatcher(unittest.TestCase):
-    ORIG="test-data/xorg.conf.orig"
+    ORIG="test-data/xorg.conf.original"
     FGLRX="test-data/xorg.conf.fglrx"
     MULTISEAT="test-data/xorg.conf.multiseat"
     NEW="test-data/xorg.conf"

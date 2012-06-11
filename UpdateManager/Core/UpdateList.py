@@ -83,10 +83,10 @@ class UpdateList(object):
     # sort by origin
     for pkg in cache:
       if pkg.is_upgradable or pkg.marked_install:
-        if pkg.candidateOrigin == None:
+        if getattr(pkg.candidate, "origins", None) == None:
             # can happen for e.g. locked packages
             # FIXME: do something more sensible here (but what?)
-            print("WARNING: upgradable but no canidateOrigin?!?: ", pkg.name)
+            print("WARNING: upgradable but no candidate.origins?!?: ", pkg.name)
             continue
         # check where the package belongs
         origin_node = cache.matchPackageOrigin(pkg, self.matcher)

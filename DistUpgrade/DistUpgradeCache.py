@@ -724,7 +724,7 @@ class MyCache(apt.Cache):
         for pkg in self.get_changes():
             if pkg.marked_delete:
                 continue
-            # special case because of a bug in pkg.candidateOrigin
+            # special case because of a bug in pkg.candidate.origins
             if pkg.marked_downgrade:
                 for ver in pkg._pkg.version_list:
                     # version is lower than installed one
@@ -787,8 +787,8 @@ class MyCache(apt.Cache):
         badVersions = self.config.getlist("Distro","BadVersions")
         for bv in badVersions:
             (pkgname, ver) = bv.split("_")
-            if (pkgname in self and
-                self[pkgname].candidateVersion == ver and
+            if (pkgname in self and self[pkgname].candidate and
+                self[pkgname].candidate.version == ver and
                 (self[pkgname].marked_install or
                  self[pkgname].marked_upgrade)):
                 raise SystemError(_("Trying to install blacklisted version '%s'") % bv)

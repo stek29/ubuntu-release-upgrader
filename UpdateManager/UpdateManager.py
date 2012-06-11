@@ -1060,12 +1060,14 @@ class UpdateManager(SimpleGtkbuilderApp):
               contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           #TRANSLATORS: the b stands for Bytes
           size = _("(Size: %s)") % humanize_size(pkg.packageSize)
-          if pkg.installedVersion != None:
+          installed_version = getattr(pkg.installed, "version", None)
+          candidate_version = getattr(pkg.candidate, "version", None)
+          if installed_version is not None:
               version = _("From version %(old_version)s to %(new_version)s") %\
-                  {"old_version" : pkg.installedVersion,
-                   "new_version" : pkg.candidateVersion}
+                  {"old_version" : installed_version,
+                   "new_version" : candidate_version}
           else:
-              version = _("Version %s") % pkg.candidateVersion
+              version = _("Version %s") % candidate_version
           if self.show_versions:
               contents = "%s\n<small>%s %s</small>" % (contents, version, size)
           else:

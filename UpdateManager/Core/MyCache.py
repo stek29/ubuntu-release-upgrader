@@ -124,14 +124,14 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         return wouldDelete
     def matchPackageOrigin(self, pkg, matcher):
         """ match 'pkg' origin against 'matcher', take versions between
-            installedVersion and candidateVersion into account too
+            installed.version and candidate.version into account too
             Useful if installed pkg A v1.0 is available in both
             -updates (as v1.2) and -security (v1.1). we want to display
             it as a security update then
         """
         inst_ver = pkg._pkg.current_ver
         cand_ver = self._depcache.get_candidate_ver(pkg._pkg)
-        # init matcher with candidateVer
+        # init matcher with candidate.version
         update_origin = matcher[(None,None)]
         verFileIter = None
         for (verFileIter,index) in cand_ver.file_list:
@@ -191,7 +191,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         section = pkg._pcache._depcache.get_candidate_ver(pkg._pkg).section
 
         # get the source version, start with the binaries version
-        srcver_epoch = pkg.candidateVersion
+        srcver_epoch = pkg.candidate.version
         srcver = self._strip_epoch(srcver_epoch)
         #print("bin: %s" % binver)
 
@@ -237,7 +237,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             if match:
                 # strip epoch from installed version
                 # and from changelog too
-                installed = pkg.installedVersion
+                installed = getattr(pkg.installed, "version", None)
                 if installed and ":" in installed:
                     installed = installed.split(":",1)[1]
                 changelogver = match.group(1)
@@ -334,14 +334,14 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
 
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
-        origins = self[name].candidateOrigin
-        self.all_changes[name] = _("Changes for the versions:\nInstalled version: %s\nAvailable version: %s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
+        origins = self[name].candidate.origins
+        self.all_changes[name] = _("Changes for the versions:\nInstalled version: %s\nAvailable version: %s\n\n") % (getattr(self[name].installed, "version", None), self[name].candidate.version)
         if not self.CHANGELOG_ORIGIN in [o.origin for o in origins]:
             self._fetch_changelog_for_third_party_package(name)
             return
         # fixup epoch handling version
         srcpkg = self[name].sourcePackageName
-        srcver_epoch = self[name].candidateVersion.replace(':', '%3A')
+        srcver_epoch = self[name].candidate.version.replace(':', '%3A')
         try:
             changelog = self._get_changelog_or_news(name, "changelog")
             if len(changelog) == 0:

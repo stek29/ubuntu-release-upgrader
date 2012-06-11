@@ -31,7 +31,9 @@ group = apt_pkg.GetPkgActionGroup(cache._depcache)
 
 troublemaker = set()
 for pkg in cache:
-    for c in pkg.candidateOrigin:
+    if not pkg.candidate:
+        continue
+    for c in pkg.candidate.origins:
         if c.component == "main":
             current = set([p.name for p in cache if p.marked_install])
             if not (pkg.is_installed or blacklisted(pkg.name)):

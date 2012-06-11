@@ -147,6 +147,9 @@ if __name__ == "__main__":
 
         pkg_failed = False
 
+        if not pkg.candidate:
+            continue
+
         # skip stuff in the ubuntu-minimal that we can't install or upgrade
         if pkg.is_installed and not pkg.is_upgradable:
             continue
@@ -157,7 +160,7 @@ if __name__ == "__main__":
             continue
 
         # skip packages we tested already
-        if "%s-%s" % (pkg.name, pkg.candidateVersion) in pkgs_tested:
+        if "%s-%s" % (pkg.name, pkg.candidate.version) in pkgs_tested:
             print("already tested: ", pkg.name)
             continue
 
@@ -179,7 +182,7 @@ if __name__ == "__main__":
             continue
 
         # mark as tested
-        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidateVersion))
+        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidate.version))
             
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log
@@ -204,7 +207,7 @@ if __name__ == "__main__":
         # installation worked, record that we have tested this package
         for pkg in cache:
             if pkg.markedInstall or pkg.markedUpgrade:
-                pkgs_tested.add("%s-%s" % (pkg.name, pkg.candidateVersion))
+                pkgs_tested.add("%s-%s" % (pkg.name, pkg.candidate.version))
         statusfile.flush()
         failures.flush()
             

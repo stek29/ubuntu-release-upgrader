@@ -366,7 +366,8 @@ class DistUpgradeQuirks(object):
                 not pkg.marked_upgrade):
                 basepkg = "python-"+pkg.name[len("python2.4-"):]
                 if (basepkg in self.controller.cache and
-                    self.controller.cache[basepkg].candidateDownloadable and
+                    self.controller.cache[basepkg].candidate and
+                    self.controller.cache[basepkg].candidate.downloadable and
                     not self.controller.cache[basepkg].marked_install):
                     try:
                         self.controller.cache.mark_install(basepkg,
@@ -395,8 +396,9 @@ class DistUpgradeQuirks(object):
         if "libgl1-mesa-dri" in self.controller.cache:
             pkg = self.controller.cache["libgl1-mesa-dri"]
             # the version from the compiz repo has a "6.5.1+cvs20060824" ver
-            if (pkg.candidateVersion == pkg.installedVersion and
-                "+cvs2006" in pkg.candidateVersion):
+            if (pkg.candidate is not None and pkg.installed is not None and
+                pkg.candidate.version == pkg.installed.version and
+                "+cvs2006" in pkg.candidate.version):
                 for ver in pkg._pkg.VersionList:
                     # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
                     if "~2006" in ver.VerStr:
@@ -752,7 +754,7 @@ class DistUpgradeQuirks(object):
             depcache = self.controller.cache._depcache
             if (pkg.name.startswith("language-support-translations") and
                 pkg.is_installed):
-                for dp_or in pkg.installedDependencies:
+                for dp_or in pkg.installed.dependencies:
                     for dpname in dp_or.or_dependencies:
                         dp = self.controller.cache[dpname.name]
                         if dp.is_installed and depcache.IsAutoInstalled(dp._pkg):

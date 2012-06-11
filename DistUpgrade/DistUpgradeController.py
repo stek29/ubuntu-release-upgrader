@@ -524,7 +524,7 @@ class DistUpgradeController(object):
                      len(self.cache[pkgname].candidate.origins) == 1 and
                      self.cache[pkgname].candidate.origins[0].archive == "now")
                    ):
-                    logging.debug("BaseMetaPkg '%s' has no candidateOrigin" % pkgname)
+                    logging.debug("BaseMetaPkg '%s' has no candidate.origins" % pkgname)
                     try:
                         distro = get_distro()
                         distro.get_sources(self.sources)
@@ -1295,7 +1295,7 @@ class DistUpgradeController(object):
                     logging.error("_checkDep: '%s' not in cache" % depname)
                     return False
                 inst = self.cache[depname]
-                instver = inst.installedVersion
+                instver = getattr(inst.installed, "version", None)
                 if (instver != None and
                     apt_pkg.CheckDep(instver,oper,ver) == True):
                     return True

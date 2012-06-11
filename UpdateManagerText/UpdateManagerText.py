@@ -47,7 +47,7 @@ class UpdateManagerText(object):
         # FIXME: better progress than the current suspend/resume screen thing
         self.screen.suspend()
         if not self.DEBUG:
-            apt_pkg.PkgSystemLock()
+            apt_pkg.pkgsystem_lock()
         self.openCache()
         print(_("Building Updates List"))
         self.fillstore()

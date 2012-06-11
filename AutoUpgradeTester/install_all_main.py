@@ -61,7 +61,7 @@ print("Download: ")
 pm = apt_pkg.PackageManager(cache._depcache)
 fetcher = apt_pkg.Acquire()
 pm.get_archives(fetcher, cache._list, cache._records)
-print(apt_pkg.size_to_str(fetcher.FetchNeeded))
+print(apt_pkg.size_to_str(fetcher.fetch_needed))
 print("Total space: ", apt_pkg.size_to_str(cache._depcache.usr_size))
 
 res = False

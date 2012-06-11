@@ -404,8 +404,8 @@ class DistUpgradeQuirks(object):
                     if "~2006" in ver.ver_str:
                         # ensure that it is from a trusted repo
                         for (VerFileIter, index) in ver.file_list:
-                            indexfile = self.controller.cache._list.FindIndex(VerFileIter)
-                            if indexfile and indexfile.IsTrusted:
+                            indexfile = self.controller.cache._list.find_index(VerFileIter)
+                            if indexfile and indexfile.is_trusted:
                                 logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
                                 self.controller.cache._depcache.set_candidate_ver(pkg._pkg, ver)
                                 break

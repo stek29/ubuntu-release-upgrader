@@ -37,7 +37,7 @@ from hashlib import md5
 from .utils import lsmod, get_arch
 
 from .DistUpgradeGettext import gettext as _
-from computerjanitor.plugin import PluginManager
+from janitor.plugincore.manager import PluginManager
 
 class DistUpgradeQuirks(object):
     """
@@ -366,7 +366,8 @@ class DistUpgradeQuirks(object):
                 not pkg.marked_upgrade):
                 basepkg = "python-"+pkg.name[len("python2.4-"):]
                 if (basepkg in self.controller.cache and
-                    self.controller.cache[basepkg].candidateDownloadable and
+                    self.controller.cache[basepkg].candidate and
+                    self.controller.cache[basepkg].candidate.downloadable and
                     not self.controller.cache[basepkg].marked_install):
                     try:
                         self.controller.cache.mark_install(basepkg,
@@ -385,7 +386,7 @@ class DistUpgradeQuirks(object):
         # deal with held-backs that are unneeded
         for pkgname in ["hpijs", "bzr", "tomboy"]:
             if (pkgname in self.controller.cache and self.controller.cache[pkgname].is_installed and
-                self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].marked_upgrade):
+                self.controller.cache[pkgname].is_upgradable and not self.controller.cache[pkgname].marked_upgrade):
                 try:
                     self.controller.cache.mark_install(pkgname,"%s quirk upgrade rule" % pkgname)
                 except SystemError as e:
@@ -395,17 +396,18 @@ class DistUpgradeQuirks(object):
         if "libgl1-mesa-dri" in self.controller.cache:
             pkg = self.controller.cache["libgl1-mesa-dri"]
             # the version from the compiz repo has a "6.5.1+cvs20060824" ver
-            if (pkg.candidateVersion == pkg.installedVersion and
-                "+cvs2006" in pkg.candidateVersion):
-                for ver in pkg._pkg.VersionList:
+            if (pkg.candidate is not None and pkg.installed is not None and
+                pkg.candidate.version == pkg.installed.version and
+                "+cvs2006" in pkg.candidate.version):
+                for ver in pkg._pkg.version_list:
                     # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
-                    if "~2006" in ver.VerStr:
+                    if "~2006" in ver.ver_str:
                         # ensure that it is from a trusted repo
-                        for (VerFileIter, index) in ver.FileList:
-                            indexfile = self.controller.cache._list.FindIndex(VerFileIter)
-                            if indexfile and indexfile.IsTrusted:
+                        for (VerFileIter, index) in ver.file_list:
+                            indexfile = self.controller.cache._list.find_index(VerFileIter)
+                            if indexfile and indexfile.is_trusted:
                                 logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
-                                self.controller.cache._depcache.SetCandidateVer(pkg._pkg, ver)
+                                self.controller.cache._depcache.set_candidate_ver(pkg._pkg, ver)
                                 break
                                     
         # deal with general if $foo is installed, install $bar
@@ -720,7 +722,7 @@ class DistUpgradeQuirks(object):
                     # mark mysql-{server,client}-5.0 as manual install (#453513)
                     depcache = self.controller.cache._depcache
                     for pkg in ["mysql-server-5.0", "mysql-client-5.0"]:
-                        if pkg.is_installed and depcache.IsAutoInstalled(pkg._pkg):
+                        if pkg.is_installed and depcache.is_auto_installed(pkg._pkg):
                             logging.debug("marking '%s' manual installed" % pkg.name)
                             autoInstDeps = False
                             fromUser = True
@@ -752,10 +754,10 @@ class DistUpgradeQuirks(object):
             depcache = self.controller.cache._depcache
             if (pkg.name.startswith("language-support-translations") and
                 pkg.is_installed):
-                for dp_or in pkg.installedDependencies:
+                for dp_or in pkg.installed.dependencies:
                     for dpname in dp_or.or_dependencies:
                         dp = self.controller.cache[dpname.name]
-                        if dp.is_installed and depcache.IsAutoInstalled(dp._pkg):
+                        if dp.is_installed and depcache.is_auto_installed(dp._pkg):
                             logging.debug("marking '%s' manual installed" % dp.name)
                             autoInstDeps = False
                             fromUser = True

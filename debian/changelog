@@ -1,9 +1,49 @@
 update-manager (1:0.163) UNRELEASED; urgency=low
 
+  [ Colin Watson ]
   * Isolate tests from local configuration in
     /etc/update-manager/release-upgrades.d/.
   * Use Python attributes rather than GObject.get_data and GObject.set_data,
     which have been removed upstream (LP: #1009859).
+  * Switch default view class to Gtk3 and replace python-gobject dependency
+    with python-gi.
+  * Port away from old-style apt.Package candidateFoo and installedFoo
+    properties, preferring candidate.foo and installed.foo.  In a number of
+    cases we have to check whether candidate/installed is non-None first.
+  * Use apt_pkg.version_compare rather than apt_pkg.VersionCompare.
+  * Use apt_pkg.uri_to_filename rather than apt_pkg.URItoFileName.
+  * Use apt_pkg.TagFile (and related new-style API) rather than
+    apt_pkg.ParseTagFile.
+  * Use apt_pkg.PackageManager rather than apt_pkg.GetPackageManager.
+  * Use apt_pkg.Acquire rather than apt_pkg.GetAcquire.
+  * Use mark_foo/marked_foo rather than markFoo/markedFoo.
+  * Use apt_pkg.ActionGroup rather than apt_pkg.GetPkgActionGroup.
+  * Use apt_pkg.ProblemResolver rather than apt_pkg.GetPkgProblemResolver.
+  * Use apt_pkg.read_config_file rather than apt_pkg.ReadConfigFile.
+  * Use new spelling of apt_pkg.DepCache methods.
+  * Rename several local cache methods to PEP-8 style to avoid showing up in
+    the output of /usr/share/python-apt/migrate-0.8.py.
+  * Use apt_pkg.size_to_str rather than apt_pkg.SizeToStr.
+  * Use apt_pkg.PackageManager.get_archives rather than
+    apt_pkg.PackageManager.GetArchives.
+  * Use apt_pkg.Acquire.fetch_needed rather than
+    apt_pkg.Acquire.FetchNeeded.
+  * Use new spelling of apt_pkg.Package/Version/Dependency methods.
+  * Use apt_pkg.pkgsystem_lock rather than apt_pkg.PkgSystemLock.
+  * Use new spelling of apt_pkg dependency parsing methods.
+  * Use new spelling of apt_pkg.SourceList methods.
+  * Bump python-apt (build-)dependency to >= 0.8.0.
+
+  [ Adam Conrad ]
+  * Merge branch from Michael Terry to drop auto-upgrade-tester
+    from update-manager and move it into its own source package
+
+  [ Barry Warsaw ]
+  * Begin refactoring of Computer Janitor code by renaming and
+    re-situating all of it to janitor/plugincore.  This will eventually be
+    removed from here into its own separate branch.
+  * Merge the temporary Python 3 sprint branch back into trunk, and close
+    the py3 sprint branch.
 
  -- Colin Watson <cjwatson@ubuntu.com>  Mon, 11 Jun 2012 11:46:37 +0100
 

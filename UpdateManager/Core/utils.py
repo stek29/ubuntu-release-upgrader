@@ -215,7 +215,7 @@ def get_dist_description():
   # support debug overwrite
   desc = os.environ.get("META_RELEASE_FAKE_DESCRIPTION")
   if desc:
-      logging.warn("using fake release description '%s' (because of META_RELEASE_FAKE_DESCRIPTION environment) " % dist)
+      logging.warn("using fake release description '%s' (because of META_RELEASE_FAKE_DESCRIPTION environment) " % desc)
       return desc
   # then check the real one
   from subprocess import Popen, PIPE

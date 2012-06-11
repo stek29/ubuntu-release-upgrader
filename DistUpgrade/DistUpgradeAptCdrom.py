@@ -153,7 +153,7 @@ class AptCdrom(object):
             targetdir=apt_pkg.config.find_dir("Dir::State::lists")
         diskname = self._readDiskName()
         for f in translations:
-            fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
+            fname = apt_pkg.uri_to_filename("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
             outf = os.path.join(targetdir,os.path.splitext(fname)[0])
             if f.endswith(".gz"):
                 g=gzip.open(f)
@@ -174,7 +174,7 @@ class AptCdrom(object):
         # CopyPackages()
         diskname = self._readDiskName()
         for f in packages:
-            fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
+            fname = apt_pkg.uri_to_filename("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
             outf = os.path.join(targetdir,os.path.splitext(fname)[0])
             if f.endswith(".gz"):
                 g=gzip.open(f)
@@ -228,7 +228,7 @@ class AptCdrom(object):
             releasef = os.path.splitext(sig)[0]
             # copy both Release and Release.gpg
             for f in (sig, releasef):
-                fname = apt_pkg.URItoFileName("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
+                fname = apt_pkg.uri_to_filename("cdrom:[%s]/%s" % (diskname,f[f.find("dists"):]))
                 shutil.copy(f,os.path.join(targetdir,fname))
         return True
 

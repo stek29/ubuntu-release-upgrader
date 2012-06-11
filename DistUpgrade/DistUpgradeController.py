@@ -575,7 +575,7 @@ class DistUpgradeController(object):
                 listdir = apt_pkg.config.find_dir("Dir::State::lists")
                 if not os.path.exists("%s/%s%s_%s_%s" % 
                                       (listdir,
-                                       apt_pkg.URItoFileName(entry.uri),
+                                       apt_pkg.uri_to_filename(entry.uri),
                                        "dists",
                                        entry.dist,
                                        "Release")):

@@ -145,7 +145,7 @@ class KDEAcquireProgressAdapter(apt.progress.base.AcquireProgress):
         if current_item > self.total_items:
             current_item = self.total_items
         if self.current_cps > 0:
-            self.label.setText(_("Downloading additional package files...") + _("File %s of %s at %sB/s") % (self.current_items,self.total_items,apt_pkg.SizeToStr(self.current_cps)))
+            self.label.setText(_("Downloading additional package files...") + _("File %s of %s at %sB/s") % (self.current_items,self.total_items,apt_pkg.size_to_str(self.current_cps)))
         else:
             self.label.setText(_("Downloading additional package files...") + _("File %s of %s") % (self.current_items,self.total_items))
         KApplication.kApplication().processEvents()

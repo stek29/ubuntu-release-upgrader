@@ -655,7 +655,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
                                             [parent_text % len(details_list)])
             for pkg in details_list:
               self.details_list.append(node, ["<b>%s</b> - %s" % (
-                    pkg.name, glib.markup_escape_text(pkg.summary))])
+                    pkg.name, glib.markup_escape_text(getattr(pkg.candidate, "summary", None)))])
         # prepare dialog
         self.dialog_changes.realize()
         self.dialog_changes.set_transient_for(self.window_main)

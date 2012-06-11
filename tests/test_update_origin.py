@@ -52,9 +52,9 @@ class testOriginMatcher(unittest.TestCase):
         matcher = ul.initMatcher("lucid")
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
-            self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
+            self.assertEqual(self.cache.match_package_origin(pkg, matcher),
                              matcher[("lucid-security","Ubuntu")],
-                             "pkg '%s' is not in lucid-security but in '%s' instead" % (pkg.name, self.cache.matchPackageOrigin(pkg, matcher).description))
+                             "pkg '%s' is not in lucid-security but in '%s' instead" % (pkg.name, self.cache.match_package_origin(pkg, matcher).description))
         
 
     def testOriginMatcherWithVersionInUpdatesAndSecurity(self):
@@ -69,11 +69,11 @@ class testOriginMatcher(unittest.TestCase):
                 continue
             # check if the candidate origin is -updates (but not also
             # -security, often packages are available in both)
-            if pkg.candidateOrigin:
+            if pkg.candidate is not None:
                 # ensure that the origin is not -updates and -security
                 is_in_updates = False
                 is_in_security = False
-                for v in pkg.candidateOrigin:
+                for v in pkg.candidate.origins:
                     # test if the package is not in both updates and secu
                     if v.archive == "lucid-updates":
                         is_in_updates = True
@@ -91,7 +91,7 @@ class testOriginMatcher(unittest.TestCase):
         matcher = ul.initMatcher("lucid")
         for pkgname in test_pkgs:
             pkg = self.cache[pkgname]
-            self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
+            self.assertEqual(self.cache.match_package_origin(pkg, matcher),
                              matcher[("lucid-security","Ubuntu")],
                              "package '%s' from lucid-updates contains also a (not yet installed) security updates, but it is not labeled as such" % pkg.name)
 
@@ -114,9 +114,10 @@ class testOriginMatcher(unittest.TestCase):
             pkg = self.cache[pkgname]
             self.assertNotEqual(None, pkg._pkg.current_ver,
                                 "no package '%s' installed" % pkg.name)
-            self.assertEqual(self.cache.matchPackageOrigin(pkg, matcher),
+            candidate_version = getattr(pkg.candidate, "version", None)
+            self.assertEqual(self.cache.match_package_origin(pkg, matcher),
                              matcher[("lucid-updates", "Ubuntu")],
-                             "package '%s' (%s) from lucid-updates is labeld '%s' even though we have marked this version as installed already" % (pkg.name, pkg.candidateVersion, self.cache.matchPackageOrigin(pkg, matcher).description))
+                             "package '%s' (%s) from lucid-updates is labelled '%s' even though we have marked this version as installed already" % (pkg.name, candidate_version, self.cache.match_package_origin(pkg, matcher).description))
 
 
 if __name__ == "__main__":

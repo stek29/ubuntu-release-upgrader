@@ -29,7 +29,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       bad = set()
       bad.add(os.path.basename(pkg).split("_")[0])
       # FIXME: just run apt-cache rdepends $pkg here?
-      #        or use apt.Package.candidateDependencies ?
+      #        or use apt.Package.candidate.dependencies ?
       #        or calculate the set again? <- BEST!
       for name in bad:
          new_best = open("best.txt").read().replace(name+"\n","")

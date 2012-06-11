@@ -248,6 +248,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
     def test_private_ppa_transition(self):
+        if "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ:
+            del os.environ["RELEASE_UPRADER_ALLOW_THIRD_PARTY"]
         shutil.copy(
             os.path.join(self.testdir,"sources.list.commercial-ppa-uploaders"),
             os.path.join(self.testdir,"sources.list"))
@@ -255,6 +257,7 @@ deb http://archive.canonical.com/ubuntu gutsy partner
             "Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
+        d.config.set("Sources","AllowThirdParty", "False")
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)

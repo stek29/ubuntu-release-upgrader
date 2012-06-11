@@ -16,17 +16,6 @@ def plugins():
             for name in os.listdir('janitor/plugincore/plugins')
             if name.endswith('_plugin.py') and name not in disabled]
 
-def profiles():
-    profiles = []
-    # FIXME: ship with a small collection of profiles for now
-    #for d in os.listdir("AutoUpgradeTester/profile/"):
-    for d in ["server", "ubuntu", "kubuntu", "main-all", 
-              "lts-server", "lts-ubuntu", "lts-kubuntu"]:
-        base="AutoUpgradeTester/profile/"
-        cfgs = [f for f in glob.glob("%s/%s/*" % (base,d)) if os.path.isfile(f)]
-        profiles.append(("share/auto-upgrade-tester/profiles/"+d,cfgs))
-    return profiles
-
 setup(name='update-manager',
       version='0.56',
       ext_modules=[Extension('UpdateManager.fdsend',
@@ -37,8 +26,7 @@ setup(name='update-manager',
                 'UpdateManager.Core',
                 'UpdateManagerText',
                 'DistUpgrade',
-                'janitor',
-                'AutoUpgradeTester',
+                #'computerjanitor',
                 ],
       package_dir={
                    '': '.',
@@ -51,7 +39,6 @@ setup(name='update-manager',
                "do-release-upgrade", 
                "kubuntu-devel-release-upgrade", 
                "check-new-release-gtk",
-               "AutoUpgradeTester/auto-upgrade-tester",
                ],
       data_files=[
                   ('share/update-manager/gtkbuilder',
@@ -69,11 +56,9 @@ setup(name='update-manager',
                    ['data/update-manager.convert']),
                   ('../etc/update-manager/',
                    ['data/release-upgrades', 'data/meta-release']),
-                  ('share/computerjanitor/plugins',
-                   plugins()),
-                  ('share/auto-upgrade-tester/post_upgrade_tests',
-                   glob.glob("AutoUpgradeTester/post_upgrade_tests/*")),
-                  ]+profiles(),
+                  ## ('share/computerjanitor/plugins',
+                  ##  plugins()),
+                  ],
       cmdclass = { "build" : build_extra.build_extra,
                    "build_i18n" :  build_i18n.build_i18n,
                    "build_help" :  build_help.build_help,

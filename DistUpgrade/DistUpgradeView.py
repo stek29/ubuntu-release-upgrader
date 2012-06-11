@@ -369,7 +369,7 @@ class DistUpgradeView(object):
           msg +=" "
         if downloadSize > 0:
           msg += _("\n\nYou have to download a total of %s. ") %\
-              apt_pkg.SizeToStr(downloadSize)
+              apt_pkg.size_to_str(downloadSize)
           msg += self.getAcquireProgress().estimatedDownloadTime(downloadSize)
         if ((pkgs_upgrade + pkgs_inst) > 0) and ((pkgs_upgrade + pkgs_inst + pkgs_remove) > 100):
           if self.getAcquireProgress().isDownloadSpeedEstimated():

@@ -1200,11 +1200,11 @@ class MyCache(apt.Cache):
         required_list = {}
         for dir in fs_free:
             if fs_free[dir].free < 0:
-                free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
+                free_at_least = apt_pkg.size_to_str(float(abs(fs_free[dir].free)+1))
                 # make_fs_id ensures we only get stuff on the same
                 # mountpoint, so we report the requirements only once
                 # per mountpoint
-                required_list[make_fs_id(dir)] = FreeSpaceRequired(apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least)
+                required_list[make_fs_id(dir)] = FreeSpaceRequired(apt_pkg.size_to_str(fs_free[dir].need), make_fs_id(dir), free_at_least)
         # raise exception if free space check fails
         if len(required_list) > 0:
             logging.error("Not enough free space: %s" % [str(i) for i in required_list])

@@ -205,7 +205,7 @@ class AptCdrom(object):
             if not (ret == 0):
                 return False
             # now do the hash sum checks
-            t=apt_pkg.ParseTagFile(open(releasef))
+            t=apt_pkg.TagFile(open(releasef))
             t.step()
             for entry in t.section["SHA256"].split("\n"):
                 (hash,size,name) = entry.split()

@@ -12,7 +12,10 @@ import apt_pkg
 import unittest
 from DistUpgrade.DistUpgradeController import DistUpgradeController
 from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
+from DistUpgrade import DistUpgradeConfigParser
 import logging
+
+DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
 class TestSourcesListUpdate(unittest.TestCase):
 

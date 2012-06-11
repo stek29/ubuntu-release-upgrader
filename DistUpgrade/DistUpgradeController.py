@@ -1285,7 +1285,7 @@ class DistUpgradeController(object):
 
     def _checkDep(self, depstr):
         " check if a given depends can be satisfied "
-        for or_group in apt_pkg.ParseDepends(depstr):
+        for or_group in apt_pkg.parse_depends(depstr):
             logging.debug("checking: '%s' " % or_group)
             for dep in or_group:
                 depname = dep[0]
@@ -1297,7 +1297,7 @@ class DistUpgradeController(object):
                 inst = self.cache[depname]
                 instver = getattr(inst.installed, "version", None)
                 if (instver != None and
-                    apt_pkg.CheckDep(instver,oper,ver) == True):
+                    apt_pkg.check_dep(instver,oper,ver) == True):
                     return True
         logging.error("depends '%s' is not satisfied" % depstr)
         return False

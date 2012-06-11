@@ -62,7 +62,7 @@ pm = apt_pkg.PackageManager(cache._depcache)
 fetcher = apt_pkg.Acquire()
 pm.GetArchives(fetcher, cache._list, cache._records)
 print(apt_pkg.SizeToStr(fetcher.FetchNeeded))
-print("Total space: ", apt_pkg.SizeToStr(cache._depcache.UsrSize))
+print("Total space: ", apt_pkg.SizeToStr(cache._depcache.usr_size))
 
 res = False
 current = 0

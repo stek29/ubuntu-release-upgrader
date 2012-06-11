@@ -162,7 +162,7 @@ This can be caused by:
                     need_refresh = True
                     pkg.mark_install()
             # fixup any problems
-            if self.cache._depcache.BrokenCount:
+            if self.cache._depcache.broken_count:
                 need_refresh = True
                 Fix = apt_pkg.ProblemResolver(self.cache._depcache)
                 Fix.resolve_by_keep()

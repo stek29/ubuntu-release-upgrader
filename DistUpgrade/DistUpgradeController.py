@@ -1526,7 +1526,7 @@ class DistUpgradeController(object):
         for pkgname in backportslist:
             pkg = self.cache[pkgname]
             # look for the right version (backport)
-            ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
+            ver = self.cache._depcache.get_candidate_ver(pkg._pkg)
             if not ver:
                 logging.error("No candidate for '%s'" % pkgname)
                 os.unlink(outpath)

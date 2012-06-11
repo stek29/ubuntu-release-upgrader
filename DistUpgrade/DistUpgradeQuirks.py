@@ -386,7 +386,7 @@ class DistUpgradeQuirks(object):
         # deal with held-backs that are unneeded
         for pkgname in ["hpijs", "bzr", "tomboy"]:
             if (pkgname in self.controller.cache and self.controller.cache[pkgname].is_installed and
-                self.controller.cache[pkgname].isUpgradable and not self.controller.cache[pkgname].marked_upgrade):
+                self.controller.cache[pkgname].is_upgradable and not self.controller.cache[pkgname].marked_upgrade):
                 try:
                     self.controller.cache.mark_install(pkgname,"%s quirk upgrade rule" % pkgname)
                 except SystemError as e:
@@ -407,7 +407,7 @@ class DistUpgradeQuirks(object):
                             indexfile = self.controller.cache._list.FindIndex(VerFileIter)
                             if indexfile and indexfile.IsTrusted:
                                 logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")
-                                self.controller.cache._depcache.SetCandidateVer(pkg._pkg, ver)
+                                self.controller.cache._depcache.set_candidate_ver(pkg._pkg, ver)
                                 break
                                     
         # deal with general if $foo is installed, install $bar
@@ -722,7 +722,7 @@ class DistUpgradeQuirks(object):
                     # mark mysql-{server,client}-5.0 as manual install (#453513)
                     depcache = self.controller.cache._depcache
                     for pkg in ["mysql-server-5.0", "mysql-client-5.0"]:
-                        if pkg.is_installed and depcache.IsAutoInstalled(pkg._pkg):
+                        if pkg.is_installed and depcache.is_auto_installed(pkg._pkg):
                             logging.debug("marking '%s' manual installed" % pkg.name)
                             autoInstDeps = False
                             fromUser = True
@@ -757,7 +757,7 @@ class DistUpgradeQuirks(object):
                 for dp_or in pkg.installed.dependencies:
                     for dpname in dp_or.or_dependencies:
                         dp = self.controller.cache[dpname.name]
-                        if dp.is_installed and depcache.IsAutoInstalled(dp._pkg):
+                        if dp.is_installed and depcache.is_auto_installed(dp._pkg):
                             logging.debug("marking '%s' manual installed" % dp.name)
                             autoInstDeps = False
                             fromUser = True

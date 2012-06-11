@@ -297,7 +297,7 @@ class MyCache(apt.Cache):
     def fixBroken(self):
         """ try to fix broken dependencies on the system, may throw
             SystemError when it can't"""
-        return self._depcache.FixBroken()
+        return self._depcache.fix_broken()
 
     def create_snapshot(self):
         """ create a snapshot of the current changes """
@@ -310,7 +310,7 @@ class MyCache(apt.Cache):
                 self.to_remove.append(pkg.name)
 
     def clear(self):
-        self._depcache.Init()
+        self._depcache.init()
 
     def restore_snapshot(self):
         """ restore a snapshot """

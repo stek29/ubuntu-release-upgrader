@@ -140,7 +140,7 @@ if __name__ == "__main__":
 #                                cache["emacspeak"],
 #                                cache["postfix"] ]):
         # clean the cache
-        cache._depcache.Init()
+        cache._depcache.init()
         print("\n\nPackage %s: %i of %i (%f.2)" % (pkg.name, i, len(cache),
                                              float(i)/float(len(cache))*100))
         print("pkgs_tested has %i entries\n\n" % len(pkgs_tested))

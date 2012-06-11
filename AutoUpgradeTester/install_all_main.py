@@ -39,7 +39,7 @@ for pkg in cache:
             if not (pkg.is_installed or blacklisted(pkg.name)):
                 pkg.mark_install()
             new = set([p.name for p in cache if p.marked_install])
-            #if not pkg.markedInstall or len(new) < len(current):
+            #if not pkg.marked_install or len(new) < len(current):
             if not (pkg.is_installed or pkg.marked_install):
                 print("Can't install: %s" % pkg.name)
             if len(current-new) > 0:

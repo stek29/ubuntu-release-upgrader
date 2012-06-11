@@ -166,12 +166,12 @@ if __name__ == "__main__":
 
         # see if we can install/upgrade the pkg
         try:
-            pkg.markInstall()
+            pkg.mark_install()
         except SystemError as e:
-            pkg.markKeep()
-        if not (pkg.markedInstall or pkg.markedUpgrade):
+            pkg.mark_keep()
+        if not (pkg.marked_install or pkg.marked_upgrade):
             print("pkg: %s not installable" % pkg.name)
-            failures.write("%s markInstall()\n " % pkg.name)
+            failures.write("%s mark_install()\n " % pkg.name)
             continue
         
         if not test_downloadable(backend, pkg.name):
@@ -206,7 +206,7 @@ if __name__ == "__main__":
 
         # installation worked, record that we have tested this package
         for pkg in cache:
-            if pkg.markedInstall or pkg.markedUpgrade:
+            if pkg.marked_install or pkg.marked_upgrade:
                 pkgs_tested.add("%s-%s" % (pkg.name, pkg.candidate.version))
         statusfile.flush()
         failures.flush()

@@ -104,7 +104,7 @@ This can be caused by:
             if pkg not in self.checkbox_tree_updates.item2key:
                 continue
             # update based on the status
-            if pkg.markedUpgrade or pkg.markedInstall:
+            if pkg.marked_upgrade or pkg.marked_install:
                 self.checkbox_tree_updates.setEntryValue(pkg, True)
             else:
                 self.checkbox_tree_updates.setEntryValue(pkg, False)
@@ -152,15 +152,15 @@ This can be caused by:
                 descr = self.get_news_and_changelog(pkg)
             # check if it is a wanted package
             selected = self.checkbox_tree_updates.getEntryValue(pkg)[1]
-            marked_install_upgrade = pkg.markedInstall or pkg.markedUpgrade
+            marked_install_upgrade = pkg.marked_install or pkg.marked_upgrade
             if not selected and marked_install_upgrade:
                 need_refresh = True
-                pkg.markKeep()
+                pkg.mark_keep()
             if selected and not marked_install_upgrade:
                 if not (name in self.list.held_back):
                     # FIXME: properly deal with "fromUser" here
                     need_refresh = True
-                    pkg.markInstall()
+                    pkg.mark_install()
             # fixup any problems
             if self.cache._depcache.BrokenCount:
                 need_refresh = True

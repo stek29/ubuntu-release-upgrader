@@ -883,7 +883,7 @@ class MyCache(apt.Cache):
             self[pkg].mark_install()
 
         # every meta-pkg that is installed currently, will be marked
-        # install (that result in a upgrade and removes a markDelete)
+        # install (that result in a upgrade and removes a mark_delete)
         for key in metapkgs:
             try:
                 if (key in self and
@@ -975,7 +975,7 @@ class MyCache(apt.Cache):
         actiongroup
         self.create_snapshot()
         try:
-            self[pkgname].markDelete(purge=purge)
+            self[pkgname].mark_delete(purge=purge)
             self.view.processEvents()
             #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.get_changes():

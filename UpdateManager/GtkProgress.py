@@ -203,7 +203,7 @@ if __name__ == "__main__":
     cache.upgrade()
     pm = apt_pkg.PackageManager(cache._depcache)
     fetcher = apt_pkg.Acquire(acquire_progress)
-    res = cache._fetchArchives(fetcher, pm)
+    res = cache._fetch_archives(fetcher, pm)
     print(res)
     
     

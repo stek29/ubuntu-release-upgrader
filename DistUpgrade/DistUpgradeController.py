@@ -1545,14 +1545,14 @@ class DistUpgradeController(object):
             res = self.cache.commit(self._view.getAcquireProgress(),
                                     self._view.getInstallProgress(self.cache))
         except IOError as e:
-            logging.error("fetchArchives returned '%s'" % e)
+            logging.error("fetch_archives returned '%s'" % e)
             res = False
         except SystemError as e:
-            logging.error("installArchives returned '%s'" % e)
+            logging.error("install_archives returned '%s'" % e)
             res = False
 
         if res == False:
-            logging.warning("_fetchArchives for backports returned False")
+            logging.warning("_fetch_archives for backports returned False")
 
         # all backports done, remove the pre-requirests.list file again
         try:

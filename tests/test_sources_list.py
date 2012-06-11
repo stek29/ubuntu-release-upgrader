@@ -260,7 +260,6 @@ deb http://archive.canonical.com/ubuntu gutsy partner
             "Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v,datadir=self.testdir)
-        d.config.set("Sources","AllowThirdParty", "False")
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)

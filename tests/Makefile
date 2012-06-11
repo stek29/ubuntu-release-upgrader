@@ -8,8 +8,12 @@ check:
 	while read file; do \
 	    if [ -x $$file ]; then \
 		echo "*** RUNNING $$file"; \
-	    	python $$file ; \
-	    fi \
+		if grep -q Gtk $$file; then \
+			xvfb-run python $$file; \
+		else \
+	    		python $$file ; \
+		fi; \
+	    fi; \
 	done
 
 mago_test:

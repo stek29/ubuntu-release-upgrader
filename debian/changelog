@@ -3,6 +3,8 @@ update-manager (1:0.163) UNRELEASED; urgency=low
   [ Colin Watson ]
   * Isolate tests from local configuration in
     /etc/update-manager/release-upgrades.d/.
+  * Use Python attributes rather than GObject.get_data and GObject.set_data,
+    which have been removed upstream (LP: #1009859).
   * Switch default view class to Gtk3 and replace python-gobject dependency
     with python-gi.
   * Port away from old-style apt.Package candidateFoo and installedFoo

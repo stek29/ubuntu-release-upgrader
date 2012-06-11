@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.DEBUG,
 cache = apt.Cache()
 
 min_version = "0.6.20ubuntu13"
-if apt_pkg.VersionCompare(getattr(cache["python-apt"].installed, "version", "0"), min_version) < 0:
+if apt_pkg.version_compare(getattr(cache["python-apt"].installed, "version", "0"), min_version) < 0:
     logging.error("Need at least python-apt version %s " % min_version)
     sys.exit(1)
 

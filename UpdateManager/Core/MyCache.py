@@ -157,7 +157,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         for ver in pkg._pkg.version_list:
             # discard is < than installed ver
             if (inst_ver and
-                apt_pkg.VersionCompare(ver.ver_str, inst_ver.ver_str) <= 0):
+                apt_pkg.version_compare(ver.ver_str, inst_ver.ver_str) <= 0):
                 #print("skipping '%s' " % ver.ver_str)
                 continue
             # check if we have a match
@@ -252,11 +252,11 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                 # for NEWS.Debian we do require the changelogver > installed
                 if strict_versioning:
                     if (installed and 
-                        apt_pkg.VersionCompare(changelogver,installed)<0):
+                        apt_pkg.version_compare(changelogver,installed)<0):
                         break
                 else:
                     if (installed and 
-                        apt_pkg.VersionCompare(changelogver,installed)==0):
+                        apt_pkg.version_compare(changelogver,installed)==0):
                         break
             alllines = alllines + line
         return alllines

@@ -1531,8 +1531,8 @@ class DistUpgradeController(object):
                 logging.error("No candidate for '%s'" % pkgname)
                 os.unlink(outpath)
                 return False
-            if ver.FileList == None:
-                logging.error("No ver.FileList for '%s'" % pkgname)
+            if ver.file_list == None:
+                logging.error("No ver.file_list for '%s'" % pkgname)
                 os.unlink(outpath)
                 return False
             logging.debug("marking '%s' for install" % pkgname)

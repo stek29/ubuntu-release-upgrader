@@ -409,14 +409,15 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # set descr
     pkg = model.get_value(iter, LIST_PKG)
-    if pkg == None or pkg.description == None:
+    if (pkg is None or pkg.candidate is None or
+        pkg.candidate.description is None):
       changes_buffer = self.textview_changes.get_buffer()
       changes_buffer.set_text("")
       desc_buffer = self.textview_descr.get_buffer()
       desc_buffer.set_text("")
       self.notebook_details.set_sensitive(False)
       return
-    long_desc = pkg.description
+    long_desc = pkg.candidate.description
     self.notebook_details.set_sensitive(True)
     # do some regular expression magic on the description
     # Add a newline before each bullet
@@ -443,7 +444,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     # (even if currently disconnected)
     if name in self.cache.all_changes:
       changes = self.cache.all_changes[name]
-      srcpkg = self.cache[name].sourcePackageName
+      srcpkg = self.cache[name].candidate.source_name
       self.set_changes_buffer(changes_buffer, changes, name, srcpkg)
     # if not connected, do not even attempt to get the changes
     elif not self.connected:
@@ -485,7 +486,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         return
     # display NEWS.Debian first, then the changelog
     changes = ""
-    srcpkg = self.cache[name].sourcePackageName
+    srcpkg = self.cache[name].candidate.source_name
     if name in self.cache.all_news:
         changes += self.cache.all_news[name]
     if name in self.cache.all_changes:
@@ -1053,13 +1054,13 @@ class UpdateManager(SimpleGtkbuilderApp):
           name = xml.sax.saxutils.escape(pkg.name)
           if not pkg.is_installed:
               name += _(" (New install)")
-          summary = xml.sax.saxutils.escape(pkg.summary)
+          summary = xml.sax.saxutils.escape(getattr(pkg.candidate, "summary", None))
           if self.summary_before_name:
               contents = "%s\n<small>%s</small>" % (summary, name)
           else:
               contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           #TRANSLATORS: the b stands for Bytes
-          size = _("(Size: %s)") % humanize_size(pkg.packageSize)
+          size = _("(Size: %s)") % humanize_size(getattr(pkg.candidate, "size", 0))
           installed_version = getattr(pkg.installed, "version", None)
           candidate_version = getattr(pkg.candidate, "version", None)
           if installed_version is not None:

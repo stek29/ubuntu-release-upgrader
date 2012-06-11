@@ -399,11 +399,11 @@ class DistUpgradeQuirks(object):
             if (pkg.candidate is not None and pkg.installed is not None and
                 pkg.candidate.version == pkg.installed.version and
                 "+cvs2006" in pkg.candidate.version):
-                for ver in pkg._pkg.VersionList:
+                for ver in pkg._pkg.version_list:
                     # the "official" edgy version has "6.5.1~20060817-0ubuntu3"
-                    if "~2006" in ver.VerStr:
+                    if "~2006" in ver.ver_str:
                         # ensure that it is from a trusted repo
-                        for (VerFileIter, index) in ver.FileList:
+                        for (VerFileIter, index) in ver.file_list:
                             indexfile = self.controller.cache._list.FindIndex(VerFileIter)
                             if indexfile and indexfile.IsTrusted:
                                 logging.info("Forcing downgrade of libgl1-mesa-dri for xgl.compz.info installs")

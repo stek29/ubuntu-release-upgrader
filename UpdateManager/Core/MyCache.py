@@ -183,7 +183,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         pkg = self[name]
 
         # get the src package name
-        srcpkg = pkg.sourcePackageName
+        srcpkg = pkg.candidate.source_name
 
         # assume "main" section 
         src_section = "main"
@@ -340,7 +340,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             self._fetch_changelog_for_third_party_package(name)
             return
         # fixup epoch handling version
-        srcpkg = self[name].sourcePackageName
+        srcpkg = self[name].candidate.source_name
         srcver_epoch = self[name].candidate.version.replace(':', '%3A')
         try:
             changelog = self._get_changelog_or_news(name, "changelog")

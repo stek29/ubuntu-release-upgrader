@@ -147,7 +147,7 @@ This can be caused by:
             need_refresh = False
             name = pkg.name
             if self.options.show_description:
-                descr = pkg.description
+                descr = getattr(pkg.candidate, "description", None)
             else:
                 descr = self.get_news_and_changelog(pkg)
             # check if it is a wanted package

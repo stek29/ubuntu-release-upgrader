@@ -283,7 +283,7 @@ class MyCache(apt.Cache):
         if useCandidate:
             ver = self._depcache.get_candidate_ver(pkg._pkg)
         else:
-            ver = pkg._pkg.CurrentVer
+            ver = pkg._pkg.current_ver
         if ver == None:
             logging.warning("no version information for '%s' (useCandidate=%s)" % (pkg.name, useCandidate))
             return False
@@ -617,7 +617,7 @@ class MyCache(apt.Cache):
         for pkg in self:
             # WORKADOUND bug on the CD/python-apt #253255
             ver = pkg._pcache._depcache.get_candidate_ver(pkg._pkg)
-            if ver and ver.Priority == 0:
+            if ver and ver.priority == 0:
                 logging.error("Package %s has no priority set" % pkg.name)
                 continue
             if (pkg.candidate and pkg.candidate.downloadable and
@@ -625,7 +625,7 @@ class MyCache(apt.Cache):
                 not pkg.name in removeEssentialOk and
                 # ignore multiarch priority required packages
                 not ":" in pkg.name and
-                pkg.priority in need):
+                pkg.candidate.priority in need):
                 self.mark_install(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
 
     # FIXME: make this a decorator (just like the withResolverLog())
@@ -779,7 +779,7 @@ class MyCache(apt.Cache):
             if pkg.marked_delete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
                 raise SystemError(_("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name)
-            if pkg.marked_delete and (pkg._pkg.Essential == True and
+            if pkg.marked_delete and (pkg._pkg.essential == True and
                                      not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's an ESSENTIAL package", pkg.name)
                 raise SystemError(_("The essential package '%s' is marked for removal.") % pkg.name)
@@ -806,7 +806,7 @@ class MyCache(apt.Cache):
             print("No candidate ver: ", pkg.name)
             return False
         if ver.file_list is None:
-            print("No FileList for: %s " % self._pkg.Name())
+            print("No file_list for: %s " % self._pkg.name())
             return False
         f, index = ver.file_list.pop(0)
         pkg._pcache._records.lookup((f, index))

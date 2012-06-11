@@ -196,8 +196,8 @@ class DistUpgradeController(object):
         if self.cache is None:
             self.quirks.run("PreCacheOpen")
         else:
-            self.cache.releaseLock()
-            self.cache.unlockListsDir()
+            self.cache.release_lock()
+            self.cache.unlock_lists_dir()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -420,12 +420,12 @@ class DistUpgradeController(object):
         except SystemError as e:
             logging.error("openCache() failed: '%s'" % e)
             return False
-        if not self.cache.sanityCheck(self._view):
+        if not self.cache.sanity_check(self._view):
             return False
 
         # now figure out if we need to go into desktop or 
         # server mode - we use a heuristic for this
-        self.serverMode = self.cache.needServerMode()
+        self.serverMode = self.cache.need_server_mode()
         if self.serverMode:
             os.environ["RELEASE_UPGRADE_MODE"] = "server"
         else:
@@ -810,12 +810,12 @@ class DistUpgradeController(object):
         # downloadable
         logging.debug("doPostInitialUpdate")
         self.quirks.run("PostInitialUpdate")
-        if len(self.cache.reqReinstallPkgs) > 0:
+        if len(self.cache.req_reinstall_pkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
-            self.cache.fixReqReinst(self._view)
+            self.cache.fix_req_reinst(self._view)
             self.openCache()
-        if len(self.cache.reqReinstallPkgs) > 0:
-            reqreinst = self.cache.reqReinstallPkgs
+        if len(self.cache.req_reinstall_pkgs) > 0:
+            reqreinst = self.cache.req_reinstall_pkgs
             header = ngettext("Package in inconsistent state",
                               "Packages in inconsistent state",
                               len(reqreinst))
@@ -942,7 +942,7 @@ class DistUpgradeController(object):
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,
                                         self.installed_demotions,
-                                        self.cache.requiredDownload)
+                                        self.cache.required_download)
         return res
 
     def _disableAptCronJob(self):
@@ -1464,7 +1464,7 @@ class DistUpgradeController(object):
                 logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
             # now install them
-            self.cache.releaseLock()
+            self.cache.release_lock()
             p = subprocess.Popen(
                 ["/usr/bin/dpkg", "-i", ] + glob.glob(p+"*_*.deb"),
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -1475,7 +1475,7 @@ class DistUpgradeController(object):
                 self._view.pulseProgress()
                 time.sleep(0.02)
             self._view.pulseProgress(finished=True)
-            self.cache.getLock()
+            self.cache.get_lock()
             logging.info("installing backport debs exit code '%s'" % res)
             logging.debug("dpkg output:\n%s" % p.communicate()[0])
             if res != 0:
@@ -1655,7 +1655,7 @@ class DistUpgradeController(object):
         # re-check server mode because we got new packages (it may happen
         # that the system had no sources.list entries and therefore no
         # desktop file information)
-        self.serverMode = self.cache.needServerMode()
+        self.serverMode = self.cache.need_server_mode()
         # do it here as we neeed to know if we are in server or client mode
         self.quirks.ensure_recommends_are_installed_on_desktops()
         # now check if we still have some key packages available/downloadable

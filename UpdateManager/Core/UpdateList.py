@@ -89,7 +89,7 @@ class UpdateList(object):
             print("WARNING: upgradable but no candidate.origins?!?: ", pkg.name)
             continue
         # check where the package belongs
-        origin_node = cache.matchPackageOrigin(pkg, self.matcher)
+        origin_node = cache.match_package_origin(pkg, self.matcher)
         if origin_node not in self.pkgs:
           self.pkgs[origin_node] = []
         self.pkgs[origin_node].append(pkg)

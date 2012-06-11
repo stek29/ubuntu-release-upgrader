@@ -505,7 +505,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Deselect All"))
         item_select_none.connect("activate", self.select_none_updgrades)
         menu.append(item_select_none)
-        num_updates = self.cache.installCount
+        num_updates = self.cache.install_count
         if num_updates == 0:
             item_select_none.set_property("sensitive", False)
         item_select_all = Gtk.MenuItem.new_with_mnemonic(_("Select _All"))
@@ -561,10 +561,10 @@ class UpdateManager(SimpleGtkbuilderApp):
           Gtk.main_iteration()
 
   def refresh_updates_count(self):
-      self.button_install.set_sensitive(self.cache.installCount)
+      self.button_install.set_sensitive(self.cache.install_count)
       try:
-          inst_count = self.cache.installCount
-          self.dl_size = self.cache.requiredDownload
+          inst_count = self.cache.install_count
+          self.dl_size = self.cache.required_download
           download_str = ""
           if self.dl_size != 0:
               download_str = _("%s will be downloaded.") % (humanize_size(self.dl_size))
@@ -592,7 +592,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_downsize.show()
           self.vbox_alerts.show()
       except SystemError as e:
-          print("requiredDownload could not be calculated: %s" % e)
+          print("required_download could not be calculated: %s" % e)
           self.label_downsize.set_markup(_("Unknown download size."))
           self.image_downsize.set_sensitive(False)
           self.hbox_downsize.show()
@@ -651,7 +651,7 @@ class UpdateManager(SimpleGtkbuilderApp):
   def update_last_updated_text(self, user_data):
       """timer that updates the last updated text """
       #print("update_last_updated_text")
-      num_updates = self.cache.installCount
+      num_updates = self.cache.install_count
       if num_updates == 0:
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
@@ -664,7 +664,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       """activate or disable widgets and show dialog texts correspoding to
          the number of available updates"""
       self.refresh_updates_count()
-      num_updates = self.cache.installCount
+      num_updates = self.cache.install_count
       text_label_main = ""
 
       # setup unity stuff
@@ -673,7 +673,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       if num_updates == 0:
           text_header= _("The software on this computer is up to date.")
           self.label_downsize.set_text("\n")
-          if self.cache.keepCount() == 0:
+          if self.cache.keep_count() == 0:
               self.notebook_details.set_sensitive(False)
               self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)

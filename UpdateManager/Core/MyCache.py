@@ -62,7 +62,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         apt.Cache.__init__(self, progress, rootdir)
         # raise if we have packages in reqreinst state
         # and let the caller deal with that (runs partial upgrade)
-        assert len(self.reqReinstallPkgs) == 0
+        assert len(self.req_reinstall_pkgs) == 0
         # check if the dpkg journal is ok (we need to do that here
         # too because libapt will only do it when it tries to lock
         # the packaging system)
@@ -100,16 +100,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def clear(self):
         self._initDepCache()
     @property
-    def requiredDownload(self):
+    def required_download(self):
         """ get the size of the packages that are required to download """
         pm = apt_pkg.PackageManager(self._depcache)
         fetcher = apt_pkg.Acquire()
         pm.get_archives(fetcher, self._list, self._records)
         return fetcher.fetch_needed
     @property
-    def installCount(self):
+    def install_count(self):
         return self._depcache.inst_count
-    def keepCount(self):
+    def keep_count(self):
         return self._depcache.keep_count
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
@@ -122,7 +122,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         #self._apply_dselect_upgrade()
         self._depcache.upgrade()
         return wouldDelete
-    def matchPackageOrigin(self, pkg, matcher):
+    def match_package_origin(self, pkg, matcher):
         """ match 'pkg' origin against 'matcher', take versions between
             installed.version and candidate.version into account too
             Useful if installed pkg A v1.0 is available in both

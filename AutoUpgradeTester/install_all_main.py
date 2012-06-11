@@ -60,7 +60,7 @@ print(len([pkg.name for pkg in cache if pkg.marked_install]))
 print("Download: ")
 pm = apt_pkg.PackageManager(cache._depcache)
 fetcher = apt_pkg.Acquire()
-pm.GetArchives(fetcher, cache._list, cache._records)
+pm.get_archives(fetcher, cache._list, cache._records)
 print(apt_pkg.size_to_str(fetcher.FetchNeeded))
 print("Total space: ", apt_pkg.size_to_str(cache._depcache.usr_size))
 

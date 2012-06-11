@@ -58,7 +58,7 @@ for pkg in cache:
 print("We can install:")
 print(len([pkg.name for pkg in cache if pkg.marked_install]))
 print("Download: ")
-pm = apt_pkg.GetPackageManager(cache._depcache)
+pm = apt_pkg.PackageManager(cache._depcache)
 fetcher = apt_pkg.GetAcquire()
 pm.GetArchives(fetcher, cache._list, cache._records)
 print(apt_pkg.SizeToStr(fetcher.FetchNeeded))

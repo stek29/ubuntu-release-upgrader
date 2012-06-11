@@ -201,7 +201,7 @@ if __name__ == "__main__":
     res = cache.update(acquire_progress)
     # generate a dist-upgrade (to feed data to the fetcher) and get it
     cache.upgrade()
-    pm = apt_pkg.GetPackageManager(cache._depcache)
+    pm = apt_pkg.PackageManager(cache._depcache)
     fetcher = apt_pkg.GetAcquire(acquire_progress)
     res = cache._fetchArchives(fetcher, pm)
     print(res)

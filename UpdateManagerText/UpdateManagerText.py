@@ -76,7 +76,7 @@ This can be caused by:
             self.cache._initDepCache()
         else:
             self.cache = MyCache(progress)
-            self.actiongroup = apt_pkg.GetPkgActionGroup(self.cache._depcache)
+            self.actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
         # lock the cache
         self.cache.lock = True
 

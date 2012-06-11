@@ -26,7 +26,7 @@ def blacklisted(name):
 #apt_pkg.config.set("Dir::State::status","./empty")
 
 cache = apt.Cache()
-group = apt_pkg.GetPkgActionGroup(cache._depcache)
+group = apt_pkg.ActionGroup(cache._depcache)
 #print([pkg.name for pkg in cache if pkg.is_installed])
 
 troublemaker = set()

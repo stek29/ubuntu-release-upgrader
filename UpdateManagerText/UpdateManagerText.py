@@ -164,8 +164,8 @@ This can be caused by:
             # fixup any problems
             if self.cache._depcache.BrokenCount:
                 need_refresh = True
-                Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
-                Fix.ResolveByKeep()
+                Fix = apt_pkg.ProblemResolver(self.cache._depcache)
+                Fix.resolve_by_keep()
             # update the list UI to reflect the cache state
             if need_refresh:
                 self.updateSelectionStates()

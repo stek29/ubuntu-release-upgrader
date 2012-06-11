@@ -1276,7 +1276,7 @@ class DistUpgradeController(object):
         if hasattr(self, "sources"):
             self.sources.restore_backup(self.sources_backup_ext)
         if hasattr(self, "aptcdrom"):
-            self.aptcdrom.restoreBackup(self.sources_backup_ext)
+            self.aptcdrom.restore_backup(self.sources_backup_ext)
         # generate a new cache
         self._view.updateStatus(_("Restoring original system state"))
         self._view.abort()

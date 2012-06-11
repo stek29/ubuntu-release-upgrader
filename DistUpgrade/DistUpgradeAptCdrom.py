@@ -45,7 +45,7 @@ class AptCdrom(object):
         self.signatures = set()
         self.i18n = set()
 
-    def restoreBackup(self, backup_ext):
+    def restore_backup(self, backup_ext):
         " restore the backup copy of the cdroms.list file (*not* sources.list)! "
         cdromstate = os.path.join(apt_pkg.config.find_dir("Dir::State"),
                                   apt_pkg.config.find("Dir::State::cdroms"))

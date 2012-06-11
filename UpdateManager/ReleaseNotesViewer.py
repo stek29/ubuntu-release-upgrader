@@ -71,7 +71,7 @@ class ReleaseNotesViewer(Gtk.TextView):
         """Apply the tag that marks links to the specified buffer selection"""
         tag = self.buffer.create_tag(None, foreground="blue",
                                      underline=Pango.Underline.SINGLE)
-        tag.set_data("url", url)
+        tag.url = url
         self.buffer.apply_tag(tag , start, end)
 
     def search_links(self):
@@ -126,7 +126,7 @@ class ReleaseNotesViewer(Gtk.TextView):
         # call open_url if an URL is assigned to the iter
         tags = iter.get_tags()
         for tag in tags:
-            url = tag.get_data("url")
+            url = getattr(tag, "url", None)
             if url != "":
                 open_url(url)
                 break
@@ -160,7 +160,7 @@ class ReleaseNotesViewer(Gtk.TextView):
         # set _hovering if the iter has the tag "url"
         tags = iter.get_tags()
         for tag in tags:
-            url = tag.get_data("url")
+            url = getattr(tag, "url", None)
             if url != "":
                 _hovering = True
                 break

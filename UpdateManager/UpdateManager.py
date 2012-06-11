@@ -116,11 +116,11 @@ def show_dist_no_longer_supported_dialog(parent=None):
     dialog.get_content_area().pack_end(button, True, True, 0)
     # this data used in the test to get the dialog
     if parent:
-        parent.set_data("no-longer-supported-nag", dialog)
+        parent.no_longer_supported_nag = dialog
     dialog.run()
     dialog.destroy()
     if parent:
-        parent.set_data("no-longer-supported-nag", None)
+        del parent.no_longer_supported_nag
 
 
 class UpdateManagerDbusController(dbus.service.Object):

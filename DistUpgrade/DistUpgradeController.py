@@ -403,7 +403,7 @@ class DistUpgradeController(object):
             conf = backportsdir+"/etc/apt/apt.conf.d/01ubuntu"
             if os.path.exists(conf):
                 logging.debug("adding config '%s'" % conf)
-                apt_pkg.ReadConfigFile(apt_pkg.config, conf)
+                apt_pkg.read_config_file(apt_pkg.config, conf)
 
         # do the ssh check and warn if we run under ssh
         self._sshMagic()

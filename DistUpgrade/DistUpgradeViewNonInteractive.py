@@ -321,7 +321,7 @@ if __name__ == "__main__":
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
     #if cache[pkg].is_installed:
-    #  cache[pkg].markDelete()
+    #  cache[pkg].mark_delete()
     #else:
     cache[pkg].mark_install()
   cache.commit(ap, ip)

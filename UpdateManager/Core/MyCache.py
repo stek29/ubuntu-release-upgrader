@@ -62,7 +62,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         apt.Cache.__init__(self, progress, rootdir)
         # raise if we have packages in reqreinst state
         # and let the caller deal with that (runs partial upgrade)
-        assert len(self.reqReinstallPkgs) == 0
+        assert len(self.req_reinstall_pkgs) == 0
         # check if the dpkg journal is ok (we need to do that here
         # too because libapt will only do it when it tries to lock
         # the packaging system)
@@ -100,16 +100,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
     def clear(self):
         self._initDepCache()
     @property
-    def requiredDownload(self):
+    def required_download(self):
         """ get the size of the packages that are required to download """
         pm = apt_pkg.PackageManager(self._depcache)
         fetcher = apt_pkg.Acquire()
         pm.get_archives(fetcher, self._list, self._records)
         return fetcher.fetch_needed
     @property
-    def installCount(self):
+    def install_count(self):
         return self._depcache.inst_count
-    def keepCount(self):
+    def keep_count(self):
         return self._depcache.keep_count
     def saveDistUpgrade(self):
         """ this functions mimics a upgrade but will never remove anything """
@@ -122,16 +122,16 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         #self._apply_dselect_upgrade()
         self._depcache.upgrade()
         return wouldDelete
-    def matchPackageOrigin(self, pkg, matcher):
+    def match_package_origin(self, pkg, matcher):
         """ match 'pkg' origin against 'matcher', take versions between
-            installedVersion and candidateVersion into account too
+            installed.version and candidate.version into account too
             Useful if installed pkg A v1.0 is available in both
             -updates (as v1.2) and -security (v1.1). we want to display
             it as a security update then
         """
         inst_ver = pkg._pkg.current_ver
         cand_ver = self._depcache.get_candidate_ver(pkg._pkg)
-        # init matcher with candidateVer
+        # init matcher with candidate.version
         update_origin = matcher[(None,None)]
         verFileIter = None
         for (verFileIter,index) in cand_ver.file_list:
@@ -157,7 +157,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         for ver in pkg._pkg.version_list:
             # discard is < than installed ver
             if (inst_ver and
-                apt_pkg.VersionCompare(ver.ver_str, inst_ver.ver_str) <= 0):
+                apt_pkg.version_compare(ver.ver_str, inst_ver.ver_str) <= 0):
                 #print("skipping '%s' " % ver.ver_str)
                 continue
             # check if we have a match
@@ -183,7 +183,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         pkg = self[name]
 
         # get the src package name
-        srcpkg = pkg.sourcePackageName
+        srcpkg = pkg.candidate.source_name
 
         # assume "main" section 
         src_section = "main"
@@ -191,7 +191,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         section = pkg._pcache._depcache.get_candidate_ver(pkg._pkg).section
 
         # get the source version, start with the binaries version
-        srcver_epoch = pkg.candidateVersion
+        srcver_epoch = pkg.candidate.version
         srcver = self._strip_epoch(srcver_epoch)
         #print("bin: %s" % binver)
 
@@ -237,7 +237,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
             if match:
                 # strip epoch from installed version
                 # and from changelog too
-                installed = pkg.installedVersion
+                installed = getattr(pkg.installed, "version", None)
                 if installed and ":" in installed:
                     installed = installed.split(":",1)[1]
                 changelogver = match.group(1)
@@ -252,11 +252,11 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
                 # for NEWS.Debian we do require the changelogver > installed
                 if strict_versioning:
                     if (installed and 
-                        apt_pkg.VersionCompare(changelogver,installed)<0):
+                        apt_pkg.version_compare(changelogver,installed)<0):
                         break
                 else:
                     if (installed and 
-                        apt_pkg.VersionCompare(changelogver,installed)==0):
+                        apt_pkg.version_compare(changelogver,installed)==0):
                         break
             alllines = alllines + line
         return alllines
@@ -334,14 +334,14 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
 
     def get_changelog(self, name):
         " get the changelog file from the changelog location "
-        origins = self[name].candidateOrigin
-        self.all_changes[name] = _("Changes for the versions:\nInstalled version: %s\nAvailable version: %s\n\n") % (self[name].installedVersion, self[name].candidateVersion)
+        origins = self[name].candidate.origins
+        self.all_changes[name] = _("Changes for the versions:\nInstalled version: %s\nAvailable version: %s\n\n") % (getattr(self[name].installed, "version", None), self[name].candidate.version)
         if not self.CHANGELOG_ORIGIN in [o.origin for o in origins]:
             self._fetch_changelog_for_third_party_package(name)
             return
         # fixup epoch handling version
-        srcpkg = self[name].sourcePackageName
-        srcver_epoch = self[name].candidateVersion.replace(':', '%3A')
+        srcpkg = self[name].candidate.source_name
+        srcver_epoch = self[name].candidate.version.replace(':', '%3A')
         try:
             changelog = self._get_changelog_or_news(name, "changelog")
             if len(changelog) == 0:

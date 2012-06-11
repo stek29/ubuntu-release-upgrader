@@ -15,7 +15,7 @@ vers = set()
 for k in glob.glob("/boot/vmlinuz-*"):
     ver = "-".join(k.split("-")[1:3])
     vers.add(ver)
-    if apt_pkg.VersionCompare(current_kernelver, ver) < 0:
+    if apt_pkg.version_compare(current_kernelver, ver) < 0:
         print("WARNING: there is a kernel version '%s' installed higher than the running kernel" % (ver, current_kernelver))
         sys.exit(1)
 

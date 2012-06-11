@@ -854,7 +854,7 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    if cache[pkg].is_installed and not cache[pkg].isUpgradable: 
+    if cache[pkg].is_installed and not cache[pkg].is_upgradable:
       cache[pkg].mark_delete(purge=True)
     else:
       cache[pkg].mark_install()

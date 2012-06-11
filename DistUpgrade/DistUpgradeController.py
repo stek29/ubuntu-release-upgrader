@@ -196,8 +196,8 @@ class DistUpgradeController(object):
         if self.cache is None:
             self.quirks.run("PreCacheOpen")
         else:
-            self.cache.releaseLock()
-            self.cache.unlockListsDir()
+            self.cache.release_lock()
+            self.cache.unlock_lists_dir()
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -403,7 +403,7 @@ class DistUpgradeController(object):
             conf = backportsdir+"/etc/apt/apt.conf.d/01ubuntu"
             if os.path.exists(conf):
                 logging.debug("adding config '%s'" % conf)
-                apt_pkg.ReadConfigFile(apt_pkg.config, conf)
+                apt_pkg.read_config_file(apt_pkg.config, conf)
 
         # do the ssh check and warn if we run under ssh
         self._sshMagic()
@@ -420,12 +420,12 @@ class DistUpgradeController(object):
         except SystemError as e:
             logging.error("openCache() failed: '%s'" % e)
             return False
-        if not self.cache.sanityCheck(self._view):
+        if not self.cache.sanity_check(self._view):
             return False
 
         # now figure out if we need to go into desktop or 
         # server mode - we use a heuristic for this
-        self.serverMode = self.cache.needServerMode()
+        self.serverMode = self.cache.need_server_mode()
         if self.serverMode:
             os.environ["RELEASE_UPGRADE_MODE"] = "server"
         else:
@@ -524,7 +524,7 @@ class DistUpgradeController(object):
                      len(self.cache[pkgname].candidate.origins) == 1 and
                      self.cache[pkgname].candidate.origins[0].archive == "now")
                    ):
-                    logging.debug("BaseMetaPkg '%s' has no candidateOrigin" % pkgname)
+                    logging.debug("BaseMetaPkg '%s' has no candidate.origins" % pkgname)
                     try:
                         distro = get_distro()
                         distro.get_sources(self.sources)
@@ -575,7 +575,7 @@ class DistUpgradeController(object):
                 listdir = apt_pkg.config.find_dir("Dir::State::lists")
                 if not os.path.exists("%s/%s%s_%s_%s" % 
                                       (listdir,
-                                       apt_pkg.URItoFileName(entry.uri),
+                                       apt_pkg.uri_to_filename(entry.uri),
                                        "dists",
                                        entry.dist,
                                        "Release")):
@@ -810,12 +810,12 @@ class DistUpgradeController(object):
         # downloadable
         logging.debug("doPostInitialUpdate")
         self.quirks.run("PostInitialUpdate")
-        if len(self.cache.reqReinstallPkgs) > 0:
+        if len(self.cache.req_reinstall_pkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
-            self.cache.fixReqReinst(self._view)
+            self.cache.fix_req_reinst(self._view)
             self.openCache()
-        if len(self.cache.reqReinstallPkgs) > 0:
-            reqreinst = self.cache.reqReinstallPkgs
+        if len(self.cache.req_reinstall_pkgs) > 0:
+            reqreinst = self.cache.req_reinstall_pkgs
             header = ngettext("Package in inconsistent state",
                               "Packages in inconsistent state",
                               len(reqreinst))
@@ -942,7 +942,7 @@ class DistUpgradeController(object):
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
                                         changes,
                                         self.installed_demotions,
-                                        self.cache.requiredDownload)
+                                        self.cache.required_download)
         return res
 
     def _disableAptCronJob(self):
@@ -1276,7 +1276,7 @@ class DistUpgradeController(object):
         if hasattr(self, "sources"):
             self.sources.restore_backup(self.sources_backup_ext)
         if hasattr(self, "aptcdrom"):
-            self.aptcdrom.restoreBackup(self.sources_backup_ext)
+            self.aptcdrom.restore_backup(self.sources_backup_ext)
         # generate a new cache
         self._view.updateStatus(_("Restoring original system state"))
         self._view.abort()
@@ -1285,7 +1285,7 @@ class DistUpgradeController(object):
 
     def _checkDep(self, depstr):
         " check if a given depends can be satisfied "
-        for or_group in apt_pkg.ParseDepends(depstr):
+        for or_group in apt_pkg.parse_depends(depstr):
             logging.debug("checking: '%s' " % or_group)
             for dep in or_group:
                 depname = dep[0]
@@ -1295,9 +1295,9 @@ class DistUpgradeController(object):
                     logging.error("_checkDep: '%s' not in cache" % depname)
                     return False
                 inst = self.cache[depname]
-                instver = inst.installedVersion
+                instver = getattr(inst.installed, "version", None)
                 if (instver != None and
-                    apt_pkg.CheckDep(instver,oper,ver) == True):
+                    apt_pkg.check_dep(instver,oper,ver) == True):
                     return True
         logging.error("depends '%s' is not satisfied" % depstr)
         return False
@@ -1464,7 +1464,7 @@ class DistUpgradeController(object):
                 logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
                 return False
             # now install them
-            self.cache.releaseLock()
+            self.cache.release_lock()
             p = subprocess.Popen(
                 ["/usr/bin/dpkg", "-i", ] + glob.glob(p+"*_*.deb"),
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -1475,7 +1475,7 @@ class DistUpgradeController(object):
                 self._view.pulseProgress()
                 time.sleep(0.02)
             self._view.pulseProgress(finished=True)
-            self.cache.getLock()
+            self.cache.get_lock()
             logging.info("installing backport debs exit code '%s'" % res)
             logging.debug("dpkg output:\n%s" % p.communicate()[0])
             if res != 0:
@@ -1526,13 +1526,13 @@ class DistUpgradeController(object):
         for pkgname in backportslist:
             pkg = self.cache[pkgname]
             # look for the right version (backport)
-            ver = self.cache._depcache.GetCandidateVer(pkg._pkg)
+            ver = self.cache._depcache.get_candidate_ver(pkg._pkg)
             if not ver:
                 logging.error("No candidate for '%s'" % pkgname)
                 os.unlink(outpath)
                 return False
-            if ver.FileList == None:
-                logging.error("No ver.FileList for '%s'" % pkgname)
+            if ver.file_list == None:
+                logging.error("No ver.file_list for '%s'" % pkgname)
                 os.unlink(outpath)
                 return False
             logging.debug("marking '%s' for install" % pkgname)
@@ -1545,14 +1545,14 @@ class DistUpgradeController(object):
             res = self.cache.commit(self._view.getAcquireProgress(),
                                     self._view.getInstallProgress(self.cache))
         except IOError as e:
-            logging.error("fetchArchives returned '%s'" % e)
+            logging.error("fetch_archives returned '%s'" % e)
             res = False
         except SystemError as e:
-            logging.error("installArchives returned '%s'" % e)
+            logging.error("install_archives returned '%s'" % e)
             res = False
 
         if res == False:
-            logging.warning("_fetchArchives for backports returned False")
+            logging.warning("_fetch_archives for backports returned False")
 
         # all backports done, remove the pre-requirests.list file again
         try:
@@ -1655,7 +1655,7 @@ class DistUpgradeController(object):
         # re-check server mode because we got new packages (it may happen
         # that the system had no sources.list entries and therefore no
         # desktop file information)
-        self.serverMode = self.cache.needServerMode()
+        self.serverMode = self.cache.need_server_mode()
         # do it here as we neeed to know if we are in server or client mode
         self.quirks.ensure_recommends_are_installed_on_desktops()
         # now check if we still have some key packages available/downloadable

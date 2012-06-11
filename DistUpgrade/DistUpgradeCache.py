@@ -105,7 +105,7 @@ class MyCache(apt.Cache):
         if lock:
             try:
                 apt_pkg.pkgsystem_lock()
-                self.lockListsDir()
+                self.lock_lists_dir()
                 self.lock = True
             except SystemError as e:
                 # checking for this is ok, its not translatable
@@ -133,7 +133,7 @@ class MyCache(apt.Cache):
                 pkg.mark_install(auto_inst=False, auto_fix=False)
 
     @property
-    def reqReinstallPkgs(self):
+    def req_reinstall_pkgs(self):
         " return the packages not downloadable packages in reqreinst state "
         reqreinst = set()
         for pkg in self:
@@ -144,9 +144,9 @@ class MyCache(apt.Cache):
                 reqreinst.add(pkg.name)
         return reqreinst
 
-    def fixReqReinst(self, view):
+    def fix_req_reinst(self, view):
         " check for reqreinst state and offer to fix it "
-        reqreinst = self.reqReinstallPkgs
+        reqreinst = self.req_reinstall_pkgs
         if len(reqreinst) > 0:
             header = ngettext("Remove package in bad state",
                               "Remove packages in bad state", 
@@ -163,10 +163,10 @@ class MyCache(apt.Cache):
                                "continue?",
                                len(reqreinst)) % ", ".join(reqreinst)
             if view.askYesNoQuestion(header, summary):
-                self.releaseLock()
+                self.release_lock()
                 cmd = ["dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)
                 view.getTerminal().call(cmd)
-                self.getLock()
+                self.get_lock()
                 return True
         return False
 
@@ -215,29 +215,29 @@ class MyCache(apt.Cache):
 
     # properties
     @property
-    def requiredDownload(self):
+    def required_download(self):
         """ get the size of the packages that are required to download """
         pm = apt_pkg.PackageManager(self._depcache)
         fetcher = apt_pkg.Acquire()
         pm.get_archives(fetcher, self._list, self._records)
         return fetcher.fetch_needed
     @property
-    def additionalRequiredSpace(self):
+    def additional_required_space(self):
         """ get the size of the additional required space on the fs """
         return self._depcache.usr_size
     @property
-    def isBroken(self):
+    def is_broken(self):
         """ is the cache broken """
         return self._depcache.broken_count > 0
 
     # methods
-    def lockListsDir(self):
+    def lock_lists_dir(self):
         name = apt_pkg.config.find_dir("Dir::State::Lists") + "lock"
         self._listsLock = apt_pkg.get_lock(name)
         if self._listsLock < 0:
             e = "Can not lock '%s' " % name
             raise CacheExceptionLockingFailed(e)
-    def unlockListsDir(self):
+    def unlock_lists_dir(self):
         if self._listsLock > 0:
             os.close(self._listsLock)
             self._listsLock = -1
@@ -246,9 +246,9 @@ class MyCache(apt.Cache):
         our own update implementation is required because we keep the lists
         dir lock
         """
-        self.unlockListsDir()
+        self.unlock_lists_dir()
         res = apt.Cache.update(self, fprogress)
-        self.lockListsDir()
+        self.lock_lists_dir()
         if fprogress and fprogress.release_file_download_error:
             # FIXME: not ideal error message, but we just reuse a 
             #        existing one here to avoid a new string
@@ -259,10 +259,10 @@ class MyCache(apt.Cache):
     def commit(self, fprogress, iprogress):
         logging.info("cache.commit()")
         if self.lock:
-            self.releaseLock()
+            self.release_lock()
         apt.Cache.commit(self, fprogress, iprogress)
 
-    def releaseLock(self, pkgSystemOnly=True):
+    def release_lock(self, pkgSystemOnly=True):
         if self.lock:
             try:
                 apt_pkg.pkgsystem_unlock()
@@ -270,7 +270,7 @@ class MyCache(apt.Cache):
             except SystemError as e:
                 logging.debug("failed to SystemUnLock() (%s) " % e)
 
-    def getLock(self, pkgSystemOnly=True):
+    def get_lock(self, pkgSystemOnly=True):
         if not self.lock:
             try:
                 apt_pkg.pkgsystem_lock()
@@ -283,21 +283,21 @@ class MyCache(apt.Cache):
         if useCandidate:
             ver = self._depcache.get_candidate_ver(pkg._pkg)
         else:
-            ver = pkg._pkg.CurrentVer
+            ver = pkg._pkg.current_ver
         if ver == None:
             logging.warning("no version information for '%s' (useCandidate=%s)" % (pkg.name, useCandidate))
             return False
         return ver.downloadable
     
-    def pkgAutoRemovable(self, pkg):
+    def pkg_auto_removable(self, pkg):
         """ check if the pkg is auto-removable """
         return (pkg.is_installed and 
                 self._depcache.is_garbage(pkg._pkg))
 
-    def fixBroken(self):
+    def fix_broken(self):
         """ try to fix broken dependencies on the system, may throw
             SystemError when it can't"""
-        return self._depcache.FixBroken()
+        return self._depcache.fix_broken()
 
     def create_snapshot(self):
         """ create a snapshot of the current changes """
@@ -310,7 +310,7 @@ class MyCache(apt.Cache):
                 self.to_remove.append(pkg.name)
 
     def clear(self):
-        self._depcache.Init()
+        self._depcache.init()
 
     def restore_snapshot(self):
         """ restore a snapshot """
@@ -326,7 +326,7 @@ class MyCache(apt.Cache):
             pkg = self[name]
             pkg.mark_install(auto_fix=False, auto_inst=False)
 
-    def needServerMode(self):
+    def need_server_mode(self):
         """ 
         This checks if we run on a desktop or a server install.
         
@@ -337,13 +337,13 @@ class MyCache(apt.Cache):
         dependencies, if none of those are installed we assume
         server mode
         """
-        #logging.debug("needServerMode() run")
+        #logging.debug("need_server_mode() run")
         # check for the MetaPkgs (e.g. ubuntu-desktop)
         metapkgs = self.config.getlist("Distro","MetaPkgs")
         for key in metapkgs:
             # if it is installed we are done
             if key in self and self[key].is_installed:
-                logging.debug("needServerMode(): run in 'desktop' mode, (because of pkg '%s')" % key)
+                logging.debug("need_server_mode(): run in 'desktop' mode, (because of pkg '%s')" % key)
                 return False
             # if it is not installed, but its key depends are installed 
             # we are done too (we auto-select the package later)
@@ -351,19 +351,19 @@ class MyCache(apt.Cache):
             for pkg in self.config.getlist(key,"KeyDependencies"):
                 deps_found &= pkg in self and self[pkg].is_installed
             if deps_found:
-                logging.debug("needServerMode(): run in 'desktop' mode, (because of key deps for '%s')" % key)
+                logging.debug("need_server_mode(): run in 'desktop' mode, (because of key deps for '%s')" % key)
                 return False
-        logging.debug("needServerMode(): can not find a desktop meta package or key deps, running in server mode")
+        logging.debug("need_server_mode(): can not find a desktop meta package or key deps, running in server mode")
         return True
 
-    def sanityCheck(self, view):
+    def sanity_check(self, view):
         """ check if the cache is ok and if the required metapkgs
             are installed
         """
-        if self.isBroken:
+        if self.is_broken:
             try:
                 logging.debug("Have broken pkgs, trying to fix them")
-                self.fixBroken()
+                self.fix_broken()
             except SystemError:
                 view.error(_("Broken packages"),
                                  _("Your system contains broken packages "
@@ -400,24 +400,24 @@ class MyCache(apt.Cache):
         if pkg in self:
             self._depcache.mark_delete(self[pkg]._pkg,True)
 
-    def _keepInstalled(self, pkgname, reason):
+    def _keep_installed(self, pkgname, reason):
         if (pkgname in self
             and self[pkgname].is_installed
             and self[pkgname].marked_delete):
             self.mark_install(pkgname, reason)
 
-    def keepInstalledRule(self):
+    def keep_installed_rule(self):
         """ run after the dist-upgrade to ensure that certain
             packages are kept installed """
         # first the global list
         for pkgname in self.config.getlist("Distro","KeepInstalledPkgs"):
-            self._keepInstalled(pkgname, "Distro KeepInstalledPkgs rule")
+            self._keep_installed(pkgname, "Distro KeepInstalledPkgs rule")
         # the the per-metapkg rules
         for key in self.metapkgs:
             if key in self and (self[key].is_installed or
                                 self[key].marked_install):
                 for pkgname in self.config.getlist(key,"KeepInstalledPkgs"):
-                    self._keepInstalled(pkgname, "%s KeepInstalledPkgs rule" % key)
+                    self._keep_installed(pkgname, "%s KeepInstalledPkgs rule" % key)
 
         # only enforce section if we have a network. Otherwise we run
         # into CD upgrade issues for installed language packs etc
@@ -428,7 +428,7 @@ class MyCache(apt.Cache):
                 for pkg in self:
                     if (pkg.candidate and pkg.candidate.downloadable 
                         and pkg.marked_delete and pkg.section == section):
-                        self._keepInstalled(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
+                        self._keep_installed(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
                 if key in self and (self[key].is_installed or
                                     self[key].marked_install):
@@ -437,10 +437,10 @@ class MyCache(apt.Cache):
                             if (pkg.candidate and pkg.candidate.downloadable
                                 and pkg.marked_delete and
                                 pkg.section == section):
-                                self._keepInstalled(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
+                                self._keep_installed(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
         
 
-    def postUpgradeRule(self):
+    def post_upgrade_rule(self):
         " run after the upgrade was done in the cache "
         for (rule, action) in [("Install", self.mark_install),
                                ("Upgrade", self.mark_upgrade),
@@ -617,7 +617,7 @@ class MyCache(apt.Cache):
         for pkg in self:
             # WORKADOUND bug on the CD/python-apt #253255
             ver = pkg._pcache._depcache.get_candidate_ver(pkg._pkg)
-            if ver and ver.Priority == 0:
+            if ver and ver.priority == 0:
                 logging.error("Package %s has no priority set" % pkg.name)
                 continue
             if (pkg.candidate and pkg.candidate.downloadable and
@@ -625,7 +625,7 @@ class MyCache(apt.Cache):
                 not pkg.name in removeEssentialOk and
                 # ignore multiarch priority required packages
                 not ":" in pkg.name and
-                pkg.priority in need):
+                pkg.candidate.priority in need):
                 self.mark_install(pkg.name, "priority in required set '%s' but not scheduled for install" % need)
 
     # FIXME: make this a decorator (just like the withResolverLog())
@@ -658,7 +658,7 @@ class MyCache(apt.Cache):
             self.checkPriority()
 
             # see if our KeepInstalled rules are honored
-            self.keepInstalledRule()
+            self.keep_installed_rule()
 
             # check if we got a new kernel (if we are not inside a 
             # chroot)
@@ -671,7 +671,7 @@ class MyCache(apt.Cache):
             self.checkForNvidia()
 
             # and if we have some special rules
-            self.postUpgradeRule()
+            self.post_upgrade_rule()
 
             # install missing meta-packages (if not in server upgrade mode)
             self._keepBaseMetaPkgsInstalled(view)
@@ -724,7 +724,7 @@ class MyCache(apt.Cache):
         for pkg in self.get_changes():
             if pkg.marked_delete:
                 continue
-            # special case because of a bug in pkg.candidateOrigin
+            # special case because of a bug in pkg.candidate.origins
             if pkg.marked_downgrade:
                 for ver in pkg._pkg.version_list:
                     # version is lower than installed one
@@ -779,7 +779,7 @@ class MyCache(apt.Cache):
             if pkg.marked_delete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
                 raise SystemError(_("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name)
-            if pkg.marked_delete and (pkg._pkg.Essential == True and
+            if pkg.marked_delete and (pkg._pkg.essential == True and
                                      not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's an ESSENTIAL package", pkg.name)
                 raise SystemError(_("The essential package '%s' is marked for removal.") % pkg.name)
@@ -787,8 +787,8 @@ class MyCache(apt.Cache):
         badVersions = self.config.getlist("Distro","BadVersions")
         for bv in badVersions:
             (pkgname, ver) = bv.split("_")
-            if (pkgname in self and
-                self[pkgname].candidateVersion == ver and
+            if (pkgname in self and self[pkgname].candidate and
+                self[pkgname].candidate.version == ver and
                 (self[pkgname].marked_install or
                  self[pkgname].marked_upgrade)):
                 raise SystemError(_("Trying to install blacklisted version '%s'") % bv)
@@ -806,7 +806,7 @@ class MyCache(apt.Cache):
             print("No candidate ver: ", pkg.name)
             return False
         if ver.file_list is None:
-            print("No FileList for: %s " % self._pkg.Name())
+            print("No file_list for: %s " % self._pkg.name())
             return False
         f, index = ver.file_list.pop(0)
         pkg._pcache._records.lookup((f, index))
@@ -856,7 +856,7 @@ class MyCache(apt.Cache):
     
     def _keepBaseMetaPkgsInstalled(self, view):
         for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
-            self._keepInstalled(pkg, "base meta package keep installed rule")
+            self._keep_installed(pkg, "base meta package keep installed rule")
 
     def _installMetaPkgs(self, view):
 
@@ -883,7 +883,7 @@ class MyCache(apt.Cache):
             self[pkg].mark_install()
 
         # every meta-pkg that is installed currently, will be marked
-        # install (that result in a upgrade and removes a markDelete)
+        # install (that result in a upgrade and removes a mark_delete)
         for key in metapkgs:
             try:
                 if (key in self and
@@ -975,7 +975,7 @@ class MyCache(apt.Cache):
         actiongroup
         self.create_snapshot()
         try:
-            self[pkgname].markDelete(purge=purge)
+            self[pkgname].mark_delete(purge=purge)
             self.view.processEvents()
             #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.get_changes():
@@ -1179,9 +1179,9 @@ class MyCache(apt.Cache):
             logging.debug("additional space for the snapshots: %s" % required_for_snapshots)
                     
         # sum up space requirements
-        for (dir, size) in [(archivedir, self.requiredDownload),
+        for (dir, size) in [(archivedir, self.required_download),
                             # plus 50M safety buffer in /usr
-                            ("/usr", self.additionalRequiredSpace),
+                            ("/usr", self.additional_required_space),
                             ("/usr", 50*1024*1024),
                             ("/boot", space_in_boot), 
                             ("/tmp", 5*1024*1024),   # /tmp for dkms LP: #427035
@@ -1200,11 +1200,11 @@ class MyCache(apt.Cache):
         required_list = {}
         for dir in fs_free:
             if fs_free[dir].free < 0:
-                free_at_least = apt_pkg.SizeToStr(float(abs(fs_free[dir].free)+1))
+                free_at_least = apt_pkg.size_to_str(float(abs(fs_free[dir].free)+1))
                 # make_fs_id ensures we only get stuff on the same
                 # mountpoint, so we report the requirements only once
                 # per mountpoint
-                required_list[make_fs_id(dir)] = FreeSpaceRequired(apt_pkg.SizeToStr(fs_free[dir].need), make_fs_id(dir), free_at_least)
+                required_list[make_fs_id(dir)] = FreeSpaceRequired(apt_pkg.size_to_str(fs_free[dir].need), make_fs_id(dir), free_at_least)
         # raise exception if free space check fails
         if len(required_list) > 0:
             logging.error("Not enough free space: %s" % [str(i) for i in required_list])

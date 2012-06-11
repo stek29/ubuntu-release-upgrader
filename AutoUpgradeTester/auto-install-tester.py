@@ -140,12 +140,15 @@ if __name__ == "__main__":
 #                                cache["emacspeak"],
 #                                cache["postfix"] ]):
         # clean the cache
-        cache._depcache.Init()
+        cache._depcache.init()
         print("\n\nPackage %s: %i of %i (%f.2)" % (pkg.name, i, len(cache),
                                              float(i)/float(len(cache))*100))
         print("pkgs_tested has %i entries\n\n" % len(pkgs_tested))
 
         pkg_failed = False
+
+        if not pkg.candidate:
+            continue
 
         # skip stuff in the ubuntu-minimal that we can't install or upgrade
         if pkg.is_installed and not pkg.is_upgradable:
@@ -157,18 +160,18 @@ if __name__ == "__main__":
             continue
 
         # skip packages we tested already
-        if "%s-%s" % (pkg.name, pkg.candidateVersion) in pkgs_tested:
+        if "%s-%s" % (pkg.name, pkg.candidate.version) in pkgs_tested:
             print("already tested: ", pkg.name)
             continue
 
         # see if we can install/upgrade the pkg
         try:
-            pkg.markInstall()
+            pkg.mark_install()
         except SystemError as e:
-            pkg.markKeep()
-        if not (pkg.markedInstall or pkg.markedUpgrade):
+            pkg.mark_keep()
+        if not (pkg.marked_install or pkg.marked_upgrade):
             print("pkg: %s not installable" % pkg.name)
-            failures.write("%s markInstall()\n " % pkg.name)
+            failures.write("%s mark_install()\n " % pkg.name)
             continue
         
         if not test_downloadable(backend, pkg.name):
@@ -179,7 +182,7 @@ if __name__ == "__main__":
             continue
 
         # mark as tested
-        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidateVersion))
+        statusfile.write("%s-%s\n" % (pkg.name, pkg.candidate.version))
             
         if not do_install_remove(backend, pkg.name):
             # on failure, re-run in a clean env so that the log
@@ -203,8 +206,8 @@ if __name__ == "__main__":
 
         # installation worked, record that we have tested this package
         for pkg in cache:
-            if pkg.markedInstall or pkg.markedUpgrade:
-                pkgs_tested.add("%s-%s" % (pkg.name, pkg.candidateVersion))
+            if pkg.marked_install or pkg.marked_upgrade:
+                pkgs_tested.add("%s-%s" % (pkg.name, pkg.candidate.version))
         statusfile.flush()
         failures.flush()
             

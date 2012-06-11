@@ -26,18 +26,20 @@ def blacklisted(name):
 #apt_pkg.config.set("Dir::State::status","./empty")
 
 cache = apt.Cache()
-group = apt_pkg.GetPkgActionGroup(cache._depcache)
+group = apt_pkg.ActionGroup(cache._depcache)
 #print([pkg.name for pkg in cache if pkg.is_installed])
 
 troublemaker = set()
 for pkg in cache:
-    for c in pkg.candidateOrigin:
+    if not pkg.candidate:
+        continue
+    for c in pkg.candidate.origins:
         if c.component == "main":
             current = set([p.name for p in cache if p.marked_install])
             if not (pkg.is_installed or blacklisted(pkg.name)):
                 pkg.mark_install()
             new = set([p.name for p in cache if p.marked_install])
-            #if not pkg.markedInstall or len(new) < len(current):
+            #if not pkg.marked_install or len(new) < len(current):
             if not (pkg.is_installed or pkg.marked_install):
                 print("Can't install: %s" % pkg.name)
             if len(current-new) > 0:
@@ -56,11 +58,11 @@ for pkg in cache:
 print("We can install:")
 print(len([pkg.name for pkg in cache if pkg.marked_install]))
 print("Download: ")
-pm = apt_pkg.GetPackageManager(cache._depcache)
-fetcher = apt_pkg.GetAcquire()
-pm.GetArchives(fetcher, cache._list, cache._records)
-print(apt_pkg.SizeToStr(fetcher.FetchNeeded))
-print("Total space: ", apt_pkg.SizeToStr(cache._depcache.UsrSize))
+pm = apt_pkg.PackageManager(cache._depcache)
+fetcher = apt_pkg.Acquire()
+pm.get_archives(fetcher, cache._list, cache._records)
+print(apt_pkg.size_to_str(fetcher.fetch_needed))
+print("Total space: ", apt_pkg.size_to_str(cache._depcache.usr_size))
 
 res = False
 current = 0

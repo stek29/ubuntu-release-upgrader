@@ -1109,7 +1109,7 @@ class MyCache(apt.Cache):
             if not where in mounted:
                 mounted.append(where)
         # make sure mounted is sorted by longest path
-        mounted.sort(cmp=lambda a,b: cmp(len(a),len(b)), reverse=True)
+        mounted.sort(key=len, reverse=True)
         archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")
         aufs_rw_dir = "/tmp/"
         if (hasattr(self, "config") and

@@ -47,6 +47,7 @@ import stat
 import re
 import locale
 import logging
+import operator
 import subprocess
 import time
 import threading
@@ -1044,9 +1045,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     if self.list.num_updates > 0:
       #self.treeview_update.set_model(None)
       self.scrolledwindow_update.show()
-      origin_list = self.list.pkgs.keys()
-      origin_list.sort(lambda x,y: cmp(x.importance,y.importance))
-      origin_list.reverse()
+      origin_list = sorted(
+        self.list.pkgs, key=operator.attrgetter("importance"), reverse=True)
       for origin in origin_list:
         self.store.append(['<b><big>%s</big></b>' % origin.description,
                            origin.description, None, origin,True])

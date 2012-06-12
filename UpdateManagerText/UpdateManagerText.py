@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import apt
 import apt_pkg
+import operator
 import sys
 import threading
 import time
@@ -84,9 +85,9 @@ This can be caused by:
         # populate the list
         self.list = UpdateList(self)
         self.list.update(self.cache)
-        origin_list = self.list.pkgs.keys()
-        origin_list.sort(lambda x,y: cmp(x.importance, y.importance))
-        origin_list.reverse()
+        origin_list = sorted(
+            self.list.pkgs, key=operator.attrgetter("importance"),
+            reverse=True)
         for (i, origin) in enumerate(origin_list):
             self.checkbox_tree_updates.append(origin.description, selected=True)
             for pkg in self.list.pkgs[origin]:

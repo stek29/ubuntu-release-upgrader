@@ -25,6 +25,7 @@ import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
 
 from gettext import gettext as _
+import operator
 import subprocess
 import sys
 
@@ -96,6 +97,6 @@ class UpdateList(object):
       if pkg.is_upgradable and not (pkg.marked_upgrade or pkg.marked_install):
           self.held_back.append(pkg.name)
     for l in self.pkgs.keys():
-      self.pkgs[l].sort(lambda x,y: cmp(x.name,y.name))
+      self.pkgs[l].sort(key=operator.attrgetter("name"))
     self.keepcount = cache._depcache.keep_count
 

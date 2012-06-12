@@ -36,6 +36,8 @@ update-manager (1:0.163) UNRELEASED; urgency=low
   * Always pass bytes to hashlib.md5.update.
   * Fix DistUpgradeAptCdrom to account for gzip files being opened in binary
     mode.
+  * Convert the last use of os.popen to subprocess.check_output, which makes
+    it easier to read str rather than bytes.  (This requires Python 2.7.)
 
   [ Adam Conrad ]
   * Merge branch from Michael Terry to drop auto-upgrade-tester

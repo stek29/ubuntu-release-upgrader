@@ -47,8 +47,9 @@ class GtkOpProgressInline(apt.progress.base.OpProgress):
         self.base = 0
         self.old = 0
         self.next = int(self.steps.pop(0))
-    def update(self, percent):
-        # ui
+    def update(self, percent=None):
+        super(GtkOpProgressInline, self).update(percent)
+        percent = self.percent 
         self._progressbar.show()
         self._parent.set_sensitive(False)
         # if the old percent was higher, a new progress was started

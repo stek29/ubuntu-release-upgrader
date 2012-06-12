@@ -43,6 +43,10 @@ update-manager (1:0.163) UNRELEASED; urgency=low
   * Convert the last use of os.popen to subprocess.check_output, which makes
     it easier to read str rather than bytes.  (This requires Python 2.7.)
   * Decode bytes read from urlopened file objects.
+  * UpdateManager/backend/InstallBackendSynaptic.py
+    - Keep a reference to the data tuple passed to GObject.child_watch_add
+      to avoid attempts to destroy it without a thread context
+      (LP: #724687).
 
   [ Adam Conrad ]
   * Merge branch from Michael Terry to drop auto-upgrade-tester

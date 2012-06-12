@@ -157,13 +157,16 @@ class AptCdrom(object):
             outf = os.path.join(targetdir,os.path.splitext(fname)[0])
             if f.endswith(".gz"):
                 g=gzip.open(f)
-                out=open(outf,"w")
-                # uncompress in 64k chunks
-                while True:
-                    s=g.read(64000)
-                    out.write(s)
-                    if s == "":
-                        break
+                try:
+                    with open(outf, "wb") as out:
+                        # uncompress in 64k chunks
+                        while True:
+                            s=g.read(64000)
+                            out.write(s)
+                            if s == b"":
+                                break
+                finally:
+                    g.close()
             else:
                 shutil.copy(f,outf)
         return True
@@ -178,13 +181,16 @@ class AptCdrom(object):
             outf = os.path.join(targetdir,os.path.splitext(fname)[0])
             if f.endswith(".gz"):
                 g=gzip.open(f)
-                out=open(outf,"w")
-                # uncompress in 64k chunks
-                while True:
-                    s=g.read(64000)
-                    out.write(s)
-                    if s == "":
-                        break
+                try:
+                    with open(outf, "wb") as out:
+                        # uncompress in 64k chunks
+                        while True:
+                            s=g.read(64000)
+                            out.write(s)
+                            if s == b"":
+                                break
+                finally:
+                    g.close()
             else:
                 shutil.copy(f,outf)
         return True

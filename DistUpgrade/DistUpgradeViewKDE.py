@@ -167,13 +167,14 @@ class KDEOpProgress(apt.progress.base.OpProgress):
       #self.progressbar.set_pulse_step(0.01)
       #self.progressbar.pulse()
 
-  def update(self, percent):
-      #if percent > 99:
+  def update(self, percent=None):
+      super(KDEOpProgress, self).update(percent)
+      #if self.percent > 99:
       #    self.progressbar.set_fraction(1)
       #else:
       #    self.progressbar.pulse()
-      #self.progressbar.set_fraction(percent/100.0)
-      self.progressbar.setValue(percent)
+      #self.progressbar.set_fraction(self.percent/100.0)
+      self.progressbar.setValue(self.percent)
       QApplication.processEvents()
 
   def done(self):

@@ -79,12 +79,13 @@ class GtkOpProgress(apt.progress.base.OpProgress):
       #self.progressbar.pulse()
       self.fraction = 0.0
 
-  def update(self, percent):
-      #if percent > 99:
+  def update(self, percent=None):
+      super(GtkOpProgress, self).update(percent)
+      #if self.percent > 99:
       #    self.progressbar.set_fraction(1)
       #else:
       #    self.progressbar.pulse()
-      new_fraction = percent/100.0
+      new_fraction = self.percent/100.0
       if abs(self.fraction-new_fraction) > 0.1:
         self.fraction = new_fraction
         self.progressbar.set_fraction(self.fraction)

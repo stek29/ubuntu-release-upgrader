@@ -1100,14 +1100,15 @@ class MyCache(apt.Cache):
         mounted = []
         mnt_map = {}
         fs_free = {}
-        for line in open("/proc/mounts"):
-            try:
-                (what, where, fs, options, a, b) = line.split()
-            except ValueError as e:
-                logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
-                continue
-            if not where in mounted:
-                mounted.append(where)
+        with open("/proc/mounts") as mounts:
+            for line in mounts:
+                try:
+                    (what, where, fs, options, a, b) = line.split()
+                except ValueError as e:
+                    logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
+                    continue
+                if not where in mounted:
+                    mounted.append(where)
         # make sure mounted is sorted by longest path
         mounted.sort(key=len, reverse=True)
         archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")

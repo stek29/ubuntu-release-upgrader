@@ -1208,7 +1208,7 @@ class MyCache(apt.Cache):
         # raise exception if free space check fails
         if len(required_list) > 0:
             logging.error("Not enough free space: %s" % [str(i) for i in required_list])
-            raise NotEnoughFreeSpaceError(required_list.values())
+            raise NotEnoughFreeSpaceError(list(required_list.values()))
         return True
 
 

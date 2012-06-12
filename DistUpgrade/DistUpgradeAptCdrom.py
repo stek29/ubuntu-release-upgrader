@@ -27,6 +27,7 @@ import logging
 import gzip
 import shutil
 import subprocess
+import sys
 from gettext import gettext as _
 
 
@@ -299,6 +300,9 @@ class AptCdrom(object):
         logging.debug("AptCdrom.add() returned: %s" % res)
         return res
 
-    def __nonzero__(self):
+    def __bool__(self):
         """ helper to use this as 'if cdrom:' """
         return self.cdrompath is not None
+
+    if sys.version < '3':
+        __nonzero__ = __bool__

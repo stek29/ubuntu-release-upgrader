@@ -55,9 +55,9 @@ def _(str):
     return unicode(gett(str), 'UTF-8')
 
 def utf8(str):
-  if isinstance(str, unicode):
-      return str
-  return unicode(str, 'UTF-8')
+    if isinstance(str, unicode):
+        return str
+    return unicode(str, 'UTF-8')
 
 def loadUi(file, parent):
     if os.path.exists(file):

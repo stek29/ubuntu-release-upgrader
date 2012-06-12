@@ -64,7 +64,7 @@ class InstallBackendSynaptic(InstallBackend):
         opt.append("%s" % _("Please wait, this can take some time."))
         opt.append("--finish-str")
         opt.append("%s" %  _("Update is complete"))
-        tempf = tempfile.NamedTemporaryFile()
+        tempf = tempfile.NamedTemporaryFile(mode="w+")
         for pkg_name in pkgs_install + pkgs_upgrade:
             tempf.write("%s\tinstall\n" % pkg_name)
         opt.append("--set-selections-file")

@@ -8,13 +8,13 @@ import datetime
 import os
 import subprocess
 import gettext
+import sys
 
 from apt.utils import (
     get_maintenance_end_date,
     get_release_date_from_release_file,
     get_release_filename_for_pkg,
     )
-from gettext import gettext as _
 from optparse import OptionParser
 from UpdateManager.Core.utils import twrap
 
@@ -68,8 +68,16 @@ def get_maintenance_status(cache, pkgname, supported_tag):
     return (True, "%(support_end_month_str)s %(support_end_year)s (%(support_tag)s)" % d)
             
 if __name__ == "__main__":
+    #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+    #       correctly, see http://bugs.python.org/issue4391
+    #       Should be resolved by Python3
     gettext.bindtextdomain("update-manager", "/usr/share/locale")
     gettext.textdomain("update-manager")
+    translation = gettext.translation("update-manager", fallback=True)
+    if sys.version >= '3':
+        _ = translation.gettext
+    else:
+        _ = translation.ugettext
 
     try:
         locale.setlocale(locale.LC_ALL, "")
@@ -77,22 +85,18 @@ if __name__ == "__main__":
         pass
 
     parser = OptionParser()
-    #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
-    #       correctly, see http://bugs.python.org/issue4391
-    #       Should be resolved by Python3
-    enc = locale.getpreferredencoding()
     parser.add_option("", "--show-unsupported",
                       action="store_true", default=False,
-                      help=_("Show unsupported packages on this machine").decode(enc))
+                      help=_("Show unsupported packages on this machine"))
     parser.add_option("", "--show-supported",
                       action="store_true", default=False,
-                      help=_("Show supported packages on this machine").decode(enc))
+                      help=_("Show supported packages on this machine"))
     parser.add_option("", "--show-all",
                       action="store_true", default=False,
-                      help=_("Show all packages with their status").decode(enc))
+                      help=_("Show all packages with their status"))
     parser.add_option("", "--list",
                       action="store_true", default=False,
-                      help=_("Show all packages in a list").decode(enc))
+                      help=_("Show all packages in a list"))
 
     (options, args) = parser.parse_args()
 

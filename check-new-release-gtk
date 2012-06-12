@@ -44,8 +44,6 @@ from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
 from UpdateManager.SimpleGtk3builderApp import SimpleGtkbuilderApp
 
-from gettext import gettext as _
-
 GObject.threads_init()
 
 # overwrite default upgrade fetcher and make it not show the
@@ -164,8 +162,16 @@ if __name__ == "__main__":
 
   Gtk.init_check(sys.argv)
 
+  #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
+  #       correctly, see http://bugs.python.org/issue4391
+  #       Shoudl be resolved by Python3
   gettext.bindtextdomain("update-manager", "/usr/share/locale")
   gettext.textdomain("update-manager")
+  translation = gettext.translation("update-manager", fallback=True)
+  if sys.version >= '3':
+    _ = translation.gettext
+  else:
+    _ = translation.ugettext
 
   try:
     locale.setlocale(locale.LC_ALL, "")
@@ -175,23 +181,19 @@ if __name__ == "__main__":
   init_proxy()
 
   parser = OptionParser()
-  #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
-  #       correctly, see http://bugs.python.org/issue4391
-  #       Shoudl be resolved by Python3
-  enc = locale.getpreferredencoding()
   parser.add_option ("-d", "--devel-release", action="store_true",
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
-                          "is possible").decode(enc))
+                          "is possible"))
   parser.add_option ("-p", "--proposed", action="store_true",
                      dest="proposed_release", default=False,
                      help=_("Try upgrading to the latest release using "
-                            "the upgrader from $distro-proposed").decode(enc))
+                            "the upgrader from $distro-proposed"))
   # mostly useful for development
   parser.add_option ("", "--datadir", default="/usr/share/update-manager")
   parser.add_option ("", "--test-uri")
   parser.add_option ("", "--debug", action="store_true", default=False,
-                     help=_("Add debug output").decode(enc))
+                     help=_("Add debug output"))
   (options, args) = parser.parse_args()
 
   if options.debug:

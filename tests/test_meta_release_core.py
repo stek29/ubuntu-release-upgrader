@@ -131,7 +131,7 @@ class TestMetaReleaseCore(unittest.TestCase):
             time.sleep(0.1)
         uri = meta.new_dist.releaseNotesHtmlUri
         f = urlopen(uri)
-        data = f.read()
+        data = f.read().decode("UTF-8")
         self.assertTrue(len(data) > 0)
         self.assertTrue("<html>" in data)
         del os.environ["META_RELEASE_FAKE_CODENAME"]

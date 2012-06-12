@@ -101,7 +101,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
           result = None
           try:
               release_notes = urlopen(uri)
-              notes = release_notes.read()
+              notes = release_notes.read().decode("UTF-8", "replace")
               self.dialogue.scrolled_notes.setText(notes)
               result = self.dialogue.exec_()
           except HTTPError:

@@ -285,7 +285,7 @@ class MetaReleaseCore(object):
                     print("Can't unlink '%s' (%s)" % (self.METARELEASE_FILE, e))
             # we may get exception here on e.g. disk full
             try:
-                f=open(self.METARELEASE_FILE,"w+")
+                f=open(self.METARELEASE_FILE,"w+b")
                 for line in uri.readlines():
                     f.write(line)
                 f.flush()

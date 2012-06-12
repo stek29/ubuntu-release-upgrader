@@ -230,7 +230,7 @@ class MyCache(DistUpgrade.DistUpgradeCache.MyCache):
         regexp = "^%s \((.*)\)(.*)$" % (re.escape(srcpkg))
         
         while True:
-            line = changelog.readline()
+            line = changelog.readline().decode("UTF-8", "replace")
             if line == "":
                 break
             match = re.match(regexp,line)

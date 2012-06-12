@@ -1108,7 +1108,8 @@ class DistUpgradeQuirks(object):
             # does not match but this will remove a misleading error in the 
             # logs
             md5 = hashlib.md5()
-            md5.update(open(path).read())
+            with open(path, "rb") as fd:
+                md5.update(fd.read())
             if md5.hexdigest() == result_md5sum:
                 logging.debug("already at target hash, skipping '%s'" % path)
                 continue

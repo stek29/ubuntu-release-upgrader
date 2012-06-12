@@ -18,8 +18,6 @@ def plugins():
 
 setup(name='update-manager',
       version='0.56',
-      ext_modules=[Extension('UpdateManager.fdsend',
-                             ['UpdateManager/fdsend/fdsend.c'])],
       packages=[
                 'UpdateManager',
                 'UpdateManager.backend',

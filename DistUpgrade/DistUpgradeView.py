@@ -40,9 +40,9 @@ def FuzzyTimeToStr(sec):
   #print("FuzzyTimeToStr: ", sec)
   sec = int(sec)
 
-  days = sec/(60*60*24)
-  hours = sec/(60*60) % 24
-  minutes = (sec/60) % 60
+  days = sec//(60*60*24)
+  hours = sec//(60*60) % 24
+  minutes = (sec//60) % 60
   seconds = sec % 60
   # 0 seonds remaining looks wrong and its "fuzzy" anyway
   if seconds == 0:

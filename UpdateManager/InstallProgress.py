@@ -1,4 +1,4 @@
-# UpdateProgress.py
+# InstallProgress.py
 #  
 #  Copyright (c) 2004-2012 Canonical
 #                2004 Michiel Sikkes
@@ -30,6 +30,7 @@
 from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk
+#from gi.repository import Gio
 from gi.repository import GLib
 
 import warnings
@@ -47,7 +48,7 @@ from UpdateManager.UpdatesAvailable import UpdatesAvailable
 from .Core.utils import (inhibit_sleep,
                          allow_sleep)
 
-class UpdateProgress(object):
+class InstallProgress(object):
 
   def __init__(self, app):
     self.window_main = app
@@ -63,19 +64,32 @@ class UpdateProgress(object):
     self.install_backend.connect("action-done", self._on_backend_done)
 
   def invoke_manager(self):
-    # don't display apt-listchanges
+    # don't display apt-listchanges, we already showed the changelog
     os.environ["APT_LISTCHANGES_FRONTEND"]="none"
 
     # Do not suspend during the update process
     (self.sleep_dev, self.sleep_cookie) = inhibit_sleep()
 
-    self.install_backend.update()
+    # If the progress dialog should be closed automatically afterwards
+    #settings = Gio.Settings("com.ubuntu.update-manager")
+    #close_on_done = settings.get_boolean("autoclose-install-window")
+    close_on_done = False # FIXME: confirm with mpt whether this should still be a setting
+
+    # Get the packages which should be installed and update
+    pkgs_install = []
+    pkgs_upgrade = []
+    for pkg in self.window_main.cache:
+        if pkg.marked_install:
+            pkgs_install.append(pkg.name)
+        elif pkg.marked_upgrade:
+            pkgs_upgrade.append(pkg.name)
+    self.install_backend.commit(pkgs_install, pkgs_upgrade, close_on_done)
 
   def _on_backend_done(self, backend, action, authorized, success):
     # Allow suspend after synaptic is finished
     if self.sleep_cookie:
-      allow_sleep(self.sleep_dev, self.sleep_cookie)
-      self.sleep_cookie = self.sleep_dev = None
+        allow_sleep(self.sleep_dev, self.sleep_cookie)
+        self.sleep_cookie = self.sleep_dev = None
 
     # Either launch main dialog and continue or quit altogether
     if success:

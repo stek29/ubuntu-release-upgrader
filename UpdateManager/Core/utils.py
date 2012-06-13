@@ -381,9 +381,6 @@ def str_to_bool(str):
     return False
   return True
 
-def utf8(str):
-  return unicode(str, 'latin1').encode('utf-8')
-
 def get_lang():
     import logging
     try:

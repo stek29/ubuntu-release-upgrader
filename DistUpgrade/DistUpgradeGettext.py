@@ -21,6 +21,14 @@
 
 import logging
 import gettext as mygettext
+import sys
+
+if sys.version >= '3':
+    _gettext_method = "gettext"
+    _ngettext_method = "ngettext"
+else:
+    _gettext_method = "ugettext"
+    _ngettext_method = "ungettext"
 
 def _verify(message, translated):
     """ 
@@ -31,6 +39,22 @@ def _verify(message, translated):
     arguments_in_translation = translated.count("%") - translated.count("\%")
     return arguments_in_message == arguments_in_translation
 
+_translation_singleton = None
+def _translation():
+    """Return a suitable gettext.*Translations instance."""
+    global _translation_singleton
+    if _translation_singleton is None:
+        domain = mygettext.textdomain()
+        _translation_singleton = mygettext.translation(
+            domain, mygettext.bindtextdomain(domain), fallback=True)
+    return _translation_singleton
+
+def unicode_gettext(translation, message):
+    return getattr(translation, _gettext_method)(message)
+
+def unicode_ngettext(translation, singular, plural, n):
+    return getattr(translation, _ngettext_method)(singular, plural, n)
+
 def gettext(message):
     """
     version of gettext that logs errors but does not crash on incorrect
@@ -38,7 +62,7 @@ def gettext(message):
     """
     if message == "":
         return ""
-    translated_msg = mygettext.gettext(message)
+    translated_msg = unicode_gettext(_translation(), message)
     if not _verify(message, translated_msg):
         logging.error("incorrect translation for message '%s' to '%s' (wrong number of arguments)" % (message, translated_msg))
         return message
@@ -49,7 +73,7 @@ def ngettext(msgid1, msgid2, n):
     version of ngettext that logs errors but does not crash on incorrect
     number of arguments
     """
-    translated_msg = mygettext.ngettext(msgid1, msgid2, n)
+    translated_msg = unicode_ngettext(_translation(), msgid1, msgid2, n)
     if not _verify(msgid1, translated_msg):
         logging.error("incorrect translation for ngettext message '%s' plural: '%s' to '%s' (wrong number of arguments)" % (msgid1, msgid2, translated_msg))
         # dumb fallback to not crash

@@ -52,9 +52,6 @@ from .DistUpgradeGettext import gettext as _
 
 GObject.threads_init()
 
-def utf8(str):
-    return unicode(str, 'latin1').encode('utf-8')
-
 class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress
         Subclass this class to implement cdrom add progress reporting
@@ -226,7 +223,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.parent.dialog_error.set_title("")
         self.parent.dialog_error.get_window().set_functions(Gdk.WMFunction.MOVE)
         self.parent.label_error.set_markup(markup)
-        self.parent.textview_error.get_buffer().set_text(utf8(errormsg))
+        self.parent.textview_error.get_buffer().set_text(errormsg)
         self.parent.scroll_error.show()
         self.parent.dialog_error.run()
         self.parent.dialog_error.hide()
@@ -251,7 +248,9 @@ class GtkInstallProgressAdapter(InstallProgress):
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
             cmd = ["/usr/bin/diff", "-u", current, new]
-            diff = utf8(subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0])
+            diff = subprocess.Popen(
+                cmd, stdout=subprocess.PIPE).communicate()[0]
+            diff = diff.decode("UTF-8", "replace")
             self.parent.textview_conffile.get_buffer().set_text(diff)
         else:
             self.parent.textview_conffile.get_buffer().set_text(_("The 'diff' command was not found"))

@@ -3,7 +3,7 @@
 set -e
 
 dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
-			python-mock, xvfb'
+			python-mock, xvfb, gir1.2-gtk-3.0'
 
 # update demotions
 (cd utils && ./demotions.py precise quantal > demoted.cfg)

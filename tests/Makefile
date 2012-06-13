@@ -10,8 +10,10 @@ check:
 		echo "*** RUNNING $$file"; \
 		if grep -q Gtk $$file; then \
 			xvfb-run python $$file; \
+			xvfb-run python3 $$file; \
 		else \
 	    		python $$file ; \
+	    		python3 $$file ; \
 		fi; \
 	    fi; \
 	done

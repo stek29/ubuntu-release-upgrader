@@ -42,7 +42,7 @@ rm -rf utils/apt/lists utils/apt/*.bin
 
 # run the test-suit
 #echo "Running integrated tests"
-#(cd tests && make)
+(cd tests && make)
 
 # test leftovers
 rm -f ./tests/data-sources-list-test/apt.log

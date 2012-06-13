@@ -2,12 +2,8 @@
 
 set -e
 
-dpkg-checkbuilddeps \
-	-d apt-btrfs-snapshot \
-	-d parsewiki \
-	-d python-feedparser \
-	-d python-mock \
-	-d xvfb
+dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
+			python-mock, xvfb'
 
 # update demotions
 (cd utils && ./demotions.py precise quantal > demoted.cfg)

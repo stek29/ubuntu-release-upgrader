@@ -5,6 +5,7 @@ from __future__ import print_function
 import apt
 import locale
 import datetime
+import operator
 import os
 import subprocess
 import gettext
@@ -177,7 +178,7 @@ if __name__ == "__main__":
         pkg = max(cache, key=lambda pkg: pkg.is_installed and len(pkg.name))
         field_width = len(pkg.name)
         format_str = "%-"+str(field_width)+"s  %s"
-        for pkg in sorted(cache, cmp=lambda a,b: cmp(a.name, b.name)):
+        for pkg in sorted(cache, key=operator.attrgetter("name")):
             if pkg.is_installed:
                 support =  supported_time_for_pkgname.get(pkg.name, _("Unsupported"))
                 print(format_str % (pkg.name, support))

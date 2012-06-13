@@ -2,6 +2,13 @@
 
 set -e
 
+dpkg-checkbuilddeps \
+	-d apt-btrfs-snapshot \
+	-d parsewiki \
+	-d python-feedparser \
+	-d python-mock \
+	-d xvfb
+
 # update demotions
 (cd utils && ./demotions.py precise quantal > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade

@@ -22,9 +22,9 @@ X-Python3-Version: >= 3.2
 Package: update-manager-core
 Architecture: all
 Section: admin
-Depends: ${python:Depends}, 
+Depends: ${python3:Depends},
          ${misc:Depends}, 
-         python-update-manager,
+         python3-update-manager (= ${source:Version}),
          lsb-release
 Recommends: libpam-modules (>= 1.0.1-9ubuntu3)
 Replaces: update-manager (<< 1:0.146.2)
@@ -63,12 +63,12 @@ Description: python 3.x module for update-manager
 
 Package: update-manager
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, 
+Depends: ${python3:Depends}, ${misc:Depends}, 
          update-manager-core (= ${source:Version}),
-         python-aptdaemon.gtk3widgets (>= 0.40) | synaptic, 
+         python3-aptdaemon.gtk3widgets (>= 0.40) | synaptic, 
          gksu,
-         python-dbus,
-         python-gi,
+         python3-dbus,
+         python3-gi,
          gir1.2-vte-2.90, 
          gir1.2-gtk-3.0,
 Recommends: software-properties-gtk (>= 0.71.2), 
@@ -82,10 +82,10 @@ Description: GNOME application that manages apt updates
 Package: update-manager-text
 Architecture: all
 Section: admin
-Depends: ${python:Depends}, 
+Depends: ${python3:Depends}, 
          ${misc:Depends}, 
          update-manager-core, 
-         python-newt
+         python3-newt
 Description: Text application that manages apt updates
  This is the newt apt update manager.  It checks for updates and lets the user
  choose which to install.
@@ -93,10 +93,10 @@ Description: Text application that manages apt updates
 Package: update-manager-kde
 Architecture: all
 Section: kde
-Depends: ${python:Depends}, 
+Depends: ${python3:Depends}, 
          ${misc:Depends}, 
          update-manager-core, 
-         python-kde4, 
+         python3-pykde4, 
          kdesudo,
          psmisc
 Description: Support modules for Muon Notifier and Apper

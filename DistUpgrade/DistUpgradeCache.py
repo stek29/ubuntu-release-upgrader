@@ -498,7 +498,9 @@ class MyCache(apt.Cache):
         # never be able to release
         try:
             from .NvidiaDetector.nvidiadetector import NvidiaDetection
-        except ImportError as e:
+        except (ImportError, SyntaxError) as e:
+            # SyntaxError is temporary until the port of NvidiaDetector to
+            # Python 3 is in the archive.
             logging.error("NvidiaDetector can not be imported %s" % e)
             return False
         try:

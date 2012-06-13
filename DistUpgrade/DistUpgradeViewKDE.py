@@ -242,11 +242,14 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.progress_text = parent.window_main.progress_text
         self.parent = parent
         try:
-            self._terminal_log = open("/var/log/dist-upgrade/term.log","w")
+            self._terminal_log = open("/var/log/dist-upgrade/term.log","wb")
         except Exception as e:
             # if something goes wrong (permission denied etc), use stdout
             logging.error("Can not open terminal log: '%s'" % e)
-            self._terminal_log = sys.stdout
+            if sys.version >= '3':
+                self._terminal_log = sys.stdout.buffer
+            else:
+                self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
         apt_pkg.config.set("DPkg::StopOnError","False")
 

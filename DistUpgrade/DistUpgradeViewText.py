@@ -155,6 +155,7 @@ class DistUpgradeViewText(DistUpgradeView):
       print(twrap(summary))
       print(twrap(self.confirmChangesMessage))
       print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
+      sys.stdout.flush()
       while True:
         res = sys.stdin.readline()
         # TRANSLATORS: the "y" is "yes"

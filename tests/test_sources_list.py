@@ -12,7 +12,10 @@ import apt_pkg
 import unittest
 from DistUpgrade.DistUpgradeController import DistUpgradeController
 from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
+from DistUpgrade import DistUpgradeConfigParser
 import logging
+
+DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
 class TestSourcesListUpdate(unittest.TestCase):
 
@@ -248,6 +251,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
     def test_private_ppa_transition(self):
+        if "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ:
+            del os.environ["RELEASE_UPRADER_ALLOW_THIRD_PARTY"]
         shutil.copy(
             os.path.join(self.testdir,"sources.list.commercial-ppa-uploaders"),
             os.path.join(self.testdir,"sources.list"))

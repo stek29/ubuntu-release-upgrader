@@ -102,7 +102,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           try:
               socket.setdefaulttimeout(5)
               release_notes = urlopen(uri)
-              notes = release_notes.read()
+              notes = release_notes.read().decode("UTF-8", "replace")
               textview_release_notes = ReleaseNotesViewer(notes)
               textview_release_notes.show()
               self.parent.scrolled_notes.add(textview_release_notes)

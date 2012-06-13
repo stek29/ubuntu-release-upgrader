@@ -34,7 +34,11 @@ class InstallBackendSynaptic(InstallBackend):
         cmd.extend(opt)
         flags = GObject.SPAWN_DO_NOT_REAP_CHILD
         (pid, stdin, stdout, stderr) = GObject.spawn_async(cmd, flags=flags)
-        GObject.child_watch_add(pid, self._on_synaptic_exit, (action, tempf))
+        # Keep a reference to the data tuple passed to
+        # GObject.child_watch_add to avoid attempts to destroy it without a
+        # thread context: https://bugs.launchpad.net/bugs/724687
+        self.child_data = (action, tempf)
+        GObject.child_watch_add(pid, self._on_synaptic_exit, self.child_data)
 
     def _on_synaptic_exit(self, pid, condition, data):
         action, tempf = data
@@ -60,7 +64,7 @@ class InstallBackendSynaptic(InstallBackend):
         opt.append("%s" % _("Please wait, this can take some time."))
         opt.append("--finish-str")
         opt.append("%s" %  _("Update is complete"))
-        tempf = tempfile.NamedTemporaryFile()
+        tempf = tempfile.NamedTemporaryFile(mode="w+")
         for pkg_name in pkgs_install + pkgs_upgrade:
             tempf.write("%s\tinstall\n" % pkg_name)
         opt.append("--set-selections-file")

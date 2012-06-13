@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import apt
 import apt_pkg
+import operator
 import sys
 import threading
 import time
@@ -47,7 +48,7 @@ class UpdateManagerText(object):
         # FIXME: better progress than the current suspend/resume screen thing
         self.screen.suspend()
         if not self.DEBUG:
-            apt_pkg.PkgSystemLock()
+            apt_pkg.pkgsystem_lock()
         self.openCache()
         print(_("Building Updates List"))
         self.fillstore()
@@ -76,7 +77,7 @@ This can be caused by:
             self.cache._initDepCache()
         else:
             self.cache = MyCache(progress)
-            self.actiongroup = apt_pkg.GetPkgActionGroup(self.cache._depcache)
+            self.actiongroup = apt_pkg.ActionGroup(self.cache._depcache)
         # lock the cache
         self.cache.lock = True
 
@@ -84,9 +85,9 @@ This can be caused by:
         # populate the list
         self.list = UpdateList(self)
         self.list.update(self.cache)
-        origin_list = self.list.pkgs.keys()
-        origin_list.sort(lambda x,y: cmp(x.importance, y.importance))
-        origin_list.reverse()
+        origin_list = sorted(
+            self.list.pkgs, key=operator.attrgetter("importance"),
+            reverse=True)
         for (i, origin) in enumerate(origin_list):
             self.checkbox_tree_updates.append(origin.description, selected=True)
             for pkg in self.list.pkgs[origin]:
@@ -104,7 +105,7 @@ This can be caused by:
             if pkg not in self.checkbox_tree_updates.item2key:
                 continue
             # update based on the status
-            if pkg.markedUpgrade or pkg.markedInstall:
+            if pkg.marked_upgrade or pkg.marked_install:
                 self.checkbox_tree_updates.setEntryValue(pkg, True)
             else:
                 self.checkbox_tree_updates.setEntryValue(pkg, False)
@@ -147,25 +148,25 @@ This can be caused by:
             need_refresh = False
             name = pkg.name
             if self.options.show_description:
-                descr = pkg.description
+                descr = getattr(pkg.candidate, "description", None)
             else:
                 descr = self.get_news_and_changelog(pkg)
             # check if it is a wanted package
             selected = self.checkbox_tree_updates.getEntryValue(pkg)[1]
-            marked_install_upgrade = pkg.markedInstall or pkg.markedUpgrade
+            marked_install_upgrade = pkg.marked_install or pkg.marked_upgrade
             if not selected and marked_install_upgrade:
                 need_refresh = True
-                pkg.markKeep()
+                pkg.mark_keep()
             if selected and not marked_install_upgrade:
                 if not (name in self.list.held_back):
                     # FIXME: properly deal with "fromUser" here
                     need_refresh = True
-                    pkg.markInstall()
+                    pkg.mark_install()
             # fixup any problems
-            if self.cache._depcache.BrokenCount:
+            if self.cache._depcache.broken_count:
                 need_refresh = True
-                Fix = apt_pkg.GetPkgProblemResolver(self.cache._depcache)
-                Fix.ResolveByKeep()
+                Fix = apt_pkg.ProblemResolver(self.cache._depcache)
+                Fix.resolve_by_keep()
             # update the list UI to reflect the cache state
             if need_refresh:
                 self.updateSelectionStates()

@@ -25,7 +25,8 @@ import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
 
 from gettext import gettext as _
-import os
+import operator
+import subprocess
 import sys
 
 class UpdateOrigin(object):
@@ -43,10 +44,9 @@ class UpdateList(object):
   def __init__(self, parent):
     # a map of packages under their origin
     try:
-        pipe = os.popen("lsb_release -c -s")
-        dist = pipe.read().strip()
-        del pipe
-    except Exception as e:
+        dist = subprocess.check_output(
+            ["lsb_release", "-c", "-s"], universal_newlines=True).strip()
+    except subprocess.CalledProcessError as e:
         print("Error in lsb_release: %s" % e)
         parent.error(_("Failed to detect distribution"),
                      _("A error '%s' occurred while checking what system "
@@ -83,13 +83,13 @@ class UpdateList(object):
     # sort by origin
     for pkg in cache:
       if pkg.is_upgradable or pkg.marked_install:
-        if pkg.candidateOrigin == None:
+        if getattr(pkg.candidate, "origins", None) == None:
             # can happen for e.g. locked packages
             # FIXME: do something more sensible here (but what?)
-            print("WARNING: upgradable but no canidateOrigin?!?: ", pkg.name)
+            print("WARNING: upgradable but no candidate.origins?!?: ", pkg.name)
             continue
         # check where the package belongs
-        origin_node = cache.matchPackageOrigin(pkg, self.matcher)
+        origin_node = cache.match_package_origin(pkg, self.matcher)
         if origin_node not in self.pkgs:
           self.pkgs[origin_node] = []
         self.pkgs[origin_node].append(pkg)
@@ -97,6 +97,6 @@ class UpdateList(object):
       if pkg.is_upgradable and not (pkg.marked_upgrade or pkg.marked_install):
           self.held_back.append(pkg.name)
     for l in self.pkgs.keys():
-      self.pkgs[l].sort(lambda x,y: cmp(x.name,y.name))
+      self.pkgs[l].sort(key=operator.attrgetter("name"))
     self.keepcount = cache._depcache.keep_count
 

@@ -2,10 +2,17 @@
 
 set -e
 
+dpkg-checkbuilddeps \
+	-d apt-btrfs-snapshot \
+	-d parsewiki \
+	-d python-feedparser \
+	-d python-mock \
+	-d xvfb
+
 # update demotions
-(cd utils && ./demotions.py oneiric precise > demoted.cfg)
+(cd utils && ./demotions.py precise quantal > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
-(cd utils && ./demotions.py lucid precise > demoted.cfg.lucid)
+#(cd utils && ./demotions.py lucid precise > demoted.cfg.lucid)
 
 # update base-installer
 (cd utils && ./update-base-installer.sh)

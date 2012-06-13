@@ -104,12 +104,12 @@ class ChangelogViewer(Gtk.TextView):
         """Apply the tag that marks links to the specified buffer selection"""
         tags = start.get_tags()
         for tag in tags:
-            url = tag.get_data("url")
+            url = getattr(tag, "url", None)
             if url != "":
                 return
         tag = self.buffer.create_tag(None, foreground="blue",
                                      underline=Pango.Underline.SINGLE)
-        tag.set_data("url", url)
+        tag.url = url
         self.buffer.apply_tag(tag , start, end)
 
     def on_insert_text(self, buffer, iter_end, text, *args):
@@ -209,13 +209,12 @@ class ChangelogViewer(Gtk.TextView):
         # call open_url or menu.popup if an URL is assigned to the iter
         tags = iter.get_tags()
         for tag in tags:
-            url = tag.get_data("url")
-            if url != None:
+            if hasattr(tag, "url"):
                 if event.button == 1: 
-                    open_url(url)
+                    open_url(tag.url)
                     break
                 if event.button == 3:
-                    self.create_context_menu(url)
+                    self.create_context_menu(tag.url)
                     self.menu.popup(None, None, None, None, event.button, event.time)
                     return True
 
@@ -248,8 +247,7 @@ class ChangelogViewer(Gtk.TextView):
         # set _hovering if the iter has the tag "url"
         tags = iter.get_tags()
         for tag in tags:
-            url = tag.get_data("url")
-            if url != None:
+            if hasattr(tag, "url"):
                 _hovering = True
                 break
 

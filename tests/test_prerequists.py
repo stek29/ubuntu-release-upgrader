@@ -12,6 +12,9 @@ sys.path.insert(0,"../")
 
 from DistUpgrade.DistUpgradeController import DistUpgradeController, NoBackportsFoundException
 from DistUpgrade.DistUpgradeView import DistUpgradeView
+from DistUpgrade import DistUpgradeConfigParser
+
+DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
 class testPreRequists(unittest.TestCase):
     " this test the prerequists fetching "

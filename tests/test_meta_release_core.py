@@ -126,12 +126,12 @@ class TestMetaReleaseCore(unittest.TestCase):
         os.environ["META_RELEASE_FAKE_CODENAME"] = "lucid"
         # useDevelopmentRelease=True is only needed until precise is
         # released
-        meta = MetaReleaseCore(forceDownload=True, useDevelopmentRelease=True)
+        meta = MetaReleaseCore(forceDownload=True, forceLTS=True, useDevelopmentRelease=True)
         while meta.downloading:
             time.sleep(0.1)
         uri = meta.new_dist.releaseNotesHtmlUri
         f = urlopen(uri)
-        data = f.read()
+        data = f.read().decode("UTF-8")
         self.assertTrue(len(data) > 0)
         self.assertTrue("<html>" in data)
         del os.environ["META_RELEASE_FAKE_CODENAME"]

@@ -23,7 +23,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         def _nag_dialog_close_helper(checker):
             # this helper is called to verify that the nag dialog appears
             # and that it 
-            dialog = checker.window_main.get_data("no-longer-supported-nag")
+            dialog = getattr(checker.window_main, "no_longer_supported_nag", None)
             self.assertNotEqual(dialog, None)
             dialog.response(Gtk.ResponseType.DELETE_EVENT)
             self.dialog_called = True

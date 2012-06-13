@@ -40,9 +40,9 @@ def FuzzyTimeToStr(sec):
   #print("FuzzyTimeToStr: ", sec)
   sec = int(sec)
 
-  days = sec/(60*60*24)
-  hours = sec/(60*60) % 24
-  minutes = (sec/60) % 60
+  days = sec//(60*60*24)
+  hours = sec//(60*60) % 24
+  minutes = (sec//60) % 60
   seconds = sec % 60
   # 0 seonds remaining looks wrong and its "fuzzy" anyway
   if seconds == 0:
@@ -143,16 +143,16 @@ class AcquireProgress(apt.progress.base.AcquireProgress):
     return True
   def isDownloadSpeedEstimated(self):
     return (self.est_speed != 0)
-  def estimatedDownloadTime(self, requiredDownload):
+  def estimatedDownloadTime(self, required_download):
     """ get the estimated download time """
     if self.est_speed == 0:
-      timeModem = requiredDownload/(56*1024/8)  # 56 kbit 
-      timeDSL = requiredDownload/(1024*1024/8)  # 1Mbit = 1024 kbit
+      timeModem = required_download/(56*1024/8)  # 56 kbit 
+      timeDSL = required_download/(1024*1024/8)  # 1Mbit = 1024 kbit
       s= _("This download will take about %s with a 1Mbit DSL connection "
            "and about %s with a 56k modem.") % (FuzzyTimeToStr(timeDSL), FuzzyTimeToStr(timeModem))
       return s
     # if we have a estimated speed, use it
-    s = _("This download will take about %s with your connection. ") % FuzzyTimeToStr(requiredDownload/self.est_speed)
+    s = _("This download will take about %s with your connection. ") % FuzzyTimeToStr(required_download/self.est_speed)
     return s
     
 
@@ -254,6 +254,8 @@ class DummyHtmlView(object):
  STEP_REBOOT,
  STEP_N) = range(1,8)
 
+# Declare these translatable strings from the .ui files here so that
+# xgettext picks them up.
 ( _("Preparing to upgrade"),
   _("Getting new software channels"),
   _("Getting new packages"),
@@ -369,7 +371,7 @@ class DistUpgradeView(object):
           msg +=" "
         if downloadSize > 0:
           msg += _("\n\nYou have to download a total of %s. ") %\
-              apt_pkg.SizeToStr(downloadSize)
+              apt_pkg.size_to_str(downloadSize)
           msg += self.getAcquireProgress().estimatedDownloadTime(downloadSize)
         if ((pkgs_upgrade + pkgs_inst) > 0) and ((pkgs_upgrade + pkgs_inst + pkgs_remove) > 100):
           if self.getAcquireProgress().isDownloadSpeedEstimated():

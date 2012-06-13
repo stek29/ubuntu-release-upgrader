@@ -47,21 +47,21 @@ class GtkOpProgressInline(apt.progress.base.OpProgress):
         self.base = 0
         self.old = 0
         self.next = int(self.steps.pop(0))
-    def update(self, percent):
-        # ui
+    def update(self, percent=None):
+        super(GtkOpProgressInline, self).update(percent)
         self._progressbar.show()
         self._parent.set_sensitive(False)
         # if the old percent was higher, a new progress was started
-        if self.old > percent:
+        if self.old > self.percent:
             # set the borders to the next interval
             self.base = self.next
             try:
                 self.next = int(self.steps.pop(0))
             except:
                 pass
-        progress = self.base + percent/100 * (self.next - self.base)
-        self.old = percent
-        if abs(percent-self._progressbar.get_fraction()*100.0) > 0.5:
+        progress = self.base + self.percent/100 * (self.next - self.base)
+        self.old = self.percent
+        if abs(self.percent-self._progressbar.get_fraction()*100.0) > 0.5:
             self._progressbar.set_text("%s" % self.op)
             self._progressbar.set_fraction(progress/100.0)
         while Gtk.events_pending():
@@ -94,8 +94,9 @@ class GtkOpProgressWindow(apt.progress.base.OpProgress):
         host_window.get_window().set_functions(Gdk.WMFunction.MOVE)
         self._window.set_transient_for(parent)
 
-    def update(self, percent):
-        #print(percent)
+    def update(self, percent=None):
+        super(GtkOpProgressWindow, self).update(percent)
+        #print(self.percent)
         #print(self.Op)
         #print(self.SubOp)
         # only show progress bar if the parent is not iconified (#353195)
@@ -104,16 +105,16 @@ class GtkOpProgressWindow(apt.progress.base.OpProgress):
             self._window.show()
         self._parent.set_sensitive(False)
         # if the old percent was higher, a new progress was started
-        if self.old > percent:
+        if self.old > self.percent:
             # set the borders to the next interval
             self.base = self.next
             try:
                 self.next = int(self.steps.pop(0))
             except:
                 pass
-        progress = self.base + percent/100 * (self.next - self.base)
-        self.old = percent
-        if abs(percent-self._progressbar.get_fraction()*100.0) > 0.1:
+        progress = self.base + self.percent/100 * (self.next - self.base)
+        self.old = self.percent
+        if abs(self.percent-self._progressbar.get_fraction()*100.0) > 0.1:
             self._status.set_markup("<i>%s</i>" % self.op)
             self._progressbar.set_fraction(progress/100.0)
         while Gtk.events_pending():
@@ -201,9 +202,9 @@ if __name__ == "__main__":
     res = cache.update(acquire_progress)
     # generate a dist-upgrade (to feed data to the fetcher) and get it
     cache.upgrade()
-    pm = apt_pkg.GetPackageManager(cache._depcache)
-    fetcher = apt_pkg.GetAcquire(acquire_progress)
-    res = cache._fetchArchives(fetcher, pm)
+    pm = apt_pkg.PackageManager(cache._depcache)
+    fetcher = apt_pkg.Acquire(acquire_progress)
+    res = cache._fetch_archives(fetcher, pm)
     print(res)
     
     

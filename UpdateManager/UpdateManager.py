@@ -46,6 +46,7 @@ import os
 import stat
 import re
 import logging
+import operator
 import subprocess
 import time
 import threading
@@ -111,11 +112,11 @@ def show_dist_no_longer_supported_dialog(parent=None):
     dialog.get_content_area().pack_end(button, True, True, 0)
     # this data used in the test to get the dialog
     if parent:
-        parent.set_data("no-longer-supported-nag", dialog)
+        parent.no_longer_supported_nag = dialog
     dialog.run()
     dialog.destroy()
     if parent:
-        parent.set_data("no-longer-supported-nag", None)
+        del parent.no_longer_supported_nag
 
 
 class UpdateManagerDbusController(dbus.service.Object):
@@ -374,14 +375,15 @@ class UpdateManager(SimpleGtkbuilderApp):
 
     # set descr
     pkg = model.get_value(iter, LIST_PKG)
-    if pkg == None or pkg.description == None:
+    if (pkg is None or pkg.candidate is None or
+        pkg.candidate.description is None):
       changes_buffer = self.textview_changes.get_buffer()
       changes_buffer.set_text("")
       desc_buffer = self.textview_descr.get_buffer()
       desc_buffer.set_text("")
       self.notebook_details.set_sensitive(False)
       return
-    long_desc = pkg.description
+    long_desc = pkg.candidate.description
     self.notebook_details.set_sensitive(True)
     # do some regular expression magic on the description
     # Add a newline before each bullet
@@ -408,7 +410,7 @@ class UpdateManager(SimpleGtkbuilderApp):
     # (even if currently disconnected)
     if name in self.cache.all_changes:
       changes = self.cache.all_changes[name]
-      srcpkg = self.cache[name].sourcePackageName
+      srcpkg = self.cache[name].candidate.source_name
       self.set_changes_buffer(changes_buffer, changes, name, srcpkg)
     # if not connected, do not even attempt to get the changes
     elif not self.connected:
@@ -450,7 +452,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         return
     # display NEWS.Debian first, then the changelog
     changes = ""
-    srcpkg = self.cache[name].sourcePackageName
+    srcpkg = self.cache[name].candidate.source_name
     if name in self.cache.all_news:
         changes += self.cache.all_news[name]
     if name in self.cache.all_changes:
@@ -470,7 +472,7 @@ class UpdateManager(SimpleGtkbuilderApp):
         item_select_none = Gtk.MenuItem.new_with_mnemonic(_("_Deselect All"))
         item_select_none.connect("activate", self.select_none_updgrades)
         menu.append(item_select_none)
-        num_updates = self.cache.installCount
+        num_updates = self.cache.install_count
         if num_updates == 0:
             item_select_none.set_property("sensitive", False)
         item_select_all = Gtk.MenuItem.new_with_mnemonic(_("Select _All"))
@@ -526,10 +528,10 @@ class UpdateManager(SimpleGtkbuilderApp):
           Gtk.main_iteration()
 
   def refresh_updates_count(self):
-      self.button_install.set_sensitive(self.cache.installCount)
+      self.button_install.set_sensitive(self.cache.install_count)
       try:
-          inst_count = self.cache.installCount
-          self.dl_size = self.cache.requiredDownload
+          inst_count = self.cache.install_count
+          self.dl_size = self.cache.required_download
           download_str = ""
           if self.dl_size != 0:
               download_str = _("%s will be downloaded.") % (humanize_size(self.dl_size))
@@ -557,7 +559,7 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.hbox_downsize.show()
           self.vbox_alerts.show()
       except SystemError as e:
-          print("requiredDownload could not be calculated: %s" % e)
+          print("required_download could not be calculated: %s" % e)
           self.label_downsize.set_markup(_("Unknown download size."))
           self.image_downsize.set_sensitive(False)
           self.hbox_downsize.show()
@@ -567,7 +569,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       """activate or disable widgets and show dialog texts correspoding to
          the number of available updates"""
       self.refresh_updates_count()
-      num_updates = self.cache.installCount
+      num_updates = self.cache.install_count
 
       # setup unity stuff
       self.unity.set_updates_count(num_updates)
@@ -575,7 +577,7 @@ class UpdateManager(SimpleGtkbuilderApp):
       if num_updates == 0:
           text_header= _("The software on this computer is up to date.")
           self.label_downsize.set_text("\n")
-          if self.cache.keepCount() == 0:
+          if self.cache.keep_count() == 0:
               self.notebook_details.set_sensitive(False)
               self.treeview_update.set_sensitive(False)
           self.button_install.set_sensitive(False)
@@ -918,9 +920,8 @@ class UpdateManager(SimpleGtkbuilderApp):
     if self.list.num_updates > 0:
       #self.treeview_update.set_model(None)
       self.scrolledwindow_update.show()
-      origin_list = self.list.pkgs.keys()
-      origin_list.sort(lambda x,y: cmp(x.importance,y.importance))
-      origin_list.reverse()
+      origin_list = sorted(
+        self.list.pkgs, key=operator.attrgetter("importance"), reverse=True)
       for origin in origin_list:
         self.store.append(['<b><big>%s</big></b>' % origin.description,
                            origin.description, None, origin,True])
@@ -928,19 +929,21 @@ class UpdateManager(SimpleGtkbuilderApp):
           name = xml.sax.saxutils.escape(pkg.name)
           if not pkg.is_installed:
               name += _(" (New install)")
-          summary = xml.sax.saxutils.escape(pkg.summary)
+          summary = xml.sax.saxutils.escape(getattr(pkg.candidate, "summary", None))
           if self.summary_before_name:
               contents = "%s\n<small>%s</small>" % (summary, name)
           else:
               contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
           #TRANSLATORS: the b stands for Bytes
-          size = _("(Size: %s)") % humanize_size(pkg.packageSize)
-          if pkg.installedVersion != None:
+          size = _("(Size: %s)") % humanize_size(getattr(pkg.candidate, "size", 0))
+          installed_version = getattr(pkg.installed, "version", None)
+          candidate_version = getattr(pkg.candidate, "version", None)
+          if installed_version is not None:
               version = _("From version %(old_version)s to %(new_version)s") %\
-                  {"old_version" : pkg.installedVersion,
-                   "new_version" : pkg.candidateVersion}
+                  {"old_version" : installed_version,
+                   "new_version" : candidate_version}
           else:
-              version = _("Version %s") % pkg.candidateVersion
+              version = _("Version %s") % candidate_version
           if self.show_versions:
               contents = "%s\n<small>%s %s</small>" % (contents, version, size)
           else:

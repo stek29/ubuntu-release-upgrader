@@ -215,7 +215,7 @@ def get_dist_description():
   # support debug overwrite
   desc = os.environ.get("META_RELEASE_FAKE_DESCRIPTION")
   if desc:
-      logging.warn("using fake release description '%s' (because of META_RELEASE_FAKE_DESCRIPTION environment) " % dist)
+      logging.warn("using fake release description '%s' (because of META_RELEASE_FAKE_DESCRIPTION environment) " % desc)
       return desc
   # then check the real one
   from subprocess import Popen, PIPE
@@ -380,9 +380,6 @@ def str_to_bool(str):
   if str == "0" or str.upper() == "FALSE":
     return False
   return True
-
-def utf8(str):
-  return unicode(str, 'latin1').encode('utf-8')
 
 def get_lang():
     import logging

@@ -98,7 +98,7 @@ def patch(orig, edpatch, result_md5sum=None):
     result = "".join(orig_lines)
     if result_md5sum:
         md5 = hashlib.md5()
-        md5.update(result)
+        md5.update(result.encode("UTF-8"))
         if md5.hexdigest() != result_md5sum:
             raise PatchError("the md5sum after patching is not correct")
     open(orig, "w").write(result)

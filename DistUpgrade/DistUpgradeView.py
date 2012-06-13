@@ -254,6 +254,15 @@ class DummyHtmlView(object):
  STEP_REBOOT,
  STEP_N) = range(1,8)
 
+# Declare these translatable strings from the .ui files here so that
+# xgettext picks them up.
+( _("Preparing to upgrade"),
+  _("Getting new software channels"),
+  _("Getting new packages"),
+  _("Installing the upgrades"),
+  _("Cleaning up"),
+)
+
 class DistUpgradeView(object):
     " abstraction for the upgrade view "
     def __init__(self):

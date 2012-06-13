@@ -4,16 +4,18 @@ top_srcdir=`pwd`/..
 DOMAIN=ubuntu-release-upgrader
 PO_FILES := $(wildcard *.po)
 CONTACT=sebastian.heinlein@web.de
+XGETTEXT_ARGS = --msgid-bugs-address=$(CONTACT)
+XGETTEXT_ARGS += --keyword=unicode_gettext:2 --keyword=unicode_ngettext:2,3
 
 all: update-po
 
 # update the pot
 $(DOMAIN).pot:
-	XGETTEXT_ARGS=--msgid-bugs-address=$(CONTACT) intltool-update -p -g $(DOMAIN)
+	XGETTEXT_ARGS="$(XGETTEXT_ARGS)" intltool-update -p -g $(DOMAIN)
 
 # merge the new stuff into the po files
 merge-po: $(PO_FILES)
-	XGETTEXT_ARGS=--msgid-bugs-address=$(CONTACT) intltool-update -r -g $(DOMAIN); 
+	XGETTEXT_ARGS="$(XGETTEXT_ARGS)" intltool-update -r -g $(DOMAIN); 
 
 # create mo from the pos
 %.mo : %.po

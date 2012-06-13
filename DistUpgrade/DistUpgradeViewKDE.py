@@ -49,15 +49,14 @@ from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, A
 
 import select
 import gettext
-from .DistUpgradeGettext import gettext as gett
+from .DistUpgradeGettext import gettext as _
+from .DistUpgradeGettext import unicode_gettext
 
-def _(str):
-    return unicode(gett(str), 'UTF-8')
-
-def utf8(str):
-  if isinstance(str, unicode):
-      return str
-  return unicode(str, 'UTF-8')
+def utf8(s, errors="strict"):
+    if isinstance(s, bytes):
+        return s.decode("UTF-8", errors)
+    else:
+        return s
 
 def loadUi(file, parent):
     if os.path.exists(file):
@@ -167,13 +166,14 @@ class KDEOpProgress(apt.progress.base.OpProgress):
       #self.progressbar.set_pulse_step(0.01)
       #self.progressbar.pulse()
 
-  def update(self, percent):
-      #if percent > 99:
+  def update(self, percent=None):
+      super(KDEOpProgress, self).update(percent)
+      #if self.percent > 99:
       #    self.progressbar.set_fraction(1)
       #else:
       #    self.progressbar.pulse()
-      #self.progressbar.set_fraction(percent/100.0)
-      self.progressbar.setValue(percent)
+      #self.progressbar.set_fraction(self.percent/100.0)
+      self.progressbar.setValue(self.percent)
       QApplication.processEvents()
 
   def done(self):
@@ -220,7 +220,7 @@ class KDEAcquireProgressAdapter(AcquireProgress):
 
         if self.current_cps > 0:
             self.status.setText(_("Fetching file %li of %li at %sB/s") % (current_item, self.total_items, apt_pkg.size_to_str(self.current_cps)))
-            self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % unicode(FuzzyTimeToStr(self.eta), 'utf-8') + "</i>")
+            self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % FuzzyTimeToStr(self.eta) + "</i>")
         else:
             self.status.setText(_("Fetching file %li of %li") % (current_item, self.total_items))
             self.parent.window_main.progress_text.setText("  ")
@@ -242,11 +242,14 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.progress_text = parent.window_main.progress_text
         self.parent = parent
         try:
-            self._terminal_log = open("/var/log/dist-upgrade/term.log","w")
+            self._terminal_log = open("/var/log/dist-upgrade/term.log","wb")
         except Exception as e:
             # if something goes wrong (permission denied etc), use stdout
             logging.error("Can not open terminal log: '%s'" % e)
-            self._terminal_log = sys.stdout
+            if sys.version >= '3':
+                self._terminal_log = sys.stdout.buffer
+            else:
+                self._terminal_log = sys.stdout
         # some options for dpkg to make it die less easily
         apt_pkg.config.set("DPkg::StopOnError","False")
 
@@ -280,9 +283,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         dialogue = QDialog(self.parent.window_main)
         loadUi("dialog_error.ui", dialogue)
         self.parent.translate_widget_children(dialogue)
-        dialogue.label_error.setText(utf8(msg))
+        dialogue.label_error.setText(msg)
         if errormsg != None:
-            dialogue.textview_error.setText(utf8(errormsg))
+            dialogue.textview_error.setText(errormsg)
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
@@ -313,7 +316,8 @@ class KDEInstallProgressAdapter(InstallProgress):
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
           cmd = ["/usr/bin/diff", "-u", current, new]
-          diff = utf8(subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0])
+          diff = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0]
+          diff = diff.decode("UTF-8", "replace")
           self.confDialogue.textview_conffile.setText(diff)
         else:
           self.confDialogue.textview_conffile.setText(_("The 'diff' command was not found"))
@@ -352,7 +356,7 @@ class KDEInstallProgressAdapter(InstallProgress):
           #print("setting start time to %s" % self.start_time)
           self.start_time = time.time()
         self.progress.setValue(self.percent)
-        self.label_status.setText(unicode(status.strip(), 'UTF-8'))
+        self.label_status.setText(utf8(status.strip()))
         # start showing when we gathered some data
         if percent > 1.0:
           self.last_activity = time.time()
@@ -383,7 +387,8 @@ class KDEInstallProgressAdapter(InstallProgress):
                 if len(rlist) > 0:
                     line = os.read(self.master_fd, 255)
                     self._terminal_log.write(line)
-                    self.parent.terminal_text.insertWithTermCodes(utf8(line))
+                    self.parent.terminal_text.insertWithTermCodes(
+                        utf8(line, errors="replace"))
                 else:
                     break
             except Exception as e:
@@ -558,9 +563,13 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def translate_widget(self, widget):
         if isinstance(widget, QLabel) or isinstance(widget, QPushButton):
             if str(widget.text()) == "&Cancel":
-                widget.setText(unicode(gettext.dgettext("kdelibs", "&Cancel"), 'UTF-8'))
+                kdelibs = gettext.translation(
+                    "kdelibs", gettext.textdomain("kdelibs"), fallback=True)
+                widget.setText(unicode_gettext(kdelibs, "&Cancel"))
             elif str(widget.text()) == "&Close":
-                widget.setText(unicode(gettext.dgettext("kdelibs", "&Close"), 'UTF-8'))
+                kdelibs = gettext.translation(
+                    "kdelibs", gettext.textdomain("kdelibs"), fallback=True)
+                widget.setText(unicode_gettext(kdelibs, "&Close"))
             elif str(widget.text()) != "":
                 widget.setText( _(str(widget.text())).replace("_", "&") )
 
@@ -626,7 +635,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         return self._cdromProgress
 
     def update_status(self, msg):
-        self.window_main.label_status.setText(utf8(msg))
+        self.window_main.label_status.setText(msg)
 
     def hideStep(self, step):
         image = getattr(self.window_main,"image_step%i" % step)
@@ -682,9 +691,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         dialogue = QDialog(self.window_main)
         loadUi("dialog_error.ui", dialogue)
         self.translate_widget_children(dialogue)
-        dialogue.label_error.setText(utf8(msg))
+        dialogue.label_error.setText(msg)
         if extended_msg != None:
-            dialogue.textview_error.setText(utf8(extended_msg))
+            dialogue.textview_error.setText(extended_msg)
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
@@ -706,9 +715,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         dialogue = QDialog(self.window_main)
         loadUi("dialog_error.ui", dialogue)
         self.translate_widget_children(dialogue)
-        dialogue.label_error.setText(utf8(msg))
+        dialogue.label_error.setText(msg)
         if extended_msg != None:
-            dialogue.textview_error.setText(utf8(extended_msg))
+            dialogue.textview_error.setText(extended_msg)
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
@@ -733,7 +742,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # removed (how to calc this automatically?)
         DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
                                        downloadSize)
-        msg = unicode(self.confirmChangesMessage, 'UTF-8')
         self.changesDialogue = QDialog(self.window_main)
         loadUi("dialog_changes.ui", self.changesDialogue)
 
@@ -758,9 +766,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
             confirm = actions[1].replace("_", "")
             self.changesDialogue.button_confirm_changes.setText(confirm)
 
-        summaryText = unicode("<big><b>%s</b></big>" % summary, 'UTF-8')
+        summaryText = "<big><b>%s</b></big>" % summary
         self.changesDialogue.label_summary.setText(summaryText)
-        self.changesDialogue.label_changes.setText(msg)
+        self.changesDialogue.label_changes.setText(self.confirmChangesMessage)
         # fill in the details
         self.changesDialogue.treeview_details.clear()
         self.changesDialogue.treeview_details.setHeaderLabels(["Packages"])
@@ -792,7 +800,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
     def askYesNoQuestion(self, summary, msg, default='No'):
-        answer = QMessageBox.question(self.window_main, unicode(summary, 'UTF-8'), unicode("<font>") + unicode(msg, 'UTF-8'), QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
+        answer = QMessageBox.question(self.window_main, summary, "<font>" + msg, QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
         if answer == QMessageBox.Yes:
             return True
         return False
@@ -854,7 +862,7 @@ if __name__ == "__main__":
 
   cache = apt.Cache()
   for pkg in sys.argv[1:]:
-    if cache[pkg].is_installed and not cache[pkg].isUpgradable: 
+    if cache[pkg].is_installed and not cache[pkg].is_upgradable:
       cache[pkg].mark_delete(purge=True)
     else:
       cache[pkg].mark_install()

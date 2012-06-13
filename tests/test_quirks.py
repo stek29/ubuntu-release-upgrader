@@ -84,19 +84,23 @@ class TestQuirks(unittest.TestCase):
         self.assertFalse("Hello" in open("./patchdir/foo").read())
         self.assertTrue("Hello" in open("./patchdir/foo_orig").read())
         md5 = hashlib.md5()
-        md5.update(open("./patchdir/foo").read())
+        with open("./patchdir/foo", "rb") as patch:
+            md5.update(patch.read())
         self.assertEqual(md5.hexdigest(), "52f83ff6877e42f613bcd2444c22528c")
         # more complex example fstab
         md5 = hashlib.md5()
-        md5.update(open("./patchdir/fstab").read())
+        with open("./patchdir/fstab", "rb") as patch:
+            md5.update(patch.read())
         self.assertEqual(md5.hexdigest(), "c56d2d038afb651920c83106ec8dfd09")
         # most complex example
         md5 = hashlib.md5()
-        md5.update(open("./patchdir/pycompile").read())
+        with open("./patchdir/pycompile", "rb") as patch:
+            md5.update(patch.read())
         self.assertEqual(md5.hexdigest(), "97c07a02e5951cf68cb3f86534f6f917")
         # with ".\n"
         md5 = hashlib.md5()
-        md5.update(open("./patchdir/dotdot").read())
+        with open("./patchdir/dotdot", "rb") as patch:
+            md5.update(patch.read())
         self.assertEqual(md5.hexdigest(), "cddc4be46bedd91db15ddb9f7ddfa804")
         # test that incorrect md5sum after patching rejects the patch
         self.assertEqual(open("./patchdir/fail").read(),

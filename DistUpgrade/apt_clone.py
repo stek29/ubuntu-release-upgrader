@@ -1,1 +1,1 @@
-/usr/share/pyshared/apt_clone.py
+/usr/lib/python3/dist-packages/apt_clone.py

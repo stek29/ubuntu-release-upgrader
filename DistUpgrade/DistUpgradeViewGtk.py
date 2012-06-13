@@ -49,9 +49,6 @@ from .DistUpgradeGettext import gettext as _
 
 gobject.threads_init()
 
-def utf8(str):
-  return unicode(str, 'latin1').encode('utf-8')
-
 class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress
         Subclass this class to implement cdrom add progress reporting
@@ -79,12 +76,13 @@ class GtkOpProgress(apt.progress.base.OpProgress):
       #self.progressbar.pulse()
       self.fraction = 0.0
 
-  def update(self, percent):
-      #if percent > 99:
+  def update(self, percent=None):
+      super(GtkOpProgress, self).update(percent)
+      #if self.percent > 99:
       #    self.progressbar.set_fraction(1)
       #else:
       #    self.progressbar.pulse()
-      new_fraction = percent/100.0
+      new_fraction = self.percent/100.0
       if abs(self.fraction-new_fraction) > 0.1:
         self.fraction = new_fraction
         self.progressbar.set_fraction(self.fraction)
@@ -221,7 +219,7 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.parent.dialog_error.set_title("")
         self.parent.dialog_error.window.set_functions(gtk.gdk.FUNC_MOVE)
         self.parent.label_error.set_markup(markup)
-        self.parent.textview_error.get_buffer().set_text(utf8(errormsg))
+        self.parent.textview_error.get_buffer().set_text(errormsg)
         self.parent.scroll_error.show()
         self.parent.dialog_error.run()
         self.parent.dialog_error.hide()
@@ -246,7 +244,8 @@ class GtkInstallProgressAdapter(InstallProgress):
         # now get the diff
         if os.path.exists("/usr/bin/diff"):
           cmd = ["/usr/bin/diff", "-u", current, new]
-          diff = utf8(subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0])
+          diff = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0]
+          diff = diff.decode("UTF-8", "replace")
           self.parent.textview_conffile.get_buffer().set_text(diff)
         else:
           self.parent.textview_conffile.get_buffer().set_text(_("The 'diff' command was not found"))
@@ -655,7 +654,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
                                             [parent_text % len(details_list)])
             for pkg in details_list:
               self.details_list.append(node, ["<b>%s</b> - %s" % (
-                    pkg.name, glib.markup_escape_text(pkg.summary))])
+                    pkg.name, glib.markup_escape_text(getattr(pkg.candidate, "summary", None)))])
         # prepare dialog
         self.dialog_changes.realize()
         self.dialog_changes.set_transient_for(self.window_main)

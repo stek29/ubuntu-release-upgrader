@@ -4,7 +4,7 @@ ARCH=all
 DIST=$(shell lsb_release -c -s)
 DEBVER=$(shell LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
-DH_ARGS=--with=python2
+DH_ARGS=--with=python2,python3
 %:
 	dh $@ $(DH_ARGS)
 
@@ -25,3 +25,15 @@ binary-indep:
 	       $(DEBVER)/*ReleaseAnnouncement* \
                $(DEBVER)/$(DIST).tar.gz )
 	dpkg-distaddfile $(TARNAME) raw-dist-upgrader -
+
+override_dh_auto_build:
+	dh_auto_build
+	set -ex; for python in $(shell py3versions -r); do \
+		$$python setup.py build; \
+	done
+
+override_dh_auto_install:
+	dh_auto_install
+	set -ex; for python in $(shell py3versions -r); do \
+		$$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
+	done

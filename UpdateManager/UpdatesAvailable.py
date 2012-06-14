@@ -52,8 +52,6 @@ import time
 import threading
 import xml.sax.saxutils
 
-import dbus
-
 from .GtkProgress import GtkAcquireProgress, GtkOpProgressInline
 from .backend import get_backend
 
@@ -558,37 +556,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     except SystemError as e:
         logging.exception("free space check failed")
     self.window_main.start_install()
-    
-  def on_button_restart_required_clicked(self, button=None):
-      self._request_reboot_via_session_manager()
-
-  def show_reboot_required_info(self):
-    self.frame_restart_required.show()
-    self.label_restart_required.set_text(_("The computer needs to restart to "
-                                       "finish installing updates. Please "
-                                       "save your work before continuing."))
-
-  def _request_reboot_via_session_manager(self):
-    try:
-        bus = dbus.SessionBus()
-        proxy_obj = bus.get_object("org.gnome.SessionManager",
-                                   "/org/gnome/SessionManager")
-        iface = dbus.Interface(proxy_obj, "org.gnome.SessionManager")
-        iface.RequestReboot()
-    except dbus.DBusException:
-        self._request_reboot_via_consolekit()
-    except:
-        pass
-
-  def _request_reboot_via_consolekit(self):
-    try:
-        bus = dbus.SystemBus()
-        proxy_obj = bus.get_object("org.freedesktop.ConsoleKit",
-                                   "/org/freedesktop/ConsoleKit/Manager")
-        iface = dbus.Interface(proxy_obj, "org.freedesktop.ConsoleKit.Manager")
-        iface.Restart()
-    except dbus.DBusException:
-        pass
 
   def _on_network_alert(self, watcher, state):
       # do not set the buttons to sensitive/insensitive until NM

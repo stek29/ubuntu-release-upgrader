@@ -93,7 +93,7 @@ class InstallProgress(object):
 
     # Either launch main dialog and continue or quit altogether
     if success:
-      self.window_main.start_available()
+      self.window_main.start_available(allow_restart=True)
     else:
       sys.exit(0)
 

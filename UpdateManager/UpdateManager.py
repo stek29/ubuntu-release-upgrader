@@ -37,11 +37,16 @@ from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
 
 from .UnitySupport import UnitySupport
+from .Dialogs import NoUpdatesDialog
+from .Dialogs import NeedRestartDialog
 from .InstallProgress import InstallProgress
 from .UpdateProgress import UpdateProgress
 from .UpdatesAvailable import UpdatesAvailable
 from .Core.AlertWatcher import AlertWatcher
 from .Core.roam import NetworkManagerHelper
+
+# file that signals if we need to reboot
+REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
 class UpdateManager(Gtk.Window):
   """ This class is the main window and work flow controller.  Panes will add
@@ -134,8 +139,15 @@ class UpdateManager(Gtk.Window):
       return
     self._start_pane(UpdateProgress)
 
-  def start_available(self):
-    self._start_pane(UpdatesAvailable)
+  def start_available(self, allow_restart=False):
+    # If restart is needed, show that.  Else show no-update-needed.  Else
+    # actually show the available updates.
+    if allow_restart and os.path.exists(REBOOT_REQUIRED_FILE):
+        self._start_pane(NeedRestartDialog)
+    elif False:
+        self._start_pane(NoUpdatesDialog)
+    else:
+      self._start_pane(UpdatesAvailable)
 
   def start_install(self):
     self._start_pane(InstallProgress)

@@ -86,9 +86,6 @@ from .UnitySupport import UnitySupport
 # list constants
 (LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN, LIST_TOGGLE_CHECKED) = range(5)
 
-# file that signals if we need to reboot
-REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
-
 # NetworkManager enums
 from .Core.roam import NetworkManagerHelper
 
@@ -194,10 +191,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
 
     if not os.path.exists("/usr/bin/software-properties-gtk"):
         self.button_settings.set_sensitive(False)
-
-    # check if there is a new reboot required notification
-    if os.path.exists(REBOOT_REQUIRED_FILE):
-        self.show_reboot_required_info()
 
     self.window_main.push(self.pane_updates_available, self)
 

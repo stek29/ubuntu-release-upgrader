@@ -221,16 +221,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.select_all_updgrades (None)
     self.on_button_install_clicked (None)
 
-  def warn_on_battery(self):
-      """check and warn if on battery"""
-      if on_battery():
-          self.dialog_on_battery.set_transient_for(self.window_main)
-          self.dialog_on_battery.set_title("")
-          res = self.dialog_on_battery.run()
-          self.dialog_on_battery.hide()
-          if res != Gtk.ResponseType.YES:
-              sys.exit()
-
   def install_column_view_func(self, cell_layout, renderer, model, iter, data):
     pkg = model.get_value(iter, LIST_PKG)
     if pkg is None:

@@ -685,7 +685,8 @@ class UpdateManager(SimpleGtkbuilderApp):
           self.textview_descr.get_buffer().set_text("")
           if self._get_last_apt_get_update_text() is not None:
               text_label_main = self._get_last_apt_get_update_text()
-              if self._get_last_apt_get_update_minutes()> self.NO_UPDATE_WARNING_DAYS*24*60:
+              ago_minutes = self._get_last_apt_get_update_minutes()
+              if ago_minutes is not None and ago_minutes > self.NO_UPDATE_WARNING_DAYS*24*60:
                   text_header = _("Software updates may be available for your computer.")
           # add timer to ensure we update the information when the 
           # last package count update was performed

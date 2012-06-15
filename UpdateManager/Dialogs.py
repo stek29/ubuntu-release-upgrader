@@ -39,7 +39,6 @@ from .DistUpgradeFetcher import DistUpgradeFetcherGtk
 from .GtkProgress import GtkAcquireProgress
 
 from gettext import gettext as _
-from gettext import ngettext
 
 class Dialog(SimpleGtkbuilderApp):
   def __init__(self, window_main):

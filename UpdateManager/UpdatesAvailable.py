@@ -41,9 +41,7 @@ warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWar
 
 import apt_pkg
 
-import sys
 import os
-import stat
 import re
 import logging
 import operator
@@ -52,16 +50,11 @@ import time
 import threading
 import xml.sax.saxutils
 
-from .backend import get_backend
-
 from gettext import gettext as _
 from gettext import ngettext
 
 
-from .Core.utils import (humanize_size,
-                         on_battery,
-                         inhibit_sleep,
-                         allow_sleep)
+from .Core.utils import humanize_size
 from .Core.AlertWatcher import AlertWatcher
 
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError

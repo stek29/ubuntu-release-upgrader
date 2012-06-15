@@ -26,22 +26,25 @@ import apt
 import apt_pkg
 from gettext import gettext as _
 from .Core.utils import humanize_size
+from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 class GtkAcquireProgress(apt.progress.base.AcquireProgress):
-    def __init__(self, parent, summary="", descr=""):
+    def __init__(self, parent, datadir, summary="", descr=""):
+        uifile = datadir + "gtkbuilder/AcquireProgress.ui"
+        self.widgets = SimpleGtkbuilderApp(uifile, "update-manager")
         # if this is set to false the download will cancel
         self._continue = True
         # init vars here
         # FIXME: find a more elegant way, this sucks
-        self.summary = parent.label_fetch_summary
-        self.status = parent.label_fetch_status
+        self.summary = self.widgets.label_fetch_summary
+        self.status = self.widgets.label_fetch_status
         # we need to connect the signal manual here, it won't work
         # from the main window auto-connect
-        parent.button_fetch_cancel.connect(
+        self.widgets.button_fetch_cancel.connect(
             "clicked", self.on_button_fetch_cancel_clicked)
-        self.progress = parent.progressbar_fetch
-        self.window_fetch = parent.window_fetch
-        self.window_fetch.set_transient_for(parent.window_main)
+        self.progress = self.widgets.progressbar_fetch
+        self.window_fetch = self.widgets.window_fetch
+        self.window_fetch.set_transient_for(parent)
         self.window_fetch.realize()
         self.window_fetch.get_window().set_functions(Gdk.WMFunction.MOVE)
         # set summary
@@ -85,28 +88,3 @@ class GtkAcquireProgress(apt.progress.base.AcquireProgress):
             Gtk.main_iteration()
         return self._continue
 
-if __name__ == "__main__":
-    import apt
-    from .SimpleGtkbuilderApp import SimpleGtkbuilderApp
-
-    class MockParent(SimpleGtkbuilderApp):
-        """Mock parent for the fetcher that just loads the UI file"""
-        def __init__(self):
-            SimpleGtkbuilderApp.__init__(self, "../data/gtkbuilder/UpdateManager.ui", "update-manager")
-
-    # create mock parent and fetcher
-    parent = MockParent()
-    acquire_progress = GtkAcquireProgress(parent, "summary", "long detailed description")
-    #acquire_progress = GtkAcquireProgress(parent)
-
-    # download lists
-    cache = apt.Cache()
-    res = cache.update(acquire_progress)
-    # generate a dist-upgrade (to feed data to the fetcher) and get it
-    cache.upgrade()
-    pm = apt_pkg.PackageManager(cache._depcache)
-    fetcher = apt_pkg.Acquire(acquire_progress)
-    res = cache._fetch_archives(fetcher, pm)
-    print(res)
-    
-    

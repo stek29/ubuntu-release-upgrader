@@ -88,7 +88,7 @@ class UpdateManager(Gtk.Window):
     self._setup_dbus()
 
     # deal with no-focus-on-map
-    if self.options.no_focus_on_map:
+    if self.options and self.options.no_focus_on_map:
         self.set_focus_on_map(False)
         self.iconify()
         self.stick()
@@ -98,8 +98,8 @@ class UpdateManager(Gtk.Window):
             "focus-in-event", self.on_initial_focus_in)
 
     # Look for a new release in a thread
-    self.meta_release = MetaRelease(self.options.devel_release,
-                                    self.options.use_proposed)
+    self.meta_release = MetaRelease(self.options and self.options.devel_release,
+                                    self.options and self.options.use_proposed)
 
 
   def on_initial_focus_in(self, widget, event):
@@ -280,7 +280,7 @@ class UpdateManager(Gtk.Window):
 
     self.unity.set_updates_count(self.cache.install_count)
 
-    if True or self.list.distUpgradeWouldDelete > 0:
+    if self.update_list.distUpgradeWouldDelete > 0:
       self._start_pane(PartialUpgradeDialog(self))
 
   def _setup_dbus(self):

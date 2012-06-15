@@ -117,15 +117,15 @@ class DistUpgradeDialog(Dialog):
     self.focus_button = self.add_button(Gtk.STOCK_OK, self.close)
 
   def upgrade(self):
-    #progress = GtkAcquireProgress(self,
-    #                              _("Downloading the release upgrade tool"))
-    #fetcher = DistUpgradeFetcherGtk(new_dist=self.meta_release.upgradable_to,
-    #                                parent=self,
-    #                                progress=progress)
-    #if self.window_main.options.sandbox:
-    #  fetcher.run_options.append("--sandbox")
-    #fetcher.run()
-    pass # FIXME finish implementing the above
+    progress = GtkAcquireProgress(self.window_main, self.window_main.datadir,
+                                  _("Downloading the release upgrade tool"))
+    fetcher = DistUpgradeFetcherGtk(new_dist=self.meta_release.upgradable_to,
+                                    parent=self.window_main,
+                                    progress=progress,
+                                    datadir=self.window_main.datadir)
+    if self.window_main.options.sandbox:
+      fetcher.run_options.append("--sandbox")
+    fetcher.run()
 
 
 class UnsupportedDialog(DistUpgradeDialog):

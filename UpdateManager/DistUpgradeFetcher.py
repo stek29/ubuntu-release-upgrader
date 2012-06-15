@@ -26,6 +26,7 @@ from gi.repository import Gtk, Gdk
 from .ReleaseNotesViewer import ReleaseNotesViewer
 from .Core.utils import error, inhibit_sleep, allow_sleep
 from .Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 from gettext import gettext as _
 try:
     from urllib.request import urlopen
@@ -38,10 +39,11 @@ import socket
 
 class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
 
-    def __init__(self, new_dist, progress, parent):
+    def __init__(self, new_dist, progress, parent, datadir):
         DistUpgradeFetcherCore.__init__(self,new_dist,progress)
-        self.parent = parent
-        self.window_main = parent.window_main
+        uifile = datadir + "gtkbuilder/ReleaseNotes.ui"
+        self.widgets = SimpleGtkbuilderApp(uifile, "update-manager")
+        self.window_main = parent
 
     def error(self, summary, message):
         return error(self.window_main, summary, message)
@@ -76,9 +78,9 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               from .ReleaseNotesViewerWebkit import ReleaseNotesViewerWebkit
               webkit_release_notes = ReleaseNotesViewerWebkit(self.new_dist.releaseNotesHtmlUri)
               webkit_release_notes.show()
-              self.parent.scrolled_notes.add(webkit_release_notes)
-              res = self.parent.dialog_release_notes.run()
-              self.parent.dialog_release_notes.hide()
+              self.widgets.scrolled_notes.add(webkit_release_notes)
+              res = self.widgets.dialog_release_notes.run()
+              self.widgets.dialog_release_notes.hide()
               if res == Gtk.ResponseType.OK:
                   return True
               return False
@@ -105,10 +107,10 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
               notes = release_notes.read().decode("UTF-8", "replace")
               textview_release_notes = ReleaseNotesViewer(notes)
               textview_release_notes.show()
-              self.parent.scrolled_notes.add(textview_release_notes)
-              self.parent.dialog_release_notes.set_transient_for(self.window_main)
-              res = self.parent.dialog_release_notes.run()
-              self.parent.dialog_release_notes.hide()
+              self.widgets.scrolled_notes.add(textview_release_notes)
+              self.widgets.dialog_release_notes.set_transient_for(self.window_main)
+              res = self.widgets.dialog_release_notes.run()
+              self.widgets.dialog_release_notes.hide()
           except HTTPError:
               primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                         _("Could not find the release notes")
@@ -138,9 +140,4 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
           if res == Gtk.ResponseType.OK:
               return True
       return False
-
-if __name__ == "__main__":
-    error(None, "summary","message")
-    d = DistUpgradeFetcherGtk(None,None)
-    print(d.authenticate('/tmp/Release','/tmp/Release.gpg'))
 

@@ -107,9 +107,9 @@ class DistUpgradeDialog(Dialog):
     Dialog.__init__(self, window_main)
     self.meta_release = meta_release
     self.set_header(_("The software on this computer is up to date."))
-    # FIXME: don't hardcode Ubuntu
     # Translators: these are Ubuntu version names like "Ubuntu 12.04"
-    self.set_desc(_("However, Ubuntu %s is now available (you have %s).") % (
+    self.set_desc(_("However, %s %s is now available (you have %s).") % (
+                  meta_release.flavor_name,
                   meta_release.upgradable_to.version,
                   meta_release.current_dist_version))
     self.add_settings_button()
@@ -132,10 +132,12 @@ class UnsupportedDialog(DistUpgradeDialog):
   def __init__(self, window_main, meta_release):
     DistUpgradeDialog.__init__(self, window_main, meta_release)
     # Translators: this is an Ubuntu version name like "Ubuntu 12.04"
-    self.set_header(_("Software updates are no longer provided for Ubuntu %s.") % (
+    self.set_header(_("Software updates are no longer provided for %s %s.") % (
+                    meta_release.flavor_name,
                     meta_release.current_dist_version))
     # Translators: this is an Ubuntu version name like "Ubuntu 12.04"
-    self.set_desc(_("To stay secure, you should upgrade to Ubuntu %s.") % (
+    self.set_desc(_("To stay secure, you should upgrade to %s %s.") % (
+                  meta_release.flavor_name,
                   meta_release.upgradable_to.version))
 
 

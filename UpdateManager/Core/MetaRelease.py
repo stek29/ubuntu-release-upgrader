@@ -42,7 +42,7 @@ try:
 except ImportError:
     from urllib2 import HTTPError, Request, URLError, urlopen
 
-from .utils import get_lang, get_dist, get_dist_version, get_ubuntu_flavor
+from .utils import get_lang, get_dist, get_dist_version, get_ubuntu_flavor, get_ubuntu_flavor_name
 
 class Dist(object):
     def __init__(self, name, version, date, supported):
@@ -81,6 +81,7 @@ class MetaReleaseCore(object):
         self.downloading = True
         self.upgradable_to = None
         self.new_dist = None
+        self.flavor_name = get_ubuntu_flavor_name()
         self.current_dist_name = get_dist()
         self.current_dist_version = get_dist_version()
         self.no_longer_supported = None

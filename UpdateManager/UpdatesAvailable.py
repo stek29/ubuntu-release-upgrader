@@ -443,7 +443,9 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
           # show different text on first run (UX team suggestion)
           firstrun = self.settings.get_boolean("first-run")
           if firstrun:
-              text_header = _("Updated software has been issued since Ubuntu %s was released. Do you want to install it now?") % self.window_main.meta_release.current_dist_version
+              flavor = self.window_main.meta_release.flavor_name
+              version = self.window_main.meta_release.current_dist_version
+              text_header = _("Updated software has been issued since %s %s was released. Do you want to install it now?") % (flavor, version)
               self.settings.set_boolean("first-run", False)
           else:
               text_header = _("Updated software is available for this computer. Do you want to install it now?")

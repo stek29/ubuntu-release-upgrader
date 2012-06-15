@@ -428,9 +428,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
       self.refresh_updates_count()
       num_updates = self.cache.install_count
 
-      # setup unity stuff
-      self.unity.set_updates_count(num_updates)
-
       if num_updates == 0:
           text_header= _("The software on this computer is up to date.")
           self.label_downsize.set_text("\n")

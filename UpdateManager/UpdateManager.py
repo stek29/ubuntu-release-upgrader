@@ -171,7 +171,6 @@ class UpdateManager(Gtk.Window):
     if self.cache.install_count == 0:
       if not self._check_meta_release():
         self._start_pane(NoUpdatesDialog(self))
-    # FIXME: need to stop unity update counter
     else:
       self._start_pane(UpdatesAvailable(self))
 
@@ -277,6 +276,8 @@ class UpdateManager(Gtk.Window):
                "Please report this bug against the 'update-manager' "
                "package and include the following error message:\n") + e
       self.start_error(header, desc)
+
+    self.unity.set_updates_count(self.cache.install_count)
 
   def _setup_dbus(self):
     """ this sets up a dbus listener if none is installed alread """

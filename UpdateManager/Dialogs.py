@@ -42,11 +42,14 @@ from gettext import ngettext
 class Dialog(SimpleGtkbuilderApp):
   def __init__(self, window_main):
     self.window_main = window_main
+    self.focus_button = None
     SimpleGtkbuilderApp.__init__(self, self.window_main.datadir+"gtkbuilder/Dialog.ui",
                                  "update-manager")
 
   def main(self):
     self.window_main.push(self.pane_dialog, self)
+    if self.focus_button:
+      self.focus_button.grab_focus()
 
   def add_button(self, label, callback, secondary=False):
     # from_stock tries stock first and falls back to mnemonic
@@ -87,35 +90,46 @@ class Dialog(SimpleGtkbuilderApp):
 
 
 class NoUpdatesDialog(Dialog):
-  def __init__(self, datadir):
-    Dialog.__init__(self, datadir)
+  def __init__(self, window_main):
+    Dialog.__init__(self, window_main)
     self.set_header(_("The software on this computer is up to date."))
     self.add_settings_button()
-    self.add_button(Gtk.STOCK_OK, self.close).grab_focus()
+    self.focus_button = self.add_button(Gtk.STOCK_OK, self.close)
 
   def close(self):
     sys.exit(0)
 
 
 class ErrorDialog(Dialog):
-  def __init__(self, datadir, header, desc=None):
-    Dialog.__init__(self, datadir)
+  def __init__(self, window_main, header, desc=None):
+    Dialog.__init__(self, window_main)
     self.set_header(header)
     if desc:
       self.set_desc(desc)
       self.label_desc.set_selectable(True)
     self.add_settings_button()
-    self.add_button(Gtk.STOCK_OK, self.close).grab_focus()
+    self.focus_button = self.add_button(Gtk.STOCK_OK, self.close)
 
   def close(self):
     sys.exit(0)
 
+  def main(self):
+    Dialog.main(self)
+    # The label likes to start selecting everything (b/c it got focus before
+    # we switched to our default button).
+    self.label_desc.select_region(0, 0)
+    # Since errors usually are outside the normal flow, we'll guarantee that
+    # we don't continue with normal code flow by running our own loop here.
+    # We won't screw anything up because the only thing this dialog will do
+    # is exit.
+    Gtk.main()
+
 
 class NeedRestartDialog(Dialog):
-  def __init__(self, datadir):
-    Dialog.__init__(self, datadir)
+  def __init__(self, window_main):
+    Dialog.__init__(self, window_main)
     self.set_header(_("The computer needs to restart to finish installing updates."))
-    self.add_button(_("_Restart"), self.restart)
+    self.focus_button = self.add_button(_("_Restart"), self.restart)
 
   def close(self):
     sys.exit(0)

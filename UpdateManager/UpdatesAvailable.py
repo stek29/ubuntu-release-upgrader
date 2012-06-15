@@ -63,8 +63,6 @@ from .Core.utils import (humanize_size,
                          on_battery,
                          inhibit_sleep,
                          allow_sleep)
-from .Core.UpdateList import UpdateList
-from .Core.MyCache import MyCache
 from .Core.AlertWatcher import AlertWatcher
 
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
@@ -117,6 +115,8 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.window_main = app
     self.datadir = app.datadir
     self.options = app.options
+    self.cache = app.cache
+    self.list = app.update_list
     SimpleGtkbuilderApp.__init__(self, self.datadir+"gtkbuilder/UpdateManager.ui",
                                  "update-manager")
 
@@ -196,14 +196,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.show_versions = self.settings.get_boolean("show-versions")
     # init summary_before_name
     self.summary_before_name = self.settings.get_boolean("summary-before-name")
-
-    # get progress object
-    self.progress = GtkOpProgressInline(
-        self.progressbar_cache_inline, self.window_main)
-
-    # deal with no-focus-on-map
-    if self.options.no_focus_on_map and self.progress._window:
-        self.progress._window.set_focus_on_map(False)
 
     # Create Unity launcher quicklist
     # FIXME: instead of passing parent we really should just send signals
@@ -532,6 +524,7 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
         while Gtk.events_pending():
             Gtk.main_iteration()
         time.sleep(0.05)
+    self.window_main.refresh_cache()
     self.fillstore()
 
   def on_button_install_clicked(self, widget):
@@ -687,85 +680,40 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     # disconnect the view first
     self.treeview_update.set_model(None)
     self.store.clear()
-    
     # clean most objects
     self.dl_size = 0
-    try:
-        self.initCache()
-    except SystemError as e:
-        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
-               (_("Could not initialize the package information"),
-                _("An unresolvable problem occurred while "
-                  "initializing the package information.\n\n"
-                  "Please report this bug against the 'update-manager' "
-                  "package and include the following error message:\n"),
-                e)
-               )
-        dialog = Gtk.MessageDialog(self.window_main,
-                                   0, Gtk.MessageType.ERROR,
-                                   Gtk.ButtonsType.CLOSE,"")
-        dialog.set_markup(msg)
-        dialog.get_content_area().set_spacing(6)
-        dialog.run()
-        dialog.destroy()
-        sys.exit(1)
-    self.list = UpdateList(self)
-    
-    while Gtk.events_pending():
-        Gtk.main_iteration()
 
-    # fill them again
-    try:
-        self.list.update(self.cache)
-    except SystemError as e:
-        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
-               (_("Could not calculate the upgrade"),
-                _("An unresolvable problem occurred while "
-                  "calculating the upgrade.\n\n"
-                  "Please report this bug against the 'update-manager' "
-                  "package and include the following error message:"),
-                e)
-               )
-        dialog = Gtk.MessageDialog(self.window_main,
-                                   0, Gtk.MessageType.ERROR,
-                                   Gtk.ButtonsType.CLOSE,"")
-        dialog.set_markup(msg)
-        dialog.get_content_area().set_spacing(6)
-        dialog.run()
-        dialog.destroy()
-    if self.list.num_updates > 0:
-      #self.treeview_update.set_model(None)
-      self.scrolledwindow_update.show()
-      origin_list = sorted(
-        self.list.pkgs, key=operator.attrgetter("importance"), reverse=True)
-      for origin in origin_list:
-        self.store.append(['<b><big>%s</big></b>' % origin.description,
-                           origin.description, None, origin,True])
-        for pkg in self.list.pkgs[origin]:
-          name = xml.sax.saxutils.escape(pkg.name)
-          if not pkg.is_installed:
-              name += _(" (New install)")
-          summary = xml.sax.saxutils.escape(getattr(pkg.candidate, "summary", None))
-          if self.summary_before_name:
-              contents = "%s\n<small>%s</small>" % (summary, name)
-          else:
-              contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
-          #TRANSLATORS: the b stands for Bytes
-          size = _("(Size: %s)") % humanize_size(getattr(pkg.candidate, "size", 0))
-          installed_version = getattr(pkg.installed, "version", None)
-          candidate_version = getattr(pkg.candidate, "version", None)
-          if installed_version is not None:
-              version = _("From version %(old_version)s to %(new_version)s") %\
-                  {"old_version" : installed_version,
-                   "new_version" : candidate_version}
-          else:
-              version = _("Version %s") % candidate_version
-          if self.show_versions:
-              contents = "%s\n<small>%s %s</small>" % (contents, version, size)
-          else:
-              contents = "%s <small>%s</small>" % (contents, size)
-          self.store.append([contents, pkg.name, pkg, None, True])
-      self.treeview_update.set_model(self.store)
+    self.scrolledwindow_update.show()
+    origin_list = sorted(
+      self.list.pkgs, key=operator.attrgetter("importance"), reverse=True)
+    for origin in origin_list:
+      self.store.append(['<b><big>%s</big></b>' % origin.description,
+                         origin.description, None, origin,True])
+      for pkg in self.list.pkgs[origin]:
+        name = xml.sax.saxutils.escape(pkg.name)
+        if not pkg.is_installed:
+            name += _(" (New install)")
+        summary = xml.sax.saxutils.escape(getattr(pkg.candidate, "summary", None))
+        if self.summary_before_name:
+            contents = "%s\n<small>%s</small>" % (summary, name)
+        else:
+            contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
+        #TRANSLATORS: the b stands for Bytes
+        size = _("(Size: %s)") % humanize_size(getattr(pkg.candidate, "size", 0))
+        installed_version = getattr(pkg.installed, "version", None)
+        candidate_version = getattr(pkg.candidate, "version", None)
+        if installed_version is not None:
+            version = _("From version %(old_version)s to %(new_version)s") %\
+                {"old_version" : installed_version,
+                 "new_version" : candidate_version}
+        else:
+            version = _("Version %s") % candidate_version
+        if self.show_versions:
+            contents = "%s\n<small>%s %s</small>" % (contents, version, size)
+        else:
+            contents = "%s <small>%s</small>" % (contents, size)
+        self.store.append([contents, pkg.name, pkg, None, True])
+    self.treeview_update.set_model(self.store)
     self.update_count()
     self.setBusy(False)
     while Gtk.events_pending():
@@ -778,15 +726,8 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     show_dist_no_longer_supported_dialog(self.window_main)
 
   def error(self, summary, details):
-      " helper function to display a error message "
-      msg = ("<big><b>%s</b></big>\n\n%s\n" % (summary, details) )
-      dialog = Gtk.MessageDialog(self.window_main,
-                                 0, Gtk.MessageType.ERROR,
-                                 Gtk.ButtonsType.CLOSE,"")
-      dialog.set_markup(msg)
-      dialog.get_content_area().set_spacing(6)
-      dialog.run()
-      dialog.destroy()
+    " helper function to display a error message "
+    self.window_main.start_error(summary, details)
 
   def on_button_dist_upgrade_clicked(self, button):
       #print("on_button_dist_upgrade_clicked")
@@ -805,60 +746,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.label_new_release.set_markup(_("<b>New Ubuntu release '%s' is available</b>") % upgradable_to.version)
     self.new_dist = upgradable_to
     
-
-  # fixme: we should probably abstract away all the stuff from libapt
-  def initCache(self): 
-    # get the lock
-    try:
-        apt_pkg.pkgsystem_lock()
-    except SystemError:
-        pass
-        #d = Gtk.MessageDialog(parent=self.window_main,
-        #                      flags=Gtk.DialogFlags.MODAL,
-        #                      type=Gtk.MessageType.ERROR,
-        #                      buttons=Gtk.ButtonsType.CLOSE)
-        #d.set_markup("<big><b>%s</b></big>\n\n%s" % (
-        #    _("Only one software management tool is allowed to "
-        #      "run at the same time"),
-        #    _("Please close the other application e.g. 'aptitude' "
-        #      "or 'Synaptic' first.")))
-        #print("error from apt: '%s'" % e)
-        #d.set_title("")
-        #res = d.run()
-        #d.destroy()
-        #sys.exit()
-
-    try:
-        if hasattr(self, "cache"):
-            self.cache.open(self.progress)
-            self.cache._initDepCache()
-        else:
-            self.cache = MyCache(self.progress)
-            # FIXME: make this next line more elegant in a future branch by
-            # moving the cache to a central location, probably UpdateManager.py
-            self.window_main.cache = self.cache
-    except AssertionError:
-        # if the cache could not be opened for some reason,
-        # let the release upgrader handle it, it deals
-        # a lot better with this
-        self.ask_run_partial_upgrade()
-        # we assert a clean cache
-        msg=("<big><b>%s</b></big>\n\n%s"% \
-             (_("Software index is broken"),
-              _("It is impossible to install or remove any software. "
-                "Please use the package manager \"Synaptic\" or run "
-                "\"sudo apt-get install -f\" in a terminal to fix "
-                "this issue at first.")))
-        dialog = Gtk.MessageDialog(self.window_main,
-                                   0, Gtk.MessageType.ERROR,
-                                   Gtk.ButtonsType.CLOSE,"")
-        dialog.set_markup(msg)
-        dialog.get_content_area().set_spacing(6)
-        dialog.run()
-        dialog.destroy()
-        sys.exit(1)
-    else:
-        self.progress.all_done()
 
   def check_all_updates_installable(self):
     """ Check if all available updates can be installed and suggest

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkImage" id="image-apply">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-apply</property>
-  </object>
   <object class="GtkDialog" id="dialog_dist_upgrade">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -237,6 +232,11 @@ This can be caused by:
       <action-widget response="-5">button2</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkImage" id="image-apply">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-apply</property>
+  </object>
   <object class="GtkWindow" id="window_fetch">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -450,62 +450,6 @@ This can be caused by:
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="frame_new_release">
-                <property name="can_focus">False</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkAlignment" id="alignment5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox_new_release">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="border_width">6</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label_new_release">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="use_markup">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="button_dist_upgrade">
-                            <property name="label" translatable="yes">U_pgrade</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="use_underline">True</property>
-                            <signal name="clicked" handler="on_button_dist_upgrade_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
             <child>

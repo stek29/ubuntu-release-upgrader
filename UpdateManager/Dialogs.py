@@ -35,6 +35,8 @@ import subprocess
 import sys
 import time
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
+from .DistUpgradeFetcher import DistUpgradeFetcherGtk
+from .GtkProgress import GtkAcquireProgress
 
 from gettext import gettext as _
 from gettext import ngettext
@@ -50,6 +52,9 @@ class Dialog(SimpleGtkbuilderApp):
     self.window_main.push(self.pane_dialog, self)
     if self.focus_button:
       self.focus_button.grab_focus()
+
+  def close(self):
+    sys.exit(0) # By default, exit the app
 
   def add_button(self, label, callback, secondary=False):
     # from_stock tries stock first and falls back to mnemonic
@@ -96,8 +101,42 @@ class NoUpdatesDialog(Dialog):
     self.add_settings_button()
     self.focus_button = self.add_button(Gtk.STOCK_OK, self.close)
 
-  def close(self):
-    sys.exit(0)
+
+class DistUpgradeDialog(Dialog):
+  def __init__(self, window_main, meta_release):
+    Dialog.__init__(self, window_main)
+    self.meta_release = meta_release
+    self.set_header(_("The software on this computer is up to date."))
+    # FIXME: don't hardcode Ubuntu
+    # Translators: these are Ubuntu version names like "Ubuntu 12.04"
+    self.set_desc(_("However, Ubuntu %s is now available (you have %s).") % (
+                  meta_release.upgradable_to.version,
+                  meta_release.current_dist_version))
+    self.add_settings_button()
+    self.add_button(_("Upgrade…"), self.upgrade)
+    self.focus_button = self.add_button(Gtk.STOCK_OK, self.close)
+
+  def upgrade(self):
+    #progress = GtkAcquireProgress(self,
+    #                              _("Downloading the release upgrade tool"))
+    #fetcher = DistUpgradeFetcherGtk(new_dist=self.meta_release.upgradable_to,
+    #                                parent=self,
+    #                                progress=progress)
+    #if self.window_main.options.sandbox:
+    #  fetcher.run_options.append("--sandbox")
+    #fetcher.run()
+    pass # FIXME finish implementing the above
+
+
+class UnsupportedDialog(DistUpgradeDialog):
+  def __init__(self, window_main, meta_release):
+    DistUpgradeDialog.__init__(self, window_main, meta_release)
+    # Translators: this is an Ubuntu version name like "Ubuntu 12.04"
+    self.set_header(_("Software updates are no longer provided for Ubuntu %s.") % (
+                    meta_release.current_dist_version))
+    # Translators: this is an Ubuntu version name like "Ubuntu 12.04"
+    self.set_desc(_("To stay secure, you should upgrade to Ubuntu %s.") % (
+                  meta_release.upgradable_to.version))
 
 
 class ErrorDialog(Dialog):
@@ -109,9 +148,6 @@ class ErrorDialog(Dialog):
       self.label_desc.set_selectable(True)
     self.add_settings_button()
     self.focus_button = self.add_button(Gtk.STOCK_OK, self.close)
-
-  def close(self):
-    sys.exit(0)
 
   def main(self):
     Dialog.main(self)
@@ -130,9 +166,6 @@ class NeedRestartDialog(Dialog):
     Dialog.__init__(self, window_main)
     self.set_header(_("The computer needs to restart to finish installing updates."))
     self.focus_button = self.add_button(_("_Restart"), self.restart)
-
-  def close(self):
-    sys.exit(0)
 
   def restart(self, *args, **kwargs):
     self._request_reboot_via_session_manager()

@@ -52,7 +52,6 @@ import time
 import threading
 import xml.sax.saxutils
 
-from .GtkProgress import GtkAcquireProgress, GtkOpProgressInline
 from .backend import get_backend
 
 from gettext import gettext as _
@@ -66,11 +65,9 @@ from .Core.utils import (humanize_size,
 from .Core.AlertWatcher import AlertWatcher
 
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
-from .DistUpgradeFetcher import DistUpgradeFetcherGtk
 
 from .ChangelogViewer import ChangelogViewer
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
-from .MetaReleaseGObject import MetaRelease
 from .UnitySupport import UnitySupport
 
 
@@ -84,30 +81,6 @@ from .UnitySupport import UnitySupport
 
 # NetworkManager enums
 from .Core.roam import NetworkManagerHelper
-
-def show_dist_no_longer_supported_dialog(parent=None):
-    """ show a no-longer-supported dialog """
-    msg = "<big><b>%s</b></big>\n\n%s" % (
-        _("Your Ubuntu release is not supported anymore."),
-        _("You will not get any further security fixes or critical "
-          "updates. "
-          "Please upgrade to a later version of Ubuntu."))
-    dialog = Gtk.MessageDialog(parent, 0, Gtk.MessageType.WARNING,
-                               Gtk.ButtonsType.CLOSE,"")
-    dialog.set_title("")
-    dialog.set_markup(msg)
-    button = Gtk.LinkButton(uri="http://www.ubuntu.com/releaseendoflife",
-                            label=_("Upgrade information"))
-    button.show()
-    dialog.get_content_area().pack_end(button, True, True, 0)
-    # this data used in the test to get the dialog
-    if parent:
-        parent.no_longer_supported_nag = dialog
-    dialog.run()
-    dialog.destroy()
-    if parent:
-        del parent.no_longer_supported_nag
-
 
 class UpdatesAvailable(SimpleGtkbuilderApp):
 
@@ -189,8 +162,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
 
     if not os.path.exists("/usr/bin/software-properties-gtk"):
         self.button_settings.set_sensitive(False)
-
-    self.window_main.push(self.pane_updates_available, self)
 
     # init show version
     self.show_versions = self.settings.get_boolean("show-versions")
@@ -475,7 +446,7 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
           # show different text on first run (UX team suggestion)
           firstrun = self.settings.get_boolean("first-run")
           if firstrun:
-              text_header = _("Updated software has been issued since %s was released. Do you want to install it now?") % self.meta.current_dist_description
+              text_header = _("Updated software has been issued since Ubuntu %s was released. Do you want to install it now?") % self.window_main.meta_release.current_dist_version
               self.settings.set_boolean("first-run", False)
           else:
               text_header = _("Updated software is available for this computer. Do you want to install it now?")
@@ -541,10 +512,10 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
         self.cache.checkFreeSpace()
     except NotEnoughFreeSpaceError as e:
         for req in e.free_space_required_list:
-            self.error(err_sum, err_long % (req.size_total,
-                                            req.dir,
-                                            req.size_needed,
-                                            req.dir))
+            self.window_main.start_error(err_sum, err_long % (req.size_total,
+                                                              req.dir,
+                                                              req.size_needed,
+                                                              req.dir))
         return
     except SystemError as e:
         logging.exception("free space check failed")
@@ -722,31 +693,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.refresh_updates_count()
     return False
 
-  def dist_no_longer_supported(self, meta_release):
-    show_dist_no_longer_supported_dialog(self.window_main)
-
-  def error(self, summary, details):
-    " helper function to display a error message "
-    self.window_main.start_error(summary, details)
-
-  def on_button_dist_upgrade_clicked(self, button):
-      #print("on_button_dist_upgrade_clicked")
-      if self.new_dist.upgrade_broken:
-          return self.error(
-              _("Release upgrade not possible right now"),
-              _("The release upgrade can not be performed currently, "
-                "please try again later. The server reported: '%s'") % self.new_dist.upgrade_broken)
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkAcquireProgress(self, _("Downloading the release upgrade tool")))
-      if self.options.sandbox:
-          fetcher.run_options.append("--sandbox")
-      fetcher.run()
-      
-  def new_dist_available(self, meta_release, upgradable_to):
-    self.frame_new_release.show()
-    self.label_new_release.set_markup(_("<b>New Ubuntu release '%s' is available</b>") % upgradable_to.version)
-    self.new_dist = upgradable_to
-    
-
   def check_all_updates_installable(self):
     """ Check if all available updates can be installed and suggest
         to run a distribution upgrade if not """
@@ -765,25 +711,7 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
                    "--", "/usr/bin/update-manager", "--dist-upgrade")
       return False
 
-  def check_metarelease(self):
-      " check for new meta-release information "
-      settings = Gio.Settings("com.ubuntu.update-manager")
-      self.meta = MetaRelease(self.options.devel_release,
-                              self.options.use_proposed)
-      self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
-      # check if we are interessted in dist-upgrade information
-      # (we are not by default on dapper)
-      if (self.options.check_dist_upgrades or
-          settings.get_boolean("check-dist-upgrades")):
-          self.meta.connect("new_dist_available",self.new_dist_available)
-      
-
   def main(self):
-    # check for new distributin information
-    self.check_metarelease()
-
-    while Gtk.events_pending():
-      Gtk.main_iteration()
-
+    self.window_main.push(self.pane_updates_available, self)
     self.fillstore()
     self.alert_watcher.check_alert_state()

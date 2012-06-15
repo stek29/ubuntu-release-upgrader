@@ -24,6 +24,8 @@ from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gio
+from gi.repository import GLib
 
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
@@ -39,10 +41,13 @@ from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
 
 from .UnitySupport import UnitySupport
-from .Dialogs import ErrorDialog
-from .Dialogs import NoUpdatesDialog
-from .Dialogs import NeedRestartDialog
+from .Dialogs import (DistUpgradeDialog,
+                      ErrorDialog,
+                      NeedRestartDialog,
+                      NoUpdatesDialog,
+                      UnsupportedDialog)
 from .InstallProgress import InstallProgress
+from .MetaReleaseGObject import MetaRelease
 from .UpdateProgress import UpdateProgress
 from .UpdatesAvailable import UpdatesAvailable
 from .Core.AlertWatcher import AlertWatcher
@@ -67,6 +72,7 @@ class UpdateManager(Gtk.Window):
     self.controller = None
     self.cache = None
     self.update_list = None
+    self.meta_release = None
 
     # Basic GTK+ parameters
     self.set_title(_("Software Updater"))
@@ -89,6 +95,11 @@ class UpdateManager(Gtk.Window):
         self.unity.set_urgency(True)
         self.initial_focus_id = self.connect(
             "focus-in-event", self.on_initial_focus_in)
+
+    # Look for a new release in a thread
+    self.meta_release = MetaRelease(self.options.devel_release,
+                                    self.options.use_proposed)
+
 
   def on_initial_focus_in(self, widget, event):
       """callback run on initial focus-in (if started unmapped)"""
@@ -144,6 +155,7 @@ class UpdateManager(Gtk.Window):
     if self.options.no_update:
       self.start_available()
       return
+
     self._start_pane(UpdateProgress(self))
 
   def start_available(self, allow_restart=False):
@@ -157,7 +169,9 @@ class UpdateManager(Gtk.Window):
     self.refresh_cache()
 
     if self.cache.install_count == 0:
-      self._start_pane(NoUpdatesDialog(self))
+      if not self._check_meta_release():
+        self._start_pane(NoUpdatesDialog(self))
+    # FIXME: need to stop unity update counter
     else:
       self._start_pane(UpdatesAvailable(self))
 
@@ -175,6 +189,45 @@ class UpdateManager(Gtk.Window):
     self.set_sensitive(False)
     if self.get_window() is not None:
       self.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+
+  def _check_meta_release(self):
+    if self.meta_release is None:
+      return False
+
+    if self.meta_release.downloading:
+      # Block until we get an answer
+      GLib.idle_add(self._meta_release_wait_idle)
+      Gtk.main()
+
+    # Check if there is anything to upgrade to or a known-broken upgrade
+    next = self.meta_release.upgradable_to
+    if not next or next.upgrade_broken:
+      return False
+
+    # Check for end-of-life
+    if self.meta_release.no_longer_supported:
+      self._start_pane(UnsupportedDialog(self, self.meta_release))
+      return True
+
+    # Check for new fresh release
+    settings = Gio.Settings("com.ubuntu.update-manager")
+    if (self.meta_release.new_dist and
+        (self.options.check_dist_upgrades or
+         settings.get_boolean("check-dist-upgrades"))):
+      self._start_pane(DistUpgradeDialog(self, self.meta_release))
+      return True
+
+    return False
+
+  def _meta_release_wait_idle(self):
+    # 'downloading' is changed in a thread, but the signal 'done_downloading'
+    # is done in our thread's event loop.  So we know that it won't fire while
+    # we're in this function.
+    if not self.meta_release.downloading:
+      Gtk.main_quit()
+    else:
+      self.meta_release.connect("done_downloading", Gtk.main_quit)
+    return False
 
   # fixme: we should probably abstract away all the stuff from libapt
   def refresh_cache(self):

@@ -30,8 +30,10 @@ class MetaRelease(MetaReleaseCore,GObject.GObject):
                                 (GObject.TYPE_PYOBJECT,)),
         'dist_no_longer_supported' : (GObject.SignalFlags.RUN_LAST,
                                       None,
-                                      ())
-
+                                      ()),
+        'done_downloading' : (GObject.SignalFlags.RUN_LAST,
+                              None,
+                              ())
         }
 
     def __init__(self, useDevelopmentRelease=False, useProposed=False):
@@ -43,13 +45,13 @@ class MetaRelease(MetaReleaseCore,GObject.GObject):
 
     def check(self):
         # check if we have a metarelease_information file
-        keepRuning = True
         if self.no_longer_supported is not None:
-            keepRuning = False
             self.emit("dist_no_longer_supported")
         if self.new_dist is not None:
-            keepRuning = False
-            self.emit("new_dist_available", self.new_dist)            
-        return keepRuning
-
+            self.emit("new_dist_available", self.new_dist)
+        if self.downloading:
+            return True
+        else:
+            self.emit("done_downloading")
+            return False
 

@@ -45,6 +45,7 @@ from .Dialogs import (DistUpgradeDialog,
                       ErrorDialog,
                       NeedRestartDialog,
                       NoUpdatesDialog,
+                      PartialUpgradeDialog,
                       UnsupportedDialog)
 from .InstallProgress import InstallProgress
 from .MetaReleaseGObject import MetaRelease
@@ -246,7 +247,7 @@ class UpdateManager(Gtk.Window):
       # if the cache could not be opened for some reason,
       # let the release upgrader handle it, it deals
       # a lot better with this
-      # FIXME self.ask_run_partial_upgrade()
+      self._start_pane(PartialUpgradeDialog(self))
       # we assert a clean cache
       header = _("Software index is broken")
       desc = _("It is impossible to install or remove any software. "
@@ -278,6 +279,9 @@ class UpdateManager(Gtk.Window):
       self.start_error(header, desc)
 
     self.unity.set_updates_count(self.cache.install_count)
+
+    if True or self.list.distUpgradeWouldDelete > 0:
+      self._start_pane(PartialUpgradeDialog(self))
 
   def _setup_dbus(self):
     """ this sets up a dbus listener if none is installed alread """

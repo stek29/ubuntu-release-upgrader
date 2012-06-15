@@ -686,27 +686,8 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.setBusy(False)
     while Gtk.events_pending():
       Gtk.main_iteration()
-    self.check_all_updates_installable()
     self.refresh_updates_count()
     return False
-
-  def check_all_updates_installable(self):
-    """ Check if all available updates can be installed and suggest
-        to run a distribution upgrade if not """
-    if self.list.distUpgradeWouldDelete > 0:
-        self.ask_run_partial_upgrade()
-
-  def ask_run_partial_upgrade(self):
-      self.dialog_dist_upgrade.set_transient_for(self.window_main)
-      self.dialog_dist_upgrade.set_title("")
-      res = self.dialog_dist_upgrade.run()
-      self.dialog_dist_upgrade.hide()
-      if res == Gtk.ResponseType.YES:
-          os.execl("/usr/bin/gksu",
-                   "/usr/bin/gksu", "--desktop",
-                   "/usr/share/applications/update-manager.desktop",
-                   "--", "/usr/bin/update-manager", "--dist-upgrade")
-      return False
 
   def main(self):
     self.window_main.push(self.pane_updates_available, self)

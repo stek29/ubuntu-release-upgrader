@@ -139,6 +139,33 @@ class UnsupportedDialog(DistUpgradeDialog):
                   meta_release.upgradable_to.version))
 
 
+class PartialUpgradeDialog(Dialog):
+  def __init__(self, window_main):
+    Dialog.__init__(self, window_main)
+    self.set_header(_("Not all updates can be installed"))
+    self.set_desc(_("""Run a partial upgrade, to install as many updates as possible. 
+
+This can be caused by:
+ * A previous upgrade which didn't complete
+ * Problems with some of the installed software
+ * Unofficial software packages not provided by Ubuntu
+ * Normal changes of a pre-release version of Ubuntu"""))
+    self.add_settings_button()
+    self.add_button(_("_Partial Upgrade"), self.upgrade)
+    self.focus_button = self.add_button(_("_Continue"), Gtk.main_quit)
+
+  def upgrade(self):
+    os.execl("/usr/bin/gksu",
+             "/usr/bin/gksu", "--desktop",
+             "/usr/share/applications/update-manager.desktop",
+             "--", "/usr/bin/update-manager", "--dist-upgrade")
+
+  def main(self):
+    Dialog.main(self)
+    # Block progress until user has answered this question
+    Gtk.main()
+
+
 class ErrorDialog(Dialog):
   def __init__(self, window_main, header, desc=None):
     Dialog.__init__(self, window_main)

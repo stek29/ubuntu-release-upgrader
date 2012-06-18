@@ -44,13 +44,21 @@ class Dialog(SimpleGtkbuilderApp):
   def __init__(self, window_main):
     self.window_main = window_main
     self.focus_button = None
-    SimpleGtkbuilderApp.__init__(self, self.window_main.datadir+"gtkbuilder/Dialog.ui",
+    SimpleGtkbuilderApp.__init__(self, self.window_main.datadir+"/gtkbuilder/Dialog.ui",
                                  "update-manager")
 
   def main(self):
     self.window_main.push(self.pane_dialog, self)
     if self.focus_button:
       self.focus_button.grab_focus()
+
+  def run(self, parent=None):
+    if self.focus_button:
+      self.focus_button.grab_focus()
+    if parent:
+      self.window_dialog.set_transient_for(parent)
+      self.window_dialog.set_modal(True)
+    self.window_dialog.run()
 
   def close(self):
     sys.exit(0) # By default, exit the app
@@ -138,6 +146,13 @@ class UnsupportedDialog(DistUpgradeDialog):
     self.set_desc(_("To stay secure, you should upgrade to %s %s.") % (
                   meta_release.flavor_name,
                   meta_release.upgradable_to.version))
+    print("Hello!")
+
+  def run(self, parent):
+    # This field is used in tests/test_end_of_life.py
+    print("Hello2!", self.window_main)
+    self.window_main.no_longer_supported_nag = self.window_dialog
+    DistUpgradeDialog.run(self, parent)
 
 
 class PartialUpgradeDialog(Dialog):

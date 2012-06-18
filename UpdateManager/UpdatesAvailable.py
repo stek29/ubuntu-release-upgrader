@@ -83,7 +83,7 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.options = app.options
     self.cache = app.cache
     self.list = app.update_list
-    SimpleGtkbuilderApp.__init__(self, self.datadir+"gtkbuilder/UpdateManager.ui",
+    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpdateManager.ui",
                                  "update-manager")
 
     # Used for inhibiting power management

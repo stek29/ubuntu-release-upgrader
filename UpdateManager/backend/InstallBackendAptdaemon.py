@@ -111,7 +111,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def _run_in_dialog(self, trans, action, header, show_details, close_on_done):
         builder = Gtk.Builder()
         builder.set_translation_domain("update-manager")
-        builder.add_from_file(self.datadir+"gtkbuilder/UpdateProgress.ui")
+        builder.add_from_file(self.datadir+"/gtkbuilder/UpdateProgress.ui")
 
         label_header = builder.get_object("label_header")
         label_header.set_label(header)

@@ -1,4 +1,4 @@
-# UpdatProgress.py
+# UpdateProgress.py
 #  
 #  Copyright (c) 2004-2012 Canonical
 #                2004 Michiel Sikkes
@@ -29,7 +29,6 @@
 
 from __future__ import absolute_import, print_function
 
-from gi.repository import Gtk
 from gi.repository import GLib
 
 import warnings
@@ -40,12 +39,8 @@ import sys
 
 from .backend import get_backend
 
-from gettext import gettext as _
-from gettext import ngettext
-
 from UpdateManager.UpdateManager import UpdateManager
-from .Core.utils import (inhibit_sleep,
-                         allow_sleep)
+from .Core.utils import inhibit_sleep, allow_sleep
 
 class UpdateProgress(object):
 
@@ -63,7 +58,7 @@ class UpdateProgress(object):
 
   def invoke_manager(self):
     # don't display apt-listchanges
-    os.environ["APT_LISTCHANGES_FRONTEND"]="none"
+    os.environ["APT_LISTCHANGES_FRONTEND"] = "none"
 
     # Do not suspend during the update process
     (self.sleep_dev, self.sleep_cookie) = inhibit_sleep()

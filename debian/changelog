@@ -14,6 +14,15 @@ update-manager (1:0.164) UNRELEASED; urgency=low
   * debian/rules: Make sure to run setup.py with the default python3 last,
     so that scripts get correct #! lines.
 
+  [ Barry Warsaw ]
+  * pre-build.sh: Add python-gi as an explicit dependency.
+  * setup.py:
+    - Fix the installation of the janitor.plugincore package for Python 3.
+      (LP: #1013490)
+    - Calculate the setup() version number from debian/changelog.
+    - Remove package_dir since it's not actually needed.
+    - Whitespace normalization.
+
  -- Brian Murray <brian@ubuntu.com>  Tue, 19 Jun 2012 15:34:45 -0700
 
 update-manager (1:0.163) quantal; urgency=low

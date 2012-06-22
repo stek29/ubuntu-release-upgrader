@@ -37,6 +37,7 @@ setup(name='update-manager',
                 'UpdateManager.Core',
                 'UpdateManagerText',
                 'DistUpgrade',
+                'janitor',
                 'janitor.plugincore',
                 ],
       scripts=[

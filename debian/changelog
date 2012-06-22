@@ -15,13 +15,18 @@ update-manager (1:0.164) UNRELEASED; urgency=low
     so that scripts get correct #! lines.
 
   [ Barry Warsaw ]
-  * pre-build.sh: Add python-gi as an explicit dependency.
+  * pre-build.sh:
+    - Add python-gi as an explicit dependency.
+    - python3-mock is required.
   * setup.py:
     - Fix the installation of the janitor.plugincore package for Python 3.
       (LP: #1013490)
     - Calculate the setup() version number from debian/changelog.
     - Remove package_dir since it's not actually needed.
     - Whitespace normalization.
+  * tests/Makefile
+    - Add sleep between Python 2 and Python 3 invocation of tests under
+      xvfb-run, otherwise I get crashes where xvfb doesn't come up.
 
  -- Brian Murray <brian@ubuntu.com>  Tue, 19 Jun 2012 15:34:45 -0700
 

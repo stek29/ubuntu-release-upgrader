@@ -1768,6 +1768,28 @@ msgstr "Du har takka nei til å oppgradera åt Ubuntu %s"
 msgid "Add debug output"
 msgstr ""
 
+#~ msgid ""
+#~ "If none of this applies, then please report this bug using the command "
+#~ "'ubuntu-bug update-manager' in a terminal."
+#~ msgstr ""
+#~ "Om dette ikkje gjeld, rapporter feilen ved å bruka kommandoen «ubuntu-bug "
+#~ "update-manager» i ein terminal."
+
+#~ msgid ""
+#~ "It was impossible to install a required package. Please report this as a "
+#~ "bug using 'ubuntu-bug update-manager' in a terminal."
+#~ msgstr ""
+#~ "Klarte ikkje installera ein nødvendig pakke. Rapporter denne feilen ved å "
+#~ "bruka kommandoen «ubuntu-bug update-manager» i ein terminal."
+
+#~ msgid ""
+#~ "This is most likely a bug in the upgrade tool. Please report it as a bug "
+#~ "using the command 'ubuntu-bug update-manager'."
+#~ msgstr ""
+#~ "Dette er mest sannsynleg ein feil i oppgraderingsverktøyet. Rapporter "
+#~ "denne feilen ved å bruka kommandoen «ubuntu-bug update-manager» i ein "
+#~ "terminal."
+
 #~ msgid "Please wait, this can take some time."
 #~ msgstr "Vent litt, dette kan ta ei stund."
 
@@ -1835,16 +1857,14 @@ msgstr ""
 #~ msgid "Select _All"
 #~ msgstr "Vel _alle"
 
-#~ msgid "%(count)s update has been selected."
-#~ msgid_plural "%(count)s updates have been selected."
-#~ msgstr[0] "%(count)s oppdatering er vald"
-#~ msgstr[1] "%(count)s oppdateringar er valde"
-
 #~ msgid "%s will be downloaded."
 #~ msgstr "%s vil verta lasta ned."
 
-#~ msgid "%(count_str)s %(download_str)s"
-#~ msgstr "%(count_str)s %(download_str)s"
+#, fuzzy
+#~ msgid "The update has already been downloaded."
+#~ msgid_plural "The updates have already been downloaded."
+#~ msgstr[0] "Oppdateringa er lasta ned, men ikkje installert"
+#~ msgstr[1] "Oppdateringane er lasta ned, men ikkje installerte"
 
 #~ msgid "Unknown download size."
 #~ msgstr "Ukjend storleik på nedlastinga."
@@ -1885,18 +1905,8 @@ msgstr ""
 #~ msgid "The package information was just updated."
 #~ msgstr "Pakkeinformasjonen vart akkurat oppdatert."
 
-#~ msgid ""
-#~ "Software updates correct errors, eliminate security vulnerabilities and "
-#~ "provide new features."
-#~ msgstr ""
-#~ "Programvareoppdateringar fiksar feil, fjernar tryggleikshol og gir deg "
-#~ "nye funksjonar."
-
 #~ msgid "Software updates may be available for your computer."
 #~ msgstr "Programvareoppdateringar er kanskje tilgjengelege for maskina di."
-
-#~ msgid "Welcome to Ubuntu"
-#~ msgstr "Velkommen til Ubuntu"
 
 #~ msgid ""
 #~ "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -2086,8 +2096,16 @@ msgstr ""
 #~ msgid "Other updates"
 #~ msgstr "Andre oppdateringar"
 
-#~ msgid "<big><b>Starting Update Manager</b></big>"
+#, fuzzy
+#~ msgid "<big><b>Starting Software Updater</b></big>"
 #~ msgstr "<big><b>Startar Oppdateringshandsamar</b></big>"
+
+#~ msgid ""
+#~ "Software updates correct errors, eliminate security vulnerabilities and "
+#~ "provide new features."
+#~ msgstr ""
+#~ "Programvareoppdateringar fiksar feil, fjernar tryggleikshol og gir deg "
+#~ "nye funksjonar."
 
 #~ msgid "_Partial Upgrade"
 #~ msgstr "_Delvis oppgradering"
@@ -2144,17 +2162,29 @@ msgstr ""
 #~ msgid "_Upgrade"
 #~ msgstr "_Oppgrader"
 
-#~ msgid "Update Manager"
-#~ msgstr "Oppdateringshandsamar"
+#, fuzzy
+#~ msgid "Software Updater"
+#~ msgstr "Programvareoppdateringar"
 
-#~ msgid "Starting Update Manager"
-#~ msgstr "Startar oppdateringshandsamaren"
+#, fuzzy
+#~ msgid "Starting Software Updater"
+#~ msgstr "Programvareoppdateringar"
 
 #~ msgid "U_pgrade"
 #~ msgstr "O_ppgrader"
 
 #~ msgid "updates"
 #~ msgstr "oppdateringar"
+
+#~ msgid "Changes"
+#~ msgstr "Endringar"
+
+#~ msgid "Description"
+#~ msgstr "Skildring"
+
+#, fuzzy
+#~ msgid "Details of updates"
+#~ msgstr "Skildring av oppdateringa"
 
 #~ msgid ""
 #~ "You are connected via roaming and may be charged for the data consumed by "
@@ -2163,26 +2193,15 @@ msgstr ""
 #~ "Du er kopla til via roaming, og kan verta kravd penger for datatrafikken "
 #~ "åt denne oppdateringa."
 
-#~ msgid "You are connected via a wireless modem."
-#~ msgstr "Du er kopla til via eit trådlaust modem."
-
 #~ msgid "It’s safer to connect the computer to AC power before updating."
 #~ msgstr "Du lyt kopla datamaskina åt ei straumkjelde før du oppdaterer."
 
-#~ msgid "_Install Updates"
-#~ msgstr "_Installer oppdateringar"
-
-#~ msgid "Changes"
-#~ msgstr "Endringar"
-
-#~ msgid "Description"
-#~ msgstr "Skildring"
-
-#~ msgid "Description of update"
-#~ msgstr "Skildring av oppdateringa"
-
 #~ msgid "_Settings..."
 #~ msgstr "_Innstillingar …"
+
+#, fuzzy
+#~ msgid "_Install Now"
+#~ msgstr "Installer"
 
 #~ msgid "Software Updates"
 #~ msgstr "Programvareoppdateringar"
@@ -2217,14 +2236,37 @@ msgstr ""
 #~ msgid "A file on disk"
 #~ msgstr "Ei fil på disken"
 
-#~ msgid ".deb package"
-#~ msgstr ".deb-pakke"
-
 #~ msgid "Install missing package."
 #~ msgstr "Installer manglande pakke."
 
 #~ msgid "Package %s should be installed."
 #~ msgstr "Pakka %s lyt verta installert."
+
+#~ msgid ".deb package"
+#~ msgstr ".deb-pakke"
+
+#~ msgid "%(count)s update has been selected."
+#~ msgid_plural "%(count)s updates have been selected."
+#~ msgstr[0] "%(count)s oppdatering er vald"
+#~ msgstr[1] "%(count)s oppdateringar er valde"
+
+#~ msgid "%(count_str)s %(download_str)s"
+#~ msgstr "%(count_str)s %(download_str)s"
+
+#~ msgid "Welcome to Ubuntu"
+#~ msgstr "Velkommen til Ubuntu"
+
+#~ msgid "Update Manager"
+#~ msgstr "Oppdateringshandsamar"
+
+#~ msgid "Starting Update Manager"
+#~ msgstr "Startar oppdateringshandsamaren"
+
+#~ msgid "You are connected via a wireless modem."
+#~ msgstr "Du er kopla til via eit trådlaust modem."
+
+#~ msgid "_Install Updates"
+#~ msgstr "_Installer oppdateringar"
 
 #~ msgid "Your system is up-to-date"
 #~ msgstr "Systemet ditt er oppdatert!"
@@ -2258,11 +2300,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Datamaskina di vil ikkje lenger få kritiske oppdateringar eller "
 #~ "tryggleikshol tetta. Oppgrader til ein nyare versjon av Ubuntu Linux no."
-
-#~ msgid "The update has already been downloaded, but not installed"
-#~ msgid_plural "The updates have already been downloaded, but not installed"
-#~ msgstr[0] "Oppdateringa er lasta ned, men ikkje installert"
-#~ msgstr[1] "Oppdateringane er lasta ned, men ikkje installerte"
 
 #~ msgid ""
 #~ "If you don't want to install them now, choose \"Update Manager\" from the "
@@ -2327,6 +2364,21 @@ msgstr ""
 #~ "Det er avgrensa støtte for ditt Intel-grafikkort i Ubuntu 11.04, og det "
 #~ "kan oppstå problem etter oppgraderinga. Vil du halda fram med "
 #~ "oppgraderinga?"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please report this bug using the command 'ubuntu-bug update-manager' in a "
+#~ "terminal and include the files in /var/log/dist-upgrade/ in the bug "
+#~ "report.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Rapporter denne feilen ved å bruka kommandoen «ubuntu-bug update-manager» "
+#~ "i ein terminal og inkluder filene i mappa /var/log/dist-upgrade/ i "
+#~ "feilrapporten.\n"
+#~ "%s"
 
 #~ msgid ""
 #~ "Preparing the system for the upgrade failed. Please report this using the "

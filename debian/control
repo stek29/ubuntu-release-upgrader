@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 9),
                python3-distutils-extra, 
                python3-apt (>= 0.8.5~),
                lsb-release,
-               ubuntu-drivers-common [i386 amd64], 
+               ubuntu-drivers-common (>= 1:0.2.55) [i386 amd64], 
                apt-clone (>= 0.2.3~ubuntu1)
 Build-Depends-Indep: libxml-parser-perl, 
                      scrollkeeper, 
@@ -20,21 +20,22 @@ Package: ubuntu-release-upgrader-core
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
-         python3-distupgrade
+         python3-distupgrade (= ${source:Version})
 Recommends: libpam-modules (>= 1.0.1-9ubuntu3)
-Replaces: update-manager (<< 1:0.164),
-          update-manager-core (<< 1:0.164)
-Breaks: update-manager (<< 1:0.164),
-        update-manager-core (<< 1:0.164)
+Replaces: update-manager (<< 1:0.166),
+          update-manager-core (<< 1:0.166)
+Breaks: update-manager (<< 1:0.166),
+        update-manager-core (<< 1:0.166)
 Description: manage release upgrades
  This is the core of the Ubuntu Release Upgrader
 
 Package: python3-distupgrade
 Architecture: all
+Section: python
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${python3:Depends},
          ${misc:Depends},
-         ubuntu-release-upgrader-core,
+         ubuntu-release-upgrader-core (= ${source:Version}),
          python3-apt (>= 0.8.5~),
          lsb-release
 Description: manage release upgrades
@@ -45,7 +46,13 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${python3:Depends},
          ${misc:Depends},
-         python3-distupgrade
+         ubuntu-release-upgrader-core (= ${source:Version}),
+         python3-distupgrade (= ${source:Version}),
+         python3-dbus,
+         python3-gi,
+         gir1.2-vte-2.90, 
+         gir1.2-gtk-3.0,
+Recommends: gir1.2-webkit-3.0
 Description: manage release upgrades
  This is the GTK+ frontend of the Ubuntu Release Upgrader
 
@@ -53,8 +60,9 @@ Package: ubuntu-release-upgrader-qt
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
-         ubuntu-release-upgrader-core,
-         python-kde4, 
-         kdesudo
+         ubuntu-release-upgrader-core (= ${source:Version}),
+         python3-kde4, 
+         kdesudo,
+         psmisc
 Description: manage release upgrades
  This is the Qt frontend of the Ubuntu Release Upgrader

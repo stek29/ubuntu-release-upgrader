@@ -1792,6 +1792,27 @@ msgstr "Heu triat no actualitzar a l'Ubuntu %s"
 msgid "Add debug output"
 msgstr ""
 
+#~ msgid ""
+#~ "If none of this applies, then please report this bug using the command "
+#~ "'ubuntu-bug update-manager' in a terminal."
+#~ msgstr ""
+#~ "Si cap d'estes s'aplica, llavors informeu d'este error utilitzant l'orde "
+#~ "«ubuntu-bug update-manager» en un terminal."
+
+#~ msgid ""
+#~ "It was impossible to install a required package. Please report this as a "
+#~ "bug using 'ubuntu-bug update-manager' in a terminal."
+#~ msgstr ""
+#~ "Ha sigut impossible instal·lar el paquet necessari. Informeu d'este error "
+#~ "utilitzant l'orde «ubuntu-bug update-manager» en un terminal."
+
+#~ msgid ""
+#~ "This is most likely a bug in the upgrade tool. Please report it as a bug "
+#~ "using the command 'ubuntu-bug update-manager'."
+#~ msgstr ""
+#~ "Pareix que hi ha un error en l'eina d'actualització. Informeu d'este "
+#~ "error utilitzant l'orde «ubuntu-bug update-manager» en un terminal."
+
 #~ msgid "Please wait, this can take some time."
 #~ msgstr "Espereu un moment, això pot tardar una estona."
 
@@ -1859,16 +1880,15 @@ msgstr ""
 #~ msgid "Select _All"
 #~ msgstr "Seleccion_a-ho tot"
 
-#~ msgid "%(count)s update has been selected."
-#~ msgid_plural "%(count)s updates have been selected."
-#~ msgstr[0] "S'ha seleccionat %(count)s actualització."
-#~ msgstr[1] "S'han seleccionat %(count)s actualitzacions."
-
 #~ msgid "%s will be downloaded."
 #~ msgstr "Es baixaran %s."
 
-#~ msgid "%(count_str)s %(download_str)s"
-#~ msgstr "%(count_str)s %(download_str)s"
+#, fuzzy
+#~ msgid "The update has already been downloaded."
+#~ msgid_plural "The updates have already been downloaded."
+#~ msgstr[0] "L'actualització ja s'ha baixat, però encara no s'ha instal·lat"
+#~ msgstr[1] ""
+#~ "Les actualitzacions ja s'han baixat, però encara no s'han instal·lat"
 
 #~ msgid "Unknown download size."
 #~ msgstr "No s'ha pogut determinar la mida de la baixada."
@@ -1911,19 +1931,9 @@ msgstr ""
 #~ msgid "The package information was just updated."
 #~ msgstr "La informació del paquet s'acaba d'actualitzar."
 
-#~ msgid ""
-#~ "Software updates correct errors, eliminate security vulnerabilities and "
-#~ "provide new features."
-#~ msgstr ""
-#~ "Les actualitzacions de programari corregeixen errors, eliminen problemes "
-#~ "de seguretat i proporcionen prestacions noves."
-
 #~ msgid "Software updates may be available for your computer."
 #~ msgstr ""
 #~ "Pot ser que hi haja actualitzacions de programari per a este ordinador."
-
-#~ msgid "Welcome to Ubuntu"
-#~ msgstr "Benvingut a l'Ubuntu"
 
 #~ msgid ""
 #~ "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -2116,8 +2126,16 @@ msgstr ""
 #~ msgid "Other updates"
 #~ msgstr "Altres actualitzacions"
 
-#~ msgid "<big><b>Starting Update Manager</b></big>"
+#, fuzzy
+#~ msgid "<big><b>Starting Software Updater</b></big>"
 #~ msgstr "<big><b>S'està iniciant el gestor d'actualitzacions</b></big>"
+
+#~ msgid ""
+#~ "Software updates correct errors, eliminate security vulnerabilities and "
+#~ "provide new features."
+#~ msgstr ""
+#~ "Les actualitzacions de programari corregeixen errors, eliminen problemes "
+#~ "de seguretat i proporcionen prestacions noves."
 
 #~ msgid "_Partial Upgrade"
 #~ msgstr "Actualització _parcial"
@@ -2177,17 +2195,29 @@ msgstr ""
 #~ msgid "_Upgrade"
 #~ msgstr "_Actualitza"
 
-#~ msgid "Update Manager"
-#~ msgstr "Gestor d'actualitzacions"
+#, fuzzy
+#~ msgid "Software Updater"
+#~ msgstr "Actualitzacions de programari"
 
-#~ msgid "Starting Update Manager"
-#~ msgstr "S'està iniciant el Gestor d'actualitzacions"
+#, fuzzy
+#~ msgid "Starting Software Updater"
+#~ msgstr "Actualitzacions de programari"
 
 #~ msgid "U_pgrade"
 #~ msgstr "_Actualitza"
 
 #~ msgid "updates"
 #~ msgstr "actualitzacions"
+
+#~ msgid "Changes"
+#~ msgstr "Canvis"
+
+#~ msgid "Description"
+#~ msgstr "Descripció"
+
+#, fuzzy
+#~ msgid "Details of updates"
+#~ msgstr "Descripció de l'actualització"
 
 #~ msgid ""
 #~ "You are connected via roaming and may be charged for the data consumed by "
@@ -2196,28 +2226,17 @@ msgstr ""
 #~ "Esteu connectat per itinerància i potser vos cobraran per les dades "
 #~ "baixades per l'actualització."
 
-#~ msgid "You are connected via a wireless modem."
-#~ msgstr "Esteu connectat a través d'un mòdem sense fil."
-
 #~ msgid "It’s safer to connect the computer to AC power before updating."
 #~ msgstr ""
 #~ "És més segur connectar l'ordinador a la xarxa elèctrica abans de començar "
 #~ "l'actualització."
 
-#~ msgid "_Install Updates"
-#~ msgstr "_Instal·la les actualitzacions"
-
-#~ msgid "Changes"
-#~ msgstr "Canvis"
-
-#~ msgid "Description"
-#~ msgstr "Descripció"
-
-#~ msgid "Description of update"
-#~ msgstr "Descripció de l'actualització"
-
 #~ msgid "_Settings..."
 #~ msgstr "_Paràmetres..."
+
+#, fuzzy
+#~ msgid "_Install Now"
+#~ msgstr "Instal·la"
 
 #~ msgid "Software Updates"
 #~ msgstr "Actualitzacions de programari"
@@ -2254,14 +2273,37 @@ msgstr ""
 #~ msgid "A file on disk"
 #~ msgstr "Un fitxer en disc"
 
-#~ msgid ".deb package"
-#~ msgstr "Paquet .deb"
-
 #~ msgid "Install missing package."
 #~ msgstr "Instal·la el paquet que falta."
 
 #~ msgid "Package %s should be installed."
 #~ msgstr "El paquet %s s'hauria d'instal·lar."
+
+#~ msgid ".deb package"
+#~ msgstr "Paquet .deb"
+
+#~ msgid "%(count)s update has been selected."
+#~ msgid_plural "%(count)s updates have been selected."
+#~ msgstr[0] "S'ha seleccionat %(count)s actualització."
+#~ msgstr[1] "S'han seleccionat %(count)s actualitzacions."
+
+#~ msgid "%(count_str)s %(download_str)s"
+#~ msgstr "%(count_str)s %(download_str)s"
+
+#~ msgid "Welcome to Ubuntu"
+#~ msgstr "Benvingut a l'Ubuntu"
+
+#~ msgid "Update Manager"
+#~ msgstr "Gestor d'actualitzacions"
+
+#~ msgid "Starting Update Manager"
+#~ msgstr "S'està iniciant el Gestor d'actualitzacions"
+
+#~ msgid "You are connected via a wireless modem."
+#~ msgstr "Esteu connectat a través d'un mòdem sense fil."
+
+#~ msgid "_Install Updates"
+#~ msgstr "_Instal·la les actualitzacions"
 
 #~ msgid ""
 #~ "This upgrade is running in sandbox (test) mode. All changes are written "
@@ -2293,12 +2335,6 @@ msgstr ""
 #~ "No rebeu cap més actualització de seguretat o actualitzacions crítiques. "
 #~ "És recomanable que actualitzeu el sistema a una versió més nova de "
 #~ "l'Ubuntu."
-
-#~ msgid "The update has already been downloaded, but not installed"
-#~ msgid_plural "The updates have already been downloaded, but not installed"
-#~ msgstr[0] "L'actualització ja s'ha baixat, però encara no s'ha instal·lat"
-#~ msgstr[1] ""
-#~ "Les actualitzacions ja s'han baixat, però encara no s'han instal·lat"
 
 #~ msgid "There are no updates to install"
 #~ msgstr "No hi ha actualitzacions a instal·lar"
@@ -2333,6 +2369,21 @@ msgstr ""
 #~ "El resultat de l'actualització de la informació del dipòsit ha sigut un "
 #~ "fitxer no vàlid. Informeu d'este error utilitzant l'orde «ubuntu-bug "
 #~ "update-manager» en un terminal."
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please report this bug using the command 'ubuntu-bug update-manager' in a "
+#~ "terminal and include the files in /var/log/dist-upgrade/ in the bug "
+#~ "report.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Informeu d'este error utilitzant l'orde «ubuntu-bug update-manager» en un "
+#~ "terminal i incloeu els fitxers a /var/log/dist-upgrade/ en l'informe "
+#~ "d'error.\n"
+#~ "%s"
 
 #~ msgid ""
 #~ "Preparing the system for the upgrade failed. Please report this using the "

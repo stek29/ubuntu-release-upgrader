@@ -2,12 +2,8 @@
 
 set -e
 
-dpkg-checkbuilddeps \
-	-d apt-btrfs-snapshot \
-	-d parsewiki \
-	-d python-feedparser \
-	-d python-mock \
-	-d xvfb
+dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
+			python3-mock, xvfb, gir1.2-gtk-3.0, python-gi'
 
 # update demotions
 (cd utils && ./demotions.py precise quantal > demoted.cfg)
@@ -50,4 +46,3 @@ rm -f ./tests/data-sources-list-test/apt.log
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 echo "VERSION='$DEBVER'" > DistUpgrade/DistUpgradeVersion.py
-

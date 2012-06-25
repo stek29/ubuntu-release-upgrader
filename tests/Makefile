@@ -7,11 +7,15 @@ check:
 	find . -name 'test_*.py' | \
 	while read file; do \
 	    if [ -x $$file ]; then \
-		echo "*** RUNNING $$file"; \
 		if grep -q Gtk $$file; then \
+			echo "*** RUNNING $$file (under xvfb-run)"; \
 			xvfb-run python $$file; \
+			sleep 1; \
+			xvfb-run python3 $$file; \
 		else \
-	    		python $$file ; \
+			echo "*** RUNNING $$file"; \
+			python $$file ; \
+			python3 $$file ; \
 		fi; \
 	    fi; \
 	done

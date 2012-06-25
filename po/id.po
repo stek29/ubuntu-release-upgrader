@@ -1765,6 +1765,27 @@ msgstr "Anda telah menolak peningkatan ke Ubuntu %s"
 msgid "Add debug output"
 msgstr ""
 
+#~ msgid ""
+#~ "If none of this applies, then please report this bug using the command "
+#~ "'ubuntu-bug update-manager' in a terminal."
+#~ msgstr ""
+#~ "Bila tak satupun yang berlaku, mohon laporkan kutu ini memakai perintah "
+#~ "'ubuntu-bug update-manager' dalam suatu terminal."
+
+#~ msgid ""
+#~ "It was impossible to install a required package. Please report this as a "
+#~ "bug using 'ubuntu-bug update-manager' in a terminal."
+#~ msgstr ""
+#~ "Tak mungkin memasang suatu paket yang diperlukan. Silakan laporkan ini "
+#~ "sebagai kutu memakai 'ubuntu-bug update-manager' dalam suatu terminal."
+
+#~ msgid ""
+#~ "This is most likely a bug in the upgrade tool. Please report it as a bug "
+#~ "using the command 'ubuntu-bug update-manager'."
+#~ msgstr ""
+#~ "Ini sangat boleh jadi suatu kutu pada perkakas peningkatan. Silakan "
+#~ "laporkan ini sebagai kutu memakai perintah 'ubuntu-bug update-manager'."
+
 #~ msgid "Please wait, this can take some time."
 #~ msgstr "Silakan tunggu, hal ini membutuhkan beberapa waktu."
 
@@ -1832,15 +1853,13 @@ msgstr ""
 #~ msgid "Select _All"
 #~ msgstr "Pilih Semu_a"
 
-#~ msgid "%(count)s update has been selected."
-#~ msgid_plural "%(count)s updates have been selected."
-#~ msgstr[0] "%(count)s pemutakhiran telah dipilih."
-
 #~ msgid "%s will be downloaded."
 #~ msgstr "%s akan diunduh."
 
-#~ msgid "%(count_str)s %(download_str)s"
-#~ msgstr "%(count_str)s %(download_str)s"
+#, fuzzy
+#~ msgid "The update has already been downloaded."
+#~ msgid_plural "The updates have already been downloaded."
+#~ msgstr[0] "Pemutakhiran telah selesai diunduh, namun belum terpasang"
 
 #~ msgid "Unknown download size."
 #~ msgstr "Ukuran unduhan tidak diketahui."
@@ -1876,18 +1895,8 @@ msgstr ""
 #~ msgid "The package information was just updated."
 #~ msgstr "Informasi paket baru saja diperbarui."
 
-#~ msgid ""
-#~ "Software updates correct errors, eliminate security vulnerabilities and "
-#~ "provide new features."
-#~ msgstr ""
-#~ "Pemutakhiran perangkat lunak dapat memperbaiki masalah, menghilangkan "
-#~ "kerentanan pada keamanan dan menyediakan fitur baru."
-
 #~ msgid "Software updates may be available for your computer."
 #~ msgstr "Pembaruan perangkat lunak mungkin tersedia  untuk komputer Anda."
-
-#~ msgid "Welcome to Ubuntu"
-#~ msgstr "Selamat datang di Ubuntu"
 
 #~ msgid ""
 #~ "The upgrade needs a total of %s free space on disk '%s'. Please free at "
@@ -2080,8 +2089,16 @@ msgstr ""
 #~ msgid "Other updates"
 #~ msgstr "Pemutakhiran lain"
 
-#~ msgid "<big><b>Starting Update Manager</b></big>"
+#, fuzzy
+#~ msgid "<big><b>Starting Software Updater</b></big>"
 #~ msgstr "<b><big>Memulai Pengelola Pemutakhiran</big></b>"
+
+#~ msgid ""
+#~ "Software updates correct errors, eliminate security vulnerabilities and "
+#~ "provide new features."
+#~ msgstr ""
+#~ "Pemutakhiran perangkat lunak dapat memperbaiki masalah, menghilangkan "
+#~ "kerentanan pada keamanan dan menyediakan fitur baru."
 
 #~ msgid "_Partial Upgrade"
 #~ msgstr "Peningkatan Versi Sebagian"
@@ -2139,17 +2156,29 @@ msgstr ""
 #~ msgid "_Upgrade"
 #~ msgstr "Tingkatkan"
 
-#~ msgid "Update Manager"
-#~ msgstr "Manajer Pemutakhiran"
+#, fuzzy
+#~ msgid "Software Updater"
+#~ msgstr "Perangkat Lunak Mutakhir"
 
-#~ msgid "Starting Update Manager"
-#~ msgstr "Memulai Pengelola Pemutakhiran"
+#, fuzzy
+#~ msgid "Starting Software Updater"
+#~ msgstr "Perangkat Lunak Mutakhir"
 
 #~ msgid "U_pgrade"
 #~ msgstr "U_pgrade"
 
 #~ msgid "updates"
 #~ msgstr "pembaruan"
+
+#~ msgid "Changes"
+#~ msgstr "Perubahan"
+
+#~ msgid "Description"
+#~ msgstr "Deskripsi"
+
+#, fuzzy
+#~ msgid "Details of updates"
+#~ msgstr "Penjelasan tentang pemutakhiran"
 
 #~ msgid ""
 #~ "You are connected via roaming and may be charged for the data consumed by "
@@ -2158,28 +2187,17 @@ msgstr ""
 #~ "Anda terhubung melalui roaming dan mungkin akan ditagih untuk sejumlah "
 #~ "data yang terpakai untuk pembaruan ini."
 
-#~ msgid "You are connected via a wireless modem."
-#~ msgstr "Anda terhubung melalui modem nirkabel."
-
 #~ msgid "It’s safer to connect the computer to AC power before updating."
 #~ msgstr ""
 #~ "Lebih aman untuk menghubungkan komputer ke listrik AC sebelum melakukan "
 #~ "pembaruan."
 
-#~ msgid "_Install Updates"
-#~ msgstr "_Instal Update"
-
-#~ msgid "Changes"
-#~ msgstr "Perubahan"
-
-#~ msgid "Description"
-#~ msgstr "Deskripsi"
-
-#~ msgid "Description of update"
-#~ msgstr "Penjelasan tentang pemutakhiran"
-
 #~ msgid "_Settings..."
 #~ msgstr "_Pengaturan..."
+
+#, fuzzy
+#~ msgid "_Install Now"
+#~ msgstr "Pasang"
 
 #~ msgid "Software Updates"
 #~ msgstr "Perangkat Lunak Mutakhir"
@@ -2215,14 +2233,36 @@ msgstr ""
 #~ msgid "A file on disk"
 #~ msgstr "Sebuah berkas di disk"
 
-#~ msgid ".deb package"
-#~ msgstr "paket .deb"
-
 #~ msgid "Install missing package."
 #~ msgstr "Pasang paket yang hilang."
 
 #~ msgid "Package %s should be installed."
 #~ msgstr "Paket %s sebaiknya diinstal."
+
+#~ msgid ".deb package"
+#~ msgstr "paket .deb"
+
+#~ msgid "%(count)s update has been selected."
+#~ msgid_plural "%(count)s updates have been selected."
+#~ msgstr[0] "%(count)s pemutakhiran telah dipilih."
+
+#~ msgid "%(count_str)s %(download_str)s"
+#~ msgstr "%(count_str)s %(download_str)s"
+
+#~ msgid "Welcome to Ubuntu"
+#~ msgstr "Selamat datang di Ubuntu"
+
+#~ msgid "Update Manager"
+#~ msgstr "Manajer Pemutakhiran"
+
+#~ msgid "Starting Update Manager"
+#~ msgstr "Memulai Pengelola Pemutakhiran"
+
+#~ msgid "You are connected via a wireless modem."
+#~ msgstr "Anda terhubung melalui modem nirkabel."
+
+#~ msgid "_Install Updates"
+#~ msgstr "_Instal Update"
 
 #~ msgid ""
 #~ "Fetching and installing the upgrade can take several hours. Once the "
@@ -2273,12 +2313,23 @@ msgstr ""
 #~ "Perangkat keras grafis Anda mungkin tidak sepenuhnya didukung di Ubuntu "
 #~ "11.04"
 
-#~ msgid "The update has already been downloaded, but not installed"
-#~ msgid_plural "The updates have already been downloaded, but not installed"
-#~ msgstr[0] "Pemutakhiran telah selesai diunduh, namun belum terpasang"
-
 #~ msgid "Your system is up-to-date"
 #~ msgstr "Sistem Anda mutakhir"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please report this bug using the command 'ubuntu-bug update-manager' in a "
+#~ "terminal and include the files in /var/log/dist-upgrade/ in the bug "
+#~ "report.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Silakan laporkan kutu ini menggunakan perintah 'ubuntu-bug update-"
+#~ "manager' dalam suatu terminal dan sertakan berkas di /var/log/dist-"
+#~ "upgrade/ dalam laporan kutu.\n"
+#~ "%s"
 
 #~ msgid ""
 #~ "Preparing the system for the upgrade failed. Please report this using the "

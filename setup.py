@@ -1,22 +1,31 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
-import glob
 import os
+import glob
+
+from distutils.core import setup
+from subprocess import check_output
 
 from DistUtilsExtra.command import (
     build_extra, build_i18n)
 
+for line in check_output('dpkg-parsechangelog --format rfc822'.split(),
+                         universal_newlines=True).splitlines():
+    header, colon, value = line.lower().partition(':')
+    if header == 'version':
+        version = value.strip()
+        break
+else:
+    raise RuntimeError('No version found in debian/changelog')
+
 setup(name='ubuntu-release-upgrader',
+      version=version,
       packages=[
                 'DistUpgrade',
                 ],
-      package_dir={
-                   '': '.',
-                  },
       scripts=[
-               "do-release-upgrade", 
-               "kubuntu-devel-release-upgrade", 
+               "do-release-upgrade",
+               "kubuntu-devel-release-upgrade",
                "check-new-release-gtk",
                ],
       data_files=[

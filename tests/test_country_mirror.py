@@ -12,7 +12,10 @@ class testCountryMirror(unittest.TestCase):
 
       def testSimple(self):
             # empty
-            del os.environ["LANG"] 
+            try:
+                del os.environ["LANG"] 
+            except KeyError:
+                pass
             self.assertEqual(country_mirror(),'')
             # simple
             os.environ["LANG"] = 'de'

@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
-import glob
 import os
+import glob
+
+from distutils.core import setup
+from subprocess import check_output
 
 from DistUtilsExtra.command import (
     build_extra, build_i18n, build_help, build_icons)
@@ -16,8 +18,19 @@ def plugins():
             for name in os.listdir('janitor/plugincore/plugins')
             if name.endswith('_plugin.py') and name not in disabled]
 
+
+for line in check_output('dpkg-parsechangelog --format rfc822'.split(),
+                         universal_newlines=True).splitlines():
+    header, colon, value = line.lower().partition(':')
+    if header == 'version':
+        version = value.strip()
+        break
+else:
+    raise RuntimeError('No version found in debian/changelog')
+
+
 setup(name='update-manager',
-      version='0.56',
+      version=version,
       packages=[
                 'UpdateManager',
                 'UpdateManager.backend',
@@ -25,17 +38,14 @@ setup(name='update-manager',
                 'UpdateManagerText',
                 'DistUpgrade',
                 'janitor',
+                'janitor.plugincore',
                 ],
-      package_dir={
-                   '': '.',
-                   'janitor.plugincore': 'janitor/plugincore',
-                  },
       scripts=[
-               'update-manager', 
-               'ubuntu-support-status', 
-               'update-manager-text', 
-               "do-release-upgrade", 
-               "kubuntu-devel-release-upgrade", 
+               'update-manager',
+               'ubuntu-support-status',
+               'update-manager-text',
+               "do-release-upgrade",
+               "kubuntu-devel-release-upgrade",
                "check-new-release-gtk",
                ],
       data_files=[

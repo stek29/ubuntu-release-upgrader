@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# DO NOT CHANGE THE ABOVE TO python3!
 
 from __future__ import absolute_import
 

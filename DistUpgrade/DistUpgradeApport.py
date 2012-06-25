@@ -6,6 +6,7 @@ import sys
 import gettext
 import errno
 
+
 def apport_crash(type, value, tb):
     logging.debug("running apport_crash()")
     try:
@@ -23,16 +24,17 @@ def apport_crash(type, value, tb):
         report.setdefault('Tags', 'dist-upgrade')
         report['Tags'] += ' dist-upgrade'
         for fname in os.listdir("/var/log/dist-upgrade/"):
-            f = os.path.join("/var/log/dist-upgrade",fname)
+            f = os.path.join("/var/log/dist-upgrade", fname)
             if not os.path.isfile(f) or os.path.getsize(f) == 0:
                 continue
-            report[f.replace(".","").replace("-","")] = (open(f), )
+            report[f.replace(".", "").replace("-", "")] = (open(f), )
         report.add_to_existing('/var/crash/_usr_bin_update-manager.0.crash')
     return True
 
+
 def apport_pkgfailure(pkg, errormsg):
     logging.debug("running apport_pkgfailure() %s: %s", pkg, errormsg)
-    LOGDIR="/var/log/dist-upgrade/"
+    LOGDIR = "/var/log/dist-upgrade/"
     s = "/usr/share/apport/package_hook"
 
     # we do not report followup errors from earlier failures
@@ -49,7 +51,8 @@ def apport_pkgfailure(pkg, errormsg):
 
     if os.path.exists(s):
         try:
-            p = subprocess.Popen([s,"-p",pkg,"-l",LOGDIR], stdin=subprocess.PIPE)
+            p = subprocess.Popen([s, "-p", pkg, "-l", LOGDIR, "--tags",
+                "dist-upgrade"], stdin=subprocess.PIPE)
             p.stdin.write("%s\n" % errormsg)
             p.stdin.close()
             #p.wait()
@@ -58,6 +61,7 @@ def apport_pkgfailure(pkg, errormsg):
             return False
         return True
     return False
+
 
 def run_apport():
     " run apport, check if we have a display "

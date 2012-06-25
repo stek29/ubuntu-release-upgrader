@@ -43,7 +43,6 @@ import apt_pkg
 
 import sys
 import os
-import stat
 import re
 import logging
 import operator

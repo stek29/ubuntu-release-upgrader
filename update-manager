@@ -35,7 +35,6 @@ import sys
 import time
 
 from UpdateManager.UpdateManager import UpdateManager
-from UpdateManager.UpdateProgress import UpdateProgress
 from UpdateManager.Core.utils import init_proxy
 from DistUpgrade.DistUpgradeVersion import VERSION
 import locale
@@ -127,9 +126,6 @@ if __name__ == "__main__":
     settings.set_int("launch-time", int(time.time()))
     init_proxy(settings)
 
-    if options.no_update:
-      app = UpdateManager(data_dir, options)
-    else:
-      app = UpdateProgress(data_dir, options)
-    app.main()
+    app = UpdateManager(data_dir, options)
+    app.start_update()
     Gtk.main()

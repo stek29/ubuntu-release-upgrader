@@ -23,11 +23,12 @@ class InstallBackend(GObject.GObject):
 
     (INSTALL, UPDATE) = range(2)
 
-    def __init__(self, window_main):
+    def __init__(self, datadir, window_main):
         """init backend
         takes a gtk main window as parameter
         """
         GObject.GObject.__init__(self)
+        self.datadir = datadir
         self.window_main = window_main
 
     def commit(self, pkgs_install, pkgs_upgrade, close_on_done):

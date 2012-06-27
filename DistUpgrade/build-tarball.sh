@@ -7,7 +7,7 @@ DIST=$(lsb_release -c -s)
 # cleanup
 echo "Cleaning up"
 
-for d in ./ janitor/; do
+for d in ./; do
     rm -f $d/*~ $d/*.bak $d/*.pyc $d/*.moved $d/'#'* $d/*.rej $d/*.orig
     rm -rf $d/__pycache__
     rm -f *.tar.gz *.tar

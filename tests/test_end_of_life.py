@@ -28,7 +28,12 @@ class TestDistroEndOfLife(unittest.TestCase):
             dialog.response(Gtk.ResponseType.DELETE_EVENT)
             self.dialog_called = True
         # ----
-        from check_new_release_gtk import CheckNewReleaseGtk
+        try:
+            from check_new_release_gtk import CheckNewReleaseGtk
+        except ImportError:
+            # This may fail in python2, since the Gtk bits needed only exist
+            # in update-manager's python3-only code
+            return
         options = mock.Mock()
         options.datadir = "../data"
         options.test_uri = None

@@ -31,7 +31,7 @@ def remove_input_devices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
             if (line.lower().startswith("section") and 
                 line.lower().split("#")[0].strip().endswith('"inputdevice"')):
                 logging.debug("found 'InputDevice' section")
-                content.append("# commented out by update-manager, HAL is now used and auto-detects devices\n")
+                content.append("# commented out by ubuntu-release-upgrader, HAL is now used and auto-detects devices\n")
                 content.append("# Keyboard settings are now read from /etc/default/console-setup\n")
                 content.append("#"+raw)
                 in_input_devices=True
@@ -40,7 +40,7 @@ def remove_input_devices(xorg_source=XORG_CONF, xorg_destination=XORG_CONF):
                 in_input_devices=False
             elif line.lower().startswith("inputdevice"):
                 logging.debug("commenting out '%s' " % line)
-                content.append("# commented out by update-manager, HAL is now used and auto-detects devices\n")
+                content.append("# commented out by ubuntu-release-upgrader, HAL is now used and auto-detects devices\n")
                 content.append("# Keyboard settings are now read from /etc/default/console-setup\n")
                 content.append("#"+raw)
             elif in_input_devices:
@@ -123,8 +123,8 @@ if __name__ == "__main__":
         print("Need to run as root")
         sys.exit(1)
 
-    # we pretend to be update-manger so that apport picks up when we crash
-    sys.argv[0] = "/usr/bin/update-manager"
+    # we pretend to be do-release-upgrade so that apport picks up when we crash
+    sys.argv[0] = "/usr/bin/do-release-upgrade"
 
     # setup logging
     logging.basicConfig(level=logging.DEBUG,

@@ -12,7 +12,7 @@ import unittest
 sys.path.insert(0, "../")
 
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
-from UpdateManager.Core.DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 
 # make sure we have a writable location for the meta-release file
 os.environ["XDG_CACHE_HOME"] = "/tmp"

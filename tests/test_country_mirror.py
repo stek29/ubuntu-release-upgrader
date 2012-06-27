@@ -6,7 +6,7 @@ sys.path.insert(0, "../")
 
 import unittest
 
-from UpdateManager.Core.DistUpgradeFetcherCore import country_mirror
+from DistUpgrade.DistUpgradeFetcherCore import country_mirror
 
 class testCountryMirror(unittest.TestCase):
 

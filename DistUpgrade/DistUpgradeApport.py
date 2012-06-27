@@ -15,11 +15,11 @@ def apport_crash(type, value, tb):
     except ImportError as e:
         logging.error("failed to import apport python module, can't report bug: %s" % e)
         return False
-    # we pretend we are update-manager
-    sys.argv[0] = "/usr/bin/update-manager"
+    # we pretend we are do-release-upgrade
+    sys.argv[0] = "/usr/bin/do-release-upgrade"
     apport_excepthook(type, value, tb)
     # now add the files in /var/log/dist-upgrade/*
-    if os.path.exists('/var/crash/_usr_bin_update-manager.0.crash'):
+    if os.path.exists('/var/crash/_usr_bin_do-release-upgrade.0.crash'):
         report = Report()
         report.setdefault('Tags', 'dist-upgrade')
         report['Tags'] += ' dist-upgrade'
@@ -28,7 +28,7 @@ def apport_crash(type, value, tb):
             if not os.path.isfile(f) or os.path.getsize(f) == 0:
                 continue
             report[f.replace(".", "").replace("-", "")] = (open(f), )
-        report.add_to_existing('/var/crash/_usr_bin_update-manager.0.crash')
+        report.add_to_existing('/var/crash/_usr_bin_do-release-upgrade.0.crash')
     return True
 
 

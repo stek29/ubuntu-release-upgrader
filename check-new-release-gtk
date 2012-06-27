@@ -38,7 +38,7 @@ import UpdateManager.GtkProgress
 import gettext
 from optparse import OptionParser
 
-from DistUpgrade.utils import init_proxy
+from UpdateManager.Core.utils import init_proxy
 
 from UpdateManager.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
@@ -49,9 +49,9 @@ GObject.threads_init()
 #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
 #       correctly, see http://bugs.python.org/issue4391
 #       Shoudl be resolved by Python3
-gettext.bindtextdomain("update-manager", "/usr/share/locale")
-gettext.textdomain("update-manager")
-translation = gettext.translation("update-manager", fallback=True)
+gettext.bindtextdomain("ubuntu-release-upgrader", "/usr/share/locale")
+gettext.textdomain("ubuntu-release-upgrader")
+translation = gettext.translation("ubuntu-release-upgrader", fallback=True)
 if sys.version >= '3':
   _ = translation.gettext
 else:
@@ -74,7 +74,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def __init__(self, options):
     self.options = options
     self.datadir = options.datadir
-    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "update-manager")
+    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "update-release-upgrader")
     self.new_dist = None
     logging.debug("running with devel=%s proposed=%s" % (
             options.devel_release, options.proposed_release))
@@ -194,7 +194,7 @@ if __name__ == "__main__":
                      help=_("Try upgrading to the latest release using "
                             "the upgrader from $distro-proposed"))
   # mostly useful for development
-  parser.add_option ("", "--datadir", default="/usr/share/update-manager")
+  parser.add_option ("", "--datadir", default="/usr/share/ubuntu-release-upgrader")
   parser.add_option ("", "--test-uri")
   parser.add_option ("", "--debug", action="store_true", default=False,
                      help=_("Add debug output"))

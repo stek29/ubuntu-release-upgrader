@@ -16,7 +16,7 @@ import os.path
 import logging
 import glob
 
-CONFIG_OVERRIDE_DIR =  "/etc/update-manager/release-upgrades.d"
+CONFIG_OVERRIDE_DIR =  "/etc/ubuntu-release-upgrader/release-upgrades.d"
 
 class DistUpgradeConfig(SafeConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg", 

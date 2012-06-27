@@ -40,7 +40,7 @@ from subprocess import Popen, PIPE
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import ngettext
 
-from .utils import inside_chroot, estimate_kernel_size_in_boot
+from UpdateManager.Core.utils import inside_chroot, estimate_kernel_size_in_boot
 
 class CacheException(Exception):
     pass
@@ -704,7 +704,7 @@ class MyCache(apt.Cache):
                              "please try again later.")
             else:
                 details += _("If none of this applies, then please report this bug using "
-                             "the command 'ubuntu-bug update-manager' in a terminal.")
+                             "the command 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal.")
             # make the error text available again on stdout for the
             # text frontend
             self._stopAptResolverLog()
@@ -915,7 +915,7 @@ class MyCache(apt.Cache):
                                    _("It was impossible to install a "
                                      "required package. Please report "
                                      "this as a bug using "
-                                     "'ubuntu-bug update-manager' in "
+                                     "'ubuntu-bug ubuntu-release-upgrader-core' in "
                                      "a terminal."))
                         return False
                     logging.debug("marked_install: '%s' -> '%s'" % (key, self[key].marked_install))

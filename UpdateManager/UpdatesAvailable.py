@@ -115,6 +115,11 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     # useful exit stuff
     self.button_close.connect("clicked", lambda w: self.window_main.exit())
 
+    # If auto-updates are on, change cancel label
+    self.notifier_settings = Gio.Settings("com.ubuntu.update-notifier")
+    self.notifier_settings.connect("changed::auto-launch", lambda s, p: self.update_close_button())
+    self.update_close_button()
+
     # the treeview (move into it's own code!)
     self.store = Gtk.ListStore(str, str, GObject.TYPE_PYOBJECT, 
                                GObject.TYPE_PYOBJECT, bool)
@@ -170,6 +175,21 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.alert_watcher.connect("network-alert", self._on_network_alert)
     self.alert_watcher.connect("battery-alert", self._on_battery_alert)
     self.alert_watcher.connect("network-3g-alert", self._on_network_3g_alert)
+
+  def is_auto_update(self):
+    update_days = apt_pkg.config.find_i("APT::Periodic::Update-Package-Lists")
+    auto_launch = self.notifier_settings.get_boolean("auto-launch")
+    return update_days >= 1 and auto_launch
+
+  def update_close_button(self):
+    if self.is_auto_update():
+      self.button_close.set_label(_("_Remind Me Later"))
+      self.button_close.set_use_stock(False)
+      self.button_close.set_use_underline(True)
+    else:
+      self.button_close.set_label(Gtk.STOCK_CANCEL)
+      self.button_close.set_use_stock(True)
+      self.button_close.set_use_underline(False)
 
   def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)
@@ -487,8 +507,11 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
         while Gtk.events_pending():
             Gtk.main_iteration()
         time.sleep(0.05)
+    apt_pkg.init_config()
     self.window_main.refresh_cache()
     self.fillstore()
+    self.update_close_button()
+    self.window_main.set_sensitive(True)
 
   def on_button_install_clicked(self, widget):
     #print("on_button_install_clicked")

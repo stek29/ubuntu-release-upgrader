@@ -4,7 +4,7 @@ ARCH=all
 DIST=$(shell lsb_release -c -s)
 DEBVER=$(shell LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
 TARNAME=dist-upgrader_$(DEBVER)_$(ARCH).tar.gz
-DH_ARGS=--with=python2,python3
+DH_ARGS=--with=python3
 PY3REQUESTED := $(shell py3versions -r)
 PY3DEFAULT := $(shell py3versions -d)
 # Run setup.py with the default python3 last so that the scripts use

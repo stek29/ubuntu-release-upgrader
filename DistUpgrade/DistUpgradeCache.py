@@ -40,7 +40,7 @@ from subprocess import Popen, PIPE
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import ngettext
 
-from .utils import inside_chroot, estimate_kernel_size_in_boot
+from UpdateManager.Core.utils import inside_chroot, estimate_kernel_size_in_boot
 
 class CacheException(Exception):
     pass

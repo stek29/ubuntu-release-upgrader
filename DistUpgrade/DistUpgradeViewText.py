@@ -33,7 +33,7 @@ import apt.progress
 
 import gettext
 from .DistUpgradeGettext import gettext as _
-from .utils import twrap
+from UpdateManager.Core.utils import twrap
 
 class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
     def __init__(self):

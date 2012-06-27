@@ -33,7 +33,7 @@ import subprocess
 from gettext import gettext as _
 from aptsources.sourceslist import SourcesList
 
-from .utils import get_dist, url_downloadable, country_mirror
+from UpdateManager.Core.utils import get_dist, url_downloadable, country_mirror
 
 class DistUpgradeFetcherCore(object):
     " base class (without GUI) for the upgrade fetcher "

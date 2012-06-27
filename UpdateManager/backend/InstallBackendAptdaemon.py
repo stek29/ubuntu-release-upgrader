@@ -11,9 +11,10 @@ from gi.repository import Gdk
 from aptdaemon import client, errors
 from defer import inline_callbacks
 from aptdaemon.gtk3widgets import (AptCancelButton,
+                                   AptConfigFileConflictDialog, 
                                    AptDetailsExpander,
                                    AptErrorDialog,
-                                   AptProgressDialog,
+                                   AptMediumRequiredDialog,
                                    AptProgressBar)
 from aptdaemon.enums import (EXIT_SUCCESS,
                              EXIT_FAILED,
@@ -41,7 +42,7 @@ class InstallBackendAptdaemon(InstallBackend):
         self.button_cancel = None
 
     def close(self):
-        if button_cancel:
+        if self.button_cancel:
             self.button_cancel.clicked()
             return True
         else:
@@ -110,7 +111,7 @@ class InstallBackendAptdaemon(InstallBackend):
     def _run_in_dialog(self, trans, action, header, show_details, close_on_done):
         builder = Gtk.Builder()
         builder.set_translation_domain("update-manager")
-        builder.add_from_file(self.datadir+"gtkbuilder/UpdateProgress.ui")
+        builder.add_from_file(self.datadir+"/gtkbuilder/UpdateProgress.ui")
 
         label_header = builder.get_object("label_header")
         label_header.set_label(header)
@@ -226,6 +227,4 @@ class InstallBackendAptdaemon(InstallBackend):
 if __name__ == "__main__":
     b = InstallBackendAptdaemon(None)
     b.commit(["2vcard"], [], False)
-
-    from gi.repository import Gtk
     Gtk.main()

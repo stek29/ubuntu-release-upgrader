@@ -210,16 +210,16 @@ def get_dist():
   p.stdout.close()
   return dist
 
-def get_dist_description():
-  " return the description of the current runing distro "
+def get_dist_version():
+  " return the version of the current running distro "
   # support debug overwrite
-  desc = os.environ.get("META_RELEASE_FAKE_DESCRIPTION")
+  desc = os.environ.get("META_RELEASE_FAKE_VERSION")
   if desc:
-      logging.warn("using fake release description '%s' (because of META_RELEASE_FAKE_DESCRIPTION environment) " % desc)
+      logging.warn("using fake release version '%s' (because of META_RELEASE_FAKE_VERSION environment) " % desc)
       return desc
   # then check the real one
   from subprocess import Popen, PIPE
-  p = Popen(["lsb_release","-d","-s"], stdout=PIPE, universal_newlines=True)
+  p = Popen(["lsb_release","-r","-s"], stdout=PIPE, universal_newlines=True)
   res = p.wait()
   if res != 0:
     sys.stderr.write("lsb_release returned exitcode: %i\n" % res)
@@ -395,6 +395,8 @@ def get_ubuntu_flavor():
     # this will (of course) not work in a server environment, 
     # but the main use case for this is to show the right
     # release notes
+    # TODO: actually examine which meta packages are installed, like
+    # DistUpgrade/DistUpgradeCache.py does and use that to choose a flavor.
     denv = os.environ.get("DESKTOP_SESSION", "")
     if "gnome" in denv:
         return "ubuntu"
@@ -406,6 +408,17 @@ def get_ubuntu_flavor():
         return "lubuntu"
     # default to ubuntu if nothing more specific is found
     return "ubuntu"
+
+def get_ubuntu_flavor_name():
+    flavor = get_ubuntu_flavor()
+    if flavor == "kubuntu":
+        return "Kubuntu"
+    elif flavor == "xubuntu":
+        return "Xubuntu"
+    elif flavor == "lubuntu":
+        return "Lubuntu"
+    else:
+        return "Ubuntu"
 
 def error(parent, summary, message):
   from gi.repository import Gtk, Gdk

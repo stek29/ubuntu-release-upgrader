@@ -41,7 +41,6 @@ warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWar
 
 import apt_pkg
 
-import sys
 import os
 import re
 import logging
@@ -51,29 +50,17 @@ import time
 import threading
 import xml.sax.saxutils
 
-import dbus
-
-from .GtkProgress import GtkAcquireProgress, GtkOpProgressInline
-from .backend import get_backend
-
 from gettext import gettext as _
 from gettext import ngettext
 
 
-from .Core.utils import (humanize_size,
-                         on_battery,
-                         inhibit_sleep,
-                         allow_sleep)
-from .Core.UpdateList import UpdateList
-from .Core.MyCache import MyCache
+from .Core.utils import humanize_size
 from .Core.AlertWatcher import AlertWatcher
 
 from DistUpgrade.DistUpgradeCache import NotEnoughFreeSpaceError
-from .DistUpgradeFetcher import DistUpgradeFetcherGtk
 
 from .ChangelogViewer import ChangelogViewer
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
-from .MetaReleaseGObject import MetaRelease
 from .UnitySupport import UnitySupport
 
 
@@ -85,35 +72,8 @@ from .UnitySupport import UnitySupport
 # list constants
 (LIST_CONTENTS, LIST_NAME, LIST_PKG, LIST_ORIGIN, LIST_TOGGLE_CHECKED) = range(5)
 
-# file that signals if we need to reboot
-REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
-
 # NetworkManager enums
 from .Core.roam import NetworkManagerHelper
-
-def show_dist_no_longer_supported_dialog(parent=None):
-    """ show a no-longer-supported dialog """
-    msg = "<big><b>%s</b></big>\n\n%s" % (
-        _("Your Ubuntu release is not supported anymore."),
-        _("You will not get any further security fixes or critical "
-          "updates. "
-          "Please upgrade to a later version of Ubuntu."))
-    dialog = Gtk.MessageDialog(parent, 0, Gtk.MessageType.WARNING,
-                               Gtk.ButtonsType.CLOSE,"")
-    dialog.set_title("")
-    dialog.set_markup(msg)
-    button = Gtk.LinkButton(uri="http://www.ubuntu.com/releaseendoflife",
-                            label=_("Upgrade information"))
-    button.show()
-    dialog.get_content_area().pack_end(button, True, True, 0)
-    # this data used in the test to get the dialog
-    if parent:
-        parent.no_longer_supported_nag = dialog
-    dialog.run()
-    dialog.destroy()
-    if parent:
-        del parent.no_longer_supported_nag
-
 
 class UpdatesAvailable(SimpleGtkbuilderApp):
 
@@ -121,7 +81,9 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     self.window_main = app
     self.datadir = app.datadir
     self.options = app.options
-    SimpleGtkbuilderApp.__init__(self, self.datadir+"gtkbuilder/UpdateManager.ui",
+    self.cache = app.cache
+    self.list = app.update_list
+    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpdateManager.ui",
                                  "update-manager")
 
     # Used for inhibiting power management
@@ -194,24 +156,10 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     if not os.path.exists("/usr/bin/software-properties-gtk"):
         self.button_settings.set_sensitive(False)
 
-    # check if there is a new reboot required notification
-    if os.path.exists(REBOOT_REQUIRED_FILE):
-        self.show_reboot_required_info()
-
-    self.window_main.push(self.pane_updates_available, self)
-
     # init show version
     self.show_versions = self.settings.get_boolean("show-versions")
     # init summary_before_name
     self.summary_before_name = self.settings.get_boolean("summary-before-name")
-
-    # get progress object
-    self.progress = GtkOpProgressInline(
-        self.progressbar_cache_inline, self.window_main)
-
-    # deal with no-focus-on-map
-    if self.options.no_focus_on_map and self.progress._window:
-        self.progress._window.set_focus_on_map(False)
 
     # Create Unity launcher quicklist
     # FIXME: instead of passing parent we really should just send signals
@@ -226,16 +174,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
   def install_all_updates (self, menu, menuitem, data):
     self.select_all_updgrades (None)
     self.on_button_install_clicked (None)
-
-  def warn_on_battery(self):
-      """check and warn if on battery"""
-      if on_battery():
-          self.dialog_on_battery.set_transient_for(self.window_main)
-          self.dialog_on_battery.set_title("")
-          res = self.dialog_on_battery.run()
-          self.dialog_on_battery.hide()
-          if res != Gtk.ResponseType.YES:
-              sys.exit()
 
   def install_column_view_func(self, cell_layout, renderer, model, iter, data):
     pkg = model.get_value(iter, LIST_PKG)
@@ -483,9 +421,6 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
       self.refresh_updates_count()
       num_updates = self.cache.install_count
 
-      # setup unity stuff
-      self.unity.set_updates_count(num_updates)
-
       if num_updates == 0:
           text_header= _("The software on this computer is up to date.")
           self.label_downsize.set_text("\n")
@@ -501,7 +436,9 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
           # show different text on first run (UX team suggestion)
           firstrun = self.settings.get_boolean("first-run")
           if firstrun:
-              text_header = _("Updated software has been issued since %s was released. Do you want to install it now?") % self.meta.current_dist_description
+              flavor = self.window_main.meta_release.flavor_name
+              version = self.window_main.meta_release.current_dist_version
+              text_header = _("Updated software has been issued since %s %s was released. Do you want to install it now?") % (flavor, version)
               self.settings.set_boolean("first-run", False)
           else:
               text_header = _("Updated software is available for this computer. Do you want to install it now?")
@@ -550,6 +487,7 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
         while Gtk.events_pending():
             Gtk.main_iteration()
         time.sleep(0.05)
+    self.window_main.refresh_cache()
     self.fillstore()
 
   def on_button_install_clicked(self, widget):
@@ -566,45 +504,14 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
         self.cache.checkFreeSpace()
     except NotEnoughFreeSpaceError as e:
         for req in e.free_space_required_list:
-            self.error(err_sum, err_long % (req.size_total,
-                                            req.dir,
-                                            req.size_needed,
-                                            req.dir))
+            self.window_main.start_error(err_sum, err_long % (req.size_total,
+                                                              req.dir,
+                                                              req.size_needed,
+                                                              req.dir))
         return
     except SystemError as e:
         logging.exception("free space check failed")
     self.window_main.start_install()
-    
-  def on_button_restart_required_clicked(self, button=None):
-      self._request_reboot_via_session_manager()
-
-  def show_reboot_required_info(self):
-    self.frame_restart_required.show()
-    self.label_restart_required.set_text(_("The computer needs to restart to "
-                                       "finish installing updates. Please "
-                                       "save your work before continuing."))
-
-  def _request_reboot_via_session_manager(self):
-    try:
-        bus = dbus.SessionBus()
-        proxy_obj = bus.get_object("org.gnome.SessionManager",
-                                   "/org/gnome/SessionManager")
-        iface = dbus.Interface(proxy_obj, "org.gnome.SessionManager")
-        iface.RequestReboot()
-    except dbus.DBusException:
-        self._request_reboot_via_consolekit()
-    except:
-        pass
-
-  def _request_reboot_via_consolekit(self):
-    try:
-        bus = dbus.SystemBus()
-        proxy_obj = bus.get_object("org.freedesktop.ConsoleKit",
-                                   "/org/freedesktop/ConsoleKit/Manager")
-        iface = dbus.Interface(proxy_obj, "org.freedesktop.ConsoleKit.Manager")
-        iface.Restart()
-    except dbus.DBusException:
-        pass
 
   def _on_network_alert(self, watcher, state):
       # do not set the buttons to sensitive/insensitive until NM
@@ -736,216 +643,48 @@ class UpdatesAvailable(SimpleGtkbuilderApp):
     # disconnect the view first
     self.treeview_update.set_model(None)
     self.store.clear()
-    
     # clean most objects
     self.dl_size = 0
-    try:
-        self.initCache()
-    except SystemError as e:
-        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
-               (_("Could not initialize the package information"),
-                _("An unresolvable problem occurred while "
-                  "initializing the package information.\n\n"
-                  "Please report this bug against the 'update-manager' "
-                  "package and include the following error message:\n"),
-                e)
-               )
-        dialog = Gtk.MessageDialog(self.window_main,
-                                   0, Gtk.MessageType.ERROR,
-                                   Gtk.ButtonsType.CLOSE,"")
-        dialog.set_markup(msg)
-        dialog.get_content_area().set_spacing(6)
-        dialog.run()
-        dialog.destroy()
-        sys.exit(1)
-    self.list = UpdateList(self)
-    
-    while Gtk.events_pending():
-        Gtk.main_iteration()
 
-    # fill them again
-    try:
-        self.list.update(self.cache)
-    except SystemError as e:
-        msg = ("<big><b>%s</b></big>\n\n%s\n'%s'" %
-               (_("Could not calculate the upgrade"),
-                _("An unresolvable problem occurred while "
-                  "calculating the upgrade.\n\n"
-                  "Please report this bug against the 'update-manager' "
-                  "package and include the following error message:"),
-                e)
-               )
-        dialog = Gtk.MessageDialog(self.window_main,
-                                   0, Gtk.MessageType.ERROR,
-                                   Gtk.ButtonsType.CLOSE,"")
-        dialog.set_markup(msg)
-        dialog.get_content_area().set_spacing(6)
-        dialog.run()
-        dialog.destroy()
-    if self.list.num_updates > 0:
-      #self.treeview_update.set_model(None)
-      self.scrolledwindow_update.show()
-      origin_list = sorted(
-        self.list.pkgs, key=operator.attrgetter("importance"), reverse=True)
-      for origin in origin_list:
-        self.store.append(['<b><big>%s</big></b>' % origin.description,
-                           origin.description, None, origin,True])
-        for pkg in self.list.pkgs[origin]:
-          name = xml.sax.saxutils.escape(pkg.name)
-          if not pkg.is_installed:
-              name += _(" (New install)")
-          summary = xml.sax.saxutils.escape(getattr(pkg.candidate, "summary", None))
-          if self.summary_before_name:
-              contents = "%s\n<small>%s</small>" % (summary, name)
-          else:
-              contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
-          #TRANSLATORS: the b stands for Bytes
-          size = _("(Size: %s)") % humanize_size(getattr(pkg.candidate, "size", 0))
-          installed_version = getattr(pkg.installed, "version", None)
-          candidate_version = getattr(pkg.candidate, "version", None)
-          if installed_version is not None:
-              version = _("From version %(old_version)s to %(new_version)s") %\
-                  {"old_version" : installed_version,
-                   "new_version" : candidate_version}
-          else:
-              version = _("Version %s") % candidate_version
-          if self.show_versions:
-              contents = "%s\n<small>%s %s</small>" % (contents, version, size)
-          else:
-              contents = "%s <small>%s</small>" % (contents, size)
-          self.store.append([contents, pkg.name, pkg, None, True])
-      self.treeview_update.set_model(self.store)
+    self.scrolledwindow_update.show()
+    origin_list = sorted(
+      self.list.pkgs, key=operator.attrgetter("importance"), reverse=True)
+    for origin in origin_list:
+      self.store.append(['<b><big>%s</big></b>' % origin.description,
+                         origin.description, None, origin,True])
+      for pkg in self.list.pkgs[origin]:
+        name = xml.sax.saxutils.escape(pkg.name)
+        if not pkg.is_installed:
+            name += _(" (New install)")
+        summary = xml.sax.saxutils.escape(getattr(pkg.candidate, "summary", None))
+        if self.summary_before_name:
+            contents = "%s\n<small>%s</small>" % (summary, name)
+        else:
+            contents = "<b>%s</b>\n<small>%s</small>" % (name, summary)
+        #TRANSLATORS: the b stands for Bytes
+        size = _("(Size: %s)") % humanize_size(getattr(pkg.candidate, "size", 0))
+        installed_version = getattr(pkg.installed, "version", None)
+        candidate_version = getattr(pkg.candidate, "version", None)
+        if installed_version is not None:
+            version = _("From version %(old_version)s to %(new_version)s") %\
+                {"old_version" : installed_version,
+                 "new_version" : candidate_version}
+        else:
+            version = _("Version %s") % candidate_version
+        if self.show_versions:
+            contents = "%s\n<small>%s %s</small>" % (contents, version, size)
+        else:
+            contents = "%s <small>%s</small>" % (contents, size)
+        self.store.append([contents, pkg.name, pkg, None, True])
+    self.treeview_update.set_model(self.store)
     self.update_count()
     self.setBusy(False)
     while Gtk.events_pending():
       Gtk.main_iteration()
-    self.check_all_updates_installable()
     self.refresh_updates_count()
     return False
 
-  def dist_no_longer_supported(self, meta_release):
-    show_dist_no_longer_supported_dialog(self.window_main)
-
-  def error(self, summary, details):
-      " helper function to display a error message "
-      msg = ("<big><b>%s</b></big>\n\n%s\n" % (summary, details) )
-      dialog = Gtk.MessageDialog(self.window_main,
-                                 0, Gtk.MessageType.ERROR,
-                                 Gtk.ButtonsType.CLOSE,"")
-      dialog.set_markup(msg)
-      dialog.get_content_area().set_spacing(6)
-      dialog.run()
-      dialog.destroy()
-
-  def on_button_dist_upgrade_clicked(self, button):
-      #print("on_button_dist_upgrade_clicked")
-      if self.new_dist.upgrade_broken:
-          return self.error(
-              _("Release upgrade not possible right now"),
-              _("The release upgrade can not be performed currently, "
-                "please try again later. The server reported: '%s'") % self.new_dist.upgrade_broken)
-      fetcher = DistUpgradeFetcherGtk(new_dist=self.new_dist, parent=self, progress=GtkAcquireProgress(self, _("Downloading the release upgrade tool")))
-      if self.options.sandbox:
-          fetcher.run_options.append("--sandbox")
-      fetcher.run()
-      
-  def new_dist_available(self, meta_release, upgradable_to):
-    self.frame_new_release.show()
-    self.label_new_release.set_markup(_("<b>New Ubuntu release '%s' is available</b>") % upgradable_to.version)
-    self.new_dist = upgradable_to
-    
-
-  # fixme: we should probably abstract away all the stuff from libapt
-  def initCache(self): 
-    # get the lock
-    try:
-        apt_pkg.pkgsystem_lock()
-    except SystemError:
-        pass
-        #d = Gtk.MessageDialog(parent=self.window_main,
-        #                      flags=Gtk.DialogFlags.MODAL,
-        #                      type=Gtk.MessageType.ERROR,
-        #                      buttons=Gtk.ButtonsType.CLOSE)
-        #d.set_markup("<big><b>%s</b></big>\n\n%s" % (
-        #    _("Only one software management tool is allowed to "
-        #      "run at the same time"),
-        #    _("Please close the other application e.g. 'aptitude' "
-        #      "or 'Synaptic' first.")))
-        #print("error from apt: '%s'" % e)
-        #d.set_title("")
-        #res = d.run()
-        #d.destroy()
-        #sys.exit()
-
-    try:
-        if hasattr(self, "cache"):
-            self.cache.open(self.progress)
-            self.cache._initDepCache()
-        else:
-            self.cache = MyCache(self.progress)
-            # FIXME: make this next line more elegant in a future branch by
-            # moving the cache to a central location, probably UpdateManager.py
-            self.window_main.cache = self.cache
-    except AssertionError:
-        # if the cache could not be opened for some reason,
-        # let the release upgrader handle it, it deals
-        # a lot better with this
-        self.ask_run_partial_upgrade()
-        # we assert a clean cache
-        msg=("<big><b>%s</b></big>\n\n%s"% \
-             (_("Software index is broken"),
-              _("It is impossible to install or remove any software. "
-                "Please use the package manager \"Synaptic\" or run "
-                "\"sudo apt-get install -f\" in a terminal to fix "
-                "this issue at first.")))
-        dialog = Gtk.MessageDialog(self.window_main,
-                                   0, Gtk.MessageType.ERROR,
-                                   Gtk.ButtonsType.CLOSE,"")
-        dialog.set_markup(msg)
-        dialog.get_content_area().set_spacing(6)
-        dialog.run()
-        dialog.destroy()
-        sys.exit(1)
-    else:
-        self.progress.all_done()
-
-  def check_all_updates_installable(self):
-    """ Check if all available updates can be installed and suggest
-        to run a distribution upgrade if not """
-    if self.list.distUpgradeWouldDelete > 0:
-        self.ask_run_partial_upgrade()
-
-  def ask_run_partial_upgrade(self):
-      self.dialog_dist_upgrade.set_transient_for(self.window_main)
-      self.dialog_dist_upgrade.set_title("")
-      res = self.dialog_dist_upgrade.run()
-      self.dialog_dist_upgrade.hide()
-      if res == Gtk.ResponseType.YES:
-          os.execl("/usr/bin/gksu",
-                   "/usr/bin/gksu", "--desktop",
-                   "/usr/share/applications/update-manager.desktop",
-                   "--", "/usr/bin/update-manager", "--dist-upgrade")
-      return False
-
-  def check_metarelease(self):
-      " check for new meta-release information "
-      settings = Gio.Settings("com.ubuntu.update-manager")
-      self.meta = MetaRelease(self.options.devel_release,
-                              self.options.use_proposed)
-      self.meta.connect("dist_no_longer_supported",self.dist_no_longer_supported)
-      # check if we are interessted in dist-upgrade information
-      # (we are not by default on dapper)
-      if (self.options.check_dist_upgrades or
-          settings.get_boolean("check-dist-upgrades")):
-          self.meta.connect("new_dist_available",self.new_dist_available)
-      
-
   def main(self):
-    # check for new distributin information
-    self.check_metarelease()
-
-    while Gtk.events_pending():
-      Gtk.main_iteration()
-
+    self.window_main.push(self.pane_updates_available, self)
     self.fillstore()
     self.alert_watcher.check_alert_state()

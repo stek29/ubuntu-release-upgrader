@@ -42,7 +42,7 @@ try:
 except ImportError:
     from urllib2 import HTTPError, Request, URLError, urlopen
 
-from .utils import get_lang, get_dist, get_dist_description, get_ubuntu_flavor
+from .utils import get_lang, get_dist, get_dist_version, get_ubuntu_flavor, get_ubuntu_flavor_name
 
 class Dist(object):
     def __init__(self, name, version, date, supported):
@@ -79,9 +79,11 @@ class MetaReleaseCore(object):
         self.forceDownload = forceDownload
         # information about the available dists
         self.downloading = True
+        self.upgradable_to = None
         self.new_dist = None
+        self.flavor_name = get_ubuntu_flavor_name()
         self.current_dist_name = get_dist()
-        self.current_dist_description = get_dist_description()
+        self.current_dist_version = get_dist_version()
         self.no_longer_supported = None
 
         # default (if the conf file is missing)
@@ -248,8 +250,10 @@ class MetaReleaseCore(object):
         # only warn if unsupported and a new dist is available (because 
         # the development version is also unsupported)
         if upgradable_to != "" and not current_dist.supported:
+            self.upgradable_to = upgradable_to
             self.dist_no_longer_supported(current_dist)
         if upgradable_to != "":
+            self.upgradable_to = upgradable_to
             self.new_dist_available(upgradable_to)
 
         # parsing done and sucessfully

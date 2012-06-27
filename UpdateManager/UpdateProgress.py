@@ -29,8 +29,6 @@
 
 from __future__ import absolute_import, print_function
 
-from gi.repository import GLib
-
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property",
                         DeprecationWarning)
@@ -40,7 +38,6 @@ import sys
 
 from .backend import get_backend
 
-from UpdateManager.UpdatesAvailable import UpdatesAvailable
 from .Core.utils import inhibit_sleep, allow_sleep
 
 class UpdateProgress(object):

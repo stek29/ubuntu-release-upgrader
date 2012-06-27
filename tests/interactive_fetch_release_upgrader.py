@@ -64,14 +64,17 @@ class TestReleaseUpgradeFetcherGUI(unittest.TestCase):
         self.assertTrue(self.new_dist is not None)
         
     def testdownloading(self):
-        parent = UpdateManager("/usr/share/update-manager/")
+        parent = UpdateManager("/usr/share/update-manager/", None)
         progress = GtkAcquireProgress(parent,
+                                      "/usr/share/update-manager/",
                                       _("Downloading the upgrade "
                                         "tool"),
                                       _("The upgrade tool will "
                                         "guide you through the "
                                         "upgrade process."))
-        fetcher = DistUpgradeFetcherGtk(self.new_dist, parent=parent, progress=progress)
+        fetcher = DistUpgradeFetcherGtk(self.new_dist, parent=parent,
+                                        progress=progress,
+                                        datadir="/usr/share/update-manager/")
         self.assertTrue(fetcher.showReleaseNotes())
         self.assertTrue(fetcher.fetchDistUpgrader())
         self.assertTrue(fetcher.extractDistUpgrader())

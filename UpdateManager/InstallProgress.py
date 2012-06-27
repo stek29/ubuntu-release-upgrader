@@ -29,10 +29,6 @@
 
 from __future__ import absolute_import, print_function
 
-from gi.repository import Gtk
-#from gi.repository import Gio
-from gi.repository import GLib
-
 import warnings
 warnings.filterwarnings("ignore", "Accessed deprecated property", DeprecationWarning)
 
@@ -41,10 +37,6 @@ import sys
 
 from .backend import get_backend
 
-from gettext import gettext as _
-from gettext import ngettext
-
-from UpdateManager.UpdatesAvailable import UpdatesAvailable
 from .Core.utils import (inhibit_sleep,
                          allow_sleep)
 
@@ -93,7 +85,7 @@ class InstallProgress(object):
 
     # Either launch main dialog and continue or quit altogether
     if success:
-      self.window_main.start_available()
+      self.window_main.start_available(allow_restart=True)
     else:
       sys.exit(0)
 

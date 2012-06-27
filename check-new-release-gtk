@@ -72,7 +72,9 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   FETCH_TIMEOUT = 20
 
   def __init__(self, options):
-    SimpleGtkbuilderApp.__init__(self, options.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "update-manager")
+    self.options = options
+    self.datadir = options.datadir
+    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "update-manager")
     self.new_dist = None
     logging.debug("running with devel=%s proposed=%s" % (
             options.devel_release, options.proposed_release))
@@ -107,9 +109,9 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     self.show_uri(html_uri)
     # show alert on unsupported distros
     if meta_release.no_longer_supported is not None:
-        from UpdateManager.UpdateManager import show_dist_no_longer_supported_dialog
-        self.window_main.realize()
-        show_dist_no_longer_supported_dialog(self.window_main)
+        from UpdateManager.Dialogs import UnsupportedDialog
+        dialog = UnsupportedDialog(self, meta_release)
+        dialog.run(self.window_main)
   
   def build_ui(self):
     from gi.repository import WebKit
@@ -123,9 +125,11 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    progress=UpdateManager.GtkProgress.GtkAcquireProgress(self, _("Downloading the release upgrade tool"))
+    progress=UpdateManager.GtkProgress.GtkAcquireProgress(self, self.datadir,
+                                                          _("Downloading the release upgrade tool"))
     fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
                                  parent=self,
+                                 datadir=self.datadir,
                                  progress=progress)
     res = fetcher.run()
     res # pyflakes

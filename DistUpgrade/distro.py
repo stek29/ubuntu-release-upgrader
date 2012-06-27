@@ -1,1 +1,1 @@
-/usr/lib/python2.7/dist-packages/aptsources/distro.py
+/usr/lib/python3/dist-packages/aptsources/distro.py

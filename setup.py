@@ -23,6 +23,7 @@ setup(name='ubuntu-release-upgrader',
                 'DistUpgrade',
                 ],
       scripts=[
+               "do-dist-upgrade",
                "do-release-upgrade",
                "kubuntu-devel-release-upgrade",
                "check-new-release-gtk",
@@ -32,7 +33,7 @@ setup(name='ubuntu-release-upgrader',
                    glob.glob("data/gtkbuilder/*.ui")
                   ),
                   ('share/ubuntu-release-upgrader/',
-                   glob.glob("DistUpgrade/*.cfg")+
+                   glob.glob("data/*.cfg")+
                    glob.glob("DistUpgrade/*.ui")
                   ),
                   ('share/man/man8',

@@ -34,7 +34,7 @@ fi
 
 # cleanup
 rm -rf utils/apt/lists utils/apt/*.bin
-(cd utils && ./update_mirrors.py ../DistUpgrade/mirrors.cfg)
+(cd utils && ./update_mirrors.py ../data/mirrors.cfg)
 
 # run the test-suit
 #echo "Running integrated tests"

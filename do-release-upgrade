@@ -4,12 +4,10 @@ from __future__ import print_function
 
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
-import apt
 
 from DistUpgrade.DistUpgradeVersion import VERSION
 
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
-from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from optparse import OptionParser
 import locale
 import gettext
@@ -21,6 +19,26 @@ from UpdateManager.Core.utils import init_proxy
 
 RELEASE_AVAILABLE=0
 NO_RELEASE_AVAILABLE=1
+
+
+def get_fetcher(frontend, new_dist, datadir):
+    if frontend == "DistUpgradeViewGtk3":
+        from DistUpgrade.DistUpgradeFetcher import DistUpgradeFetcherGtk
+        from DistUpgrade.GtkProgress import GtkAcquireProgress
+        progress = GtkAcquireProgress(
+            None,
+            datadir,
+            _("Downloading the release upgrade tool"))
+        return DistUpgradeFetcherGtk(new_dist=new_dist,
+                                     progress=progress,
+                                     parent=None,
+                                     datadir=datadir)
+    else:
+        from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
+        import apt
+        progress = apt.progress.text.AcquireProgress()
+        return DistUpgradeFetcherCore
+
 
 if __name__ == "__main__":
 
@@ -53,6 +71,9 @@ if __name__ == "__main__":
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
                           "is possible"))
+  parser.add_option ("--data-dir", "", 
+                     default="/usr/share/ubuntu-release-upgrader/",
+                     help=_("Directory that contains the data files"))
   parser.add_option ("-p", "--proposed", action="store_true",
                      dest="proposed_release", default=False,
                      help=_("Try upgrading to the latest release using "
@@ -120,9 +141,7 @@ if __name__ == "__main__":
     print(_("Run 'do-release-upgrade' to upgrade to it."))
     sys.exit(RELEASE_AVAILABLE)
 
-  progress = apt.progress.text.AcquireProgress()
-  fetcher = DistUpgradeFetcherCore(new_dist=m.new_dist,
-                                   progress=progress)
+  fetcher = get_fetcher(options.frontend, m.new_dist, options.data_dir)
   fetcher.run_options += ["--mode=%s" % options.mode,
                           "--frontend=%s" % options.frontend,
                           ]

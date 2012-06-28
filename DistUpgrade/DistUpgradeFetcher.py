@@ -42,8 +42,6 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
 
     def __init__(self, new_dist, progress, parent, datadir):
         DistUpgradeFetcherCore.__init__(self, new_dist, progress)
-        # TODO don't override this once we move callers from u-m to u-r-u
-        datadir = "/usr/share/ubuntu-release-upgrader/"
         uifile = datadir + "gtkbuilder/ReleaseNotes.ui"
         self.widgets = SimpleGtkbuilderApp(uifile, "ubuntu-release-upgrader")
         self.window_main = parent
@@ -98,9 +96,10 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         # FIXME: care about i18n! (append -$lang or something)
         if self.new_dist.releaseNotesURI is not None:
             uri = self._expandUri(self.new_dist.releaseNotesURI)
-            self.window_main.set_sensitive(False)
-            self.window_main.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.WATCH))
+            if self.window_main:
+                self.window_main.set_sensitive(False)
+                self.window_main.get_window().set_cursor(
+                    Gdk.Cursor.new(Gdk.CursorType.WATCH))
             while Gtk.events_pending():
                 Gtk.main_iteration()
 
@@ -146,8 +145,9 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
                 dialog.run()
                 dialog.destroy()
             socket.setdefaulttimeout(timeout)
-            self.window_main.set_sensitive(True)
-            self.window_main.get_window().set_cursor(None)
+            if self.window_main:
+                self.window_main.set_sensitive(True)
+                self.window_main.get_window().set_cursor(None)
             # user clicked cancel
             if res == Gtk.ResponseType.OK:
                 return True

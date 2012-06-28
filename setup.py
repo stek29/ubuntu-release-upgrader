@@ -23,7 +23,7 @@ setup(name='ubuntu-release-upgrader',
                 'DistUpgrade',
                 ],
       scripts=[
-               "do-dist-upgrade",
+               "do-partial-upgrade-gtk",
                "do-release-upgrade",
                "kubuntu-devel-release-upgrade",
                "check-new-release-gtk",

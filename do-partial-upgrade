@@ -33,7 +33,6 @@ import os
 import sys
 
 from DistUpgrade.DistUpgradeVersion import VERSION
-from DistUpgrade.DistUpgradeViewGtk3 import DistUpgradeViewGtk3
 from DistUpgrade.DistUpgradeController import DistUpgradeController
 import locale
 import gettext
@@ -69,6 +68,9 @@ if __name__ == "__main__":
     parser.add_option ("--data-dir", "", 
                        default="/usr/share/ubuntu-release-upgrader/",
                        help=_("Directory that contains the data files"))
+    parser.add_option ("-f", "--frontend", default="DistUpgradeViewText",
+                       dest="frontend", 
+                       help=_("Run the specified frontend"))
 
     (options, args) = parser.parse_args()
 
@@ -78,10 +80,13 @@ if __name__ == "__main__":
         print("%s: version %s" % (os.path.basename(sys.argv[0]), VERSION))
         sys.exit(0)
 
-    # FIXME: Having a "partial upgrade" view here would make it possible
-    #        to get rid of the ugly hideStep() stuff
-    view = DistUpgradeViewGtk3(data_dir)
-    view.label_title.set_markup("<b><big>%s</big></b>" %
-                                _("Running partial upgrade"))
+    module_name = "DistUpgrade." + options.frontend
+    module = __import__(module_name)
+    submodule = getattr(module, options.frontend)
+    view_class = getattr(submodule, options.frontend)
+    view = view_class(data_dir)
+    if options.frontend == "DistUpgradeViewGtk3":
+        view.label_title.set_markup("<b><big>%s</big></b>" %
+                                    _("Running partial upgrade"))
     controller = DistUpgradeController(view, datadir=data_dir)
     controller.doPartialUpgrade()

@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
 import os
-import sys
-sys.path.insert(0, "../")
-
 import unittest
 
 from DistUpgrade.DistUpgradeFetcherCore import country_mirror
+
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
 
 class testCountryMirror(unittest.TestCase):
 

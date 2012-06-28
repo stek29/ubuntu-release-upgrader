@@ -5,10 +5,8 @@ from __future__ import print_function
 import unittest
 import tempfile
 import shutil
-import sys
 import os.path
 import apt_pkg
-sys.path.insert(0,"../")
 
 from DistUpgrade.DistUpgradeController import DistUpgradeController, NoBackportsFoundException
 from DistUpgrade.DistUpgradeView import DistUpgradeView
@@ -16,16 +14,39 @@ from DistUpgrade import DistUpgradeConfigParser
 
 DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
+
 class testPreRequists(unittest.TestCase):
     " this test the prerequists fetching "
 
-    testdir = os.path.abspath("./data-sources-list-test/")
+    testdir = os.path.abspath(CURDIR + "/data-sources-list-test/")
+
+    orig_etc = ''
+    orig_sourceparts = ''
+    orig_state = ''
+    orig_status = ''
+    orig_trusted = ''
 
     def setUp(self):
+        self.orig_etc = apt_pkg.config.get("Dir::Etc")
+        self.orig_sourceparts = apt_pkg.config.get("Dir::Etc::sourceparts")
+        self.orig_state = apt_pkg.config.get("Dir::State")
+        self.orig_status = apt_pkg.config.get("Dir::State::status")
+        self.orig_trusted = apt_pkg.config.get("APT::GPGV::TrustedKeyring")
+
         apt_pkg.config.set("Dir::Etc",self.testdir)
         apt_pkg.config.set("Dir::Etc::sourceparts",os.path.join(self.testdir,"sources.list.d"))
         self.dc = DistUpgradeController(DistUpgradeView(),
                                         datadir=self.testdir)
+
+    def tearDown(self):
+        apt_pkg.config.set("Dir::Etc", self.orig_etc)
+        apt_pkg.config.set("Dir::Etc::sourceparts", self.orig_sourceparts)
+        apt_pkg.config.set("Dir::State", self.orig_state)
+        apt_pkg.config.set("Dir::State::status", self.orig_status)
+        apt_pkg.config.set("APT::GPGV::TrustedKeyring", self.orig_trusted)
+
     def testPreReqSourcesListAddingSimple(self):
         " test adding the prerequists when a mirror is known "
         shutil.copy(os.path.join(self.testdir,"sources.list.in"),

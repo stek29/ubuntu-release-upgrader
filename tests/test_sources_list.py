@@ -3,8 +3,6 @@
 from __future__ import print_function
 
 import os
-import sys
-sys.path.insert(0,"../")
 
 import shutil
 import subprocess
@@ -17,9 +15,12 @@ import logging
 
 DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
+
 class TestSourcesListUpdate(unittest.TestCase):
 
-    testdir = os.path.abspath("./data-sources-list-test/")
+    testdir = os.path.abspath(CURDIR + "/data-sources-list-test/")
 
     def setUp(self):
         apt_pkg.config.set("Dir::Etc",self.testdir)

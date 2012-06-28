@@ -4,21 +4,21 @@ from __future__ import print_function
 
 import apt_pkg
 import os
-import sys
 import tempfile
 import unittest
 
 from mock import Mock
 
-sys.path.insert(0,"../DistUpgrade")
-from DistUpgradeAptCdrom import AptCdrom
+from DistUpgrade.DistUpgradeAptCdrom import AptCdrom
+
+CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestAptCdrom(unittest.TestCase):
     " this test the apt-cdrom implementation "
     
 #    def testAdd(self):
-#        p = "./test-data-cdrom"
+#        p = CURDIR + "/test-data-cdrom"
 #        apt_pkg.config.set("Dir::State::lists","/tmp")
 #        cdrom = AptCdrom(None, p)
 #        self.assertTrue(cdrom._doAdd())
@@ -27,8 +27,8 @@ class TestAptCdrom(unittest.TestCase):
         expect =  """CD::36e3f69081b7d10081d167b137886a71-2 "Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)";
 CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)";
 """
-        p = "./test-data-cdrom/"
-        database="./test-data-cdrom/cdrom.list"
+        p = CURDIR + "/test-data-cdrom/"
+        database = CURDIR + "/test-data-cdrom/cdrom.list"
         apt_pkg.config.set("Dir::State::cdroms", database)
         apt_pkg.config.set("Acquire::cdrom::mount", p)
         apt_pkg.config.set("APT::CDROM::NoMount","true")
@@ -39,7 +39,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         self.assertEqual(expect, open(database).read())
     
     def testScanCD(self):
-        p = "./test-data-cdrom"
+        p = CURDIR + "/test-data-cdrom"
         cdrom = AptCdrom(None, p)
         (p,s,i18n) = cdrom._scanCD()
         self.assertTrue(len(p) > 0 and len(s) > 0 and len(i18n) > 0,
@@ -47,7 +47,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         #print(p,s,i18n)
     
     def testDropArch(self):
-        p = "./test-data-cdrom"
+        p = CURDIR + "/test-data-cdrom"
         cdrom = AptCdrom(None, p)
         (p,s,i18n) = cdrom._scanCD()
         self.assertTrue(len(cdrom._dropArch(p)) < len(p),
@@ -55,13 +55,13 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
 
     def testDiskName(self):
         " read and escape the disskname"
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         s = cdrom._readDiskName()
         self.assertEqual("Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)", s,
                          "_readDiskName failed (got %s)" % s)
 
     def testGenerateSourcesListLine(self):
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()
         p = cdrom._dropArch(p)
         line = cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
@@ -70,7 +70,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
                          "deb line wrong (got %s)" % line)
 
     def testCopyi18n(self):
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()
         p = cdrom._dropArch(p)
         d=tempfile.mkdtemp()
@@ -79,7 +79,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
                                                     "no outfile in '%s'" % os.listdir(d))
 
     def testCopyPackages(self):
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()
         p = cdrom._dropArch(p)
         d=tempfile.mkdtemp()
@@ -88,13 +88,13 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
                                                     "no outfile in '%s'" % os.listdir(d))
 
     def testVerifyRelease(self):
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()
         res=cdrom._verifyRelease(s)
         self.assertTrue(res)
 
     def testCopyRelease(self):
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()
         d=tempfile.mkdtemp()
         cdrom._copyRelease(s, d)
@@ -103,7 +103,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         
 
     def testSourcesList(self):
-        cdrom = AptCdrom(None, "./test-data-cdrom")
+        cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
         (p,s,i18n) = cdrom._scanCD()
         p=cdrom._dropArch(p)
         line=cdrom._generateSourcesListLine(cdrom._readDiskName(), p)
@@ -117,7 +117,7 @@ CD::36e3f69081b7d10081d167b137886a71-2::Label "Ubuntu 8.10 _Intrepid Ibex_ - Bet
         apt_pkg.config.set("dir::etc::sourcelist",  sourceslist)
         apt_pkg.config.set("dir::state::lists", tmpdir)
         view = Mock()
-        cdrom = AptCdrom(view, "./test-data-cdrom")
+        cdrom = AptCdrom(view, CURDIR + "/test-data-cdrom")
         cdrom.add()
         cdrom.comment_out_cdrom_entry()
         for line in open(sourceslist):

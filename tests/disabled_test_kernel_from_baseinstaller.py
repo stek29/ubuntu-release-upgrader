@@ -3,20 +3,21 @@
 from __future__ import print_function
 
 import os
-import sys
 import unittest
 
 from mock import Mock
 
-sys.path.insert(0,"../")
 from DistUpgrade.DistUpgradeCache import MyCache
 from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
+
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
 
 class TestKernelBaseinstaller(unittest.TestCase):
 
     def test_kernel_from_baseinstaller(self):
         # the upgrade expects this 
-        os.chdir("../DistUpgrade")
+        os.chdir(CURDIR + "/../DistUpgrade")
         # get a config
         config = DistUpgradeConfig(".")
         config.set("Files", "LogDir", "/tmp")
@@ -36,6 +37,7 @@ class TestKernelBaseinstaller(unittest.TestCase):
             "linux-generic2-pae", "Selecting new kernel from base-installer")
         cache.mark_install.assert_any_call(
             "linux-headers-generic2-pae", "Selecting new kernel headers from base-installer")
+
 if __name__ == "__main__":
     import logging
     logging.basicConfig(level=logging.DEBUG)

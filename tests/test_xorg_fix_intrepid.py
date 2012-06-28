@@ -1,19 +1,20 @@
 #!/usr/bin/python
 
-import sys
-sys.path.insert(0,"../")
-
+import os
 import unittest
 import shutil
 import re
 
 from DistUpgrade.xorg_fix_proprietary import comment_out_driver_from_xorg, replace_driver_from_xorg, is_multiseat
 
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
+
 class testOriginMatcher(unittest.TestCase):
-    ORIG="test-data/xorg.conf.original"
-    FGLRX="test-data/xorg.conf.fglrx"
-    MULTISEAT="test-data/xorg.conf.multiseat"
-    NEW="test-data/xorg.conf"
+    ORIG = CURDIR + "/test-data/xorg.conf.original"
+    FGLRX = CURDIR + "/test-data/xorg.conf.fglrx"
+    MULTISEAT = CURDIR + "/test-data/xorg.conf.multiseat"
+    NEW = CURDIR + "/test-data/xorg.conf"
 
 
     def testSimple(self):
@@ -34,6 +35,7 @@ class testOriginMatcher(unittest.TestCase):
         comment_out_driver_from_xorg("fglrx",self.NEW)
         for line in open(self.NEW):
             if re.match('^#.*Driver.*fglrx',line):
+                import logging
                 logging.info("commented out line found")
                 break
         else:

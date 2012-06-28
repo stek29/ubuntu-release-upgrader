@@ -3,11 +3,12 @@
 from gi.repository import Gtk, GObject
 
 import mock
-import unittest
+import os
 import subprocess
-import sys
+import unittest
 
-sys.path.insert(0,"../")
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
 
 class TestDistroEndOfLife(unittest.TestCase):
 
@@ -35,7 +36,7 @@ class TestDistroEndOfLife(unittest.TestCase):
             # in update-manager's python3-only code
             return
         options = mock.Mock()
-        options.datadir = "../data"
+        options.datadir = CURDIR + "/../data"
         options.test_uri = None
         checker = CheckNewReleaseGtk(options)
         meta_release = mock.Mock()

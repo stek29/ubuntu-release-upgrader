@@ -101,6 +101,9 @@ class DistUpgradeController(object):
         if datadir == None:
             datadir = os.getcwd()
             localedir = os.path.join(datadir,"mo")
+        else:
+            # FIXME: don't overwrite this, once we move caller from u-m to us
+            datadir = "/usr/share/ubuntu-release-upgrader/"
         self.datadir = datadir
         self.options = options
 

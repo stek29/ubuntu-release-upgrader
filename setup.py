@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os
 import glob
 
 from distutils.core import setup
@@ -30,12 +29,11 @@ setup(name='ubuntu-release-upgrader',
                ],
       data_files=[
                   ('share/ubuntu-release-upgrader/gtkbuilder',
-                   glob.glob("data/gtkbuilder/*.ui")+
-                   glob.glob("DistUpgrade/*.ui")
+                   glob.glob("data/gtkbuilder/*.ui")
                   ),
                   ('share/ubuntu-release-upgrader/',
                    glob.glob("DistUpgrade/*.cfg")+
-                   glob.glob("UpdateManager/*.ui")
+                   glob.glob("DistUpgrade/*.ui")
                   ),
                   ('share/man/man8',
                    glob.glob('data/*.8')

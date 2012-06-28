@@ -400,6 +400,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
             localedir=os.path.join(os.getcwd(),"mo")
             gladedir=os.getcwd()
         else:
+            # FIXME: don't overwrite this, once we move caller from u-m to us
+            datadir = "/usr/share/ubuntu-release-upgrader/"
             localedir="/usr/share/locale/"
             gladedir=os.path.join(datadir, "gtkbuilder")
 

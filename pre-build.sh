@@ -3,7 +3,7 @@
 set -e
 
 dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
-			python3-mock, xvfb, gir1.2-gtk-3.0, python-gi'
+			python3-mock, xvfb, gir1.2-gtk-3.0, python-gi, python3-nose'
 
 # update demotions
 (cd utils && ./demotions.py precise quantal > demoted.cfg)
@@ -38,7 +38,7 @@ rm -rf utils/apt/lists utils/apt/*.bin
 
 # run the test-suit
 #echo "Running integrated tests"
-(cd tests && make)
+nosetests3
 
 # test leftovers
 rm -f ./tests/data-sources-list-test/apt.log

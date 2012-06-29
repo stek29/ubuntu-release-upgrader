@@ -20,7 +20,8 @@ X-Python3-Version: >= 3.2
 Package: ubuntu-release-upgrader-core
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends},
+Depends: ${python3:Depends},
+         ${misc:Depends},
          python3-distupgrade (= ${source:Version})
 Recommends: libpam-modules (>= 1.0.1-9ubuntu3)
 Replaces: update-manager (<< 1:0.165),
@@ -36,7 +37,6 @@ Section: python
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${python3:Depends},
          ${misc:Depends},
-         ubuntu-release-upgrader-core (= ${source:Version}),
          python3-update-manager,
          python3-apt (>= 0.8.5~),
          lsb-release

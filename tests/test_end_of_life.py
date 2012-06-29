@@ -42,7 +42,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         meta_release = mock.Mock()
         # pretend the current distro is no longer supported
         meta_release.no_longer_supported = subprocess.Popen(
-            ["lsb_release","-c","-s"], 
+            ["lsb_release", "-c", "-s"], 
             stdout=subprocess.PIPE,
             universal_newlines=True).communicate()[0].strip()
         # build new release mock
@@ -59,7 +59,6 @@ class TestDistroEndOfLife(unittest.TestCase):
         self.dialog_called = False
         checker.new_dist_available(meta_release, new_dist)
         self.assertTrue(self.dialog_called, True)
-
 
     def _p(self):
         while Gtk.events_pending():

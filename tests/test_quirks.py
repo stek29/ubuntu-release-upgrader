@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+# -*- Mode: Python; indent-tabs-mode: nil; tab-width: 4; coding: utf-8 -*-
 
 import apt
 import apt_pkg
@@ -83,7 +84,11 @@ class TestPatches(unittest.TestCase):
     def test_patch_lowlevel(self):
         #test lowlevel too
         from DistUpgrade.DistUpgradePatcher import patch, PatchError
-        self.assertRaises(PatchError, patch, CURDIR + "/patchdir/fail", CURDIR + "/patchdir/patchdir_fail.ed04abbc6ee688ee7908c9dbb4b9e0a2.deadbeefdeadbeefdeadbeff", "deadbeefdeadbeefdeadbeff")
+        self.assertRaises(PatchError, patch, CURDIR + "/patchdir/fail",
+                          CURDIR + "/patchdir/patchdir_fail."
+                          "ed04abbc6ee688ee7908c9dbb4b9e0a2."
+                          "deadbeefdeadbeefdeadbeff",
+                          "deadbeefdeadbeefdeadbeff")
 
 
 class TestQuirks(unittest.TestCase):
@@ -118,18 +123,24 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(apt_pkg.config.find_b("APT::Install-Recommends"))
 
     def test_parse_from_modaliases_header(self):
-        pkgrec = { "Package" : "foo",
-                   "Modaliases" : "modules1(pci:v00001002d00006700sv*sd*bc03sc*i*, pci:v00001002d00006701sv*sd*bc03sc*i*), module2(pci:v00001002d00006702sv*sd*bc03sc*i*, pci:v00001001d00006702sv*sd*bc03sc*i*)"
-                 }
+        pkgrec = {
+            "Package": "foo",
+            "Modaliases": "modules1(pci:v00001002d00006700sv*sd*bc03sc*i*, "
+                          "pci:v00001002d00006701sv*sd*bc03sc*i*), "
+                          "module2(pci:v00001002d00006702sv*sd*bc03sc*i*, "
+                          "pci:v00001001d00006702sv*sd*bc03sc*i*)"
+        }
         controller = mock.Mock()
         config = mock.Mock()
         q = DistUpgradeQuirks(controller, config)
         self.assertEqual(q._parse_modaliases_from_pkg_header({}), [])
         self.assertEqual(q._parse_modaliases_from_pkg_header(pkgrec),
                          [("modules1",
-                           ["pci:v00001002d00006700sv*sd*bc03sc*i*", "pci:v00001002d00006701sv*sd*bc03sc*i*"]),
+                           ["pci:v00001002d00006700sv*sd*bc03sc*i*",
+                            "pci:v00001002d00006701sv*sd*bc03sc*i*"]),
                          ("module2",
-                          ["pci:v00001002d00006702sv*sd*bc03sc*i*", "pci:v00001001d00006702sv*sd*bc03sc*i*"]) ])
+                          ["pci:v00001002d00006702sv*sd*bc03sc*i*",
+                           "pci:v00001001d00006702sv*sd*bc03sc*i*"])])
 
     def testFglrx(self):
         mock_lspci_good = set(['1002:9714'])
@@ -145,28 +156,41 @@ class TestQuirks(unittest.TestCase):
     def test_cpuHasSSESupport(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         testdir = CURDIR + "/test-data/"
-        self.assertTrue(q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-with-sse"))
-        self.assertFalse(q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-without-sse"))
+        self.assertTrue(
+            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-with-sse"))
+        self.assertFalse(
+            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-without-sse"))
 
     def test_cpu_is_i686(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         q.arch = "i386"
         testdir = CURDIR + "/test-data/"
-        self.assertTrue(q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-with-sse"))
-        self.assertFalse(q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-without-cmov"))
-        self.assertFalse(q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i586"))
-        self.assertFalse(q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i486"))
-        self.assertTrue(q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-via-c7m"))
+        self.assertTrue(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-with-sse"))
+        self.assertFalse(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-without-cmov"))
+        self.assertFalse(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i586"))
+        self.assertFalse(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i486"))
+        self.assertTrue(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-via-c7m"))
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         testdir = CURDIR + "/test-data/"
         shutil.copy(testdir + "fstab.ntfs.original", testdir + "fstab.ntfs")
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open(testdir + "fstab.ntfs").read())
+        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
+                        "nls=utf8,umask=000,gid=46 0 1" in
+                        open(testdir + "fstab.ntfs").read())
         q._ntfsFstabFixup(fstab=testdir + "fstab.ntfs")
         self.assertTrue(open(testdir + "fstab.ntfs").read().endswith("0\n"))
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 0" in open(testdir + "fstab.ntfs").read())
-        self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open(testdir + "fstab.ntfs").read())
+        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
+                        "nls=utf8,umask=000,gid=46 0 0" in
+                        open(testdir + "fstab.ntfs").read())
+        self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
+                         "nls=utf8,umask=000,gid=46 0 1" in
+                         open(testdir + "fstab.ntfs").read())
 
     def test_kde_card_games_transition(self):
         # fake nothing is installed
@@ -206,7 +230,7 @@ class TestQuirks(unittest.TestCase):
         quirks = DistUpgradeQuirks(controller, config)
         quirks._pokeScreensaver()
         res = quirks._stopPokeScreensaver()
-        res # pyflakes
+        res  # pyflakes
 
 if __name__ == "__main__":
     import logging

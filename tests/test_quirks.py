@@ -1,25 +1,108 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+# -*- Mode: Python; indent-tabs-mode: nil; tab-width: 4; coding: utf-8 -*-
 
 import apt
 import apt_pkg
 import hashlib
 import mock
+import os
 import unittest
 import shutil
-import sys
 import tempfile
 
-sys.path.insert(0,"../")
 from DistUpgrade.DistUpgradeQuirks import DistUpgradeQuirks
+
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
 
 class MockController(object):
     def __init__(self):
         self._view = None
 
+
 class MockConfig(object):
     pass
 
+
+class TestPatches(unittest.TestCase):
+
+    orig_chdir = ''
+
+    def setUp(self):
+        # To patch, we need to be in the same directory as the patched files
+        self.orig_chdir = os.getcwd()
+        os.chdir(CURDIR)
+
+    def tearDown(self):
+        os.chdir(self.orig_chdir)
+
+    def _verify_result_checksums(self):
+        """ helper for test_patch to verify that we get the expected result """
+        # simple case is foo
+        patchdir = CURDIR + "/patchdir/"
+        self.assertFalse("Hello" in open(patchdir + "foo").read())
+        self.assertTrue("Hello" in open(patchdir + "foo_orig").read())
+        md5 = hashlib.md5()
+        with open(patchdir + "foo", "rb") as patch:
+            md5.update(patch.read())
+        self.assertEqual(md5.hexdigest(), "52f83ff6877e42f613bcd2444c22528c")
+        # more complex example fstab
+        md5 = hashlib.md5()
+        with open(patchdir + "fstab", "rb") as patch:
+            md5.update(patch.read())
+        self.assertEqual(md5.hexdigest(), "c56d2d038afb651920c83106ec8dfd09")
+        # most complex example
+        md5 = hashlib.md5()
+        with open(patchdir + "pycompile", "rb") as patch:
+            md5.update(patch.read())
+        self.assertEqual(md5.hexdigest(), "97c07a02e5951cf68cb3f86534f6f917")
+        # with ".\n"
+        md5 = hashlib.md5()
+        with open(patchdir + "dotdot", "rb") as patch:
+            md5.update(patch.read())
+        self.assertEqual(md5.hexdigest(), "cddc4be46bedd91db15ddb9f7ddfa804")
+        # test that incorrect md5sum after patching rejects the patch
+        self.assertEqual(open(patchdir + "fail").read(),
+                         open(patchdir + "fail_orig").read())
+
+    def test_patch(self):
+        q = DistUpgradeQuirks(MockController(), MockConfig)
+        # create patch environment
+        patchdir = CURDIR + "/patchdir/"
+        shutil.copy(patchdir + "foo_orig", patchdir + "foo")
+        shutil.copy(patchdir + "fstab_orig", patchdir + "fstab")
+        shutil.copy(patchdir + "pycompile_orig", patchdir + "pycompile")
+        shutil.copy(patchdir + "dotdot_orig", patchdir + "dotdot")
+        shutil.copy(patchdir + "fail_orig", patchdir + "fail")
+        # apply patches
+        q._applyPatches(patchdir=patchdir)
+        self._verify_result_checksums()
+        # now apply patches again and ensure we don't patch twice
+        q._applyPatches(patchdir=patchdir)
+        self._verify_result_checksums()
+
+    def test_patch_lowlevel(self):
+        #test lowlevel too
+        from DistUpgrade.DistUpgradePatcher import patch, PatchError
+        self.assertRaises(PatchError, patch, CURDIR + "/patchdir/fail",
+                          CURDIR + "/patchdir/patchdir_fail."
+                          "ed04abbc6ee688ee7908c9dbb4b9e0a2."
+                          "deadbeefdeadbeefdeadbeff",
+                          "deadbeefdeadbeefdeadbeff")
+
+
 class TestQuirks(unittest.TestCase):
+
+    orig_recommends = ''
+    orig_status = ''
+
+    def setUp(self):
+        self.orig_recommends = apt_pkg.config.get("APT::Install-Recommends")
+        self.orig_status = apt_pkg.config.get("Dir::state::status")
+
+    def tearDown(self):
+        apt_pkg.config.set("APT::Install-Recommends", self.orig_recommends)
+        apt_pkg.config.set("Dir::state::status", self.orig_status)
 
     def test_enable_recommends_during_upgrade(self):
         controller = mock.Mock()
@@ -40,18 +123,24 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(apt_pkg.config.find_b("APT::Install-Recommends"))
 
     def test_parse_from_modaliases_header(self):
-        pkgrec = { "Package" : "foo",
-                   "Modaliases" : "modules1(pci:v00001002d00006700sv*sd*bc03sc*i*, pci:v00001002d00006701sv*sd*bc03sc*i*), module2(pci:v00001002d00006702sv*sd*bc03sc*i*, pci:v00001001d00006702sv*sd*bc03sc*i*)"
-                 }
+        pkgrec = {
+            "Package": "foo",
+            "Modaliases": "modules1(pci:v00001002d00006700sv*sd*bc03sc*i*, "
+                          "pci:v00001002d00006701sv*sd*bc03sc*i*), "
+                          "module2(pci:v00001002d00006702sv*sd*bc03sc*i*, "
+                          "pci:v00001001d00006702sv*sd*bc03sc*i*)"
+        }
         controller = mock.Mock()
         config = mock.Mock()
         q = DistUpgradeQuirks(controller, config)
         self.assertEqual(q._parse_modaliases_from_pkg_header({}), [])
         self.assertEqual(q._parse_modaliases_from_pkg_header(pkgrec),
                          [("modules1",
-                           ["pci:v00001002d00006700sv*sd*bc03sc*i*", "pci:v00001002d00006701sv*sd*bc03sc*i*"]),
+                           ["pci:v00001002d00006700sv*sd*bc03sc*i*",
+                            "pci:v00001002d00006701sv*sd*bc03sc*i*"]),
                          ("module2",
-                          ["pci:v00001002d00006702sv*sd*bc03sc*i*", "pci:v00001001d00006702sv*sd*bc03sc*i*"]) ])
+                          ["pci:v00001002d00006702sv*sd*bc03sc*i*",
+                           "pci:v00001001d00006702sv*sd*bc03sc*i*"])])
 
     def testFglrx(self):
         mock_lspci_good = set(['1002:9714'])
@@ -66,74 +155,42 @@ class TestQuirks(unittest.TestCase):
 
     def test_cpuHasSSESupport(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
-        self.assertTrue(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-with-sse"))
-        self.assertFalse(q._cpuHasSSESupport(cpuinfo="test-data/cpuinfo-without-sse"))
+        testdir = CURDIR + "/test-data/"
+        self.assertTrue(
+            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-with-sse"))
+        self.assertFalse(
+            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-without-sse"))
 
     def test_cpu_is_i686(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         q.arch = "i386"
-        self.assertTrue(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-with-sse"))
-        self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-without-cmov"))
-        self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-i586"))
-        self.assertFalse(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-i486"))
-        self.assertTrue(q._cpu_is_i686_and_has_cmov("test-data/cpuinfo-via-c7m"))
-
-    def _verify_result_checksums(self):
-        """ helper for test_patch to verify that we get the expected result """
-        # simple case is foo
-        self.assertFalse("Hello" in open("./patchdir/foo").read())
-        self.assertTrue("Hello" in open("./patchdir/foo_orig").read())
-        md5 = hashlib.md5()
-        with open("./patchdir/foo", "rb") as patch:
-            md5.update(patch.read())
-        self.assertEqual(md5.hexdigest(), "52f83ff6877e42f613bcd2444c22528c")
-        # more complex example fstab
-        md5 = hashlib.md5()
-        with open("./patchdir/fstab", "rb") as patch:
-            md5.update(patch.read())
-        self.assertEqual(md5.hexdigest(), "c56d2d038afb651920c83106ec8dfd09")
-        # most complex example
-        md5 = hashlib.md5()
-        with open("./patchdir/pycompile", "rb") as patch:
-            md5.update(patch.read())
-        self.assertEqual(md5.hexdigest(), "97c07a02e5951cf68cb3f86534f6f917")
-        # with ".\n"
-        md5 = hashlib.md5()
-        with open("./patchdir/dotdot", "rb") as patch:
-            md5.update(patch.read())
-        self.assertEqual(md5.hexdigest(), "cddc4be46bedd91db15ddb9f7ddfa804")
-        # test that incorrect md5sum after patching rejects the patch
-        self.assertEqual(open("./patchdir/fail").read(),
-                         open("./patchdir/fail_orig").read())
-
-    def test_patch(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        # create patch environment
-        shutil.copy("./patchdir/foo_orig", "./patchdir/foo")
-        shutil.copy("./patchdir/fstab_orig", "./patchdir/fstab")
-        shutil.copy("./patchdir/pycompile_orig", "./patchdir/pycompile")
-        shutil.copy("./patchdir/dotdot_orig", "./patchdir/dotdot")
-        shutil.copy("./patchdir/fail_orig", "./patchdir/fail")
-        # apply patches
-        q._applyPatches(patchdir="./patchdir")
-        self._verify_result_checksums()
-        # now apply patches again and ensure we don't patch twice
-        q._applyPatches(patchdir="./patchdir")
-        self._verify_result_checksums()
-
-    def test_patch_lowlevel(self):
-        #test lowlevel too
-        from DistUpgrade.DistUpgradePatcher import patch, PatchError
-        self.assertRaises(PatchError, patch, "./patchdir/fail", "patchdir/patchdir_fail.ed04abbc6ee688ee7908c9dbb4b9e0a2.deadbeefdeadbeefdeadbeff", "deadbeefdeadbeefdeadbeff")
+        testdir = CURDIR + "/test-data/"
+        self.assertTrue(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-with-sse"))
+        self.assertFalse(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-without-cmov"))
+        self.assertFalse(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i586"))
+        self.assertFalse(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i486"))
+        self.assertTrue(
+            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-via-c7m"))
 
     def test_ntfs_fstab(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
-        shutil.copy("./test-data/fstab.ntfs.original", "./test-data/fstab.ntfs")
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open("./test-data/fstab.ntfs").read())
-        q._ntfsFstabFixup(fstab="./test-data/fstab.ntfs")
-        self.assertTrue(open("./test-data/fstab.ntfs").read().endswith("0\n"))
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 0" in open("./test-data/fstab.ntfs").read())
-        self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,nls=utf8,umask=000,gid=46 0 1" in open("./test-data/fstab.ntfs").read())
+        testdir = CURDIR + "/test-data/"
+        shutil.copy(testdir + "fstab.ntfs.original", testdir + "fstab.ntfs")
+        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
+                        "nls=utf8,umask=000,gid=46 0 1" in
+                        open(testdir + "fstab.ntfs").read())
+        q._ntfsFstabFixup(fstab=testdir + "fstab.ntfs")
+        self.assertTrue(open(testdir + "fstab.ntfs").read().endswith("0\n"))
+        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
+                        "nls=utf8,umask=000,gid=46 0 0" in
+                        open(testdir + "fstab.ntfs").read())
+        self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
+                         "nls=utf8,umask=000,gid=46 0 1" in
+                         open(testdir + "fstab.ntfs").read())
 
     def test_kde_card_games_transition(self):
         # fake nothing is installed
@@ -173,7 +230,7 @@ class TestQuirks(unittest.TestCase):
         quirks = DistUpgradeQuirks(controller, config)
         quirks._pokeScreensaver()
         res = quirks._stopPokeScreensaver()
-        res # pyflakes
+        res  # pyflakes
 
 if __name__ == "__main__":
     import logging

@@ -3,11 +3,12 @@
 from gi.repository import Gtk, GObject
 
 import mock
-import unittest
+import os
 import subprocess
-import sys
+import unittest
 
-sys.path.insert(0,"../")
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+
 
 class TestDistroEndOfLife(unittest.TestCase):
 
@@ -35,15 +36,17 @@ class TestDistroEndOfLife(unittest.TestCase):
             # in update-manager's python3-only code
             return
         options = mock.Mock()
-        options.datadir = "../data"
+        options.datadir = CURDIR + "/../data"
         options.test_uri = None
         checker = CheckNewReleaseGtk(options)
         meta_release = mock.Mock()
         # pretend the current distro is no longer supported
         meta_release.no_longer_supported = subprocess.Popen(
-            ["lsb_release","-c","-s"], 
+            ["lsb_release", "-c", "-s"], 
             stdout=subprocess.PIPE,
             universal_newlines=True).communicate()[0].strip()
+        meta_release.flavor_name = "Ubuntu"
+        meta_release.current_dist_version = "0.0"
         # build new release mock
         new_dist = mock.Mock()
         new_dist.name = "zaphod"
@@ -51,6 +54,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         new_dist.supported = True
         new_dist.releaseNotesHtmlUri = "http://www.ubuntu.com/html"
         new_dist.releaseNotesURI = "http://www.ubuntu.com/text"
+        meta_release.upgradable_to = new_dist
         # schedule a close event in 1 s
         GObject.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
         # run the dialog, this will also run a gtk mainloop so that the 
@@ -58,7 +62,6 @@ class TestDistroEndOfLife(unittest.TestCase):
         self.dialog_called = False
         checker.new_dist_available(meta_release, new_dist)
         self.assertTrue(self.dialog_called, True)
-
 
     def _p(self):
         while Gtk.events_pending():

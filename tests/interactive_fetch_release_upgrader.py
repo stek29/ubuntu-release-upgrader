@@ -5,7 +5,7 @@ from __future__ import print_function
 
 import unittest
 
-from UpdateManager.GtkProgress import GtkAcquireProgress
+from DistUpgrade.GtkProgress import GtkAcquireProgress
 from UpdateManager.UpdateManager import UpdateManager
 from UpdateManager.MetaReleaseGObject import MetaRelease
 from DistUpgrade.DistUpgradeFetcher import DistUpgradeFetcherGtk

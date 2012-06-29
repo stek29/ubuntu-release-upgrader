@@ -45,6 +45,8 @@ class TestDistroEndOfLife(unittest.TestCase):
             ["lsb_release", "-c", "-s"], 
             stdout=subprocess.PIPE,
             universal_newlines=True).communicate()[0].strip()
+        meta_release.flavor_name = "Ubuntu"
+        meta_release.current_dist_version = "0.0"
         # build new release mock
         new_dist = mock.Mock()
         new_dist.name = "zaphod"
@@ -52,6 +54,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         new_dist.supported = True
         new_dist.releaseNotesHtmlUri = "http://www.ubuntu.com/html"
         new_dist.releaseNotesURI = "http://www.ubuntu.com/text"
+        meta_release.upgradable_to = new_dist
         # schedule a close event in 1 s
         GObject.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
         # run the dialog, this will also run a gtk mainloop so that the 

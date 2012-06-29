@@ -33,7 +33,7 @@ import logging
 import sys
 import time
 
-import UpdateManager.GtkProgress
+import DistUpgrade.GtkProgress
 
 import gettext
 from optparse import OptionParser
@@ -42,7 +42,7 @@ from UpdateManager.Core.utils import init_proxy
 
 from DistUpgrade.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
-from UpdateManager.SimpleGtk3builderApp import SimpleGtkbuilderApp
+from DistUpgrade.SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 GObject.threads_init()
 
@@ -110,6 +110,9 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # show alert on unsupported distros
     if meta_release.no_longer_supported is not None:
         from UpdateManager.Dialogs import UnsupportedDialog
+        # Since now we are talking to update-manager code, point at the right
+        # location for it to pick up its own .ui files.
+        self.datadir = "/usr/share/update-manager/"
         dialog = UnsupportedDialog(self, meta_release)
         dialog.run(self.window_main)
   
@@ -125,8 +128,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    progress=UpdateManager.GtkProgress.GtkAcquireProgress(self, self.datadir,
-                                                          _("Downloading the release upgrade tool"))
+    progress=DistUpgrade.GtkProgress.GtkAcquireProgress(self, self.datadir,
+                                                        _("Downloading the release upgrade tool"))
     fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
                                  parent=self,
                                  datadir=self.datadir,

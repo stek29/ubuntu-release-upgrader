@@ -1,6 +1,13 @@
-ubuntu-release-upgrader (1:0.165) quantal; urgency=low
+ubuntu-release-upgrader (1:0.165) quantal-proposed; urgency=low
 
   * Rename source package, split upgrade bits out of update-manager
+  * do-partial-upgrade:
+    - Add a private command for running a partial upgrade (dist-upgrade)
+  * data/com.ubuntu.release-upgrader.policy:
+    - Add a PolicyKit policy file to give nice user strings when
+      do-partial-upgrade and do-release-upgrade are run under pkexec
+  * debian/tests:
+    - add dep8 tests
 
  -- Michael Terry <mterry@ubuntu.com>  Mon, 25 Jun 2012 12:10:31 -0400
 

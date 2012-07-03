@@ -38,12 +38,12 @@ def patch(orig, edpatch, result_md5sum=None):
      STATE_EXPECT_DATA) = range(2)
 
     # this is inefficient for big files
-    orig_lines = open(orig).readlines()
+    orig_lines = open(orig, encoding="UTF-8").readlines()
     start = end = 0
 
     # we start in wait-for-commend state
     state = STATE_EXPECT_COMMAND
-    for line in open(edpatch):
+    for line in open(edpatch, encoding="UTF-8"):
         if state == STATE_EXPECT_COMMAND:
             # in commands get rid of whitespace, 
             line = line.strip()
@@ -101,5 +101,5 @@ def patch(orig, edpatch, result_md5sum=None):
         md5.update(result.encode("UTF-8"))
         if md5.hexdigest() != result_md5sum:
             raise PatchError("the md5sum after patching is not correct")
-    open(orig, "w").write(result)
+    open(orig, "w", encoding="UTF-8").write(result)
     return True

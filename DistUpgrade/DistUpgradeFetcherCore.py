@@ -34,7 +34,7 @@ import subprocess
 from gettext import gettext as _
 from aptsources.sourceslist import SourcesList
 
-from UpdateManager.Core.utils import get_dist, url_downloadable, country_mirror
+from .utils import get_dist, url_downloadable, country_mirror
 
 
 class DistUpgradeFetcherCore(object):

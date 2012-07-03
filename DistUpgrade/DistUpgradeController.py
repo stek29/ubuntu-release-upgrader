@@ -45,14 +45,14 @@ try:
 except ImportError:
     # < 3.0
     from ConfigParser import SafeConfigParser, NoOptionError
-from UpdateManager.Core.utils import (country_mirror,
-                                      url_downloadable,
-                                      check_and_fix_xbit,
-                                      get_arch,
-                                      iptables_active,
-                                      inside_chroot,
-                                      get_string_with_no_auth_from_source_entry,
-                                      is_child_of_process_name)
+from .utils import (country_mirror,
+                    url_downloadable,
+                    check_and_fix_xbit,
+                    get_arch,
+                    iptables_active,
+                    inside_chroot,
+                    get_string_with_no_auth_from_source_entry,
+                    is_child_of_process_name)
 from string import Template
 try:
     from urllib.parse import urlsplit
@@ -305,7 +305,7 @@ class DistUpgradeController(object):
             and we have network - we will then try to fetch a update
             of ourself
         """  
-        from UpdateManager.Core.MetaRelease import MetaReleaseCore
+        from .MetaRelease import MetaReleaseCore
         from .DistUpgradeFetcherSelf import DistUpgradeFetcherSelf
         # check if we run from a LTS 
         forceLTS=False

@@ -25,7 +25,7 @@ from __future__ import absolute_import, print_function
 from gi.repository import Gtk, Gdk
 
 from .ReleaseNotesViewer import ReleaseNotesViewer
-from UpdateManager.Core.utils import error, inhibit_sleep, allow_sleep
+from .utils import error, inhibit_sleep, allow_sleep
 from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 from gettext import gettext as _

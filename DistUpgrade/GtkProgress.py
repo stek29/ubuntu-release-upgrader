@@ -25,7 +25,7 @@ from __future__ import absolute_import, print_function
 from gi.repository import Gtk, Gdk
 import apt
 from gettext import gettext as _
-from UpdateManager.Core.utils import humanize_size
+from .utils import humanize_size
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 

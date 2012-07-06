@@ -29,7 +29,7 @@ from PyQt4 import uic
 import apt_pkg
 import sys
 
-from UpdateManager.Core.utils import inhibit_sleep, allow_sleep
+from .utils import inhibit_sleep, allow_sleep
 from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 try:
@@ -39,7 +39,7 @@ except ImportError:
     from urllib2 import urlopen, HTTPError
 import os
 
-from UpdateManager.Core.MetaRelease import MetaReleaseCore
+from .MetaRelease import MetaReleaseCore
 import time
 import apt
 

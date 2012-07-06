@@ -34,10 +34,10 @@ import subprocess
 from subprocess import PIPE, Popen
 from hashlib import md5
 
-from UpdateManager.Core.utils import lsmod, get_arch
+from .utils import lsmod, get_arch
 
 from .DistUpgradeGettext import gettext as _
-from janitor.plugincore.manager import PluginManager
+from .janitor.plugincore.manager import PluginManager
 
 class DistUpgradeQuirks(object):
     """

@@ -127,7 +127,8 @@ def save_system_state(logdir):
     # right umask
     old_umask = os.umask(0o0066)
     clone = AptClone()
-    clone.save_state(sourcedir="/", target=target, with_dpkg_status=True)
+    clone.save_state(sourcedir="/", target=target, with_dpkg_status=True,
+        scrub_sources=True)
     # reset umask
     os.umask(old_umask)
     # lspci output

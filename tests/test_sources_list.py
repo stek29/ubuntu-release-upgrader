@@ -12,6 +12,7 @@ import unittest
 from DistUpgrade.DistUpgradeController import DistUpgradeController
 from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 from DistUpgrade import DistUpgradeConfigParser
+from DistUpgrade.utils import url_downloadable
 import logging
 
 DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
@@ -188,9 +189,15 @@ deb-src http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse
 deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted universe multiverse
 """)
 
+    @unittest.skipUnless(url_downloadable(
+        "http://us.archive.ubuntu.com/ubuntu", logging.debug),
+        "Could not reach mirror")
     def testEOL2SupportedWithMirrorUpgrade(self):
         " test upgrade from a EOL release to a supported release with mirror"
-        os.environ["LANG"] = "de_DE.UTF-8"
+        # Use us.archive.ubuntu.com, because it is available in Canonical's
+        # data center, unlike most mirrors.  This lets this test pass when
+        # when run in their Jenkins test environment.
+        os.environ["LANG"] = "en_US.UTF-8"
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir, "sources.list.EOL2Supported"),
@@ -206,10 +213,10 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted univers
         self.assertTrue(res)
         self._verifySources("""
 # main repo
-deb http://de.archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
-deb-src http://de.archive.ubuntu.com/ubuntu hardy main restricted multiverse
+deb http://us.archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
+deb-src http://us.archive.ubuntu.com/ubuntu hardy main restricted multiverse
 
-deb http://de.archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
+deb http://us.archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
 """)
 
     def testEOL2SupportedUpgrade(self):

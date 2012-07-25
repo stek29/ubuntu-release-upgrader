@@ -1,10 +1,31 @@
 
 import os
+import os.path
 import logging
 import subprocess
 import sys
 import gettext
 import errno
+
+APPORT_WHITELIST = [
+    "apt.log",
+    "apt-term.log",
+    "apt-clone_system_state.tar.gz",
+    "history.log",
+    "lspci.txt",
+    "main.log",
+    "term.log",
+    "screenlog.0",
+    "xorg_fixup.log",
+    ]
+
+
+def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
+    for fname in APPORT_WHITELIST:
+        f = os.path.join(logdir, fname)
+        if not os.path.isfile(f) or os.path.getsize(f) == 0:
+            continue
+        report[f.replace(".","").replace("-","")] = (open(f), )
 
 
 def apport_crash(type, value, tb):
@@ -23,11 +44,7 @@ def apport_crash(type, value, tb):
         report = Report()
         report.setdefault('Tags', 'dist-upgrade')
         report['Tags'] += ' dist-upgrade'
-        for fname in os.listdir("/var/log/dist-upgrade/"):
-            f = os.path.join("/var/log/dist-upgrade", fname)
-            if not os.path.isfile(f) or os.path.getsize(f) == 0:
-                continue
-            report[f.replace(".", "").replace("-", "")] = (open(f), )
+        _apport_append_logfiles(report)
         report.add_to_existing('/var/crash/_usr_bin_do-release-upgrade.0.crash')
     return True
 
@@ -50,10 +67,12 @@ def apport_pkgfailure(pkg, errormsg):
         return False
 
     if os.path.exists(s):
+        args = [s, "-p", pkg, "--tags", "dist-upgrade"]
+        for fname in APPORT_WHITELIST:
+            args.extend(["-l", os.path.join(LOGDIR, fname)])
         try:
-            p = subprocess.Popen([s, "-p", pkg, "-l", LOGDIR, "--tags",
-                "dist-upgrade"], stdin=subprocess.PIPE)
-            p.stdin.write("%s\n" % errormsg)
+            p = subprocess.Popen(args, stdin=subprocess.PIPE)
+            p.stdin.write("ErrorMessage: %s\n" % errormsg)
             p.stdin.close()
             #p.wait()
         except Exception as e:

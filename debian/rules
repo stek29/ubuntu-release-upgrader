@@ -35,11 +35,11 @@ binary-indep:
 override_dh_auto_build:
 	dh_auto_build
 	set -ex; for python in $(PY3); do \
-		LANG=C.UTF-8 $$python setup.py build; \
+		LANG=C.UTF-8 LC_ALL=C.UTF-8 $$python setup.py build; \
 	done
 
 override_dh_auto_install:
 	dh_auto_install
 	set -ex; for python in $(PY3); do \
-		LANG=C.UTF-8 $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
+		LANG=C.UTF-8 LC_ALL=C.UTF-8 $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
 	done

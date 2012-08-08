@@ -172,7 +172,7 @@ class DistUpgradeQuirks(object):
         self._test_and_warn_on_i8xx()
 
     def from_precisePostInitialUpdate(self):
-        self._test_and_warn_unity_3d_support()
+        self._test_and_warn_for_unity_3d_support()
 
     def oneiricPostInitialUpdate(self):
         self._test_and_warn_on_i8xx()

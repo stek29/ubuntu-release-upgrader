@@ -511,10 +511,11 @@ class DistUpgradeQuirks(object):
                 _("Your graphics hardware may not be fully supported in "
                   "Ubuntu 12.10."),
                 _("Running the 'unity' desktop environment is not fully "
-                  "supported by your graphics hardware. "
-                  "For more information see "
+                  "supported by your graphics hardware. You will maybe end up in "
+                  "a very slow environment after the upgrade. Our advice is to keep "
+                  "the LTS version for now. For more information see "
                   "https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D "
-                  "Do you want to continue with the upgrade?")
+                  "Do you still want to continue with the upgrade?")
                 )
             if res == False:
                 self.controller.abort()

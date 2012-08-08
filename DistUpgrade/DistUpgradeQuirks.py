@@ -495,8 +495,13 @@ class DistUpgradeQuirks(object):
         if (not os.path.exists(UNITY_SUPPORT_TEST) or
             not "DISPLAY" in os.environ):
             return
-        # FIXME: detect if unity is running, we can't use "os.environ"
-        #        for that as sudo cleans this
+        # see if there is a running unity, that service is used by both 2d,3d
+        ret = subprocess.call(
+            ["ps","-C","unity-panel-service"], stdout=open(os.devnull, "w"))
+        if ret != 0:
+            logging.debug("_test_and_warn_for_unity_3d_support: no unity running")
+            return
+        # if we are here, we need to test and warn
         res = subprocess.call([UNITY_SUPPORT_TEST])
         logging.debug(
             "_test_and_warn_for_unity_3d_support '%s' returned '%s'" % (

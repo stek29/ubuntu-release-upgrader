@@ -494,8 +494,7 @@ class DistUpgradeQuirks(object):
         UNITY_SUPPORT_TEST = "/usr/lib/nux/unity_support_test"
         # only run if the user is running a unity session
         if (not os.path.exists(UNITY_SUPPORT_TEST) or
-            not os.environ.get("GDMSESSION", "") == "ubuntu" or
-            # FIXME: what about the fallback 2d session name?
+            not os.environ.get("XDG_CURRENT_DESKTOP", "") == "Unity" or
             not "DISPLAY" in os.environ):
             return
         res = subprocess.call([UNITY_SUPPORT_TEST])
@@ -507,10 +506,11 @@ class DistUpgradeQuirks(object):
                 _("Your graphics hardware may not be fully supported in "
                   "Ubuntu 12.10."),
                 _("Running the 'unity' desktop environment is not fully "
-                  "supported by your graphics hardware. "
-                  "For more information see "
+                  "supported by your graphics hardware. You will maybe end up in "
+                  "a very slow environment after the upgrade. Our advice is to keep "
+                  "the LTS version for now. For more information see "
                   "https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D "
-                  "Do you want to continue with the upgrade?")
+                  "Do you still want to continue with the upgrade?")
                 )
             if res == False:
                 self.controller.abort()

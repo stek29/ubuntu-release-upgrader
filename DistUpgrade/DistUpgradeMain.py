@@ -80,7 +80,7 @@ def do_commandline():
     parser.add_option("--disable-gnu-screen", action="store_true", 
                       default=False,
                       help=_("Disable GNU screen support"))
-    parser.add_option("--datadir", dest="datadir", default=None,
+    parser.add_option("--datadir", dest="datadir", default=".",
                       help=_("Set datadir"))
     return parser.parse_args()
     
@@ -154,7 +154,7 @@ def setup_view(options, config, logdir):
             # won't work with py3
             #view_modul = __import__(requested_view, globals())
             view_class = getattr(view_modul, requested_view)
-            instance = view_class(logdir=logdir)
+            instance = view_class(logdir=logdir, datadir=options.datadir)
             break
         except Exception as e:
             logging.warning("can't import view '%s' (%s)" % (requested_view,e))
@@ -204,7 +204,7 @@ def main():
     
     # commandline setup and config
     (options, args) = do_commandline()
-    config = DistUpgradeConfig(".")
+    config = DistUpgradeConfig(options.datadir)
     logdir = setup_logging(options, config)
 
     from .DistUpgradeVersion import VERSION

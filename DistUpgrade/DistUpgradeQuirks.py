@@ -492,12 +492,11 @@ class DistUpgradeQuirks(object):
 
     def _test_and_warn_for_unity_3d_support(self):
         UNITY_SUPPORT_TEST = "/usr/lib/nux/unity_support_test"
-        # only run if the user is running a unity session
         if (not os.path.exists(UNITY_SUPPORT_TEST) or
-            not os.environ.get("GDMSESSION", "") == "ubuntu" or
-            # FIXME: what about the fallback 2d session name?
             not "DISPLAY" in os.environ):
             return
+        # FIXME: detect if unity is running, we can't use "os.environ"
+        #        for that as sudo cleans this
         res = subprocess.call([UNITY_SUPPORT_TEST])
         logging.debug(
             "_test_and_warn_for_unity_3d_support '%s' returned '%s'" % (

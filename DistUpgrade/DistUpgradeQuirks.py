@@ -496,17 +496,17 @@ class DistUpgradeQuirks(object):
             not "DISPLAY" in os.environ):
             return
         # see if there is a running unity, that service is used by both 2d,3d
-        ret = subprocess.call(
+        return_code = subprocess.call(
             ["ps","-C","unity-panel-service"], stdout=open(os.devnull, "w"))
-        if ret != 0:
+        if return_code != 0:
             logging.debug("_test_and_warn_for_unity_3d_support: no unity running")
             return
         # if we are here, we need to test and warn
-        res = subprocess.call([UNITY_SUPPORT_TEST])
+        return_code = subprocess.call([UNITY_SUPPORT_TEST])
         logging.debug(
             "_test_and_warn_for_unity_3d_support '%s' returned '%s'" % (
-                UNITY_SUPPORT_TEST, res))
-        if res != 0:
+                UNITY_SUPPORT_TEST, return_code))
+        if return_code != 0:
             res = self._view.askYesNoQuestion(
                 _("Your graphics hardware may not be fully supported in "
                   "Ubuntu 12.10."),

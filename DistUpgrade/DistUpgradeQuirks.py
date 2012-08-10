@@ -171,6 +171,9 @@ class DistUpgradeQuirks(object):
         self._test_and_fail_on_non_i686()
         self._test_and_warn_on_i8xx()
 
+    def from_precisePostInitialUpdate(self):
+        self._test_and_warn_for_unity_3d_support()
+
     def oneiricPostInitialUpdate(self):
         self._test_and_warn_on_i8xx()
 
@@ -486,6 +489,36 @@ class DistUpgradeQuirks(object):
             if line:
                 lspci.add(line.split()[2])
         return lspci
+
+    def _test_and_warn_for_unity_3d_support(self):
+        UNITY_SUPPORT_TEST = "/usr/lib/nux/unity_support_test"
+        if (not os.path.exists(UNITY_SUPPORT_TEST) or
+            not "DISPLAY" in os.environ):
+            return
+        # see if there is a running unity, that service is used by both 2d,3d
+        return_code = subprocess.call(
+            ["ps","-C","unity-panel-service"], stdout=open(os.devnull, "w"))
+        if return_code != 0:
+            logging.debug("_test_and_warn_for_unity_3d_support: no unity running")
+            return
+        # if we are here, we need to test and warn
+        return_code = subprocess.call([UNITY_SUPPORT_TEST])
+        logging.debug(
+            "_test_and_warn_for_unity_3d_support '%s' returned '%s'" % (
+                UNITY_SUPPORT_TEST, return_code))
+        if return_code != 0:
+            res = self._view.askYesNoQuestion(
+                _("Your graphics hardware may not be fully supported in "
+                  "Ubuntu 12.10."),
+                _("Running the 'unity' desktop environment is not fully "
+                  "supported by your graphics hardware. You will maybe end up in "
+                  "a very slow environment after the upgrade. Our advice is to keep "
+                  "the LTS version for now. For more information see "
+                  "https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D "
+                  "Do you still want to continue with the upgrade?")
+                )
+            if res == False:
+                self.controller.abort()
 
     def _test_and_warn_on_i8xx(self):
         I8XX_PCI_IDS = ["8086:7121", # i810

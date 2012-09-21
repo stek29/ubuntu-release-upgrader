@@ -191,7 +191,7 @@ class DistUpgradeController(object):
         # apt cron job
         self._aptCronJobPerms = 0o755
 
-    def openCache(self, lock=True):
+    def openCache(self, lock=True, restore_sources_list_on_fail=False):
         logging.debug("openCache()")
         if self.cache is None:
             self.quirks.run("PreCacheOpen")
@@ -221,7 +221,10 @@ class DistUpgradeController(object):
                                        "(like apt-get or aptitude) "
                                        "already running. Please close that "
                                        "application first."));
-                    sys.exit(1)
+                    if restore_sources_list_on_fail:
+                        self.abort()
+                    else:
+                        sys.exit(1)
 
     def _openCache(self, lock):
         try:
@@ -1668,7 +1671,10 @@ class DistUpgradeController(object):
 
         # then open the cache (again)
         self._view.updateStatus(_("Checking package manager"))
-        self.openCache()
+        # if something fails here (e.g. locking the cache) we need to
+        # restore the system state (LP: #1052605)
+        self.openCache(restore_sources_list_on_fail=True)
+
         # re-check server mode because we got new packages (it may happen
         # that the system had no sources.list entries and therefore no
         # desktop file information)

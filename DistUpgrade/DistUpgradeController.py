@@ -198,6 +198,32 @@ class DistUpgradeController(object):
         else:
             self.cache.release_lock()
             self.cache.unlock_lists_dir()
+        # this loop will try getting the lock a couple of times
+        MAX_LOCK_RETRIES = 20
+        lock_retry = 0
+        while True:
+            try:
+                # exit here once the cache is ready
+                return self._openCache(lock)
+            except CacheExceptionLockingFailed as e:
+                # wait a bit
+                lock_retry += 1
+                self._view.processEvents()
+                time.sleep(0.1)
+                logging.debug(
+                    "failed to lock the cache, retrying (%i)" % lock_retry)
+                # and give up after some time
+                if lock_retry > MAX_LOCK_RETRIES:
+                    logging.error("Cache can not be locked (%s)" % e)
+                    self._view.error(_("Unable to get exclusive lock"),
+                                     _("This usually means that another "
+                                       "package management application "
+                                       "(like apt-get or aptitude) "
+                                       "already running. Please close that "
+                                       "application first."));
+                    sys.exit(1)
+
+    def _openCache(self, lock):
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -218,15 +244,6 @@ class DistUpgradeController(object):
                                  self._view,
                                  self.quirks,
                                  self._view.getOpCacheProgress())
-        except CacheExceptionLockingFailed as e:
-            logging.error("Cache can not be locked (%s)" % e)
-            self._view.error(_("Unable to get exclusive lock"),
-                             _("This usually means that another "
-                               "package management application "
-                               "(like apt-get or aptitude) "
-                               "already running. Please close that "
-                               "application first."));
-            sys.exit(1)
         self.cache.partialUpgrade = self._partialUpgrade
         logging.debug("/openCache(), new cache size %i" % len(self.cache))
 

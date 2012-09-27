@@ -987,6 +987,7 @@ class DistUpgradeController(object):
         #          no apt-get update can run outside from the release
         #          upgrader 
         user_canceled = False
+        e = None
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.PackageManager(self.cache._depcache)

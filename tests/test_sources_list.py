@@ -326,6 +326,28 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
+    def test_unicode_comments(self):
+        """
+        test transition of apt-cacher/apt-torrent uris
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.unicode"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(res)
+
+        # verify it
+        self._verifySources("""
+deb http://archive.ubuntu.com/ubuntu gutsy main restricted
+deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+# A PPA with a unicode comment
+# deb http://ppa.launchpad.net/random-ppa quantal main # ppa of Víctor R. Ruiz (vrruiz) disabled on upgrade to gutsy
+""")
+
     def _verifySources(self, expected):
         sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
         sources_list = open(sources_file).read()

@@ -7,6 +7,8 @@ import sys
 import gettext
 import errno
 
+from apport.hookutils import root_command_output
+
 APPORT_WHITELIST = [
     "apt.log",
     "apt-term.log",
@@ -25,7 +27,12 @@ def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
         f = os.path.join(logdir, fname)
         if not os.path.isfile(f) or os.path.getsize(f) == 0:
             continue
-        report[f.replace(".","").replace("-","")] = (open(f), )
+        ident = f.replace(".", "").replace("-", "")
+        if os.access(f, os.R_OK):
+            report[ident] = (open(f), )
+        elif os.path.exists(f):
+            report[ident] = root_command_output(["cat", '%s' % f],
+                decode_utf8=False)
 
 
 def apport_crash(type, value, tb):

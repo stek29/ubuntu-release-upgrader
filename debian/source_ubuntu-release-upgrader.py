@@ -6,7 +6,9 @@ Author: Brian Murray <brian@ubuntu.com>
 
 from apport.hookutils import (
     attach_gsettings_package,
-    attach_file_if_exists)
+    attach_file_if_exists,
+    root_command_output)
+
 
 def add_info(report, ui):
     try:
@@ -15,9 +17,9 @@ def add_info(report, ui):
         pass
     report.setdefault('Tags', 'dist-upgrade')
     report['Tags'] += ' dist-upgrade'
-    attach_file_if_exists(report,
-        '/var/log/dist-upgrade/apt-clone_system_state.tar.gz',
-        'VarLogDistupgradeAptclonesystemstate.tar.gz')
+    clone_file = '/var/log/dist-upgrade/apt-clone_system_state.tar.gz'
+    report['VarLogDistupgradeAptclonesystemstate.tar.gz'] =  \
+        root_command_output(["cat", clone_file], decode_utf8=False)
     attach_file_if_exists(report, '/var/log/dist-upgrade/apt.log',
         'VarLogDistupgradeAptlog')
     attach_file_if_exists(report, '/var/log/dist-upgrade/apt-term.log',

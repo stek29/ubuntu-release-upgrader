@@ -4,6 +4,8 @@
 Author: Brian Murray <brian@ubuntu.com>
 '''
 
+import os
+
 from apport.hookutils import (
     attach_gsettings_package,
     attach_file_if_exists,
@@ -18,8 +20,9 @@ def add_info(report, ui):
     report.setdefault('Tags', 'dist-upgrade')
     report['Tags'] += ' dist-upgrade'
     clone_file = '/var/log/dist-upgrade/apt-clone_system_state.tar.gz'
-    report['VarLogDistupgradeAptclonesystemstate.tar.gz'] =  \
-        root_command_output(["cat", clone_file], decode_utf8=False)
+    if os.path.exists(clone_file):
+        report['VarLogDistupgradeAptclonesystemstate.tar.gz'] =  \
+            root_command_output(["cat", clone_file], decode_utf8=False)
     attach_file_if_exists(report, '/var/log/dist-upgrade/apt.log',
         'VarLogDistupgradeAptlog')
     attach_file_if_exists(report, '/var/log/dist-upgrade/apt-term.log',

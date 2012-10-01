@@ -7,8 +7,6 @@ import sys
 import gettext
 import errno
 
-from apport.hookutils import root_command_output
-
 APPORT_WHITELIST = [
     "apt.log",
     "apt-term.log",
@@ -31,8 +29,13 @@ def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
         if os.access(f, os.R_OK):
             report[ident] = (open(f), )
         elif os.path.exists(f):
-            report[ident] = root_command_output(["cat", '%s' % f],
-                decode_utf8=False)
+            try:
+                from apport.hookutils import root_command_output
+                report[ident] = root_command_output(["cat", '%s' % f],
+                    decode_utf8=False)
+            except ImportError:
+                logging.error("failed to import apport python module, can't include: %s" % ident)
+                pass
 
 
 def apport_crash(type, value, tb):

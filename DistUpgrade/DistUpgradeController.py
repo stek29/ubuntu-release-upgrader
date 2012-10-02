@@ -191,13 +191,42 @@ class DistUpgradeController(object):
         # apt cron job
         self._aptCronJobPerms = 0o755
 
-    def openCache(self, lock=True):
+    def openCache(self, lock=True, restore_sources_list_on_fail=False):
         logging.debug("openCache()")
         if self.cache is None:
             self.quirks.run("PreCacheOpen")
         else:
             self.cache.release_lock()
             self.cache.unlock_lists_dir()
+        # this loop will try getting the lock a couple of times
+        MAX_LOCK_RETRIES = 20
+        lock_retry = 0
+        while True:
+            try:
+                # exit here once the cache is ready
+                return self._openCache(lock)
+            except CacheExceptionLockingFailed as e:
+                # wait a bit
+                lock_retry += 1
+                self._view.processEvents()
+                time.sleep(0.1)
+                logging.debug(
+                    "failed to lock the cache, retrying (%i)" % lock_retry)
+                # and give up after some time
+                if lock_retry > MAX_LOCK_RETRIES:
+                    logging.error("Cache can not be locked (%s)" % e)
+                    self._view.error(_("Unable to get exclusive lock"),
+                                     _("This usually means that another "
+                                       "package management application "
+                                       "(like apt-get or aptitude) "
+                                       "already running. Please close that "
+                                       "application first."));
+                    if restore_sources_list_on_fail:
+                        self.abort()
+                    else:
+                        sys.exit(1)
+
+    def _openCache(self, lock):
         try:
             self.cache = MyCache(self.config,
                                  self._view,
@@ -218,15 +247,6 @@ class DistUpgradeController(object):
                                  self._view,
                                  self.quirks,
                                  self._view.getOpCacheProgress())
-        except CacheExceptionLockingFailed as e:
-            logging.error("Cache can not be locked (%s)" % e)
-            self._view.error(_("Unable to get exclusive lock"),
-                             _("This usually means that another "
-                               "package management application "
-                               "(like apt-get or aptitude) "
-                               "already running. Please close that "
-                               "application first."));
-            sys.exit(1)
         self.cache.partialUpgrade = self._partialUpgrade
         logging.debug("/openCache(), new cache size %i" % len(self.cache))
 
@@ -1656,7 +1676,10 @@ class DistUpgradeController(object):
 
         # then open the cache (again)
         self._view.updateStatus(_("Checking package manager"))
-        self.openCache()
+        # if something fails here (e.g. locking the cache) we need to
+        # restore the system state (LP: #1052605)
+        self.openCache(restore_sources_list_on_fail=True)
+
         # re-check server mode because we got new packages (it may happen
         # that the system had no sources.list entries and therefore no
         # desktop file information)

@@ -143,9 +143,11 @@ class GtkAcquireProgressAdapter(AcquireProgress):
           if currentItem > self.total_items:
             currentItem = self.total_items
           if self.current_cps > 0:
+            current_cps = apt_pkg.size_to_str(self.current_cps)
+            if isinstance(current_cps, bytes):
+              current_cps = current_cps.decode()
             self.status.set_text(_("Fetching file %li of %li at %sB/s") % (
-                currentItem, self.total_items, 
-                apt_pkg.size_to_str(self.current_cps)))
+                currentItem, self.total_items, current_cps))
             self.progress.set_text(_("About %s remaining") % FuzzyTimeToStr(
                 self.eta))
           else:

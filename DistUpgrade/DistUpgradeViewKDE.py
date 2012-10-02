@@ -30,6 +30,7 @@ from PyQt4.QtGui import (
 from PyQt4 import uic
 
 import sys
+import locale
 import logging
 import time
 import subprocess
@@ -221,7 +222,7 @@ class KDEAcquireProgressAdapter(AcquireProgress):
         if self.current_cps > 0:
             current_cps = apt_pkg.size_to_str(self.current_cps)
             if isinstance(current_cps, bytes):
-                current_cps = current_cps.decode()
+                current_cps = current_cps.decode(locale.getpreferredencoding())
             self.status.setText(_("Fetching file %li of %li at %sB/s") % (current_item, self.total_items, current_cps))
             self.parent.window_main.progress_text.setText("<i>" + _("About %s remaining") % FuzzyTimeToStr(self.eta) + "</i>")
         else:

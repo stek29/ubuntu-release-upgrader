@@ -27,6 +27,7 @@ import apt
 import errno
 import os
 import apt_pkg 
+import locale
 import logging
 import signal
 import select
@@ -372,7 +373,8 @@ class DistUpgradeView(object):
         if downloadSize > 0:
           downloadSizeStr = apt_pkg.size_to_str(downloadSize)
           if isinstance(downloadSizeStr, bytes):
-              downloadSizeStr = downloadSizeStr.decode()
+              downloadSizeStr = downloadSizeStr.decode(
+                  locale.getpreferredencoding())
           msg += _("\n\nYou have to download a total of %s. ") % (
               downloadSizeStr)
           msg += self.getAcquireProgress().estimatedDownloadTime(downloadSize)

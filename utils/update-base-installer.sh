@@ -27,7 +27,7 @@ if [ ! -d $BASEDIR/preferences.d ]; then
     mkdir -p $BASEDIR/preferences.d
 fi
 
-cp /etc/apt/trusted.gpg $BASEDIR/
+cp /usr/share/keyrings/ubuntu-archive-keyring.gpg $BASEDIR/trusted.gpg
 
 # create status file
 touch $BASEDIR/status

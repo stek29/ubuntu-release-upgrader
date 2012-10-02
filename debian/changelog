@@ -2,6 +2,10 @@ ubuntu-release-upgrader (1:0.184) UNRELEASED; urgency=low
 
   * Decode the output of apt_pkg.size_to_str() if necessary when
     substituting it into Unicode strings (LP: #1031882).
+  * Ship /usr/share/keyrings/ubuntu-archive-keyring.gpg as
+    utils/apt/trusted.gpg (although that's only for tests anyway), rather
+    than whatever happens to be in /etc/apt/trusted.gpg on the system used
+    to build the source package.
 
  -- Colin Watson <cjwatson@ubuntu.com>  Tue, 02 Oct 2012 15:37:43 +0100
 

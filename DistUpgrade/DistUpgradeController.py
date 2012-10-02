@@ -237,7 +237,7 @@ class DistUpgradeController(object):
             self.apt_cache = self.cache
         # if we get a dpkg error that it was interrupted, just
         # run dpkg --configure -a
-        except CacheExceptionDpkgInterrupted as e:
+        except CacheExceptionDpkgInterrupted:
             logging.warning("dpkg interrupted, calling dpkg --configure -a")
             cmd = ["/usr/bin/dpkg","--configure","-a"]
             if os.environ.get("DEBIAN_FRONTEND") == "noninteractive":

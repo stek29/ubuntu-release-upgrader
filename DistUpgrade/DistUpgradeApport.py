@@ -7,25 +7,26 @@ import sys
 import gettext
 import errno
 
-APPORT_WHITELIST = [
-    "apt.log",
-    "apt-term.log",
-    "apt-clone_system_state.tar.gz",
-    "history.log",
-    "lspci.txt",
-    "main.log",
-    "term.log",
-    "screenlog.0",
-    "xorg_fixup.log",
-    ]
+APPORT_WHITELIST = {
+    "apt.log": "Aptlog",
+    "apt-term.log": "Apttermlog",
+    "apt-clone_system_state.tar.gz": "Aptclonesystemstate.tar.gz",
+    "history.log": "Historylog",
+    "lspci.txt": "Lspcitxt",
+    "main.log": "Mainlog",
+    "term.log": "Termlog",
+    "screenlog.0": "Screenlog",
+    "xorg_fixup.log": "Xorgfixup"
+    }
 
 
 def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
+    dirname = 'VarLogDistupgrade'
     for fname in APPORT_WHITELIST:
         f = os.path.join(logdir, fname)
         if not os.path.isfile(f) or os.path.getsize(f) == 0:
             continue
-        ident = f.replace(".", "").replace("-", "")
+        ident = dirname + APPORT_WHITELIST[fname]
         if os.access(f, os.R_OK):
             report[ident] = (open(f), )
         elif os.path.exists(f):

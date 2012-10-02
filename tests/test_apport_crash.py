@@ -18,15 +18,16 @@ class TestApportInformationLeak(unittest.TestCase):
 
     def test_no_information_leak_in_apport_append_logfiles(self):
         tmpdir = tempfile.mkdtemp()
-        report = {}
+        from apport.report import Report
+        report = Report()
         for name in ["apt.log", "system_state.tar.gz", "bar", "main.log"]:
             with open(os.path.join(tmpdir, name), "w") as f:
                 f.write("some-data")
         _apport_append_logfiles(report, tmpdir)
-        self.assertEqual(sorted([f[0].name for f in report.values()]),
+        self.assertEqual(sorted([f[0].name for f in report.values() if isinstance(f, tuple)]),
                          sorted([os.path.join(tmpdir, "main.log"),
                                  os.path.join(tmpdir, "apt.log")]))
-        
+
     @patch("subprocess.Popen")
     def test_no_information_leak_in_apport_pkgfailure(self, mock_popen):
         # call apport_pkgfailure with mocked data

@@ -24,6 +24,12 @@ case "$1" in
 	fi
     ;;
 
+    upgrade)
+    if dpkg --compare-versions "$2" lt 0.183 && [ -f /etc/update-manager/release-upgrades ]; then
+        sed -i -s 's/^prompt=/Prompt=/' /etc/update-manager/release-upgrades
+    fi
+    ;;
+
     abort-upgrade)
     ;;
 

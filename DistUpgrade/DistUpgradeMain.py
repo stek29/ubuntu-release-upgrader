@@ -32,6 +32,7 @@ import os
 import shutil
 import subprocess
 import sys
+import gettext
 
 from datetime import datetime
 from optparse import OptionParser
@@ -52,8 +53,6 @@ SYSTEM_DIRS = ["/bin",
               ]
 
 
-
-from .DistUpgradeController import DistUpgradeController
 from .DistUpgradeConfigParser import DistUpgradeConfig
 
 
@@ -209,6 +208,8 @@ def main():
 
     from .DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)
+    # ensure that DistUpgradeView translations are displayed
+    gettext.textdomain("ubuntu-release-upgrader")
 
     # create view and app objects
     view = setup_view(options, config, logdir)
@@ -219,6 +220,7 @@ def main():
         not options.disable_gnu_screen):
         run_new_gnu_screen_window_or_reattach()
 
+    from .DistUpgradeController import DistUpgradeController
     app = DistUpgradeController(view, options, datadir=options.datadir)
     atexit.register(app._enableAptCronJob)
 

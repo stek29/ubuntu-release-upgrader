@@ -98,7 +98,7 @@ class DistUpgradeController(object):
     def __init__(self, distUpgradeView, options=None, datadir=None):
         # setup the paths
         localedir = "/usr/share/locale/"
-        if datadir == None:
+        if datadir == None or datadir == '.':
             datadir = os.getcwd()
             localedir = os.path.join(datadir,"mo")
         self.datadir = datadir

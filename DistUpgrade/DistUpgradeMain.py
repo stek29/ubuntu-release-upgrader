@@ -26,13 +26,13 @@ warnings.filterwarnings("ignore", "Accessed deprecated", DeprecationWarning)
 
 import apt
 import atexit
+import gettext
 import glob
 import logging
 import os
 import shutil
 import subprocess
 import sys
-import gettext
 
 from datetime import datetime
 from optparse import OptionParser
@@ -209,7 +209,10 @@ def main():
     from .DistUpgradeVersion import VERSION
     logging.info("release-upgrader version '%s' started" % VERSION)
     # ensure that DistUpgradeView translations are displayed
-    gettext.textdomain("ubuntu-release-upgrader")
+    if options.datadir is None or options.datadir == '.':
+        localedir = os.path.join(os.getcwd(), "mo")
+        gettext.bindtextdomain("ubuntu-release-upgrader", localedir)
+        gettext.textdomain("ubuntu-release-upgrader")
 
     # create view and app objects
     view = setup_view(options, config, logdir)

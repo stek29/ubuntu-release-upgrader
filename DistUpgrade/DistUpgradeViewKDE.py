@@ -456,7 +456,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # silence the PyQt4 logger
         logger = logging.getLogger("PyQt4")
         logger.setLevel(logging.INFO)
-        if not datadir:
+        if not datadir or datadir == '.':
           localedir=os.path.join(os.getcwd(),"mo")
         else:
           localedir="/usr/share/locale/ubuntu-release-upgrader"

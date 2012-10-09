@@ -378,7 +378,7 @@ class DistUpgradeViewGtk(DistUpgradeView,SimpleGtkbuilderApp):
     def __init__(self, datadir=None, logdir=None):
         DistUpgradeView.__init__(self)
         self.logdir = logdir
-        if not datadir:
+        if not datadir or datadir == '.':
           localedir=os.path.join(os.getcwd(),"mo")
           gladedir=os.getcwd()
         else:

@@ -65,7 +65,7 @@ class DistUpgradeViewText(DistUpgradeView):
         # packages like "quagga"
         if "DEBIAN_FRONTEND" not in os.environ:
             os.environ["DEBIAN_FRONTEND"] = "dialog"
-        if not datadir:
+        if not datadir or datadir == '.':
           localedir=os.path.join(os.getcwd(),"mo")
         else:
           localedir="/usr/share/locale/ubuntu-release-upgrader"

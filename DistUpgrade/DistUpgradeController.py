@@ -1699,7 +1699,7 @@ class DistUpgradeController(object):
                 #        missing sources entries but network errors etc)
                 logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg)
                 self._view.error(_("Invalid package information"),
-                                 _("After updating your package ",
+                                 _("After updating your package "
                                    "information, the essential package '%s' "
                                    "could not be located. This may be "
                                    "because you have no official mirrors "

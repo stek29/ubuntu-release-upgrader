@@ -136,7 +136,11 @@ class DistUpgradeViewText(DistUpgradeView):
         print(twrap(extended_msg))
       return False
     def showInPager(self, output):
-      " helper to show output in a pager"
+      """ helper to show output in a pager """
+      # we need to send a utf8 encode str (bytes in py3) to the pipe
+      # LP: #1068389
+      if not isinstance(output, bytes):
+          output = output.encode("utf-8")
       for pager in ["/usr/bin/sensible-pager", "/bin/more"]:
           if os.path.exists(pager):
               p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)

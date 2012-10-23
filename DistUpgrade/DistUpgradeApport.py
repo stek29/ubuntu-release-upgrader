@@ -78,7 +78,14 @@ def apport_pkgfailure(pkg, errormsg):
         return False
 
     if os.path.exists(s):
-        args = [s, "-p", pkg, "--tags", "dist-upgrade"]
+        args = [s, "-p", pkg]
+        try:
+            import apport.ui
+            major = apport.ui.__version__.split('.')[:2]
+            if '.'.join(major) == '2.6':
+                args.extend(["--tags", "dist-upgrade"])
+        except Exception as e:
+            logging.warning("Failed to determine apport version (%s)" % e)
         for fname in APPORT_WHITELIST:
             args.extend(["-l", os.path.join(LOGDIR, fname)])
         try:

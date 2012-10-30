@@ -6,7 +6,7 @@ dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
 			python3-mock, xvfb, gir1.2-gtk-3.0, python-gi, python3-nose'
 
 # update demotions
-(cd utils && ./demotions.py precise quantal > demoted.cfg)
+(cd utils && ./demotions.py quantal raring > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
 #(cd utils && ./demotions.py lucid precise > demoted.cfg.lucid)
 

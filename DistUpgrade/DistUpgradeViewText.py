@@ -57,7 +57,8 @@ class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
 
 
 class DistUpgradeViewText(DistUpgradeView):
-    " text frontend of the distUpgrade tool "
+    """ text frontend of the distUpgrade tool """
+
     def __init__(self, datadir=None, logdir=None):
         # indicate that we benefit from using gnu screen
         self.needs_screen = True
@@ -127,7 +128,7 @@ class DistUpgradeViewText(DistUpgradeView):
       if extended_msg:
         print(twrap(extended_msg))
       print(_("To continue please press [ENTER]"))
-      sys.stdin.readline()
+      sys.stdin.readline().decode("utf-8", "backslashreplace")
     def error(self, summary, msg, extended_msg=None):
       print()
       print(twrap(summary))
@@ -161,7 +162,7 @@ class DistUpgradeViewText(DistUpgradeView):
       print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
       sys.stdout.flush()
       while True:
-        res = sys.stdin.readline()
+        res = sys.stdin.readline().decode("utf-8", "backslashreplace")
         # TRANSLATORS: the "y" is "yes"
         if res.strip().lower().startswith(_("y")):
           return True
@@ -205,14 +206,14 @@ class DistUpgradeViewText(DistUpgradeView):
       print(twrap(msg))
       if default == 'No':
           print(_("Continue [yN] "), end="")
-          res = sys.stdin.readline()
+          res = sys.stdin.readline().decode("utf-8", "backslashreplace")
           # TRANSLATORS: first letter of a positive (yes) answer
           if res.strip().lower().startswith(_("y")):
               return True
           return False
       else:
           print(_("Continue [Yn] "), end="")
-          res = sys.stdin.readline()
+          res = sys.stdin.readline().decode("utf-8", "backslashreplace")
           # TRANSLATORS: first letter of a negative (no) answer
           if res.strip().lower().startswith(_("n")):
               return False

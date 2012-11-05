@@ -3,12 +3,11 @@
 
 from __future__ import unicode_literals
 
-import io
 import os
 import tempfile
 import unittest
 
-from mock import Mock, patch
+from mock import patch
 
 from DistUpgrade.DistUpgradeViewText import DistUpgradeViewText
 

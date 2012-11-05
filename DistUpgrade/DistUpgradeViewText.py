@@ -28,12 +28,18 @@ import subprocess
 import apt
 import os
 
-from .DistUpgradeView import DistUpgradeView, InstallProgress, AcquireProgress
+from .DistUpgradeView import (
+    AcquireProgress,
+    DistUpgradeView,
+    ENCODING,
+    InstallProgress,
+    )
 import apt.progress
 
 import gettext
 from .DistUpgradeGettext import gettext as _
 from .utils import twrap
+
 
 class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
     def __init__(self):
@@ -43,6 +49,7 @@ class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
         apt.progress.text.AcquireProgress.pulse(self, owner)
         AcquireProgress.pulse(self, owner)
         return True
+
 
 class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress  """
@@ -128,7 +135,7 @@ class DistUpgradeViewText(DistUpgradeView):
       if extended_msg:
         print(twrap(extended_msg))
       print(_("To continue please press [ENTER]"))
-      sys.stdin.readline().decode("utf-8", "backslashreplace")
+      sys.stdin.readline().decode(ENCODING, "backslashreplace")
     def error(self, summary, msg, extended_msg=None):
       print()
       print(twrap(summary))
@@ -138,10 +145,10 @@ class DistUpgradeViewText(DistUpgradeView):
       return False
     def showInPager(self, output):
       """ helper to show output in a pager """
-      # we need to send a utf8 encode str (bytes in py3) to the pipe
+      # we need to send a encoded str (bytes in py3) to the pipe
       # LP: #1068389
       if not isinstance(output, bytes):
-          output = output.encode("utf-8")
+          output = output.encode(ENCODING)
       for pager in ["/usr/bin/sensible-pager", "/bin/more"]:
           if os.path.exists(pager):
               p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)
@@ -162,7 +169,7 @@ class DistUpgradeViewText(DistUpgradeView):
       print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
       sys.stdout.flush()
       while True:
-        res = sys.stdin.readline().decode("utf-8", "backslashreplace")
+        res = sys.stdin.readline().decode(ENCODING, "backslashreplace")
         # TRANSLATORS: the "y" is "yes"
         if res.strip().lower().startswith(_("y")):
           return True
@@ -206,14 +213,14 @@ class DistUpgradeViewText(DistUpgradeView):
       print(twrap(msg))
       if default == 'No':
           print(_("Continue [yN] "), end="")
-          res = sys.stdin.readline().decode("utf-8", "backslashreplace")
+          res = sys.stdin.readline().decode(ENCODING, "backslashreplace")
           # TRANSLATORS: first letter of a positive (yes) answer
           if res.strip().lower().startswith(_("y")):
               return True
           return False
       else:
           print(_("Continue [Yn] "), end="")
-          res = sys.stdin.readline().decode("utf-8", "backslashreplace")
+          res = sys.stdin.readline().decode(ENCODING, "backslashreplace")
           # TRANSLATORS: first letter of a negative (no) answer
           if res.strip().lower().startswith(_("n")):
               return False

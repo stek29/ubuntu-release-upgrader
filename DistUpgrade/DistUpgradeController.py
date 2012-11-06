@@ -652,6 +652,7 @@ class DistUpgradeController(object):
                     entry.type == "deb-src" or
                     "/security.ubuntu.com" in entry.uri or
                     "%s-security" % self.fromDist in entry.dist or
+                    "%s-backports" % self.fromDist in entry.dist or
                     "/archive.canonical.com" in entry.uri or
                     "/extras.ubuntu.com" in entry.uri):
                     validTo = False

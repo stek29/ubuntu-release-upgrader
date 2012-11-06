@@ -348,6 +348,27 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 # deb http://ppa.launchpad.net/random-ppa quantal main # ppa of Víctor R. Ruiz (vrruiz) disabled on upgrade to gutsy
 """)
 
+    def test_local_mirror(self):
+        """
+        test that a local mirror with official -backports works (LP:# 1067393)
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.local"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(res)
+
+        # verify it
+        self._verifySources("""
+deb http://192.168.1.1/ubuntu gutsy main restricted
+deb http://192.168.1.1/ubuntu gutsy-updates main restricted
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe multiverse
+""")
+
     def _verifySources(self, expected):
         sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
         sources_list = open(sources_file).read()

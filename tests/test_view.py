@@ -15,7 +15,7 @@ class TestDistUpradeView(unittest.TestCase):
     def test_show_in_pager_lp1068389(self):
         """Regression test for LP: #1068389"""
         output = tempfile.NamedTemporaryFile()
-        os.environ["PAGER"] = "less -F -O%s" % output.name
+        os.environ["PAGER"] = "tee %s" % output.name
         v = DistUpgradeViewText()
         v.showInPager("äää")
         with open(output.name, "rb") as fp:

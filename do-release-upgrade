@@ -37,7 +37,7 @@ def get_fetcher(frontend, new_dist, datadir):
         from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
         import apt
         progress = apt.progress.text.AcquireProgress()
-        return DistUpgradeFetcherCore
+        return DistUpgradeFetcherCore(new_dist, progress)
 
 
 if __name__ == "__main__":

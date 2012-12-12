@@ -36,6 +36,14 @@ from .DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
 from .DistUpgradeApport import apport_pkgfailure
 
 
+try:
+    locale.setlocale(locale.LC_ALL, "")
+    (code, ENCODING) = locale.getdefaultlocale()
+except:
+    logging.exception("getting the encoding failed")
+    ENCODING = "utf-8"   #pyflakes
+
+
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "
   #print("FuzzyTimeToStr: ", sec)
@@ -373,8 +381,7 @@ class DistUpgradeView(object):
         if downloadSize > 0:
           downloadSizeStr = apt_pkg.size_to_str(downloadSize)
           if isinstance(downloadSizeStr, bytes):
-              downloadSizeStr = downloadSizeStr.decode(
-                  locale.getpreferredencoding())
+              downloadSizeStr = downloadSizeStr.decode(ENCODING)
           msg += _("\n\nYou have to download a total of %s. ") % (
               downloadSizeStr)
           msg += self.getAcquireProgress().estimatedDownloadTime(downloadSize)

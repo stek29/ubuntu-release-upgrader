@@ -164,7 +164,7 @@ class MyCache(apt.Cache):
                                len(reqreinst)) % ", ".join(reqreinst)
             if view.askYesNoQuestion(header, summary):
                 self.release_lock()
-                cmd = ["dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)
+                cmd = ["/usr/bin/dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)
                 view.getTerminal().call(cmd)
                 self.get_lock()
                 return True

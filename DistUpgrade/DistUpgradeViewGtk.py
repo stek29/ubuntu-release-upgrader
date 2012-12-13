@@ -736,7 +736,7 @@ if __name__ == "__main__":
   
   #sys.exit(0)
   ip.conffile("TODO","TODO~")
-  view.getTerminal().call(["dpkg","--configure","-a"])
+  view.getTerminal().call(["/usr/bin/dpkg","--configure","-a"])
   #view.getTerminal().call(["ls","-R","/usr"])
   view.error("short","long",
              "asfds afsdj af asdf asdf asf dsa fadsf asdf as fasf sextended\n"

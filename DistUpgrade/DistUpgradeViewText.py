@@ -276,7 +276,7 @@ if __name__ == "__main__":
   cache.commit(fp,ip)
   
   sys.exit(0)
-  view.getTerminal().call(["dpkg","--configure","-a"])
+  view.getTerminal().call(["/usr/bin/dpkg","--configure","-a"])
   #view.getTerminal().call(["ls","-R","/usr"])
   view.error("short","long",
              "asfds afsdj af asdf asdf asf dsa fadsf asdf as fasf sextended\n"

@@ -1143,7 +1143,7 @@ class DistUpgradeController(object):
                                  "%s" % e)
                 self._view.error(_("Could not install the upgrades"), msg)
                 # installing the packages failed, can't be retried
-                cmd = ["dpkg","--configure","-a"]
+                cmd = ["/usr/bin/dpkg","--configure","-a"]
                 if os.environ.get("DEBIAN_FRONTEND") == "noninteractive":
                     cmd.append("--force-confold")
                 self._view.getTerminal().call(cmd)

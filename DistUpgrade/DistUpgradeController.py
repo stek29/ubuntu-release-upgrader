@@ -88,6 +88,18 @@ from .DistUpgradeApport import run_apport
 
 REBOOT_REQUIRED_FILE = "/var/run/reboot-required"
 
+
+def component_ordering_key(a):
+    """ key() function for sorted to ensure "correct" component ordering """
+    ordering = ["main", "restricted", "universe", "multiverse"]
+    try:
+        return ordering.index(a)
+    except ValueError:
+        # ensure to sort behind the "official" components, order is not
+        # really important for those
+        return len(ordering)+1
+
+
 class NoBackportsFoundException(Exception):
     pass
 
@@ -725,7 +737,9 @@ class DistUpgradeController(object):
                 component_diff = self.found_components[self.toDist]-self.found_components[entry.dist]
                 if component_diff:
                     logging.info("fixing components inconsistency from '%s'" % get_string_with_no_auth_from_source_entry(entry))
-                    entry.comps.extend(list(component_diff))
+                    # extend and make sure to keep order
+                    entry.comps.extend(
+                        sorted(component_diff, key=component_ordering_key))
                     logging.info("to new entry '%s'" % get_string_with_no_auth_from_source_entry(entry))
                     del self.found_components[entry.dist]
         return foundToDist

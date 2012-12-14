@@ -18,7 +18,7 @@ override_dh_auto_clean:
 	set -ex; for python in $(PY3); do \
 		LANG=C.UTF-8 LC_ALL=C.UTF-8 $$python setup.py clean -a; \
 	done
-	find -name __pycache__ -exec rm -r {} \;
+	find -name __pycache__ | xargs rm -r 
 	rm -rf ./build ./DistUpgrade/$(DEBVER) ./DistUpgrade/mo \
 		./DistUpgrade/$(DIST)  ./DistUpgrade/$(DIST).tar.gz \
 		 ./DistUpgrade/ubuntu-drivers-obsolete.pkgs ./po/mo

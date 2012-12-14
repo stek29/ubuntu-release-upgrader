@@ -95,6 +95,8 @@ def component_ordering_key(a):
     try:
         return ordering.index(a)
     except ValueError:
+        # ensure to sort behind the "official" components, order is not
+        # really important for those
         return len(ordering)+1
 
 

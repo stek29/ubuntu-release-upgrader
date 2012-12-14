@@ -25,7 +25,13 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestComponentOrdering(unittest.TestCase):
     
-    def test_component_ordering_key(self):
+    def test_component_ordering_key_from_set(self):
+        self.assertEqual(
+            sorted(set(["x", "restricted", "main"]),
+                   key=component_ordering_key),
+            ["main", "restricted", "x"])
+
+    def test_component_ordering_key_from_list(self):
         self.assertEqual(
             sorted(["x", "main"], key=component_ordering_key),
             ["main", "x"])
@@ -42,9 +48,9 @@ class TestComponentOrdering(unittest.TestCase):
                    key=component_ordering_key),
             ["main", "restricted", "universe", "multiverse"])
         self.assertEqual(
-            sorted(["x", "a", "main", "multiverse", "restricted", "universe"],
+            sorted(["a", "main", "multiverse", "restricted", "universe"],
                    key=component_ordering_key),
-            ["main", "restricted", "universe", "multiverse", "x", "a"])
+            ["main", "restricted", "universe", "multiverse", "a"])
 
 
 class TestSourcesListUpdate(unittest.TestCase):

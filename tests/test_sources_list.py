@@ -9,7 +9,10 @@ import shutil
 import subprocess
 import apt_pkg
 import unittest
-from DistUpgrade.DistUpgradeController import DistUpgradeController
+from DistUpgrade.DistUpgradeController import (
+    DistUpgradeController,
+    component_ordering_key,
+)
 from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
 from DistUpgrade import DistUpgradeConfigParser
 from DistUpgrade.utils import url_downloadable
@@ -18,6 +21,30 @@ import logging
 DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
 CURDIR = os.path.dirname(os.path.abspath(__file__))
+
+
+class TestComponentOrdering(unittest.TestCase):
+    
+    def test_component_ordering_key(self):
+        self.assertEqual(
+            sorted(["x", "main"], key=component_ordering_key),
+            ["main", "x"])
+        self.assertEqual(
+            sorted(["restricted", "main"],
+                   key=component_ordering_key),
+            ["main", "restricted"])
+        self.assertEqual(
+            sorted(["main", "restricted"],
+                   key=component_ordering_key),
+            ["main", "restricted"])
+        self.assertEqual(
+            sorted(["main", "multiverse", "restricted", "universe"],
+                   key=component_ordering_key),
+            ["main", "restricted", "universe", "multiverse"])
+        self.assertEqual(
+            sorted(["x", "a", "main", "multiverse", "restricted", "universe"],
+                   key=component_ordering_key),
+            ["main", "restricted", "universe", "multiverse", "x", "a"])
 
 
 class TestSourcesListUpdate(unittest.TestCase):
@@ -377,6 +404,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe mu
                 l in sources_list.split("\n"),
                 "expected entry '%s' in sources.list missing. got:\n'''%s'''" %
                     (l, sources_list))
+
 
 if __name__ == "__main__":
     import sys

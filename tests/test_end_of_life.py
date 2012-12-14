@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GLib
 
 import mock
 import os
@@ -56,7 +56,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         new_dist.releaseNotesURI = "http://www.ubuntu.com/text"
         meta_release.upgradable_to = new_dist
         # schedule a close event in 1 s
-        GObject.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
+        GLib.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
         # run the dialog, this will also run a gtk mainloop so that the 
         # timeout works
         self.dialog_called = False

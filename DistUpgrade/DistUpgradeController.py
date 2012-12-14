@@ -27,7 +27,6 @@ warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import sys
-import functools
 import os
 import subprocess
 import locale

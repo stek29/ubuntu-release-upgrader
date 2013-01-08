@@ -27,7 +27,7 @@ def get_new_dist():
     os.system("rm -rf /tmp/update-manager-core/")
     meta = MetaReleaseCore()
     #meta.DEBUG = True
-    meta.current_dist_name = "lucid"
+    meta.current_dist_name = "precise"
     meta.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
     while meta.downloading:
         time.sleep(0.1)
@@ -94,7 +94,7 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
         self.assertTrue(progress.stopped)
         self.assertTrue(progress.pulsed)
 
-    def disabled_because_ftp_is_not_relaible____testfetcher_ftp(self):
+    def disabled_because_ftp_is_not_reliable____testfetcher_ftp(self):
         progress = TestAcquireProgress()
         fetcher = TestDistUpgradeFetcherCore(self.new_dist, progress)
         fetcher.current_dist_name = "hardy"

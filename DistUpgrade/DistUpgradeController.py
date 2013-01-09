@@ -1062,12 +1062,6 @@ class DistUpgradeController(object):
         self._enableAptCronJob()
         self.abort()
 
-    def enableApport(self, fname="/etc/default/apport"):
-        """ enable apport """
-        # startup apport just until the next reboot, it has the magic
-        # "force_start" environment for this
-        subprocess.call(["service","apport","start","force_start=1"])
-
     def _is_apt_btrfs_snapshot_supported(self):
         """ check if apt-btrfs-snapshot is usable """
         try:
@@ -1092,17 +1086,13 @@ class DistUpgradeController(object):
         prefix = "release-upgrade-%s-" % self.toDist
         res = apt_btrfs.create_btrfs_root_snapshot(prefix)
         logging.info("creating snapshot '%s' (success=%s)" % (prefix, res))
-        
-    def doDistUpgrade(self):
-        # check if we want apport running during the upgrade
-        if self.config.getWithDefault("Distro","EnableApport", False):
-            self.enableApport()
 
+    def doDistUpgrade(self):
         # add debug code only here
         #apt_pkg.config.set("Debug::pkgDpkgPM", "1")
         #apt_pkg.config.set("Debug::pkgOrderList", "1")
         #apt_pkg.config.set("Debug::pkgPackageManager", "1")
-  
+
         # get the upgrade
         currentRetry = 0
         fprogress = self._view.getAcquireProgress()

@@ -810,7 +810,7 @@ class DistUpgradeController(object):
                              _("Upgrading the repository information "
                                "resulted in a invalid file so a bug "
                                "reporting process is being started."))
-            subprocess.Popen(["apport-bug", "ubuntu-release-upgrader"])
+            subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
             return False
 
         if self.sources_disabled:
@@ -1624,7 +1624,7 @@ class DistUpgradeController(object):
                              _("Preparing the system for the upgrade "
                                "failed so a bug reporting process is "
                                "being started."))
-            subprocess.Popen(["apport-bug", "ubuntu-release-upgrader"])
+            subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -1643,7 +1643,7 @@ class DistUpgradeController(object):
                                    "\n"
                                    "Additionally, a bug reporting process is "
                                    "being started."))
-                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader"])
+                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
                 self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
@@ -1717,7 +1717,7 @@ class DistUpgradeController(object):
                                    "In the case of an overloaded mirror, you "
                                    "may want to try the upgrade again later.")
                                    % pkg)
-                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader"])
+                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
                 self.abort()
 
         # calc the dist-upgrade and see if the removals are ok/expected

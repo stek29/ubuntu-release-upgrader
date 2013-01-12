@@ -17,6 +17,7 @@ def add_info(report, ui):
         attach_gsettings_package(report, 'ubuntu-release-upgrader')
     except:
         pass
+    report['CrashDB'] = 'ubuntu'
     report.setdefault('Tags', 'dist-upgrade')
     report['Tags'] += ' dist-upgrade'
     clone_file = '/var/log/dist-upgrade/apt-clone_system_state.tar.gz'

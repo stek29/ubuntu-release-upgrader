@@ -24,6 +24,7 @@ from __future__ import absolute_import, print_function
 
 from gi.repository import Gtk, Gdk
 import apt
+import os
 from gettext import gettext as _
 from .utils import humanize_size
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
@@ -31,7 +32,7 @@ from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 class GtkAcquireProgress(apt.progress.base.AcquireProgress):
     def __init__(self, parent, datadir, summary="", descr=""):
-        uifile = datadir + "gtkbuilder/AcquireProgress.ui"
+        uifile = os.path.join(datadir, "gtkbuilder", "AcquireProgress.ui")
         self.widgets = SimpleGtkbuilderApp(uifile, "ubuntu-release-upgrader")
         # if this is set to false the download will cancel
         self._continue = True

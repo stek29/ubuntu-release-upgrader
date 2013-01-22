@@ -129,7 +129,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    progress=DistUpgrade.GtkProgress.GtkAcquireProgress(self, self.datadir,
+    progress=DistUpgrade.GtkProgress.GtkAcquireProgress(self.window_main, self.datadir,
                                                         _("Downloading the release upgrade tool"))
     fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
                                  parent=self,
@@ -143,7 +143,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # check again in a week
     next_check = time.time() + 7*24*60*60
     client = Gio.Settings("com.ubuntu.update-notifier")
-    client.set_int("release-check-time", int(next_check))
+    client.set_uint("release-check-time", int(next_check))
     Gtk.main_quit()
 
   def on_button_dont_upgrade_clicked(self, button):

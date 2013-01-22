@@ -42,7 +42,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
 
     def __init__(self, new_dist, progress, parent, datadir):
         DistUpgradeFetcherCore.__init__(self, new_dist, progress)
-        uifile = datadir + "gtkbuilder/ReleaseNotes.ui"
+        uifile = os.path.join(datadir, "gtkbuilder", "ReleaseNotes.ui")
         self.widgets = SimpleGtkbuilderApp(uifile, "ubuntu-release-upgrader")
         self.window_main = parent
 

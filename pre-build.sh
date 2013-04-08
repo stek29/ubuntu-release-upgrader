@@ -13,7 +13,7 @@ dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
 # update base-installer
 (cd utils && ./update-base-installer.sh)
 
-# update apt_btrfs_snapshot.py copy, this nees a installed
+# update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine
 if [ ! -e /usr/share/pyshared/apt_btrfs_snapshot.py ]; then
     echo "please sudo apt-get install apt-btrfs-snapshot"

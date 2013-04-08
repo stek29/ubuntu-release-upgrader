@@ -849,6 +849,8 @@ class DistUpgradeController(object):
         # downloadable
         logging.debug("doPostInitialUpdate")
         self.quirks.run("PostInitialUpdate")
+        if not self.cache:
+            return False
         if len(self.cache.req_reinstall_pkgs) > 0:
             logging.warning("packages in reqReinstall state, trying to fix")
             self.cache.fix_req_reinst(self._view)

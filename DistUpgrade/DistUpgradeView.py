@@ -43,6 +43,9 @@ except:
     logging.exception("getting the encoding failed")
     ENCODING = "utf-8"   #pyflakes
 
+if not ENCODING:
+    ENCODING = "utf-8"
+
 
 def FuzzyTimeToStr(sec):
   " return the time a bit fuzzy (no seconds if time > 60 secs "

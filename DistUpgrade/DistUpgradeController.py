@@ -1028,7 +1028,11 @@ class DistUpgradeController(object):
         #          no apt-get update can run outside from the release
         #          upgrader 
         user_canceled = False
-        e = None
+        # LP: #1102593 - In Python 3, the targets of except clauses get `del`d
+        # from the current namespace after the exception is handled, so we
+        # must assign it to a different variable in order to use it after
+        # the while loop.
+        exception = None
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.PackageManager(self.cache._depcache)
@@ -1037,14 +1041,16 @@ class DistUpgradeController(object):
             except apt.cache.FetchCancelledException as e:
                 logging.info("user canceled")
                 user_canceled = True
+                exception = e
                 break
             except IOError as e:
                 # fetch failed, will be retried
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
                 currentRetry += 1
+                exception = e
                 continue
             return True
-        
+
         # maximum fetch-retries reached without a successful commit
         if user_canceled:
             self._view.information(_("Upgrade canceled"),
@@ -1059,7 +1065,7 @@ class DistUpgradeController(object):
                                "Internet connection or "
                                "installation media and try again. All files "
                                "downloaded so far have been kept."),
-                             "%s" % e)
+                             "%s" % exception)
         # abort here because we want our sources.list back
         self._enableAptCronJob()
         self.abort()

@@ -2,8 +2,11 @@
 
 set -e
 
-dpkg-checkbuilddeps -d 'apt-btrfs-snapshot, parsewiki, python-feedparser,
-			python3-mock, xvfb, gir1.2-gtk-3.0, python-gi, python3-nose'
+# The testsuite has a sad if you're in a non-UTF-8 locale:
+export LANG='C.UTF-8'
+
+dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python-feedparser,
+			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose'
 
 # update demotions
 (cd utils && ./demotions.py quantal raring > demoted.cfg)

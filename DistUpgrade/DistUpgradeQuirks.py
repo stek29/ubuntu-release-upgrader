@@ -54,6 +54,7 @@ class DistUpgradeQuirks(object):
                            universal_newlines=True).communicate()[0].strip()
         self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
+        self._poke = None
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -866,15 +867,15 @@ class DistUpgradeQuirks(object):
             except:
                 logging.exception("failed to setup screensaver poke")
     def _stopPokeScreensaver(self):
-        if self._poke:
-            res = False
+        res = False
+        if self._poke is not None:
             try:
                 self._poke.terminate()
                 res = self._poke.wait()
             except:
                 logging.exception("failed to stop screensaver poke")
             self._poke = None
-            return res
+        return res
     def _removeBadMaintainerScripts(self):
         " remove bad/broken maintainer scripts (last resort) "
         # apache: workaround #95325 (edgy->feisty)

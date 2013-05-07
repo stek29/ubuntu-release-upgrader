@@ -1762,6 +1762,10 @@ class DistUpgradeController(object):
         if self.aptcdrom:
             self.aptcdrom.comment_out_cdrom_entry()
 
+        # remove upgrade-available notice
+        if os.path.exists("/var/lib/ubuntu-release-upgrader/release-upgrade-available"):
+            os.unlink("/var/lib/ubuntu-release-upgrader/release-upgrade-available")
+
         # done, ask for reboot
         self._view.setStep(STEP_REBOOT)
         self._view.updateStatus(_("System upgrade is complete."))            

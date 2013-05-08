@@ -25,6 +25,8 @@ case "$1" in
             chmod -f 0600 /var/log/dist-upgrade/apt-clone_system_state.tar.gz || true
             chmod -f 0600 /var/log/dist-upgrade/system_state.tar.gz || true
         fi
+	# Clear out upgrade-available flag; it will repopulate if necessary
+	rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

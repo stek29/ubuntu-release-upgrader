@@ -711,16 +711,16 @@ class MyCache(apt.Cache):
             view.error(_("Could not calculate the upgrade"), details)
             # start the resolver log again because this is run with
             # the withResolverLog decorator
-            self._startAptResolverLog()            
-            logging.error("Dist-upgrade failed: '%s'", e)
+            self._startAptResolverLog()
+            logging.error("Dist-upgrade failed: '%s'", e.encode("UTF-8"))
             return False
         # would be nice to be able to use finally: here, but we need
-        # to run on python2.4 too 
+        # to run on python2.4 too
         #finally:
         # wait for the gui-update thread to exit
         lock.release()
         t.join()
-        
+
         # check the trust of the packages that are going to change
         untrusted = []
         for pkg in self.get_changes():

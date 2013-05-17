@@ -1150,7 +1150,9 @@ class MyCache(apt.Cache):
             if re.match("^linux-(image|image-debug)-[0-9.]*-.*", pkg.name):
                 if pkg.marked_install:
                     logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    space_in_boot += KERNEL_INITRD_SIZE
+                    # multiply the KERNEL_INITRD_SIZE by two as we store a
+                    # copy of the old initrd when creating a new one
+                    space_in_boot += (KERNEL_INITRD_SIZE * 2)
                 # mvo: jaunty does not create .bak files anymore
                 #elif (pkg.marked_upgrade or pkg.is_installed):
                 #    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))

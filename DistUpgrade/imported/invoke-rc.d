@@ -21,9 +21,10 @@
 # 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # Constants
-RUNLEVEL=/sbin/runlevel
+RUNLEVELHELPER=/sbin/runlevel
 POLICYHELPER=/usr/sbin/policy-rc.d
 INITDPREFIX=/etc/init.d/
+UPSTARTDIR=/etc/init/
 RCDPREFIX=/etc/rc
 
 # Options
@@ -36,6 +37,7 @@ FORCE=
 RETRY=
 RETURNFAILURE=
 RC=
+is_upstart=
 
 # Shell options
 set +e
@@ -138,6 +140,8 @@ if test "x${POLICYHELPER}" != x && test -x "${POLICYHELPER}" ; then
 	101) if test x${FORCE} != x ; then
 		printerror Overriding policy-rc.d denied execution of ${printaction}.
 		RC=104
+	     else
+		printerror policy-rc.d denied execution of ${printaction}.
 	     fi
 	     ;;
     esac
@@ -263,21 +267,42 @@ case ${ACTION} in
 	;;
 esac
 
-## Verifies if the given initscript ID is known
-## For sysvinit, this error is critical
-if test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
+# If we're running on upstart and there's an upstart job of this name, do
+# the rest with upstart instead of calling the init script.
+if which initctl >/dev/null && initctl version | grep -q upstart \
+   && [ -e "$UPSTARTDIR/${INITSCRIPTID}.conf" ]
+then
+    is_upstart=1
+elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
+    ## Verifies if the given initscript ID is known
+    ## For sysvinit, this error is critical
     printerror unknown initscript, ${INITDPREFIX}${INITSCRIPTID} not found.
-    exit 100
+    if [ ! -e "$UPSTARTDIR/${INITSCRIPTID}.conf" ]; then
+	# If the init script doesn't exist, but the upstart job does, we
+	# defer the error exit; we might be running in a chroot and
+	# policy-rc.d might say not to start the job anyway, in which case
+	# we don't want to exit non-zero.
+	exit 100
+    fi
 fi
 
 ## Queries sysvinit for the current runlevel
-RL=`${RUNLEVEL} | sed 's/.*\ //'`
+RL=`${RUNLEVELHELPER} | sed 's/.*\ //'`
 if test ! $? ; then
     printerror "could not determine current runlevel"
     if test x${RETRY} = x ; then
 	exit 102
     fi
     RL=
+fi
+
+## Running ${RUNLEVELHELPER} to get current runlevel does not work in
+## the boot runlevel (scripts in /etc/rcS.d/), as /var/run/utmp
+## contains runlevel 0 or 6 (written at shutdown) at that point.
+if test x${RL} = x0 || test x${RL} = x6 ; then
+    if ps -fp 1 | grep -q 'init boot' ; then
+       RL=S
+    fi
 fi
 
 ## Handles shutdown sequences VERY safely
@@ -288,10 +313,11 @@ if test x${RL} = x0 || test x${RL} = x6 ; then
     RETRY=yes
     POLICYHELPER=
     BEQUIET=
-    printerror ----------------------------------------------------
-    printerror WARNING: invoke-rc.d called during shutdown sequence
-    printerror enabling safe mode: initscript policy layer disabled
-    printerror ----------------------------------------------------
+    printerror "-----------------------------------------------------"
+    printerror "WARNING: 'invoke-rc.d ${INITSCRIPTID} ${ACTION}' called"
+    printerror "during shutdown sequence."
+    printerror "enabling safe mode: initscript policy layer disabled"
+    printerror "-----------------------------------------------------"
 fi
 
 ## Verifies the existance of proper S??initscriptID and K??initscriptID 
@@ -367,7 +393,7 @@ case ${ACTION} in
 esac
 
 # test if /etc/init.d/initscript is actually executable
-if testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
     if test x${RC} = x && test x${MODE} = xquery ; then
         RC=105
     fi
@@ -386,6 +412,18 @@ if testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
     	       fi
            fi
            ;;
+    esac
+elif [ -z "$is_upstart" ] && test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
+    # call policy layer.  If the policy denies the execution, pass it on.
+    # otherwise, if the policy *allows* the execution, there's a
+    # misconfiguration somewhere and we throw an error.
+    querypolicy
+    case $RC in
+        101)
+          ;;
+        *)
+          exit 100
+          ;;
     esac
 else
     ###
@@ -414,11 +452,25 @@ getnextaction () {
     ACTION="$@"
 }
 
+if [ -n "$is_upstart" ]; then
+    RUNNING=
+    DISABLED=
+    if status "$INITSCRIPTID" 2>/dev/null | grep -q ' start/'; then
+	RUNNING=1
+    fi
+    UPSTART_VERSION_RUNNING=$(initctl version|awk '{print $3}'|tr -d ')')
+
+    if dpkg --compare-versions "$UPSTART_VERSION_RUNNING" ge 0.9.7
+    then
+	initctl show-config -e "$INITSCRIPTID"|grep -q '^  start on' || DISABLED=1
+    fi
+fi
+
 ## Executes initscript
 ## note that $ACTION is a space-separated list of actions
 ## to be attempted in order until one suceeds.
 if test x${FORCE} != x || test ${RC} -eq 104 ; then
-    if testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+    if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
 	RC=102
 	setechoactions ${ACTION}
 	while test ! -z "${ACTION}" ; do
@@ -427,7 +479,48 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 		printerror executing initscript action \"${saction}\"...
 	    fi
 
-	    "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+	    if [ -n "$is_upstart" ]; then
+		case $saction in
+		    status)
+			"$saction" "$INITSCRIPTID" && exit 0
+			;;
+		    start|stop)
+			if [ -z "$RUNNING" ] && [ "$saction" = "stop" ]; then
+			    exit 0
+			elif [ -n "$RUNNING" ] && [ "$saction" = "start" ]; then
+			    exit 0
+			elif [ -n "$DISABLED" ] && [ "$saction" = "start" ]; then
+			    exit 0
+			fi
+			$saction "$INITSCRIPTID" && exit 0
+			;;
+		    restart)
+			if [ -n "$RUNNING" ] ; then
+			    stop "$INITSCRIPTID"
+			fi
+
+			# If the job is disabled and is not currently
+			# running, the job is not restarted. However, if
+			# the job is disabled but has been forced into
+			# the running state, we *do* stop and restart it
+			# since this is expected behaviour
+			# for the admin who forced the start.
+			if [ -n "$DISABLED" ] && [ -z "$RUNNING" ]; then
+			    exit 0
+			fi
+			start "$INITSCRIPTID" && exit 0
+			;;
+		    reload|force-reload)
+			reload "$INITSCRIPTID" && exit 0
+			;;
+		    *)
+			# This will almost certainly fail, but give it a try
+			initctl "$saction" "$INITSCRIPTID" && exit 0
+			;;
+		esac
+	    else
+		"${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+	    fi
 	    RC=$?
 
 	    if test ! -z "${ACTION}" ; then
@@ -444,9 +537,14 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
     exit 102
 fi
 
-## Handles --disclose-deny
+## Handles --disclose-deny and denied "status" action (bug #381497)
 if test ${RC} -eq 101 && test x${RETURNFAILURE} = x ; then
-    RC=0
+    if test "x${ACTION%% *}" = "xstatus"; then
+	printerror emulating initscript action \"status\", returning \"unknown\"
+	RC=4
+    else
+        RC=0
+    fi
 else
     formataction ${ACTION}
     printerror initscript ${naction} \"${printaction}\" not executed.

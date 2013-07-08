@@ -17,6 +17,7 @@ from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteract
 from DistUpgrade import DistUpgradeConfigParser
 from DistUpgrade.utils import url_downloadable
 import logging
+import mock
 
 DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
@@ -400,6 +401,28 @@ deb http://192.168.1.1/ubuntu gutsy main restricted
 deb http://192.168.1.1/ubuntu gutsy-updates main restricted
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe multiverse
+""")
+
+    def test_disable_proposed(self):
+        """
+        Test that proposed is disabled when upgrading to a development release.
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.proposed_enabled"),
+            os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = DistUpgradeViewNonInteractive()
+        options = mock.Mock()
+        options.devel_release = True
+        d = DistUpgradeController(v, options, datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(res)
+
+        self._verifySources("""
+deb http://archive.ubuntu.com/ubuntu gutsy main restricted
+deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+# deb http://archive.ubuntu.com/ubuntu feisty-proposed universe main multiverse restricted
 """)
 
     def _verifySources(self, expected):

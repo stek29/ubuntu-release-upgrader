@@ -639,8 +639,9 @@ class DistUpgradeController(object):
                 and self.options.devel_release == True and
                 "%s-proposed" % self.fromDist in entry.dist):
                 logging.debug("upgrade to development release, disabling proposed")
-                entry.disabled = True
+                entry.dist = "%s-proposed" % self.toDist
                 entry.comment += _("disabled on upgrade to development release %s") % self.toDist
+                entry.disabled = True
                 continue
 
             # handle upgrades from a EOL release and check if there

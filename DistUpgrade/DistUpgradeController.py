@@ -640,7 +640,7 @@ class DistUpgradeController(object):
                 "%s-proposed" % self.fromDist in entry.dist):
                 logging.debug("upgrade to development release, disabling proposed")
                 entry.dist = "%s-proposed" % self.toDist
-                entry.comment += _("disabled on upgrade to development release %s") % self.toDist
+                entry.comment += _("Not for humans during development stage of release %s") % self.toDist
                 entry.disabled = True
                 continue
 

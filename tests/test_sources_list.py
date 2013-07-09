@@ -422,7 +422,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe mu
 deb http://archive.ubuntu.com/ubuntu gutsy main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
-# deb http://archive.ubuntu.com/ubuntu gutsy-proposed universe main multiverse restricted #disabled on upgrade to development release gutsy
+# deb http://archive.ubuntu.com/ubuntu gutsy-proposed universe main multiverse restricted #Not for humans during development stage of release gutsy
 """)
 
     def _verifySources(self, expected):

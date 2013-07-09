@@ -39,7 +39,7 @@ fi
 rm -rf utils/apt/lists utils/apt/*.bin
 (cd utils && ./update_mirrors.py ../data/mirrors.cfg)
 
-# run the test-suit
+# run the test-suite
 #echo "Running integrated tests"
 nosetests3
 

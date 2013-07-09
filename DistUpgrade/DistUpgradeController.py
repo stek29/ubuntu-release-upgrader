@@ -633,7 +633,17 @@ class DistUpgradeController(object):
                 logging.debug("commenting landscape.canonical.com out")
                 entry.disabled = True
                 continue
-            
+
+            # Disable proposed on upgrade to a development release.
+            if (not entry.disabled and self.options
+                and self.options.devel_release == True and
+                "%s-proposed" % self.fromDist in entry.dist):
+                logging.debug("upgrade to development release, disabling proposed")
+                entry.dist = "%s-proposed" % self.toDist
+                entry.comment += _("Not for humans during development stage of release %s") % self.toDist
+                entry.disabled = True
+                continue
+
             # handle upgrades from a EOL release and check if there
             # is a supported release available
             if (not entry.disabled and

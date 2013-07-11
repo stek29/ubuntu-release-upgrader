@@ -81,8 +81,11 @@ def do_commandline():
                       help=_("Disable GNU screen support"))
     parser.add_option("--datadir", dest="datadir", default=".",
                       help=_("Set datadir"))
+    parser.add_option("--devel-release", action="store_true",
+                      dest="devel_release", default=False,
+                      help=_("Upgrade to the development release"))
     return parser.parse_args()
-    
+
 def setup_logging(options, config):
     " setup the logging "
     logdir = config.getWithDefault("Files","LogDir","/var/log/dist-upgrade/")
@@ -200,7 +203,7 @@ def run_new_gnu_screen_window_or_reattach():
 
 def main():
     """ main method """
-    
+
     # commandline setup and config
     (options, args) = do_commandline()
     config = DistUpgradeConfig(options.datadir)

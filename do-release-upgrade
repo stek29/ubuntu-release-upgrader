@@ -71,7 +71,7 @@ if __name__ == "__main__":
                      dest="devel_release", default=False,
                      help=_("Check if upgrading to the latest devel release "
                           "is possible"))
-  parser.add_option ("--data-dir", "", 
+  parser.add_option ("--data-dir", "",
                      default="/usr/share/ubuntu-release-upgrader/",
                      help=_("Directory that contains the data files"))
   parser.add_option ("-p", "--proposed", action="store_true",
@@ -147,4 +147,6 @@ if __name__ == "__main__":
                           ]
   if options.sandbox:
     fetcher.run_options.append("--sandbox")
+  if options.devel_release:
+    fetcher.run_options.append("--devel-release")
   fetcher.run()

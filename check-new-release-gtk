@@ -135,6 +135,9 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
                                  parent=self,
                                  datadir=self.datadir,
                                  progress=progress)
+
+    if options.devel_release:
+        fetcher.run_options.append("--devel-release")
     res = fetcher.run()
     res # pyflakes
 

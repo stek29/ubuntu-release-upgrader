@@ -50,8 +50,6 @@ from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 import gettext
 from .DistUpgradeGettext import gettext as _
 
-GObject.threads_init()
-
 class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress
         Subclass this class to implement cdrom add progress reporting

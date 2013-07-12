@@ -26,7 +26,6 @@
 from __future__ import print_function
 
 from gi.repository import Gio
-from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gtk
 import locale
@@ -44,8 +43,6 @@ from UpdateManager.Core.utils import init_proxy
 from DistUpgrade.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
 from DistUpgrade.SimpleGtk3builderApp import SimpleGtkbuilderApp
-
-GObject.threads_init()
 
 #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
 #       correctly, see http://bugs.python.org/issue4391

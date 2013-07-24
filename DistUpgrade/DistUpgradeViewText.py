@@ -51,6 +51,12 @@ class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
         return True
 
 
+class TextInstallProgress(InstallProgress):
+
+    def status_change(self, pkg, percent, status):
+        print("[%s] %s" % (percent, status))
+
+
 class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress  """
     def update(self, text, step):
@@ -88,7 +94,7 @@ class DistUpgradeViewText(DistUpgradeView):
         self._opCacheProgress = apt.progress.text.OpProgress()
         self._acquireProgress = TextAcquireProgress()
         self._cdromProgress = TextCdromProgressAdapter()
-        self._installProgress = InstallProgress()
+        self._installProgress = TextInstallProgress()
         sys.excepthook = self._handleException
         #self._process_events_tick = 0
 

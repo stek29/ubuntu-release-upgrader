@@ -53,8 +53,18 @@ class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
 
 class TextInstallProgress(InstallProgress):
 
+    # percent step when progress is reported (to avoid screen spam)
+    MIN_REPORTING = 1
+
+    def __init__(self, *args, **kwargs):
+        super(TextInstallProgress, self).__init__(*args, **kwargs)
+        self._prev_percent = 0
+
     def status_change(self, pkg, percent, status):
-        print("[%s] %s" % (percent, status))
+        if self._prev_percent + self.MIN_REPORTING < percent:
+            sys.stdout.write("\r\n%s [%05.2f]\r\n\n" % (
+                     _("Total Progress"), percent))
+            self._prev_percent = percent
 
 
 class TextCdromProgressAdapter(apt.progress.base.CdromProgress):

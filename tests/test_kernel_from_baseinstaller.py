@@ -16,7 +16,7 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 class TestKernelBaseinstaller(unittest.TestCase):
 
     def test_kernel_from_baseinstaller(self):
-        # the upgrade expects this 
+        # the upgrade expects this
         os.chdir(CURDIR + "/../DistUpgrade")
         # get a config
         config = DistUpgradeConfig(".")

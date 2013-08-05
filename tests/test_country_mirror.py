@@ -14,7 +14,7 @@ class testCountryMirror(unittest.TestCase):
     def testSimple(self):
         # empty
         try:
-            del os.environ["LANG"] 
+            del os.environ["LANG"]
         except KeyError:
             pass
         self.assertEqual(country_mirror(), '')
@@ -26,7 +26,7 @@ class testCountryMirror(unittest.TestCase):
         self.assertEqual(country_mirror(), 'dk.')
         os.environ["LANG"] = 'fr_FR@euro.ISO-8859-15'
         self.assertEqual(country_mirror(), 'fr.')
-            
+
 
 if __name__ == "__main__":
     unittest.main()

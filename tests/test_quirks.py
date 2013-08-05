@@ -217,7 +217,7 @@ class TestQuirks(unittest.TestCase):
         self.assertFalse(cache["kdegames-card-data-extra"].marked_install)
         quirks._add_kdegames_card_extra_if_installed()
         # verify that the quirks handler is now installing it
-        self.assertTrue(cache["kdegames-card-data-extra"].marked_install)  
+        self.assertTrue(cache["kdegames-card-data-extra"].marked_install)
 
     def test_screensaver_poke(self):
         # fake nothing is installed

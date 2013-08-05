@@ -14,6 +14,7 @@ from DistUpgrade.DistUpgradeApport import (
     APPORT_WHITELIST,
 )
 
+
 class TestApportInformationLeak(unittest.TestCase):
 
     def test_no_information_leak_in_apport_append_logfiles(self):
@@ -38,7 +39,7 @@ class TestApportInformationLeak(unittest.TestCase):
         # ensure that the whitelist is honored
         for i in range(1, len(apport_cmd_args), 2):
             option = apport_cmd_args[i]
-            arg = apport_cmd_args[i+1]
+            arg = apport_cmd_args[i + 1]
             if option == "-l":
                 self.assertTrue(os.path.basename(arg) in APPORT_WHITELIST)
 

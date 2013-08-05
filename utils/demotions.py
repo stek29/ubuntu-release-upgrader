@@ -1,11 +1,11 @@
 #! /usr/bin/env python
 #
 # FIXME: strip "TryExec" from the extracted menu files (and noDisplay)
-#        
+#
 # TODO:
 # - emacs21 ships it's icon in emacs-data, deal with this
 # - some stuff needs to be blacklisted (e.g. gnome-about)
-# - lots of packages have there desktop file in "-data", "-comon" (e.g. anjuta)
+# - lots of packages have their desktop file in "-data", "-comon" (e.g. anjuta)
 # - lots of packages have multiple desktop files for the same application
 #   abiword, abiword-gnome, abiword-gtk
 
@@ -19,7 +19,7 @@ import apt
 import apt_pkg
 #import xdg.Menu
 
-ARCHES = ["i386","amd64"]
+ARCHES = ["i386", "amd64"]
 #ARCHES = ["i386"]
 
 # pkgs in main for the given dist
@@ -61,21 +61,22 @@ if __name__ == "__main__":
 
   old = Dist(sys.argv[1]) # Dist("gutsy")
   new = Dist(sys.argv[2]) # Dist("hardy")
-  
+
   # go over the dists to find main pkgs
   for dist in [old, new]:
-    
+
     for comp in ["main", "restricted", "universe", "multiverse"]:
-      line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (dist.name,comp)
+      line = "deb http://archive.ubuntu.com/ubuntu %s %s\n" % (dist.name,
+          comp)
       with open("apt/sources.list", "w") as sources_list:
         sources_list.write(line)
       dist.pkgs_in_comp[comp] = set()
 
       # and the archs
       for arch in ARCHES:
-        apt_pkg.config.set("APT::Architecture",arch)
+        apt_pkg.config.set("APT::Architecture", arch)
         cache = apt.Cache(apt.progress.base.OpProgress())
-        prog = apt.progress.base.AcquireProgress() 
+        prog = apt.progress.base.AcquireProgress()
         cache.update(prog)
         cache.open(apt.progress.base.OpProgress())
         for pkg in cache:

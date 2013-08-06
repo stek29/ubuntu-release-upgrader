@@ -26,7 +26,7 @@ class TestDistroEndOfLife(unittest.TestCase):
             # and that it
             dialog = getattr(checker, "no_longer_supported_nag", None)
             self.assertNotEqual(dialog, None)
-            dialog.response(Gtk.ResponseType.DELETE_EVENT)
+            checker.close()
             self.dialog_called = True
         # ----
         try:

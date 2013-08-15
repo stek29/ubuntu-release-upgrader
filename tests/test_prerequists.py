@@ -179,7 +179,7 @@ class testPreRequists(unittest.TestCase):
         except NoBackportsFoundException:
             exp = True
         self.assertTrue(exp)
-    
+
     def _verifySources(self, filename, expected):
         sources_list = open(filename).read()
         for l in expected.split("\n"):

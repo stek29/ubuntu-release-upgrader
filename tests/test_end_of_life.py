@@ -17,16 +17,16 @@ class TestDistroEndOfLife(unittest.TestCase):
     # - the next release (the upgrade target) is end of life
 
     def test_distro_current_distro_end_of_life(self):
-        """ this code tests that check-new-release-gtk shows a 
-            dist-no-longer-supported dialog when it detects that the 
+        """ this code tests that check-new-release-gtk shows a
+            dist-no-longer-supported dialog when it detects that the
             running distribution is no longer supported
         """
         def _nag_dialog_close_helper(checker):
             # this helper is called to verify that the nag dialog appears
-            # and that it 
+            # and that it
             dialog = getattr(checker, "no_longer_supported_nag", None)
             self.assertNotEqual(dialog, None)
-            dialog.response(Gtk.ResponseType.DELETE_EVENT)
+            checker.close()
             self.dialog_called = True
         # ----
         try:
@@ -42,7 +42,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         meta_release = mock.Mock()
         # pretend the current distro is no longer supported
         meta_release.no_longer_supported = subprocess.Popen(
-            ["lsb_release", "-c", "-s"], 
+            ["lsb_release", "-c", "-s"],
             stdout=subprocess.PIPE,
             universal_newlines=True).communicate()[0].strip()
         meta_release.flavor_name = "Ubuntu"
@@ -57,7 +57,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         meta_release.upgradable_to = new_dist
         # schedule a close event in 1 s
         GLib.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
-        # run the dialog, this will also run a gtk mainloop so that the 
+        # run the dialog, this will also run a gtk mainloop so that the
         # timeout works
         self.dialog_called = False
         checker.new_dist_available(meta_release, new_dist)

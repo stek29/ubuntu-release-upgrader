@@ -64,7 +64,7 @@ class DistUpgradeFetcher(DistUpgradeFetcherGtk):
 
 
 class CheckNewReleaseGtk(SimpleGtkbuilderApp):
-  """ Gtk verson of the release notes check/download """
+  """ Gtk version of the release notes check/download """
 
   # the timeout until we give up
   FETCH_TIMEOUT = 20
@@ -112,8 +112,13 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         # location for it to pick up its own .ui files.
         self.datadir = "/usr/share/update-manager/"
         dialog = UnsupportedDialog(self, meta_release)
-        dialog.run(self.window_main)
+        self.no_longer_supported_nag = self.window_main
+        Gtk.main()
   
+  def close(self):
+    self.window_main.destroy()
+    Gtk.main_quit()
+
   def build_ui(self):
     from gi.repository import WebKit
     self.webkit_view = WebKit.WebView()
@@ -209,6 +214,6 @@ if __name__ == "__main__":
 
   # create object
   cnr = CheckNewReleaseGtk(options)
- 
+
   Gtk.main()
 

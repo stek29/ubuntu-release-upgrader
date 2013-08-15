@@ -17,7 +17,7 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestAptCdrom(unittest.TestCase):
     " this test the apt-cdrom implementation "
-    
+
 #    def testAdd(self):
 #        p = CURDIR + "/test-data-cdrom"
 #        apt_pkg.config.set("Dir::State::lists","/tmp")
@@ -40,7 +40,7 @@ class TestAptCdrom(unittest.TestCase):
         cdrom = AptCdrom(None, p)
         cdrom._writeDatabase()
         self.assertEqual(expect, open(database).read())
-    
+
     def testScanCD(self):
         p = CURDIR + "/test-data-cdrom"
         cdrom = AptCdrom(None, p)
@@ -48,7 +48,7 @@ class TestAptCdrom(unittest.TestCase):
         self.assertTrue(len(p) > 0 and len(s) > 0 and len(i18n) > 0,
                         "failed to scan packages files (%s) (%s)" % (p, s))
         #print(p,s,i18n)
-    
+
     def testDropArch(self):
         p = CURDIR + "/test-data-cdrom"
         cdrom = AptCdrom(None, p)

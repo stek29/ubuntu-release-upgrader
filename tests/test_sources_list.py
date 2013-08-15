@@ -25,7 +25,7 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestComponentOrdering(unittest.TestCase):
-    
+
     def test_component_ordering_key_from_set(self):
         self.assertEqual(
             sorted(set(["x", "restricted", "main"]),
@@ -113,7 +113,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
             ["cmp",
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".in",
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
-            ]))
+             ]))
 
     def test_commercial_transition(self):
         """
@@ -134,9 +134,9 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         self._verifySources("""
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
-        
+
     def test_powerpc_transition(self):
-        """ 
+        """
         test transition of powerpc to ports.ubuntu.com
         """
         arch = apt_pkg.config.find("APT::Architecture")
@@ -160,7 +160,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted univers
         apt_pkg.config.set("APT::Architecture", arch)
 
     def test_sparc_transition(self):
-        """ 
+        """
         test transition of sparc to ports.ubuntu.com
         """
         arch = apt_pkg.config.find("APT::Architecture")
@@ -188,22 +188,22 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted univers
     def testVerifySourcesListEntry(self):
         from aptsources.sourceslist import SourceEntry
         v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeController(v,datadir=self.testdir)
+        d = DistUpgradeController(v, datadir=self.testdir)
         for scheme in ["http"]:
             entry = "deb %s://archive.ubuntu.com/ubuntu/ hardy main universe restricted multiverse" % scheme
             self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)),
                             "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
             self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)),
-                            "entry '%s' not downloadable" % entry)
+                             "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ xxx main" % scheme
             self.assertFalse(d._sourcesListEntryDownloadable(SourceEntry(entry)),
-                            "entry '%s' not downloadable" % entry)
+                             "entry '%s' not downloadable" % entry)
 
     def testEOL2EOLUpgrades(self):
         " test upgrade from EOL release to EOL release "
         v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeController(v,datadir=self.testdir)
+        d = DistUpgradeController(v, datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir, "sources.list.EOL"),
                     os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("Dir::Etc::sourceparts",
@@ -405,10 +405,12 @@ deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe mu
 
     def test_disable_proposed(self):
         """
-        Test that proposed is disabled when upgrading to a development release.
+        Test that proposed is disabled when upgrading to a development
+        release.
         """
-        shutil.copy(os.path.join(self.testdir, "sources.list.proposed_enabled"),
-            os.path.join(self.testdir, "sources.list"))
+        shutil.copy(os.path.join(self.testdir,
+                    "sources.list.proposed_enabled"),
+                    os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         options = mock.Mock()
@@ -432,7 +434,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
             self.assertTrue(
                 l in sources_list.split("\n"),
                 "expected entry '%s' in sources.list missing. got:\n'''%s'''" %
-                    (l, sources_list))
+                (l, sources_list))
 
 
 if __name__ == "__main__":

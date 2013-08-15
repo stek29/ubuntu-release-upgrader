@@ -62,7 +62,7 @@ class TextInstallProgress(InstallProgress):
 
     def status_change(self, pkg, percent, status):
         if self._prev_percent + self.MIN_REPORTING < percent:
-            sys.stdout.write("\r\n%s [%05.2f]\r\n\n" % (
+            sys.stdout.write("\r\n%s [%05.2f%%]\r\n\n" % (
                      _("Total Progress"), percent))
             self._prev_percent = percent
 

@@ -47,7 +47,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         self.window_main = parent
 
     def error(self, summary, message):
-        return error(self.window_main, summary, message)
+        return error(self.window_main.window_main, summary, message)
 
     def runDistUpgrader(self):
         inhibit_sleep()

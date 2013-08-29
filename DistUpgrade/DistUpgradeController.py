@@ -285,7 +285,7 @@ class DistUpgradeController(object):
             is_child_of_process_name("sshd")):
             # check if the frontend supports ssh upgrades (see lp: #322482)
             if not self._viewSupportsSSH():
-                logging.error("upgrade over ssh not alllowed")
+                logging.error("upgrade over ssh not allowed")
                 self._view.error(_("Upgrading over remote connection not supported"),
                                  _("You are running the upgrade over a "
                                    "remote ssh connection with a frontend "

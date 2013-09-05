@@ -531,57 +531,6 @@ class MyCache(apt.Cache):
         return False
 
 
-    def getKernelsFromBaseInstaller(self):
-        """get the list of recommended kernels from base-installer"""
-        p = Popen(["/bin/sh", "./get_kernel_list.sh"],
-                  stdout=PIPE, universal_newlines=True)
-        res = p.wait()
-        if res != 0:
-            logging.warn("./get_kernel_list.sh returned non-zero exitcode")
-            return ""
-        kernels = p.communicate()[0]
-        kernels = [x.strip() for x in kernels.split("\n")]
-        kernels = [x for x in kernels if len(x) > 0]
-        logging.debug("./get_kernel_list.sh returns: %s" % kernels)
-        return kernels
-
-    def _selectKernelFromBaseInstaller(self):
-        """ use the get_kernel_list.sh script (that uses base-installer)
-            to figure out what kernel is most suitable for the system
-        """
-        # check if we have a kernel from that list installed first
-        kernels = self.getKernelsFromBaseInstaller()
-        for kernel in kernels:
-            if not kernel in self:
-                logging.debug("%s not available in cache" % kernel)
-                continue
-            # this can happen e.g. on cdrom -> cdrom only upgrades
-            # where on hardy we have linux-386 but on the lucid CD 
-            # we only have linux-generic
-            if (not self[kernel].candidate or
-                not self[kernel].candidate.downloadable):
-                logging.debug("%s not downloadable" % kernel)
-                continue
-            # check if installed
-            if self[kernel].is_installed or self[kernel].marked_install:
-                logging.debug("%s kernel already installed" % kernel)
-                if self[kernel].is_upgradable and not self[kernel].marked_upgrade:
-                    self.mark_upgrade(kernel, "Upgrading kernel from base-installer")
-                return 
-        # if we have not found a kernel yet, use the first one that installs
-        for kernel in kernels:
-            if self.mark_install(kernel, 
-                                 "Selecting new kernel from base-installer"):
-                if self._has_kernel_headers_installed():
-                    prefix, sep, postfix = kernel.partition("-")
-                    headers = "%s-header-%s" % (prefix, postfix)
-                    self.mark_install(
-                        headers,
-                        "Selecting new kernel headers from base-installer")
-                else:
-                    logging.debug("no kernel-headers installed")
-                return
-
     def _has_kernel_headers_installed(self):
         for pkg in self:
             if (pkg.name.startswith("linux-headers-") and
@@ -603,11 +552,6 @@ class MyCache(apt.Cache):
         dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
         if b"WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
-        # use base-installer to get the kernel we want (if it exists)
-        if os.path.exists("./get_kernel_list.sh"):
-            self._selectKernelFromBaseInstaller()
-        else:
-            logging.debug("skipping ./get_kernel_list.sh: not found")
         return True
 
     def checkPriority(self):

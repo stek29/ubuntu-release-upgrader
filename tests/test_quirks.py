@@ -176,22 +176,6 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(
             q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-via-c7m"))
 
-    def test_ntfs_fstab(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        testdir = CURDIR + "/test-data/"
-        shutil.copy(testdir + "fstab.ntfs.original", testdir + "fstab.ntfs")
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
-                        "nls=utf8,umask=000,gid=46 0 1" in
-                        open(testdir + "fstab.ntfs").read())
-        q._ntfsFstabFixup(fstab=testdir + "fstab.ntfs")
-        self.assertTrue(open(testdir + "fstab.ntfs").read().endswith("0\n"))
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
-                        "nls=utf8,umask=000,gid=46 0 0" in
-                        open(testdir + "fstab.ntfs").read())
-        self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
-                         "nls=utf8,umask=000,gid=46 0 1" in
-                         open(testdir + "fstab.ntfs").read())
-
     def test_kde_card_games_transition(self):
         # fake nothing is installed
         empty_status = tempfile.NamedTemporaryFile()

@@ -900,11 +900,12 @@ class DistUpgradeQuirks(object):
         open("/var/lib/pycentral/pkgremove","w")
 
     def _removeOldApportCrashes(self):
-        " remove old apport crash files "
+        " remove old apport crash files and whoopsie control files "
         try:
-            for f in glob.glob("/var/crash/*.crash"):
-                logging.debug("removing old crash file '%s'" % f)
-                os.unlink(f)
+            for ext in ['.crash', '.upload', '.uploaded']:
+                for f in glob.glob("/var/crash/*%s" % ext):
+                    logging.debug("removing old %s file '%s'" % (ext, f))
+                    os.unlink(f)
         except Exception as e:
             logging.warning("error during unlink of old crash files (%s)" % e)
 

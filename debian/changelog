@@ -1,7 +1,21 @@
 ubuntu-release-upgrader (1:0.202) UNRELEASED; urgency=low
 
+  [ Brian Murray ]
   * DistUpgradeQuirks.py: when removing .crash files also remove whoopsie
     .upload and .uploaded files
+
+  [ Steve Langasek ]
+  * Drop all quirks for upgrades prior to the karmic->lucid upgrade; all
+    releases earlier than 10.04 are entirely EOLed, and in any case users
+    should not be upgrading directly from such old releases to 13.10 or
+    later without going through the intermediate LTS releases, so this is
+    all dead code.
+  * Drop use of base-installer for detecting "recommended" kernels for the
+    hardware.  So far this code was only ever used for a one-time transition
+    when more specialized kernel flavors became available on i386 that were
+    preferred over the -386 flavor, and in the meantime the code is causing
+    wrong results on upgrade for users of UbuntuStudio, which ships a kernel
+    flavor that's not known by base-installer.  LP: #1220898.
 
  -- Brian Murray <brian@ubuntu.com>  Fri, 06 Sep 2013 13:15:29 -0700
 

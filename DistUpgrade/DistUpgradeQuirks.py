@@ -32,9 +32,8 @@ import shutil
 import sys
 import subprocess
 from subprocess import PIPE, Popen
-from hashlib import md5
 
-from .utils import lsmod, get_arch
+from .utils import get_arch
 
 from .DistUpgradeGettext import gettext as _
 from .janitor.plugincore.manager import PluginManager
@@ -180,7 +179,6 @@ class DistUpgradeQuirks(object):
     def StartUpgrade(self):
         self._applyPatches()
         self._removeOldApportCrashes()
-        self._removeBadMaintainerScripts()
         self._killUpdateNotifier()
         self._killKBluetooth()
         self._killScreensaver()
@@ -275,63 +273,6 @@ class DistUpgradeQuirks(object):
             if res == False:
                 self.controller.abort()
 
-    def _test_and_warn_on_nvidia_and_no_sse(self):
-        """ The current 
-        """
-        # check if we have sse
-        cache = self.controller.cache
-        for pkgname in ["nvidia-glx-180", "nvidia-glx-185", "nvidia-glx-195"]:
-            if (pkgname in cache and
-                cache[pkgname].marked_install and
-                self._checkVideoDriver("nvidia")):
-                logging.debug("found %s video driver" % pkgname)
-                if not self._cpuHasSSESupport():
-                    logging.warning("nvidia driver that needs SSE but cpu has no SSE support")
-                    res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the NVIDIA 'nvidia' "
-                                        "graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with your "
-                                        "video card in Ubuntu "
-                                        "10.04 LTS.\n\nDo you want to continue?"))
-                    if res == False:
-                        self.controller.abort()
-                    # if the user continue, do not install the broken driver
-                    # so that we can transiton him to the free "nv" one after
-                    # the upgrade
-                    self.controller.cache[pkgname].mark_keep()
-        
-
-    def _test_and_warn_on_old_nvidia(self):
-        """ nvidia-glx-71 and -96 are no longer in the archive since 8.10 """
-        # now check for nvidia and show a warning if needed
-        cache = self.controller.cache
-        for pkgname in ["nvidia-glx-71","nvidia-glx-96"]:
-            if (pkgname in cache and
-                cache[pkgname].marked_install and
-                self._checkVideoDriver("nvidia")):
-                logging.debug("found %s video driver" % pkgname)
-                res = self._view.askYesNoQuestion(_("Upgrading may reduce desktop "
-                                        "effects, and performance in games "
-                                        "and other graphically intensive "
-                                        "programs."),
-                                      _("This computer is currently using "
-                                        "the NVIDIA 'nvidia' "
-                                        "graphics driver. "
-                                        "No version of this driver is "
-                                        "available that works with your "
-                                        "video card in Ubuntu "
-                                        "10.04 LTS.\n\nDo you want to continue?"))
-                if res == False:
-                    self.controller.abort()
-                # if the user continue, do not install the broken driver
-                # so that we can transiton him to the free "nv" one after
-                # the upgrade
-                self.controller.cache[pkgname].mark_keep()
 
     def _test_and_warn_on_dropped_fglrx_support(self):
         """
@@ -445,37 +386,6 @@ class DistUpgradeQuirks(object):
                 self.controller.abort()
             self._view.processEvents()
 
-    def _mysqlClusterCheck(self):
-        """
-        check if ndb clustering is used and do not upgrade mysql
-        if it is (LP: #450837)
-        """
-        logging.debug("_mysqlClusterCheck")
-        if ("mysql-server" in self.controller.cache and
-            self.controller.cache["mysql-server"].is_installed):
-            # taken from the mysql-server-5.1.preinst
-            ret = subprocess.call([
-                    "egrep", "-q", "-i", "-r",
-                    "^[^#]*ndb.connectstring|^[:space:]*\[[:space:]*ndb_mgmd", 
-                    "/etc/mysql/"])
-            logging.debug("egrep returned %s" % ret)
-            # if clustering is used, do not upgrade to 5.1 and 
-            # remove mysql-{server,client}
-            # metapackage and upgrade the 5.0 packages
-            if ret == 0:
-                logging.debug("mysql clustering in use, do not upgrade to 5.1")
-                for pkg in ("mysql-server", "mysql-client"):
-                    self.controller.cache.mark_remove(pkg, "clustering in use")
-                    # mark mysql-{server,client}-5.0 as manual install (#453513)
-                    depcache = self.controller.cache._depcache
-                    for pkg in ["mysql-server-5.0", "mysql-client-5.0"]:
-                        if pkg.is_installed and depcache.is_auto_installed(pkg._pkg):
-                            logging.debug("marking '%s' manual installed" % pkg.name)
-                            autoInstDeps = False
-                            fromUser = True
-                            depcache.Mark_install(pkg._pkg, autoInstDeps, fromUser)
-            else:
-                self.controller.cache.mark_upgrade("mysql-server", "no clustering in use")
 
     def _checkArmCPU(self):
         """
@@ -490,38 +400,6 @@ class DistUpgradeQuirks(object):
             return False
         return True
 
-    def _checkLanguageSupport(self):
-        """
-        check if the language support is fully installed and if
-        not generate a update-notifier note on next login
-        """
-        if not os.path.exists("/usr/bin/check-language-support"):
-            logging.debug("no check-language-support available")
-            return
-        p = subprocess.Popen(["check-language-support"],
-                             stdout=subprocess.PIPE, universal_newlines=True)
-        for pkgname in p.communicate()[0].split():
-            if (pkgname in self.controller.cache and
-                not self.controller.cache[pkgname].is_installed):
-                logging.debug("language support package '%s' missing" % pkgname)
-                # check if kde/gnome and copy language-selector note
-                base = "/usr/share/language-support/"
-                target = "/var/lib/update-notifier/user.d"
-                for p in ("incomplete-language-support-gnome.note",
-                          "incomplete-language-support-qt.note"):
-                    if os.path.exists(os.path.join(base,p)):
-                        shutil.copy(os.path.join(base,p), target)
-                        return
-
-    def _checkAndInstallBroadcom(self):
-        """
-        check for the 'wl' kernel module and install bcmwl-kernel-source
-        if the module is loaded
-        """
-        logging.debug("checking for 'wl' module")
-        if "wl" in lsmod():
-            self.controller.cache.mark_install("bcmwl-kernel-source",
-                                              "'wl' module found in lsmod")
 
     def _stopApparmor(self):
         """ /etc/init.d/apparmor stop (see bug #559433)"""
@@ -569,17 +447,7 @@ class DistUpgradeQuirks(object):
                 logging.exception("failed to stop screensaver poke")
             self._poke = None
         return res
-    def _removeBadMaintainerScripts(self):
-        " remove bad/broken maintainer scripts (last resort) "
-        # apache: workaround #95325 (edgy->feisty)
-        # pango-libthai #103384 (edgy->feisty)
-        bad_scripts = ["/var/lib/dpkg/info/apache2-common.prerm",
-                       "/var/lib/dpkg/info/pango-libthai.postrm",
-                       ]
-        for ap in bad_scripts:
-            if os.path.exists(ap):
-                logging.debug("removing bad script '%s'" % ap)
-                os.unlink(ap)
+
 
     def _removeOldApportCrashes(self):
         " remove old apport crash files and whoopsie control files "
@@ -591,14 +459,6 @@ class DistUpgradeQuirks(object):
         except Exception as e:
             logging.warning("error during unlink of old crash files (%s)" % e)
 
-    def _cpuHasSSESupport(self, cpuinfo="/proc/cpuinfo"):
-        " helper that checks if the given cpu has sse support "
-        if not os.path.exists(cpuinfo):
-            return False
-        for line in open(cpuinfo):
-            if line.startswith("flags") and not " sse" in line:
-                return False
-        return True
 
     def _checkVideoDriver(self, name):
         " check if the given driver is in use in xorg.conf "

@@ -691,12 +691,12 @@ class MyCache(apt.Cache):
             t.join()
             # FIXME: change the text to something more useful
             details =  _("An unresolvable problem occurred while "
-                         "calculating the upgrade:\n%s\n\n "
+                         "calculating the upgrade.\n\n "
                          "This can be caused by:\n"
                          " * Upgrading to a pre-release version of Ubuntu\n"
                          " * Running the current pre-release version of Ubuntu\n"
                          " * Unofficial software packages not provided by Ubuntu\n"
-                         "\n") % e
+                         "\n")
             # we never have partialUpgrades (including removes) on a stable system
             # with only ubuntu sources so we do not recommend reporting a bug
             if partialUpgrade:

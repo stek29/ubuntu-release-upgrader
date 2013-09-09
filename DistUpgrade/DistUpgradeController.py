@@ -1707,7 +1707,7 @@ class DistUpgradeController(object):
         # that the system had no sources.list entries and therefore no
         # desktop file information)
         self.serverMode = self.cache.need_server_mode()
-        # do it here as we neeed to know if we are in server or client mode
+        # do it here as we need to know if we are in server or client mode
         self.quirks.ensure_recommends_are_installed_on_desktops()
         # now check if we still have some key packages available/downloadable
         # after the update - if not something went seriously wrong

@@ -153,14 +153,6 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(q._supportInModaliases("fglrx", mock_lspci_good))
         self.assertFalse(q._supportInModaliases("fglrx", mock_lspci_bad))
 
-    def test_cpuHasSSESupport(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        testdir = CURDIR + "/test-data/"
-        self.assertTrue(
-            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-with-sse"))
-        self.assertFalse(
-            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-without-sse"))
-
     def test_cpu_is_i686(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
         q.arch = "i386"

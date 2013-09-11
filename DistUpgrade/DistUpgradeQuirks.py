@@ -44,7 +44,7 @@ class DistUpgradeQuirks(object):
     be hooked into to fix/work around issues that the individual
     releases have
     """
-    
+
     def __init__(self, controller, config):
         self.controller = controller
         self._view = controller._view

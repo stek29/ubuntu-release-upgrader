@@ -190,7 +190,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted univers
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         for scheme in ["http"]:
-            entry = "deb %s://archive.ubuntu.com/ubuntu/ hardy main universe restricted multiverse" % scheme
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ precise main universe restricted multiverse" % scheme
             self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)),
                             "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
@@ -240,17 +240,17 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted univers
                            os.path.join(self.testdir, "sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        d.fromDist = "gutsy"
-        d.toDist = "hardy"
+        d.fromDist = "oneiric"
+        d.toDist = "precise"
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
         self._verifySources("""
 # main repo
-deb http://us.archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
-deb-src http://us.archive.ubuntu.com/ubuntu hardy main restricted multiverse
+deb http://us.archive.ubuntu.com/ubuntu precise main restricted multiverse universe
+deb-src http://us.archive.ubuntu.com/ubuntu precise main restricted multiverse
 
-deb http://us.archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
+deb http://us.archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 """)
 
     def testEOL2SupportedUpgrade(self):
@@ -264,17 +264,17 @@ deb http://us.archive.ubuntu.com/ubuntu hardy-security main restricted universe 
                            os.path.join(self.testdir, "sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        d.fromDist = "gutsy"
-        d.toDist = "hardy"
+        d.fromDist = "oneiric"
+        d.toDist = "precise"
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
         self._verifySources("""
 # main repo
-deb http://archive.ubuntu.com/ubuntu hardy main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu hardy main restricted multiverse
+deb http://archive.ubuntu.com/ubuntu precise main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu precise main restricted multiverse
 
-deb http://archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 """)
 
     def test_partner_update(self):

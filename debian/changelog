@@ -1,6 +1,22 @@
 ubuntu-release-upgrader (1:0.203) UNRELEASED; urgency=low
 
+  [ Brian Murray ]
   * test/test_sources_list.py: resolve test failure regarding EOL upgrades
+  * DistUpgradeQuirks.py: pep8 cleanup, remove some additional unnecessary
+    quirks
+
+  [ Steve Langasek ]
+  * Drop all quirks for upgrades prior to the karmic->lucid upgrade; all
+    releases earlier than 10.04 are entirely EOLed, and in any case users
+    should not be upgrading directly from such old releases to 13.10 or
+    later without going through the intermediate LTS releases, so this is
+    all dead code.
+  * Drop use of base-installer for detecting "recommended" kernels for the
+    hardware.  So far this code was only ever used for a one-time transition
+    when more specialized kernel flavors became available on i386 that were
+    preferred over the -386 flavor, and in the meantime the code is causing
+    wrong results on upgrade for users of UbuntuStudio, which ships a kernel
+    flavor that's not known by base-installer.  LP: #1220898.
 
  -- Brian Murray <brian@ubuntu.com>  Wed, 11 Sep 2013 16:06:40 -0700
 

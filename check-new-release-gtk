@@ -30,6 +30,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 import locale
 import logging
+import subprocess
 import sys
 import time
 
@@ -46,7 +47,7 @@ from DistUpgrade.SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
 #       correctly, see http://bugs.python.org/issue4391
-#       Shoudl be resolved by Python3
+#       Should be resolved by Python3
 gettext.bindtextdomain("ubuntu-release-upgrader", "/usr/share/locale")
 gettext.textdomain("ubuntu-release-upgrader")
 translation = gettext.translation("ubuntu-release-upgrader", fallback=True)
@@ -111,14 +112,8 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
     # show alert on unsupported distros
     if meta_release.no_longer_supported is not None:
-        from UpdateManager.Dialogs import UnsupportedDialog
-        # Since now we are talking to update-manager code, point at the right
-        # location for it to pick up its own .ui files.
-        self.datadir = "/usr/share/update-manager/"
-        dialog = UnsupportedDialog(self, meta_release)
-        self.no_longer_supported_nag = self.window_main
-        self.window_main.hide()
-        self._run_dialog(dialog)
+        subprocess.call(['update-manager', '--no-update'])
+        Gtk.main_quit()
     else:
         self.build_ui()
         self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
@@ -224,10 +219,6 @@ if __name__ == "__main__":
   parser.add_option ("", "--debug", action="store_true", default=False,
                      help=_("Add debug output"))
   (options, args) = parser.parse_args()
-  # update-manager which is used if there is an unsupported release uses 
-  # different variable names
-  options.use_proposed = options.proposed_release
-  options.sandbox = False
   if options.debug:
       logging.basicConfig(level=logging.DEBUG)
 

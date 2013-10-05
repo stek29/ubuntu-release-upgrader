@@ -30,11 +30,10 @@ from gi.repository import GLib
 from gi.repository import Gtk
 import locale
 import logging
+import os
 import subprocess
 import sys
 import time
-
-import DistUpgrade.GtkProgress
 
 import gettext
 from optparse import OptionParser
@@ -79,12 +78,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)
     m.connect("new-dist-available", self.new_dist_available)
-    # useful for testing
-    if options.test_uri:
-        self.build_ui()
-        self.show_uri(options.test_uri)
-    else:
-        GLib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout, None)
+    GLib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout, None)
 
   def _run_dialog(self, dialog):
     window = Gtk.Window()
@@ -117,12 +111,6 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     else:
         self.build_ui()
         self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
-        self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
-        html_uri = new_dist.releaseNotesHtmlUri
-        if not html_uri:
-            logging.warn("no ReleaseNotesHtmlUri found")
-            return
-        self.show_uri(html_uri)
         self.window_main.show()
 
   def close(self):
@@ -131,28 +119,17 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def build_ui(self):
     SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "ubuntu-release-upgrader")
-    from gi.repository import WebKit
-    self.webkit_view = WebKit.WebView()
-    self.webkit_view.show()
-    settings = self.webkit_view.get_settings()
-    settings.set_property("enable-plugins", False)
-    # FIXME: do we want to have it in a Gtk.ScrolledWindow ?
-    #self.alignment_webkit_view.add(self.webkit_view)
-    self.scrolledwindow_webkit_view.add(self.webkit_view)
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    progress=DistUpgrade.GtkProgress.GtkAcquireProgress(self.window_main, self.datadir,
-                                                        _("Downloading the release upgrade tool"))
-    fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
-                                 parent=self,
-                                 datadir=self.datadir,
-                                 progress=progress)
-
+    extra_args = ""
     if options.devel_release:
-        fetcher.run_options.append("--devel-release")
-    res = fetcher.run()
-    res # pyflakes
+        extra_args = extra_args + " --devel-release"
+    if options.proposed_release:
+        extra_args = extra_args + " --proposed"
+    os.execl("/bin/sh", "/bin/sh", "-c",
+             "/usr/bin/pkexec /usr/bin/do-release-upgrade "
+             "--frontend=DistUpgradeViewGtk3%s" % extra_args)
 
   def on_button_ask_me_later_clicked(self, button):
     logging.debug("ask me later")
@@ -177,16 +154,6 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def window_delete_event_cb(self, window, event):
     Gtk.main_quit()
-
-  def show_uri(self, uri):
-    logging.debug("using uri '%s'" % uri)
-    self.webkit_view.open(uri)
-    self.webkit_view.connect("load-finished", self._on_load_finished)
-
-  def _on_load_finished(self, view, frame):
-    self.window_main.show_all()
-    # hide redundant release notes button
-    self.linkbutton_release_notes.hide()
 
   def timeout(self, user_data):
     if self.new_dist is None:
@@ -215,7 +182,6 @@ if __name__ == "__main__":
                             "the upgrader from $distro-proposed"))
   # mostly useful for development
   parser.add_option ("", "--datadir", default="/usr/share/ubuntu-release-upgrader")
-  parser.add_option ("", "--test-uri")
   parser.add_option ("", "--debug", action="store_true", default=False,
                      help=_("Add debug output"))
   (options, args) = parser.parse_args()

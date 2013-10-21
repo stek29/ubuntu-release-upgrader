@@ -244,7 +244,7 @@ class DistUpgradeQuirks(object):
         if return_code != 0:
             res = self._view.askYesNoQuestion(
                 _("Your graphics hardware may not be fully supported in "
-                  "Ubuntu 13.10."),
+                  "Ubuntu 14.04."),
                 _("Running the 'unity' desktop environment is not fully "
                   "supported by your graphics hardware. You will maybe end "
                   "up in a very slow environment after the upgrade. Our "

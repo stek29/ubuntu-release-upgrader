@@ -866,16 +866,16 @@ class MyCache(apt.Cache):
                     break
         # check if we actually found one
         if not metaPkgInstalled():
-            # FIXME: provide a list
+            meta_pkgs = ', '.join(metapkgs[0:-1])
             view.error(_("Can't guess meta-package"),
                        _("Your system does not contain a "
-                         "ubuntu-desktop, kubuntu-desktop, xubuntu-desktop or "
-                         "edubuntu-desktop package and it was not "
+                         "%s or %s package and it was not "
                          "possible to detect which version of "
-                        "Ubuntu you are running.\n "
+                         "Ubuntu you are running.\n "
                          "Please install one of the packages "
                          "above first using synaptic or "
-                         "apt-get before proceeding."))
+                         "apt-get before proceeding.") %
+                        (meta_pkgs, metapkgs[-1]))
             return False
         return True
 

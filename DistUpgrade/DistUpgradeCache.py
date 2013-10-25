@@ -91,7 +91,6 @@ class MyCache(apt.Cache):
 
     # init
     def __init__(self, config, view, quirks, progress=None, lock=True):
-        apt.Cache.__init__(self, progress)
         self.to_install = []
         self.to_remove = []
         self.view = view
@@ -112,6 +111,8 @@ class MyCache(apt.Cache):
                 if "dpkg --configure -a" in str(e):
                     raise CacheExceptionDpkgInterrupted(e)
                 raise CacheExceptionLockingFailed(e)
+        # Do not create the cache until we know it is not locked
+        apt.Cache.__init__(self, progress)
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
         self.uname = Popen(["uname","-r"], stdout=PIPE,

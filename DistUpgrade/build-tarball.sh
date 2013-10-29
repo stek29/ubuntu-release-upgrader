@@ -35,7 +35,7 @@ cp /usr/share/ubuntu-drivers-common/obsolete ubuntu-drivers-obsolete.pkgs
 tar -c -h -v --exclude DistUpgrade --exclude=$DIST.tar --exclude=$0 -X build-exclude.txt -f $DIST.tar  ./*
 
 # add *.cfg and *.ui to the tarball
-tar --append -v -f $DIST.tar --transform 's|.*/|./|' ../data/*.cfg ../data/gtkbuilder/*.ui
+tar --append -v -f $DIST.tar --transform 's|.*/|./|' ../data/*.cfg* ../data/gtkbuilder/*.ui
 
 # add "DistUpgrade"  symlink as symlink
 tar --append -v -f $DIST.tar ./DistUpgrade

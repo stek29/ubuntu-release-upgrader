@@ -349,9 +349,9 @@ class DistUpgradeController(object):
         m = MetaReleaseCore(useDevelopmentRelease=False,
                             forceLTS=forceLTS)
         # this will timeout eventually
-        while m.downloading:
+        self._view.processEvents()
+        while not m.downloaded.wait(0.1):
             self._view.processEvents()
-            time.sleep(0.1)
         if m.new_dist is None:
             logging.error("No new dist found")
             return False

@@ -43,7 +43,7 @@ class TestMetaReleaseGUI(unittest.TestCase):
         meta.METARELEASE_URI = uri
         meta.connect("new_dist_available", self.new_dist_available)
         meta.download()
-        self.assertFalse(meta.downloading)
+        self.assertTrue(meta.downloaded.is_set())
         no_new_information = meta.check()
         self.assertFalse(no_new_information)
         self.assertTrue(self.new_dist is not None)
@@ -59,7 +59,7 @@ class TestReleaseUpgradeFetcherGUI(unittest.TestCase):
         meta.METARELEASE_URI = uri
         meta.connect("new_dist_available", self._new_dist_available)
         meta.download()
-        self.assertFalse(meta.downloading)
+        self.assertTrue(meta.downloaded.is_set())
         no_new_information = meta.check()
         self.assertFalse(no_new_information)
         self.assertTrue(self.new_dist is not None)

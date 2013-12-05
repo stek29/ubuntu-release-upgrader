@@ -29,8 +29,7 @@ def get_new_dist():
     #meta.DEBUG = True
     meta.current_dist_name = "precise"
     meta.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
-    while meta.downloading:
-        time.sleep(0.1)
+    meta.downloaded.wait()
     meta._buildMetaReleaseFile()
     meta.download()
     return meta.new_dist

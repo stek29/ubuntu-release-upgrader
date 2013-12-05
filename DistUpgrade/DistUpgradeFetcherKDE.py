@@ -52,8 +52,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         self.useDevelopmentRelease = useDevelopmentRelease
         self.useProposed = useProposed
         metaRelease = MetaReleaseCore(useDevelopmentRelease, useProposed)
-        while metaRelease.downloading:
-            time.sleep(0.2)
+        metaRelease.downloaded.wait()
         if metaRelease.new_dist is None and __name__ == "__main__":
             sys.exit()
         elif metaRelease.new_dist is None:

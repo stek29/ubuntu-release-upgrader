@@ -110,8 +110,7 @@ if __name__ == "__main__":
   m = MetaReleaseCore(useDevelopmentRelease=options.devel_release,
                       useProposed=options.proposed_release)
   # this will timeout eventually
-  while m.downloading:
-    time.sleep(0.5)
+  m.downloaded.wait()
 
   # make sure to inform the user if his distro is no longer supported
   # this will make it appear in motd (that calls do-release-upgrade in

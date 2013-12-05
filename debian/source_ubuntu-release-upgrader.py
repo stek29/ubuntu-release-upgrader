@@ -9,6 +9,7 @@ import os
 from apport.hookutils import (
     attach_gsettings_package,
     attach_file_if_exists,
+    attach_root_command_outputs,
     root_command_output)
 
 
@@ -38,3 +39,7 @@ def add_info(report, ui):
         'VarLogDistupgradeTermlog')
     attach_file_if_exists(report, '/var/log/dist-upgrade/screenlog.0',
         'VarLogDistupgradeScreenlog')
+    attach_root_command_outputs(
+        report,
+        {'CurrentDmesg.txt':
+            'dmesg | comm -13 --nocheck-order /var/log/dmesg -'})

@@ -7,7 +7,6 @@ import apt
 import apt_pkg
 import logging
 import os
-import time
 import unittest
 
 from UpdateManager.Core.MetaRelease import MetaReleaseCore

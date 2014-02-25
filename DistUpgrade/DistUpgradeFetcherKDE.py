@@ -40,7 +40,6 @@ except ImportError:
 import os
 
 from .MetaRelease import MetaReleaseCore
-import time
 import apt
 
 

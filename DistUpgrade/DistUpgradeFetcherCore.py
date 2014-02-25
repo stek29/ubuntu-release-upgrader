@@ -86,6 +86,9 @@ class DistUpgradeFetcherCore(object):
         """
         status_pipe = os.pipe()
         logger_pipe = os.pipe()
+        if sys.version_info >= (3,4):
+            os.set_inheritable(status_pipe[1], 1)
+            os.set_inheritable(logger_pipe[1], 1)
         gpg = [
             "gpg",
             "--status-fd", "%d" % status_pipe[1],
@@ -131,7 +134,7 @@ class DistUpgradeFetcherCore(object):
             logger_handle.close()
 
     def extractDistUpgrader(self):
-        # extract the tarbal
+        # extract the tarball
         fname = os.path.join(self.tmpdir, os.path.basename(self.uri))
         print(_("extracting '%s'") % os.path.basename(fname))
         if not os.path.exists(fname):

@@ -150,6 +150,8 @@ class TestQuirks(unittest.TestCase):
         controller = mock.Mock()
         controller.cache = cache
         q = DistUpgradeQuirks(controller, config)
+        if q.arch not in ['i386', 'amd64']:
+           return self.skipTest("Not on an arch with fglrx package")
         self.assertTrue(q._supportInModaliases("fglrx", mock_lspci_good))
         self.assertFalse(q._supportInModaliases("fglrx", mock_lspci_bad))
 

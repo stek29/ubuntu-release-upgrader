@@ -148,6 +148,7 @@ class DistUpgradeQuirks(object):
         self._test_and_warn_on_i8xx()
 
     def from_precisePostInitialUpdate(self):
+        self._checkPae()
         self._test_and_warn_for_unity_3d_support()
 
     def oneiricPostInitialUpdate(self):
@@ -477,6 +478,25 @@ class DistUpgradeQuirks(object):
                     os.unlink(f)
         except Exception as e:
             logging.warning("error during unlink of old crash files (%s)" % e)
+
+    def _checkPae(self):
+        " check PAE in /proc/cpuinfo "
+        # upgrade from Precise will fail if PAE is not in cpu flags
+        logging.debug("_checkPae")
+        pae = 0
+        cpuinfo = open('/proc/cpuinfo').read()
+        if re.search("^flags\s+:.* pae ", cpuinfo, re.MULTILINE):
+            pae = 1
+        if not pae:
+            logging.error("no pae in /proc/cpuinfo")
+            summary = _("PAE not enabled")
+            msg = _("Your system uses a CPU that does not have PAE enabled. "
+                    "Ubuntu only supports non-PAE systems up to Ubuntu "
+                    "12.04. To upgrade to a later version of Ubuntu, you "
+                    "must enable PAE (if this is possible) see:\n"
+                    "http://help.ubuntu.com/community/EnablingPAE")
+            self._view.error(summary, msg)
+            self.controller.abort()
 
     def _checkVideoDriver(self, name):
         " check if the given driver is in use in xorg.conf "

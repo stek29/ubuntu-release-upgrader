@@ -104,6 +104,11 @@ if __name__ == "__main__":
     print("%s: version %s" % (os.path.basename(sys.argv[0]), VERSION))
     sys.exit(0)
 
+  if options.devel_release and options.proposed_release:
+    print(_("The options --devel-release and --proposed are"))
+    print(_("mutually exclusive. Please use only one of them."))
+    sys.exit(1)
+
   if not options.quiet:
     print(_("Checking for a new Ubuntu release"))
 

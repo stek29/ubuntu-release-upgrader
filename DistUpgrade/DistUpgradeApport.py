@@ -42,10 +42,11 @@ def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
 def apport_crash(type, value, tb):
     logging.debug("running apport_crash()")
     try:
+        # we don't depend on python3-apport because of servers
         from apport_python_hook import apport_excepthook
         from apport.report import Report
     except ImportError as e:
-        logging.error("failed to import apport python module, can't report bug: %s" % e)
+        logging.error("failed to import apport python module, can't generate crash: %s" % e)
         return False
     # we pretend we are do-release-upgrade
     sys.argv[0] = "/usr/bin/do-release-upgrade"

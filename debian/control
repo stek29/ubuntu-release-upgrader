@@ -11,7 +11,6 @@ Build-Depends: debhelper (>= 9),
                python3-update-manager,
                apt-clone (>= 0.2.3~ubuntu2)
 Build-Depends-Indep: libxml-parser-perl, 
-                     scrollkeeper, 
                      intltool
 Standards-Version: 3.9.3
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-core-dev/ubuntu-release-upgrader/trunk
@@ -39,7 +38,7 @@ Section: python
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${python3:Depends},
          ${misc:Depends},
-         python3-update-manager,
+         python3-update-manager (>= 1:0.196.2~),
          python3-apt (>= 0.8.5~),
          lsb-release
 Replaces: python3-update-manager (<< 1:0.165)
@@ -59,7 +58,7 @@ Depends: ${python3:Depends},
          python3-gi (>= 3.8),
          gir1.2-vte-2.90, 
          gir1.2-gtk-3.0,
-Recommends: gir1.2-webkit-3.0
+         gir1.2-webkit-3.0
 Description: manage release upgrades
  This is the GTK+ frontend of the Ubuntu Release Upgrader
 

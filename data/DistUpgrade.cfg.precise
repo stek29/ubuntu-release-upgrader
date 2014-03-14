@@ -34,7 +34,7 @@ BadVersions=blcr-dkms_0.8.2-13
 #SlideshowUrl=http://people.canonical.com/~mvo/ubiquity-slideshow-upgrade/slides/
 
 [KernelRemoval]
-Version=3.8.0
+Version=3.2.0
 BaseNames=linux-image,linux-headers,linux-image-debug,linux-backport-modules,linux-header-lbm
 Types=386,ec2,generic,rt,server,virtual
 
@@ -46,13 +46,13 @@ PostUpgradeRemove=xscreensaver, gnome-cups-manager, powermanagement-interface, d
 ForcedObsoletes=desktop-effects, gnome-app-install, policykit-gnome, gnome-mount
 
 [kubuntu-desktop]
-KeyDependencies=plasma-desktop, kubuntu-settings-desktop
+KeyDependencies=plasma-desktop, kubuntu-default-settings
 PostUpgradeRemove=powermanagement-interface, guidance-power-manager, kde-guidance-powermanager
 # those packages are marked as obsolete right after the upgrade
 ForcedObsoletes=ivman, gtk-qt-engine
 
 [kubuntu-netbook]
-KeyDependencies=plasma-netbook, kubuntu-settings-netbook
+KeyDependencies=plasma-netbook, kubuntu-netbook-default-settings
 
 [ubuntu-netbook]
 KeyDependencies=gdm, ubuntu-netbook-default-settings
@@ -78,7 +78,7 @@ BackupExt=distUpgrade
 LogDir=/var/log/dist-upgrade/
 
 [Sources]
-From=saucy
+From=precise
 To=trusty
 ValidOrigin=Ubuntu
 ValidMirrors = mirrors.cfg

@@ -150,16 +150,10 @@ class TestQuirks(unittest.TestCase):
         controller = mock.Mock()
         controller.cache = cache
         q = DistUpgradeQuirks(controller, config)
+        if q.arch not in ['i386', 'amd64']:
+           return self.skipTest("Not on an arch with fglrx package")
         self.assertTrue(q._supportInModaliases("fglrx", mock_lspci_good))
         self.assertFalse(q._supportInModaliases("fglrx", mock_lspci_bad))
-
-    def test_cpuHasSSESupport(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        testdir = CURDIR + "/test-data/"
-        self.assertTrue(
-            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-with-sse"))
-        self.assertFalse(
-            q._cpuHasSSESupport(cpuinfo=testdir + "cpuinfo-without-sse"))
 
     def test_cpu_is_i686(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)
@@ -175,22 +169,6 @@ class TestQuirks(unittest.TestCase):
             q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i486"))
         self.assertTrue(
             q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-via-c7m"))
-
-    def test_ntfs_fstab(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        testdir = CURDIR + "/test-data/"
-        shutil.copy(testdir + "fstab.ntfs.original", testdir + "fstab.ntfs")
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
-                        "nls=utf8,umask=000,gid=46 0 1" in
-                        open(testdir + "fstab.ntfs").read())
-        q._ntfsFstabFixup(fstab=testdir + "fstab.ntfs")
-        self.assertTrue(open(testdir + "fstab.ntfs").read().endswith("0\n"))
-        self.assertTrue("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
-                        "nls=utf8,umask=000,gid=46 0 0" in
-                        open(testdir + "fstab.ntfs").read())
-        self.assertFalse("UUID=7260D4F760D4C2D1 /media/storage ntfs defaults,"
-                         "nls=utf8,umask=000,gid=46 0 1" in
-                         open(testdir + "fstab.ntfs").read())
 
     def test_kde_card_games_transition(self):
         # fake nothing is installed

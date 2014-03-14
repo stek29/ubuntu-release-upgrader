@@ -13,16 +13,13 @@ dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python-feedp
 # when this gets enabled, make sure to add symlink in DistUpgrade
 #(cd utils && ./demotions.py lucid precise > demoted.cfg.lucid)
 
-# update base-installer
-(cd utils && ./update-base-installer.sh)
-
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine
-if [ ! -e /usr/share/pyshared/apt_btrfs_snapshot.py ]; then
+if [ ! -e /usr/lib/python2.7/dist-packages/apt_btrfs_snapshot.py ]; then
     echo "please sudo apt-get install apt-btrfs-snapshot"
     exit 1
 fi
-cp /usr/share/pyshared/apt_btrfs_snapshot.py DistUpgrade
+cp /usr/lib/python2.7/dist-packages/apt_btrfs_snapshot.py DistUpgrade
 
 # (auto) generate the required html
 if [ ! -x /usr/bin/parsewiki ]; then

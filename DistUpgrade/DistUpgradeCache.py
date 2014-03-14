@@ -1,19 +1,19 @@
-# DistUpgradeCache.py 
-#  
+# DistUpgradeCache.py
+#
 #  Copyright (c) 2004-2008 Canonical
-#  
+#
 #  Author: Michael Vogt <michael.vogt@ubuntu.com>
-# 
-#  This program is free software; you can redistribute it and/or 
-#  modify it under the terms of the GNU General Public License as 
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
 #  published by the Free Software Foundation; either version 2 of the
 #  License, or (at your option) any later version.
-# 
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-# 
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -63,7 +63,7 @@ KERNEL_INITRD_SIZE = _set_kernel_initrd_size()
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:
-    
+
     This exposes:
     - the total size required (size_total)
     - the dir that requires the space (dir)
@@ -75,12 +75,12 @@ class FreeSpaceRequired(object):
         self.size_needed = size_needed
     def __str__(self):
         return "FreeSpaceRequired Object: Dir: %s size_total: %s size_needed: %s" % (self.dir, self.size_total, self.size_needed)
-    
+
 
 class NotEnoughFreeSpaceError(CacheException):
-    """ 
-    Exception if there is not enough free space for this operation 
-    
+    """
+    Exception if there is not enough free space for this operation
+
     """
     def __init__(self, free_space_required_list):
         self.free_space_required_list = free_space_required_list
@@ -91,7 +91,6 @@ class MyCache(apt.Cache):
 
     # init
     def __init__(self, config, view, quirks, progress=None, lock=True):
-        apt.Cache.__init__(self, progress)
         self.to_install = []
         self.to_remove = []
         self.view = view
@@ -99,7 +98,7 @@ class MyCache(apt.Cache):
         self.lock = False
         self.partialUpgrade = False
         self.config = config
-        self.metapkgs = self.config.getlist("Distro","MetaPkgs")
+        self.metapkgs = self.config.getlist("Distro", "MetaPkgs")
         # acquire lock
         self._listsLock = -1
         if lock:
@@ -112,16 +111,18 @@ class MyCache(apt.Cache):
                 if "dpkg --configure -a" in str(e):
                     raise CacheExceptionDpkgInterrupted(e)
                 raise CacheExceptionLockingFailed(e)
+        # Do not create the cache until we know it is not locked
+        apt.Cache.__init__(self, progress)
         # a list of regexp that are not allowed to be removed
-        self.removal_blacklist = config.getListFromFile("Distro","RemovalBlacklistFile")
-        self.uname = Popen(["uname","-r"], stdout=PIPE,
+        self.removal_blacklist = config.getListFromFile("Distro", "RemovalBlacklistFile")
+        self.uname = Popen(["uname", "-r"], stdout=PIPE,
                            universal_newlines=True).communicate()[0].strip()
         self._initAptLog()
-        # from hardy on we use recommends by default, so for the 
+        # from hardy on we use recommends by default, so for the
         # transition to the new dist we need to enable them now
-        if (config.get("Sources","From") == "hardy" and 
+        if (config.get("Sources", "From") == "hardy" and
             not "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
-            apt_pkg.config.set("APT::Install-Recommends","true")
+            apt_pkg.config.set("APT::Install-Recommends", "true")
 
     def _apply_dselect_upgrade(self):
         """ honor the dselect install state """
@@ -149,7 +150,7 @@ class MyCache(apt.Cache):
         reqreinst = self.req_reinstall_pkgs
         if len(reqreinst) > 0:
             header = ngettext("Remove package in bad state",
-                              "Remove packages in bad state", 
+                              "Remove packages in bad state",
                               len(reqreinst))
             summary = ngettext("The package '%s' is in an inconsistent "
                                "state and needs to be reinstalled, but "
@@ -164,7 +165,7 @@ class MyCache(apt.Cache):
                                len(reqreinst)) % ", ".join(reqreinst)
             if view.askYesNoQuestion(header, summary):
                 self.release_lock()
-                cmd = ["/usr/bin/dpkg","--remove","--force-remove-reinstreq"] + list(reqreinst)
+                cmd = ["/usr/bin/dpkg", "--remove", "--force-remove-reinstreq"] + list(reqreinst)
                 view.getTerminal().call(cmd)
                 self.get_lock()
                 return True
@@ -173,21 +174,21 @@ class MyCache(apt.Cache):
     # logging stuff
     def _initAptLog(self):
         " init logging, create log file"
-        logdir = self.config.getWithDefault("Files","LogDir",
+        logdir = self.config.getWithDefault("Files", "LogDir",
                                             "/var/log/dist-upgrade")
         if not os.path.exists(logdir):
             os.makedirs(logdir)
-        apt_pkg.config.set("Dir::Log",logdir)
-        apt_pkg.config.set("Dir::Log::Terminal","apt-term.log")
-        self.logfd = os.open(os.path.join(logdir,"apt.log"),
-                             os.O_RDWR|os.O_CREAT|os.O_APPEND, 0o644)
+        apt_pkg.config.set("Dir::Log", logdir)
+        apt_pkg.config.set("Dir::Log::Terminal", "apt-term.log")
+        self.logfd = os.open(os.path.join(logdir, "apt.log"),
+                             os.O_RDWR | os.O_CREAT | os.O_APPEND, 0o644)
         now = datetime.datetime.now()
         header = "Log time: %s\n" % now
         os.write(self.logfd, header.encode("utf-8"))
 
         # turn on debugging in the cache
-        apt_pkg.config.set("Debug::pkgProblemResolver","true")
-        apt_pkg.config.set("Debug::pkgDepCache::AutoInstall","true")
+        apt_pkg.config.set("Debug::pkgProblemResolver", "true")
+        apt_pkg.config.set("Debug::pkgDepCache::AutoInstall", "true")
     def _startAptResolverLog(self):
         if hasattr(self, "old_stdout"):
             os.close(self.old_stdout)
@@ -250,7 +251,7 @@ class MyCache(apt.Cache):
         res = apt.Cache.update(self, fprogress)
         self.lock_lists_dir()
         if fprogress and fprogress.release_file_download_error:
-            # FIXME: not ideal error message, but we just reuse a 
+            # FIXME: not ideal error message, but we just reuse a
             #        existing one here to avoid a new string
             raise IOError(_("The server may be overloaded"))
         if res == False:
@@ -288,10 +289,10 @@ class MyCache(apt.Cache):
             logging.warning("no version information for '%s' (useCandidate=%s)" % (pkg.name, useCandidate))
             return False
         return ver.downloadable
-    
+
     def pkg_auto_removable(self, pkg):
         """ check if the pkg is auto-removable """
-        return (pkg.is_installed and 
+        return (pkg.is_installed and
                 self._depcache.is_garbage(pkg._pkg))
 
     def fix_broken(self):
@@ -327,28 +328,28 @@ class MyCache(apt.Cache):
             pkg.mark_install(auto_fix=False, auto_inst=False)
 
     def need_server_mode(self):
-        """ 
+        """
         This checks if we run on a desktop or a server install.
-        
+
         A server install has more freedoms, for a desktop install
         we force a desktop meta package to be install on the upgrade.
 
-        We look for a installed desktop meta pkg and for key 
+        We look for a installed desktop meta pkg and for key
         dependencies, if none of those are installed we assume
         server mode
         """
         #logging.debug("need_server_mode() run")
         # check for the MetaPkgs (e.g. ubuntu-desktop)
-        metapkgs = self.config.getlist("Distro","MetaPkgs")
+        metapkgs = self.config.getlist("Distro", "MetaPkgs")
         for key in metapkgs:
             # if it is installed we are done
             if key in self and self[key].is_installed:
                 logging.debug("need_server_mode(): run in 'desktop' mode, (because of pkg '%s')" % key)
                 return False
-            # if it is not installed, but its key depends are installed 
+            # if it is not installed, but its key depends are installed
             # we are done too (we auto-select the package later)
             deps_found = True
-            for pkg in self.config.getlist(key,"KeyDependencies"):
+            for pkg in self.config.getlist(key, "KeyDependencies"):
                 deps_found &= pkg in self and self[pkg].is_installed
             if deps_found:
                 logging.debug("need_server_mode(): run in 'desktop' mode, (because of key deps for '%s')" % key)
@@ -398,7 +399,7 @@ class MyCache(apt.Cache):
     def mark_purge(self, pkg, reason=""):
         logging.debug("Purging '%s' (%s)" % (pkg, reason))
         if pkg in self:
-            self._depcache.mark_delete(self[pkg]._pkg,True)
+            self._depcache.mark_delete(self[pkg]._pkg, True)
 
     def _keep_installed(self, pkgname, reason):
         if (pkgname in self
@@ -410,35 +411,35 @@ class MyCache(apt.Cache):
         """ run after the dist-upgrade to ensure that certain
             packages are kept installed """
         # first the global list
-        for pkgname in self.config.getlist("Distro","KeepInstalledPkgs"):
+        for pkgname in self.config.getlist("Distro", "KeepInstalledPkgs"):
             self._keep_installed(pkgname, "Distro KeepInstalledPkgs rule")
         # the the per-metapkg rules
         for key in self.metapkgs:
             if key in self and (self[key].is_installed or
                                 self[key].marked_install):
-                for pkgname in self.config.getlist(key,"KeepInstalledPkgs"):
+                for pkgname in self.config.getlist(key, "KeepInstalledPkgs"):
                     self._keep_installed(pkgname, "%s KeepInstalledPkgs rule" % key)
 
         # only enforce section if we have a network. Otherwise we run
         # into CD upgrade issues for installed language packs etc
-        if self.config.get("Options","withNetwork") == "True":
+        if self.config.get("Options", "withNetwork") == "True":
             logging.debug("Running KeepInstalledSection rules")
             # now the KeepInstalledSection code
-            for section in self.config.getlist("Distro","KeepInstalledSection"):
+            for section in self.config.getlist("Distro", "KeepInstalledSection"):
                 for pkg in self:
-                    if (pkg.candidate and pkg.candidate.downloadable 
+                    if (pkg.candidate and pkg.candidate.downloadable
                         and pkg.marked_delete and pkg.section == section):
                         self._keep_installed(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
                 if key in self and (self[key].is_installed or
                                     self[key].marked_install):
-                    for section in self.config.getlist(key,"KeepInstalledSection"):
+                    for section in self.config.getlist(key, "KeepInstalledSection"):
                         for pkg in self:
                             if (pkg.candidate and pkg.candidate.downloadable
                                 and pkg.marked_delete and
                                 pkg.section == section):
                                 self._keep_installed(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
-        
+
 
     def post_upgrade_rule(self):
         " run after the upgrade was done in the cache "
@@ -447,12 +448,12 @@ class MyCache(apt.Cache):
                                ("Remove", self.mark_remove),
                                ("Purge", self.mark_purge)]:
             # first the global list
-            for pkg in self.config.getlist("Distro","PostUpgrade%s" % rule):
+            for pkg in self.config.getlist("Distro", "PostUpgrade%s" % rule):
                 action(pkg, "Distro PostUpgrade%s rule" % rule)
             for key in self.metapkgs:
                 if key in self and (self[key].is_installed or
                                     self[key].marked_install):
-                    for pkg in self.config.getlist(key,"PostUpgrade%s" % rule):
+                    for pkg in self.config.getlist(key, "PostUpgrade%s" % rule):
                         action(pkg, "%s PostUpgrade%s rule" % (key, rule))
         # run the quirks handlers
         if not self.partialUpgrade:
@@ -462,26 +463,26 @@ class MyCache(apt.Cache):
         # we have a funny policy that we remove security updates
         # for the kernel from the archive again when a new ABI
         # version hits the archive. this means that we have
-        # e.g. 
-        # linux-image-2.6.24-15-generic 
-        # is obsolete when 
+        # e.g.
+        # linux-image-2.6.24-15-generic
+        # is obsolete when
         # linux-image-2.6.24-19-generic
         # is available
         # ...
         # This code tries to identify the kernels that can be removed
         logging.debug("identifyObsoleteKernels()")
         obsolete_kernels = set()
-        version = self.config.get("KernelRemoval","Version")
-        basenames = self.config.getlist("KernelRemoval","BaseNames")
-        types = self.config.getlist("KernelRemoval","Types")
+        version = self.config.get("KernelRemoval", "Version")
+        basenames = self.config.getlist("KernelRemoval", "BaseNames")
+        types = self.config.getlist("KernelRemoval", "Types")
         for pkg in self:
             for base in basenames:
-                basename = "%s-%s-" % (base,version)
+                basename = "%s-%s-" % (base, version)
                 for type in types:
-                    if (pkg.name.startswith(basename) and 
+                    if (pkg.name.startswith(basename) and
                         pkg.name.endswith(type) and
                         pkg.is_installed):
-                        if (pkg.name == "%s-%s" % (base,self.uname)):
+                        if (pkg.name == "%s-%s" % (base, self.uname)):
                             logging.debug("skipping running kernel %s" % pkg.name)
                             continue
                         logging.debug("removing obsolete kernel '%s'" % pkg.name)
@@ -490,7 +491,7 @@ class MyCache(apt.Cache):
         return obsolete_kernels
 
     def checkForNvidia(self):
-        """ 
+        """
         this checks for nvidia hardware and checks what driver is needed
         """
         logging.debug("nvidiaUpdate()")
@@ -531,57 +532,6 @@ class MyCache(apt.Cache):
         return False
 
 
-    def getKernelsFromBaseInstaller(self):
-        """get the list of recommended kernels from base-installer"""
-        p = Popen(["/bin/sh", "./get_kernel_list.sh"],
-                  stdout=PIPE, universal_newlines=True)
-        res = p.wait()
-        if res != 0:
-            logging.warn("./get_kernel_list.sh returned non-zero exitcode")
-            return ""
-        kernels = p.communicate()[0]
-        kernels = [x.strip() for x in kernels.split("\n")]
-        kernels = [x for x in kernels if len(x) > 0]
-        logging.debug("./get_kernel_list.sh returns: %s" % kernels)
-        return kernels
-
-    def _selectKernelFromBaseInstaller(self):
-        """ use the get_kernel_list.sh script (that uses base-installer)
-            to figure out what kernel is most suitable for the system
-        """
-        # check if we have a kernel from that list installed first
-        kernels = self.getKernelsFromBaseInstaller()
-        for kernel in kernels:
-            if not kernel in self:
-                logging.debug("%s not available in cache" % kernel)
-                continue
-            # this can happen e.g. on cdrom -> cdrom only upgrades
-            # where on hardy we have linux-386 but on the lucid CD 
-            # we only have linux-generic
-            if (not self[kernel].candidate or
-                not self[kernel].candidate.downloadable):
-                logging.debug("%s not downloadable" % kernel)
-                continue
-            # check if installed
-            if self[kernel].is_installed or self[kernel].marked_install:
-                logging.debug("%s kernel already installed" % kernel)
-                if self[kernel].is_upgradable and not self[kernel].marked_upgrade:
-                    self.mark_upgrade(kernel, "Upgrading kernel from base-installer")
-                return 
-        # if we have not found a kernel yet, use the first one that installs
-        for kernel in kernels:
-            if self.mark_install(kernel, 
-                                 "Selecting new kernel from base-installer"):
-                if self._has_kernel_headers_installed():
-                    prefix, sep, postfix = kernel.partition("-")
-                    headers = "%s-header-%s" % (prefix, postfix)
-                    self.mark_install(
-                        headers,
-                        "Selecting new kernel headers from base-installer")
-                else:
-                    logging.debug("no kernel-headers installed")
-                return
-
     def _has_kernel_headers_installed(self):
         for pkg in self:
             if (pkg.name.startswith("linux-headers-") and
@@ -600,21 +550,16 @@ class MyCache(apt.Cache):
             logging.warning("Can't parse kernel uname: '%s' (self compiled?)" % e)
             return False
         # now check if we have a SMP system
-        dmesg = Popen(["dmesg"],stdout=PIPE).communicate()[0]
+        dmesg = Popen(["dmesg"], stdout=PIPE).communicate()[0]
         if b"WARNING: NR_CPUS limit" in dmesg:
             logging.debug("UP kernel on SMP system!?!")
-        # use base-installer to get the kernel we want (if it exists)
-        if os.path.exists("./get_kernel_list.sh"):
-            self._selectKernelFromBaseInstaller()
-        else:
-            logging.debug("skipping ./get_kernel_list.sh: not found")
         return True
 
     def checkPriority(self):
-        # tuple of priorities we require to be installed 
+        # tuple of priorities we require to be installed
         need = ('required', )
         # stuff that its ok not to have
-        removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
+        removeEssentialOk = self.config.getlist("Distro", "RemoveEssentialOk")
         # check now
         for pkg in self:
             # WORKADOUND bug on the CD/python-apt #253255
@@ -662,7 +607,7 @@ class MyCache(apt.Cache):
             # see if our KeepInstalled rules are honored
             self.keep_installed_rule()
 
-            # check if we got a new kernel (if we are not inside a 
+            # check if we got a new kernel (if we are not inside a
             # chroot)
             if inside_chroot():
                 logging.warn("skipping kernel checks because we run inside a chroot")
@@ -681,22 +626,22 @@ class MyCache(apt.Cache):
                 # if this fails, a system error is raised
                 self._installMetaPkgs(view)
 
-            # see if it all makes sense, if not this function raises 
+            # see if it all makes sense, if not this function raises
             self._verifyChanges()
 
         except SystemError as e:
-            # this should go into a finally: line, see below for the 
-            # rationale why it doesn't 
+            # this should go into a finally: line, see below for the
+            # rationale why it doesn't
             lock.release()
             t.join()
             # FIXME: change the text to something more useful
             details =  _("An unresolvable problem occurred while "
-                         "calculating the upgrade:\n%s\n\n "
+                         "calculating the upgrade.\n\n "
                          "This can be caused by:\n"
                          " * Upgrading to a pre-release version of Ubuntu\n"
                          " * Running the current pre-release version of Ubuntu\n"
                          " * Unofficial software packages not provided by Ubuntu\n"
-                         "\n") % e
+                         "\n")
             # we never have partialUpgrades (including removes) on a stable system
             # with only ubuntu sources so we do not recommend reporting a bug
             if partialUpgrade:
@@ -747,7 +692,7 @@ class MyCache(apt.Cache):
                 untrusted.append(pkg.name)
         # check if the user overwrote the unauthenticated warning
         try:
-            b = self.config.getboolean("Distro","AllowUnauthenticated")
+            b = self.config.getboolean("Distro", "AllowUnauthenticated")
             if b:
                 logging.warning("AllowUnauthenticated set!")
                 return True
@@ -755,7 +700,7 @@ class MyCache(apt.Cache):
             pass
         if len(untrusted) > 0:
             untrusted.sort()
-            logging.error("Unauthenticated packages found: '%s'" % \
+            logging.error("Unauthenticated packages found: '%s'" %
                           " ".join(untrusted))
             # FIXME: maybe ask a question here? instead of failing?
             self._stopAptResolverLog()
@@ -767,7 +712,7 @@ class MyCache(apt.Cache):
                        "\n".join(untrusted))
             # start the resolver log again because this is run with
             # the withResolverLog decorator
-            self._startAptResolverLog()            
+            self._startAptResolverLog()
             return False
         return True
 
@@ -775,7 +720,7 @@ class MyCache(apt.Cache):
         """ this function tests if the current changes don't violate
             our constrains (blacklisted removals etc)
         """
-        removeEssentialOk = self.config.getlist("Distro","RemoveEssentialOk")
+        removeEssentialOk = self.config.getlist("Distro", "RemoveEssentialOk")
         # check changes
         for pkg in self.get_changes():
             if pkg.marked_delete and self._inRemovalBlacklist(pkg.name):
@@ -786,7 +731,7 @@ class MyCache(apt.Cache):
                 logging.debug("The package '%s' is marked for removal but it's an ESSENTIAL package", pkg.name)
                 raise SystemError(_("The essential package '%s' is marked for removal.") % pkg.name)
         # check bad-versions blacklist
-        badVersions = self.config.getlist("Distro","BadVersions")
+        badVersions = self.config.getlist("Distro", "BadVersions")
         for bv in badVersions:
             (pkgname, ver) = bv.split("_")
             if (pkgname in self and self[pkgname].candidate and
@@ -795,14 +740,14 @@ class MyCache(apt.Cache):
                  self[pkgname].marked_upgrade)):
                 raise SystemError(_("Trying to install blacklisted version '%s'") % bv)
         return True
-    
+
     def _lookupPkgRecord(self, pkg):
-        """ 
+        """
         helper to make sure that the pkg._records is pointing to the right
         location - needed because python-apt 0.7.9 dropped the python-apt
         version but we can not yet use the new version because on upgrade
         the old version is still installed
-        """ 
+        """
         ver = pkg._pcache._depcache.get_candidate_ver(pkg._pkg)
         if ver is None:
             print("No candidate ver: ", pkg.name)
@@ -838,14 +783,14 @@ class MyCache(apt.Cache):
             if installed:
                 installed_tasks.add(task)
         return installed_tasks
-            
+
     def installTasks(self, tasks):
         logging.debug("running installTasks")
         for pkg in self:
             if pkg.marked_install or pkg.is_installed:
                 continue
             self._lookupPkgRecord(pkg)
-            if not (hasattr(pkg._pcache._records,"record") and pkg._pcache._records.record):
+            if not (hasattr(pkg._pcache._records, "record") and pkg._pcache._records.record):
                 logging.warning("can not find Record for '%s'" % pkg.name)
                 continue
             for line in pkg._pcache._records.record.split("\n"):
@@ -855,16 +800,16 @@ class MyCache(apt.Cache):
                         if task in tasks:
                             pkg.mark_install()
         return True
-    
+
     def _keepBaseMetaPkgsInstalled(self, view):
-        for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
+        for pkg in self.config.getlist("Distro", "BaseMetaPkgs"):
             self._keep_installed(pkg, "base meta package keep installed rule")
 
     def _installMetaPkgs(self, view):
 
         def metaPkgInstalled():
-            """ 
-            internal helper that checks if at least one meta-pkg is 
+            """
+            internal helper that checks if at least one meta-pkg is
             installed or marked install
             """
             for key in metapkgs:
@@ -872,16 +817,16 @@ class MyCache(apt.Cache):
                     pkg = self[key]
                     if pkg.is_installed and pkg.marked_delete:
                         logging.debug("metapkg '%s' installed but marked_delete" % pkg.name)
-                    if ((pkg.is_installed and not pkg.marked_delete) 
+                    if ((pkg.is_installed and not pkg.marked_delete)
                         or self[key].marked_install):
                         return True
             return False
 
         # now check for ubuntu-desktop, kubuntu-desktop, edubuntu-desktop
-        metapkgs = self.config.getlist("Distro","MetaPkgs")
+        metapkgs = self.config.getlist("Distro", "MetaPkgs")
 
         # we never go without ubuntu-base
-        for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
+        for pkg in self.config.getlist("Distro", "BaseMetaPkgs"):
             self[pkg].mark_install()
 
         # every meta-pkg that is installed currently, will be marked
@@ -896,21 +841,22 @@ class MyCache(apt.Cache):
             except SystemError as e:
                 # warn here, but don't fail, its possible that meta-packages
                 # conflict (like ubuntu-desktop vs xubuntu-desktop) LP: #775411
-                logging.warn("Can't mark '%s' for upgrade (%s)" % (key,e))
+                logging.warn("Can't mark '%s' for upgrade (%s)" % (key, e))
 
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
             logging.debug("none of the '%s' meta-pkgs installed" % metapkgs)
             for key in metapkgs:
                 deps_found = True
-                for pkg in self.config.getlist(key,"KeyDependencies"):
+                for pkg in self.config.getlist(key, "KeyDependencies"):
                     deps_found &= pkg in self and self[pkg].is_installed
                 if deps_found:
                     logging.debug("guessing '%s' as missing meta-pkg" % key)
                     try:
                         self[key].mark_install()
                     except (SystemError, KeyError) as e:
-                        logging.error("failed to mark '%s' for install (%s)" % (key,e))
+                        logging.error("failed to mark '%s' for install (%s)" %
+                                      (key, e))
                         view.error(_("Can't install '%s'") % key,
                                    _("It was impossible to install a "
                                      "required package. Please report "
@@ -922,16 +868,16 @@ class MyCache(apt.Cache):
                     break
         # check if we actually found one
         if not metaPkgInstalled():
-            # FIXME: provide a list
+            meta_pkgs = ', '.join(metapkgs[0:-1])
             view.error(_("Can't guess meta-package"),
                        _("Your system does not contain a "
-                         "ubuntu-desktop, kubuntu-desktop, xubuntu-desktop or "
-                         "edubuntu-desktop package and it was not "
+                         "%s or %s package and it was not "
                          "possible to detect which version of "
-                        "Ubuntu you are running.\n "
+                         "Ubuntu you are running.\n "
                          "Please install one of the packages "
                          "above first using synaptic or "
-                         "apt-get before proceeding."))
+                         "apt-get before proceeding.") %
+                        (meta_pkgs, metapkgs[-1]))
             return False
         return True
 
@@ -953,7 +899,7 @@ class MyCache(apt.Cache):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False
         # ensure we honor KeepInstalledSection here as well
-        for section in self.config.getlist("Distro","KeepInstalledSection"):
+        for section in self.config.getlist("Distro", "KeepInstalledSection"):
             if pkgname in self and self[pkgname].section == section:
                 logging.debug("skipping '%s' (in KeepInstalledSection)" % pkgname)
                 return False
@@ -962,9 +908,9 @@ class MyCache(apt.Cache):
         if pkgname not in self:
             #logging.debug("package '%s' not in cache" % pkgname)
             return True
-        # check if we want to purge 
+        # check if we want to purge
         try:
-            purge = self.config.getboolean("Distro","PurgeObsoletes")
+            purge = self.config.getboolean("Distro", "PurgeObsoletes")
         except configparser.NoOptionError as e:
             purge = False
 
@@ -981,8 +927,8 @@ class MyCache(apt.Cache):
             self.view.processEvents()
             #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.get_changes():
-                if (pkg.name not in remove_candidates or 
-                      pkg.name in foreign_pkgs or 
+                if (pkg.name not in remove_candidates or
+                      pkg.name in foreign_pkgs or
                       self._inRemovalBlacklist(pkg.name)):
                     logging.debug("package '%s' has unwanted removals, skipping" % pkgname)
                     self.restore_snapshot()
@@ -992,12 +938,12 @@ class MyCache(apt.Cache):
             self.restore_snapshot()
             return False
         return True
-    
+
     def _getObsoletesPkgs(self):
         " get all package names that are not downloadable "
-        obsolete_pkgs =set()        
+        obsolete_pkgs = set()
         for pkg in self:
-            if pkg.is_installed: 
+            if pkg.is_installed:
                 # check if any version is downloadable. we need to check
                 # for older ones too, because there might be
                 # cases where e.g. firefox in gutsy-updates is newer
@@ -1015,19 +961,19 @@ class MyCache(apt.Cache):
 
     def _getUnusedDependencies(self):
         " get all package names that are not downloadable "
-        unused_dependencies =set()        
+        unused_dependencies = set()
         for pkg in self:
             if pkg.is_installed and self._depcache.is_garbage(pkg._pkg):
                 unused_dependencies.add(pkg.name)
         return unused_dependencies
 
     def get_installed_demoted_packages(self):
-        """ return list of installed and demoted packages 
+        """ return list of installed and demoted packages
 
             If a demoted package is a automatic install it will be skipped
         """
         demotions = set()
-        demotions_file = self.config.get("Distro","Demotions")
+        demotions_file = self.config.get("Distro", "Demotions")
         if os.path.exists(demotions_file):
             with open(demotions_file) as demotions_f:
                 for line in demotions_f:
@@ -1049,14 +995,14 @@ class MyCache(apt.Cache):
         """ get all packages that are installed from a foreign repo
             (and are actually downloadable)
         """
-        foreign_pkgs=set()        
+        foreign_pkgs = set()
         for pkg in self:
             if pkg.is_installed and self.downloadable(pkg):
                 if not pkg.candidate:
                     continue
-                # assume it is foreign and see if it is from the 
+                # assume it is foreign and see if it is from the
                 # official archive
-                foreign=True
+                foreign = True
                 for origin in pkg.candidate.origins:
                     # FIXME: use some better metric here
                     if fromDist in origin.archive and \
@@ -1072,9 +1018,9 @@ class MyCache(apt.Cache):
     def checkFreeSpace(self, snapshots_in_use=False):
         """
         this checks if we have enough free space on /var, /boot and /usr
-        with the given cache 
+        with the given cache
 
-        Note: this can not be fully accurate if there are multiple 
+        Note: this can not be fully accurate if there are multiple
               mountpoints for /usr, /var, /boot
         """
 
@@ -1116,12 +1062,12 @@ class MyCache(apt.Cache):
         archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")
         aufs_rw_dir = "/tmp/"
         if (hasattr(self, "config") and
-            self.config.getWithDefault("Aufs","Enabled", False)):
-            aufs_rw_dir = self.config.get("Aufs","RWDir")
+            self.config.getWithDefault("Aufs", "Enabled", False)):
+            aufs_rw_dir = self.config.get("Aufs", "RWDir")
             if not os.path.exists(aufs_rw_dir):
                 os.makedirs(aufs_rw_dir)
         logging.debug("cache aufs_rw_dir: %s" % aufs_rw_dir)
-        for d in ["/","/usr","/var","/boot", archivedir, aufs_rw_dir, "/home","/tmp/"]:
+        for d in ["/", "/usr", "/var", "/boot", archivedir, aufs_rw_dir, "/home", "/tmp/"]:
             d = os.path.realpath(d)
             fs_id = make_fs_id(d)
             if os.path.exists(d):
@@ -1131,10 +1077,12 @@ class MyCache(apt.Cache):
                 logging.warn("directory '%s' does not exists" % d)
                 free = 0
             if fs_id in mnt_map:
-                logging.debug("Dir %s mounted on %s" % (d,mnt_map[fs_id]))
+                logging.debug("Dir %s mounted on %s" %
+                              (d, mnt_map[fs_id]))
                 fs_free[d] = fs_free[mnt_map[fs_id]]
             else:
-                logging.debug("Free space on %s: %s" % (d,free))
+                logging.debug("Free space on %s: %s" %
+                              (d, free))
                 mnt_map[fs_id] = d
                 fs_free[d] = FreeSpace(free)
         del mnt_map
@@ -1165,9 +1113,9 @@ class MyCache(apt.Cache):
         # /     has a small safety buffer as well
         required_for_aufs = 0.0
         if (hasattr(self, "config") and
-            self.config.getWithDefault("Aufs","Enabled", False)):
+            self.config.getWithDefault("Aufs", "Enabled", False)):
             logging.debug("taking aufs overlay into space calculation")
-            aufs_rw_dir = self.config.get("Aufs","RWDir")
+            aufs_rw_dir = self.config.get("Aufs", "RWDir")
             # if we use the aufs rw overlay all the space is consumed
             # the overlay dir
             for pkg in self:
@@ -1178,17 +1126,17 @@ class MyCache(apt.Cache):
         required_for_snapshots = 0.0
         if snapshots_in_use:
             for pkg in self:
-                if (pkg.is_installed and 
+                if (pkg.is_installed and
                     (pkg.marked_upgrade or pkg.marked_delete)):
                     required_for_snapshots += pkg.installed.installed_size
             logging.debug("additional space for the snapshots: %s" % required_for_snapshots)
-                    
+
         # sum up space requirements
         for (dir, size) in [(archivedir, self.required_download),
                             # plus 50M safety buffer in /usr
                             ("/usr", self.additional_required_space),
                             ("/usr", 50*1024*1024),
-                            ("/boot", space_in_boot), 
+                            ("/boot", space_in_boot),
                             ("/tmp", 5*1024*1024),   # /tmp for dkms LP: #427035
                             ("/", 10*1024*1024),     # small safety buffer /
                             (aufs_rw_dir, required_for_aufs),
@@ -1199,7 +1147,6 @@ class MyCache(apt.Cache):
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size
             fs_free[dir].need += size
-
 
         # check for space required violations
         required_list = {}
@@ -1215,7 +1162,6 @@ class MyCache(apt.Cache):
             logging.error("Not enough free space: %s" % [str(i) for i in required_list])
             raise NotEnoughFreeSpaceError(list(required_list.values()))
         return True
-
 
 
 if __name__ == "__main__":

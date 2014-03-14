@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from gi.repository import Gtk, GLib
+from mock import patch
 
 import mock
 import os
@@ -15,19 +16,15 @@ class TestDistroEndOfLife(unittest.TestCase):
     # we need to test two cases:
     # - the current distro is end of life
     # - the next release (the upgrade target) is end of life
-
-    def test_distro_current_distro_end_of_life(self):
-        """ this code tests that check-new-release-gtk shows a
-            dist-no-longer-supported dialog when it detects that the
-            running distribution is no longer supported
+    @patch("subprocess.call")
+    def test_distro_current_distro_end_of_life(self, mock_call):
+        """ this code tests that check-new-release-gtk calls
+            update-manager when it detects that the running
+            distribution is no longer supported
         """
         def _nag_dialog_close_helper(checker):
-            # this helper is called to verify that the nag dialog appears
-            # and that it
-            dialog = getattr(checker, "no_longer_supported_nag", None)
-            self.assertNotEqual(dialog, None)
+            # this helper is called to close the checker
             checker.close()
-            self.dialog_called = True
         # ----
         try:
             from check_new_release_gtk import CheckNewReleaseGtk
@@ -59,9 +56,8 @@ class TestDistroEndOfLife(unittest.TestCase):
         GLib.timeout_add_seconds(1, _nag_dialog_close_helper, checker)
         # run the dialog, this will also run a gtk mainloop so that the
         # timeout works
-        self.dialog_called = False
         checker.new_dist_available(meta_release, new_dist)
-        self.assertTrue(self.dialog_called, True)
+        mock_call.assert_called_with(['update-manager', '--no-update'])
 
     def _p(self):
         while Gtk.events_pending():

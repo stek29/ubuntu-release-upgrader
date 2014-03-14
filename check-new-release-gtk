@@ -30,10 +30,10 @@ from gi.repository import GLib
 from gi.repository import Gtk
 import locale
 import logging
+import os
+import subprocess
 import sys
 import time
-
-import DistUpgrade.GtkProgress
 
 import gettext
 from optparse import OptionParser
@@ -46,7 +46,7 @@ from DistUpgrade.SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
 #       correctly, see http://bugs.python.org/issue4391
-#       Shoudl be resolved by Python3
+#       Should be resolved by Python3
 gettext.bindtextdomain("ubuntu-release-upgrader", "/usr/share/locale")
 gettext.textdomain("ubuntu-release-upgrader")
 translation = gettext.translation("ubuntu-release-upgrader", fallback=True)
@@ -72,19 +72,25 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
   def __init__(self, options):
     self.options = options
     self.datadir = options.datadir
-    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "ubuntu-release-upgrader")
     self.new_dist = None
     logging.debug("running with devel=%s proposed=%s" % (
             options.devel_release, options.proposed_release))
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
                     useProposed=options.proposed_release)
     m.connect("new-dist-available", self.new_dist_available)
-    # useful for testing
-    if options.test_uri:
-        self.build_ui()
-        self.show_uri(options.test_uri)
-    else:
-        GLib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout, None)
+    GLib.timeout_add_seconds(self.FETCH_TIMEOUT, self.timeout, None)
+
+  def _run_dialog(self, dialog):
+    window = Gtk.Window()
+    window.set_title(_("Software Updater"))
+    window.set_icon_name("system-software-update")
+    window.set_position(Gtk.WindowPosition.CENTER)
+    window.set_resizable(False)
+
+    window.add(dialog)
+    dialog.start()
+    window.show_all()
+    Gtk.main()
 
   def new_dist_available(self, meta_release, new_dist):
     logging.debug("new_dist_available: %s" % new_dist)
@@ -96,52 +102,34 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     if (ignore_dist == new_dist.name and
         meta_release.no_longer_supported is None):
         logging.warn("found new dist '%s' but it is on the ignore list" % new_dist.name)
-        Gtk.main_quit()
-    self.build_ui()
-    self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
-    self.linkbutton_release_notes.set_uri(new_dist.releaseNotesURI)
-    html_uri = new_dist.releaseNotesHtmlUri
-    if not html_uri:
-        logging.warn("no ReleaseNotesHtmlUri found")
-        return
-    self.show_uri(html_uri)
+        sys.exit()
+
     # show alert on unsupported distros
     if meta_release.no_longer_supported is not None:
-        from UpdateManager.Dialogs import UnsupportedDialog
-        # Since now we are talking to update-manager code, point at the right
-        # location for it to pick up its own .ui files.
-        self.datadir = "/usr/share/update-manager/"
-        dialog = UnsupportedDialog(self, meta_release)
-        self.no_longer_supported_nag = self.window_main
-        Gtk.main()
-  
+        subprocess.call(['update-manager', '--no-update'])
+        Gtk.main_quit()
+    else:
+        self.build_ui()
+        self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
+        self.window_main.show()
+
   def close(self):
     self.window_main.destroy()
     Gtk.main_quit()
 
   def build_ui(self):
-    from gi.repository import WebKit
-    self.webkit_view = WebKit.WebView()
-    self.webkit_view.show()
-    settings = self.webkit_view.get_settings()
-    settings.set_property("enable-plugins", False)
-    # FIXME: do we want to have it in a Gtk.ScrolledWindow ?
-    #self.alignment_webkit_view.add(self.webkit_view)
-    self.scrolledwindow_webkit_view.add(self.webkit_view)
+    SimpleGtkbuilderApp.__init__(self, self.datadir+"/gtkbuilder/UpgradePromptDialog.ui", "ubuntu-release-upgrader")
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    progress=DistUpgrade.GtkProgress.GtkAcquireProgress(self.window_main, self.datadir,
-                                                        _("Downloading the release upgrade tool"))
-    fetcher = DistUpgradeFetcher(new_dist=self.new_dist, 
-                                 parent=self,
-                                 datadir=self.datadir,
-                                 progress=progress)
-
+    extra_args = ""
     if options.devel_release:
-        fetcher.run_options.append("--devel-release")
-    res = fetcher.run()
-    res # pyflakes
+        extra_args = extra_args + " --devel-release"
+    if options.proposed_release:
+        extra_args = extra_args + " --proposed"
+    os.execl("/bin/sh", "/bin/sh", "-c",
+             "/usr/bin/pkexec /usr/bin/do-release-upgrade "
+             "--frontend=DistUpgradeViewGtk3%s" % extra_args)
 
   def on_button_ask_me_later_clicked(self, button):
     logging.debug("ask me later")
@@ -166,16 +154,6 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def window_delete_event_cb(self, window, event):
     Gtk.main_quit()
-
-  def show_uri(self, uri):
-    logging.debug("using uri '%s'" % uri)
-    self.webkit_view.open(uri)
-    self.webkit_view.connect("load-finished", self._on_load_finished)
-
-  def _on_load_finished(self, view, frame):
-    self.window_main.show_all()
-    # hide redundant release notes button
-    self.linkbutton_release_notes.hide()
 
   def timeout(self, user_data):
     if self.new_dist is None:
@@ -204,11 +182,9 @@ if __name__ == "__main__":
                             "the upgrader from $distro-proposed"))
   # mostly useful for development
   parser.add_option ("", "--datadir", default="/usr/share/ubuntu-release-upgrader")
-  parser.add_option ("", "--test-uri")
   parser.add_option ("", "--debug", action="store_true", default=False,
                      help=_("Add debug output"))
   (options, args) = parser.parse_args()
-
   if options.debug:
       logging.basicConfig(level=logging.DEBUG)
 

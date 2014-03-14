@@ -285,7 +285,7 @@ class DistUpgradeController(object):
             is_child_of_process_name("sshd")):
             # check if the frontend supports ssh upgrades (see lp: #322482)
             if not self._viewSupportsSSH():
-                logging.error("upgrade over ssh not alllowed")
+                logging.error("upgrade over ssh not allowed")
                 self._view.error(_("Upgrading over remote connection not supported"),
                                  _("You are running the upgrade over a "
                                    "remote ssh connection with a frontend "
@@ -349,9 +349,9 @@ class DistUpgradeController(object):
         m = MetaReleaseCore(useDevelopmentRelease=False,
                             forceLTS=forceLTS)
         # this will timeout eventually
-        while m.downloading:
+        self._view.processEvents()
+        while not m.downloaded.wait(0.1):
             self._view.processEvents()
-            time.sleep(0.1)
         if m.new_dist is None:
             logging.error("No new dist found")
             return False
@@ -816,11 +816,20 @@ class DistUpgradeController(object):
             sourceslist.read_main_list()
         except SystemError:
             logging.error("Repository information invalid after updating (we broke it!)")
-            self._view.error(_("Repository information invalid"),
-                             _("Upgrading the repository information "
-                               "resulted in a invalid file so a bug "
-                               "reporting process is being started."))
-            subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+            if os.path.exists("/usr/bin/apport-bug"):
+                self._view.error(_("Repository information invalid"),
+                                 _("Upgrading the repository information "
+                                   "resulted in a invalid file so a bug "
+                                   "reporting process is being started."))
+                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+            else:
+                self._view.error(_("Repository information invalid"),
+                                 _("Upgrading the repository information "
+                                   "resulted in a invalid file. To report "
+                                   "a bug install apport and then execute "
+                                   "'apport-bug ubuntu-release-upgrader'."))
+                logging.error("Missing apport-bug, bug report not "
+                              "autocreated")
             return False
 
         if self.sources_disabled:
@@ -1638,11 +1647,20 @@ class DistUpgradeController(object):
 
         if not self.prepare():
             logging.error("self.prepared() failed")
-            self._view.error(_("Preparing the upgrade failed"),
-                             _("Preparing the system for the upgrade "
-                               "failed so a bug reporting process is "
-                               "being started."))
-            subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+            if os.path.exists("/usr/bin/apport-bug"):
+                self._view.error(_("Preparing the upgrade failed"),
+                                 _("Preparing the system for the upgrade "
+                                   "failed so a bug reporting process is "
+                                   "being started."))
+                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+            else:
+                self._view.error(_("Preparing the upgrade failed"),
+                                 _("Preparing the system for the upgrade "
+                                   "failed. To report a bug install apport "
+                                   "and then execute 'apport-bug "
+                                   "ubuntu-release-upgrader'."))
+                logging.error("Missing apport-bug, bug report not "
+                              "autocreated")
             sys.exit(1)
 
         # mvo: commented out for now, see #54234, this needs to be
@@ -1653,15 +1671,28 @@ class DistUpgradeController(object):
             logging.debug("need backports")
             # get backported packages (if needed)
             if not self.getRequiredBackports():
-                self._view.error(_("Getting upgrade prerequisites failed"),
-                                 _("The system was unable to get the "
-                                   "prerequisites for the upgrade. "
-                                   "The upgrade will abort now and restore "
-                                   "the original system state.\n"
-                                   "\n"
-                                   "Additionally, a bug reporting process is "
-                                   "being started."))
-                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+                if os.path.exists("/usr/bin/apport-bug"):
+                    self._view.error(_("Getting upgrade prerequisites failed"),
+                                     _("The system was unable to get the "
+                                       "prerequisites for the upgrade. "
+                                       "The upgrade will abort now and restore "
+                                       "the original system state.\n"
+                                       "\n"
+                                       "Additionally, a bug reporting process is "
+                                       "being started."))
+                    subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+                else:
+                    self._view.error(_("Getting upgrade prerequisites failed"),
+                                     _("The system was unable to get the "
+                                       "prerequisites for the upgrade. "
+                                       "The upgrade will abort now and restore "
+                                       "the original system state.\n"
+                                       "\n"
+                                       "To report a bug install apport and "
+                                       "then execute 'apport-bug "
+                                       "ubuntu-release-upgrader'."))
+                    logging.error("Missing apport-bug, bug report not "
+                                  "autocreated")
                 self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
@@ -1707,7 +1738,7 @@ class DistUpgradeController(object):
         # that the system had no sources.list entries and therefore no
         # desktop file information)
         self.serverMode = self.cache.need_server_mode()
-        # do it here as we neeed to know if we are in server or client mode
+        # do it here as we need to know if we are in server or client mode
         self.quirks.ensure_recommends_are_installed_on_desktops()
         # now check if we still have some key packages available/downloadable
         # after the update - if not something went seriously wrong
@@ -1735,7 +1766,11 @@ class DistUpgradeController(object):
                                    "In the case of an overloaded mirror, you "
                                    "may want to try the upgrade again later.")
                                    % pkg)
-                subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+                if os.path.exists("/usr/bin/apport-bug"):
+                    subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+                else:
+                    logging.error("Missing apport-bug, bug report not "
+                                  "autocreated")
                 self.abort()
 
         # calc the dist-upgrade and see if the removals are ok/expected

@@ -1,14 +1,16 @@
 '''apport package hook for ubuntu-release-upgrader
 
-(c) 2011 Canonical Ltd.
+(c) 2011-2014 Canonical Ltd.
 Author: Brian Murray <brian@ubuntu.com>
 '''
 
 import os
+import re
 
 from apport.hookutils import (
     attach_gsettings_package,
     attach_file_if_exists,
+    attach_root_command_outputs,
     root_command_output)
 
 
@@ -38,3 +40,17 @@ def add_info(report, ui):
         'VarLogDistupgradeTermlog')
     attach_file_if_exists(report, '/var/log/dist-upgrade/screenlog.0',
         'VarLogDistupgradeScreenlog')
+    attach_root_command_outputs(
+        report,
+        {'CurrentDmesg.txt':
+            'dmesg | comm -13 --nocheck-order /var/log/dmesg -'})
+    problem_type = report.get("ProblemType", None)
+    if problem_type == 'Crash':
+        tmpdir = re.compile('ubuntu-release-upgrader-\w+')
+        tb = report.get("Traceback", None)
+        if tb:
+            dupe_sig = ''
+            for line in tb.splitlines():
+                scrub_line = tmpdir.sub('ubuntu-release-upgrader-tmpdir', line)
+                dupe_sig += scrub_line + '\n'
+            report["DuplicateSignature"] = dupe_sig

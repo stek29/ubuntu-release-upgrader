@@ -1,3 +1,176 @@
+ubuntu-release-upgrader (1:0.216.1) trusty; urgency=medium
+
+  * debian/control: do not depend on python3-apport as this recommends apport
+    which pull in a lot more packages on servers.
+
+ -- Brian Murray <brian@ubuntu.com>  Thu, 13 Mar 2014 10:06:07 -0700
+
+ubuntu-release-upgrader (1:0.216) trusty; urgency=medium
+
+  * debian/control.py: depend on python3-apport since the release upgrader for
+    U will be using python3 not python2.
+
+ -- Brian Murray <brian@ubuntu.com>  Mon, 10 Mar 2014 10:01:49 -0700
+
+ubuntu-release-upgrader (1:0.215) trusty; urgency=medium
+
+  * do-release-upgrade: indicate that -p and -d switches are mutually
+    exclusive (LP: #1071025)
+  * debian/control.py: depend on python-apport since DistUpgradeApport.py
+    imports it and the release upgrader does not use python3 (LP: #1289604)
+  * debian/source_ubuntu-release-upgrader.py: create a DuplicateSignature by
+    stripping out the tmpdir from the Traceback (LP: #1289850)
+
+ -- Brian Murray <brian@ubuntu.com>  Fri, 07 Mar 2014 14:29:14 -0800
+
+ubuntu-release-upgrader (1:0.214) trusty; urgency=medium
+
+  * DistUpgrade/DistUpgradeQuirks.py: On 12.04 stop the upgrade process if the
+    system does not support PAE. Thanks to Chris Bainbridge for the initial
+    patch. (LP: #1160346)
+
+ -- Brian Murray <brian@ubuntu.com>  Wed, 05 Mar 2014 12:53:48 -0800
+
+ubuntu-release-upgrader (1:0.213) trusty; urgency=medium
+
+  * DistUpgrade/DistUpgradeController.py: Catch exception if apport is not
+    installed and fail gracefully. Thanks to Jean-Baptiste Lallement for the
+    initial patch. (LP: #1285545)
+
+ -- Brian Murray <brian@ubuntu.com>  Wed, 05 Mar 2014 10:56:40 -0800
+
+ubuntu-release-upgrader (1:0.212) trusty; urgency=medium
+
+  * tests/test_quirks.py: Only run fglrx tests on amd64 and i386 
+
+ -- Brian Murray <brian@ubuntu.com>  Thu, 27 Feb 2014 15:05:32 -0800
+
+ubuntu-release-upgrader (1:0.211) trusty; urgency=medium
+
+  * DistUpgrade/DistUpgradeFetcherCore.py: set inheritance of file descriptors
+    for python3.4 (LP: #1272387)
+
+ -- Brian Murray <brian@ubuntu.com>  Mon, 24 Feb 2014 16:28:23 -0800
+
+ubuntu-release-upgrader (1:0.210) trusty; urgency=low
+
+  [ Brian Murray ]
+  * data/DistUpgrade.cfg.precise: change kernel removals to 3.2.0
+  * source_ubuntu-release-upgrader.py: collect dmesg info when reporting
+    upgrade failures
+  * Utilize new downloaded event from update-manager thereby speeding up usage
+    of MetaReleaseCore.  Thanks to Anders Kaseorg for the patch.
+  * Don't build depend on scrollkeeper thanks to Jeremy Bicha for the patch.
+
+  [ Harald Sitter ]
+  * data/DistUpgrade.cfg.precise: change kubuntu-desktop key dependencies to
+    plasma-desktop, kubuntu-default-settings (previous ones did not exist or
+    were simply bad key dependencies) LP: #1264887
+    + Same for kubuntu-netbook using plasma-netbook,
+       kubuntu-netbook-default-settings.
+  * data/DistUpgrade.cfg: change kubuntu-desktop key dependencies to
+    plasma-desktop, kubuntu-settings-desktop
+    + Same for kubuntu-netbook using plasma-netbook, kubuntu-settings-netbook
+
+ -- Brian Murray <brian@ubuntu.com>  Thu, 23 Jan 2014 16:14:37 -0800
+
+ubuntu-release-upgrader (1:0.209) trusty; urgency=low
+
+  [ Jean-Baptiste Lallement ]
+  * Add data/DistUpgrade.cfg.precise to support Precise to Trusty upgrades.
+    (LP: #1245469)
+
+ -- Brian Murray <brian@ubuntu.com>  Tue, 29 Oct 2013 10:18:07 -0700
+
+ubuntu-release-upgrader (1:0.208) trusty; urgency=low
+
+  [ Brian Murray ]
+  * Synchronize the list of metapackages used in the code.  LP: #1225016.
+  * Properly display error messages encountered by DistUpgradeFetcherCore.
+    (LP: #1241660)
+  * DistUpgrade/DistUpgradeCache.py: Do not initialize the cache until we know
+    it is unlocked.  (LP: #1214186)
+
+ -- Brian Murray <brian@ubuntu.com>  Fri, 25 Oct 2013 09:17:56 -0700
+
+ubuntu-release-upgrader (1:0.207) trusty; urgency=low
+
+  * Support saucy->trusty upgrades.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Wed, 23 Oct 2013 02:42:08 +0000
+
+ubuntu-release-upgrader (1:0.206) trusty; urgency=low
+
+  * Remove lubuntu-desktop PostUpgradeRemove rule as it is unnecessary
+    (LP: #1241123)
+  * Replace references to Saucy with Trusty
+
+ -- Brian Murray <brian@ubuntu.com>  Mon, 21 Oct 2013 09:31:39 -0700
+
+ubuntu-release-upgrader (1:0.205) saucy; urgency=low
+
+  * Instead of using gksu to authenticate for the distribution upgrade, use
+    do-release-upgrade with pkexec (LP: #1210649)
+
+ -- Brian Murray <brian@ubuntu.com>  Fri, 04 Oct 2013 19:17:49 -0700
+
+ubuntu-release-upgrader (1:0.204) saucy; urgency=low
+
+  * Call update-manager instead of raising it's UnsupportedDialog
+    error. (LP: #1210643) Thanks to Dylan McCall for some help with this.
+  * Replace references to 13.04 with 13.10 (LP: #1225665)
+
+ -- Brian Murray <brian@ubuntu.com>  Tue, 17 Sep 2013 14:35:25 -0700
+
+ubuntu-release-upgrader (1:0.203) saucy; urgency=low
+
+  [ Brian Murray ]
+  * test/test_sources_list.py: resolve test failure regarding EOL upgrades
+  * DistUpgradeQuirks.py: pep8 cleanup, remove some additional unnecessary
+    quirks
+  * DistUpgrade/patches/: remove pycompile patch
+
+  [ Steve Langasek ]
+  * Drop all quirks for upgrades prior to the karmic->lucid upgrade; all
+    releases earlier than 10.04 are entirely EOLed, and in any case users
+    should not be upgrading directly from such old releases to 13.10 or
+    later without going through the intermediate LTS releases, so this is
+    all dead code.
+  * Drop use of base-installer for detecting "recommended" kernels for the
+    hardware.  So far this code was only ever used for a one-time transition
+    when more specialized kernel flavors became available on i386 that were
+    preferred over the -386 flavor, and in the meantime the code is causing
+    wrong results on upgrade for users of UbuntuStudio, which ships a kernel
+    flavor that's not known by base-installer.  LP: #1220898.
+
+ -- Brian Murray <brian@ubuntu.com>  Thu, 12 Sep 2013 10:38:41 -0700
+
+ubuntu-release-upgrader (1:0.202) saucy; urgency=low
+
+  * DistUpgradeQuirks.py: when removing .crash files also remove whoopsie
+    .upload and .uploaded files
+  * DistUpgradeCache.py: remove unhelpful system error message from upgrade
+    failure dialog (LP: #1221307)
+
+ -- Brian Murray <brian@ubuntu.com>  Mon, 09 Sep 2013 16:37:20 -0700
+
+ubuntu-release-upgrader (1:0.201) saucy; urgency=low
+
+  [ Colin Watson ]
+  * DistUpgrade/DistUpgradeController.py: Fix "alllowed" typo.
+
+  [ Brian Murray ]
+  * DistUpgrade/DevelReleaseAnnouncement: indicate that it is a Beta now
+
+ -- Brian Murray <brian@ubuntu.com>  Thu, 05 Sep 2013 10:07:13 -0700
+
+ubuntu-release-upgrader (1:0.200) saucy; urgency=low
+
+  * DistUpgradeFetcher.py: Properly pass Gtk.window to error (LP: #1199984)
+  * ubuntu-release-upgrader-gtk: depend on gir1.2-webkit-3.0 (LP: #1215526)
+
+ -- Brian Murray <brian@ubuntu.com>  Thu, 22 Aug 2013 09:48:10 -0700
+
 ubuntu-release-upgrader (1:0.199) saucy; urgency=low
 
   * Drop obsolete GObject.threads_init() calls to avoid warnings.  Bump

@@ -48,6 +48,7 @@ def apport_crash(type, value, tb):
     except ImportError as e:
         logging.error("failed to import apport python module, can't generate crash: %s" % e)
         return False
+    from .DistUpgradeVersion import VERSION
     # we pretend we are do-release-upgrade
     sys.argv[0] = "/usr/bin/do-release-upgrade"
     apport_excepthook(type, value, tb)
@@ -55,7 +56,10 @@ def apport_crash(type, value, tb):
     if os.path.exists('/var/crash/_usr_bin_do-release-upgrade.0.crash'):
         report = Report()
         report.setdefault('Tags', 'dist-upgrade')
-        report['Tags'] += ' dist-upgrade'
+        # use the version of the release-upgrader tarball, not the installed
+        # package
+        report.setdefault('Package', 'ubuntu-release-upgrader-core 1:%s' %
+                          VERSION)
         _apport_append_logfiles(report)
         report.add_to_existing('/var/crash/_usr_bin_do-release-upgrade.0.crash')
     return True

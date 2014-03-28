@@ -111,14 +111,8 @@ def run_apport():
         logging.debug("RELEASE_UPRADER_NO_APPORT env set")
         return False
     if "DISPLAY" in os.environ:
-        for p in ["/usr/share/apport/apport-gtk", "/usr/share/apport/apport-qt"]:
-            if os.path.exists(p):
-                ret = -1
-                try:
-                    ret = subprocess.call(p)
-                except Exception:
-                    logging.exception("Unable to launch '%s' " % p)
-                return (ret == 0)
+        # update-notifier will notify about the crash
+        return True
     elif os.path.exists("/usr/bin/apport-cli"):
         try:
             return (subprocess.call("/usr/bin/apport-cli") == 0)

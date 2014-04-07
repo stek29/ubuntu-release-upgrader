@@ -434,6 +434,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         try:
             from gi.repository import WebKit
             self._webkit_view = WebKit.WebView()
+            settings = self._webkit_view.get_settings()
+            settings.set_property("enable-plugins", False)
             self.vbox_main.pack_end(self._webkit_view, True, True, 0)
         except:
             logging.exception("html widget")

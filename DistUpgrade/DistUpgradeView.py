@@ -325,6 +325,7 @@ class DistUpgradeView(object):
         self.confirmChangesMessage = ""
         self.demotions = demotions
         self.toInstall = []
+        self.toReinstall = []
         self.toUpgrade = []
         self.toRemove = []
         self.toRemoveAuto = []
@@ -334,6 +335,8 @@ class DistUpgradeView(object):
               self.toInstall.append(pkg)
             elif pkg.marked_upgrade: 
               self.toUpgrade.append(pkg)
+            elif pkg.marked_reinstall:
+              self.toReinstall.append(pkg)
             elif pkg.marked_delete:
               if pkg._pcache._depcache.is_auto_installed(pkg._pkg):
                 self.toRemoveAuto.append(pkg)
@@ -341,18 +344,18 @@ class DistUpgradeView(object):
                 self.toRemove.append(pkg)
             elif pkg.marked_downgrade: 
               self.toDowngrade.append(pkg)
+        # do not bother the user with a different treeview
+        self.toInstall = self.toInstall + self.toReinstall
         # sort it
         self.toInstall.sort()
         self.toUpgrade.sort()
         self.toRemove.sort()
         self.toRemoveAuto.sort()
         self.toDowngrade.sort()
-        # no re-installs 
-        assert(len(self.toInstall)+len(self.toUpgrade)+len(self.toRemove)+len(self.toRemoveAuto)+len(self.toDowngrade) == len(changes))
         # now build the message (the same for all frontends)
         msg = "\n"
         pkgs_remove = len(self.toRemove) + len(self.toRemoveAuto)
-        pkgs_inst = len(self.toInstall)
+        pkgs_inst = len(self.toInstall) + len(self.toReinstall)
         pkgs_upgrade = len(self.toUpgrade)
         # FIXME: show detailed packages
         if len(self.demotions) > 0:

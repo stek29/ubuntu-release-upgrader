@@ -25,7 +25,9 @@ class TestApportInformationLeak(unittest.TestCase):
             with open(os.path.join(tmpdir, name), "w") as f:
                 f.write("some-data")
         _apport_append_logfiles(report, tmpdir)
-        self.assertEqual(sorted([f[0].name for f in report.values() if isinstance(f, tuple)]),
+        self.assertEqual(
+            sorted([fname[0].name 
+                    for fname in report.values() if isinstance(f, tuple)]),
                          sorted([os.path.join(tmpdir, "main.log"),
                                  os.path.join(tmpdir, "apt.log")]))
 

@@ -24,6 +24,7 @@ from __future__ import absolute_import, print_function
 import sys
 import logging
 import subprocess
+from gettext import dgettext
 
 import apt
 import os
@@ -54,7 +55,7 @@ class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
 class TextInstallProgress(InstallProgress):
 
     # percent step when progress is reported (to avoid screen spam)
-    MIN_REPORTING = 1
+    MIN_REPORTING = 5
 
     def __init__(self, *args, **kwargs):
         super(TextInstallProgress, self).__init__(*args, **kwargs)
@@ -62,8 +63,10 @@ class TextInstallProgress(InstallProgress):
 
     def status_change(self, pkg, percent, status):
         if self._prev_percent + self.MIN_REPORTING < percent:
-            sys.stdout.write("\r\n%s [%05.2f%%]\r\n\n" % (
-                     _("Total Progress"), percent))
+            # FIXME: move into ubuntu-release-upgrader after trusty
+            domain = "libapt-pkg4.12"
+            progress_str = dgettext(domain, "Progress: [%3i%%]") % int(percent)
+            sys.stdout.write("\r\n%s\r\n" % progress_str)
             self._prev_percent = percent
 
 

@@ -188,6 +188,7 @@ class MyCache(apt.Cache):
 
         # turn on debugging in the cache
         apt_pkg.config.set("Debug::pkgProblemResolver", "true")
+        apt_pkg.config.set("Debug::pkgDepCache::Marker", "true")
         apt_pkg.config.set("Debug::pkgDepCache::AutoInstall", "true")
     def _startAptResolverLog(self):
         if hasattr(self, "old_stdout"):

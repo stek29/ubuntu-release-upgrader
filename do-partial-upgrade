@@ -25,24 +25,22 @@
 
 from __future__ import print_function
 
-from gi.repository import Gtk
-import gi
-gi.require_version("Gtk", "3.0")
-
 import os
 import sys
 
 from DistUpgrade.DistUpgradeVersion import VERSION
 from DistUpgrade.DistUpgradeController import DistUpgradeController
+from DistUpgrade.DistUpgradeConfigParser import DistUpgradeConfig
+from DistUpgrade.DistUpgradeMain import (
+    setup_logging,
+    setup_view,
+)
 import locale
 import gettext
 
 from optparse import OptionParser
 
 if __name__ == "__main__":
-
-    Gtk.init_check(sys.argv)
-    Gtk.Window.set_default_icon_name("system-software-update")
 
     #FIXME: Workaround a bug in optparser which doesn't handle unicode/str
     #       correctly, see http://bugs.python.org/issue4391
@@ -60,33 +58,48 @@ if __name__ == "__main__":
     except:
         pass
 
+    # gtk2 used to throw a exception when it failed to init the display,
+    # so back then it was safe to try to import the frontend and fallback
+    # to text if the import failed. this is no longer the case so we need
+    # do figure it out here :/
+    if "DISPLAY" in os.environ:
+        default_frontend = "DistUpgradeViewGtk3"
+    else:
+        default_frontend = "DistUpgradeViewText"
+
     # Begin parsing of options
     parser = OptionParser()
     parser.add_option ("-V", "--version", action="store_true",
                        dest="show_version", default=False,
                        help=_("Show version and exit"))
-    parser.add_option ("--data-dir", "", 
+    parser.add_option ("--data-dir", "", dest="datadir",
                        default="/usr/share/ubuntu-release-upgrader/",
                        help=_("Directory that contains the data files"))
-    parser.add_option ("-f", "--frontend", default="DistUpgradeViewText",
+    parser.add_option ("-f", "--frontend", default=default_frontend,
                        dest="frontend", 
                        help=_("Run the specified frontend"))
 
     (options, args) = parser.parse_args()
 
-    data_dir = os.path.normpath(options.data_dir)+"/"
+    datadir = os.path.normpath(options.datadir)+"/"
 
     if options.show_version:
         print("%s: version %s" % (os.path.basename(sys.argv[0]), VERSION))
         sys.exit(0)
 
-    module_name = "DistUpgrade." + options.frontend
-    module = __import__(module_name)
-    submodule = getattr(module, options.frontend)
-    view_class = getattr(submodule, options.frontend)
-    view = view_class(data_dir)
+    # we are by definition in partial upgrade mode
+    options.partial = True
+    config = DistUpgradeConfig(options.datadir)
+    logdir = setup_logging(options, config)
+    view = setup_view(options, config, logdir)
+
     if options.frontend == "DistUpgradeViewGtk3":
+        from gi.repository import Gtk
+        import gi
+        gi.require_version("Gtk", "3.0")
+        Gtk.init_check(sys.argv)
+        Gtk.Window.set_default_icon_name("system-software-update")
         view.label_title.set_markup("<b><big>%s</big></b>" %
                                     _("Running partial upgrade"))
-    controller = DistUpgradeController(view, datadir=data_dir)
+    controller = DistUpgradeController(view, datadir=datadir)
     controller.doPartialUpgrade()

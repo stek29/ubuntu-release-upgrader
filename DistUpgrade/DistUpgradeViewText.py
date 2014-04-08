@@ -21,6 +21,7 @@
 
 from __future__ import absolute_import, print_function
 
+import errno
 import sys
 import logging
 import subprocess
@@ -152,9 +153,14 @@ class DistUpgradeViewText(DistUpgradeView):
       for pager in ["/usr/bin/sensible-pager", "/bin/more"]:
           if os.path.exists(pager):
               p = subprocess.Popen([pager,"-"],stdin=subprocess.PIPE)
-              p.stdin.write(output)
-              p.stdin.close()
-              p.wait()
+              # if lots of data is shown, we need to catch EPIPE
+              try:
+                  p.stdin.write(output)
+                  p.stdin.close()
+                  p.wait()
+              except IOError as e:
+                  if e.errno != errno.EPIPE:
+                      raise
               return
       # if we don't have a pager, just print
       print(output)

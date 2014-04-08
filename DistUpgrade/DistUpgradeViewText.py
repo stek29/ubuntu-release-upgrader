@@ -41,6 +41,14 @@ from .DistUpgradeGettext import gettext as _
 from .utils import twrap
 
 
+def readline():
+    """ py2/py3 compatible readline from stdin """
+    s = sys.stdin.readline()
+    if hasattr(s, "decode"):
+        return s.decode(ENCODING, "backslashreplace")
+    return s
+
+
 class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
     def __init__(self):
         apt.progress.text.AcquireProgress.__init__(self)
@@ -135,7 +143,7 @@ class DistUpgradeViewText(DistUpgradeView):
       if extended_msg:
         print(twrap(extended_msg))
       print(_("To continue please press [ENTER]"))
-      sys.stdin.readline().decode(ENCODING, "backslashreplace")
+      readline()
     def error(self, summary, msg, extended_msg=None):
       print()
       print(twrap(summary))
@@ -169,7 +177,7 @@ class DistUpgradeViewText(DistUpgradeView):
       print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
       sys.stdout.flush()
       while True:
-        res = sys.stdin.readline().decode(ENCODING, "backslashreplace")
+        res = readline()
         # TRANSLATORS: the "y" is "yes"
         if res.strip().lower().startswith(_("y")):
           return True
@@ -213,14 +221,14 @@ class DistUpgradeViewText(DistUpgradeView):
       print(twrap(msg))
       if default == 'No':
           print(_("Continue [yN] "), end="")
-          res = sys.stdin.readline().decode(ENCODING, "backslashreplace")
+          res = readline()
           # TRANSLATORS: first letter of a positive (yes) answer
           if res.strip().lower().startswith(_("y")):
               return True
           return False
       else:
           print(_("Continue [Yn] "), end="")
-          res = sys.stdin.readline().decode(ENCODING, "backslashreplace")
+          res = readline()
           # TRANSLATORS: first letter of a negative (no) answer
           if res.strip().lower().startswith(_("n")):
               return False

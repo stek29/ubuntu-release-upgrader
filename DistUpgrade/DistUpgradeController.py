@@ -757,6 +757,8 @@ class DistUpgradeController(object):
     def updateSourcesList(self):
         logging.debug("updateSourcesList()")
         self.sources = SourcesList(matcherPath=".")
+        # backup first!
+        self.sources.backup(self.sources_backup_ext)
         if not self.rewriteSourcesList(mirror_check=True):
             logging.error("No valid mirror found")
             res = self._view.askYesNoQuestion(_("No valid mirror found"),
@@ -802,8 +804,7 @@ class DistUpgradeController(object):
             else:
                 self.abort()
 
-        # write (well, backup first ;) !
-        self.sources.backup(self.sources_backup_ext)
+        # now write
         self.sources.save()
 
         # re-check if the written self.sources are valid, if not revert and

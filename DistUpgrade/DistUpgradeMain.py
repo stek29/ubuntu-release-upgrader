@@ -28,6 +28,7 @@ import apt
 import atexit
 import gettext
 import glob
+import locale
 import logging
 import os
 import shutil
@@ -114,6 +115,7 @@ def setup_logging(options, config):
     logging.info("Using config files '%s'" % config.config_files)
     logging.info("uname information: '%s'" % " ".join(os.uname()))
     logging.info("apt version: '%s'" % apt.apt_pkg.VERSION)
+    logging.info("python version: '%s'" % sys.version)
     return logdir
 
 def save_system_state(logdir):

@@ -43,8 +43,14 @@ except:
     logging.exception("getting the encoding failed")
     ENCODING = "utf-8"   #pyflakes
 
+# if there is no encoding, setup UTF-8
 if not ENCODING:
     ENCODING = "utf-8"
+    os.putenv("LC_CTYPE", "C.UTF-8")
+    locale.setlocale(locale.LC_CTYPE, "C.UTF-8")
+
+# log locale information
+logging.info("locale: '%s' '%s'" % locale.getlocale())
 
 
 def FuzzyTimeToStr(sec):

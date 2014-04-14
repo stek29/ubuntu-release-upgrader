@@ -28,7 +28,6 @@ import apt
 import atexit
 import gettext
 import glob
-import locale
 import logging
 import os
 import shutil

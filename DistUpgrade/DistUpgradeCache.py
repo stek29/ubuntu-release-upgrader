@@ -721,14 +721,17 @@ class MyCache(apt.Cache):
         """ this function tests if the current changes don't violate
             our constrains (blacklisted removals etc)
         """
+        main_arch = apt_pkg.config.find("APT::Architecture")
         removeEssentialOk = self.config.getlist("Distro", "RemoveEssentialOk")
         # check changes
         for pkg in self.get_changes():
             if pkg.marked_delete and self._inRemovalBlacklist(pkg.name):
                 logging.debug("The package '%s' is marked for removal but it's in the removal blacklist", pkg.name)
                 raise SystemError(_("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name)
-            if pkg.marked_delete and (pkg._pkg.essential == True and
-                                     not pkg.name in removeEssentialOk):
+            if pkg.marked_delete and (
+                    pkg._pkg.essential == True and
+                    pkg.installed.architecture == main_arch and
+                    not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's an ESSENTIAL package", pkg.name)
                 raise SystemError(_("The essential package '%s' is marked for removal.") % pkg.name)
         # check bad-versions blacklist

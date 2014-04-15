@@ -455,6 +455,13 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         self.treeview_details.append_column(column)
         self.details_list.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.treeview_details.set_model(self.details_list)
+        # lp: #1072460
+        self.dialog_changes.set_resizable(False)
+        def _activated(w):
+            # the *current* expanded state which will change after the signal
+            expanded = self.expander_details.get_expanded()
+            self.dialog_changes.set_resizable(not expanded)
+        self.expander_details.connect("activate", _activated)
         # FIXME: portme
         # Use italic style in the status labels
         #attrlist=Pango.AttrList()

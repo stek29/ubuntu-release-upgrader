@@ -25,6 +25,7 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
+import locale
 import os
 import re
 import logging
@@ -1157,8 +1158,14 @@ class MyCache(apt.Cache):
         for dir in fs_free:
             if fs_free[dir].free < 0:
                 # ensure unicode here (LP: #1172740)
-                free_at_least = unicode(apt_pkg.size_to_str(float(abs(fs_free[dir].free)+1)), "utf-8")
-                free_needed = unicode(apt_pkg.size_to_str(fs_free[dir].need), "utf-8")
+                free_at_least = apt_pkg.size_to_str(float(abs(fs_free[dir].free)+1))
+                if isinstance(free_at_least, bytes):
+                    free_at_least = free_at_least.decode(
+                        locale.getpreferredencoding())
+                free_needed = apt_pkg.size_to_str(fs_free[dir].need)
+                if isinstance(free_needed, bytes):
+                    free_needed = free_needed.decode(
+                        locale.getpreferredencoding())
                 # make_fs_id ensures we only get stuff on the same
                 # mountpoint, so we report the requirements only once
                 # per mountpoint

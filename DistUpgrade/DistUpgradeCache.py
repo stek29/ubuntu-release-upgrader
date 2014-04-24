@@ -731,7 +731,7 @@ class MyCache(apt.Cache):
                 raise SystemError(_("The package '%s' is marked for removal but it is in the removal blacklist.") % pkg.name)
             if pkg.marked_delete and (
                     pkg._pkg.essential == True and
-                    pkg.installed.architecture == main_arch and
+                    pkg.installed.architecture in (main_arch, "all") and
                     not pkg.name in removeEssentialOk):
                 logging.debug("The package '%s' is marked for removal but it's an ESSENTIAL package", pkg.name)
                 raise SystemError(_("The essential package '%s' is marked for removal.") % pkg.name)

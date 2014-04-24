@@ -431,15 +431,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         # we don't use this currently
         #self.window_main.set_keep_above(True)
         self.icontheme = Gtk.IconTheme.get_default()
-        try:
-            from gi.repository import WebKit
-            self._webkit_view = WebKit.WebView()
-            settings = self._webkit_view.get_settings()
-            settings.set_property("enable-plugins", False)
-            self.vbox_main.pack_end(self._webkit_view, True, True, 0)
-        except:
-            logging.exception("html widget")
-            self._webkit_view = None
+        self._webkit_view = None
         self.window_main.realize()
         self.window_main.get_window().set_functions(Gdk.WMFunction.MOVE)
         self._opCacheProgress = GtkOpProgress(self.progressbar_cache)
@@ -497,6 +489,16 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     def getTerminal(self):
         return DistUpgradeVteTerminal(self, self._term)
     def getHtmlView(self):
+        if self._webkit_view is None:
+            try:
+                from gi.repository import WebKit
+                self._webkit_view = WebKit.WebView()
+                settings = self._webkit_view.get_settings()
+                settings.set_property("enable-plugins", False)
+                self.vbox_main.pack_end(self._webkit_view, True, True, 0)
+            except:
+                logging.exception("html widget")
+                return DistUpgradeView.DummyHtmlView()
         return HtmlView(self._webkit_view)
 
     def _key_press_handler(self, widget, keyev):

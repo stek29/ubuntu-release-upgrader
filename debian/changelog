@@ -1,12 +1,29 @@
-ubuntu-release-upgrader (1:0.220.3) UNRELEASED; urgency=low
+ubuntu-release-upgrader (1:0.220.3) trusty-proposed; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
     - fix crash in free space check for certain locales (LP: #1172740)
+    - removal of essential packages that are not in the main arch
+      is ok (LP: #1307904)
+  * DistUpgrade/DistUpgradeViewGtk3.py:
+   - make details dialog resize when details are expanded/collapsed 
+     (LP: #1072460)
+    - load webkit only when needed
+  * DistUpgrade/DistUpgradeView.py:
+    - if no encoding is found, use C.UTF-8 to ensure that e.g. python-apt
+      can read sources.list (LP: #1309447)
+  * DistUpgrade/DistUpgradeViewText.py:
+    - fix py3 crash in text mode
+  * DistUpgrade/DistUpgradeMain.py:
+    - log python version
   * po/{eo,id,ug}.po:
     - fix translations of check-new-release-gtk which cause a crash
       (LP: #1311396)
+  * data/demoted.cfg:
+    - autmatic refresh of the demoted packages
+  * po/*.po:
+    - automatic refresh from launchpad
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 24 Apr 2014 13:21:25 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 24 Apr 2014 14:13:06 +0200
 
 ubuntu-release-upgrader (1:0.220.2) trusty; urgency=medium
 

@@ -656,10 +656,12 @@ class MyCache(apt.Cache):
             # text frontend
             self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
+            # may contain utf-8 (LP: #1310053)
+            error_msg = unicode(e)
+            logging.error("Dist-upgrade failed: '%s'", error_msg)
             # start the resolver log again because this is run with
             # the withResolverLog decorator
             self._startAptResolverLog()
-            logging.error("Dist-upgrade failed: '%s'", e)
             return False
         # would be nice to be able to use finally: here, but we need
         # to run on python2.4 too

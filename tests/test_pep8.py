@@ -22,7 +22,6 @@ IGNORE_FILES = (
     "DistUpgradeAptCdrom.py",
     "DistUpgradeView.py",
     "DistUpgradeController.py",
-    "DistUpgradeQuirks.py",
     "DistUpgradeMain.py",
     "DistUpgradeCache.py",
     "GtkProgress.py",

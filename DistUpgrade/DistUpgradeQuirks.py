@@ -85,8 +85,7 @@ class DistUpgradeQuirks(object):
         for condition in [
             quirksName,
             "%s%s" % (to_release, quirksName),
-            "from_%s%s" % (from_release, quirksName)
-                ]:
+            "from_%s%s" % (from_release, quirksName)]:
             for plugin in self.plugin_manager.get_plugins(condition):
                 logging.debug("running quirks plugin %s" % plugin)
                 plugin.do_cleanup_cruft()
@@ -117,68 +116,10 @@ class DistUpgradeQuirks(object):
         """ run before the apt cache is opened the first time """
         logging.debug("running Quirks.PreCacheOpen")
 
-    def oneiricPreCacheOpen(self):
-        logging.debug("running Quirks.oneiricPreCacheOpen")
-        # enable i386 multiach temporarely during the upgrade if on amd64
-        # this needs to be done very early as libapt caches the result
-        # of the "getArchitectures()" call in aptconfig and its not possible
-        # currently to invalidate this cache
-        if apt.apt_pkg.config.find("Apt::Architecture") == "amd64":
-            logging.debug(
-                "multiarch: enabling i386 as a additional architecture")
-            apt.apt_pkg.config.set("Apt::Architectures::", "i386")
-            # increase case size to workaround bug in natty apt that
-            # may cause segfault on cache grow
-            apt.apt_pkg.config.set("APT::Cache-Start", str(48*1024*1024))
-
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
         " run after cleanup "
         logging.debug("running Quirks.PostCleanup")
-
-    # quirks when run when the initial apt-get update was run ----------------
-    def from_lucidPostInitialUpdate(self):
-        """ Quirks that are run before the sources.list is updated to the
-            new distribution when upgrading from a lucid system (either
-            to maverick or the new LTS)
-        """
-        logging.debug("running %s" % sys._getframe().f_code.co_name)
-        # systems < i686 will not upgrade
-        self._test_and_fail_on_non_i686()
-        self._test_and_warn_on_i8xx()
-
-    def from_precisePostInitialUpdate(self):
-        if self.arch in ['i386', 'amd64']:
-            self._checkPae()
-        self._test_and_warn_for_unity_3d_support()
-
-    def oneiricPostInitialUpdate(self):
-        self._test_and_warn_on_i8xx()
-
-    def lucidPostInitialUpdate(self):
-        """ quirks that are run before the sources.list is updated to lucid """
-        logging.debug("running %s" % sys._getframe().f_code.co_name)
-        # upgrades on systems with < arvm6 CPUs will break
-        self._test_and_fail_on_non_arm_v6()
-        # vserver+upstart are problematic
-        self._test_and_warn_if_vserver()
-        # fglrx dropped support for some cards
-        self._test_and_warn_on_dropped_fglrx_support()
-
-    def nattyPostDistUpgradeCache(self):
-        """
-        this function works around quirks in the
-        maverick -> natty cache upgrade calculation
-        """
-        self._add_kdegames_card_extra_if_installed()
-
-    def maverickPostDistUpgradeCache(self):
-        """
-        this function works around quirks in the
-        lucid->maverick upgrade calculation
-        """
-        self._add_extras_repository()
-        self._gutenprint_fixup()
 
     # run right before the first packages get installed
     def StartUpgrade(self):
@@ -189,28 +130,6 @@ class DistUpgradeQuirks(object):
         self._killScreensaver()
         self._pokeScreensaver()
         self._stopDocvertConverter()
-
-    def oneiricStartUpgrade(self):
-        logging.debug("oneiric StartUpgrade quirks")
-        # fix grub issue
-        if (os.path.exists("/usr/sbin/update-grub") and
-                not os.path.exists("/etc/kernel/postinst.d/zz-update-grub")):
-            # create a version of zz-update-grub to avoid depending on
-            # the upgrade order. if that file is missing, we may end
-            # up generating a broken grub.cfg
-            targetdir = "/etc/kernel/postinst.d"
-            if not os.path.exists(targetdir):
-                os.makedirs(targetdir)
-            logging.debug("copying zz-update-grub into %s" % targetdir)
-            shutil.copy("zz-update-grub", targetdir)
-            os.chmod(os.path.join(targetdir, "zz-update-grub"), 0o755)
-        # enable multiarch permanently
-        if apt.apt_pkg.config.find("Apt::Architecture") == "amd64":
-            self._enable_multiarch(foreign_arch="i386")
-
-    def from_hardyStartUpgrade(self):
-        logging.debug("from_hardyStartUpgrade quirks")
-        self._stopApparmor()
 
     # helpers
     def _get_pci_ids(self):
@@ -255,7 +174,7 @@ class DistUpgradeQuirks(object):
                   "https://wiki.ubuntu.com/X/Bugs/"
                   "UpdateManagerWarningForUnity3D "
                   "Do you still want to continue with the upgrade?")
-                )
+            )
             if not res:
                 self.controller.abort()
 
@@ -279,7 +198,7 @@ class DistUpgradeQuirks(object):
                   "For more information see "
                   "https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx "
                   "Do you want to continue with the upgrade?")
-                )
+            )
             if not res:
                 self.controller.abort()
 
@@ -314,7 +233,7 @@ class DistUpgradeQuirks(object):
                 "fglrx-amdcccle",
                 "xorg-driver-fglrx-dev",
                 "libamdxvba1"
-                ]
+            ]
             logging.debug("remove %s" % ", ".join(removals))
             l = self.controller.config.getlist("Distro", "PostUpgradePurge")
             for remove in removals:
@@ -678,7 +597,6 @@ class DistUpgradeQuirks(object):
         """ ensure that on a desktop install recommends are installed
             (LP: #759262)
         """
-        import apt
         if not self.controller.serverMode:
             if not apt.apt_pkg.config.find_b("Apt::Install-Recommends"):
                 msg = "Apt::Install-Recommends was disabled,"

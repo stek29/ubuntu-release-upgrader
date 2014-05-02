@@ -138,9 +138,9 @@ class TestQuirks(unittest.TestCase):
                          [("modules1",
                            ["pci:v00001002d00006700sv*sd*bc03sc*i*",
                             "pci:v00001002d00006701sv*sd*bc03sc*i*"]),
-                         ("module2",
-                          ["pci:v00001002d00006702sv*sd*bc03sc*i*",
-                           "pci:v00001001d00006702sv*sd*bc03sc*i*"])])
+                          ("module2",
+                           ["pci:v00001002d00006702sv*sd*bc03sc*i*",
+                            "pci:v00001001d00006702sv*sd*bc03sc*i*"])])
 
     def testFglrx(self):
         mock_lspci_good = set(['1002:9990'])
@@ -151,7 +151,7 @@ class TestQuirks(unittest.TestCase):
         controller.cache = cache
         q = DistUpgradeQuirks(controller, config)
         if q.arch not in ['i386', 'amd64']:
-           return self.skipTest("Not on an arch with fglrx package")
+            return self.skipTest("Not on an arch with fglrx package")
         self.assertTrue(q._supportInModaliases("fglrx", mock_lspci_good))
         self.assertFalse(q._supportInModaliases("fglrx", mock_lspci_bad))
 

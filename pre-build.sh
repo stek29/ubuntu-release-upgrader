@@ -45,4 +45,4 @@ rm -f ./tests/data-sources-list-test/apt.log
 
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)
-echo "VERSION='$DEBVER'" > DistUpgrade/DistUpgradeVersion.py
+echo "VERSION = '$DEBVER'" > DistUpgrade/DistUpgradeVersion.py

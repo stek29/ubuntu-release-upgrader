@@ -86,7 +86,7 @@ class DistUpgradeFetcherCore(object):
         """
         status_pipe = os.pipe()
         logger_pipe = os.pipe()
-        if sys.version_info >= (3,4):
+        if sys.version_info >= (3, 4):
             os.set_inheritable(status_pipe[1], 1)
             os.set_inheritable(logger_pipe[1], 1)
         gpg = [

@@ -23,6 +23,7 @@ import logging
 
 import gtk
 
+
 # based on SimpleGladeApp
 class SimpleGtkbuilderApp:
 

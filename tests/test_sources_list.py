@@ -13,7 +13,9 @@ from DistUpgrade.DistUpgradeController import (
     DistUpgradeController,
     component_ordering_key,
 )
-from DistUpgrade.DistUpgradeViewNonInteractive import DistUpgradeViewNonInteractive
+from DistUpgrade.DistUpgradeViewNonInteractive import (
+    DistUpgradeViewNonInteractive,
+)
 from DistUpgrade import DistUpgradeConfigParser
 from DistUpgrade.utils import url_downloadable
 import logging

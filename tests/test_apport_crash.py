@@ -28,8 +28,8 @@ class TestApportInformationLeak(unittest.TestCase):
         self.assertEqual(
             sorted([fname[0].name 
                     for fname in report.values() if isinstance(f, tuple)]),
-                         sorted([os.path.join(tmpdir, "main.log"),
-                                 os.path.join(tmpdir, "apt.log")]))
+            sorted([os.path.join(tmpdir, "main.log"),
+                    os.path.join(tmpdir, "apt.log")]))
 
     @patch("subprocess.Popen")
     def test_no_information_leak_in_apport_pkgfailure(self, mock_popen):

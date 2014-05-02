@@ -23,6 +23,7 @@ import logging
 
 from gi.repository import Gtk
 
+
 # based on SimpleGladeApp
 class SimpleGtkbuilderApp:
 

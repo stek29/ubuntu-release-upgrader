@@ -16,8 +16,8 @@ APPORT_WHITELIST = {
     "main.log": "Mainlog",
     "term.log": "Termlog",
     "screenlog.0": "Screenlog",
-    "xorg_fixup.log": "Xorgfixup"
-    }
+    "xorg_fixup.log": "Xorgfixup",
+}
 
 
 def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
@@ -32,11 +32,11 @@ def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
         elif os.path.exists(f):
             try:
                 from apport.hookutils import root_command_output
-                report[ident] = root_command_output(["cat", '%s' % f],
-                    decode_utf8=False)
+                report[ident] = root_command_output(
+                    ["cat", '%s' % f], decode_utf8=False)
             except ImportError:
-                logging.error("failed to import apport python module, can't include: %s" % ident)
-                pass
+                logging.error("failed to import apport python module, "
+                              "can't include: %s" % ident)
 
 
 def apport_crash(type, value, tb):
@@ -46,7 +46,8 @@ def apport_crash(type, value, tb):
         from apport_python_hook import apport_excepthook
         from apport.report import Report
     except ImportError as e:
-        logging.error("failed to import apport python module, can't generate crash: %s" % e)
+        logging.error("failed to import apport python module, can't "
+                      "generate crash: %s" % e)
         return False
     from .DistUpgradeVersion import VERSION
     # we pretend we are do-release-upgrade
@@ -61,7 +62,8 @@ def apport_crash(type, value, tb):
         report.setdefault('Package', 'ubuntu-release-upgrader-core 1:%s' %
                           VERSION)
         _apport_append_logfiles(report)
-        report.add_to_existing('/var/crash/_usr_bin_do-release-upgrade.0.crash')
+        report.add_to_existing(
+            '/var/crash/_usr_bin_do-release-upgrade.0.crash')
     return True
 
 
@@ -75,11 +77,14 @@ def apport_pkgfailure(pkg, errormsg):
     # set which it is by default so check for the English message first
     if "dependency problems - leaving unconfigured" in errormsg:
         return False
-    if gettext.dgettext('dpkg', "dependency problems - leaving unconfigured") in errormsg:
+    needle = gettext.dgettext(
+        'dpkg', "dependency problems - leaving unconfigured")
+    if needle in errormsg:
         return False
     # we do not run apport_pkgfailure for full disk errors
     if os.strerror(errno.ENOSPC) in errormsg:
-        logging.debug("dpkg error because of full disk, not reporting against %s " % pkg)
+        logging.debug("dpkg error because of full disk, not reporting "
+                      "against %s " % pkg)
         return False
 
     if os.path.exists(s):

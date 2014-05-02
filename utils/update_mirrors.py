@@ -9,7 +9,7 @@ for line in open(sys.argv[1], "r"):
     current_mirrors.add(line.strip())
 
     
-outfile = open(sys.argv[1],"a")
+outfile = open(sys.argv[1], "a")
 d = feedparser.parse("https://launchpad.net/ubuntu/+archivemirrors-rss")
 
 #import pprint
@@ -19,4 +19,4 @@ d = feedparser.parse("https://launchpad.net/ubuntu/+archivemirrors-rss")
 for entry in d.entries:
     for link in entry.links:
         if not link.href in current_mirrors:
-            outfile.write(link.href+"\n")
+            outfile.write(link.href + "\n")

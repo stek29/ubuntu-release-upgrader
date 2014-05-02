@@ -19,10 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import, print_function
-
-import warnings
-warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import locale
@@ -32,10 +28,7 @@ import logging
 import time
 import datetime
 import threading
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 from subprocess import Popen, PIPE
 
 from .DistUpgradeGettext import gettext as _
@@ -43,12 +36,18 @@ from .DistUpgradeGettext import ngettext
 
 from .utils import inside_chroot, estimate_kernel_size_in_boot
 
+
 class CacheException(Exception):
     pass
+
+
 class CacheExceptionLockingFailed(CacheException):
     pass
+
+
 class CacheExceptionDpkgInterrupted(CacheException):
     pass
+
 
 # the initrd/vmlinuz/abi space required in /boot for each kernel
 # we estimate based on the current kernel size and add a safety marging
@@ -61,6 +60,7 @@ def _set_kernel_initrd_size():
     size += 1*1024*1024
     return size
 KERNEL_INITRD_SIZE = _set_kernel_initrd_size()
+
 
 class FreeSpaceRequired(object):
     """ FreeSpaceRequired object:
@@ -85,6 +85,7 @@ class NotEnoughFreeSpaceError(CacheException):
     """
     def __init__(self, free_space_required_list):
         self.free_space_required_list = free_space_required_list
+
 
 class MyCache(apt.Cache):
     ReInstReq = 1

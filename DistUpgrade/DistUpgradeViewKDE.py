@@ -19,8 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import, print_function
-
 from PyQt4.QtCore import QUrl, Qt, SIGNAL, QTimer
 from PyQt4.QtGui import (
     QDesktopServices, QDialog, QPixmap, QTreeWidgetItem, QMessageBox, 
@@ -53,11 +51,13 @@ import gettext
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import unicode_gettext
 
+
 def utf8(s, errors="strict"):
     if isinstance(s, bytes):
         return s.decode("UTF-8", errors)
     else:
         return s
+
 
 def loadUi(file, parent):
     if os.path.exists(file):
@@ -65,6 +65,7 @@ def loadUi(file, parent):
     else:
         #FIXME find file
         print("error, can't find file: " + file)
+
 
 class DumbTerminal(QTextEdit):
     """ A very dumb terminal """
@@ -139,6 +140,7 @@ class DumbTerminal(QTextEdit):
         self.moveCursor(QTextCursor.End)
         self._block = False
 
+
 class KDECdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress """
     def __init__(self, parent):
@@ -158,6 +160,7 @@ class KDECdromProgressAdapter(apt.progress.base.CdromProgress):
 
     def change_cdrom(self):
         return False
+
 
 class KDEOpProgress(apt.progress.base.OpProgress):
   """ methods on the progress bar """
@@ -179,6 +182,7 @@ class KDEOpProgress(apt.progress.base.OpProgress):
 
   def done(self):
       self.progressbar_label.setText("")
+
 
 class KDEAcquireProgressAdapter(AcquireProgress):
     """ methods for updating the progress bar while fetching packages """
@@ -231,6 +235,7 @@ class KDEAcquireProgressAdapter(AcquireProgress):
 
         QApplication.processEvents()
         return True
+
 
 class KDEInstallProgressAdapter(InstallProgress):
     """methods for updating the progress bar while installing packages"""
@@ -430,6 +435,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         # we need the full status here (not just WEXITSTATUS)
         return res
 
+
 # inherit from the class created in window_main.ui
 # to add the handler for closing the window
 class UpgraderMainWindow(QWidget):
@@ -448,6 +454,7 @@ class UpgraderMainWindow(QWidget):
             event.accept()
         else:
             event.ignore()
+
 
 class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
@@ -839,6 +846,7 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
         if cancel == QMessageBox.Yes:
             return True
         return False
+
 
 if __name__ == "__main__":
   

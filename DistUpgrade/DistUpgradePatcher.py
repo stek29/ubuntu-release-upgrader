@@ -27,6 +27,7 @@ class PatchError(Exception):
     """ Error during the patch process """
     pass
 
+
 def patch(orig, edpatch, result_md5sum=None):
     """ python implementation of enough "ed" to apply ed-style
         patches. Note that this patches in memory so its *not*

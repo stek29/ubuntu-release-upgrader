@@ -32,11 +32,12 @@ from gettext import gettext as _
 
 
 class AptCdromError(Exception):
-    " base exception for apt cdrom errors "
+    """ base exception for apt cdrom errors """
     pass
 
+
 class AptCdrom(object):
-    " represents a apt cdrom object "
+    """ represents a apt cdrom object """
 
     def __init__(self, view, path):
         self.view = view

@@ -1,22 +1,34 @@
-from __future__ import print_function
+# DistUpgradeConfigParser.py 
+#  
+#  Copyright (c) 2004-2014 Canonical
+#  
+#  Author: Michael Vogt <michael.vogt@ubuntu.com>
+# 
+#  This program is free software; you can redistribute it and/or 
+#  modify it under the terms of the GNU General Public License as 
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#  USA
 
-import sys
-try:
-    # >= 3.0
-    from configparser import NoOptionError, NoSectionError
-    if sys.version >= '3.2':
-        from configparser import ConfigParser as SafeConfigParser
-    else:
-        from configparser import SafeConfigParser
-except ImportError:
-    # < 3.0
-    from ConfigParser import SafeConfigParser, NoOptionError, NoSectionError
+
+from configparser import NoOptionError, NoSectionError
+from configparser import ConfigParser as SafeConfigParser
 import subprocess
 import os.path
 import logging
 import glob
 
 CONFIG_OVERRIDE_DIR =  "/etc/update-manager/release-upgrades.d"
+
 
 class DistUpgradeConfig(SafeConfigParser):
     def __init__(self, datadir, name="DistUpgrade.cfg", 

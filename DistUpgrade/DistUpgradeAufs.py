@@ -1,9 +1,29 @@
-from __future__ import absolute_import, print_function
+# DistUpgradeAufs.py
+#
+#  Copyright (c) 2009-2012 Canonical
+#
+#  Author: Michael Vogt <michael.vogt@ubuntu.com>
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#  USA
 
 import logging
 import os
 import subprocess
 import tempfile
+
 
 def aufsOptionsAndEnvironmentSetup(options, config):
     """ setup the environment based on the config and options
@@ -61,6 +81,7 @@ def _bindMount(from_dir, to_dir, rbind=False):
         return False
     return True
 
+
 def _aufsOverlayMount(target, rw_dir, chroot_dir="/"):
     """ 
     helper that takes a target dir and mounts a rw dir over it, e.g.
@@ -110,6 +131,7 @@ def is_submount(mountpoint, systemdirs):
             return True
     return False
 
+
 def is_real_fs(fs):
     if fs.startswith("fuse"):
         return False
@@ -117,6 +139,7 @@ def is_real_fs(fs):
               "devpts","binfmt_misc", "sysfs"]:
         return False
     return True
+
 
 def doAufsChrootRsync(aufs_chroot_dir):
     """
@@ -136,6 +159,7 @@ def doAufsChrootRsync(aufs_chroot_dir):
         ret = subprocess.call(cmd)
         logging.debug("rsync back result for %s: %i" % (d, ret))
     return True
+
 
 def doAufsChroot(aufs_rw_dir, aufs_chroot_dir):
     " helper that sets the chroot up and does chroot() into it "
@@ -185,6 +209,7 @@ def setupAufsChroot(rw_dir, chroot_dir):
             if not _bindMount(mountpoint, chroot_dir+mountpoint):
                 return False
     return True
+
 
 def setupAufs(rw_dir):
     " setup aufs overlay over the rootfs "
@@ -245,6 +270,7 @@ def setupAufs(rw_dir):
     #        (whiteout files start with .wh.$name
     #         whiteout dirs with .wh..? - check with aufs man page)
     return True
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)

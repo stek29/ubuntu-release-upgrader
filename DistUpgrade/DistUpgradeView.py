@@ -19,8 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import, print_function
-
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import ngettext
 import apt
@@ -47,7 +45,11 @@ except:
 if not ENCODING:
     ENCODING = "utf-8"
     os.putenv("LC_CTYPE", "C.UTF-8")
-    locale.setlocale(locale.LC_CTYPE, "C.UTF-8")
+    try:
+        locale.setlocale(locale.LC_CTYPE, "C.UTF-8")
+    except locale.error:
+        pass
+
 
 # log locale information
 logging.info("locale: '%s' '%s'" % locale.getlocale())

@@ -4,8 +4,6 @@
 # transition from broken proprietary drivers to the free ones
 #
 
-from __future__ import print_function
-
 import sys
 import os
 import logging

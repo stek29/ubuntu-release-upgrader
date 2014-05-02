@@ -20,8 +20,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import, print_function
-
 from gi.repository import Gtk, Gdk
 
 from .ReleaseNotesViewer import ReleaseNotesViewer
@@ -29,11 +27,8 @@ from .utils import error, inhibit_sleep, allow_sleep
 from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 from gettext import gettext as _
-try:
-    from urllib.request import urlopen
-    from urllib.error import HTTPError
-except ImportError:
-    from urllib2 import urlopen, HTTPError
+from urllib.request import urlopen
+from urllib.error import HTTPError
 import os
 import socket
 

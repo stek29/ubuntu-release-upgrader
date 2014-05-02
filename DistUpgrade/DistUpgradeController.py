@@ -20,10 +20,6 @@
 #  USA
 
 
-from __future__ import absolute_import, print_function
-
-import warnings
-warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 import apt
 import apt_pkg
 import sys
@@ -35,16 +31,8 @@ import shutil
 import glob
 import time
 import copy
-try:
-    # >= 3.0
-    from configparser import NoOptionError
-    if sys.version >= '3.2':
-        from configparser import ConfigParser as SafeConfigParser
-    else:
-        from configparser import SafeConfigParser
-except ImportError:
-    # < 3.0
-    from ConfigParser import SafeConfigParser, NoOptionError
+from configparser import NoOptionError
+from configparser import ConfigParser as SafeConfigParser
 from .utils import (country_mirror,
                     url_downloadable,
                     check_and_fix_xbit,
@@ -54,12 +42,16 @@ from .utils import (country_mirror,
                     get_string_with_no_auth_from_source_entry,
                     is_child_of_process_name)
 from string import Template
-try:
-    from urllib.parse import urlsplit
-except ImportError:
-    from urlparse import urlsplit
+from urllib.parse import urlsplit
 
-from .DistUpgradeView import STEP_PREPARE, STEP_MODIFY_SOURCES, STEP_FETCH, STEP_INSTALL, STEP_CLEANUP, STEP_REBOOT
+from .DistUpgradeView import (
+    STEP_PREPARE,
+    STEP_MODIFY_SOURCES,
+    STEP_FETCH,
+    STEP_INSTALL,
+    STEP_CLEANUP,
+    STEP_REBOOT,
+)
 from .DistUpgradeCache import MyCache
 from .DistUpgradeConfigParser import DistUpgradeConfig
 from .DistUpgradeQuirks import DistUpgradeQuirks

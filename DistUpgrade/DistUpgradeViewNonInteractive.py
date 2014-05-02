@@ -19,8 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import, print_function
-
 import apt
 import apt_pkg
 import logging
@@ -33,14 +31,12 @@ import subprocess
 import copy
 import apt.progress
 
-try:
-    from configparser import NoSectionError, NoOptionError
-except ImportError:
-    from ConfigParser import NoSectionError, NoOptionError
+from configparser import NoSectionError, NoOptionError
 from subprocess import PIPE, Popen
 
 from .DistUpgradeView import DistUpgradeView, InstallProgress, AcquireProgress
 from .DistUpgradeConfigParser import DistUpgradeConfig
+
 
 class NonInteractiveAcquireProgress(AcquireProgress):
     def update_status(self, uri, descr, shortDescr, status):
@@ -244,6 +240,7 @@ class NonInteractiveInstallProgress(InstallProgress):
         if self.pid != 0:
             logging.debug("pid is: %s" % self.pid)
         return self.pid
+
 
 class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "

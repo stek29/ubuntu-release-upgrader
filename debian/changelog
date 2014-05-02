@@ -5,6 +5,7 @@ ubuntu-release-upgrader (1:14.10.0) UNRELEASED; urgency=low
     - updated kernel remove version
     - add ubuntu-gnome-desktop meta package
     - remove no longer needed configuration entries
+    - remove gtk2/py2 DistUpgradeViewGtk view
   * data/removal_blacklist.cfg:
     - add ubuntu-gnome-desktop
   * DistUpgrade/{Devel,EOF,}ReleaseAccounement, DistUpgrade/window_main.ui:
@@ -22,6 +23,14 @@ ubuntu-release-upgrader (1:14.10.0) UNRELEASED; urgency=low
     - enable for a subset of the code and fix a bunch of pep8 issues
   * DistUpgrade/DistUpgradeQuirks.py:
     - cleanup no longer needed quirks, pep8 clean
+  * DistUpgrade/DistUpgradeViewGtk.py:
+    - removed old gtk2 version, we have DistUpgradeViewGtk3.py and
+      the gtk2 version will not work with py3
+  * DistUpgrade/*.py:
+    - remove from future as we are on py3 now
+  * DistUpgrade/DistUpgradeAufs.py, DistUpgrade/DistUpgradeConfigParser.py,
+    DistUpgrade/DistUpgradeFetcherSelf.py:
+    - add missing header
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 02 May 2014 13:30:16 +0200
 

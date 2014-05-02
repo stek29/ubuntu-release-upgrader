@@ -19,8 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import, print_function
-
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("Vte", "2.90")
@@ -50,6 +48,7 @@ from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 import gettext
 from .DistUpgradeGettext import gettext as _
 
+
 class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
     """ Report the cdrom add progress
         Subclass this class to implement cdrom add progress reporting
@@ -69,6 +68,7 @@ class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
         return (False, "")
     def change_cdrom(self):
         return False
+
 
 class GtkOpProgress(apt.progress.base.OpProgress):
     def __init__(self, progressbar):
@@ -159,6 +159,7 @@ class GtkAcquireProgressAdapter(AcquireProgress):
         while Gtk.events_pending():
             Gtk.main_iteration()
         return (not self.canceled)
+
 
 class GtkInstallProgressAdapter(InstallProgress):
     # timeout with no status change when the terminal is expanded
@@ -346,6 +347,7 @@ class GtkInstallProgressAdapter(InstallProgress):
             Gtk.main_iteration()
         time.sleep(0.01)
 
+
 class DistUpgradeVteTerminal(object):
     def __init__(self, parent, term):
         self.term = term
@@ -377,6 +379,7 @@ class DistUpgradeVteTerminal(object):
             time.sleep(0.1)
         del self.finished
 
+
 class HtmlView(object):
     def __init__(self, webkit_view):
         self._webkit_view = webkit_view
@@ -391,6 +394,7 @@ class HtmlView(object):
         self._webkit_view.hide()
     def _on_load_finished(self, view, frame):
         view.show()
+
 
 class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     " gtk frontend of the distUpgrade tool "
@@ -725,6 +729,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         if res == Gtk.ResponseType.CANCEL:
             sys.exit(1)
         return True
+
 
 if __name__ == "__main__":
 

@@ -19,8 +19,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from __future__ import absolute_import
-
 import apt
 import atexit
 import glob
@@ -28,8 +26,6 @@ import logging
 import os
 import re
 import hashlib
-import shutil
-import sys
 import subprocess
 from subprocess import PIPE, Popen
 

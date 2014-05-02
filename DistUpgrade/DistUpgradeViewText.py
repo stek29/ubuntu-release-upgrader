@@ -110,9 +110,6 @@ class DistUpgradeViewText(DistUpgradeView):
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
         
-        # show install progress by default
-        apt.apt_pkg.config.set("Dpkg::Progress-Fancy", "1")
-
         self.last_step = 0 # keep a record of the latest step
         self._opCacheProgress = apt.progress.text.OpProgress()
         self._acquireProgress = TextAcquireProgress()

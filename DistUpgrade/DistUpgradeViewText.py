@@ -23,6 +23,7 @@ import errno
 import sys
 import logging
 import subprocess
+from gettext import dgettext
 
 import apt
 import os
@@ -56,6 +57,24 @@ class TextAcquireProgress(AcquireProgress, apt.progress.text.AcquireProgress):
         apt.progress.text.AcquireProgress.pulse(self, owner)
         AcquireProgress.pulse(self, owner)
         return True
+
+
+class TextInstallProgress(InstallProgress):
+
+    # percent step when progress is reported (to avoid screen spam)
+    MIN_REPORTING = 5
+
+    def __init__(self, *args, **kwargs):
+        super(TextInstallProgress, self).__init__(*args, **kwargs)
+        self._prev_percent = 0
+
+    def status_change(self, pkg, percent, status):
+        if self._prev_percent + self.MIN_REPORTING < percent:
+            # FIXME: move into ubuntu-release-upgrader after trusty
+            domain = "libapt-pkg4.12"
+            progress_str = dgettext(domain, "Progress: [%3i%%]") % int(percent)
+            sys.stdout.write("\r\n%s\r\n" % progress_str)
+            self._prev_percent = percent
 
 
 class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
@@ -98,7 +117,7 @@ class DistUpgradeViewText(DistUpgradeView):
         self._opCacheProgress = apt.progress.text.OpProgress()
         self._acquireProgress = TextAcquireProgress()
         self._cdromProgress = TextCdromProgressAdapter()
-        self._installProgress = InstallProgress()
+        self._installProgress = TextInstallProgress()
         sys.excepthook = self._handleException
         #self._process_events_tick = 0
 

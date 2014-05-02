@@ -657,7 +657,7 @@ class MyCache(apt.Cache):
             self._stopAptResolverLog()
             view.error(_("Could not calculate the upgrade"), details)
             # may contain utf-8 (LP: #1310053)
-            error_msg = unicode(e)
+            error_msg = str(e)
             logging.error("Dist-upgrade failed: '%s'", error_msg)
             # start the resolver log again because this is run with
             # the withResolverLog decorator

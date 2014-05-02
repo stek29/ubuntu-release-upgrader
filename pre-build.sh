@@ -9,17 +9,17 @@ dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python-feedp
 			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose'
 
 # update demotions
-(cd utils && ./demotions.py saucy trusty > demoted.cfg)
+(cd utils && ./demotions.py trusty utopic > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
-(cd utils && ./demotions.py precise trusty > demoted.cfg.precise)
+#(cd utils && ./demotions.py trusty w00t > demoted.cfg.trusty)
 
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine
-if [ ! -e /usr/lib/python2.7/dist-packages/apt_btrfs_snapshot.py ]; then
+if [ ! -e /usr/lib/python3/dist-packages/apt_btrfs_snapshot.py ]; then
     echo "please sudo apt-get install apt-btrfs-snapshot"
     exit 1
 fi
-cp /usr/lib/python2.7/dist-packages/apt_btrfs_snapshot.py DistUpgrade
+cp /usr/lib/python3/dist-packages/apt_btrfs_snapshot.py DistUpgrade
 
 # (auto) generate the required html
 if [ ! -x /usr/bin/parsewiki ]; then

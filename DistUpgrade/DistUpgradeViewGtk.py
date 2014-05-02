@@ -34,6 +34,7 @@ import locale
 import logging
 import time
 import subprocess
+import atexit
 
 import apt
 import apt_pkg
@@ -272,7 +273,7 @@ class GtkInstallProgressAdapter(InstallProgress):
             os.environ["DPKG_UNTRANSLATED_MESSAGES"] = "1"
           # HACK to work around bug in python/vte and unregister the logging
           #      atexit func in the child
-          sys.exitfunc = lambda: True
+          atexit.register(lambda: True)
         return pid
 
     def status_change(self, pkg, percent, status):

@@ -1,3 +1,26 @@
+ubuntu-release-upgrader (1:14.10.0) UNRELEASED; urgency=low
+
+  * data/DistUpgrade.cfg:
+    - updated for trusty->utopic
+    - updated kernel remove version
+    - add ubuntu-gnome-desktop meta package
+    - remove no longer needed configuration entries
+  * data/removal_blacklist.cfg:
+    - add ubuntu-gnome-desktop
+  * DistUpgrade/{Devel,EOF,}ReleaseAccounement, DistUpgrade/window_main.ui:
+    - updated for utopic
+  * DistUpgrade/dist-upgrade.py:
+    - move from py2 to py3
+  * pre-build.sh:
+    - update demotions
+    - use py3 version of apt_btrfs_snapshot.py
+  * tests/Makefile:
+    - removed, not used anymore
+  * DistUpgrade/DistUpgradeCache.py:
+    - remove py2ism
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 02 May 2014 13:30:16 +0200
+
 ubuntu-release-upgrader (1:0.220.3) trusty-proposed; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:

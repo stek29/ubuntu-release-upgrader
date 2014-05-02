@@ -9,7 +9,6 @@ import unittest
 IGNORE_PEP8 = "W,E125,E126"
 IGNORE_FILES = (
     "DistUpgradeViewKDE.py",
-    "DistUpgradeViewGtk.py",
     "DistUpgradeViewGtk3.py",
     "DistUpgradeViewText.py",
     "DistUpgradeViewNonInteractive.py",

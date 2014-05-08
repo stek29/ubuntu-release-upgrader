@@ -887,8 +887,9 @@ class DistUpgradeController(object):
             return False
         # FIXME: check out what packages are downloadable etc to
         # compare the list after the update again
-        self.obsolete_pkgs = self.cache._getObsoletesPkgs()
-        self.foreign_pkgs = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
+        self.obsolete_pkgs = sorted(self.cache._getObsoletesPkgs())
+        self.foreign_pkgs = sorted(self.cache._getForeignPkgs(self.origin,
+                                   self.fromDist, self.toDist))
         if self.serverMode:
             self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))

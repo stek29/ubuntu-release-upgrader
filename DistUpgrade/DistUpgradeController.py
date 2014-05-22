@@ -887,13 +887,12 @@ class DistUpgradeController(object):
             return False
         # FIXME: check out what packages are downloadable etc to
         # compare the list after the update again
-        self.obsolete_pkgs = sorted(self.cache._getObsoletesPkgs())
-        self.foreign_pkgs = sorted(self.cache._getForeignPkgs(self.origin,
-                                   self.fromDist, self.toDist))
+        self.obsolete_pkgs = self.cache._getObsoletesPkgs()
+        self.foreign_pkgs = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
         if self.serverMode:
             self.tasks = self.cache.installedTasks
-        logging.debug("Foreign: %s" % " ".join(self.foreign_pkgs))
-        logging.debug("Obsolete: %s" % " ".join(self.obsolete_pkgs))
+        logging.debug("Foreign: %s" % " ".join(sorted(self.foreign_pkgs)))
+        logging.debug("Obsolete: %s" % " ".join(sorted(self.obsolete_pkgs)))
         return True
 
     def doUpdate(self, showErrors=True, forceRetries=None):
@@ -1216,8 +1215,8 @@ class DistUpgradeController(object):
         # use self.{foreign,obsolete}_pkgs here and see what changed
         now_obsolete = self.cache._getObsoletesPkgs()
         now_foreign = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
-        logging.debug("Obsolete: %s" % " ".join(now_obsolete))
-        logging.debug("Foreign: %s" % " ".join(now_foreign))
+        logging.debug("Obsolete: %s" % " ".join(sorted(now_obsolete)))
+        logging.debug("Foreign: %s" % " ".join(sorted(now_foreign)))
         # now sanity check - if a base meta package is in the obsolete list now, that means
         # that something went wrong (see #335154) badly with the network. this should never happen, but it did happen
         # at least once so we add extra paranoia here
@@ -1237,7 +1236,7 @@ class DistUpgradeController(object):
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
         # now add the obsolete kernels to the forced obsoletes
         self.forced_obsoletes.extend(self.cache.identifyObsoleteKernels())
-        logging.debug("forced_obsoletes: %s", self.forced_obsoletes)
+        logging.debug("forced_obsoletes: %s" % self.forced_obsoletes)
 
         # mark packages that are now obsolete (and where not obsolete
         # before) to be deleted. make sure to not delete any foreign

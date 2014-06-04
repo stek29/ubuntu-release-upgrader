@@ -920,6 +920,9 @@ class DistUpgradeController(object):
 
         logging.error("doUpdate() failed completely")
         if showErrors:
+            # LP: #1321959
+            if not e:
+                e = ''
             self._view.error(_("Error during update"),
                              _("A problem occurred during the update. "
                                "This is usually some sort of network "

@@ -36,30 +36,30 @@ def aufsOptionsAndEnvironmentSetup(options, config):
     # enabled from the commandline (full overlay by default)
     if options and options.useAufs:
         logging.debug("enabling full overlay from commandline")
-        config.set("Aufs","Enabled", "True")
-        config.set("Aufs","EnableFullOverlay","True")
+        config.set("Aufs", "Enabled", "True")
+        config.set("Aufs", "EnableFullOverlay", "True")
     
     # setup environment based on config
     tmprw = tempfile.mkdtemp(prefix="upgrade-rw-")
-    aufs_rw_dir = config.getWithDefault("Aufs","RWDir", tmprw)
+    aufs_rw_dir = config.getWithDefault("Aufs", "RWDir", tmprw)
     logging.debug("using '%s' as aufs_rw_dir" % aufs_rw_dir)
     os.environ["RELEASE_UPGRADE_AUFS_RWDIR"] = aufs_rw_dir
-    config.set("Aufs","RWDir",aufs_rw_dir)
+    config.set("Aufs", "RWDir", aufs_rw_dir)
     # now the chroot tmpdir
     tmpchroot = tempfile.mkdtemp(prefix="upgrade-chroot-")
     os.chmod(tmpchroot, 0o755)
-    aufs_chroot_dir = config.getWithDefault("Aufs","ChrootDir", tmpchroot)
+    aufs_chroot_dir = config.getWithDefault("Aufs", "ChrootDir", tmpchroot)
     logging.debug("using '%s' as aufs chroot dir" % aufs_chroot_dir)
     
-    if config.getWithDefault("Aufs","EnableFullOverlay", False):
+    if config.getWithDefault("Aufs", "EnableFullOverlay", False):
         logging.debug("enabling aufs full overlay (from config)")
-        config.set("Aufs","Enabled", "True")
+        config.set("Aufs", "Enabled", "True")
         os.environ["RELEASE_UPGRADE_USE_AUFS_FULL_OVERLAY"] = "1"
-    if config.getWithDefault("Aufs","EnableChrootOverlay",False):
+    if config.getWithDefault("Aufs", "EnableChrootOverlay", False):
         logging.debug("enabling aufs chroot overlay")
-        config.set("Aufs","Enabled", "True")        
+        config.set("Aufs", "Enabled", "True")        
         os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"] = aufs_chroot_dir
-    if config.getWithDefault("Aufs","EnableChrootRsync", False):
+    if config.getWithDefault("Aufs", "EnableChrootRsync", False):
         logging.debug("enable aufs chroot rsync back to real system")
         os.environ["RELEASE_UPGRADE_RSYNC_AUFS_CHROOT"] = "1"
     
@@ -72,12 +72,13 @@ def _bindMount(from_dir, to_dir, rbind=False):
         bind = "--rbind"
     else:
         bind = "--bind"
-    cmd = ["mount",bind, from_dir, to_dir]
+    cmd = ["mount", bind, from_dir, to_dir]
     logging.debug("cmd: %s" % cmd)
     res = subprocess.call(cmd)
     if res != 0:
         # FIXME: revert already mounted stuff
-        logging.error("Failed to bind mount from '%s' to '%s'" % (from_dir, to_dir))
+        logging.error(
+            "Failed to bind mount from '%s' to '%s'" % (from_dir, to_dir))
         return False
     return True
 
@@ -87,24 +88,24 @@ def _aufsOverlayMount(target, rw_dir, chroot_dir="/"):
     helper that takes a target dir and mounts a rw dir over it, e.g.
     /var , /tmp/upgrade-rw
     """
-    if not os.path.exists(rw_dir+target):
-        os.makedirs(rw_dir+target)
-    if not os.path.exists(chroot_dir+target):
-        os.makedirs(chroot_dir+target)
+    if not os.path.exists(rw_dir + target):
+        os.makedirs(rw_dir + target)
+    if not os.path.exists(chroot_dir + target):
+        os.makedirs(chroot_dir + target)
     # FIXME: figure out when to use aufs and when to use overlayfs
     use_overlayfs = False
     if use_overlayfs:
         cmd = ["mount",
-               "-t","overlayfs",
-               "-o","upperdir=%s,lowerdir=%s" % (rw_dir+target, target),
+               "-t", "overlayfs",
+               "-o", "upperdir=%s,lowerdir=%s" % (rw_dir + target, target),
                "none",
-               chroot_dir+target]
+               chroot_dir + target]
     else:
         cmd = ["mount",
-               "-t","aufs",
-               "-o","br:%s:%s=ro" % (rw_dir+target, target),
+               "-t", "aufs",
+               "-o", "br:%s:%s=ro" % (rw_dir + target, target),
                "none",
-               chroot_dir+target]
+               chroot_dir + target]
     res = subprocess.call(cmd)
     if res != 0:
         # FIXME: revert already mounted stuff
@@ -113,6 +114,7 @@ def _aufsOverlayMount(target, rw_dir, chroot_dir="/"):
     logging.debug("cmd '%s' return '%s' " % (cmd, res))
     return True
 
+
 def is_aufs_mount(dir):
     " test if the given dir is already mounted with aufs overlay "
     for line in open("/proc/mounts"):
@@ -120,6 +122,7 @@ def is_aufs_mount(dir):
         if device == "none" and fstype == "aufs" and mountpoint == dir:
             return True
     return False
+
 
 def is_submount(mountpoint, systemdirs):
     " helper: check if the given mountpoint is a submount of a systemdir "
@@ -135,8 +138,8 @@ def is_submount(mountpoint, systemdirs):
 def is_real_fs(fs):
     if fs.startswith("fuse"):
         return False
-    if fs in ["rootfs","tmpfs","proc","fusectrl","aufs",
-              "devpts","binfmt_misc", "sysfs"]:
+    if fs in ["rootfs", "tmpfs", "proc", "fusectrl", "aufs",
+              "devpts", "binfmt_misc", "sysfs"]:
         return False
     return True
 
@@ -152,7 +155,7 @@ def doAufsChrootRsync(aufs_chroot_dir):
             continue
         # its important to have the "/" at the end of source
         # and dest so that rsync knows what to do
-        cmd = ["rsync","-aHAX","--del","-v", "--progress",
+        cmd = ["rsync", "-aHAX", "--del", "-v", "--progress",
                "/%s/%s/" % (aufs_chroot_dir, d),
                "/%s/" % d]
         logging.debug("running: '%s'" % cmd)
@@ -185,7 +188,7 @@ def setupAufsChroot(rw_dir, chroot_dir):
     
     # aufs mount or bind mount required dirs
     for d in os.listdir("/"):
-        d = os.path.join("/",d)
+        d = os.path.join("/", d)
         if os.path.isdir(d):
             if d in systemdirs:
                 logging.debug("bind mounting %s" % d)
@@ -193,20 +196,21 @@ def setupAufsChroot(rw_dir, chroot_dir):
                     return False
             else:
                 logging.debug("overlay mounting %s" % d)
-                if not _bindMount(d, chroot_dir+d, rbind=True):
+                if not _bindMount(d, chroot_dir + d, rbind=True):
                     return False
 
     # create binds for the systemdirs
     #needs_bind_mount = set()
     for line in mounts.split("\n"):
         line = line.strip()
-        if not line: continue
+        if not line: 
+            continue
         (device, mountpoint, fstype, options, a, b) = line.split()
         if (fstype != "aufs" and
-            not is_real_fs(fstype) and
-            is_submount(mountpoint, systemdirs)):
+                not is_real_fs(fstype) and
+                is_submount(mountpoint, systemdirs)):
             logging.debug("found %s that needs bind mount", mountpoint)
-            if not _bindMount(mountpoint, chroot_dir+mountpoint):
+            if not _bindMount(mountpoint, chroot_dir + mountpoint):
                 return False
     return True
 
@@ -235,7 +239,9 @@ def setupAufs(rw_dir):
         if is_real_fs(fstype) and is_submount(mountpoint, systemdirs):
             logging.warning("mountpoint %s submount of systemdir" % mountpoint)
             return False
-        if (fstype != "aufs" and not is_real_fs(fstype) and is_submount(mountpoint, systemdirs)):
+        if (fstype != "aufs" and
+                not is_real_fs(fstype) and
+                is_submount(mountpoint, systemdirs)):
             logging.debug("found %s that needs bind mount", mountpoint)
             needs_bind_mount.add(mountpoint)
 
@@ -243,7 +249,7 @@ def setupAufs(rw_dir):
     # if we mount /var we will loose the tmpfs stuff
     # first bind mount varun and varlock into the tmpfs
     for d in needs_bind_mount:
-        if not _bindMount(d, rw_dir+"/needs_bind_mount/"+d):
+        if not _bindMount(d, rw_dir + "/needs_bind_mount/" + d):
             return False
     # setup writable overlay into /tmp/upgrade-rw so that all 
     # changes are written there instead of the real fs
@@ -253,7 +259,7 @@ def setupAufs(rw_dir):
                 return False
     # now bind back the tempfs to the original location
     for d in needs_bind_mount:
-        if not _bindMount(rw_dir+"/needs_bind_mount/"+d, d):
+        if not _bindMount(rw_dir + "/needs_bind_mount/" + d, d):
             return False
 
     # The below information is only of historical relevance:

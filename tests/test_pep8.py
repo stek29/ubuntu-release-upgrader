@@ -13,8 +13,6 @@ IGNORE_FILES = (
     "DistUpgradeViewGtk3.py",
     "DistUpgradeViewText.py",
     "DistUpgradeViewNonInteractive.py",
-    "DistUpgradeAufs.py",
-    "DistUpgradeAptCdrom.py",
     "DistUpgradeView.py",
     "DistUpgradeController.py",
     "DistUpgradeMain.py",

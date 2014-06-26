@@ -5,8 +5,9 @@ import os
 import subprocess
 import unittest
 
-# FIXME: both ignore listsshould be empty
-IGNORE_PEP8 = "W,E125,E126"
+# pep8 is overdoing it a bit IMO
+IGNORE_PEP8 = "W,E125,E126,E265"
+# FIXME: this list should be empty
 IGNORE_FILES = (
     "DistUpgradeViewKDE.py",
     "DistUpgradeViewGtk3.py",

@@ -18,5 +18,5 @@ d = feedparser.parse("https://launchpad.net/ubuntu/+archivemirrors-rss")
 
 for entry in d.entries:
     for link in entry.links:
-        if not link.href in current_mirrors:
+        if link.href not in current_mirrors:
             outfile.write(link.href + "\n")

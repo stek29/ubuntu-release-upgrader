@@ -79,9 +79,10 @@ class DistUpgradeQuirks(object):
         from_release = self.config.get("Sources", "From")
         # first check for matching plugins
         for condition in [
-            quirksName,
-            "%s%s" % (to_release, quirksName),
-            "from_%s%s" % (from_release, quirksName)]:
+                quirksName,
+                "%s%s" % (to_release, quirksName),
+                "from_%s%s" % (from_release, quirksName)
+        ]:
             for plugin in self.plugin_manager.get_plugins(condition):
                 logging.debug("running quirks plugin %s" % plugin)
                 plugin.do_cleanup_cruft()
@@ -144,7 +145,7 @@ class DistUpgradeQuirks(object):
     def _test_and_warn_for_unity_3d_support(self):
         UNITY_SUPPORT_TEST = "/usr/lib/nux/unity_support_test"
         if (not os.path.exists(UNITY_SUPPORT_TEST) or
-                not "DISPLAY" in os.environ):
+                "DISPLAY" not in os.environ):
             return
         # see if there is a running unity, that service is used by both 2d,3d
         return_code = subprocess.call(
@@ -270,7 +271,7 @@ class DistUpgradeQuirks(object):
         # check flags for cmov
         match = re.search("^flags\s*:\s*(.*)", cpuinfo, re.MULTILINE)
         if match:
-            if not "cmov" in match.group(1).split():
+            if "cmov" not in match.group(1).split():
                 logging.debug("found flags '%s'" % match.group(1))
                 logging.debug("can not find cmov in flags")
                 return False
@@ -438,7 +439,7 @@ class DistUpgradeQuirks(object):
             return
         for f in os.listdir(patchdir):
             # skip, not a patch file, they all end with .$md5sum
-            if not "." in f:
+            if "." not in f:
                 logging.debug("skipping '%s' (no '.')" % f)
                 continue
             logging.debug("check if patch '%s' needs to be applied" % f)
@@ -485,7 +486,7 @@ class DistUpgradeQuirks(object):
         if not lspci:
             lspci = self._get_pci_ids()
         # get pkg
-        if (not pkgname in self.controller.cache or
+        if (pkgname not in self.controller.cache or
                 not self.controller.cache[pkgname].candidate):
             logging.warn("can not find '%s' in cache")
             return False
@@ -506,7 +507,7 @@ class DistUpgradeQuirks(object):
 
     def _parse_modaliases_from_pkg_header(self, pkgrecord):
         """ return a list of (module1, (pciid, ...), ...)"""
-        if not "Modaliases" in pkgrecord:
+        if "Modaliases" not in pkgrecord:
             return []
         # split the string
         modules = []
@@ -521,7 +522,7 @@ class DistUpgradeQuirks(object):
     def _add_extras_repository(self):
         logging.debug("_add_extras_repository")
         cache = self.controller.cache
-        if not "ubuntu-extras-keyring" in cache:
+        if "ubuntu-extras-keyring" not in cache:
             logging.debug("no ubuntu-extras-keyring, no need to add repo")
             return
         if not (cache["ubuntu-extras-keyring"].marked_install or

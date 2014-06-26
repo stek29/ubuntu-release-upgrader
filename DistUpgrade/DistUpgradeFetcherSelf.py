@@ -27,7 +27,7 @@ from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
 
 class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
     def __init__(self, new_dist, progress, options, view):
-        DistUpgradeFetcherCore.__init__(self,new_dist,progress)
+        DistUpgradeFetcherCore.__init__(self, new_dist, progress)
         self.view = view
         # user chose to use the network, otherwise it would not be
         # possible to download self

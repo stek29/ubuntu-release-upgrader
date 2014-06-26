@@ -11,7 +11,7 @@ import time
 import shutil
 
 # main xorg.conf
-XORG_CONF="/etc/X11/xorg.conf"
+XORG_CONF = "/etc/X11/xorg.conf"
 
 
 def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
@@ -22,25 +22,26 @@ def replace_driver_from_xorg(old_driver, new_driver, xorg=XORG_CONF):
     if not os.path.exists(xorg):
         logging.warning("file %s not found" % xorg)
         return
-    content=[]
+    content = []
     with open(xorg) as xorg_file:
         for line in xorg_file:
             # remove comments
-            s=line.split("#")[0].strip()
+            s = line.split("#")[0].strip()
             # check for fglrx driver entry
             if (s.lower().startswith("driver") and
-                s.endswith('"%s"' % old_driver)):
+                    s.endswith('"%s"' % old_driver)):
                 logging.debug("line '%s' found" % line)
-                line='\tDriver\t"%s"\n' % new_driver
+                line = '\tDriver\t"%s"\n' % new_driver
                 logging.debug("replacing with '%s'" % line)
             content.append(line)
     # write out the new version
     with open(xorg) as xorg_file:
         if xorg_file.readlines() != content:
-            logging.info("saving new %s (%s -> %s)" % (xorg, old_driver, new_driver))
-            with open(xorg+".xorg_fix", "w") as xorg_fix_file:
+            logging.info("saving new %s (%s -> %s)" % (
+                xorg, old_driver, new_driver))
+            with open(xorg + ".xorg_fix", "w") as xorg_fix_file:
                 xorg_fix_file.write("".join(content))
-            os.rename(xorg+".xorg_fix", xorg)
+            os.rename(xorg + ".xorg_fix", xorg)
 
 
 def comment_out_driver_from_xorg(old_driver, xorg=XORG_CONF):
@@ -50,25 +51,25 @@ def comment_out_driver_from_xorg(old_driver, xorg=XORG_CONF):
     if not os.path.exists(xorg):
         logging.warning("file %s not found" % xorg)
         return
-    content=[]
+    content = []
     with open(xorg) as xorg_file:
         for line in xorg_file:
             # remove comments
-            s=line.split("#")[0].strip()
+            s = line.split("#")[0].strip()
             # check for old_driver driver entry
             if (s.lower().startswith("driver") and
-                s.endswith('"%s"' % old_driver)):
+                    s.endswith('"%s"' % old_driver)):
                 logging.debug("line '%s' found" % line)
-                line='#%s' % line
+                line = '#%s' % line
                 logging.debug("replacing with '%s'" % line)
             content.append(line)
     # write out the new version
     with open(xorg) as xorg_file:
         if xorg_file.readlines() != content:
             logging.info("saveing new %s (commenting %s)" % (xorg, old_driver))
-            with open(xorg+".xorg_fix", "w") as xorg_fix_file:
+            with open(xorg + ".xorg_fix", "w") as xorg_fix_file:
                 xorg_fix_file.write("".join(content))
-            os.rename(xorg+".xorg_fix", xorg)
+            os.rename(xorg + ".xorg_fix", xorg)
 
 
 if __name__ == "__main__":

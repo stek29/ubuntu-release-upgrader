@@ -2,6 +2,7 @@
 # -*- Mode: Python; indent-tabs-mode: nil; tab-width: 4; coding: utf-8 -*-
 #
 #  Copyright (c) 2008 Canonical Ltd
+#  Copyright (c) 2014 Harald Sitter <apachelogger@kubuntu.org>
 #
 #  Author: Jonathan Riddell <jriddell@ubuntu.com>
 #
@@ -18,58 +19,100 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyKDE4.kdecore import ki18n, KAboutData, KCmdLineOptions, KCmdLineArgs
-from PyKDE4.kdeui import KIcon, KMessageBox, KApplication, KStandardGuiItem
-from PyQt4.QtCore import QDir, QTimer
-from PyQt4.QtGui import QDialog, QDialogButtonBox
-from PyQt4 import uic
+try:
+    # 14.04 has a broken pyqt5, so don't even try to import it and require
+    # pyqt4.
+    # In 14.04 various signals in pyqt5 can not be connected because it thinks
+    # the signal does not exist or has an incompatible signature. Since this
+    # potentially renders the GUI entirely broken and pyqt5 was not actively
+    # used back then it is fair to simply require qt4 on trusty systems.
+    from .utils import get_dist
+    if get_dist() == 'trusty':
+        raise ImportError
+
+    from PyQt5 import uic
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
+except ImportError:
+    from PyKDE4.kdecore import ki18n, KAboutData, KCmdLineOptions, KCmdLineArgs
+    from PyKDE4.kdeui import KIcon, KMessageBox, KApplication, KStandardGuiItem
+    from PyQt4.QtCore import QDir, QTimer
+    from PyQt4.QtGui import QDialog, QDialogButtonBox
+    from PyQt4 import uic
 
 import apt_pkg
 import sys
 
-from .utils import inhibit_sleep, allow_sleep
-from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
+from DistUpgrade.utils import inhibit_sleep, allow_sleep
+from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 from urllib.request import urlopen
 from urllib.error import HTTPError
 import os
 
-from .MetaRelease import MetaReleaseCore
 import apt
 
+from .QUrlOpener import QUrlOpener
+
+# TODO: uifile resolution is an utter mess and should be revised globally for
+#       both the fetcher and the upgrader GUI.
+
+# TODO: make this a singleton
+# We have no globally constructed QApplication available so we need to
+# make sure that one is created when needed. Since from a module POV
+# this can be happening in any order of the two classes this function takes care
+# of it for the classes, the classes only hold a ref to the qapp returned
+# to prevent it from getting GC'd, so in essence this is a singleton scoped to
+# the longest lifetime of an instance from the Qt GUI. Since the lifetime is 
+# pretty much equal to the process' one we might as well singleton up.
+def _ensureQApplication():
+    if not QApplication.instance():
+        app = QApplication(["ubuntu-release-upgrader"])
+        # Try to load default Qt translations so we don't have to worry about
+        # QStandardButton translations.
+        # FIXME: make sure we dep on l10n
+        translator = QTranslator(app)
+        if PYQT_VERSION >= 0x50000:
+            translator.load(QLocale.system(), 'qt', '_', '/usr/share/qt5/translations')
+        else:
+            translator.load(QLocale.system(), 'qt', '_', '/usr/share/qt4/translations')
+        app.installTranslator(translator)
+        return app
+    return QApplication.instance()
+
+# Qt 5 vs. KDELibs4 compat functions
+def _warning(text):
+    if PYQT_VERSION >= 0x50000:
+        QMessageBox.warning(None, "", text)
+    else:
+        KMessageBox.sorry(None, text, "")
+
+def _icon(name):
+    if PYQT_VERSION >= 0x50000:
+        return QIcon.fromTheme(name)
+    else:
+        return KIcon(name)
 
 class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
-    """A small application run by Adept to download, verify
-    and run the dist-upgrade tool"""
 
-    def __init__(self, useDevelopmentRelease=False, useProposed=False):
-        self.useDevelopmentRelease = useDevelopmentRelease
-        self.useProposed = useProposed
-        metaRelease = MetaReleaseCore(useDevelopmentRelease, useProposed)
-        metaRelease.downloaded.wait()
-        if metaRelease.new_dist is None and __name__ == "__main__":
-            sys.exit()
-        elif metaRelease.new_dist is None:
-            return
+    def __init__(self, new_dist, progress, parent, datadir):
+        DistUpgradeFetcherCore.__init__(self, new_dist, progress)
 
-        self.progressDialogue = QDialog()
-        if os.path.exists("fetch-progress.ui"):
-            self.APPDIR = QDir.currentPath()
-        else:
-            self.APPDIR = "/usr/share/ubuntu-release-upgrader"
+        self.app = _ensureQApplication()
+        self.app.setWindowIcon(_icon("system-software-update"))
 
-        uic.loadUi(self.APPDIR + "/fetch-progress.ui", self.progressDialogue)
-        self.progressDialogue.setWindowIcon(KIcon("system-software-update"))
-        self.progressDialogue.setWindowTitle(_("Upgrade"))
-        self.progress = KDEAcquireProgressAdapter(
-            self.progressDialogue.installationProgress,
-            self.progressDialogue.installingLabel,
-            None)
-        DistUpgradeFetcherCore.__init__(self, metaRelease.new_dist,
-                                        self.progress)
+        self.datadir = datadir
+
+        QUrlOpener().setupUrlHandles()
+
+        QApplication.processEvents()
 
     def error(self, summary, message):
-        KMessageBox.sorry(None, message, summary)
+        if PYQT_VERSION >= 0x50000:
+            QMessageBox.critical(None, summary, message)
+        else:
+            KMessageBox.sorry(None, message, summary)
 
     def runDistUpgrader(self):
         inhibit_sleep()
@@ -80,73 +123,103 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
                       self.script + " --frontend=DistUpgradeViewKDE"])
         else:
             os.execv(self.script,
-                     [self.script] + ["--frontend=DistUpgradeViewKDE"] +
-                     self.run_options)
+                     [self.script, "--frontend=DistUpgradeViewKDE" + self.run_options])
         # we shouldn't come to this point, but if we do, undo our
         # inhibit sleep
         allow_sleep()
 
     def showReleaseNotes(self):
         # FIXME: care about i18n! (append -$lang or something)
-        self.dialogue = QDialog()
-        uic.loadUi(self.APPDIR + "/dialog_release_notes.ui", self.dialogue)
-        upgradeButton = self.dialogue.buttonBox.button(QDialogButtonBox.Ok)
-        upgradeButton.setText(_("Upgrade"))
-        upgradeButton.setIcon(KIcon("dialog-ok"))
-        cancelButton = self.dialogue.buttonBox.button(QDialogButtonBox.Cancel)
-        cancelButton.setIcon(KIcon("dialog-cancel"))
-        self.dialogue.setWindowTitle(_("Release Notes"))
-        self.dialogue.show()
-        if self.new_dist.releaseNotesURI is not None:
-            uri = self._expandUri(self.new_dist.releaseNotesURI)
+        # TODO:  ^ what is this supposed to mean?
+        self.dialog = QDialog()
+        uic.loadUi(self.datadir + "/dialog_release_notes.ui", self.dialog)
+        upgradeButton = self.dialog.buttonBox.button(QDialogButtonBox.Ok)
+        upgradeButton.setText(_("&Upgrade"))
+        upgradeButton.setIcon(_icon("dialog-ok"))
+        cancelButton = self.dialog.buttonBox.button(QDialogButtonBox.Cancel)
+        cancelButton.setText(_("&Cancel"))
+        cancelButton.setIcon(_icon("dialog-cancel"))
+        self.dialog.setWindowTitle(_("Release Notes"))
+        self.dialog.show()
+        if self.new_dist.releaseNotesHtmlUri is not None:
+            uri = self._expandUri(self.new_dist.releaseNotesHtmlUri)
             # download/display the release notes
-            # FIXME: add some progress reporting here
+            # TODO: add some progress reporting here
             result = None
             try:
                 release_notes = urlopen(uri)
                 notes = release_notes.read().decode("UTF-8", "replace")
-                self.dialogue.scrolled_notes.setText(notes)
-                result = self.dialogue.exec_()
+                self.dialog.scrolled_notes.setText(notes)
+                result = self.dialog.exec_()
             except HTTPError:
                 primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                           _("Could not find the release notes")
                 secondary = _("The server may be overloaded. ")
-                KMessageBox.sorry(None, primary + "<br />" + secondary, "")
+                self._warning(primary + "<br />" + secondary)
             except IOError:
                 primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                           _("Could not download the release notes")
                 secondary = _("Please check your internet connection.")
-                KMessageBox.sorry(None, primary + "<br />" + secondary, "")
+                self._warning(primary + "<br />" + secondary)
             # user clicked cancel
             if result == QDialog.Accepted:
-                self.progressDialogue.show()
                 return True
-        if __name__ == "__main__":
-            KApplication.kApplication().exit(1)
-        if self.useDevelopmentRelease or self.useProposed:
-            #FIXME why does KApplication.kApplication().exit() crash but
-            # this doesn't?
-            sys.exit()
         return False
 
+    # FIXME: largely code copy from ReleaseNotesViewer which imports GTK.
+    @pyqtSlot(QUrl)
+    def openUrl(self, url):
+        url = url.toString()
+        import subprocess
+        """Open the specified URL in a browser"""
+        # Find an appropiate browser
+        if os.path.exists("/usr/bin/kde-open"):
+            command = ["kde-open", url]
+        elif os.path.exists("/usr/bin/xdg-open"):
+            command = ["xdg-open", url]
+        elif os.path.exists("/usr/bin/exo-open"):
+            command = ["exo-open", url]
+        elif os.path.exists('/usr/bin/gnome-open'):
+            command = ['gnome-open', url]
+        else:
+            command = ['x-www-browser', url]
+        # Avoid to run the browser as user root
+        if os.getuid() == 0 and 'SUDO_USER' in os.environ:
+            command = ['sudo', '-u', os.environ['SUDO_USER']] + command
+        subprocess.Popen(command)
 
 class KDEAcquireProgressAdapter(apt.progress.base.AcquireProgress):
-    def __init__(self, progress, label, parent):
-        self.progress = progress
-        self.label = label
-        self.parent = parent
+    def __init__(self, parent, datadir, label):
+        self.app = _ensureQApplication()
+        self.dialog = QDialog()
+
+        uiFile = os.path.join(datadir, "fetch-progress.ui")
+        uic.loadUi(uiFile, self.dialog)
+        self.dialog.setWindowTitle(_("Upgrade"))
+        self.dialog.installingLabel.setText(label)
+        self.dialog.buttonBox.rejected.connect(self.abort)
+
+        # This variable is used as return value for AcquireProgress pulses.
+        # Setting it to False will abort the Acquire and consequently the
+        # entire fetcher.
+        self._continue = True
+
+        QApplication.processEvents()
+
+    def abort(self):
+        self._continue = False
 
     def start(self):
-        self.label.setText(_("Downloading additional package files..."))
-        self.progress.setValue(0)
+        self.dialog.installingLabel.setText(_("Downloading additional package files..."))
+        self.dialog.installationProgress.setValue(0)
+        self.dialog.show()
 
     def stop(self):
-        pass
+        self.dialog.hide()
 
     def pulse(self, owner):
         apt.progress.base.AcquireProgress.pulse(self, owner)
-        self.progress.setValue((self.current_bytes + self.current_items) /
-                               float(self.total_bytes + self.total_items))
+        self.dialog.installationProgress.setValue((self.current_bytes + self.current_items) / float(self.total_bytes + self.total_items) * 100)
         current_item = self.current_items + 1
         if current_item > self.total_items:
             current_item = self.total_items
@@ -158,47 +231,22 @@ class KDEAcquireProgressAdapter(apt.progress.base.AcquireProgress):
         else:
             label_text += _("File %s of %s") % (
                 self.current_items, self.total_items)
-        self.label.setText(label_text)
-        KApplication.kApplication().processEvents()
-        return True
+        self.dialog.installingLabel.setText(label_text)
+        QApplication.processEvents()
+        return self._continue
 
     def mediaChange(self, medium, drive):
         msg = _("Please insert '%s' into the drive '%s'") % (medium, drive)
-        #change = QMessageBox.question(None, _("Media Change"), msg,
-        #                              QMessageBox.Ok, QMessageBox.Cancel)
-        change = KMessageBox.questionYesNo(None, _("Media Change"),
-                                           _("Media Change") + "<br>" + msg,
-                                           KStandardGuiItem.ok(),
-                                           KStandardGuiItem.cancel())
-        if change == KMessageBox.Yes:
-            return True
+        if PYQT_VERSION >= 0x50000:
+            change = QMessageBox.question(None, _("Media Change"), msg,
+                                          QMessageBox.Ok, QMessageBox.Cancel)
+            if change == QMessageBox.Ok:
+                return True
+        else:
+            change = KMessageBox.questionYesNo(None, _("Media Change"),
+                                               _("Media Change") + "<br>" + msg,
+                                               KStandardGuiItem.ok(),
+                                               KStandardGuiItem.cancel())
+            if change == KMessageBox.Yes:
+                return True
         return False
-
-if __name__ == "__main__":
-
-    appName = "dist-upgrade-fetcher"
-    catalog = ""
-    programName = ki18n("Dist Upgrade Fetcher")
-    version = "0.3.4"
-    description = ki18n("Dist Upgrade Fetcher")
-    license = KAboutData.License_GPL
-    copyright = ki18n("(c) 2008 Canonical Ltd")
-    text = ki18n("none")
-    homePage = "https://launchpad.net/ubuntu-release-upgrader"
-    bugEmail = ""
-
-    aboutData = KAboutData(appName, catalog, programName, version, description,
-                           license, copyright, text, homePage, bugEmail)
-
-    aboutData.addAuthor(ki18n("Jonathan Riddell"), ki18n("Author"))
-
-    options = KCmdLineOptions()
-
-    KCmdLineArgs.init(sys.argv, aboutData)
-    KCmdLineArgs.addCmdLineOptions(options)
-
-    app = KApplication()
-    fetcher = DistUpgradeFetcherKDE()
-    QTimer.singleShot(10, fetcher.run)
-
-    app.exec_()

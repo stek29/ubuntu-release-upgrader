@@ -1,3 +1,87 @@
+ubuntu-release-upgrader (1:14.10.6ubuntu1) UNRELEASED; urgency=medium
+
+  * Port KDE GUIs to native Qt5 versions.
+    + pyqt5 is only imported iff the current dist version is not trusty as
+      that one had a nasty bug with signals and slots not connecting properly.
+    + pyqt4/pykde4 compatibility is retained by fallback handling for the
+      pyqt5 import, as well as some version checks switching out kde classes
+      for qt classes when using Qt5. Ultimately systems <=utopic will retain
+      the same behavior as before.
+    + KDE bits replacemed as follows:
+      * KIcon -> QIcon::fromTheme
+      * KMessageBox -> QMessageBox (using most suitable version from the
+        limited feature set of QMB)
+      * KApplication -> QApplication
+      * i18n -> _()
+  * Fix KDE upgrade fetcher GUI
+    + Wire up do-release-upgrade with the KDE GUI to actually provide a UI
+      when run from a KDE Plasma envrionment
+    + Remove all logic that replicated stuff done in do-release-upgrade
+      (this primarily includes using MetaRelease to actually conduct the
+       version check, the automatic version checks are done by a special
+       script that is part of muon, so we do not ever call the fetcher
+       manually, and have not done so in at least 5 years)
+    + Detangle the Acquire class from the Fetcher class, latter is not
+      automatically constructing former any longer but needs to get it
+      supplied from the outside (i.e. do-release-upgrade)
+    + init arguments of both classes are now alinged with their GTK
+      counterparts
+    + The designer ui file now uses a QTextBrowser rather than a QTextEdit as
+      the user doesn't need to edit anything and the former supports html and
+      url opening
+    + The fetcher ui file has had all unused widgets removed which makes the
+      fetcher dialog have correct spacing
+    + The classes now hold a QApp as self.app to reflect the fact that they
+      may be constructed in any order and thus may need a QApplication in any
+      order. The actually instance is created from a new function that creates
+      an instance if there isn't one already. Ultimately this should probably
+      become a singleton.
+    + The Acquire process can now be aborted properly.
+   * Fix translation loading. As all Qt GUIs no prominently feature Qt builtin
+     classes with strings (QMessageBox, QButtonBox) we make sure that the
+     correct translations are loaded through QTranslator right after creating
+     the QApplication instances.
+     + ubuntu-release-upgrader-qt now recommends qttranslations5-l10n to
+      reflect this on a packaging level
+  * Add a new class QUrlOpener to redirect all openUrl calls through sudo -u
+    if the GUI is run as root, so that we can start the browsers as the user
+    rather than root. This class is used in both the Fetcher and the Upgrader.
+    It is a singleton that autoparents to qapp, so a qapp instance needs to be
+    available before using the opener.
+  * Improve Upgrader GUI
+    + Upgrader GUI does not meddle with xauthority anymore and doesn't kill
+      adept anymore (mind you, adept hasn't been used in years...)
+      Also the meddling seems to have been bugged in one form or the other
+      which ultimately prevents us from doing a proper openUrl as the invoking
+      user
+    + dialog_error.ui has been converted to use QTextBrowser as there is no
+      editing need.
+    + error dialog size hinting as been adjusted to make sure the window can
+      not be resized beyond what is suitable to still display stuff.
+    + error dialog window size is adjusted before exec to make sure that
+      the window has a suitable default size depending on whether the textview
+      is displayed or not
+    + dialog_error.ui has had its close button replaced with a standard
+      QButtonBox
+    + reportBug function has been removed as it is not used anymore (core
+      brings up apport regardless and the bug report url is most inconvenient
+      and pointless because people will not attach the relevant logs...)
+    + openUrl function has been removed as it is not used anymore
+    + dialog_changes.ui has had its size hinting adjusted to make sure that
+      the window has a suitable default size
+    + dialog_changes.ui uses QDialogButtonBox for all buttons now, details is
+      derived from Help which is the closest fit as far as standard types are
+      concerned
+    + The changes dialog now adjusts its size when the details widget is
+      hidden, this prevents overly large windows after details was shown once
+    + The changes dialog now correctly spaces the labels as well as the icon
+      label at the window, this resolves text jumping when showing/hiding the
+      details widget which was caused by the labels being pushed towards the
+      top to make space for the details, now a space makes that happen all the
+      time
+
+ -- Harald Sitter <apachelogger@kubuntu.org>  Tue, 05 Aug 2014 15:20:10 +0200
+
 ubuntu-release-upgrader (1:14.10.5) utopic; urgency=medium
 
   [ Brian Murray ]

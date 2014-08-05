@@ -1,9 +1,10 @@
 # DistUpgradeViewKDE.py 
-#  
+#
 #  Copyright (c) 2007 Canonical Ltd
-#  
+#  Copyright (c) 2014 Harald Sitter <apachelogger@kubuntu.org>
+#
 #  Author: Jonathan Riddell <jriddell@ubuntu.com>
-# 
+#
 #  This program is free software; you can redistribute it and/or 
 #  modify it under the terms of the GNU General Public License as 
 #  published by the Free Software Foundation; either version 2 of the
@@ -19,13 +20,26 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from PyQt4.QtCore import QUrl, Qt, SIGNAL, QTimer
-from PyQt4.QtGui import (
-    QDesktopServices, QDialog, QPixmap, QTreeWidgetItem, QMessageBox, 
-    QApplication, QTextEdit, QTextOption, QTextCursor, QPushButton, 
-    QWidget, QIcon, QHBoxLayout, QLabel
-    )
-from PyQt4 import uic
+try:
+    # 14.04 has a broken pyqt5, so don't even try to import it and require
+    # pyqt4.
+    # In 14.04 various signals in pyqt5 can not be connected because it thinks
+    # the signal does not exist or has an incompatible signature. Since this
+    # potentially renders the GUI entirely broken and pyqt5 was not actively
+    # used back then it is fair to simply require qt4 on trusty systems.
+    from .utils import get_dist
+    if get_dist() == 'trusty':
+        raise ImportError
+
+    from PyQt5 import uic
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
+except ImportError:
+    from PyQt4 import uic
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    # If we still throw an exception, bounce back to Main to try another UI.
 
 import sys
 import locale
@@ -51,14 +65,16 @@ import gettext
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import unicode_gettext
 
+from .QUrlOpener import QUrlOpener
 
+# FIXME: what's the purpose?
 def utf8(s, errors="strict"):
     if isinstance(s, bytes):
         return s.decode("UTF-8", errors)
     else:
         return s
 
-
+# FIXME: what's the purpose?
 def loadUi(file, parent):
     if os.path.exists(file):
         uic.loadUi(file, parent)
@@ -74,6 +90,7 @@ class DumbTerminal(QTextEdit):
         QTextEdit.__init__(self, "", parent_frame)
         self.installProgress = installProgress
         self.setFontFamily("Monospace")
+        # FIXME: fixed font size set!!!
         self.setFontPointSize(8)
         self.setWordWrapMode(QTextOption.NoWrap)
         self.setUndoRedoEnabled(False)
@@ -298,7 +315,8 @@ class KDEInstallProgressAdapter(InstallProgress):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        dialogue.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.parent.reportBug)
+        # Make sure we have a suitable size depending on whether or not the view is shown
+        dialogue.adjustSize()
         dialogue.exec_()
 
     def conffile(self, current, new):
@@ -316,7 +334,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.confDialogue.textview_conffile.hide()
         #FIXME, below to be tested
         #self.confDialogue.resize(self.confDialogue.minimumSizeHint())
-        self.confDialogue.connect(self.confDialogue.show_difference_button, SIGNAL("clicked()"), self.showConffile)
+        self.confDialogue.show_difference_button.clicked.connect(self.showConffile))
 
         # workaround silly dpkg 
         if not os.path.exists(current):
@@ -475,17 +493,22 @@ class DistUpgradeViewKDE(DistUpgradeView):
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
 
-        #about = KAboutData("adept_manager","Upgrader","0.1","Dist Upgrade Tool for Kubuntu",KAboutData.License_GPL,"(c) 2007 Canonical Ltd",
-        #"http://wiki.kubuntu.org/KubuntuUpdateManager", "jriddell@ubuntu.com")
-        #about.addAuthor("Jonathan Riddell", None,"jriddell@ubuntu.com")
-        #about.addAuthor("Michael Vogt", None,"michael.vogt@ubuntu.com")
-        #KCmdLineArgs.init(["./dist-upgrade.py"],about)
-
         # we test for DISPLAY here, QApplication does not throw a 
         # exception when run without DISPLAY but dies instead
         if not "DISPLAY" in os.environ:
             raise Exception("No DISPLAY in os.environ found")
         self.app = QApplication(["ubuntu-release-upgrader"])
+
+        # Try to load default Qt translations so we don't have to worry about
+        # QStandardButton translations.
+        translator = QTranslator(self.app)
+        if PYQT_VERSION >= 0x50000:
+            translator.load(QLocale.system(), 'qt', '_', '/usr/share/qt5/translations')
+        else:
+            translator.load(QLocale.system(), 'qt', '_', '/usr/share/qt4/translations')
+        self.app.installTranslator(translator)
+
+        QUrlOpener().setupUrlHandles()
 
         if os.path.exists("/usr/share/icons/oxygen/48x48/apps/system-software-update.png"):
             messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/apps/system-software-update.png")
@@ -509,30 +532,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         sys.excepthook = self._handleException
 
         self.window_main.showTerminalButton.setEnabled(False)
-        self.app.connect(self.window_main.showTerminalButton, SIGNAL("clicked()"), self.showTerminal)
-
-        #kdesu requires us to copy the xauthority file before it removes it when Adept is killed
-        fd, copyXauth = tempfile.mkstemp("", "adept")
-        if 'XAUTHORITY' in os.environ and os.environ['XAUTHORITY'] != copyXauth:
-            shutil.copy(os.environ['XAUTHORITY'], copyXauth)
-            os.environ["XAUTHORITY"] = copyXauth
-
-        # Note that with kdesudo this needs --nonewdcop
-        ## create a new DCOP-Client:
-        #client = DCOPClient()
-        ## connect the client to the local DCOP-server:
-        #client.attach()
-
-        #for qcstring_app in client.registeredApplications():
-        #    app = str(qcstring_app)
-        #    if app.startswith("adept"): 
-        #        adept = DCOPApp(qcstring_app, client)
-        #        adeptInterface = adept.object("MainApplication-Interface")
-        #        adeptInterface.quit()
-
-        # This works just as well
-        subprocess.call(["killall", "adept_manager"])
-        subprocess.call(["killall", "adept_updater"])
+        self.window_main.showTerminalButton.clicked.connect(self.showTerminal)
 
         # init gettext
         gettext.bindtextdomain("ubuntu-release-upgrader",localedir)
@@ -605,23 +605,11 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialog = QDialog(self.window_main)
             loadUi("dialog_error.ui", dialog)
             self.translate_widget_children(self.dialog)
-            #FIXME make URL work
-            #dialog.connect(dialog.beastie_url, SIGNAL("leftClickedURL(const QString&)"), self.openURL)
             dialog.crash_detail.setText(tbtext)
+            # Make sure we have a suitable size depending on whether or not the view is shown
+            dialogue.adjustSize()
             dialog.exec_()
         sys.exit(1)
-
-    def openURL(self, url):
-        """start konqueror"""
-        #need to run this else kdesu can't run Konqueror
-        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
-        QDesktopServices.openUrl(QUrl(url))
-
-    def reportBug(self):
-        """start konqueror"""
-        #need to run this else kdesu can't run Konqueror
-        #subprocess.call(['su', 'ubuntu', 'xhost', '+localhost'])
-        QDesktopServices.openUrl(QUrl("https://launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug"))
 
     def showTerminal(self):
         if self.window_main.konsole_frame.isVisible():
@@ -708,7 +696,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        dialogue.button_bugreport.hide()
         dialogue.setWindowTitle(_("Information"))
 
         if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-information.png"):
@@ -718,6 +705,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             messageIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_info.png")
         dialogue.image.setPixmap(messageIcon)
+        # Make sure we have a suitable size depending on whether or not the view is shown
+        dialogue.adjustSize()
         dialogue.exec_()
 
     def error(self, summary, msg, extended_msg=None):
@@ -732,8 +721,6 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.show()
         else:
             dialogue.textview_error.hide()
-        dialogue.button_close.show()
-        self.app.connect(dialogue.button_bugreport, SIGNAL("clicked()"), self.reportBug)
 
         if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-error.png"):
             messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-error.png")
@@ -742,6 +729,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             messageIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_critical.png")
         dialogue.image.setPixmap(messageIcon)
+        # Make sure we have a suitable size depending on whether or not the view is shown
+        dialogue.adjustSize()
         dialogue.exec_()
 
         return False
@@ -757,9 +746,11 @@ class DistUpgradeViewKDE(DistUpgradeView):
         loadUi("dialog_changes.ui", self.changesDialogue)
 
         self.changesDialogue.treeview_details.hide()
-        self.changesDialogue.connect(self.changesDialogue.show_details_button, SIGNAL("clicked()"), self.showChangesDialogueDetails)
+        self.changesDialogue.buttonBox.helpRequested.connect(self.showChangesDialogueDetails)
         self.translate_widget_children(self.changesDialogue)
-        self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+        self.changesDialogue.buttonBox.button(QDialogButtonBox.Ok).setText(_("&Start Upgrade"))
+        self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setIcon(QIcon())
+        self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setText(_("Details") + " >>>")
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
         if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-warning.png"):
@@ -773,9 +764,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         if actions != None:
             cancel = actions[0].replace("_", "")
-            self.changesDialogue.button_cancel_changes.setText(cancel)
+            self.changesDialogue.buttonBox.button(QDialogButtonBox.Cancel).setText(cancel)
             confirm = actions[1].replace("_", "")
-            self.changesDialogue.button_confirm_changes.setText(confirm)
+            self.changesDialogue.buttonBox.button(QDialogButtonBox.Ok).setText(confirm)
 
         summaryText = "<big><b>%s</b></big>" % summary
         self.changesDialogue.label_summary.setText(summaryText)
@@ -804,10 +795,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
     def showChangesDialogueDetails(self):
         if self.changesDialogue.treeview_details.isVisible():
             self.changesDialogue.treeview_details.hide()
-            self.changesDialogue.show_details_button.setText(_("Details") + " >>>")
+            self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setText(_("Details") + " >>>")
+            # Make sure we shrink the dialog otherwise it looks silly
+            self.changesDialogue.adjustSize()
         else:
             self.changesDialogue.treeview_details.show()
-            self.changesDialogue.show_details_button.setText("<<< " + _("Details"))
+            self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setText("<<< " + _("Details"))
         self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
     def askYesNoQuestion(self, summary, msg, default='No'):

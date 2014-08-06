@@ -21,12 +21,12 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 def get_new_dist():
     """
     common code to test new dist fetching, get the new dist information
-    for hardy+1
+    for trusty+1
     """
     os.system("rm -rf /tmp/update-manager-core/")
     meta = MetaReleaseCore()
     #meta.DEBUG = True
-    meta.current_dist_name = "precise"
+    meta.current_dist_name = "trusty"
     meta.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
     meta.downloaded.wait()
     meta._buildMetaReleaseFile()

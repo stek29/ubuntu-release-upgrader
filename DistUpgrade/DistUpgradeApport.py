@@ -1,6 +1,5 @@
 
 import os
-import os.path
 import logging
 import subprocess
 import sys
@@ -97,7 +96,8 @@ def apport_pkgfailure(pkg, errormsg):
         for fname in APPORT_WHITELIST:
             args.extend(["-l", os.path.join(LOGDIR, fname)])
         try:
-            p = subprocess.Popen(args, stdin=subprocess.PIPE)
+            p = subprocess.Popen(args, stdin=subprocess.PIPE,
+                    universal_newlines=True)
             p.stdin.write(errormsg)
             p.stdin.close()
             #p.wait()

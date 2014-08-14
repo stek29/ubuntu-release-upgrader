@@ -76,10 +76,14 @@ def apport_pkgfailure(pkg, errormsg):
     # dpkg messages will not be translated if DPKG_UNTRANSLATED_MESSAGES is
     # set which it is by default so check for the English message first
     if "dependency problems - leaving unconfigured" in errormsg:
+        logging.debug("dpkg error because of dependency problems, not "
+                      "against %s " % pkg)
         return False
     needle = gettext.dgettext(
         'dpkg', "dependency problems - leaving unconfigured")
     if needle in errormsg:
+        logging.debug("dpkg error because of dependency problems, not "
+                      "reporting against %s " % pkg)
         return False
     # we do not run apport_pkgfailure for full disk errors
     if os.strerror(errno.ENOSPC) in errormsg:

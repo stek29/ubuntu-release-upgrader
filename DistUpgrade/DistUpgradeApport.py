@@ -77,7 +77,7 @@ def apport_pkgfailure(pkg, errormsg):
     # set which it is by default so check for the English message first
     if "dependency problems - leaving unconfigured" in errormsg:
         logging.debug("dpkg error because of dependency problems, not "
-                      "against %s " % pkg)
+                      "reporting against %s " % pkg)
         return False
     needle = gettext.dgettext(
         'dpkg', "dependency problems - leaving unconfigured")

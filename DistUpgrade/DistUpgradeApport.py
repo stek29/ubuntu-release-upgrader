@@ -97,7 +97,7 @@ def apport_pkgfailure(pkg, errormsg):
             args.extend(["-l", os.path.join(LOGDIR, fname)])
         try:
             p = subprocess.Popen(args, stdin=subprocess.PIPE,
-                    universal_newlines=True)
+                                 universal_newlines=True)
             p.stdin.write(errormsg)
             p.stdin.close()
             #p.wait()

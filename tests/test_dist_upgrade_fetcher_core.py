@@ -5,15 +5,21 @@ from __future__ import print_function
 
 import apt
 import apt_pkg
+import atexit
 import logging
 import os
+import shutil
+import tempfile
 import unittest
 
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
 from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 
 # make sure we have a writable location for the meta-release file
-os.environ["XDG_CACHE_HOME"] = "/tmp"
+tmpdir = tempfile.mkdtemp()
+atexit.register(lambda: shutil.rmtree(tmpdir))
+os.environ["XDG_CACHE_HOME"] = tmpdir
+
 
 CURDIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,11 +29,12 @@ def get_new_dist():
     common code to test new dist fetching, get the new dist information
     for trusty+1
     """
-    os.system("rm -rf /tmp/update-manager-core/")
+    shutil.rmtree(tmpdir)
     meta = MetaReleaseCore()
     #meta.DEBUG = True
     meta.current_dist_name = "trusty"
-    meta.METARELEASE_URI = "http://changelogs.ubuntu.com/meta-release"
+    meta.METARELEASE_URI = \
+        "http://changelogs.ubuntu.com/meta-release-development"
     meta.downloaded.wait()
     meta._buildMetaReleaseFile()
     meta.download()

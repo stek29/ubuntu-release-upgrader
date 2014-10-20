@@ -334,9 +334,9 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.time_ui += time.time() - start
         # if replace, send this to the terminal
         if result == QDialog.Accepted:
-            os.write(self.master_fd, "y\n")
+            os.write(self.master_fd, b"y\n")
         else:
-            os.write(self.master_fd, "n\n")
+            os.write(self.master_fd, b"n\n")
 
     def showConffile(self):
         if self.confDialogue.textview_conffile.isVisible():

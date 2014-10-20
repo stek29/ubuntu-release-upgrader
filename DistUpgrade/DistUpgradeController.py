@@ -908,10 +908,13 @@ class DistUpgradeController(object):
             maxRetries=forceRetries
         else:
             maxRetries = self.config.getint("Network","MaxRetries")
+        # LP: #1321959
+        error_msg = ""
         while currentRetry < maxRetries:
             try:
                 self.cache.update(progress)
             except (SystemError, IOError) as e:
+                error_msg = str(e)
                 logging.error("IOError/SystemError in cache.update(): '%s'. Retrying (currentRetry: %s)" % (e,currentRetry))
                 currentRetry += 1
                 continue
@@ -920,14 +923,11 @@ class DistUpgradeController(object):
 
         logging.error("doUpdate() failed completely")
         if showErrors:
-            # LP: #1321959
-            if not e:
-                e = ''
             self._view.error(_("Error during update"),
                              _("A problem occurred during the update. "
                                "This is usually some sort of network "
                                "problem, please check your network "
-                               "connection and retry."), "%s" % e)
+                               "connection and retry."), "%s" % error_msg)
         return False
 
 

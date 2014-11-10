@@ -459,16 +459,6 @@ class DistUpgradeController(object):
             logging.error("checkViewDepends() failed")
             return False
 
-        if os.path.exists("/usr/bin/debsig-verify"):
-            logging.error("debsig-verify is installed")
-            self._view.error(_("Package 'debsig-verify' is installed"),
-                             _("The upgrade can not continue with that "
-                               "package installed.\n"
-                               "Please remove it with synaptic "
-                               "or 'apt-get remove debsig-verify' first "
-                               "and run the upgrade again."))
-            self.abort()
-
         from .DistUpgradeMain import SYSTEM_DIRS
         for systemdir in SYSTEM_DIRS:
             if os.path.exists(systemdir) and not os.access(systemdir, os.W_OK):

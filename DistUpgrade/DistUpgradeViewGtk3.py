@@ -21,7 +21,7 @@
 
 import gi
 gi.require_version("Gtk", "3.0")
-gi.require_version("Vte", "2.90")
+gi.require_version("Vte", "2.91")
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -266,7 +266,7 @@ class GtkInstallProgressAdapter(InstallProgress):
             self.term.feed_child("n\n", -1)
 
     def fork(self):
-        pty = Vte.Pty.new(Vte.PtyFlags.DEFAULT)
+        pty = Vte.Pty.new_sync(Vte.PtyFlags.DEFAULT)
         pid = os.fork()
         if pid == 0:
             # WORKAROUND for broken feisty vte where envv does not work)
@@ -279,7 +279,7 @@ class GtkInstallProgressAdapter(InstallProgress):
             # duplication detection
             os.environ["DPKG_UNTRANSLATED_MESSAGES"] = "1"
         else:
-            self.term.set_pty_object(pty)
+            self.term.set_pty(pty)
             self.term.watch_child(pid)
         return pid
 
@@ -316,9 +316,9 @@ class GtkInstallProgressAdapter(InstallProgress):
                 self.parent._webkit_view.get_property("load-status") == 2):
                 self.parent._webkit_view.execute_script('progress("%s")' % percent)
 
-    def child_exited(self, term):
+    def child_exited(self, term, status):
         # we need to capture the full status here (not only the WEXITSTATUS)
-        self.apt_status =  term.get_child_exit_status()
+        self.apt_status =  status
         self.finished = True
 
     def wait_child(self):
@@ -362,14 +362,15 @@ class DistUpgradeVteTerminal(object):
         if hidden==False:
             self.parent.expander_terminal.set_expanded(True)
         self.finished = False
-        (success, pid) = self.term.fork_command_full(Vte.PtyFlags.DEFAULT,
-                                                     "/",
-                                                     cmd,
-                                                     None,
-                                                     0,    # GLib.SpawnFlags
-                                                     None, # child_setup
-                                                     None, # child_setup_data
-                                                     )
+        (success, pid) = self.term.spawn_sync(Vte.PtyFlags.DEFAULT,
+                                              "/",
+                                              cmd,
+                                              None,
+                                              0,    # GLib.SpawnFlags
+                                              None, # child_setup
+                                              None, # child_setup_data
+                                              None, # GCancellable
+                                              )
         if not success or pid < 0:
             # error
             return
@@ -519,9 +520,10 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
 
     def create_terminal(self):
         " helper to create a vte terminal "
-        self._term = Vte.Terminal()
+        self._term = Vte.Terminal.new()
         self._term.connect("key-press-event", self._key_press_handler)
-        self._term.set_font_from_string("monospace 10")
+        fontdesc = Pango.font_description_from_string("monospace 10")
+        self._term.set_font(fontdesc)
         self._terminal_lines = []
         self.hbox_custom.pack_start(self._term, True, True, 0)
         self._term.realize()

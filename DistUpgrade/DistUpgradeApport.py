@@ -56,6 +56,8 @@ def apport_crash(type, value, tb):
     if os.path.exists('/var/crash/_usr_bin_do-release-upgrade.0.crash'):
         report = Report()
         report.setdefault('Tags', 'dist-upgrade')
+        release = 'Ubuntu %s' % VERSION[0:5]
+        report.setdefault('DistroRelease', release)
         # use the version of the release-upgrader tarball, not the installed
         # package
         report.setdefault('Package', 'ubuntu-release-upgrader-core 1:%s' %

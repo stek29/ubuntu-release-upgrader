@@ -470,10 +470,10 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         sys.excepthook = self._handleException
 
     def _handleException(self, type, value, tb):
-            # we handle the exception here, hand it to apport and run the
-            # apport gui manually after it because we kill u-m during the upgrade
-            # to prevent it from poping up for reboot notifications or FF restart
-            # notifications or somesuch
+        # we handle the exception here, hand it to apport and run the
+        # apport gui manually after it because we kill u-n during the upgrade
+        # to prevent it from poping up for reboot notifications or FF restart
+        # notifications or somesuch
         import traceback
         lines = traceback.format_exception(type, value, tb)
         logging.error("not handled expection:\n%s" % "\n".join(lines))

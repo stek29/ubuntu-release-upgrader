@@ -21,11 +21,19 @@
 
 import gi
 gi.require_version("Gtk", "3.0")
-gi.require_version("Vte", "2.91")
+try:
+    gi.require_version("Vte", "2.91")
+    from gi.repository import Vte
+except Exception as e:
+    gi.require_version("Vte", "2.90")
+    # COMPAT: Dear upstream, this compat code below will be duplicated in
+    #         all python-vte using applications. Love, Michael
+    from gi.repository import Vte
+    Vte.Pty.new_sync = Vte.Pty.new
+
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Vte
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
@@ -316,9 +324,13 @@ class GtkInstallProgressAdapter(InstallProgress):
                 self.parent._webkit_view.get_property("load-status") == 2):
                 self.parent._webkit_view.execute_script('progress("%s")' % percent)
 
-    def child_exited(self, term, status):
+    def child_exited(self, term, status=None):
         # we need to capture the full status here (not only the WEXITSTATUS)
-        self.apt_status =  status
+        if status is None:
+            # COMPAT we must keep until 16.04
+            self.apt_status = term.get_child_exit_status()
+        else:
+            self.apt_status =  status
         self.finished = True
 
     def wait_child(self):
@@ -521,6 +533,10 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     def create_terminal(self):
         " helper to create a vte terminal "
         self._term = Vte.Terminal.new()
+        # COMPAT that must be kept until 16.04
+        if not hasattr(self.term, "set_pty"):
+            self._term.set_pty = self.term.set_pty_object
+
         self._term.connect("key-press-event", self._key_press_handler)
         fontdesc = Pango.font_description_from_string("monospace 10")
         self._term.set_font(fontdesc)

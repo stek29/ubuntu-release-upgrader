@@ -534,8 +534,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         " helper to create a vte terminal "
         self._term = Vte.Terminal.new()
         # COMPAT that must be kept until 16.04
-        if not hasattr(self.term, "set_pty"):
-            self._term.set_pty = self.term.set_pty_object
+        if not hasattr(self._term, "set_pty"):
+            self._term.set_pty = self._term.set_pty_object
 
         self._term.connect("key-press-event", self._key_press_handler)
         fontdesc = Pango.font_description_from_string("monospace 10")

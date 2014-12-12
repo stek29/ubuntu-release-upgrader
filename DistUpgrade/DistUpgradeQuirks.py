@@ -572,24 +572,6 @@ class DistUpgradeQuirks(object):
                 pass
             open(cfg, "w").write("foreign-architecture %s\n" % foreign_arch)
 
-    def _add_kdegames_card_extra_if_installed(self):
-        """ test if kdegames-card-data is installed and if so,
-            add kdegames-card-data-extra so that users do not
-            loose functionality (LP: #745396)
-        """
-        try:
-            cache = self.controller.cache
-            if not ("kdegames-card-data" in cache or
-                    "kdegames-card-data-extra" in cache):
-                return
-            if (cache["kdegames-card-data"].is_installed or
-                    cache["kdegames-card-data"].marked_install):
-                cache.mark_install(
-                    "kdegames-card-data-extra",
-                    "kdegames-card-data -> k-c-d-extra transition")
-        except:
-            logging.exception("_add_kdegames_card_extra_if_installed failed")
-
     def ensure_recommends_are_installed_on_desktops(self):
         """ ensure that on a desktop install recommends are installed
             (LP: #759262)

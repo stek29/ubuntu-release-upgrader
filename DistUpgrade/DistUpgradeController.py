@@ -565,6 +565,20 @@ class DistUpgradeController(object):
                                    for x in pockets]
         self.sources_disabled = False
 
+        # Special quirk to remove extras.ubuntu.com
+        new_list = []
+        for entry in self.sources.list[:]:
+            if "/extras.ubuntu.com" in entry.uri:
+                continue
+            if entry.line.startswith(
+                    "## This software is not part of Ubuntu, but is offered by third-party"):
+                continue
+            if entry.line.startswith(
+                    "## developers who want to ship their latest software."):
+                continue
+            new_list.append(entry)
+        self.sources.list = new_list
+
         # look over the stuff we have
         foundToDist = False
         # collect information on what components (main,universe) are enabled for what distro (sub)version
@@ -657,8 +671,7 @@ class DistUpgradeController(object):
                     "/security.ubuntu.com" in entry.uri or
                     "%s-security" % self.fromDist in entry.dist or
                     "%s-backports" % self.fromDist in entry.dist or
-                    "/archive.canonical.com" in entry.uri or
-                    "/extras.ubuntu.com" in entry.uri):
+                    "/archive.canonical.com" in entry.uri):
                     validTo = False
                 if entry.dist in toDists:
                     # so the self.sources.list is already set to the new

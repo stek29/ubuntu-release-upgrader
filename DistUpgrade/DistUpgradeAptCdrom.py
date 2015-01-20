@@ -281,7 +281,8 @@ class AptCdrom(object):
             content = f.read()
         with open(sourceslist, "w") as f:
             f.write(
-            "# added by the release upgrader\n%s\n%s" % (debline, content))
+                "# added by the release upgrader\n%s\n%s" %
+                (debline, content))
         self._writeDatabase()
 
         return True

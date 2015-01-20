@@ -469,7 +469,8 @@ class DistUpgradeQuirks(object):
                 logging.debug("already at target hash, skipping '%s'" % path)
                 continue
             elif md5.hexdigest() != md5sum:
-                logging.warning("unexpected target md5sum, skipping: '%s'" % path)
+                logging.warning("unexpected target md5sum, skipping: '%s'"
+                                % path)
                 continue
             # patchable, do it
             from .DistUpgradePatcher import patch

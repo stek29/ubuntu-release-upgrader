@@ -240,7 +240,8 @@ def setupAufs(rw_dir):
         for line in f:
             (device, mountpoint, fstype, options, a, b) = line.split()
             if is_real_fs(fstype) and is_submount(mountpoint, systemdirs):
-                logging.warning("mountpoint %s submount of systemdir" % mountpoint)
+                logging.warning("mountpoint %s submount of systemdir" % 
+                                mountpoint)
                 return False
             if (fstype != "aufs" and
                     not is_real_fs(fstype) and

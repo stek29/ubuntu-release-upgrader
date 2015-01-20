@@ -454,7 +454,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 
     def _verifySources(self, expected):
         sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
-        sources_list = open(sources_file).read()
+        with open(sources_file) as f:
+            sources_list = f.read()
         for l in expected.split("\n"):
             self.assertTrue(
                 l in sources_list.split("\n"),

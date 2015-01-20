@@ -63,9 +63,11 @@ class AptCdrom(object):
         diskname = self._readDiskName()
         pentry = self._generateSourcesListLine(diskname, self.packages)
         sourceslist = apt_pkg.config.find_file("Dir::Etc::sourcelist")
-        content = open(sourceslist).read()
+        with open(sourceslist) as f:
+            content = f.read()
         content = content.replace(pentry, "# %s" % pentry)
-        open(sourceslist, "w").write(content)
+        with open(sourceslist, "w") as f:
+            f.write(content)
 
     def _scanCD(self):
         """ 
@@ -106,9 +108,9 @@ class AptCdrom(object):
         cdrom = apt_pkg.Cdrom()
         id = cdrom.ident(apt.progress.base.CdromProgress())
         label = self._readDiskName()
-        out = open(dbfile, "a")
-        out.write('CD::%s "%s";\n' % (id, label))
-        out.write('CD::%s::Label "%s";\n' % (id, label))
+        with open(dbfile, "a") as out:
+            out.write('CD::%s "%s";\n' % (id, label))
+            out.write('CD::%s::Label "%s";\n' % (id, label))
 
     def _dropArch(self, packages):
         """ drop architectures that are not ours """
@@ -127,7 +129,8 @@ class AptCdrom(object):
         diskname = self.cdrompath
         info = os.path.join(self.cdrompath, ".disk", "info")
         if os.path.exists(info):
-            diskname = open(info).read()
+            with open(info) as f:
+                diskname = f.read()
             for special in ('"', ']', '[', '_'):
                 diskname = diskname.replace(special, '_')
         return diskname
@@ -162,17 +165,13 @@ class AptCdrom(object):
                 "cdrom:[%s]/%s" % (diskname, f[f.find("dists"):]))
             outf = os.path.join(targetdir, os.path.splitext(fname)[0])
             if f.endswith(".gz"):
-                g = gzip.open(f)
-                try:
-                    with open(outf, "wb") as out:
-                        # uncompress in 64k chunks
-                        while True:
-                            s = g.read(64000)
-                            out.write(s)
-                            if s == b"":
-                                break
-                finally:
-                    g.close()
+                with gzip.open(f) as g, open(outf, "wb") as out:
+                    # uncompress in 64k chunks
+                    while True:
+                        s = g.read(64000)
+                        out.write(s)
+                        if s == b"":
+                            break
             else:
                 shutil.copy(f, outf)
         return True
@@ -187,17 +186,13 @@ class AptCdrom(object):
                 "cdrom:[%s]/%s" % (diskname, f[f.find("dists"):]))
             outf = os.path.join(targetdir, os.path.splitext(fname)[0])
             if f.endswith(".gz"):
-                g = gzip.open(f)
-                try:
-                    with open(outf, "wb") as out:
-                        # uncompress in 64k chunks
-                        while True:
-                            s = g.read(64000)
-                            out.write(s)
-                            if s == b"":
-                                break
-                finally:
-                    g.close()
+                with gzip.open(f) as g, open(outf, "wb") as out:
+                    # uncompress in 64k chunks
+                    while True:
+                        s = g.read(64000)
+                        out.write(s)
+                        if s == b"":
+                            break
             else:
                 shutil.copy(f, outf)
         return True
@@ -218,15 +213,18 @@ class AptCdrom(object):
             if not (ret == 0):
                 return False
             # now do the hash sum checks
-            t = apt_pkg.TagFile(open(releasef))
-            t.step()
-            for entry in t.section["SHA256"].split("\n"):
+            with open(releasef) as f:
+                t = apt_pkg.TagFile(f)
+                t.step()
+                sha256_section = t.section["SHA256"]
+            for entry in sha256_section.split("\n"):
                 (hash, size, name) = entry.split()
                 f = os.path.join(basepath, name)
                 if not os.path.exists(f):
                     logging.info("ignoring missing '%s'" % f)
                     continue
-                sum = apt_pkg.sha256sum(open(f))
+                with open(f) as fp:
+                    sum = apt_pkg.sha256sum(open(fp))
                 if not (sum == hash):
                     logging.error(
                         "hash sum mismatch expected %s but got %s" % (
@@ -279,8 +277,10 @@ class AptCdrom(object):
         
         # prepend to the sources.list
         sourceslist = apt_pkg.config.find_file("Dir::Etc::sourcelist")
-        content = open(sourceslist).read()
-        open(sourceslist, "w").write(
+        with open(sourceslist) as f:
+            content = f.read()
+        with open(sourceslist, "w") as f:
+            f.write(
             "# added by the release upgrader\n%s\n%s" % (debline, content))
         self._writeDatabase()
 

@@ -101,7 +101,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     # go into nag mode
     if (ignore_dist == new_dist.name and
         meta_release.no_longer_supported is None):
-        logging.warn("found new dist '%s' but it is on the ignore list" % new_dist.name)
+        logging.warning("found new dist '%s' but it is on the ignore list" % new_dist.name)
         sys.exit()
 
     # show alert on unsupported distros
@@ -157,7 +157,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def timeout(self, user_data):
     if self.new_dist is None:
-      logging.warn("timeout reached, exiting")
+      logging.warning("timeout reached, exiting")
       Gtk.main_quit()
 
 if __name__ == "__main__":

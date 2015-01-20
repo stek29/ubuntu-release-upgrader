@@ -133,7 +133,8 @@ def save_system_state(logdir):
     try:
         s=subprocess.Popen(["lspci","-nn"], stdout=subprocess.PIPE,
                            universal_newlines=True).communicate()[0]
-        open(os.path.join(logdir, "lspci.txt"), "w").write(s)
+        with open(os.path.join(logdir, "lspci.txt"), "w") as f:
+            f.write(s)
     except OSError as e:
         logging.debug("lspci failed: %s" % e)
     

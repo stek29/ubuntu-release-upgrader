@@ -363,7 +363,8 @@ class DistUpgradeController(object):
         logging.debug("_pythonSymlinkCheck run")
         if os.path.exists('/usr/share/python/debian_defaults'):
             config = SafeConfigParser()
-            config.readfp(open('/usr/share/python/debian_defaults'))
+            with open('/usr/share/python/debian_defaults') as f:
+                config.readfp(f)
             try:
                 expected_default = config.get('DEFAULT', 'default-version')
             except NoOptionError:
@@ -552,7 +553,8 @@ class DistUpgradeController(object):
                         s += "deb http://archive.ubuntu.com/ubuntu %s main restricted" % self.toDist
                         s += "deb http://archive.ubuntu.com/ubuntu %s-updates main restricted" % self.toDist
                         s += "deb http://security.ubuntu.com/ubuntu %s-security main restricted" % self.toDist
-                        open("/etc/apt/sources.list","w").write(s)
+                        with open("/etc/apt/sources.list","w") as f:
+                            f.write(s)
                     break
 
         # this must map, i.e. second in "from" must be the second in "to"
@@ -1140,7 +1142,8 @@ class DistUpgradeController(object):
                 # the previous release, no packages have been installed
                 # yet (LP: #328655, #356781)
                 if os.path.exists("/var/run/ubuntu-release-upgrader-apt-exception"):
-                    e = open("/var/run/ubuntu-release-upgrader-apt-exception").read()
+                    with open("/var/run/ubuntu-release-upgrader-apt-exception") as f:
+                        e = f.read()
                     logging.error("found exception: '%s'" % e)
                     # if its a ordering bug we can cleanly revert but we need to write
                     # a marker for the parent process to know its this kind of error
@@ -1486,14 +1489,13 @@ class DistUpgradeController(object):
         # go over the sources.list and try to find a valid mirror
         # that we can use to add the backports dir
         logging.debug("writing prerequists sources.list at: '%s' " % out)
-        outfile = open(out, "w")
         mirrorlines = self._getPreReqMirrorLines(dumb)
-        for line in open(template):
-            template = Template(line)
-            outline = template.safe_substitute(mirror=mirrorlines)
-            outfile.write(outline)
-            logging.debug("adding '%s' prerequists" % outline)
-        outfile.close()
+        with open(out, "w") as outfile, open(template) as infile:
+            for line in infile:
+                template = Template(line)
+                outline = template.safe_substitute(mirror=mirrorlines)
+                outfile.write(outline)
+                logging.debug("adding '%s' prerequists" % outline)
         return True
 
     def getRequiredBackports(self):

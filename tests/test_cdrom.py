@@ -26,9 +26,9 @@ class TestAptCdrom(unittest.TestCase):
 
     def testWriteDatabase(self):
         expect = \
-            "CD::36e3f69081b7d10081d167b137886a71-2 " \
+            "CD::0380987599d9f666b749fbfe29d5b440-2 " \
             "\"Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)\";\n" \
-            "CD::36e3f69081b7d10081d167b137886a71-2::Label " \
+            "CD::0380987599d9f666b749fbfe29d5b440-2::Label " \
             "\"Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)\";\n"
         p = CURDIR + "/test-data-cdrom/"
         database = CURDIR + "/test-data-cdrom/cdrom.list"
@@ -39,7 +39,8 @@ class TestAptCdrom(unittest.TestCase):
             os.unlink(database)
         cdrom = AptCdrom(None, p)
         cdrom._writeDatabase()
-        self.assertEqual(expect, open(database).read())
+        with open(database) as f:
+            self.assertEqual(expect, f.read())
 
     def testScanCD(self):
         p = CURDIR + "/test-data-cdrom"
@@ -134,16 +135,17 @@ class TestAptCdrom(unittest.TestCase):
     def test_comment_out(self):
         tmpdir = tempfile.mkdtemp()
         sourceslist = os.path.join(tmpdir, "sources.list")
-        open(sourceslist, "w")
         apt_pkg.config.set("dir::etc::sourcelist", sourceslist)
         apt_pkg.config.set("dir::state::lists", tmpdir)
         view = Mock()
         cdrom = AptCdrom(view, CURDIR + "/test-data-cdrom")
         cdrom.add()
         cdrom.comment_out_cdrom_entry()
-        for line in open(sourceslist):
+        with open(sourceslist) as f:
+            sourceslines = f.readlines()
+        for line in sourceslines:
             self.assertTrue(line.startswith("#"))
-        self.assertEqual(len(open(sourceslist).readlines()), 2)
+        self.assertEqual(len(sourceslines), 2)
 
 
 if __name__ == "__main__":

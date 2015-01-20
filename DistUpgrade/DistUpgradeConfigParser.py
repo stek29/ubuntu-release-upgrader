@@ -86,7 +86,8 @@ class DistUpgradeConfig(SafeConfigParser):
         p = os.path.join(self.datadir, filename)
         if not os.path.exists(p):
             logging.error("getListFromFile: no '%s' found" % p)
-        items = [x.strip() for x in open(p)]
+        with open(p) as f:
+            items = [x.strip() for x in f]
         return [s for s in items if not s.startswith("#") and not s == ""]
 
 

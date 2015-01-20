@@ -24,18 +24,23 @@ class OriginMatcherTestCase(unittest.TestCase):
     def test_simple(self):
         shutil.copy(self.ORIG, self.NEW)
         replace_driver_from_xorg("fglrx", "ati", self.NEW)
-        self.assertEqual(open(self.NEW).read(), open(self.ORIG).read())
+        with open(self.NEW) as n, open(self.ORIG) as o:
+            self.assertEqual(n.read(), o.read())
 
     def test_remove(self):
         shutil.copy(self.FGLRX, self.NEW)
-        self.assertTrue("fglrx" in open(self.NEW).read())
+        with open(self.NEW) as f:
+            self.assertTrue("fglrx" in f.read())
         replace_driver_from_xorg("fglrx", "ati", self.NEW)
-        self.assertFalse("fglrx" in open(self.NEW).read())
+        with open(self.NEW) as f:
+            self.assertFalse("fglrx" in f.read())
 
     def test_omment(self):
         shutil.copy(self.FGLRX, self.NEW)
         comment_out_driver_from_xorg("fglrx", self.NEW)
-        for line in open(self.NEW):
+        with open(self.NEW) as n:
+            lines = n.readlines()
+        for line in lines:
             if re.match('^#.*Driver.*fglrx', line):
                 import logging
                 logging.info("commented out line found")

@@ -40,8 +40,10 @@ class TestPatches(unittest.TestCase):
         """ helper for test_patch to verify that we get the expected result """
         # simple case is foo
         patchdir = CURDIR + "/patchdir/"
-        self.assertFalse("Hello" in open(patchdir + "foo").read())
-        self.assertTrue("Hello" in open(patchdir + "foo_orig").read())
+        with open(patchdir + "foo") as f:
+            self.assertFalse("Hello" in f.read())
+        with open(patchdir + "foo_orig") as f:
+            self.assertTrue("Hello" in f.read())
         md5 = hashlib.md5()
         with open(patchdir + "foo", "rb") as patch:
             md5.update(patch.read())
@@ -62,8 +64,9 @@ class TestPatches(unittest.TestCase):
             md5.update(patch.read())
         self.assertEqual(md5.hexdigest(), "cddc4be46bedd91db15ddb9f7ddfa804")
         # test that incorrect md5sum after patching rejects the patch
-        self.assertEqual(open(patchdir + "fail").read(),
-                         open(patchdir + "fail_orig").read())
+        with open(patchdir + "fail") as f1, open(patchdir + "fail_orig") as f2:
+            self.assertEqual(f1.read(),
+                             f2.read())
 
     def test_patch(self):
         q = DistUpgradeQuirks(MockController(), MockConfig)

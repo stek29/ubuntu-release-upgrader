@@ -5,18 +5,19 @@ import sys
 
 # read what we have
 current_mirrors = set()
-for line in open(sys.argv[1], "r"):
-    current_mirrors.add(line.strip())
+with open(sys.argv[1], "r") as f:
+    for line in f:
+        current_mirrors.add(line.strip())
 
     
-outfile = open(sys.argv[1], "a")
 d = feedparser.parse("https://launchpad.net/ubuntu/+archivemirrors-rss")
 
 #import pprint
 #pp  = pprint.PrettyPrinter(indent=4)
 #pp.pprint(d)
 
-for entry in d.entries:
-    for link in entry.links:
-        if link.href not in current_mirrors:
-            outfile.write(link.href + "\n")
+with open(sys.argv[1], "a") as outfile:
+    for entry in d.entries:
+        for link in entry.links:
+            if link.href not in current_mirrors:
+                outfile.write(link.href + "\n")

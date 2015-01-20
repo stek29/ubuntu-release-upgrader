@@ -89,7 +89,8 @@ class testPreRequists(unittest.TestCase):
         # unset sourceparts
         apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
         # write empty status file
-        open(tmpdir + "/status", "w")
+        with open(tmpdir + "/status", "w") as f:
+            f
         os.makedirs(tmpdir + "/lists/partial")
         apt_pkg.config.set("Dir::State", tmpdir)
         apt_pkg.config.set("Dir::State::status", tmpdir + "/status")
@@ -117,7 +118,8 @@ class testPreRequists(unittest.TestCase):
         template = os.path.join(self.testdir, "prerequists-sources.list.in")
         out = os.path.join(tmpdir, "prerequists-sources.list")
         # write empty status file
-        open(tmpdir + "/status", "w")
+        with open(tmpdir + "/status", "w") as f:
+            f
         os.makedirs(tmpdir + "/lists/partial")
         apt_pkg.config.set("Dir::State", tmpdir)
         apt_pkg.config.set("Dir::State::status", tmpdir + "/status")
@@ -143,7 +145,8 @@ class testPreRequists(unittest.TestCase):
             "prerequists-sources.list.in.no_archive_falllback")
         out = os.path.join(tmpdir, "prerequists-sources.list")
         # write empty status file
-        open(tmpdir + "/status", "w")
+        with open(tmpdir + "/status", "w") as f:
+            f
         os.makedirs(tmpdir + "/lists/partial")
         apt_pkg.config.set("Dir::State", tmpdir)
         apt_pkg.config.set("Dir::State::status", tmpdir + "/status")
@@ -168,7 +171,8 @@ class testPreRequists(unittest.TestCase):
                                 "prerequists-sources.list.in.broken")
         out = os.path.join(tmpdir, "prerequists-sources.list")
         # write empty status file
-        open(tmpdir + "/status", "w")
+        with open(tmpdir + "/status", "w") as f:
+            f
         os.makedirs(tmpdir + "/lists/partial")
         apt_pkg.config.set("Dir::State", tmpdir)
         apt_pkg.config.set("Dir::State::status", tmpdir + "/status")
@@ -181,13 +185,14 @@ class testPreRequists(unittest.TestCase):
         self.assertTrue(exp)
 
     def _verifySources(self, filename, expected):
-        sources_list = open(filename).read()
+        with open(filename) as f:
+            sources_list = f.read()
         for l in expected.split("\n"):
             if l:
                 self.assertTrue(l in sources_list,
                                 "expected entry '%s' in '%s' missing, "
                                 "got:\n%s" % (l, filename,
-                                              open(filename).read()))
+                                              sources_list))
 
 if __name__ == "__main__":
     unittest.main()

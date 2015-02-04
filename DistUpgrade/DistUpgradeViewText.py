@@ -45,6 +45,7 @@ from .utils import twrap
 
 def readline():
     """ py2/py3 compatible readline from stdin """
+    sys.stdout.flush()
     s = sys.stdin.readline()
     if hasattr(s, "decode"):
         return s.decode(ENCODING, "backslashreplace")
@@ -206,7 +207,6 @@ class DistUpgradeViewText(DistUpgradeView):
       print(twrap(summary))
       print(twrap(self.confirmChangesMessage))
       print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
-      sys.stdout.flush()
       while True:
         res = readline()
         # TRANSLATORS: the "y" is "yes"

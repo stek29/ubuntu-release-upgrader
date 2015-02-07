@@ -139,7 +139,7 @@ class AcquireProgress(apt.progress.base.AcquireProgress):
     # FIXME: workaround issue in libapt/python-apt that does not 
     #        raise a exception if *all* files fails to download
     if status == apt_pkg.STAT_FAILED:
-      logging.warn("update_status: dlFailed on '%s' " % uri)
+      logging.warning("update_status: dlFailed on '%s' " % uri)
       if uri.endswith("Release.gpg") or uri.endswith("Release"):
         # only care about failures from network, not gpg, bzip, those
         # are different issues
@@ -226,7 +226,8 @@ class InstallProgress(apt.progress.base.InstallProgress):
       except Exception as e:
         print("Exception during pm.DoInstall(): ", e)
         logging.exception("Exception during pm.DoInstall()")
-        open("/var/run/ubuntu-release-upgrader-apt-exception","w").write(str(e))
+        with open("/var/run/ubuntu-release-upgrader-apt-exception","w") as f:
+            f.write(str(e))
         os._exit(pm.ResultFailed)
       os._exit(res)
     self.child_pid = pid

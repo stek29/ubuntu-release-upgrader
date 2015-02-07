@@ -54,7 +54,7 @@ class CacheExceptionDpkgInterrupted(CacheException):
 def _set_kernel_initrd_size():
     size = estimate_kernel_size_in_boot()
     if size == 0:
-        logging.warn("estimate_kernel_size_in_boot() returned '0'?")
+        logging.warning("estimate_kernel_size_in_boot() returned '0'?")
         size = 28*1024*1024
     # add small safety buffer
     size += 1*1024*1024
@@ -613,7 +613,7 @@ class MyCache(apt.Cache):
             # check if we got a new kernel (if we are not inside a
             # chroot)
             if inside_chroot():
-                logging.warn("skipping kernel checks because we run inside a chroot")
+                logging.warning("skipping kernel checks because we run inside a chroot")
             else:
                 self.checkForKernel()
 
@@ -849,7 +849,7 @@ class MyCache(apt.Cache):
             except SystemError as e:
                 # warn here, but don't fail, its possible that meta-packages
                 # conflict (like ubuntu-desktop vs xubuntu-desktop) LP: #775411
-                logging.warn("Can't mark '%s' for upgrade (%s)" % (key, e))
+                logging.warning("Can't mark '%s' for upgrade (%s)" % (key, e))
 
         # check if we have a meta-pkg, if not, try to guess which one to pick
         if not metaPkgInstalled():
@@ -1082,7 +1082,7 @@ class MyCache(apt.Cache):
                 st = os.statvfs(d)
                 free = st.f_bavail * st.f_frsize
             else:
-                logging.warn("directory '%s' does not exists" % d)
+                logging.warning("directory '%s' does not exists" % d)
                 free = 0
             if fs_id in mnt_map:
                 logging.debug("Dir %s mounted on %s" %

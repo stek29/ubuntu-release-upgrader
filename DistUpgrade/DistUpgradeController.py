@@ -363,7 +363,8 @@ class DistUpgradeController(object):
         logging.debug("_pythonSymlinkCheck run")
         if os.path.exists('/usr/share/python/debian_defaults'):
             config = SafeConfigParser()
-            config.readfp(open('/usr/share/python/debian_defaults'))
+            with open('/usr/share/python/debian_defaults') as f:
+                config.readfp(f)
             try:
                 expected_default = config.get('DEFAULT', 'default-version')
             except NoOptionError:
@@ -552,7 +553,8 @@ class DistUpgradeController(object):
                         s += "deb http://archive.ubuntu.com/ubuntu %s main restricted" % self.toDist
                         s += "deb http://archive.ubuntu.com/ubuntu %s-updates main restricted" % self.toDist
                         s += "deb http://security.ubuntu.com/ubuntu %s-security main restricted" % self.toDist
-                        open("/etc/apt/sources.list","w").write(s)
+                        with open("/etc/apt/sources.list","w") as f:
+                            f.write(s)
                     break
 
         # this must map, i.e. second in "from" must be the second in "to"
@@ -564,6 +566,20 @@ class DistUpgradeController(object):
         toDists = [self.toDist] + ["%s-%s" % (self.toDist,x)
                                    for x in pockets]
         self.sources_disabled = False
+
+        # Special quirk to remove extras.ubuntu.com
+        new_list = []
+        for entry in self.sources.list[:]:
+            if "/extras.ubuntu.com" in entry.uri:
+                continue
+            if entry.line.startswith(
+                    "## This software is not part of Ubuntu, but is offered by third-party"):
+                continue
+            if entry.line.startswith(
+                    "## developers who want to ship their latest software."):
+                continue
+            new_list.append(entry)
+        self.sources.list = new_list
 
         # look over the stuff we have
         foundToDist = False
@@ -657,8 +673,7 @@ class DistUpgradeController(object):
                     "/security.ubuntu.com" in entry.uri or
                     "%s-security" % self.fromDist in entry.dist or
                     "%s-backports" % self.fromDist in entry.dist or
-                    "/archive.canonical.com" in entry.uri or
-                    "/extras.ubuntu.com" in entry.uri):
+                    "/archive.canonical.com" in entry.uri):
                     validTo = False
                 if entry.dist in toDists:
                     # so the self.sources.list is already set to the new
@@ -1127,7 +1142,8 @@ class DistUpgradeController(object):
                 # the previous release, no packages have been installed
                 # yet (LP: #328655, #356781)
                 if os.path.exists("/var/run/ubuntu-release-upgrader-apt-exception"):
-                    e = open("/var/run/ubuntu-release-upgrader-apt-exception").read()
+                    with open("/var/run/ubuntu-release-upgrader-apt-exception") as f:
+                        e = f.read()
                     logging.error("found exception: '%s'" % e)
                     # if its a ordering bug we can cleanly revert but we need to write
                     # a marker for the parent process to know its this kind of error
@@ -1473,14 +1489,13 @@ class DistUpgradeController(object):
         # go over the sources.list and try to find a valid mirror
         # that we can use to add the backports dir
         logging.debug("writing prerequists sources.list at: '%s' " % out)
-        outfile = open(out, "w")
         mirrorlines = self._getPreReqMirrorLines(dumb)
-        for line in open(template):
-            template = Template(line)
-            outline = template.safe_substitute(mirror=mirrorlines)
-            outfile.write(outline)
-            logging.debug("adding '%s' prerequists" % outline)
-        outfile.close()
+        with open(out, "w") as outfile, open(template) as infile:
+            for line in infile:
+                template = Template(line)
+                outline = template.safe_substitute(mirror=mirrorlines)
+                outfile.write(outline)
+                logging.debug("adding '%s' prerequists" % outline)
         return True
 
     def getRequiredBackports(self):

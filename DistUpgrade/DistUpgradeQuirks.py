@@ -263,7 +263,8 @@ class DistUpgradeQuirks(object):
         if not os.path.exists(cpuinfo_path):
             logging.error("cannot open %s ?!?" % cpuinfo_path)
             return True
-        cpuinfo = open(cpuinfo_path).read()
+        with open(cpuinfo_path) as f:
+            cpuinfo = f.read()
         # check family
         if re.search("^cpu family\s*:\s*[345]\s*", cpuinfo, re.MULTILINE):
             logging.debug("found cpu family [345], no i686+")
@@ -304,7 +305,7 @@ class DistUpgradeQuirks(object):
         try:
             os.kill(1, 0)
         except:
-            logging.warn("no init found")
+            logging.warning("no init found")
             res = self._view.askYesNoQuestion(
                 _("No init available"),
                 _("Your system appears to be a virtualised environment "
@@ -325,8 +326,9 @@ class DistUpgradeQuirks(object):
         if not os.path.exists("/proc/cpuinfo"):
             logging.error("cannot open /proc/cpuinfo ?!?")
             return False
-        cpuinfo = open("/proc/cpuinfo")
-        if re.search("^Processor\s*:\s*ARMv[45]", cpuinfo.read(),
+        with open("/proc/cpuinfo") as f:
+            cpuinfo = f.read()
+        if re.search("^Processor\s*:\s*ARMv[45]", cpuinfo,
                      re.MULTILINE):
             return False
         return True
@@ -401,7 +403,8 @@ class DistUpgradeQuirks(object):
         # upgrade from Precise will fail if PAE is not in cpu flags
         logging.debug("_checkPae")
         pae = 0
-        cpuinfo = open('/proc/cpuinfo').read()
+        with open('/proc/cpuinfo') as f:
+            cpuinfo = f.read()
         if re.search("^flags\s+:.* pae ", cpuinfo, re.MULTILINE):
             pae = 1
         if not pae:
@@ -420,7 +423,9 @@ class DistUpgradeQuirks(object):
         XORG = "/etc/X11/xorg.conf"
         if not os.path.exists(XORG):
             return False
-        for line in open(XORG):
+        with open(XORG) as f:
+            lines = f.readlines()
+        for line in lines:
             s = line.split("#")[0].strip()
             # check for fglrx driver entry
             if (s.lower().startswith("driver") and
@@ -464,7 +469,8 @@ class DistUpgradeQuirks(object):
                 logging.debug("already at target hash, skipping '%s'" % path)
                 continue
             elif md5.hexdigest() != md5sum:
-                logging.warn("unexpected target md5sum, skipping: '%s'" % path)
+                logging.warning("unexpected target md5sum, skipping: '%s'"
+                                % path)
                 continue
             # patchable, do it
             from .DistUpgradePatcher import patch
@@ -488,7 +494,7 @@ class DistUpgradeQuirks(object):
         # get pkg
         if (pkgname not in self.controller.cache or
                 not self.controller.cache[pkgname].candidate):
-            logging.warn("can not find '%s' in cache")
+            logging.warning("can not find '%s' in cache")
             return False
         pkg = self.controller.cache[pkgname]
         for (module, pciid_list) in \
@@ -570,7 +576,8 @@ class DistUpgradeQuirks(object):
                 os.makedirs("/etc/dpkg/dpkg.cfg.d/")
             except OSError:
                 pass
-            open(cfg, "w").write("foreign-architecture %s\n" % foreign_arch)
+            with open(cfg, "w") as f:
+                f.write("foreign-architecture %s\n" % foreign_arch)
 
     def ensure_recommends_are_installed_on_desktops(self):
         """ ensure that on a desktop install recommends are installed
@@ -580,5 +587,5 @@ class DistUpgradeQuirks(object):
             if not apt.apt_pkg.config.find_b("Apt::Install-Recommends"):
                 msg = "Apt::Install-Recommends was disabled,"
                 msg += " enabling it just for the upgrade"
-                logging.warn(msg)
+                logging.warning(msg)
                 apt.apt_pkg.config.set("Apt::Install-Recommends", "1")

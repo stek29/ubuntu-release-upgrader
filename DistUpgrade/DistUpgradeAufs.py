@@ -117,10 +117,11 @@ def _aufsOverlayMount(target, rw_dir, chroot_dir="/"):
 
 def is_aufs_mount(dir):
     " test if the given dir is already mounted with aufs overlay "
-    for line in open("/proc/mounts"):
-        (device, mountpoint, fstype, options, a, b) = line.split()
-        if device == "none" and fstype == "aufs" and mountpoint == dir:
-            return True
+    with open("/proc/mounts") as f:
+        for line in f:
+            (device, mountpoint, fstype, options, a, b) = line.split()
+            if device == "none" and fstype == "aufs" and mountpoint == dir:
+                return True
     return False
 
 
@@ -182,7 +183,8 @@ def setupAufsChroot(rw_dir, chroot_dir):
     # create something vaguely rollbackable
 
     # get the mount points before the aufs buisiness starts
-    mounts = open("/proc/mounts").read()
+    with open("/proc/mounts") as f:
+        mounts = f.read()
     from .DistUpgradeMain import SYSTEM_DIRS
     systemdirs = SYSTEM_DIRS
     
@@ -234,16 +236,18 @@ def setupAufs(rw_dir):
     # include sub mounts)
     needs_bind_mount = set()
     needs_bind_mount.add("/var/cache/apt/archives")
-    for line in open("/proc/mounts"):
-        (device, mountpoint, fstype, options, a, b) = line.split()
-        if is_real_fs(fstype) and is_submount(mountpoint, systemdirs):
-            logging.warning("mountpoint %s submount of systemdir" % mountpoint)
-            return False
-        if (fstype != "aufs" and
-                not is_real_fs(fstype) and
-                is_submount(mountpoint, systemdirs)):
-            logging.debug("found %s that needs bind mount", mountpoint)
-            needs_bind_mount.add(mountpoint)
+    with open("/proc/mounts") as f:
+        for line in f:
+            (device, mountpoint, fstype, options, a, b) = line.split()
+            if is_real_fs(fstype) and is_submount(mountpoint, systemdirs):
+                logging.warning("mountpoint %s submount of systemdir" % 
+                                mountpoint)
+                return False
+            if (fstype != "aufs" and
+                    not is_real_fs(fstype) and
+                    is_submount(mountpoint, systemdirs)):
+                logging.debug("found %s that needs bind mount", mountpoint)
+                needs_bind_mount.add(mountpoint)
 
     # aufs mounts do not support stacked filesystems, so
     # if we mount /var we will loose the tmpfs stuff

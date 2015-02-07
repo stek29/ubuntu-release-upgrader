@@ -133,7 +133,8 @@ class NonInteractiveInstallProgress(InstallProgress):
         if not os.path.exists(maintainer_script):
             logging.error("can not find failed maintainer script '%s' " % maintainer_script)
             return
-        interp = open(maintainer_script).readline()[2:].strip().split()[0]
+        with open(maintainer_script) as f:
+            interp = f.readline()[2:].strip().split()[0]
         if ("bash" in interp) or ("/bin/sh" in interp):
             debug_opts = ["-ex"]
         elif ("perl" in interp):
@@ -143,7 +144,9 @@ class NonInteractiveInstallProgress(InstallProgress):
             logging.warning("unknown interpreter: '%s'" % interp)
 
         # check if debconf is used and fiddle a bit more if it is
-        if ". /usr/share/debconf/confmodule" in open(maintainer_script).read():
+        with open(maintainer_script) as f:
+            maintainer_script_text = f.read()
+        if ". /usr/share/debconf/confmodule" in maintainer_script_text:
             environ["DEBCONF_DEBUG"] = "developer"
             environ["DEBIAN_HAS_FRONTEND"] = "1"
             interp = "/usr/share/debconf/frontend"

@@ -246,13 +246,13 @@ class DistUpgradeFetcherCore(object):
             af2
             result = fetcher.run()
             if result != fetcher.RESULT_CONTINUE:
-                logging.warn("fetch result != continue (%s)" % result)
+                logging.warning("fetch result != continue (%s)" % result)
                 return False
             # check that both files are really there and non-null
             for f in [os.path.basename(self.new_dist.upgradeToolSig),
                       os.path.basename(self.new_dist.upgradeTool)]:
                 if not (os.path.exists(f) and os.path.getsize(f) > 0):
-                    logging.warn("file '%s' missing" % f)
+                    logging.warning("file '%s' missing" % f)
                     return False
             return True
         return False

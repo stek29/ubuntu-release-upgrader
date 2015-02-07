@@ -137,6 +137,29 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
+    def test_extras_removal(self):
+        """
+        test removal of extras.ubuntu.com archives
+        """
+        original = os.path.join(self.testdir,
+                                 "sources.list.extras")
+        shutil.copy(original,
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",
+                           os.path.join(self.testdir, "sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(res)
+
+        sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
+        self.assertEqual(open(sources_file).read(),"""deb http://archive.ubuntu.com/ubuntu gutsy main restricted
+deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
+deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+
+""")
+
     def test_powerpc_transition(self):
         """
         test transition of powerpc to ports.ubuntu.com
@@ -431,7 +454,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 
     def _verifySources(self, expected):
         sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
-        sources_list = open(sources_file).read()
+        with open(sources_file) as f:
+            sources_list = f.read()
         for l in expected.split("\n"):
             self.assertTrue(
                 l in sources_list.split("\n"),

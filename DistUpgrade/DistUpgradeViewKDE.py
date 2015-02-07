@@ -864,7 +864,9 @@ if __name__ == "__main__":
           time.sleep(0.01)
 
   if sys.argv[1] == "--show-in-terminal":
-      for c in open(sys.argv[2]).read():
+      with open(sys.argv[2]) as f:
+          chars = f.read()
+      for c in chars:
           view.terminal_text.insertWithTermCodes( c )
           #print(c, ord(c))
           QApplication.processEvents()

@@ -1753,6 +1753,10 @@ class DistUpgradeController(object):
                 #        (i.e. the error here could be something else than
                 #        missing sources entries but network errors etc)
                 logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg)
+                if pkg not in self.cache:
+                    logging.error("'%s' was not in the cache" % pkg)
+                if not self.cache.anyVersionDownloadable(self.cache[pkg]):
+                    logging.error("'%s' was not downloadable" % pkg)
                 self._view.error(_("Invalid package information"),
                                  _("After updating your package "
                                    "information, the essential package '%s' "

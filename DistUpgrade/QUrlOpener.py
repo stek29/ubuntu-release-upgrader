@@ -36,13 +36,16 @@ except ImportError:
 import os
 import subprocess
 
+
 def singleton(class_):
     instances = {}
+
     def instance(*args, **kwargs):
         if class_ not in instances:
             instances[class_] = class_(*args, **kwargs)
         return instances[class_]
     return instance
+
 
 @singleton
 class QUrlOpener(QObject):
@@ -53,8 +56,8 @@ class QUrlOpener(QObject):
     def setupUrlHandles(self):
         # Make sure we don't run a root browser.
         # NOTE: Qt native API can set an openUrl handler from a QObject
-        # function, pyqt in theory also allows an arbitrary callable. Latter has
-        # been observed to be non-functional so rely on the native handling.
+        # function, pyqt in theory also allows an arbitrary callable. Latter
+        # has been observed to be non-functional so rely on the native handling
         QDesktopServices.setUrlHandler('http', self, 'openUrl')
         QDesktopServices.setUrlHandler('https', self, 'openUrl')
 

@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2013-05-22 21:30+0100\n"
+"POT-Creation-Date: 2015-02-18 16:10+0100\n"
 "PO-Revision-Date: 2013-05-22 11:00+0000\n"
 "Last-Translator: Marian Vasile <marianvasile@upcmail.ro>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,7 +19,6 @@ msgstr ""
 "== 0) && (n != 0))) ? 2: 1));\n"
 "X-Launchpad-Export-Date: 2015-02-12 06:57+0000\n"
 "X-Generator: Launchpad (build 17336)\n"
-"Language: ro\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -118,11 +118,10 @@ msgstr ""
 "program. Înainte de a continua, remediați-le utilizând Synaptic sau apt-get."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:693
-#, python-format
+#: ../DistUpgrade/DistUpgradeCache.py:641
+#, fuzzy
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
+"An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -208,11 +207,11 @@ msgstr ""
 msgid "Can't guess meta-package"
 msgstr "Nu s-a putut ghici meta-pachetul"
 
-#: ../DistUpgrade/DistUpgradeCache.py:872
+#: ../DistUpgrade/DistUpgradeCache.py:881
+#, fuzzy, python-format
 msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
+"Your system does not contain a %s or %s package and it was not possible to "
+"detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
@@ -348,22 +347,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Python-ul instalat este deteriorat. Reparați legătura simbolică "
-"„/usr/bin/python”."
-
-#: ../DistUpgrade/DistUpgradeController.py:464
-msgid "Package 'debsig-verify' is installed"
-msgstr "Pachetul „debsig-verify” este instalat"
-
-#: ../DistUpgrade/DistUpgradeController.py:465
-msgid ""
-"The upgrade can not continue with that package installed.\n"
-"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-"run the upgrade again."
-msgstr ""
-"Actualizarea nu mai poate continua cu acest pachet instalat.\n"
-"Dezinstalați-l cu Synaptic sau tastați comanda „apt-get remove debsig-"
-"verify” și reluați înnoirea."
+"Python-ul instalat este deteriorat. Reparați legătura simbolică „/usr/bin/"
+"python”."
 
 #: ../DistUpgrade/DistUpgradeController.py:468
 #, python-format
@@ -405,6 +390,11 @@ msgstr ""
 "instalați ultimele actualizări curând după înnoirea sistemului.\n"
 "Dacă răspunsul aici este „nu”, rețeaua nu va fi folosită deloc."
 
+#: ../DistUpgrade/DistUpgradeController.py:641
+#, python-format
+msgid "Not for humans during development stage of release %s"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
 msgid "disabled on upgrade to %s"
@@ -414,11 +404,11 @@ msgstr "dezactivat la înnoirea la %s"
 msgid "No valid mirror found"
 msgstr "Nu s-a găsit niciun site oglindă valid"
 
-#: ../DistUpgrade/DistUpgradeController.py:753
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:762
+#, fuzzy, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run an internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
@@ -462,6 +452,15 @@ msgstr "Informațiile despre depozite nu sunt valide"
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
+msgstr ""
+"Actualizarea informațiilor despre arhive a creat un fișier nevalid, așa că a "
+"fost inițiat un raport pentru defecte de programare."
+
+#: ../DistUpgrade/DistUpgradeController.py:825
+#, fuzzy
+msgid ""
+"Upgrading the repository information resulted in a invalid file. To report a "
+"bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
 "Actualizarea informațiilor despre arhive a creat un fișier nevalid, așa că a "
 "fost inițiat un raport pentru defecte de programare."
@@ -612,16 +611,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Raportați această eroare la adresa "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"atașând raportului și fișierele din /var/log/dist-upgrade/.\n"
+"Raportați această eroare la adresa http://bugs.launchpad.net/ubuntu/+source/"
+"ubuntu-release-upgrader/+filebug atașând raportului și fișierele din /var/"
+"log/dist-upgrade/.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -684,6 +683,15 @@ msgstr ""
 "Pregătirea sistemului în vederea actualizării a eșuat, astfel că se pornește "
 "un proces pentru raportarea defecțiunilor."
 
+#: ../DistUpgrade/DistUpgradeController.py:1659
+#, fuzzy
+msgid ""
+"Preparing the system for the upgrade failed. To report a bug install apport "
+"and then execute 'apport-bug ubuntu-release-upgrader'."
+msgstr ""
+"Pregătirea sistemului în vederea actualizării a eșuat, astfel că se pornește "
+"un proces pentru raportarea defecțiunilor."
+
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
 msgid "Getting upgrade prerequisites failed"
@@ -695,6 +703,20 @@ msgid ""
 "will abort now and restore the original system state.\n"
 "\n"
 "Additionally, a bug reporting process is being started."
+msgstr ""
+"Nu pot fi asigurate condițiile pentru actualizarea sistemului. Înnoirea va "
+"fi abandonată iar sistemul va fi adus la starea originală.\n"
+"\n"
+"În plus, a fost inițiat un raport pentru defecte de programare."
+
+#: ../DistUpgrade/DistUpgradeController.py:1687
+#, fuzzy
+msgid ""
+"The system was unable to get the prerequisites for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"To report a bug install apport and then execute 'apport-bug ubuntu-release-"
+"upgrader'."
 msgstr ""
 "Nu pot fi asigurate condițiile pentru actualizarea sistemului. Înnoirea va "
 "fi abandonată iar sistemul va fi adus la starea originală.\n"
@@ -731,8 +753,8 @@ msgstr ""
 "După actualizarea informațiilor despre pachete, nu se poate localiza "
 "pachetul esențial '%s'. Acest lucru poate fi cauzat de lipsa unor surse "
 "oficiale în lista de surse software, sau de încărcarea excesivă a site-ului "
-"utilizat. Verificați lista cu sursele software configurate în "
-"/etc/apt/sources.list.\n"
+"utilizat. Verificați lista cu sursele software configurate în /etc/apt/"
+"sources.list.\n"
 "În cazul unei surse încărcate de trafic, ați putea încerca să actualizați "
 "mai târziu."
 
@@ -775,22 +797,22 @@ msgid "The partial upgrade was completed."
 msgstr "Înnoirea parțială a fost încheiată."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:118
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:112
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:156
 msgid "Could not find the release notes"
 msgstr "Nu s-au putut găsi notițele de lansare"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:119
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:113
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:157
 msgid "The server may be overloaded. "
 msgstr "Serverul ar putea fi supraîncărcat. "
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:131
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:117
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:161
 msgid "Could not download the release notes"
 msgstr "Nu s-a putut descărca notițele de lansare"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:132
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:118
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:162
 msgid "Please check your internet connection."
 msgstr "Verificați conexiunea la internet."
 
@@ -887,63 +909,58 @@ msgstr ""
 msgid "The error message is '%s'."
 msgstr "Mesajul de eroare este „%s”."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:63
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:94
-msgid "Upgrade"
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
+#, fuzzy
+msgid "&Upgrade"
 msgstr "Înnoiește"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:98
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
+#: ../DistUpgrade/DistUpgradeViewKDE.py:579
+msgid "&Cancel"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:142
 #: ../data/gtkbuilder/ReleaseNotes.ui.h:1
 msgid "Release Notes"
 msgstr "Notițe de lansare"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:153
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:198
+msgid "Upgrade"
+msgstr "Înnoiește"
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:213
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:226
 msgid "Downloading additional package files..."
 msgstr "Se descarcă pachete adiționale..."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:155
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:228
 #, python-format
 msgid "File %s of %s at %sB/s"
 msgstr "Fișierul %s din %s la %sB/s"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:159
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:232
 #, python-format
 msgid "File %s of %s"
 msgstr "Fișierul %s din %s"
 
 #. print("mediaChange %s %s" % (medium, drive))
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:166
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:239
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:123
-#: ../DistUpgrade/DistUpgradeViewKDE.py:200
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Introduceți „%s” în unitatea „%s”"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg,
-#. QMessageBox.Ok, QMessageBox.Cancel)
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:169
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
-#: ../DistUpgrade/DistUpgradeViewKDE.py:201
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:241
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:246
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:247
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
 msgid "Media Change"
 msgstr "Modificare mediu de stocare"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:208
-msgid "evms in use"
-msgstr "evms în uz"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Sistemul dumneavoastră folosește gestionarul de volume „evms” în "
-"/proc/mounts. Programul „evms” nu mai beneficiază de asistență. Dezactivați-"
-"l și apoi reporniți procesul de înnoire."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:511
-msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#, fuzzy
+msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 "Componentele dumneavoastră grafice pot să nu fie complet suportate în Ubuntu "
 "13.04."
@@ -953,20 +970,18 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "Placa video poate face ca rularea mediului desktop 'unity' să fie groaie. "
 "Există posibilitatea ca după actualizare să rezulte un mediu grafic foarte "
 "încet. Sfatul nostru este acela de a păstra versiunea curentă. Pentru mai "
-"multe informații mergeți la "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Doriți să "
-"continuați actualizarea?"
+"multe informații mergeți la https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Doriți să continuați actualizarea?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Există posibilitatea ca funcțiile plăcii grafice să nu fie recunoscute pe "
 "deplin în Ubuntu 12.04 LTS."
@@ -980,9 +995,8 @@ msgid ""
 msgstr ""
 "Suportul pentru dispozitivele grafice Intel este limitat în Ubuntu 12.04 "
 "LTS, de aceea este posibil să aveți unele probleme după actualizare. Pentru "
-"mai multe informații consultați "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx. Doriți să "
-"continuați actualizarea?"
+"mai multe informații consultați https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForI8xx. Doriți să continuați actualizarea?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:212
 msgid ""
@@ -991,21 +1005,6 @@ msgid ""
 msgstr ""
 "Înnoirea ar putea reduce efectele vizuale, performanța în jocuri și a altor "
 "aplicații intensive din punct de vedere grafic."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:564
-#: ../DistUpgrade/DistUpgradeQuirks.py:592
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04 LTS.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Acest calculator folosește driverul grafic pentru plăci NVIDIA numit "
-"„nvidia”. Nu există în Ubuntu 10.04 LTS nicio versiune a acestui driver care "
-"să funcționeze cu placa video din calculator.\n"
-"\n"
-"Doriți să continuați?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
 msgid ""
@@ -1073,6 +1072,18 @@ msgstr ""
 "\n"
 "Sigur doriți să continuați?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:412
+msgid "PAE not enabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:413
+msgid ""
+"Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
+"non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
+"you must enable PAE (if this is possible) see:\n"
+"http://help.ubuntu.com/community/EnablingPAE"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
 msgstr "Înnoire de tip „cutie de nisip” folosind aufs"
@@ -1107,27 +1118,31 @@ msgstr "Dezactivează suportul pentru „GNU screen”"
 msgid "Set datadir"
 msgstr "Stabilește datadir"
 
+#: ../DistUpgrade/DistUpgradeMain.py:81
+msgid "Upgrade to the development release"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
-#: ../DistUpgrade/DistUpgradeViewKDE.py:214
+#: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Fetching is complete"
 msgstr "Descărcarea este completă"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:159
-#: ../DistUpgrade/DistUpgradeViewKDE.py:230
+#: ../DistUpgrade/DistUpgradeViewKDE.py:247
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "Se descarcă fișierul %li din %li cu %sB/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:319
-#: ../DistUpgrade/DistUpgradeViewKDE.py:231
-#: ../DistUpgrade/DistUpgradeViewKDE.py:380
+#: ../DistUpgrade/DistUpgradeViewKDE.py:248
+#: ../DistUpgrade/DistUpgradeViewKDE.py:398
 #, python-format
 msgid "About %s remaining"
 msgstr "Mai rămân aproximativ %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:164
-#: ../DistUpgrade/DistUpgradeViewKDE.py:233
+#: ../DistUpgrade/DistUpgradeViewKDE.py:250
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Se descarcă fișierul %li din %li"
@@ -1136,24 +1151,24 @@ msgstr "Se descarcă fișierul %li din %li"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:196
-#: ../DistUpgrade/DistUpgradeViewKDE.py:271
+#: ../DistUpgrade/DistUpgradeViewKDE.py:288
 msgid "Applying changes"
 msgstr "Se aplică modificările"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:284
+#: ../DistUpgrade/DistUpgradeViewKDE.py:301
 msgid "dependency problems - leaving unconfigured"
 msgstr "probleme de dependențe - lăsat neconfigurat"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:227
-#: ../DistUpgrade/DistUpgradeViewKDE.py:286
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Nu s-a putut instala „%s”"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:228
-#: ../DistUpgrade/DistUpgradeViewKDE.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:304
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1164,7 +1179,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:245
-#: ../DistUpgrade/DistUpgradeViewKDE.py:308
+#: ../DistUpgrade/DistUpgradeViewKDE.py:326
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1174,7 +1189,7 @@ msgstr ""
 "'%s'?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:246
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewKDE.py:327
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1183,7 +1198,7 @@ msgstr ""
 "alegeți să îl înlocuiți cu o versiune nouă."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:266
-#: ../DistUpgrade/DistUpgradeViewKDE.py:332
+#: ../DistUpgrade/DistUpgradeViewKDE.py:350
 msgid "The 'diff' command was not found"
 msgstr "Comanda „diff” nu a putut fi localizată"
 
@@ -1194,15 +1209,15 @@ msgstr "S-a produs o eroare fatală"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Raportați acest defect (dacă nu ați raportat încă) și includeți fișierele "
-"/var/log/dist-upgrade/main.log și /var/log/dist-upgrade/apt.log în raport. "
-"Înnoirea a fost abandonată. Fișierul sources.list original a fost salvat în "
-"/etc/apt/sources.list.distUpgrade."
+"Raportați acest defect (dacă nu ați raportat încă) și includeți fișierele /"
+"var/log/dist-upgrade/main.log și /var/log/dist-upgrade/apt.log în raport. "
+"Înnoirea a fost abandonată. Fișierul sources.list original a fost salvat în /"
+"etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1253,11 +1268,11 @@ msgstr "Instalează (%s)"
 msgid "Upgrade (%s)"
 msgstr "Actualizează (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:344
+#: ../DistUpgrade/DistUpgradeViewKDE.py:362
 msgid "Show Difference >>>"
 msgstr "Afișează diferențele >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:347
+#: ../DistUpgrade/DistUpgradeViewKDE.py:365
 msgid "<<< Hide Difference"
 msgstr "<<< Ascunde diferențele"
 
@@ -1265,76 +1280,77 @@ msgstr "<<< Ascunde diferențele"
 msgid "Error"
 msgstr "Eroare"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:572
-msgid "&Cancel"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:824
+#: ../DistUpgrade/DistUpgradeViewKDE.py:583
+#: ../DistUpgrade/DistUpgradeViewKDE.py:817
 msgid "&Close"
 msgstr "În&chide"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:629
+#: ../DistUpgrade/DistUpgradeViewKDE.py:617
 msgid "Show Terminal >>>"
 msgstr "Afișează terminalul >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:632
+#: ../DistUpgrade/DistUpgradeViewKDE.py:620
 msgid "<<< Hide Terminal"
 msgstr "<<< Ascunde terminalul"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:712
+#: ../DistUpgrade/DistUpgradeViewKDE.py:699
 msgid "Information"
 msgstr "Informații"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:762
-#: ../DistUpgrade/DistUpgradeViewKDE.py:807
-#: ../DistUpgrade/DistUpgradeViewKDE.py:810
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#, fuzzy
+msgid "&Start Upgrade"
+msgstr "_Pornește înnoirea"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewKDE.py:798
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Detalii"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewKDE.py:779
 #, python-format
 msgid "No longer supported %s"
 msgstr "Nu mai este suportat %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:790
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #, python-format
 msgid "Remove %s"
 msgstr "Șterge %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:783
 #: ../DistUpgrade/DistUpgradeViewText.py:233
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Șterge %s (a fost instalat automat)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:794
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 #, python-format
 msgid "Install %s"
 msgstr "Instalează %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:787
 #, python-format
 msgid "Upgrade %s"
 msgstr "Înnoiește %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 #: ../DistUpgrade/DistUpgradeViewText.py:281
 msgid "Restart required"
 msgstr "Este necesară repornirea"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
-"<b><big>Reporniți sistemul pentru ca înnoirea să se încheie</big></b>"
+msgstr "<b><big>Reporniți sistemul pentru ca înnoirea să se încheie</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:823
+#: ../DistUpgrade/DistUpgradeViewKDE.py:816
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "_Repornește acum"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:841
+#: ../DistUpgrade/DistUpgradeViewKDE.py:834
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1346,7 +1362,7 @@ msgstr ""
 "În cazul în care anulați această înnoire este posibil ca sistemul să rămână "
 "într-o stare neutilizabilă. Este foarte indicat să continuați înnoirea."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:845
+#: ../DistUpgrade/DistUpgradeViewKDE.py:838
 msgid "Cancel Upgrade?"
 msgstr "Anulați înnoirea?"
 
@@ -1386,10 +1402,10 @@ msgstr[2] "%li de secunde"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1400,10 +1416,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1425,8 +1441,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeView.py:175
 #, python-format
 msgid "This download will take about %s with your connection. "
-msgstr ""
-"Acestă descărcare va dura aproximativ %s cu conexiunea dumneavoastră. "
+msgstr "Acestă descărcare va dura aproximativ %s cu conexiunea dumneavoastră. "
 
 #. Declare these translatable strings from the .ui files here so that
 #. xgettext picks them up.
@@ -1553,17 +1568,22 @@ msgstr ""
 "Înnoirea s-a încheiat și este necesară repornirea calculatorului. Doriți să "
 "faceți acest lucru acum?"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, python-format
+msgid "Progress: [%3i%%]"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Raportați acest defect și includeți fișierele /var/log/dist-upgrade/main.log "
 "și /var/log/dist-upgrade/apt.log în raport. Înnoirea a fost abandonată. "
-"Fișierul sources.list original a fost salvat în "
-"/etc/apt/sources.list.distUpgrade."
+"Fișierul sources.list original a fost salvat în /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "Aborting"
@@ -1713,7 +1733,8 @@ msgid "Distribution Upgrade"
 msgstr "Înnoire distribuție"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#, fuzzy
+msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
 msgstr "<b><big>Actualizare Ubuntu la versiunea 13.04</big></b>"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
@@ -1737,8 +1758,7 @@ msgid "_Upgrade"
 msgstr "Î_nnoiește"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>O nouă versiune Ubuntu este disponibilă. Doriți să înnoiți sistemul la "
 "această versiune?</b>"
@@ -1783,15 +1803,15 @@ msgstr "Se realizează o actualizare parțială"
 msgid "To perform a partial upgrade, you need to authenticate."
 msgstr "Pentru a realiza o actualizare parțială trebuie să vă autentificați."
 
-#: ../do-partial-upgrade:74 ../do-release-upgrade:69
+#: ../do-partial-upgrade:74 ../do-release-upgrade:81
 msgid "Show version and exit"
 msgstr "Afișează versiunea și ieși"
 
-#: ../do-partial-upgrade:77 ../do-release-upgrade:76
+#: ../do-partial-upgrade:77 ../do-release-upgrade:88
 msgid "Directory that contains the data files"
 msgstr "Dosarul care conține fișierele cu date"
 
-#: ../do-partial-upgrade:80 ../do-release-upgrade:89
+#: ../do-partial-upgrade:80 ../do-release-upgrade:101
 msgid "Run the specified frontend"
 msgstr "Lansează interfața specificată"
 
@@ -1799,24 +1819,24 @@ msgstr "Lansează interfața specificată"
 msgid "Running partial upgrade"
 msgstr "Se execută înnoirea parțială"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:31 ../do-release-upgrade:43
 msgid "Downloading the release upgrade tool"
 msgstr "Se descarcă utilitarul de înnoire"
 
-#: ../do-release-upgrade:72 ../check-new-release-gtk:177
+#: ../do-release-upgrade:84 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr ""
 "Verifică dacă este posibilă înnoirea la cea mai recentă versiune în "
 "dezvoltare"
 
-#: ../do-release-upgrade:79 ../check-new-release-gtk:181
+#: ../do-release-upgrade:91 ../check-new-release-gtk:181
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Încercați o înnoire la ultima versiune folosind utilitarul de înnoire din "
 "$distro-proposed"
 
-#: ../do-release-upgrade:83
+#: ../do-release-upgrade:95
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1826,11 +1846,11 @@ msgstr ""
 "Momentan sunt suportate „desktop” pentru o actualizare normală a unui sistem "
 "de birou sau „server” pentru actualizarea unui sistem de tip server."
 
-#: ../do-release-upgrade:91
+#: ../do-release-upgrade:103
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr "Testează înnoirea într-o cutie de nisip cu aufs"
 
-#: ../do-release-upgrade:94
+#: ../do-release-upgrade:106
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
@@ -1838,15 +1858,23 @@ msgstr ""
 "Verifică doar dacă o nouă versiune de distribuție este disponibilă și "
 "raportează rezultatul prin codul de ieșire"
 
-#: ../do-release-upgrade:113
+#: ../do-release-upgrade:120
+msgid "The options --devel-release and --proposed are"
+msgstr ""
+
+#: ../do-release-upgrade:121
+msgid "mutually exclusive. Please use only one of them."
+msgstr ""
+
+#: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
 msgstr "Se verifică dacă există versiuni noi pentru Ubuntu"
 
-#: ../do-release-upgrade:125
+#: ../do-release-upgrade:137
 msgid "Your Ubuntu release is not supported anymore."
 msgstr "Această versiune Ubuntu nu mai primește asistență."
 
-#: ../do-release-upgrade:126
+#: ../do-release-upgrade:138
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
@@ -1854,15 +1882,15 @@ msgstr ""
 "Pentru informații despre înnoire, vizitați:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
+#: ../do-release-upgrade:144
 msgid "No new release found"
 msgstr "Nu s-a găsit o versiune nouă"
 
-#: ../do-release-upgrade:137
+#: ../do-release-upgrade:149
 msgid "Release upgrade not possible right now"
 msgstr "Înnoirea la o nouă versiune nu este posibilă acum"
 
-#: ../do-release-upgrade:138
+#: ../do-release-upgrade:150
 #, c-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
@@ -1871,14 +1899,18 @@ msgstr ""
 "Înnoirea la o nouă versiune nu este posibilă acum, încercați mai târziu. "
 "Serverul a raportat: „%s”"
 
-#: ../do-release-upgrade:144
+#: ../do-release-upgrade:156
 #, c-format
 msgid "New release '%s' available."
 msgstr "O nouă versiune „%s” disponibilă."
 
-#: ../do-release-upgrade:145
+#: ../do-release-upgrade:157
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Executați „do-release-upgrade” pentru a o aplica."
+
+#: ../check-new-release-gtk:85
+msgid "Software Updater"
+msgstr ""
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1893,8 +1925,46 @@ msgstr "Ați refuzat înnoirea la Ubuntu %s"
 msgid "Add debug output"
 msgstr "Adaugă informații pentru depanare"
 
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Pachetul „debsig-verify” este instalat"
+
+#~ msgid ""
+#~ "The upgrade can not continue with that package installed.\n"
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
+#~ msgstr ""
+#~ "Actualizarea nu mai poate continua cu acest pachet instalat.\n"
+#~ "Dezinstalați-l cu Synaptic sau tastați comanda „apt-get remove debsig-"
+#~ "verify” și reluați înnoirea."
+
+#~ msgid "evms in use"
+#~ msgstr "evms în uz"
+
+#~ msgid ""
+#~ "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+#~ "software is no longer supported, please switch it off and run the upgrade "
+#~ "again when this is done."
+#~ msgstr ""
+#~ "Sistemul dumneavoastră folosește gestionarul de volume „evms” în /proc/"
+#~ "mounts. Programul „evms” nu mai beneficiază de asistență. Dezactivați-l "
+#~ "și apoi reporniți procesul de înnoire."
+
+#~ msgid ""
+#~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+#~ "version of this driver is available that works with your video card in "
+#~ "Ubuntu 10.04 LTS.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Acest calculator folosește driverul grafic pentru plăci NVIDIA numit "
+#~ "„nvidia”. Nu există în Ubuntu 10.04 LTS nicio versiune a acestui driver "
+#~ "care să funcționeze cu placa video din calculator.\n"
+#~ "\n"
+#~ "Doriți să continuați?"
+
 #~ msgid "Authentication is required to perform a partial upgrade"
-#~ msgstr "Este necesară autentificarea pentru a efectua o actualizare parțială"
+#~ msgstr ""
+#~ "Este necesară autentificarea pentru a efectua o actualizare parțială"
 
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr ""

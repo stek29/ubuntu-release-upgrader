@@ -8,17 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager 0.37.2\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2013-05-22 21:30+0100\n"
+"POT-Creation-Date: 2015-02-18 16:10+0100\n"
 "PO-Revision-Date: 2013-05-23 18:15+0000\n"
 "Last-Translator: Pierre Slamich <pierre.slamich@gmail.com>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2015-02-12 06:56+0000\n"
 "X-Generator: Launchpad (build 17336)\n"
-"Language: fr\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -114,11 +114,10 @@ msgstr ""
 "avant de continuer."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:693
-#, python-format
+#: ../DistUpgrade/DistUpgradeCache.py:641
+#, fuzzy
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
+"An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -204,11 +203,11 @@ msgstr ""
 msgid "Can't guess meta-package"
 msgstr "Impossible de déterminer le méta-paquet"
 
-#: ../DistUpgrade/DistUpgradeCache.py:872
+#: ../DistUpgrade/DistUpgradeCache.py:881
+#, fuzzy, python-format
 msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
+"Your system does not contain a %s or %s package and it was not possible to "
+"detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
@@ -237,8 +236,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeController.py:281
 msgid "Upgrading over remote connection not supported"
-msgstr ""
-"La mise à niveau via une connexion distante n'est pas prise en charge"
+msgstr "La mise à niveau via une connexion distante n'est pas prise en charge"
 
 #: ../DistUpgrade/DistUpgradeController.py:282
 msgid ""
@@ -350,20 +348,6 @@ msgstr ""
 "Votre installation de Python est endommagée. Veuillez réparer le lien "
 "symbolique « /usr/bin/python »."
 
-#: ../DistUpgrade/DistUpgradeController.py:464
-msgid "Package 'debsig-verify' is installed"
-msgstr "Le paquet « debsig-verify » est installé"
-
-#: ../DistUpgrade/DistUpgradeController.py:465
-msgid ""
-"The upgrade can not continue with that package installed.\n"
-"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-"run the upgrade again."
-msgstr ""
-"La mise à niveau ne peut pas continuer si ce paquet est installé.\n"
-"Veuillez le supprimer avec Synaptic ou avec « apt-get remove debsig-"
-"verify », puis relancez la mise à jour."
-
 #: ../DistUpgrade/DistUpgradeController.py:468
 #, python-format
 msgid "Can not write to '%s'"
@@ -406,6 +390,11 @@ msgstr ""
 "après la mise à jour.\n"
 "Si vous répondez « non », le réseau ne sera pas utilisé du tout."
 
+#: ../DistUpgrade/DistUpgradeController.py:641
+#, python-format
+msgid "Not for humans during development stage of release %s"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
 msgid "disabled on upgrade to %s"
@@ -415,11 +404,11 @@ msgstr "désactivé pour la mise à niveau vers %s"
 msgid "No valid mirror found"
 msgstr "Aucun miroir valable trouvé"
 
-#: ../DistUpgrade/DistUpgradeController.py:753
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:762
+#, fuzzy, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run an internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
@@ -462,6 +451,15 @@ msgstr "Informations sur les dépôts non valables"
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
+msgstr ""
+"La mise à niveau des informations des dépôts a renvoyé un fichier invalide, "
+"un rapport de bug va être envoyé."
+
+#: ../DistUpgrade/DistUpgradeController.py:825
+#, fuzzy
+msgid ""
+"Upgrading the repository information resulted in a invalid file. To report a "
+"bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
 "La mise à niveau des informations des dépôts a renvoyé un fichier invalide, "
 "un rapport de bug va être envoyé."
@@ -610,17 +608,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Veuillez signaler ce bogue dans un navigateur à l'adresse "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug et "
-"joignez au rapport les fichiers qui se trouvent dans /var/log/dist-upgrade/ "
-".\n"
+"Veuillez signaler ce bogue dans un navigateur à l'adresse http://bugs."
+"launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug et joignez au "
+"rapport les fichiers qui se trouvent dans /var/log/dist-upgrade/ .\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -683,6 +680,15 @@ msgstr ""
 "La préparation du système pour la mise à niveau a échoué. Un processus de "
 "rapport d'incident est donc initialisé."
 
+#: ../DistUpgrade/DistUpgradeController.py:1659
+#, fuzzy
+msgid ""
+"Preparing the system for the upgrade failed. To report a bug install apport "
+"and then execute 'apport-bug ubuntu-release-upgrader'."
+msgstr ""
+"La préparation du système pour la mise à niveau a échoué. Un processus de "
+"rapport d'incident est donc initialisé."
+
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
 msgid "Getting upgrade prerequisites failed"
@@ -694,6 +700,19 @@ msgid ""
 "will abort now and restore the original system state.\n"
 "\n"
 "Additionally, a bug reporting process is being started."
+msgstr ""
+"Le système n'a pas réussi à obtenir les prérequis pour la mise à niveau. La "
+"mise à niveau va s'arrêter et restaurer le système dans son état initial.\n"
+"En complément, un processus de rapport d'incident est initialisé."
+
+#: ../DistUpgrade/DistUpgradeController.py:1687
+#, fuzzy
+msgid ""
+"The system was unable to get the prerequisites for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"To report a bug install apport and then execute 'apport-bug ubuntu-release-"
+"upgrader'."
 msgstr ""
 "Le système n'a pas réussi à obtenir les prérequis pour la mise à niveau. La "
 "mise à niveau va s'arrêter et restaurer le système dans son état initial.\n"
@@ -774,22 +793,22 @@ msgid "The partial upgrade was completed."
 msgstr "La mise à niveau partielle est terminée."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:118
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:112
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:156
 msgid "Could not find the release notes"
 msgstr "Impossible de trouver les notes de version"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:119
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:113
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:157
 msgid "The server may be overloaded. "
 msgstr "Le serveur est peut-être surchargé. "
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:131
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:117
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:161
 msgid "Could not download the release notes"
 msgstr "Impossible de télécharger les notes de version"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:132
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:118
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:162
 msgid "Please check your internet connection."
 msgstr "Veuillez vérifier votre connexion Internet."
 
@@ -889,63 +908,58 @@ msgstr ""
 msgid "The error message is '%s'."
 msgstr "Le message d'erreur est « %s »."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:63
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:94
-msgid "Upgrade"
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
+#, fuzzy
+msgid "&Upgrade"
 msgstr "Mettre à niveau"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:98
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
+#: ../DistUpgrade/DistUpgradeViewKDE.py:579
+msgid "&Cancel"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:142
 #: ../data/gtkbuilder/ReleaseNotes.ui.h:1
 msgid "Release Notes"
 msgstr "Notes de version"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:153
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:198
+msgid "Upgrade"
+msgstr "Mettre à niveau"
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:213
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:226
 msgid "Downloading additional package files..."
 msgstr "Téléchargement des paquets supplémentaires..."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:155
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:228
 #, python-format
 msgid "File %s of %s at %sB/s"
 msgstr "Fichier %s sur %s à %s octets/s"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:159
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:232
 #, python-format
 msgid "File %s of %s"
 msgstr "Fichier %s sur %s"
 
 #. print("mediaChange %s %s" % (medium, drive))
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:166
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:239
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:123
-#: ../DistUpgrade/DistUpgradeViewKDE.py:200
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Veuillez insérer « %s » dans le lecteur « %s »"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg,
-#. QMessageBox.Ok, QMessageBox.Cancel)
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:169
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
-#: ../DistUpgrade/DistUpgradeViewKDE.py:201
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:241
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:246
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:247
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
 msgid "Media Change"
 msgstr "Changement de média"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:208
-msgid "evms in use"
-msgstr "evms est en cours d'utilisation"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Votre système utilise le gestionnaire de volume « evms » dans /proc/mounts. "
-"Le logiciel « evms » n’est plus pris en charge. Veuillez le désactiver avant "
-"d'exécuter à nouveau la mise à niveau."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:511
-msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#, fuzzy
+msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 "Votre matériel graphique peut ne pas être entièrement pris en charge par "
 "Ubuntu 13.04."
@@ -955,21 +969,19 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "L'utilisation de l'environnement de bureau « Unity » n'est pas complètement "
 "prise en charge par votre carte graphique. Vous risquez de vous retrouver "
 "avec un environnement très lent après la mise à niveau. Pour le moment, nous "
 "vous conseillons de conserver la version LTS. Pour plus d'information, "
-"rendez-vous sur "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Voulez-vous "
-"poursuivre la mise à niveau ?"
+"rendez-vous sur https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Voulez-vous poursuivre la mise à niveau ?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Il est possible que votre carte graphique ne soit pas entièrement prise en "
 "charge par Ubuntu 12.04 LTS."
@@ -983,9 +995,8 @@ msgid ""
 msgstr ""
 "La prise en charge par Ubuntu 12.04 LTS de votre carte graphique Intel est "
 "limitée et il se peut vous rencontriez des problèmes après la mise à niveau. "
-"Pour plus d'information, rendez-vous sur "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx Voulez-vous "
-"poursuivre la mise à niveau ?"
+"Pour plus d'information, rendez-vous sur https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForI8xx Voulez-vous poursuivre la mise à niveau ?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:212
 msgid ""
@@ -995,21 +1006,6 @@ msgstr ""
 "Il se peut que la mise à niveau réduise les effets visuels et les "
 "performances pour les jeux et autres programmes exigeants au niveau "
 "graphique."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:564
-#: ../DistUpgrade/DistUpgradeQuirks.py:592
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04 LTS.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Cet ordinateur utilise actuellement le pilote graphique « nvidia » de "
-"NVIDIA. Il n'y a aucune version de ce pilote pour Ubuntu 10.04 LTS "
-"fonctionnant avec votre matériel.\n"
-"\n"
-"Voulez-vous continuer ?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
 msgid ""
@@ -1078,6 +1074,18 @@ msgstr ""
 "\n"
 "Voulez-vous vraiment continuer ?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:412
+msgid "PAE not enabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:413
+msgid ""
+"Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
+"non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
+"you must enable PAE (if this is possible) see:\n"
+"http://help.ubuntu.com/community/EnablingPAE"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
 msgstr "Mise à niveau en espace protégé (sandbox) en utilisant aufs"
@@ -1114,27 +1122,31 @@ msgstr "Désactiver la prise en charge de GNU screen"
 msgid "Set datadir"
 msgstr "Définir l'emplacement des données"
 
+#: ../DistUpgrade/DistUpgradeMain.py:81
+msgid "Upgrade to the development release"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
-#: ../DistUpgrade/DistUpgradeViewKDE.py:214
+#: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Fetching is complete"
 msgstr "Récupération des fichiers terminée"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:159
-#: ../DistUpgrade/DistUpgradeViewKDE.py:230
+#: ../DistUpgrade/DistUpgradeViewKDE.py:247
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "Récupération du fichier %li sur %li à %s octets/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:319
-#: ../DistUpgrade/DistUpgradeViewKDE.py:231
-#: ../DistUpgrade/DistUpgradeViewKDE.py:380
+#: ../DistUpgrade/DistUpgradeViewKDE.py:248
+#: ../DistUpgrade/DistUpgradeViewKDE.py:398
 #, python-format
 msgid "About %s remaining"
 msgstr "Temps restant : environ %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:164
-#: ../DistUpgrade/DistUpgradeViewKDE.py:233
+#: ../DistUpgrade/DistUpgradeViewKDE.py:250
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Téléchargement du fichier %li sur %li"
@@ -1143,24 +1155,24 @@ msgstr "Téléchargement du fichier %li sur %li"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:196
-#: ../DistUpgrade/DistUpgradeViewKDE.py:271
+#: ../DistUpgrade/DistUpgradeViewKDE.py:288
 msgid "Applying changes"
 msgstr "Application des changements"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:284
+#: ../DistUpgrade/DistUpgradeViewKDE.py:301
 msgid "dependency problems - leaving unconfigured"
 msgstr "problèmes de dépendances - laissé non configuré"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:227
-#: ../DistUpgrade/DistUpgradeViewKDE.py:286
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Impossible d'installer « %s »"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:228
-#: ../DistUpgrade/DistUpgradeViewKDE.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:304
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1171,7 +1183,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:245
-#: ../DistUpgrade/DistUpgradeViewKDE.py:308
+#: ../DistUpgrade/DistUpgradeViewKDE.py:326
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1181,7 +1193,7 @@ msgstr ""
 "« %s » ?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:246
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewKDE.py:327
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1190,7 +1202,7 @@ msgstr ""
 "perdues si vous décidez de le remplacer par une version plus récente."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:266
-#: ../DistUpgrade/DistUpgradeViewKDE.py:332
+#: ../DistUpgrade/DistUpgradeViewKDE.py:350
 msgid "The 'diff' command was not found"
 msgstr "La commande « diff » n'a pas été trouvée"
 
@@ -1201,16 +1213,16 @@ msgstr "Une erreur fatale est survenue"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Veuillez signaler ce problème comme un bogue (si ce n'est déjà fait), et y "
-"inclure les fichiers /var/log/dist-upgrade/main.log et /var/log/dist-"
-"upgrade/apt.log. La mise a niveau a échoué.\n"
-"Votre fichier souce.list original a été enregistré dans "
-"/etc/apt/sources.list.distUpgrade."
+"inclure les fichiers /var/log/dist-upgrade/main.log et /var/log/dist-upgrade/"
+"apt.log. La mise a niveau a échoué.\n"
+"Votre fichier souce.list original a été enregistré dans /etc/apt/sources."
+"list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1261,11 +1273,11 @@ msgstr "Installer (%s)"
 msgid "Upgrade (%s)"
 msgstr "Mettre à jour (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:344
+#: ../DistUpgrade/DistUpgradeViewKDE.py:362
 msgid "Show Difference >>>"
 msgstr "Afficher les différences >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:347
+#: ../DistUpgrade/DistUpgradeViewKDE.py:365
 msgid "<<< Hide Difference"
 msgstr "<<< Masquer les différences"
 
@@ -1273,76 +1285,77 @@ msgstr "<<< Masquer les différences"
 msgid "Error"
 msgstr "Erreur"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:572
-msgid "&Cancel"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:824
+#: ../DistUpgrade/DistUpgradeViewKDE.py:583
+#: ../DistUpgrade/DistUpgradeViewKDE.py:817
 msgid "&Close"
 msgstr "&Fermer"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:629
+#: ../DistUpgrade/DistUpgradeViewKDE.py:617
 msgid "Show Terminal >>>"
 msgstr "Afficher le terminal >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:632
+#: ../DistUpgrade/DistUpgradeViewKDE.py:620
 msgid "<<< Hide Terminal"
 msgstr "<<< Masquer le terminal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:712
+#: ../DistUpgrade/DistUpgradeViewKDE.py:699
 msgid "Information"
 msgstr "Informations"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:762
-#: ../DistUpgrade/DistUpgradeViewKDE.py:807
-#: ../DistUpgrade/DistUpgradeViewKDE.py:810
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#, fuzzy
+msgid "&Start Upgrade"
+msgstr "Lancer la mi_se à niveau"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewKDE.py:798
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Détails"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewKDE.py:779
 #, python-format
 msgid "No longer supported %s"
 msgstr "N'est plus maintenu (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:790
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #, python-format
 msgid "Remove %s"
 msgstr "Supprimer %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:783
 #: ../DistUpgrade/DistUpgradeViewText.py:233
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Supprimer (avait été installé automatiquement) %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:794
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 #, python-format
 msgid "Install %s"
 msgstr "Installer %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:787
 #, python-format
 msgid "Upgrade %s"
 msgstr "Mettre à niveau %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 #: ../DistUpgrade/DistUpgradeViewText.py:281
 msgid "Restart required"
 msgstr "Redémarrage nécessaire de l'ordinateur"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
-"<b><big>Redémarrez le système pour terminer la mise à niveau</big></b>"
+msgstr "<b><big>Redémarrez le système pour terminer la mise à niveau</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:823
+#: ../DistUpgrade/DistUpgradeViewKDE.py:816
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "_Redémarrer maintenant"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:841
+#: ../DistUpgrade/DistUpgradeViewKDE.py:834
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1354,7 +1367,7 @@ msgstr ""
 "Le système pourrait devenir inutilisable suite à l'annulation de la mise à "
 "niveau. Il vous est fortement recommandé de reprendre celle-ci."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:845
+#: ../DistUpgrade/DistUpgradeViewKDE.py:838
 msgid "Cancel Upgrade?"
 msgstr "_Annuler la mise à niveau ?"
 
@@ -1390,10 +1403,10 @@ msgstr[1] "%li secondes"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1404,10 +1417,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1550,18 +1563,23 @@ msgstr ""
 "La mise à niveau est terminée et l'ordinateur doit être redémarré. Voulez-"
 "vous le faire dès maintenant ?"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, python-format
+msgid "Progress: [%3i%%]"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Veuillez signaler ce problème comme un bogue et y inclure les fichiers "
-"/var/log/dist-upgrade/main.log et /var/log/dist-upgrade/apt.log. La mise a "
-"niveau a échoué.\n"
-"Votre fichier souce.list original a été enregistré dans "
-"/etc/apt/sources.list.distUpgrade."
+"Veuillez signaler ce problème comme un bogue et y inclure les fichiers /var/"
+"log/dist-upgrade/main.log et /var/log/dist-upgrade/apt.log. La mise a niveau "
+"a échoué.\n"
+"Votre fichier souce.list original a été enregistré dans /etc/apt/sources."
+"list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "Aborting"
@@ -1711,7 +1729,8 @@ msgid "Distribution Upgrade"
 msgstr "Mise à niveau de la distribution"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#, fuzzy
+msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
 msgstr "<b><big>Mise à niveau d'Ubuntu vers la version 13.04</big></b>"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
@@ -1735,8 +1754,7 @@ msgid "_Upgrade"
 msgstr "Mettre à _niveau"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Une nouvelle version d'Ubuntu est disponible. Souhaitez-vous mettre à "
 "niveau votre système ?</b>"
@@ -1781,15 +1799,15 @@ msgstr "Effectuer une mise à niveau partielle"
 msgid "To perform a partial upgrade, you need to authenticate."
 msgstr "Pour faire une mise à niveau partielle, vous devez vous identifier."
 
-#: ../do-partial-upgrade:74 ../do-release-upgrade:69
+#: ../do-partial-upgrade:74 ../do-release-upgrade:81
 msgid "Show version and exit"
 msgstr "Afficher le numéro de version et fermer"
 
-#: ../do-partial-upgrade:77 ../do-release-upgrade:76
+#: ../do-partial-upgrade:77 ../do-release-upgrade:88
 msgid "Directory that contains the data files"
 msgstr "Dossier contenant les fichiers de données"
 
-#: ../do-partial-upgrade:80 ../do-release-upgrade:89
+#: ../do-partial-upgrade:80 ../do-release-upgrade:101
 msgid "Run the specified frontend"
 msgstr "Lancer l'interface spécifiée"
 
@@ -1797,24 +1815,24 @@ msgstr "Lancer l'interface spécifiée"
 msgid "Running partial upgrade"
 msgstr "Lancement d'une mise à niveau partielle"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:31 ../do-release-upgrade:43
 msgid "Downloading the release upgrade tool"
 msgstr "Téléchargement de l'outil de mise à niveau de distribution"
 
-#: ../do-release-upgrade:72 ../check-new-release-gtk:177
+#: ../do-release-upgrade:84 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr ""
 "Vérifier si la mise à niveau vers la dernière version de développement est "
 "possible"
 
-#: ../do-release-upgrade:79 ../check-new-release-gtk:181
+#: ../do-release-upgrade:91 ../check-new-release-gtk:181
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Essayer de mettre à niveau vers la dernière version disponible en utilisant "
 "l'outil de mise à niveau de $distro-proposed"
 
-#: ../do-release-upgrade:83
+#: ../do-release-upgrade:95
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1825,11 +1843,11 @@ msgstr ""
 "standard d'un ordinateur de bureau et « server » pour les installations de "
 "type serveur."
 
-#: ../do-release-upgrade:91
+#: ../do-release-upgrade:103
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr "Tester la mise à niveau dans un environnement protégé (sandbox aufs)"
 
-#: ../do-release-upgrade:94
+#: ../do-release-upgrade:106
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
@@ -1837,15 +1855,23 @@ msgstr ""
 "Vérifier seulement si une nouvelle distribution est disponible et afficher "
 "le résultat en sortie"
 
-#: ../do-release-upgrade:113
+#: ../do-release-upgrade:120
+msgid "The options --devel-release and --proposed are"
+msgstr ""
+
+#: ../do-release-upgrade:121
+msgid "mutually exclusive. Please use only one of them."
+msgstr ""
+
+#: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
 msgstr "Recherche d'une nouvelle version d'Ubuntu"
 
-#: ../do-release-upgrade:125
+#: ../do-release-upgrade:137
 msgid "Your Ubuntu release is not supported anymore."
 msgstr "Votre version d'Ubuntu n'est plus prise en charge."
 
-#: ../do-release-upgrade:126
+#: ../do-release-upgrade:138
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
@@ -1853,15 +1879,15 @@ msgstr ""
 "Pour plus d'informations sur la mise à jour, veuillez visiter :\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
+#: ../do-release-upgrade:144
 msgid "No new release found"
 msgstr "Aucune nouvelle version trouvée"
 
-#: ../do-release-upgrade:137
+#: ../do-release-upgrade:149
 msgid "Release upgrade not possible right now"
 msgstr "Mise à niveau impossible dans l'immédiat."
 
-#: ../do-release-upgrade:138
+#: ../do-release-upgrade:150
 #, c-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
@@ -1870,14 +1896,18 @@ msgstr ""
 "La mise à niveau de la distribution ne peut s'exécuter pour le moment. "
 "Veuillez réessayer plus tard. Le serveur a renvoyé : « %s »"
 
-#: ../do-release-upgrade:144
+#: ../do-release-upgrade:156
 #, c-format
 msgid "New release '%s' available."
 msgstr "Nouvelle version « %s » disponible."
 
-#: ../do-release-upgrade:145
+#: ../do-release-upgrade:157
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Lancer « do-release-upgrade » pour mettre à niveau vers celle-ci."
+
+#: ../check-new-release-gtk:85
+msgid "Software Updater"
+msgstr ""
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1891,6 +1921,43 @@ msgstr "Vous avez refusé la mise à niveau vers Ubuntu %s"
 #: ../check-new-release-gtk:186
 msgid "Add debug output"
 msgstr "Ajouter la sortie de débogage"
+
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Le paquet « debsig-verify » est installé"
+
+#~ msgid ""
+#~ "The upgrade can not continue with that package installed.\n"
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
+#~ msgstr ""
+#~ "La mise à niveau ne peut pas continuer si ce paquet est installé.\n"
+#~ "Veuillez le supprimer avec Synaptic ou avec « apt-get remove debsig-"
+#~ "verify », puis relancez la mise à jour."
+
+#~ msgid "evms in use"
+#~ msgstr "evms est en cours d'utilisation"
+
+#~ msgid ""
+#~ "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+#~ "software is no longer supported, please switch it off and run the upgrade "
+#~ "again when this is done."
+#~ msgstr ""
+#~ "Votre système utilise le gestionnaire de volume « evms » dans /proc/"
+#~ "mounts. Le logiciel « evms » n’est plus pris en charge. Veuillez le "
+#~ "désactiver avant d'exécuter à nouveau la mise à niveau."
+
+#~ msgid ""
+#~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+#~ "version of this driver is available that works with your video card in "
+#~ "Ubuntu 10.04 LTS.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Cet ordinateur utilise actuellement le pilote graphique « nvidia » de "
+#~ "NVIDIA. Il n'y a aucune version de ce pilote pour Ubuntu 10.04 LTS "
+#~ "fonctionnant avec votre matériel.\n"
+#~ "\n"
+#~ "Voulez-vous continuer ?"
 
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr ""

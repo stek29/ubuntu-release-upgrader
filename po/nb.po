@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2013-05-22 21:30+0100\n"
+"POT-Creation-Date: 2015-02-18 16:10+0100\n"
 "PO-Revision-Date: 2013-06-19 12:32+0000\n"
 "Last-Translator: Åka Sikrom <Unknown>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2015-02-12 06:57+0000\n"
 "X-Generator: Launchpad (build 17336)\n"
-"Language: nb\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -112,11 +112,10 @@ msgstr ""
 "eller kommandoen «apt-get» før du fortsetter."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:693
-#, python-format
+#: ../DistUpgrade/DistUpgradeCache.py:641
+#, fuzzy
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
+"An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -199,11 +198,11 @@ msgstr ""
 msgid "Can't guess meta-package"
 msgstr "Klarer ikke å gjette meta-pakke"
 
-#: ../DistUpgrade/DistUpgradeCache.py:872
+#: ../DistUpgrade/DistUpgradeCache.py:881
+#, fuzzy, python-format
 msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
+"Your system does not contain a %s or %s package and it was not possible to "
+"detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
@@ -337,22 +336,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Python-installasjonen din er ødelagt. Du må rette opp den symbolske lenka "
-"«/usr/bin/python»."
-
-#: ../DistUpgrade/DistUpgradeController.py:464
-msgid "Package 'debsig-verify' is installed"
-msgstr "Pakka «debsig-verify» er installert"
-
-#: ../DistUpgrade/DistUpgradeController.py:465
-msgid ""
-"The upgrade can not continue with that package installed.\n"
-"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-"run the upgrade again."
-msgstr ""
-"Oppgraderinga kan ikke fortsette så lenge denne pakka er installert.\n"
-"Fjern den med synaptic eller «apt-get remove debsig-verify» først, og kjør "
-"deretter oppgradering på nytt."
+"Python-installasjonen din er ødelagt. Du må rette opp den symbolske lenka «/"
+"usr/bin/python»."
 
 #: ../DistUpgrade/DistUpgradeController.py:468
 #, python-format
@@ -395,6 +380,11 @@ msgstr ""
 "er ferdig.\n"
 "Svarer du «nei» her, brukes ikke Internett underveis i det hele tatt."
 
+#: ../DistUpgrade/DistUpgradeController.py:641
+#, python-format
+msgid "Not for humans during development stage of release %s"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
 msgid "disabled on upgrade to %s"
@@ -404,11 +394,11 @@ msgstr "deaktivert under oppgradering til %s"
 msgid "No valid mirror found"
 msgstr "Ingen gyldige tjenere ble funnet"
 
-#: ../DistUpgrade/DistUpgradeController.py:753
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:762
+#, fuzzy, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run an internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
@@ -451,6 +441,15 @@ msgstr "Ugyldig informasjon om pakkekilder"
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
+msgstr ""
+"Oppgradering av informasjon om pakkebrønner førte til en ugyldig fil. "
+"Starter feilrapportering."
+
+#: ../DistUpgrade/DistUpgradeController.py:825
+#, fuzzy
+msgid ""
+"Upgrading the repository information resulted in a invalid file. To report a "
+"bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
 "Oppgradering av informasjon om pakkebrønner førte til en ugyldig fil. "
 "Starter feilrapportering."
@@ -596,9 +595,9 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
@@ -668,6 +667,15 @@ msgstr ""
 "Noe gikk galt under forberedelser til systemoppgradering. Starter "
 "feilrapportering."
 
+#: ../DistUpgrade/DistUpgradeController.py:1659
+#, fuzzy
+msgid ""
+"Preparing the system for the upgrade failed. To report a bug install apport "
+"and then execute 'apport-bug ubuntu-release-upgrader'."
+msgstr ""
+"Noe gikk galt under forberedelser til systemoppgradering. Starter "
+"feilrapportering."
+
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
 msgid "Getting upgrade prerequisites failed"
@@ -679,6 +687,20 @@ msgid ""
 "will abort now and restore the original system state.\n"
 "\n"
 "Additionally, a bug reporting process is being started."
+msgstr ""
+"Systemet klarte ikke å hente forberedelsesprogrammer. Oppgraderinga "
+"avbrytes, og systemet stilles tilbake til opprinnelig tilstand.\n"
+"\n"
+"I tillegg blir programfeilen innrapportert."
+
+#: ../DistUpgrade/DistUpgradeController.py:1687
+#, fuzzy
+msgid ""
+"The system was unable to get the prerequisites for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"To report a bug install apport and then execute 'apport-bug ubuntu-release-"
+"upgrader'."
 msgstr ""
 "Systemet klarte ikke å hente forberedelsesprogrammer. Oppgraderinga "
 "avbrytes, og systemet stilles tilbake til opprinnelig tilstand.\n"
@@ -714,8 +736,8 @@ msgid ""
 msgstr ""
 "Fant ikke den essensielle pakka  «%s» etter å ha oppdatert pakkeoversikten "
 "din. Dette kan skyldes at du ikke har ført opp offisielle speiltjenere som "
-"programvarekilder, eller at speiltjeneren du bruker har stor pågang. Sjekk "
-"/etc/apt/sources.list for å kontrollere hvilke speil du bruker som "
+"programvarekilder, eller at speiltjeneren du bruker har stor pågang. Sjekk /"
+"etc/apt/sources.list for å kontrollere hvilke speil du bruker som "
 "programvarekilder.\n"
 "Hvis det er sannsynlig at speiltjeneren er overbelastet, bør du forsøke å "
 "kjøre oppgraderinga på nytt senere."
@@ -758,22 +780,22 @@ msgid "The partial upgrade was completed."
 msgstr "Delvis oppgradering er fullført."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:118
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:112
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:156
 msgid "Could not find the release notes"
 msgstr "Klarte ikke å finne utgivelsesmerknadene"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:119
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:113
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:157
 msgid "The server may be overloaded. "
 msgstr "Tjeneren kan være overbelastet. "
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:131
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:117
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:161
 msgid "Could not download the release notes"
 msgstr "Klarte ikke å laste ned utgivelsesmerknadene"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:132
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:118
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:162
 msgid "Please check your internet connection."
 msgstr "Kontoller internettforbindelsen."
 
@@ -871,63 +893,58 @@ msgstr ""
 msgid "The error message is '%s'."
 msgstr "Feilmeldingen er «%s»."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:63
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:94
-msgid "Upgrade"
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
+#, fuzzy
+msgid "&Upgrade"
 msgstr "Oppgrader"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:98
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
+#: ../DistUpgrade/DistUpgradeViewKDE.py:579
+msgid "&Cancel"
+msgstr "&Avbryt"
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:142
 #: ../data/gtkbuilder/ReleaseNotes.ui.h:1
 msgid "Release Notes"
 msgstr "Utgivelsesmerknader"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:153
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:198
+msgid "Upgrade"
+msgstr "Oppgrader"
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:213
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:226
 msgid "Downloading additional package files..."
 msgstr "Laster ned ekstra pakkefiler …"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:155
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:228
 #, python-format
 msgid "File %s of %s at %sB/s"
 msgstr "Fil %s av %s ved %sB/s"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:159
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:232
 #, python-format
 msgid "File %s of %s"
 msgstr "Fil %s av %s"
 
 #. print("mediaChange %s %s" % (medium, drive))
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:166
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:239
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:123
-#: ../DistUpgrade/DistUpgradeViewKDE.py:200
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Sett inn «%s» i «%s»-leseren"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg,
-#. QMessageBox.Ok, QMessageBox.Cancel)
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:169
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
-#: ../DistUpgrade/DistUpgradeViewKDE.py:201
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:241
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:246
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:247
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
 msgid "Media Change"
 msgstr "Medieendring"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:208
-msgid "evms in use"
-msgstr "evms i bruk"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Systemet ditt bruker «evms» for behandling av dataområde i «/proc/mounts». "
-"Programvaren til «evms» er ikke lenger støttet, vennligst slå den av og kjør "
-"oppdateringen på nytt."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:511
-msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#, fuzzy
+msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 "Det er ikke sikkert at grafikkortet ditt støttes optimalt i Ubuntu 13.04."
 
@@ -936,9 +953,9 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "Skrivebordsmiljøet Unity støtter ikke grafikkortet ditt optimalt. "
 "Oppgraderinga kan altså føre til at skrivebordsmiljøet kjører veldig tregt. "
@@ -947,8 +964,7 @@ msgstr ""
 "mer informasjon. Vil du fortsette med å oppgradere likevel?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Det er ikke sikkert at grafikkortet ditt støttes optimalt i Ubuntu 12.04 LTS."
 
@@ -960,9 +976,9 @@ msgid ""
 "continue with the upgrade?"
 msgstr ""
 "Intel-grafikkortet ditt har begrenset støtte i Ubuntu 12.04 LTS, og du kan "
-"møte problemer etter oppgraderingen. Se "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx for mer "
-"informasjon. Vil fortsette med å oppgradere likevel?"
+"møte problemer etter oppgraderingen. Se https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForI8xx for mer informasjon. Vil fortsette med å "
+"oppgradere likevel?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:212
 msgid ""
@@ -971,21 +987,6 @@ msgid ""
 msgstr ""
 "Å oppgradere kan gå på bekostning av skrivebordseffekter, samt ytelse i "
 "spill og andre grafikkintensive programmer."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:564
-#: ../DistUpgrade/DistUpgradeQuirks.py:592
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04 LTS.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Denne datamaskinen benytter for øyeblikket NVIDIA 'nvidia' grafikkdriver. "
-"Ingen versjoner av denne driveren er tilgjengelig for skjermkortet ditt for "
-"Ubuntu 10.04 LTS.\n"
-"\n"
-"Ønsker du å fortsette?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
 msgid ""
@@ -1053,6 +1054,18 @@ msgstr ""
 "\n"
 "Vil du fortsette likevel?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:412
+msgid "PAE not enabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:413
+msgid ""
+"Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
+"non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
+"you must enable PAE (if this is possible) see:\n"
+"http://help.ubuntu.com/community/EnablingPAE"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
 msgstr "Sandkasseoppgradering ved bruk av aufs"
@@ -1087,27 +1100,31 @@ msgstr "Skru av GNU-skjermstøtte"
 msgid "Set datadir"
 msgstr "Velg datamappe"
 
+#: ../DistUpgrade/DistUpgradeMain.py:81
+msgid "Upgrade to the development release"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
-#: ../DistUpgrade/DistUpgradeViewKDE.py:214
+#: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Fetching is complete"
 msgstr "Ferdig med å hente"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:159
-#: ../DistUpgrade/DistUpgradeViewKDE.py:230
+#: ../DistUpgrade/DistUpgradeViewKDE.py:247
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "Henter fil %li av %li ved %sB/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:319
-#: ../DistUpgrade/DistUpgradeViewKDE.py:231
-#: ../DistUpgrade/DistUpgradeViewKDE.py:380
+#: ../DistUpgrade/DistUpgradeViewKDE.py:248
+#: ../DistUpgrade/DistUpgradeViewKDE.py:398
 #, python-format
 msgid "About %s remaining"
 msgstr "Omtrent %s gjenstår"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:164
-#: ../DistUpgrade/DistUpgradeViewKDE.py:233
+#: ../DistUpgrade/DistUpgradeViewKDE.py:250
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Henter fil %li av %li"
@@ -1116,24 +1133,24 @@ msgstr "Henter fil %li av %li"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:196
-#: ../DistUpgrade/DistUpgradeViewKDE.py:271
+#: ../DistUpgrade/DistUpgradeViewKDE.py:288
 msgid "Applying changes"
 msgstr "Utfører endringer"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:284
+#: ../DistUpgrade/DistUpgradeViewKDE.py:301
 msgid "dependency problems - leaving unconfigured"
 msgstr "avhengighetsproblem - pakka blir ikke satt opp"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:227
-#: ../DistUpgrade/DistUpgradeViewKDE.py:286
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Klarte ikke å installere «%s»"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:228
-#: ../DistUpgrade/DistUpgradeViewKDE.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:304
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1144,7 +1161,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:245
-#: ../DistUpgrade/DistUpgradeViewKDE.py:308
+#: ../DistUpgrade/DistUpgradeViewKDE.py:326
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1154,7 +1171,7 @@ msgstr ""
 "«%s»?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:246
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewKDE.py:327
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1163,7 +1180,7 @@ msgstr ""
 "bruke en nyere versjon."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:266
-#: ../DistUpgrade/DistUpgradeViewKDE.py:332
+#: ../DistUpgrade/DistUpgradeViewKDE.py:350
 msgid "The 'diff' command was not found"
 msgstr "Kommandoen «diff» ble ikke funnet"
 
@@ -1174,16 +1191,16 @@ msgstr "Det oppstod en kritisk feil"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Rapporter dette som en feil (med mindre du allerede har gjort det), og "
-"inkluder filene /var/log/dist-upgrade/main.log og /var/log/dist-"
-"upgrade/apt.log i rapporten. Oppgraderinga er avbrutt.\n"
-"Den opprinnelige sources.list-fila ble lagret i "
-"/etc/apt/sources.list.distUpgrade."
+"inkluder filene /var/log/dist-upgrade/main.log og /var/log/dist-upgrade/apt."
+"log i rapporten. Oppgraderinga er avbrutt.\n"
+"Den opprinnelige sources.list-fila ble lagret i /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1233,11 +1250,11 @@ msgstr "Installer (%s)"
 msgid "Upgrade (%s)"
 msgstr "Oppgrader (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:344
+#: ../DistUpgrade/DistUpgradeViewKDE.py:362
 msgid "Show Difference >>>"
 msgstr "Vis forskjell >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:347
+#: ../DistUpgrade/DistUpgradeViewKDE.py:365
 msgid "<<< Hide Difference"
 msgstr "<<< Skjul forskjell"
 
@@ -1245,76 +1262,77 @@ msgstr "<<< Skjul forskjell"
 msgid "Error"
 msgstr "Feil"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:572
-msgid "&Cancel"
-msgstr "&Avbryt"
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:824
+#: ../DistUpgrade/DistUpgradeViewKDE.py:583
+#: ../DistUpgrade/DistUpgradeViewKDE.py:817
 msgid "&Close"
 msgstr "&Lukk"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:629
+#: ../DistUpgrade/DistUpgradeViewKDE.py:617
 msgid "Show Terminal >>>"
 msgstr "Vis Terminal >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:632
+#: ../DistUpgrade/DistUpgradeViewKDE.py:620
 msgid "<<< Hide Terminal"
 msgstr "<<< Skjul Terminal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:712
+#: ../DistUpgrade/DistUpgradeViewKDE.py:699
 msgid "Information"
 msgstr "Informasjon"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:762
-#: ../DistUpgrade/DistUpgradeViewKDE.py:807
-#: ../DistUpgrade/DistUpgradeViewKDE.py:810
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#, fuzzy
+msgid "&Start Upgrade"
+msgstr "Start _oppgradering"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewKDE.py:798
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Detaljer"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewKDE.py:779
 #, python-format
 msgid "No longer supported %s"
 msgstr "Støttes ikke lenger (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:790
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #, python-format
 msgid "Remove %s"
 msgstr "Fjern %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:783
 #: ../DistUpgrade/DistUpgradeViewText.py:233
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Fjern (ble installert automatisk) %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:794
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 #, python-format
 msgid "Install %s"
 msgstr "Installer %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:787
 #, python-format
 msgid "Upgrade %s"
 msgstr "Oppgrader %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 #: ../DistUpgrade/DistUpgradeViewText.py:281
 msgid "Restart required"
 msgstr "Omstart er nødvendig"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
-"<b><big>Start systemet på nytt for å fullføre oppgraderinga</big></b>"
+msgstr "<b><big>Start systemet på nytt for å fullføre oppgraderinga</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:823
+#: ../DistUpgrade/DistUpgradeViewKDE.py:816
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "_Start maskina på nytt nå"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:841
+#: ../DistUpgrade/DistUpgradeViewKDE.py:834
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1326,7 +1344,7 @@ msgstr ""
 "Systemet ditt kan bli ustabilt hvis du avbryter. Vi anbefaler på det "
 "sterkeste at du fortsetter."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:845
+#: ../DistUpgrade/DistUpgradeViewKDE.py:838
 msgid "Cancel Upgrade?"
 msgstr "Vil du avbryte oppgraderinga?"
 
@@ -1362,10 +1380,10 @@ msgstr[1] "%li sekunder"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1376,10 +1394,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1522,18 +1540,22 @@ msgstr ""
 "Oppgradering er fullført, og du må starte systemet på nytt for at alt skal "
 "fungere skikkelig. Vil du gjøre dette nå?"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, python-format
+msgid "Progress: [%3i%%]"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Rapporter dette som en feil og inkluder filene /var/log/dist-"
-"upgrade/main.log og /var/log/dist-upgrade/apt.log i rapporten. Oppgraderinga "
-"er avbrutt.\n"
-"Den opprinnelige «sources.list»-fila ble lagret i "
-"/etc/apt/sources.list.distUpgrade."
+"Rapporter dette som en feil og inkluder filene /var/log/dist-upgrade/main."
+"log og /var/log/dist-upgrade/apt.log i rapporten. Oppgraderinga er avbrutt.\n"
+"Den opprinnelige «sources.list»-fila ble lagret i /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "Aborting"
@@ -1683,7 +1705,8 @@ msgid "Distribution Upgrade"
 msgstr "Distribusjonsoppgradering"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#, fuzzy
+msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
 msgstr "<b><big>Oppgraderer Ubuntu til versjon 13.04</big></b>"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
@@ -1707,8 +1730,7 @@ msgid "_Upgrade"
 msgstr "_Oppgrader"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Det har kommet en ny versjon av Ubuntu. Vil du oppgradere til denne "
 "versjonen?</b>"
@@ -1753,15 +1775,15 @@ msgstr "Utfør en deloppgradering"
 msgid "To perform a partial upgrade, you need to authenticate."
 msgstr "Du må autentisere deg for å utføre en deloppgradering."
 
-#: ../do-partial-upgrade:74 ../do-release-upgrade:69
+#: ../do-partial-upgrade:74 ../do-release-upgrade:81
 msgid "Show version and exit"
 msgstr "Vis versjon og avslutt"
 
-#: ../do-partial-upgrade:77 ../do-release-upgrade:76
+#: ../do-partial-upgrade:77 ../do-release-upgrade:88
 msgid "Directory that contains the data files"
 msgstr "Mappe som inneholder datafilene"
 
-#: ../do-partial-upgrade:80 ../do-release-upgrade:89
+#: ../do-partial-upgrade:80 ../do-release-upgrade:101
 msgid "Run the specified frontend"
 msgstr "Kjør valgt brukergrensesnitt"
 
@@ -1769,22 +1791,22 @@ msgstr "Kjør valgt brukergrensesnitt"
 msgid "Running partial upgrade"
 msgstr "Kjører deloppgradering"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:31 ../do-release-upgrade:43
 msgid "Downloading the release upgrade tool"
 msgstr "Laster ned oppgraderingsverktøyet for utgivelsen"
 
-#: ../do-release-upgrade:72 ../check-new-release-gtk:177
+#: ../do-release-upgrade:84 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "Sjekk om systemet kan oppgraderes til den nyeste utviklingsversjonen"
 
-#: ../do-release-upgrade:79 ../check-new-release-gtk:181
+#: ../do-release-upgrade:91 ../check-new-release-gtk:181
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Prøv å oppgradere til den nyeste utgivelsen ved å bruke "
 "oppgraderingsverktøyet til $distro-proposed"
 
-#: ../do-release-upgrade:83
+#: ../do-release-upgrade:95
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1794,11 +1816,11 @@ msgstr ""
 "For øyeblikket støttes «desktop» for oppgradering av vanlige "
 "arbeidsstasjoner, og «server» for tjenersystemer."
 
-#: ../do-release-upgrade:91
+#: ../do-release-upgrade:103
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr "Prøv ut oppgraderingen i en sandkasse (aufs testdekke)"
 
-#: ../do-release-upgrade:94
+#: ../do-release-upgrade:106
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
@@ -1806,15 +1828,23 @@ msgstr ""
 "Sjekk bare om en ny versjonsoppgradering er tilgjengelig, og gi resultatet "
 "som en avslutningskode."
 
-#: ../do-release-upgrade:113
+#: ../do-release-upgrade:120
+msgid "The options --devel-release and --proposed are"
+msgstr ""
+
+#: ../do-release-upgrade:121
+msgid "mutually exclusive. Please use only one of them."
+msgstr ""
+
+#: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
 msgstr "Ser etter ny utgivelse av Ubuntu"
 
-#: ../do-release-upgrade:125
+#: ../do-release-upgrade:137
 msgid "Your Ubuntu release is not supported anymore."
 msgstr "Din Ubuntu-utgivelse støttes ikke lenger."
 
-#: ../do-release-upgrade:126
+#: ../do-release-upgrade:138
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
@@ -1822,15 +1852,15 @@ msgstr ""
 "Besøk følgende adresse for oppgraderingsinformasjon:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
+#: ../do-release-upgrade:144
 msgid "No new release found"
 msgstr "Fant ingen nye utgivelser"
 
-#: ../do-release-upgrade:137
+#: ../do-release-upgrade:149
 msgid "Release upgrade not possible right now"
 msgstr "Du kan ikke oppgradere til en ny utgave akkurat nå"
 
-#: ../do-release-upgrade:138
+#: ../do-release-upgrade:150
 #, c-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
@@ -1839,14 +1869,18 @@ msgstr ""
 "Du kan ikke oppgradere til en ny utgave akkurat nå. Prøv igjen senere. "
 "Tjeneren svarte med følgende melding: «%s»"
 
-#: ../do-release-upgrade:144
+#: ../do-release-upgrade:156
 #, c-format
 msgid "New release '%s' available."
 msgstr "Den nye utgaven «%s» er tilgjengelig."
 
-#: ../do-release-upgrade:145
+#: ../do-release-upgrade:157
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Kjør «do-release-upgrade» for å oppgradere systemet til denne."
+
+#: ../check-new-release-gtk:85
+msgid "Software Updater"
+msgstr ""
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1860,6 +1894,43 @@ msgstr "Du har avslått å oppgradere til Ubuntu %s"
 #: ../check-new-release-gtk:186
 msgid "Add debug output"
 msgstr "Legg til en utskrift av feilsøkingsdata"
+
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Pakka «debsig-verify» er installert"
+
+#~ msgid ""
+#~ "The upgrade can not continue with that package installed.\n"
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
+#~ msgstr ""
+#~ "Oppgraderinga kan ikke fortsette så lenge denne pakka er installert.\n"
+#~ "Fjern den med synaptic eller «apt-get remove debsig-verify» først, og "
+#~ "kjør deretter oppgradering på nytt."
+
+#~ msgid "evms in use"
+#~ msgstr "evms i bruk"
+
+#~ msgid ""
+#~ "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+#~ "software is no longer supported, please switch it off and run the upgrade "
+#~ "again when this is done."
+#~ msgstr ""
+#~ "Systemet ditt bruker «evms» for behandling av dataområde i «/proc/"
+#~ "mounts». Programvaren til «evms» er ikke lenger støttet, vennligst slå "
+#~ "den av og kjør oppdateringen på nytt."
+
+#~ msgid ""
+#~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+#~ "version of this driver is available that works with your video card in "
+#~ "Ubuntu 10.04 LTS.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Denne datamaskinen benytter for øyeblikket NVIDIA 'nvidia' grafikkdriver. "
+#~ "Ingen versjoner av denne driveren er tilgjengelig for skjermkortet ditt "
+#~ "for Ubuntu 10.04 LTS.\n"
+#~ "\n"
+#~ "Ønsker du å fortsette?"
 
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr "Du må autentisere deg for å utføre en versjonsoppgradering"

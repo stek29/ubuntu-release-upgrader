@@ -8,18 +8,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2013-05-22 21:30+0100\n"
+"POT-Creation-Date: 2015-02-18 16:10+0100\n"
 "PO-Revision-Date: 2013-05-22 11:00+0000\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2015-02-12 06:58+0000\n"
 "X-Generator: Launchpad (build 17336)\n"
-"Language: sr\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -120,11 +120,10 @@ msgstr ""
 "наставите."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:693
-#, python-format
+#: ../DistUpgrade/DistUpgradeCache.py:641
+#, fuzzy
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
+"An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -207,11 +206,11 @@ msgstr ""
 msgid "Can't guess meta-package"
 msgstr "Не могу да погодим мета пакет"
 
-#: ../DistUpgrade/DistUpgradeCache.py:872
+#: ../DistUpgrade/DistUpgradeCache.py:881
+#, fuzzy, python-format
 msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
+"Your system does not contain a %s or %s package and it was not possible to "
+"detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
@@ -346,22 +345,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Питонова инсталација је оштећена. Молим оправите симболичку везу "
-"„/usr/bin/python“."
-
-#: ../DistUpgrade/DistUpgradeController.py:464
-msgid "Package 'debsig-verify' is installed"
-msgstr "Пакет „debsig-verify“ је инсталиран"
-
-#: ../DistUpgrade/DistUpgradeController.py:465
-msgid ""
-"The upgrade can not continue with that package installed.\n"
-"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-"run the upgrade again."
-msgstr ""
-"Надоградња се не може наставити док је тај пакет инсталиран.\n"
-"Прво га уклоните синаптиком или у терминалу извршите „apt-get remove debsig-"
-"verify“ и затим поново покрените надоградњу."
+"Питонова инсталација је оштећена. Молим оправите симболичку везу „/usr/bin/"
+"python“."
 
 #: ../DistUpgrade/DistUpgradeController.py:468
 #, python-format
@@ -403,6 +388,11 @@ msgstr ""
 "инсталирате најновије исправке након надоградње.\n"
 "Ако овде изаберете „не“, мрежа неће бити коришћена."
 
+#: ../DistUpgrade/DistUpgradeController.py:641
+#, python-format
+msgid "Not for humans during development stage of release %s"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
 msgid "disabled on upgrade to %s"
@@ -412,11 +402,11 @@ msgstr "искљученo приликом надоградње на %s"
 msgid "No valid mirror found"
 msgstr "Нисам пронашао важеће огледало"
 
-#: ../DistUpgrade/DistUpgradeController.py:753
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:762
+#, fuzzy, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run an internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
@@ -459,6 +449,15 @@ msgstr "Неисправна информација ризнице"
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
+msgstr ""
+"Надограђивање података о ризници је резултирало неисправном датотеком тако "
+"да је покренут процес за извештавање о грешци."
+
+#: ../DistUpgrade/DistUpgradeController.py:825
+#, fuzzy
+msgid ""
+"Upgrading the repository information resulted in a invalid file. To report a "
+"bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
 "Надограђивање података о ризници је резултирало неисправном датотеком тако "
 "да је покренут процес за извештавање о грешци."
@@ -605,17 +604,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Поднесите извештај о грешци на адреси "
-"„http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug“ "
-"користећи прегледника и приложите уз извештај датотеке које се налазе у "
-"„/var/log/dist-upgrade/“.\n"
+"Поднесите извештај о грешци на адреси „http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug“ користећи прегледника и приложите "
+"уз извештај датотеке које се налазе у „/var/log/dist-upgrade/“.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -678,6 +676,15 @@ msgstr ""
 "Припрема система за надоградњу није успела тако да је покренут процес за "
 "извештавање о грешци."
 
+#: ../DistUpgrade/DistUpgradeController.py:1659
+#, fuzzy
+msgid ""
+"Preparing the system for the upgrade failed. To report a bug install apport "
+"and then execute 'apport-bug ubuntu-release-upgrader'."
+msgstr ""
+"Припрема система за надоградњу није успела тако да је покренут процес за "
+"извештавање о грешци."
+
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
 msgid "Getting upgrade prerequisites failed"
@@ -689,6 +696,20 @@ msgid ""
 "will abort now and restore the original system state.\n"
 "\n"
 "Additionally, a bug reporting process is being started."
+msgstr ""
+"Систем није могао да добави предуслове за надоградњу. Надоградња ће сада "
+"бити прекинута и биће враћено пређашње стање система.\n"
+"\n"
+"Уз ово, покренут је и процес за извештавање о грешци."
+
+#: ../DistUpgrade/DistUpgradeController.py:1687
+#, fuzzy
+msgid ""
+"The system was unable to get the prerequisites for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"To report a bug install apport and then execute 'apport-bug ubuntu-release-"
+"upgrader'."
 msgstr ""
 "Систем није могао да добави предуслове за надоградњу. Надоградња ће сада "
 "бити прекинута и биће враћено пређашње стање система.\n"
@@ -753,8 +774,7 @@ msgstr "Надоградња је завршена"
 #: ../DistUpgrade/DistUpgradeController.py:1855
 msgid ""
 "The upgrade has completed but there were errors during the upgrade process."
-msgstr ""
-"Надоградња је завршена, али је било грешака током процеса надоградње."
+msgstr "Надоградња је завршена, али је било грешака током процеса надоградње."
 
 #: ../DistUpgrade/DistUpgradeController.py:1804
 msgid "Searching for obsolete software"
@@ -769,22 +789,22 @@ msgid "The partial upgrade was completed."
 msgstr "Делимична надоградња је завршена."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:118
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:112
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:156
 msgid "Could not find the release notes"
 msgstr "Не могу да пронађем белешке о издању"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:119
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:113
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:157
 msgid "The server may be overloaded. "
 msgstr "Сервер је можда преоптерећен. "
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:131
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:117
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:161
 msgid "Could not download the release notes"
 msgstr "Не могу да преузмем белешке о издању"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:132
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:118
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:162
 msgid "Please check your internet connection."
 msgstr "Проверите вашу интернет везу."
 
@@ -882,63 +902,57 @@ msgstr ""
 msgid "The error message is '%s'."
 msgstr "Порука грешке је „%s“."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:63
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:94
-msgid "Upgrade"
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
+#, fuzzy
+msgid "&Upgrade"
 msgstr "Надоградња"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:98
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
+#: ../DistUpgrade/DistUpgradeViewKDE.py:579
+msgid "&Cancel"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:142
 #: ../data/gtkbuilder/ReleaseNotes.ui.h:1
 msgid "Release Notes"
 msgstr "Белешке о издању"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:153
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:198
+msgid "Upgrade"
+msgstr "Надоградња"
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:213
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:226
 msgid "Downloading additional package files..."
 msgstr "Преузимам додатне датотеке пакета..."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:155
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:228
 #, python-format
 msgid "File %s of %s at %sB/s"
 msgstr "Датотека број %s од укупно %s брзином %sB/s"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:159
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:232
 #, python-format
 msgid "File %s of %s"
 msgstr "Датотека број %s од укупно %s"
 
 #. print("mediaChange %s %s" % (medium, drive))
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:166
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:239
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:123
-#: ../DistUpgrade/DistUpgradeViewKDE.py:200
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Молим убаците „%s“ у оптички уређај „%s“"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg,
-#. QMessageBox.Ok, QMessageBox.Cancel)
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:169
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
-#: ../DistUpgrade/DistUpgradeViewKDE.py:201
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:241
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:246
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:247
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
 msgid "Media Change"
 msgstr "Промена медијума"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:208
-msgid "evms in use"
-msgstr "„evms“ у употреби"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
-msgstr ""
-"Ваш систем користи „evms“ управника волумена у „/proc/mounts“. Софтвер "
-"„evms“ више није подржан, молим искључите га и поново покрените надоградњу "
-"када то урадите."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:511
-msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:166
@@ -946,20 +960,19 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "Коришћење графичког окружења „јунити“ није у потпуности подржано за ваш "
 "хардвер. Највероватније да ћете имати веома спор систем након надоградње. "
 "Саветујемо вам да се за сада држите дугорочног (ЛТС) издања. Више података о "
-"овоме можете наћи на "
-"„https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D“. Да ли и "
-"даље желите да наставите са надоградњом?"
+"овоме можете наћи на „https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D“. Да ли и даље желите да наставите са "
+"надоградњом?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:192
@@ -981,20 +994,6 @@ msgid ""
 msgstr ""
 "Надоградња може смањити ефекте радне површине, перформансе игрица и других "
 "графички захтевних програма."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:564
-#: ../DistUpgrade/DistUpgradeQuirks.py:592
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04 LTS.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Овај рачунар тренутно користи НВИДИА „nvidia“ графички дајвер. Нема доступне "
-"верзије овог драјвера која ради са Вашом видео картицом у Убунту 10.04 LTS.\n"
-"\n"
-"Да ли желите да наставите?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
 msgid ""
@@ -1061,6 +1060,18 @@ msgstr ""
 "\n"
 "Да ли сте сигурни да желите на наставите?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:412
+msgid "PAE not enabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:413
+msgid ""
+"Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
+"non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
+"you must enable PAE (if this is possible) see:\n"
+"http://help.ubuntu.com/community/EnablingPAE"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
 msgstr "Надоградња тестирања коришћењем „aufs“"
@@ -1094,27 +1105,31 @@ msgstr "Онемогући подршку ГНУ екрана"
 msgid "Set datadir"
 msgstr "Подеси директоријум података"
 
+#: ../DistUpgrade/DistUpgradeMain.py:81
+msgid "Upgrade to the development release"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
-#: ../DistUpgrade/DistUpgradeViewKDE.py:214
+#: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Fetching is complete"
 msgstr "Добављање је завршено"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:159
-#: ../DistUpgrade/DistUpgradeViewKDE.py:230
+#: ../DistUpgrade/DistUpgradeViewKDE.py:247
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "Преузимам %li. датотеку од укупно %li брзином %sB/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:319
-#: ../DistUpgrade/DistUpgradeViewKDE.py:231
-#: ../DistUpgrade/DistUpgradeViewKDE.py:380
+#: ../DistUpgrade/DistUpgradeViewKDE.py:248
+#: ../DistUpgrade/DistUpgradeViewKDE.py:398
 #, python-format
 msgid "About %s remaining"
 msgstr "Око %s је преостало"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:164
-#: ../DistUpgrade/DistUpgradeViewKDE.py:233
+#: ../DistUpgrade/DistUpgradeViewKDE.py:250
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Добављам датотеку %li oд %li"
@@ -1123,24 +1138,24 @@ msgstr "Добављам датотеку %li oд %li"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:196
-#: ../DistUpgrade/DistUpgradeViewKDE.py:271
+#: ../DistUpgrade/DistUpgradeViewKDE.py:288
 msgid "Applying changes"
 msgstr "Примењујем измене"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:284
+#: ../DistUpgrade/DistUpgradeViewKDE.py:301
 msgid "dependency problems - leaving unconfigured"
 msgstr "Проблем са међузависностима — остављам неподешено"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:227
-#: ../DistUpgrade/DistUpgradeViewKDE.py:286
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Не могу да инсталирам „%s“"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:228
-#: ../DistUpgrade/DistUpgradeViewKDE.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:304
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1151,7 +1166,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:245
-#: ../DistUpgrade/DistUpgradeViewKDE.py:308
+#: ../DistUpgrade/DistUpgradeViewKDE.py:326
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1161,7 +1176,7 @@ msgstr ""
 "„%s“?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:246
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewKDE.py:327
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1170,7 +1185,7 @@ msgstr ""
 "одлучите да је замените новијом."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:266
-#: ../DistUpgrade/DistUpgradeViewKDE.py:332
+#: ../DistUpgrade/DistUpgradeViewKDE.py:350
 msgid "The 'diff' command was not found"
 msgstr "Нисам пронашао наредбу разлика — „diff“"
 
@@ -1181,16 +1196,16 @@ msgstr "Дошло је до кобне грешке"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Пријавите ово као грешку (ако већ нисте) и укључите датотеке „/var/log/dist-"
 "upgrade/main.log“ и „/var/log/dist-upgrade/apt.log“ у ваш извештај. "
 "Надоградња је прекинута.\n"
-"Ваша оригинална датотека „sources.list“ је сачувана у "
-"„/etc/apt/sources.list.distUpgrade“."
+"Ваша оригинална датотека „sources.list“ је сачувана у „/etc/apt/sources.list."
+"distUpgrade“."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1240,11 +1255,11 @@ msgstr "Инсталирај (%s)"
 msgid "Upgrade (%s)"
 msgstr "Надогради (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:344
+#: ../DistUpgrade/DistUpgradeViewKDE.py:362
 msgid "Show Difference >>>"
 msgstr "Прикажи разлике >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:347
+#: ../DistUpgrade/DistUpgradeViewKDE.py:365
 msgid "<<< Hide Difference"
 msgstr "<<< Сакриј разлике"
 
@@ -1252,75 +1267,77 @@ msgstr "<<< Сакриј разлике"
 msgid "Error"
 msgstr "Грешка"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:572
-msgid "&Cancel"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:824
+#: ../DistUpgrade/DistUpgradeViewKDE.py:583
+#: ../DistUpgrade/DistUpgradeViewKDE.py:817
 msgid "&Close"
 msgstr "&Затвори"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:629
+#: ../DistUpgrade/DistUpgradeViewKDE.py:617
 msgid "Show Terminal >>>"
 msgstr "Прикажи терминал >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:632
+#: ../DistUpgrade/DistUpgradeViewKDE.py:620
 msgid "<<< Hide Terminal"
 msgstr "<<< Сакриј терминал"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:712
+#: ../DistUpgrade/DistUpgradeViewKDE.py:699
 msgid "Information"
 msgstr "Информације"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:762
-#: ../DistUpgrade/DistUpgradeViewKDE.py:807
-#: ../DistUpgrade/DistUpgradeViewKDE.py:810
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#, fuzzy
+msgid "&Start Upgrade"
+msgstr "За_почни надоградњу"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewKDE.py:798
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Детаљи"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewKDE.py:779
 #, python-format
 msgid "No longer supported %s"
 msgstr "Није више подржан %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:790
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #, python-format
 msgid "Remove %s"
 msgstr "Уклони %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:783
 #: ../DistUpgrade/DistUpgradeViewText.py:233
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Уклони (беше аутоинсталиран) %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:794
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 #, python-format
 msgid "Install %s"
 msgstr "Инсталирај %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:787
 #, python-format
 msgid "Upgrade %s"
 msgstr "Надогради %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 #: ../DistUpgrade/DistUpgradeViewText.py:281
 msgid "Restart required"
 msgstr "Потребно је поновно покретање"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr "<b><big>Поново покрените систем да довршите надоградњу</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:823
+#: ../DistUpgrade/DistUpgradeViewKDE.py:816
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "Поново покрени _сада"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:841
+#: ../DistUpgrade/DistUpgradeViewKDE.py:834
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1332,7 +1349,7 @@ msgstr ""
 "Систем би могао да буде у неупотребљивом стању ако поништите надоградњу. "
 "Препоручује вам се да наставите надоградњу."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:845
+#: ../DistUpgrade/DistUpgradeViewKDE.py:838
 msgid "Cancel Upgrade?"
 msgstr "Да поништим надоградњу?"
 
@@ -1372,10 +1389,10 @@ msgstr[2] "%li секунди"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1386,10 +1403,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1536,18 +1553,23 @@ msgstr ""
 "Надоградња је завршена и неопходно је поново покренути рачунар. Да ли желите "
 "да то учините сада?"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, python-format
+msgid "Progress: [%3i%%]"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Молим пријавите ово као грешку и укључите датотеке „/var/log/dist-"
-"upgrade/main.log“ и „/var/log/dist-upgrade/apt.log“ у ваш извештај. "
-"Надоградња је прекинута.\n"
-"Ваша оригинална датотека „sources.list“ је сачувана у "
-"„/etc/apt/sources.list.distUpgrade“."
+"Молим пријавите ово као грешку и укључите датотеке „/var/log/dist-upgrade/"
+"main.log“ и „/var/log/dist-upgrade/apt.log“ у ваш извештај. Надоградња је "
+"прекинута.\n"
+"Ваша оригинална датотека „sources.list“ је сачувана у „/etc/apt/sources.list."
+"distUpgrade“."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "Aborting"
@@ -1698,7 +1720,7 @@ msgid "Distribution Upgrade"
 msgstr "Надоградња дистрибуције"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
 msgstr ""
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
@@ -1722,8 +1744,7 @@ msgid "_Upgrade"
 msgstr "_Надогради"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr "<b>Доступно је ново издање Убунтуа. Да ли желите да надоградите?</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
@@ -1766,15 +1787,15 @@ msgstr ""
 msgid "To perform a partial upgrade, you need to authenticate."
 msgstr "Да извршите делимичну надоградњу, морате да потврдите идентитет."
 
-#: ../do-partial-upgrade:74 ../do-release-upgrade:69
+#: ../do-partial-upgrade:74 ../do-release-upgrade:81
 msgid "Show version and exit"
 msgstr "Приказује издање и излази"
 
-#: ../do-partial-upgrade:77 ../do-release-upgrade:76
+#: ../do-partial-upgrade:77 ../do-release-upgrade:88
 msgid "Directory that contains the data files"
 msgstr "Приказује директоријум који садржи датотеке података"
 
-#: ../do-partial-upgrade:80 ../do-release-upgrade:89
+#: ../do-partial-upgrade:80 ../do-release-upgrade:101
 msgid "Run the specified frontend"
 msgstr "Покреће назначеног челника"
 
@@ -1782,22 +1803,22 @@ msgstr "Покреће назначеног челника"
 msgid "Running partial upgrade"
 msgstr "Покреће делимичну надоградњу"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:31 ../do-release-upgrade:43
 msgid "Downloading the release upgrade tool"
 msgstr "Преузима алат надоградње издања"
 
-#: ../do-release-upgrade:72 ../check-new-release-gtk:177
+#: ../do-release-upgrade:84 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "Проверава да ли је могуће надоградити на најновије развојно издање"
 
-#: ../do-release-upgrade:79 ../check-new-release-gtk:181
+#: ../do-release-upgrade:91 ../check-new-release-gtk:181
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Пробајте са надоградњом на најновије издање коришћењем програма из „$distro-"
 "proposed“"
 
-#: ../do-release-upgrade:83
+#: ../do-release-upgrade:95
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1807,11 +1828,11 @@ msgstr ""
 "Тренутно су подржани „desktop“ за редовне надоградње радних станица и "
 "„server“ за системе сервера."
 
-#: ../do-release-upgrade:91
+#: ../do-release-upgrade:103
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr "Тестира ажурирање помоћу „aufs“"
 
-#: ../do-release-upgrade:94
+#: ../do-release-upgrade:106
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
@@ -1819,15 +1840,23 @@ msgstr ""
 "Проверава само да ли је доступно ново издање дистрибуције и извести о "
 "резултату путем излазног кода"
 
-#: ../do-release-upgrade:113
+#: ../do-release-upgrade:120
+msgid "The options --devel-release and --proposed are"
+msgstr ""
+
+#: ../do-release-upgrade:121
+msgid "mutually exclusive. Please use only one of them."
+msgstr ""
+
+#: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
 msgstr "Проверавам за новим издањем Убунтуа"
 
-#: ../do-release-upgrade:125
+#: ../do-release-upgrade:137
 msgid "Your Ubuntu release is not supported anymore."
 msgstr "Ваше издање Убунтуа више није подржано."
 
-#: ../do-release-upgrade:126
+#: ../do-release-upgrade:138
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
@@ -1835,15 +1864,15 @@ msgstr ""
 "За информације о надоградњи, посетите:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
+#: ../do-release-upgrade:144
 msgid "No new release found"
 msgstr "Нема нових издања"
 
-#: ../do-release-upgrade:137
+#: ../do-release-upgrade:149
 msgid "Release upgrade not possible right now"
 msgstr "Надоградња издања није тренутно могућа"
 
-#: ../do-release-upgrade:138
+#: ../do-release-upgrade:150
 #, c-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
@@ -1852,14 +1881,18 @@ msgstr ""
 "Надоградња издања тренутно не може бити извршена, покушајте касније. Сервер "
 "је известио: „%s“"
 
-#: ../do-release-upgrade:144
+#: ../do-release-upgrade:156
 #, c-format
 msgid "New release '%s' available."
 msgstr "Доступно је ново издање „%s“."
 
-#: ../do-release-upgrade:145
+#: ../do-release-upgrade:157
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Покрените наредбу „do-release-upgrade“ да надоградите на то издање."
+
+#: ../check-new-release-gtk:85
+msgid "Software Updater"
+msgstr ""
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1873,3 +1906,40 @@ msgstr "Одбили сте надоградњу на Убунту %s"
 #: ../check-new-release-gtk:186
 msgid "Add debug output"
 msgstr "Додај излаз прочишћавања"
+
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Пакет „debsig-verify“ је инсталиран"
+
+#~ msgid ""
+#~ "The upgrade can not continue with that package installed.\n"
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
+#~ msgstr ""
+#~ "Надоградња се не може наставити док је тај пакет инсталиран.\n"
+#~ "Прво га уклоните синаптиком или у терминалу извршите „apt-get remove "
+#~ "debsig-verify“ и затим поново покрените надоградњу."
+
+#~ msgid "evms in use"
+#~ msgstr "„evms“ у употреби"
+
+#~ msgid ""
+#~ "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+#~ "software is no longer supported, please switch it off and run the upgrade "
+#~ "again when this is done."
+#~ msgstr ""
+#~ "Ваш систем користи „evms“ управника волумена у „/proc/mounts“. Софтвер "
+#~ "„evms“ више није подржан, молим искључите га и поново покрените "
+#~ "надоградњу када то урадите."
+
+#~ msgid ""
+#~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+#~ "version of this driver is available that works with your video card in "
+#~ "Ubuntu 10.04 LTS.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Овај рачунар тренутно користи НВИДИА „nvidia“ графички дајвер. Нема "
+#~ "доступне верзије овог драјвера која ради са Вашом видео картицом у Убунту "
+#~ "10.04 LTS.\n"
+#~ "\n"
+#~ "Да ли желите да наставите?"

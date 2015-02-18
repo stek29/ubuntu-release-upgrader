@@ -33,6 +33,18 @@ def get_fetcher(frontend, new_dist, datadir):
                                      progress=progress,
                                      parent=None,
                                      datadir=datadir)
+    elif frontend == "DistUpgradeViewKDE":
+        print("kde")
+        from DistUpgrade.DistUpgradeFetcherKDE import DistUpgradeFetcherKDE
+        from DistUpgrade.DistUpgradeFetcherKDE import KDEAcquireProgressAdapter
+        progress = KDEAcquireProgressAdapter(
+            parent=None,
+            datadir=datadir,
+            label=_("Downloading the release upgrade tool"))
+        return DistUpgradeFetcherKDE(new_dist=new_dist,
+                                     progress=progress,
+                                     parent=None,
+                                     datadir=datadir)
     else:
         from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
         import apt

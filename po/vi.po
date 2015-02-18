@@ -6,17 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager Gnome HEAD\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2013-05-22 21:30+0100\n"
+"POT-Creation-Date: 2015-02-18 16:10+0100\n"
 "PO-Revision-Date: 2013-05-23 02:39+0000\n"
 "Last-Translator: Hai Lang <hailangvn@gmail.com>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Launchpad-Export-Date: 2015-02-12 06:58+0000\n"
 "X-Generator: Launchpad (build 17336)\n"
-"Language: vi\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -104,11 +104,10 @@ msgstr ""
 "này. Hãy sửa chúng bằng phần mềm synaptic hoặc apt-get trước khi tiếp tục."
 
 #. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:693
-#, python-format
+#: ../DistUpgrade/DistUpgradeCache.py:641
+#, fuzzy
 msgid ""
-"An unresolvable problem occurred while calculating the upgrade:\n"
-"%s\n"
+"An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " This can be caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -190,11 +189,11 @@ msgstr ""
 msgid "Can't guess meta-package"
 msgstr "Không thể đoán được gói gốc"
 
-#: ../DistUpgrade/DistUpgradeCache.py:872
+#: ../DistUpgrade/DistUpgradeCache.py:881
+#, fuzzy, python-format
 msgid ""
-"Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop or edubuntu-desktop package and it was not possible to detect which "
-"version of Ubuntu you are running.\n"
+"Your system does not contain a %s or %s package and it was not possible to "
+"detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
@@ -294,8 +293,7 @@ msgstr "Không thể nâng cấp"
 #: ../DistUpgrade/DistUpgradeController.py:394
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
-msgstr ""
-"Quá trình nâng cấp từ '%s' lên '%s' không được hỗ trợ với công cụ này."
+msgstr "Quá trình nâng cấp từ '%s' lên '%s' không được hỗ trợ với công cụ này."
 
 #: ../DistUpgrade/DistUpgradeController.py:403
 msgid "Sandbox setup failed"
@@ -328,22 +326,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Bản cài đặt python của bạn bị lỗi. Vui lòng sửa lại liên kết "
-"'/usr/bin/python'."
-
-#: ../DistUpgrade/DistUpgradeController.py:464
-msgid "Package 'debsig-verify' is installed"
-msgstr "Gói 'debsig-verify' đã được cài đặt"
-
-#: ../DistUpgrade/DistUpgradeController.py:465
-msgid ""
-"The upgrade can not continue with that package installed.\n"
-"Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-"run the upgrade again."
-msgstr ""
-"Việc nâng cấp không thể thực hiện nếu gói debsig-verify đã được cài.\n"
-"Vui lòng gỡ bỏ nó bằng phần mềm synaptic hoặc bằng lệnh 'apt-get remove "
-"debsig-verify' rồi thực hiện lại việc nâng cấp."
+"Bản cài đặt python của bạn bị lỗi. Vui lòng sửa lại liên kết '/usr/bin/"
+"python'."
 
 #: ../DistUpgrade/DistUpgradeController.py:468
 #, python-format
@@ -384,6 +368,11 @@ msgstr ""
 "nên tiến hành cài đặt các bản cập nhật mới nhất.\n"
 "Nếu bạn chọn \"Không\", sẽ không có gì được tải từ trên mạng."
 
+#: ../DistUpgrade/DistUpgradeController.py:641
+#, python-format
+msgid "Not for humans during development stage of release %s"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
 msgid "disabled on upgrade to %s"
@@ -393,11 +382,11 @@ msgstr "bị hủy khi nâng cấp %s"
 msgid "No valid mirror found"
 msgstr "Không tìm thấy nguồn cập nhật hợp lệ"
 
-#: ../DistUpgrade/DistUpgradeController.py:753
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:762
+#, fuzzy, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
-"was found. This can happen if you run a internal mirror or if the mirror "
+"was found. This can happen if you run an internal mirror or if the mirror "
 "information is out of date.\n"
 "\n"
 "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
@@ -440,6 +429,15 @@ msgstr "Thông tin về các nguồn cập nhật không hợp lệ"
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
+msgstr ""
+"Việc nâng cấp thông tin kho đã tạo ra một tập tin không hợp lệ nên một tiến "
+"trình báo cáo lỗi đang được bắt đầu."
+
+#: ../DistUpgrade/DistUpgradeController.py:825
+#, fuzzy
+msgid ""
+"Upgrading the repository information resulted in a invalid file. To report a "
+"bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
 "Việc nâng cấp thông tin kho đã tạo ra một tập tin không hợp lệ nên một tiến "
 "trình báo cáo lỗi đang được bắt đầu."
@@ -579,16 +577,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Xin hãy báo cáo lỗi này bằng một trình duyệt nào đó với địa chỉ "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug và "
-"đính kèm tệp ở đường dẫn /var/log/dist-upgrade/ cho trình báo cáo lỗi.\n"
+"Xin hãy báo cáo lỗi này bằng một trình duyệt nào đó với địa chỉ http://bugs."
+"launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug và đính kèm "
+"tệp ở đường dẫn /var/log/dist-upgrade/ cho trình báo cáo lỗi.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -650,6 +648,15 @@ msgstr ""
 "Gặp lỗi trong việc chuẩn bị hệ thống cho việc nâng cấp nên một tiến trình "
 "báo cáo lỗi đang được bắt đầu."
 
+#: ../DistUpgrade/DistUpgradeController.py:1659
+#, fuzzy
+msgid ""
+"Preparing the system for the upgrade failed. To report a bug install apport "
+"and then execute 'apport-bug ubuntu-release-upgrader'."
+msgstr ""
+"Gặp lỗi trong việc chuẩn bị hệ thống cho việc nâng cấp nên một tiến trình "
+"báo cáo lỗi đang được bắt đầu."
+
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
 msgid "Getting upgrade prerequisites failed"
@@ -661,6 +668,20 @@ msgid ""
 "will abort now and restore the original system state.\n"
 "\n"
 "Additionally, a bug reporting process is being started."
+msgstr ""
+"Hệ thống không thể lấy các điều kiện tiên quyết cho việc nâng cấp. Việc nâng "
+"cấp sẽ bị hủy ngang và phục hội trạng thái hệ thống ban đầu.\n"
+"\n"
+"Ngoài ra, một tiến trình báo cáo lỗi đang được bắt đầu."
+
+#: ../DistUpgrade/DistUpgradeController.py:1687
+#, fuzzy
+msgid ""
+"The system was unable to get the prerequisites for the upgrade. The upgrade "
+"will abort now and restore the original system state.\n"
+"\n"
+"To report a bug install apport and then execute 'apport-bug ubuntu-release-"
+"upgrader'."
 msgstr ""
 "Hệ thống không thể lấy các điều kiện tiên quyết cho việc nâng cấp. Việc nâng "
 "cấp sẽ bị hủy ngang và phục hội trạng thái hệ thống ban đầu.\n"
@@ -733,22 +754,22 @@ msgid "The partial upgrade was completed."
 msgstr "Quá trình nâng cấp từng phần kết thúc."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:118
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:112
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:156
 msgid "Could not find the release notes"
 msgstr "Không tìm thấy bản chú giải phát hành"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:119
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:113
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:157
 msgid "The server may be overloaded. "
 msgstr "Máy chủ có thể đang quá tải. "
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:131
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:117
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:161
 msgid "Could not download the release notes"
 msgstr "Không thể tải về bản chú giải phát hành"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:132
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:118
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:162
 msgid "Please check your internet connection."
 msgstr "Hãy kiểm tra kết nối internet của bạn."
 
@@ -799,8 +820,7 @@ msgstr "Lỗi xác thực"
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
-msgstr ""
-"Lỗi xác thực bản nâng cấp. Có thể có vấn đề về mạng hoặc với máy chủ. "
+msgstr "Lỗi xác thực bản nâng cấp. Có thể có vấn đề về mạng hoặc với máy chủ. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:289
 msgid "Failed to extract"
@@ -810,8 +830,7 @@ msgstr "Lỗi giải nén"
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
-msgstr ""
-"Lỗi giải nén bản nâng cấp. Có thể có vấn đề về mạng hoặc với máy chủ. "
+msgstr "Lỗi giải nén bản nâng cấp. Có thể có vấn đề về mạng hoặc với máy chủ. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:295
 msgid "Verification failed"
@@ -821,8 +840,7 @@ msgstr "Việc xác nhận thất bại"
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
-msgstr ""
-"Lỗi xác minh gói nâng cấp. Có thể có vấn đề về mạng hoặc với máy chủ. "
+msgstr "Lỗi xác minh gói nâng cấp. Có thể có vấn đề về mạng hoặc với máy chủ. "
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:310
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:316
@@ -842,83 +860,79 @@ msgstr ""
 msgid "The error message is '%s'."
 msgstr "Thông báo lỗi: '%s'"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:63
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:94
-msgid "Upgrade"
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
+#, fuzzy
+msgid "&Upgrade"
 msgstr "Nâng cấp"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:98
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
+#: ../DistUpgrade/DistUpgradeViewKDE.py:579
+msgid "&Cancel"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:142
 #: ../data/gtkbuilder/ReleaseNotes.ui.h:1
 msgid "Release Notes"
 msgstr "Bản chú giải phát hành"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:153
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:198
+msgid "Upgrade"
+msgstr "Nâng cấp"
+
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:213
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:226
 msgid "Downloading additional package files..."
 msgstr "Đang tải các gói bổ sung..."
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:155
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:228
 #, python-format
 msgid "File %s of %s at %sB/s"
 msgstr "Tập tin %s / %s, tốc độ %sB/s"
 
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:159
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:232
 #, python-format
 msgid "File %s of %s"
 msgstr "Tập tin %s / %s"
 
 #. print("mediaChange %s %s" % (medium, drive))
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:166
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:239
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:123
-#: ../DistUpgrade/DistUpgradeViewKDE.py:200
+#: ../DistUpgrade/DistUpgradeViewKDE.py:217
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Vui lòng đưa đĩa '%s' vào ổ '%s'"
 
-#. change = QMessageBox.question(None, _("Media Change"), msg,
-#. QMessageBox.Ok, QMessageBox.Cancel)
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:169
-#: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
-#: ../DistUpgrade/DistUpgradeViewKDE.py:201
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:241
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:246
+#: ../DistUpgrade/DistUpgradeFetcherKDE.py:247
+#: ../DistUpgrade/DistUpgradeViewKDE.py:218
 msgid "Media Change"
 msgstr "Đổi đĩa"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:208
-msgid "evms in use"
-msgstr "đang dùng evms"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
-msgid ""
-"Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
-"software is no longer supported, please switch it off and run the upgrade "
-"again when this is done."
+#: ../DistUpgrade/DistUpgradeQuirks.py:164
+#, fuzzy
+msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
-"Hệ thống cũ dùng hệ thống quản lí tập tin 'evms' trong /proc/mounts. 'evms' "
-"không còn được hỗ trợ, hãy tắt nó và thực hiện lại quá trình nâng cấp."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:511
-msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
-msgstr ""
+"Phần cứng đồ họa của bạn có thể không được hỗ trợ đầy đủ trong Ubuntu 12.04 "
+"LTS."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:166
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "Việc vận hành môi trường làm việc chính 'unity' không được phần cứng về đồ "
 "họa của bạn hỗ trợ đầy đủ. Bạn có thể phải chịu kết cục với môi trường làm "
 "việc rất chậm sau khi nâng cấp. Lời khuyên của chúng tôi là vẫn cứ giữ phiên "
-"bản Hỗ trợ dài hạn (LTS). Thông tin chi tiết xem tại "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Bạn còn muốn "
-"tiếp tục nâng cấp không?"
+"bản Hỗ trợ dài hạn (LTS). Thông tin chi tiết xem tại https://wiki.ubuntu.com/"
+"X/Bugs/UpdateManagerWarningForUnity3D Bạn còn muốn tiếp tục nâng cấp không?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Phần cứng đồ họa của bạn có thể không được hỗ trợ đầy đủ trong Ubuntu 12.04 "
 "LTS."
@@ -942,21 +956,6 @@ msgid ""
 msgstr ""
 "Quá trình nâng cấp có thể làm giảm hiệu ứng đồ họa, hiệu năng các trò chơi "
 "và các chương trình khác yêu cầu đồ họa cao."
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:564
-#: ../DistUpgrade/DistUpgradeQuirks.py:592
-msgid ""
-"This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
-"version of this driver is available that works with your video card in "
-"Ubuntu 10.04 LTS.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Máy tính sử dụng trình điều kiển đồ hoạ NVIDIA 'nvidia' . Không có phiên bản "
-"của trình điều khiển tương đương nào việc với phần cứng của bạn trong Ubuntu "
-"10.04 LTS\n"
-"\n"
-"Bạn có muốn tiếp tục?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
 msgid ""
@@ -1024,6 +1023,18 @@ msgstr ""
 "\n"
 "Bạn có chắc chắn muốn tiếp tục không?"
 
+#: ../DistUpgrade/DistUpgradeQuirks.py:412
+msgid "PAE not enabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:413
+msgid ""
+"Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
+"non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
+"you must enable PAE (if this is possible) see:\n"
+"http://help.ubuntu.com/community/EnablingPAE"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
 msgstr "Sanbox nâng cấp sử dụng aufs"
@@ -1056,27 +1067,31 @@ msgstr "Tắt hỗ trợ màn hình GNU"
 msgid "Set datadir"
 msgstr "Thiết lập datadir"
 
+#: ../DistUpgrade/DistUpgradeMain.py:81
+msgid "Upgrade to the development release"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
-#: ../DistUpgrade/DistUpgradeViewKDE.py:214
+#: ../DistUpgrade/DistUpgradeViewKDE.py:231
 msgid "Fetching is complete"
 msgstr "Quá trình tải cập nhật đã hoàn thành"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:159
-#: ../DistUpgrade/DistUpgradeViewKDE.py:230
+#: ../DistUpgrade/DistUpgradeViewKDE.py:247
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "Đang tải file %li / %li tốc độ %sB/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:319
-#: ../DistUpgrade/DistUpgradeViewKDE.py:231
-#: ../DistUpgrade/DistUpgradeViewKDE.py:380
+#: ../DistUpgrade/DistUpgradeViewKDE.py:248
+#: ../DistUpgrade/DistUpgradeViewKDE.py:398
 #, python-format
 msgid "About %s remaining"
 msgstr "Còn khoảng %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:164
-#: ../DistUpgrade/DistUpgradeViewKDE.py:233
+#: ../DistUpgrade/DistUpgradeViewKDE.py:250
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "Đang tải tập tin %li của %li"
@@ -1085,24 +1100,24 @@ msgstr "Đang tải tập tin %li của %li"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:196
-#: ../DistUpgrade/DistUpgradeViewKDE.py:271
+#: ../DistUpgrade/DistUpgradeViewKDE.py:288
 msgid "Applying changes"
 msgstr "Đang áp dụng các thay đổi"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:222
-#: ../DistUpgrade/DistUpgradeViewKDE.py:284
+#: ../DistUpgrade/DistUpgradeViewKDE.py:301
 msgid "dependency problems - leaving unconfigured"
 msgstr "có lỗi với các gói phụ thuộc - bỏ qua không cấu hình"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:227
-#: ../DistUpgrade/DistUpgradeViewKDE.py:286
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Không thể cài đặt '%s'"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:228
-#: ../DistUpgrade/DistUpgradeViewKDE.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:304
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1113,7 +1128,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:245
-#: ../DistUpgrade/DistUpgradeViewKDE.py:308
+#: ../DistUpgrade/DistUpgradeViewKDE.py:326
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1123,7 +1138,7 @@ msgstr ""
 "'%s'?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:246
-#: ../DistUpgrade/DistUpgradeViewKDE.py:309
+#: ../DistUpgrade/DistUpgradeViewKDE.py:327
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1132,7 +1147,7 @@ msgstr ""
 "bạn chọn thay thế nó bởi phiên bản mới."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:266
-#: ../DistUpgrade/DistUpgradeViewKDE.py:332
+#: ../DistUpgrade/DistUpgradeViewKDE.py:350
 msgid "The 'diff' command was not found"
 msgstr "Không tìm thấy lệnh 'diff'"
 
@@ -1143,14 +1158,14 @@ msgstr "Gặp lỗi nghiêm trọng"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Xin hãy báo cáo lỗi này (nếu như bạn chưa làm) và bao gồm các tập tin "
-"/var/log/dist-upgrade/main.log và /var/log/dist-upgrade/apt.log trong bản "
-"báo cáo. Quá trình nâng cấp bị hủy bỏ."
+"Xin hãy báo cáo lỗi này (nếu như bạn chưa làm) và bao gồm các tập tin /var/"
+"log/dist-upgrade/main.log và /var/log/dist-upgrade/apt.log trong bản báo "
+"cáo. Quá trình nâng cấp bị hủy bỏ."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1199,11 +1214,11 @@ msgstr "Cài đặt (%s)"
 msgid "Upgrade (%s)"
 msgstr "Nâng cấp (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:344
+#: ../DistUpgrade/DistUpgradeViewKDE.py:362
 msgid "Show Difference >>>"
 msgstr "Hiện khác biệt >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:347
+#: ../DistUpgrade/DistUpgradeViewKDE.py:365
 msgid "<<< Hide Difference"
 msgstr "<<< Ẩn khác biệt"
 
@@ -1211,75 +1226,77 @@ msgstr "<<< Ẩn khác biệt"
 msgid "Error"
 msgstr "Lỗi"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:572
-msgid "&Cancel"
-msgstr ""
-
-#: ../DistUpgrade/DistUpgradeViewKDE.py:824
+#: ../DistUpgrade/DistUpgradeViewKDE.py:583
+#: ../DistUpgrade/DistUpgradeViewKDE.py:817
 msgid "&Close"
 msgstr "Đó&ng"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:629
+#: ../DistUpgrade/DistUpgradeViewKDE.py:617
 msgid "Show Terminal >>>"
 msgstr "Hiện cửa sổ dòng lệnh >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:632
+#: ../DistUpgrade/DistUpgradeViewKDE.py:620
 msgid "<<< Hide Terminal"
 msgstr "<<< Ẩn cửa sổ dòng lệnh"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:712
+#: ../DistUpgrade/DistUpgradeViewKDE.py:699
 msgid "Information"
 msgstr "Thông tin"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:762
-#: ../DistUpgrade/DistUpgradeViewKDE.py:807
-#: ../DistUpgrade/DistUpgradeViewKDE.py:810
+#: ../DistUpgrade/DistUpgradeViewKDE.py:751
+#, fuzzy
+msgid "&Start Upgrade"
+msgstr "_Bắt đầu Nâng cấp"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
+#: ../DistUpgrade/DistUpgradeViewKDE.py:798
+#: ../DistUpgrade/DistUpgradeViewKDE.py:803
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Chi tiết"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:788
+#: ../DistUpgrade/DistUpgradeViewKDE.py:779
 #, python-format
 msgid "No longer supported %s"
 msgstr "Không còn hỗ trợ %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:790
+#: ../DistUpgrade/DistUpgradeViewKDE.py:781
 #, python-format
 msgid "Remove %s"
 msgstr "Xóa %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:783
 #: ../DistUpgrade/DistUpgradeViewText.py:233
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Xóa %s (được cài tự động)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:794
+#: ../DistUpgrade/DistUpgradeViewKDE.py:785
 #, python-format
 msgid "Install %s"
 msgstr "Cài đặt %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:796
+#: ../DistUpgrade/DistUpgradeViewKDE.py:787
 #, python-format
 msgid "Upgrade %s"
 msgstr "Nâng cấp %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 #: ../DistUpgrade/DistUpgradeViewText.py:281
 msgid "Restart required"
 msgstr "Cần phải khởi động lại hệ thống"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:820
+#: ../DistUpgrade/DistUpgradeViewKDE.py:813
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr "<b><big>Khởi động lại hệ thống để hoàn tất nâng cấp</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:823
+#: ../DistUpgrade/DistUpgradeViewKDE.py:816
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "_Khởi động lại ngay"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:841
+#: ../DistUpgrade/DistUpgradeViewKDE.py:834
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1291,7 +1308,7 @@ msgstr ""
 "Hệ thống sẽ không làm việc ổn định nếu bạn hủy bỏ quá trình này. Khuyến cáo: "
 "bạn hãy tiếp tục quá trình nâng cấp."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:845
+#: ../DistUpgrade/DistUpgradeViewKDE.py:838
 msgid "Cancel Upgrade?"
 msgstr "Hủy quá trình nâng cấp?"
 
@@ -1323,10 +1340,10 @@ msgstr[0] "%li giây"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1337,10 +1354,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1477,16 +1494,21 @@ msgstr ""
 "Quá trình nâng cấp đã hoàn thành và hệ thống cần được khởi động lại. Bạn có "
 "muốn thực hiện ngay không?"
 
+#: ../DistUpgrade/DistUpgradeViewText.py:78
+#, python-format
+msgid "Progress: [%3i%%]"
+msgstr ""
+
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Xin hãy báo cáo lỗi này và bao gồm các tập tin /var/log/dist-"
-"upgrade/main.log và /var/log/dist-upgrade/apt.log trong bản báo cáo. Quá "
-"trình nâng cấp bị hủy bỏ.\n"
+"Xin hãy báo cáo lỗi này và bao gồm các tập tin /var/log/dist-upgrade/main."
+"log và /var/log/dist-upgrade/apt.log trong bản báo cáo. Quá trình nâng cấp "
+"bị hủy bỏ.\n"
 "Tập tin gốc sources.list đã được lưu ở /etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
@@ -1637,7 +1659,7 @@ msgid "Distribution Upgrade"
 msgstr "Nâng cấp bản phân phối"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
 msgstr ""
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
@@ -1661,8 +1683,7 @@ msgid "_Upgrade"
 msgstr "_Nâng cấp"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Một phiên bản mới của Ubuntu đã sẵn sàng. Bạn có muốn nâng cấp không?</b>"
 
@@ -1706,15 +1727,15 @@ msgstr "Thực hiện nâng cấp từng phần"
 msgid "To perform a partial upgrade, you need to authenticate."
 msgstr ""
 
-#: ../do-partial-upgrade:74 ../do-release-upgrade:69
+#: ../do-partial-upgrade:74 ../do-release-upgrade:81
 msgid "Show version and exit"
 msgstr "Hiển thị phiên bản và thoát"
 
-#: ../do-partial-upgrade:77 ../do-release-upgrade:76
+#: ../do-partial-upgrade:77 ../do-release-upgrade:88
 msgid "Directory that contains the data files"
 msgstr "Thư mục chứa các tập tin dữ liệu"
 
-#: ../do-partial-upgrade:80 ../do-release-upgrade:89
+#: ../do-partial-upgrade:80 ../do-release-upgrade:101
 msgid "Run the specified frontend"
 msgstr "Thực thi một trình quản lý chỉ định"
 
@@ -1722,22 +1743,22 @@ msgstr "Thực thi một trình quản lý chỉ định"
 msgid "Running partial upgrade"
 msgstr "Thực hiện nâng cấp một phần"
 
-#: ../do-release-upgrade:31
+#: ../do-release-upgrade:31 ../do-release-upgrade:43
 msgid "Downloading the release upgrade tool"
 msgstr "Đang tải công cụ nâng cấp bản phát hành"
 
-#: ../do-release-upgrade:72 ../check-new-release-gtk:177
+#: ../do-release-upgrade:84 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr "Kiểm tra nếu có bản mới nhất phát hành trong giai đoạn phát triển"
 
-#: ../do-release-upgrade:79 ../check-new-release-gtk:181
+#: ../do-release-upgrade:91 ../check-new-release-gtk:181
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Đang thử nâng cấp tới các phiên bản phát hành mới nhất sử dụng trình nâng "
 "cấp từ $distro-proposed"
 
-#: ../do-release-upgrade:83
+#: ../do-release-upgrade:95
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1747,11 +1768,11 @@ msgstr ""
 "Hiện nay 'desktop' cho nâng cấp thường xuyên của một hệ thống máy tính để "
 "bàn và 'máy chủ' cho các hệ thống máy chủ được hỗ trợ."
 
-#: ../do-release-upgrade:91
+#: ../do-release-upgrade:103
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr "Thử nghiệm nâng cấp với một aufs chỗ thử bao"
 
-#: ../do-release-upgrade:94
+#: ../do-release-upgrade:106
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
@@ -1759,15 +1780,23 @@ msgstr ""
 "Kiểm tra chỉ khi một bản phân phối mới có sẵn và thông báo kết quả thông qua "
 "lệnh thoát"
 
-#: ../do-release-upgrade:113
+#: ../do-release-upgrade:120
+msgid "The options --devel-release and --proposed are"
+msgstr ""
+
+#: ../do-release-upgrade:121
+msgid "mutually exclusive. Please use only one of them."
+msgstr ""
+
+#: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
 msgstr "Đang tìm bản phát hành Ubuntu mới"
 
-#: ../do-release-upgrade:125
+#: ../do-release-upgrade:137
 msgid "Your Ubuntu release is not supported anymore."
 msgstr "Phiên bản Ubuntu của bạn không còn được hỗ trợ."
 
-#: ../do-release-upgrade:126
+#: ../do-release-upgrade:138
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
@@ -1775,15 +1804,15 @@ msgstr ""
 "Để xem thông tin nâng cấp, vui lòng truy cập:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
+#: ../do-release-upgrade:144
 msgid "No new release found"
 msgstr "Chưa có bản phát hành mới nào"
 
-#: ../do-release-upgrade:137
+#: ../do-release-upgrade:149
 msgid "Release upgrade not possible right now"
 msgstr "Không thể nâng cấp bản phát hành ngay được"
 
-#: ../do-release-upgrade:138
+#: ../do-release-upgrade:150
 #, c-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
@@ -1792,14 +1821,18 @@ msgstr ""
 "Không thể tiến hành nâng cấp bản phát hành ngay được, xin thử lại sau. Máy "
 "chủ báo cáo: '%s'"
 
-#: ../do-release-upgrade:144
+#: ../do-release-upgrade:156
 #, c-format
 msgid "New release '%s' available."
 msgstr "Phiên bản mới '%s' sẵn sàng."
 
-#: ../do-release-upgrade:145
+#: ../do-release-upgrade:157
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Chạy 'do-release-upgrade' để nâng cấp."
+
+#: ../check-new-release-gtk:85
+msgid "Software Updater"
+msgstr ""
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1813,6 +1846,43 @@ msgstr "Bạn đã từ chối việc nâng cấp lên Ubuntu %s"
 #: ../check-new-release-gtk:186
 msgid "Add debug output"
 msgstr "Thêm kết xuất tìm lỗi"
+
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Gói 'debsig-verify' đã được cài đặt"
+
+#~ msgid ""
+#~ "The upgrade can not continue with that package installed.\n"
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
+#~ msgstr ""
+#~ "Việc nâng cấp không thể thực hiện nếu gói debsig-verify đã được cài.\n"
+#~ "Vui lòng gỡ bỏ nó bằng phần mềm synaptic hoặc bằng lệnh 'apt-get remove "
+#~ "debsig-verify' rồi thực hiện lại việc nâng cấp."
+
+#~ msgid "evms in use"
+#~ msgstr "đang dùng evms"
+
+#~ msgid ""
+#~ "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
+#~ "software is no longer supported, please switch it off and run the upgrade "
+#~ "again when this is done."
+#~ msgstr ""
+#~ "Hệ thống cũ dùng hệ thống quản lí tập tin 'evms' trong /proc/mounts. "
+#~ "'evms' không còn được hỗ trợ, hãy tắt nó và thực hiện lại quá trình nâng "
+#~ "cấp."
+
+#~ msgid ""
+#~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
+#~ "version of this driver is available that works with your video card in "
+#~ "Ubuntu 10.04 LTS.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Máy tính sử dụng trình điều kiển đồ hoạ NVIDIA 'nvidia' . Không có phiên "
+#~ "bản của trình điều khiển tương đương nào việc với phần cứng của bạn trong "
+#~ "Ubuntu 10.04 LTS\n"
+#~ "\n"
+#~ "Bạn có muốn tiếp tục?"
 
 #~ msgid "Authentication is required to perform a partial upgrade"
 #~ msgstr "Yêu cầu phải xác thực để thực hiện nâng cấp từng phần"

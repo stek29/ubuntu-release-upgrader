@@ -334,7 +334,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.confDialogue.textview_conffile.hide()
         #FIXME, below to be tested
         #self.confDialogue.resize(self.confDialogue.minimumSizeHint())
-        self.confDialogue.show_difference_button.clicked.connect(self.showConffile)
+        self.confDialogue.show_difference_button.clicked.connect(self.showConffile())
 
         # workaround silly dpkg 
         if not os.path.exists(current):

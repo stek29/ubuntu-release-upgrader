@@ -13,13 +13,13 @@ msgstr ""
 "PO-Revision-Date: 2013-05-23 02:44+0000\n"
 "Last-Translator: Alessandro Ranaldi <ranaldialessandro@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-02-12 06:56+0000\n"
-"X-Generator: Launchpad (build 17336)\n"
+"X-Launchpad-Export-Date: 2015-02-19 05:30+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
+"Language: it\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -117,7 +117,6 @@ msgstr ""
 
 #. FIXME: change the text to something more useful
 #: ../DistUpgrade/DistUpgradeCache.py:641
-#, fuzzy
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -127,12 +126,12 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
-"Si è verificato un problema durante il calcolo dell'avanzamento:\n"
-"%s\n"
+"Si è verificato un problema irrisolvibile durante il calcolo "
+"dell'avanzamento.\n"
 "\n"
-" Le cause possono essere:\n"
-" * Avanzamento a una versione di pre-rilascio di Ubuntu\n"
-" * Utilizzo di una versione di pre-rilascio di Ubuntu\n"
+" I motivi possono essere:\n"
+" * L'avanzamento a una versione di pre-rilascio di Ubuntu\n"
+" * L'esecuzione dell'attuale versione di pre-rilascio di Ubuntu\n"
 " * Pacchetti software non ufficiali non forniti da Ubuntu\n"
 "\n"
 
@@ -206,18 +205,17 @@ msgid "Can't guess meta-package"
 msgstr "Impossibile indovinare il meta-pacchetto"
 
 #: ../DistUpgrade/DistUpgradeCache.py:881
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your system does not contain a %s or %s package and it was not possible to "
 "detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"Il sistema non contiene alcun pacchetto «ubuntu-desktop», «kubuntu-desktop», "
-"«xubuntu-desktop» oppure «edubuntu-desktop» e non è stato possibile rilevare "
-"la versione di Ubuntu in esecuzione.\n"
-" Prima di procedere, usare «synaptic» o «apt-get» per installare uno dei "
-"pacchetti sopra menzionati."
+"Non è possibile determinare la versione di Ubuntu utilizzata perchè manca "
+"uno dei seguenti pacchetti: %s o %s.\n"
+" Installare uno dei pacchetti mancanti utilizzando synaptic o apt-get prima "
+"di procedere."
 
 #: ../DistUpgrade/DistUpgradeController.py:118
 msgid "Reading cache"
@@ -394,7 +392,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:641
 #, python-format
 msgid "Not for humans during development stage of release %s"
-msgstr ""
+msgstr "Non per esseri umani durante la fase di sviluppo del rilascio %s"
 
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
@@ -406,7 +404,7 @@ msgid "No valid mirror found"
 msgstr "Non è stato trovato alcun mirror valido"
 
 #: ../DistUpgrade/DistUpgradeController.py:762
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
 "was found. This can happen if you run an internal mirror or if the mirror "
@@ -416,13 +414,13 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
-"Durante l'analisi delle informazioni sui repository non è stata trovata "
-"alcuna voce di mirror per l'avanzamento. Questo può essere provocato "
-"dall'esecuzione del mirror in locale o da dati sui mirror non recenti.\n"
+"L'analisi dei repository non ha rilevato mirror per l'aggiornamento. Questo "
+"succede se si utilizza un mirror interno o se le informazioni sui mirror non "
+"sono aggiornate.\n"
 "\n"
-"Sovrascrivere il file «sources.list» comunque? Scegliendo «Sì» verranno "
-"sostituite le voci «%s» in «%s».\n"
-"Scegliendo «No» l'avanzamento verrà annullato."
+"Ricreare comunque il file «sources.list»? Scegliendo «Sì», tutte le voci "
+"«%s» verranno aggiornate a «%s».\n"
+"Scegliendo «No», l'avanzamento di versione sarà annullato."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:782
@@ -456,13 +454,13 @@ msgstr ""
 "valido. Sarà ora possibile segnalare questo problema."
 
 #: ../DistUpgrade/DistUpgradeController.py:825
-#, fuzzy
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"L'aggiornamento delle informazioni sui repository ha creato un file non "
-"valido. Sarà ora possibile segnalare questo problema."
+"L'avanzamento delle informazioni sui repository ha generato un file non "
+"valido. Per segnalare un bug, installare il pacchetto «apport» ed eseguire "
+"il comando «apport-bug ubuntu-release-upgrader»."
 
 #: ../DistUpgrade/DistUpgradeController.py:834
 msgid "Third party sources disabled"
@@ -606,16 +604,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Segnalare questo problema aprendo il browser al'indirizzo http://bugs."
-"launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug e allegando "
-"alla segnalazione i file presenti in /var/log/dist-upgrade/.\n"
+"Segnalare questo problema aprendo il browser al'indirizzo "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug e "
+"allegando alla segnalazione i file presenti in /var/log/dist-upgrade/.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -679,13 +677,13 @@ msgstr ""
 "possibile segnalare questo problema."
 
 #: ../DistUpgrade/DistUpgradeController.py:1659
-#, fuzzy
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"La preparazione del sistema per l'avanzamento non è riuscita. Sarà ora "
-"possibile segnalare questo problema."
+"La preparazione del sistema per l'avanzamento non è riuscita. Per segnalare "
+"un bug, installare apport ed eseguire il comando «apport-bug ubuntu-release-"
+"upgrader»."
 
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
@@ -705,7 +703,6 @@ msgstr ""
 "Sarà ora possibile segnalare questo problema."
 
 #: ../DistUpgrade/DistUpgradeController.py:1687
-#, fuzzy
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -716,7 +713,8 @@ msgstr ""
 "Non è stato possibile recuperare i prerequisiti per l'avanzamento. Verrà ora "
 "ripristinato lo stato originario del sistema.\n"
 "\n"
-"Sarà ora possibile segnalare questo problema."
+"Per segnalare il problema installare apport ed eseguire il comando «apport-"
+"bug ubuntu-release-upgrader»."
 
 #: ../DistUpgrade/DistUpgradeController.py:1717
 msgid "Updating repository information"
@@ -902,9 +900,8 @@ msgid "The error message is '%s'."
 msgstr "Il messaggio di errore è «%s»."
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
-#, fuzzy
 msgid "&Upgrade"
-msgstr "Avanza"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
 #: ../DistUpgrade/DistUpgradeViewKDE.py:579
@@ -951,29 +948,29 @@ msgid "Media Change"
 msgstr "Cambio del supporto"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:164
-#, fuzzy
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
-"La scheda video potrebbe non essere pienamente supportata in Ubuntu 12.04 "
-"LTS."
+"L'hardware grafico potrebbe non essere pienamente supportato da Ubuntu 14.04."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:166
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "L'esecuzione dell'ambiente desktop «unity» non è completamente supportata "
 "dal proprio hardware. Dopo l'aggiornamento ci si troverà in un ambiente "
 "molto rallentato. Si consiglia di mantenere la versione LTS per il momento. "
-"Per ulteriori informazioni consultare la pagina https://wiki.ubuntu.com/X/"
-"Bugs/UpdateManagerWarningForUnity3D. Continuare comunque con l'aggiornamento?"
+"Per ulteriori informazioni consultare la pagina "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D. Continuare "
+"comunque con l'aggiornamento?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "La scheda video potrebbe non essere pienamente supportata in Ubuntu 12.04 "
 "LTS."
@@ -987,8 +984,8 @@ msgid ""
 msgstr ""
 "Il supporto per le schede video Intel in Ubuntu 11.10 è limitato e "
 "potrebbero esserci dei problemi dopo l'avanzamento. Per ulteriori "
-"informazioni andare su https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForI8xx Continuare?"
+"informazioni andare su "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx Continuare?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:212
 msgid ""
@@ -1067,7 +1064,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:412
 msgid "PAE not enabled"
-msgstr ""
+msgstr "PAE non abilitato"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:413
 msgid ""
@@ -1076,6 +1073,10 @@ msgid ""
 "you must enable PAE (if this is possible) see:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
+"Il sistema usa una CPU che non ha PAE abilitato. Ubuntu supporta sistemi non "
+"PAE solo fino alla versione 12.04. Per avanzare ad una versione successiva "
+"di Ubuntu, è necessario abilitare PAE, se possibile. Consultare:\n"
+"http://help.ubuntu.com/community/EnablingPAE"
 
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
@@ -1114,7 +1115,7 @@ msgstr "Imposta datadir"
 
 #: ../DistUpgrade/DistUpgradeMain.py:81
 msgid "Upgrade to the development release"
-msgstr ""
+msgstr "Aggiorna alla versione in sviluppo"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
@@ -1203,16 +1204,16 @@ msgstr "Si è verificato un errore fatale"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Se non è già stato fatto, segnalare questo bug includendo nella segnalazione "
 "i file /var/log/dist-upgrade/main.log e /var/log/dist-upgrade/apt.log. "
 "L'avanzamento si è interrotto.\n"
-"Il file sources.list originale è stato salvato come /etc/apt/sources.list."
-"distUpgrade."
+"Il file sources.list originale è stato salvato come "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1293,9 +1294,8 @@ msgid "Information"
 msgstr "Informazioni"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:751
-#, fuzzy
 msgid "&Start Upgrade"
-msgstr "_Avvia avanzamento"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #: ../DistUpgrade/DistUpgradeViewKDE.py:798
@@ -1393,10 +1393,10 @@ msgstr[1] "%li secondi"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1407,10 +1407,10 @@ msgstr "%(str_days)s e %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1556,20 +1556,20 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewText.py:78
 #, python-format
 msgid "Progress: [%3i%%]"
-msgstr ""
+msgstr "Avanzamento: [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Se non è già stato fatto, segnalare questo bug includendo nella segnalazione "
 "i file /var/log/dist-upgrade/main.log e /var/log/dist-upgrade/apt.log. "
 "L'avanzamento si è interrotto.\n"
-"Il file sources.list originale è stato salvato come /etc/apt/sources.list."
-"distUpgrade."
+"Il file sources.list originale è stato salvato come "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "Aborting"
@@ -1744,7 +1744,8 @@ msgid "_Upgrade"
 msgstr "_Esegui avanzamento"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>È disponibile una nuova versione di Ubuntu. Effettuare l'avanzamento?</b>"
 
@@ -1845,11 +1846,11 @@ msgstr ""
 
 #: ../do-release-upgrade:120
 msgid "The options --devel-release and --proposed are"
-msgstr ""
+msgstr "Le opzioni --devel-release e --proposed"
 
 #: ../do-release-upgrade:121
 msgid "mutually exclusive. Please use only one of them."
-msgstr ""
+msgstr "si escludono a vicenda. Utilizzarne solo una."
 
 #: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
@@ -1895,7 +1896,7 @@ msgstr "Lanciare «do-release-upgrade» per eseguire l'avanzamento."
 
 #: ../check-new-release-gtk:85
 msgid "Software Updater"
-msgstr ""
+msgstr "Aggiornamenti software"
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1910,17 +1911,68 @@ msgstr "È stato rifiutato l'avanzamento alla versione %s di Ubuntu"
 msgid "Add debug output"
 msgstr "Abilitare le informazioni di debug"
 
+#, python-format
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade:\n"
+#~ "%s\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Si è verificato un problema durante il calcolo dell'avanzamento:\n"
+#~ "%s\n"
+#~ "\n"
+#~ " Le cause possono essere:\n"
+#~ " * Avanzamento a una versione di pre-rilascio di Ubuntu\n"
+#~ " * Utilizzo di una versione di pre-rilascio di Ubuntu\n"
+#~ " * Pacchetti software non ufficiali non forniti da Ubuntu\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
+#~ "version of Ubuntu you are running.\n"
+#~ " Please install one of the packages above first using synaptic or apt-get "
+#~ "before proceeding."
+#~ msgstr ""
+#~ "Il sistema non contiene alcun pacchetto «ubuntu-desktop», «kubuntu-desktop», "
+#~ "«xubuntu-desktop» oppure «edubuntu-desktop» e non è stato possibile rilevare "
+#~ "la versione di Ubuntu in esecuzione.\n"
+#~ " Prima di procedere, usare «synaptic» o «apt-get» per installare uno dei "
+#~ "pacchetti sopra menzionati."
+
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "Il pacchetto «debsig-verify» è installato"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
 #~ msgstr ""
 #~ "Non è possibile eseguire l'avanzamento con tale pacchetto installato.\n"
 #~ "Rimuoverlo usando Synaptic oppure col comando \"apt-get remove debsig-"
 #~ "verify\" quindi eseguire nuovamente l'avanzamento."
+
+#, python-format
+#~ msgid ""
+#~ "While scanning your repository information no mirror entry for the upgrade "
+#~ "was found. This can happen if you run a internal mirror or if the mirror "
+#~ "information is out of date.\n"
+#~ "\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "If you select 'No' the upgrade will cancel."
+#~ msgstr ""
+#~ "Durante l'analisi delle informazioni sui repository non è stata trovata "
+#~ "alcuna voce di mirror per l'avanzamento. Questo può essere provocato "
+#~ "dall'esecuzione del mirror in locale o da dati sui mirror non recenti.\n"
+#~ "\n"
+#~ "Sovrascrivere il file «sources.list» comunque? Scegliendo «Sì» verranno "
+#~ "sostituite le voci «%s» in «%s».\n"
+#~ "Scegliendo «No» l'avanzamento verrà annullato."
 
 #~ msgid "evms in use"
 #~ msgstr "È in uso evms"
@@ -1930,8 +1982,8 @@ msgstr "Abilitare le informazioni di debug"
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
 #~ msgstr ""
-#~ "Il sistema sta utilizzando il gestore di volumi «evms» in /proc/mounts. "
-#~ "Il software «evms» non è più supportato, disattivarlo e rieseguire "
+#~ "Il sistema sta utilizzando il gestore di volumi «evms» in /proc/mounts. Il "
+#~ "software «evms» non è più supportato, disattivarlo e rieseguire "
 #~ "l'avanzamento."
 
 #~ msgid ""

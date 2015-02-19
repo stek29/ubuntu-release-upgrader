@@ -13,13 +13,13 @@ msgstr ""
 "PO-Revision-Date: 2013-08-19 22:27+0000\n"
 "Last-Translator: Joachim Johansson <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
-"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-02-12 06:58+0000\n"
-"X-Generator: Launchpad (build 17336)\n"
+"X-Launchpad-Export-Date: 2015-02-19 05:31+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
+"Language: sv\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -116,7 +116,6 @@ msgstr ""
 
 #. FIXME: change the text to something more useful
 #: ../DistUpgrade/DistUpgradeCache.py:641
-#, fuzzy
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -126,13 +125,12 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
-"Ett problem utan lösning inträffade vid beräkning av uppgraderingen:\n"
-"%s\n"
+"Ett problem utan lösning inträffade vid beräkning av uppgraderingen.\n"
 "\n"
-" Detta kan orsakas av:\n"
-" * Uppgradering till en för-utgåva av Ubuntu\n"
-" * Körning av aktuell för-utgåva av Ubuntu\n"
-" * Inofficiella programpaket som inte kommer från Ubuntu\n"
+" Det här kan orsakas av:\n"
+" * Uppgradering till en förutgåva av Ubuntu\n"
+" * Körning av den aktuella förutgåvan av Ubuntu\n"
+" * Inofficiella programvarupaket som inte tillhandahållts av Ubuntu\n"
 "\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:651
@@ -202,17 +200,16 @@ msgid "Can't guess meta-package"
 msgstr "Kan inte gissa metapaket"
 
 #: ../DistUpgrade/DistUpgradeCache.py:881
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your system does not contain a %s or %s package and it was not possible to "
 "detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"Ditt system innehåller inte något av paketen ubuntu-desktop, kubuntu-"
-"desktop, xubuntu-desktop eller edubuntu-desktop och det var inte möjligt att "
-"identifiera vilken version av Ubuntu som du kör.\n"
-" Installera först ett av paketen ovan med Synaptic eller apt-get innan du "
+"Ditt system innehåller inte ett %s- eller %s-paket och det var inte möjligt "
+"att identifiera vilken version av Ubuntu du använder.\n"
+" Installera ett av paketen ovan med synaptic eller apt-get innan du "
 "fortsätter."
 
 #: ../DistUpgrade/DistUpgradeController.py:118
@@ -267,8 +264,8 @@ msgstr ""
 "en uppgradering över ssh därför att om något går fel så är det svårt att "
 "rätta till detta.\n"
 "\n"
-"Om du fortsätter så kommer ytterligare en ssh-daemon att startas på port \"%s"
-"\".\n"
+"Om du fortsätter så kommer ytterligare en ssh-daemon att startas på port "
+"\"%s\".\n"
 "Vill du fortsätta?"
 
 #: ../DistUpgrade/DistUpgradeController.py:311
@@ -307,7 +304,8 @@ msgstr "Kan inte uppgradera"
 #: ../DistUpgrade/DistUpgradeController.py:394
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
-msgstr "En uppgradering från ”%s” till ”%s” stöds inte med det här verktyget."
+msgstr ""
+"En uppgradering från ”%s” till ”%s” stöds inte med det här verktyget."
 
 #: ../DistUpgrade/DistUpgradeController.py:403
 msgid "Sandbox setup failed"
@@ -340,8 +338,8 @@ msgstr ""
 msgid ""
 "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
 msgstr ""
-"Din python-installation är skadad. Rätta till den symboliska länken ”/usr/"
-"bin/python”."
+"Din python-installation är skadad. Rätta till den symboliska länken "
+"”/usr/bin/python”."
 
 #: ../DistUpgrade/DistUpgradeController.py:468
 #, python-format
@@ -387,7 +385,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:641
 #, python-format
 msgid "Not for humans during development stage of release %s"
-msgstr ""
+msgstr "Inte för mänskligt bruk under utvecklingsstadiet av utgåva %s"
 
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
@@ -399,7 +397,7 @@ msgid "No valid mirror found"
 msgstr "Hittade ingen giltig serverspegel"
 
 #: ../DistUpgrade/DistUpgradeController.py:762
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
 "was found. This can happen if you run an internal mirror or if the mirror "
@@ -409,13 +407,13 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
-"Vid genomsökning av din förrådsinformation så hittades inga spegelposter för "
-"uppgraderingen. Detta kan ske om du kör en intern spegel eller om "
-"spegelinformationen är utdaterad.\n"
+"När din arkivinformation söktes igenom hittades ingen spegelpost för "
+"uppgraderingen. Det kan hända om du använder en intern spegel, eller om "
+"spegelinformationen är för gammal.\n"
 "\n"
-"Vill du skriva om din \"sources.list\"-fil ändå? Om du väljer \"Ja\" här så "
-"kommer alla \"%s\" att uppdateras till \"%s\"-poster.\n"
-"Om du väljer \"Nej\" så kommer uppgraderingen att avbrytas."
+"Vill du skriva över din ”sources.list”-fil ändå? Om du väljer 'Ja' här "
+"kommer alla poster att uppdateras från ”%s” till ”%s”.\n"
+"Om du väljer 'Nej' kommer uppgraderingen avbrytas."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:782
@@ -450,13 +448,13 @@ msgstr ""
 "startas en felrapporteringsprocess."
 
 #: ../DistUpgrade/DistUpgradeController.py:825
-#, fuzzy
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"Uppgradering av förrådsinformationen resulterade i en ogiltig fil, därför "
-"startas en felrapporteringsprocess."
+"Uppgraderandet av informationen i programarkivet har resulterat i en ogiltig "
+"fil. För att rapportera buggar, installera apport och utför sedan ”apport-"
+"bug ubuntu-release-upgrader”."
 
 #: ../DistUpgrade/DistUpgradeController.py:834
 msgid "Third party sources disabled"
@@ -601,16 +599,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Rapportera felet i en webbläsare på http://bugs.launchpad.net/ubuntu/+source/"
-"ubuntu-release-upgrader/+filebug och bifoga filerna i /var/log/dist-upgrade/ "
-"tillsammans med felrapporten.\n"
+"Rapportera felet i en webbläsare på "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"och bifoga filerna i /var/log/dist-upgrade/ tillsammans med felrapporten.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -674,13 +672,13 @@ msgstr ""
 "felrapporteringsprocess."
 
 #: ../DistUpgrade/DistUpgradeController.py:1659
-#, fuzzy
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"Förberedelse av systemet för uppgradering misslyckades, därför startas en "
-"felrapporteringsprocess."
+"Systemets förberedelser inför uppgradering misslyckades. För att rapportera "
+"buggar, installera apport och utför sedan ”apport-bug ubuntu-release-"
+"upgrader”."
 
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
@@ -701,7 +699,6 @@ msgstr ""
 "Dessutom startas en felrapporteringsprocess."
 
 #: ../DistUpgrade/DistUpgradeController.py:1687
-#, fuzzy
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -709,11 +706,12 @@ msgid ""
 "To report a bug install apport and then execute 'apport-bug ubuntu-release-"
 "upgrader'."
 msgstr ""
-"Systemet kunde inte hämta förutsättningarna för uppgraderingen. "
-"Uppgraderingen avbryts nu och återställer systemet till dess ursprungliga "
+"Systemet kunde inte inhämta förutsättningarna inför uppgraderingen. "
+"Uppgraderingen kommer nu att avbrytas samt återställa systemets ursprungliga "
 "tillstånd.\n"
 "\n"
-"Dessutom startas en felrapporteringsprocess."
+"För att rapportera en bugg, installera apport och kör sedan  ”apport-bug "
+"ubuntu-release-upgrader”."
 
 #: ../DistUpgrade/DistUpgradeController.py:1717
 msgid "Updating repository information"
@@ -904,9 +902,8 @@ msgid "The error message is '%s'."
 msgstr "Felmeddelandet är ”%s”."
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
-#, fuzzy
 msgid "&Upgrade"
-msgstr "Uppgradera"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
 #: ../DistUpgrade/DistUpgradeViewKDE.py:579
@@ -953,27 +950,28 @@ msgid "Media Change"
 msgstr "Mediabyte"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:164
-#, fuzzy
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
-msgstr "Din grafikhårdvara kanske inte kommer ha fullt stöd i Ubuntu 13.04."
+msgstr "Din grafikhårdvara kanske inte stöds fullt ut i Ubuntu 14.04."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:166
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "Din grafikhårdvara har inte fullt stöd för att köra skrivbordsmiljön "
 "”Unity”. Du kanske får ett mycket långsamt skrivbord efter uppgraderingen. "
 "Vi rekommenderar att du behåller LTS-versionen tills vidare. För ytterligare "
-"information, se https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Vill du fortsätta uppgraderingen?"
+"information, se "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Vill du "
+"fortsätta uppgraderingen?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr "Ditt grafikkort kanske inte stöds fullt ut i Ubuntu 12.04 LTS."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:192
@@ -984,9 +982,9 @@ msgid ""
 "continue with the upgrade?"
 msgstr ""
 "Stödet i Ubuntu 12.04 LTS för ditt Intel-grafikkort är begränsat och du kan "
-"påträffa problem efter uppgraderingen. Se https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForI8xx för mer information. Vill du fortsätta med "
-"uppgraderingen?"
+"påträffa problem efter uppgraderingen. Se "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx för mer "
+"information. Vill du fortsätta med uppgraderingen?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:212
 msgid ""
@@ -1063,7 +1061,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:412
 msgid "PAE not enabled"
-msgstr ""
+msgstr "PAE är inte aktiverat."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:413
 msgid ""
@@ -1072,6 +1070,10 @@ msgid ""
 "you must enable PAE (if this is possible) see:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
+"Ditt system använder en CPU utan PAE aktiverat. Ubuntu stöder enbart icke-"
+"PAE system upp till Ubuntu 12.04. För att uppgradera till en senare version "
+"av Ubuntu, så måste du aktivera PAE (Om detta är möjligt) Se: \n"
+"http://help.ubuntu.com/community/EnablingPAE"
 
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
@@ -1109,7 +1111,7 @@ msgstr "Ange datakatalog"
 
 #: ../DistUpgrade/DistUpgradeMain.py:81
 msgid "Upgrade to the development release"
-msgstr ""
+msgstr "Uppgradera till utvecklingsutgåvan"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
@@ -1198,8 +1200,8 @@ msgstr "Ett ödesdigert fel uppstod"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
@@ -1285,9 +1287,8 @@ msgid "Information"
 msgstr "Information"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:751
-#, fuzzy
 msgid "&Start Upgrade"
-msgstr "_Starta uppgradering"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #: ../DistUpgrade/DistUpgradeViewKDE.py:798
@@ -1386,10 +1387,10 @@ msgstr[1] "%li sekunder"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1400,10 +1401,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1548,18 +1549,18 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewText.py:78
 #, python-format
 msgid "Progress: [%3i%%]"
-msgstr ""
+msgstr "Förlopp: [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Rapportera detta som ett fel och inkludera filerna /var/log/dist-upgrade/"
-"main.log samt /var/log/dist-upgrade/apt.log i din rapport. Uppgraderingen "
-"har avbrutits.\n"
+"Rapportera detta som ett fel och inkludera filerna /var/log/dist-"
+"upgrade/main.log samt /var/log/dist-upgrade/apt.log i din rapport. "
+"Uppgraderingen har avbrutits.\n"
 "Din ursprungliga sources.list sparades i /etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
@@ -1710,9 +1711,8 @@ msgid "Distribution Upgrade"
 msgstr "Uppgradering av distribution"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
-#, fuzzy
 msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
-msgstr "<b><big>Uppgraderar Ubuntu till version 13.04</big></b>"
+msgstr "<b><big>Uppgradera Ubuntu till version 15.04</big></b>"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
 msgid "    "
@@ -1735,10 +1735,11 @@ msgid "_Upgrade"
 msgstr "_Uppgradera"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
-"<b>En ny version av Ubuntu finns tillgänglig. Vill du uppgradera till den?</"
-"b>"
+"<b>En ny version av Ubuntu finns tillgänglig. Vill du uppgradera till "
+"den?</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
 msgid "Don't Upgrade"
@@ -1837,11 +1838,11 @@ msgstr ""
 
 #: ../do-release-upgrade:120
 msgid "The options --devel-release and --proposed are"
-msgstr ""
+msgstr "Valmöjligheterna --devel-release och --proposed är"
 
 #: ../do-release-upgrade:121
 msgid "mutually exclusive. Please use only one of them."
-msgstr ""
+msgstr "ömsesidigt uteslutande. Vänligen använd enbart en av dem."
 
 #: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
@@ -1887,7 +1888,7 @@ msgstr "Kör ”do-release-upgrade” för att uppgradera till den."
 
 #: ../check-new-release-gtk:85
 msgid "Software Updater"
-msgstr ""
+msgstr "Programuppdaterare"
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1902,17 +1903,56 @@ msgstr "Du valde att inte uppgradera till Ubuntu %s"
 msgid "Add debug output"
 msgstr "Lägg till felsökningsutdata"
 
-#~ msgid "Package 'debsig-verify' is installed"
-#~ msgstr "Paketet ”debsig-verify” är installerat"
+#, python-format
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade:\n"
+#~ "%s\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Ett problem utan lösning inträffade vid beräkning av uppgraderingen:\n"
+#~ "%s\n"
+#~ "\n"
+#~ " Detta kan orsakas av:\n"
+#~ " * Uppgradering till en för-utgåva av Ubuntu\n"
+#~ " * Körning av aktuell för-utgåva av Ubuntu\n"
+#~ " * Inofficiella programpaket som inte kommer från Ubuntu\n"
+#~ "\n"
 
 #~ msgid ""
-#~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
+#~ "version of Ubuntu you are running.\n"
+#~ " Please install one of the packages above first using synaptic or apt-get "
+#~ "before proceeding."
 #~ msgstr ""
-#~ "Uppgraderingen kan inte fortsätta med det paketet installerat.\n"
-#~ "Ta bort det med synaptic eller ”apt-get remove debsig-verify” först och "
-#~ "kör uppgraderingen igen."
+#~ "Ditt system innehåller inte något av paketen ubuntu-desktop, kubuntu-"
+#~ "desktop, xubuntu-desktop eller edubuntu-desktop och det var inte möjligt att "
+#~ "identifiera vilken version av Ubuntu som du kör.\n"
+#~ " Installera först ett av paketen ovan med Synaptic eller apt-get innan du "
+#~ "fortsätter."
+
+#, python-format
+#~ msgid ""
+#~ "While scanning your repository information no mirror entry for the upgrade "
+#~ "was found. This can happen if you run a internal mirror or if the mirror "
+#~ "information is out of date.\n"
+#~ "\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "If you select 'No' the upgrade will cancel."
+#~ msgstr ""
+#~ "Vid genomsökning av din förrådsinformation så hittades inga spegelposter för "
+#~ "uppgraderingen. Detta kan ske om du kör en intern spegel eller om "
+#~ "spegelinformationen är utdaterad.\n"
+#~ "\n"
+#~ "Vill du skriva om din \"sources.list\"-fil ändå? Om du väljer \"Ja\" här så "
+#~ "kommer alla \"%s\" att uppdateras till \"%s\"-poster.\n"
+#~ "Om du väljer \"Nej\" så kommer uppgraderingen att avbrytas."
 
 #~ msgid "evms in use"
 #~ msgstr "evms används"
@@ -1922,9 +1962,8 @@ msgstr "Lägg till felsökningsutdata"
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
 #~ msgstr ""
-#~ "Ditt system använder volymhanteraren \"evms\" i /proc/mounts. "
-#~ "Programvaran \"evms\" stöds inte längre. Stäng av den och kör "
-#~ "uppgraderingen igen."
+#~ "Ditt system använder volymhanteraren \"evms\" i /proc/mounts. Programvaran "
+#~ "\"evms\" stöds inte längre. Stäng av den och kör uppgraderingen igen."
 
 #~ msgid ""
 #~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
@@ -1941,3 +1980,21 @@ msgstr "Lägg till felsökningsutdata"
 
 #~ msgid "Authentication is required to perform a partial upgrade"
 #~ msgstr "Behörighetskontroll krävs för att utföra en delvis uppgradering"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#~ msgstr "<b><big>Uppgraderar Ubuntu till version 13.04</big></b>"
+
+#~ msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#~ msgstr "Din grafikhårdvara kanske inte kommer ha fullt stöd i Ubuntu 13.04."
+
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Paketet ”debsig-verify” är installerat"
+
+#~ msgid ""
+#~ "The upgrade can not continue with that package installed.\n"
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
+#~ msgstr ""
+#~ "Uppgraderingen kan inte fortsätta med det paketet installerat.\n"
+#~ "Ta bort det med synaptic eller ”apt-get remove debsig-verify” först och kör "
+#~ "uppgraderingen igen."

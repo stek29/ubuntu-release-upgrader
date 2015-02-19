@@ -11,13 +11,13 @@ msgstr ""
 "PO-Revision-Date: 2014-02-03 16:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French (Canada) <fr_CA@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2015-02-12 06:59+0000\n"
-"X-Generator: Launchpad (build 17336)\n"
+"X-Launchpad-Export-Date: 2015-02-19 05:31+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
+"Language: \n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -124,6 +124,13 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
+"Un problème insoluble est survenu durant le calcul de la mise à niveau.\n"
+"\n"
+" Ceci peut-être causé par :\n"
+" * la mise à niveau vers une préversion d'Ubuntu\n"
+" * l'exécution de la préversion actuelle d'Ubuntu\n"
+" * des paquets logiciels non officiels, non fournis par Ubuntu.\n"
+"\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:651
 msgid "This is most likely a transient problem, please try again later."
@@ -193,16 +200,17 @@ msgid "Can't guess meta-package"
 msgstr "Impossible de deviner le méta-paquet"
 
 #: ../DistUpgrade/DistUpgradeCache.py:881
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your system does not contain a %s or %s package and it was not possible to "
 "detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"Votre système contient des paquets brisés qui n'ont pas pu être réparés avec "
-"ce logiciel. Veuillez d'abord les réparer avec Synaptic ou apt-get avant de "
-"continuer."
+"Votre système ne contient pas un paquet %s ou %s et et il n'a pas été "
+"possible de détecter quelle version d'Ubuntu vous exécutez.\n"
+" Veuillez d'abord installer un des paquets ci-dessus à l'aide de synaptic ou "
+"apt-get avant de continuer."
 
 #: ../DistUpgrade/DistUpgradeController.py:118
 msgid "Reading cache"
@@ -382,6 +390,7 @@ msgstr ""
 #, python-format
 msgid "Not for humans during development stage of release %s"
 msgstr ""
+"Pas pour les humains durant l'étape de développement de la version %s"
 
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
@@ -403,6 +412,14 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
+"Durant l'analyse des informations de dépôt, aucune entrée de miroir n'a été "
+"trouvée concernant la mise à niveau. Ceci peut arriver si vous faites appel "
+"à un miroir interne ou si les informations de dépôt ne sont pas à jour.\n"
+"\n"
+"Voulez-vous quand même réécrire votre fichier « sources.list »? Si vous "
+"choisissez « Oui » ici ceci mettra à jour toutes les entrées « %s » en « %s "
+"».\n"
+"Si vous choisissez « Non » la mise à niveau sera annulée."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:782
@@ -437,13 +454,13 @@ msgstr ""
 "processus de rapport de bogue va être lancé."
 
 #: ../DistUpgrade/DistUpgradeController.py:825
-#, fuzzy
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"La mise à niveau des informations de dépôt a donnée un fichier invalide. Un "
-"processus de rapport de bogue va être lancé."
+"La mise à niveau des informations de dépôt a donné un fichier invalide. Pour "
+"rapporter un bogue, installez apport et exécutez « apport-bug ubuntu-release-"
+"upgrader »."
 
 #: ../DistUpgrade/DistUpgradeController.py:834
 msgid "Third party sources disabled"
@@ -587,16 +604,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Veuillez rapporter ce bogue dans un navigateur à http://bugs.launchpad.net/"
-"ubuntu/+source/ubuntu-release-upgrader/+filebug et joindre les fichiers "
-"dans /var/log/dist-upgrade/ au rapport de bogue.\n"
+"Veuillez rapporter ce bogue dans un navigateur à "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug et "
+"joindre les fichiers dans /var/log/dist-upgrade/ au rapport de bogue.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -660,13 +677,12 @@ msgstr ""
 "rapport de bogue est en cours."
 
 #: ../DistUpgrade/DistUpgradeController.py:1659
-#, fuzzy
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"La préparation du système pour la mise à niveau a échoué et un processus de "
-"rapport de bogue est en cours."
+"La préparation du système pour la mise à niveau a échoué. Pour rapporter un "
+"bogue, installez apport et exécutez « apport-bug ubuntu-release-upgrader »."
 
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
@@ -686,7 +702,6 @@ msgstr ""
 "De plus, un processus de rapport de bogue est en cours."
 
 #: ../DistUpgrade/DistUpgradeController.py:1687
-#, fuzzy
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -694,10 +709,12 @@ msgid ""
 "To report a bug install apport and then execute 'apport-bug ubuntu-release-"
 "upgrader'."
 msgstr ""
-"Le système n'a pas été capable d'obtenir les prérequis pour la mise à "
-"niveau. La mise à niveau va maintenant s'interrompre et restaurer l'état "
-"d'origine du système.\n"
-"De plus, un processus de rapport de bogue est en cours."
+"Le système n'a pas pu obtenir les prérequis pour l'installation. La mise à "
+"niveau va maintenant s'interrompre et restaurer l'état d'origine du "
+"système.\n"
+"\n"
+"Pour rapporter un bogue, installez apport et exécutez « apport-bug ubuntu-"
+"release-upgrader »."
 
 #: ../DistUpgrade/DistUpgradeController.py:1717
 msgid "Updating repository information"
@@ -890,9 +907,8 @@ msgid "The error message is '%s'."
 msgstr "Le message d'erreur est « %s »."
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
-#, fuzzy
 msgid "&Upgrade"
-msgstr "Mettre à niveau"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
 #: ../DistUpgrade/DistUpgradeViewKDE.py:579
@@ -939,30 +955,30 @@ msgid "Media Change"
 msgstr "Changement de support"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:164
-#, fuzzy
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
-"Votre matériel graphique n'est peut-être pas complètement prise en charge "
-"par Ubuntu 12.04 LTS."
+"Votre matériel graphique n'est peut-être pas complètement pris en charge "
+"dans Ubuntu 14.04."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:166
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "L'exécution de l'environnement de bureau «  unity » n'est pas complètement "
 "prise en charge par votre matériel graphique. Vous pourriez finir avec un "
 "environnement très lent après la mise à niveau. Notre conseil est de garder "
-"la version LTS pour l'instant. Pour plus d'informations, voir https://wiki."
-"ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Voulez-vous quand même "
-"poursuivre la mise à niveau?"
+"la version LTS pour l'instant. Pour plus d'informations, voir "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Voulez-vous "
+"quand même poursuivre la mise à niveau?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Votre matériel graphique n'est peut-être pas complètement prise en charge "
 "par Ubuntu 12.04 LTS."
@@ -976,8 +992,9 @@ msgid ""
 msgstr ""
 "La prise en charge de votre matériel graphique Intel est limitée dans Ubuntu "
 "12.04 LTS et vous pourriez rencontrer des problèmes après la mise à niveau. "
-"Pour plus d'informations, voir https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForI8xx Voulez-vous continuer la mise à niveau?"
+"Pour plus d'informations, voir "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx Voulez-vous "
+"continuer la mise à niveau?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:212
 msgid ""
@@ -1012,9 +1029,9 @@ msgid ""
 "minimal architecture. It is not possible to upgrade your system to a new "
 "Ubuntu release with this hardware."
 msgstr ""
-"Votre système utilise une UCT i586 ou une UCT qui n'a pas l'extension « "
-"cmov ]». Tous les paquets ont été compilés avec des optimisations exigeant "
-"que l'architecture minimale soit i686. Il est impossible de mettre à niveau "
+"Votre système utilise une UCT i586 ou une UCT qui n'a pas l'extension « cmov "
+"]». Tous les paquets ont été compilés avec des optimisations exigeant que "
+"l'architecture minimale soit i686. Il est impossible de mettre à niveau "
 "votre système vers une nouvelle version d'Ubuntu avec ce matériel."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:289
@@ -1055,7 +1072,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:412
 msgid "PAE not enabled"
-msgstr ""
+msgstr "PAE n'est pas activée"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:413
 msgid ""
@@ -1064,6 +1081,11 @@ msgid ""
 "you must enable PAE (if this is possible) see:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
+"Votre système utilise une UCT pour laquelle PAE n'est pas activée. Ubuntu ne "
+"prend en charge les systèmes non-PAE  que jusqu'à Ubuntu 12.04. Pour mettre "
+"à niveau vers une version ultérieure d'Ubuntu, vous devez activer PAE (si "
+"c'est possible). Voir :\n"
+" http://help.ubuntu.com/community/EnablingPAE"
 
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
@@ -1103,7 +1125,7 @@ msgstr "Définir le dossier des données"
 
 #: ../DistUpgrade/DistUpgradeMain.py:81
 msgid "Upgrade to the development release"
-msgstr ""
+msgstr "Mettre à niveau vers la version de développement"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
@@ -1193,16 +1215,16 @@ msgstr "Une erreur fatale est survenue"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Veuillez rapporter ceci comme un bogue (si vous ne l'avez pas déjà fait) et "
-"inclure les fichiers /var/log/dist-upgrade/main.log et /var/log/dist-upgrade/"
-"apt.log à votre rapport. La mise a niveau a été interrompue.\n"
-"Votre fichier souce.list original a été enregistré dans /etc/apt/sources."
-"list.distUpgrade."
+"inclure les fichiers /var/log/dist-upgrade/main.log et /var/log/dist-"
+"upgrade/apt.log à votre rapport. La mise a niveau a été interrompue.\n"
+"Votre fichier souce.list original a été enregistré dans "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1283,9 +1305,8 @@ msgid "Information"
 msgstr "Informations"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:751
-#, fuzzy
 msgid "&Start Upgrade"
-msgstr "_Démarrer la mise à jour"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #: ../DistUpgrade/DistUpgradeViewKDE.py:798
@@ -1327,7 +1348,8 @@ msgstr "Redémarrage exigé"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:813
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr "<b><big>Redémarrer le système pour terminer la mise à niveau</big></b>"
+msgstr ""
+"<b><big>Redémarrer le système pour terminer la mise à niveau</big></b>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:816
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
@@ -1383,10 +1405,10 @@ msgstr[1] "%li secondes"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1397,10 +1419,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1546,20 +1568,20 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewText.py:78
 #, python-format
 msgid "Progress: [%3i%%]"
-msgstr ""
+msgstr "Progression : [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Veuillez rapporter ce problème comme un bogue et inclure les fichiers /var/"
-"log/dist-upgrade/main.log et /var/log/dist-upgrade/apt.log à votre rapport. "
-"La mise a niveau a été interrompue.\n"
-"Votre souce.list original a été enregistré dans /etc/apt/sources.list."
-"distUpgrade."
+"Veuillez rapporter ce problème comme un bogue et inclure les fichiers "
+"/var/log/dist-upgrade/main.log et /var/log/dist-upgrade/apt.log à votre "
+"rapport. La mise a niveau a été interrompue.\n"
+"Votre souce.list original a été enregistré dans "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:160
 msgid "Aborting"
@@ -1733,7 +1755,8 @@ msgid "_Upgrade"
 msgstr "Mettre à _niveau"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Une nouvelle version d'Ubuntu est disponible. Voudriez-vous mettre à "
 "niveau?</b>"
@@ -1836,11 +1859,11 @@ msgstr ""
 
 #: ../do-release-upgrade:120
 msgid "The options --devel-release and --proposed are"
-msgstr ""
+msgstr "Les options --devel-release et --proposed sont"
 
 #: ../do-release-upgrade:121
 msgid "mutually exclusive. Please use only one of them."
-msgstr ""
+msgstr "mutuellement exclusives. Veuillez n'utiliser qu'une d'entre elles."
 
 #: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
@@ -1886,7 +1909,7 @@ msgstr "Exécuter « do-release-upgrade » pour mettre à niveau."
 
 #: ../check-new-release-gtk:85
 msgid "Software Updater"
-msgstr ""
+msgstr "Gestionnaire de mises à jour"
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1901,14 +1924,14 @@ msgstr "Vous avez refusé la mise à niveau vers Ubuntu %s"
 msgid "Add debug output"
 msgstr "Ajouter la sortie de débogage"
 
-#~ msgid "Package 'debsig-verify' is installed"
-#~ msgstr "Le paquet « debsig-verify » est installé"
-
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
 #~ msgstr ""
 #~ "La mise à niveau ne peut pas continuer si ce paquet est installé.\n"
-#~ "Veuillez l'enlever avec synaptic ou « apt-get remove debsig-verify », "
-#~ "puis exécuter la mise à jour de nouveau."
+#~ "Veuillez l'enlever avec synaptic ou « apt-get remove debsig-verify », puis "
+#~ "exécuter la mise à jour de nouveau."
+
+#~ msgid "Package 'debsig-verify' is installed"
+#~ msgstr "Le paquet « debsig-verify » est installé"

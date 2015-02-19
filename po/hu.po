@@ -11,13 +11,13 @@ msgstr ""
 "PO-Revision-Date: 2013-05-23 02:43+0000\n"
 "Last-Translator: Gabor Kelemen <kelemeng@openscope.org>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-02-12 06:56+0000\n"
-"X-Generator: Launchpad (build 17336)\n"
+"X-Launchpad-Export-Date: 2015-02-19 05:30+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
+"Language: hu\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:211 ../DistUpgrade/distro.py:442
@@ -114,7 +114,6 @@ msgstr ""
 
 #. FIXME: change the text to something more useful
 #: ../DistUpgrade/DistUpgradeCache.py:641
-#, fuzzy
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
@@ -124,13 +123,12 @@ msgid ""
 " * Unofficial software packages not provided by Ubuntu\n"
 "\n"
 msgstr ""
-"Megoldhatatlan probléma adódott a frissítés előkészítése közben:\n"
-"%s\n"
+"Megoldhatatlan probléma jelentkezett a frissítés közben.\n"
 "\n"
-" Ezt az alábbiak okozhatták:\n"
-" * frissítés egy kiadás előtti Ubuntu verzióra\n"
-" * Ön jelenleg egy kiadás előtti Ubuntu verziót használ\n"
-" * az Ubuntu által nem támogatott csomagok\n"
+" Ezt a következők okozhatták:\n"
+" * Frissítés az Ubuntu egy kiadás előtti verziójára\n"
+" * Az Ubuntu egy kiadás előtti verziójának futtatása\n"
+" * Nemhivatalos csomagok, melyeket nem az Ubuntu szolgáltat\n"
 "\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:651
@@ -199,18 +197,17 @@ msgid "Can't guess meta-package"
 msgstr "A meta-csomag megállapítása sikertelen"
 
 #: ../DistUpgrade/DistUpgradeCache.py:881
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your system does not contain a %s or %s package and it was not possible to "
 "detect which version of Ubuntu you are running.\n"
 " Please install one of the packages above first using synaptic or apt-get "
 "before proceeding."
 msgstr ""
-"A rendszere nem tartalmazza az ubuntu-desktop, kubuntu-desktop, xubuntu-"
-"desktop vagy edubuntu-desktop csomagok egyikét sem, és nem lehetett "
-"megállapítani, hogy az Ubuntu mely változatát használja.\n"
-" A folytatás előtt telepítse a fenti csomagok egyikét a synaptic vagy az apt-"
-"get használatával."
+"A rendszer nem tartalmazza a(z) %s vagy %s csomagok egyikét sem, és nem "
+"tudta érzékelni, hogy melyik Ubuntu verziót futtatja.\n"
+"Telepítse először az egyik fenti csomagot a synaptic vagy az apt-get "
+"használatával a folytatás előtt."
 
 #: ../DistUpgrade/DistUpgradeController.py:118
 msgid "Reading cache"
@@ -383,7 +380,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:641
 #, python-format
 msgid "Not for humans during development stage of release %s"
-msgstr ""
+msgstr "%s erősen kísérleti, nem embernek való kiadása :)"
 
 #: ../DistUpgrade/DistUpgradeController.py:726
 #, python-format
@@ -395,7 +392,7 @@ msgid "No valid mirror found"
 msgstr "Nem található érvényes tükör"
 
 #: ../DistUpgrade/DistUpgradeController.py:762
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
 "was found. This can happen if you run an internal mirror or if the mirror "
@@ -405,13 +402,13 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
-"A tárolóinformációk elemzése során a program nem talált tükörbejegyzést a "
-"frissítéshez. Ez akkor fordulhat elő, ha belső tükröt használ, vagy a "
+"A tárolóinformációk lekérdezése során a frissítéshez nem található tükör "
+"bejegyzés. Ez akkor lehetséges, ha belső tükröt használ, vagy a "
 "tükörinformációk elavultak.\n"
 "\n"
-"Mindenképpen újra kívánja írni a sources.list fájlt? Ha az „Igen” gombot "
-"választja, akkor az összes „%s” bejegyzés „%s” bejegyzéssé lesz frissítve. A "
-"„Nem” kiválasztása megszakítja a frissítést."
+"Mindenképpen újra szeretné írni a „sources.list” fájlt? Ha itt az „Igen”-t "
+"választja, akkor minden „%s” bejegyzés megváltozik erre: „%s”.\n"
+"Ha a „Nem”-et választja, a frissítés megszakad."
 
 #. hm, still nothing useful ...
 #: ../DistUpgrade/DistUpgradeController.py:782
@@ -446,13 +443,13 @@ msgstr ""
 "hibajelentési folyamat."
 
 #: ../DistUpgrade/DistUpgradeController.py:825
-#, fuzzy
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"A tároló frissítése érvénytelen fájlt eredményezett, ezért most elindul egy "
-"hibajelentési folyamat."
+"A tárolóinformációk frissítés érvénytelen fájlt eredményezett. Hiba "
+"jelentéséhez telepítse az apport csomagot, és adja ki az „apport-bug ubuntu-"
+"release-upgrader” parancsot."
 
 #: ../DistUpgrade/DistUpgradeController.py:834
 msgid "Third party sources disabled"
@@ -595,16 +592,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Jelentse ezt a hibát böngészőben a http://bugs.launchpad.net/ubuntu/+source/"
-"ubuntu-release-upgrader/+filebug címre, és csatolja a fájlokat a /var/log/"
-"dist-upgrade/ mappából.\n"
+"Jelentse ezt a hibát böngészőben a "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"címre, és csatolja a fájlokat a /var/log/dist-upgrade/ mappából.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1209
@@ -668,13 +665,13 @@ msgstr ""
 "hibajelentési folyamat."
 
 #: ../DistUpgrade/DistUpgradeController.py:1659
-#, fuzzy
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"A rendszer előkészítése a frissítésre sikertelen, emiatt elindul egy "
-"hibajelentési folyamat."
+"A rendszer előkészítése a frissítésre meghiúsult.  Hiba jelentéséhez "
+"telepítse az apport csomagot, és adja ki az „apport-bug ubuntu-release-"
+"upgrader” parancsot."
 
 #: ../DistUpgrade/DistUpgradeController.py:1676
 #: ../DistUpgrade/DistUpgradeController.py:1686
@@ -695,7 +692,6 @@ msgstr ""
 "Ezen kívül elindul egy hibajelentési folyamat is."
 
 #: ../DistUpgrade/DistUpgradeController.py:1687
-#, fuzzy
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -703,11 +699,11 @@ msgid ""
 "To report a bug install apport and then execute 'apport-bug ubuntu-release-"
 "upgrader'."
 msgstr ""
-"A rendszer nem volt képes a frissítés előfeltételeinek lekérésére. A "
-"frissítés ezért most megszakad, és a rendszer eredeti állapotába áll "
-"vissza.\n"
+"A rendszer nem tudta a frissítés előfeltételeit beszerezni. A frissítés most "
+"megszakad, és helyreállítja az eredeti rendszerállapotot.\n"
 "\n"
-"Ezen kívül elindul egy hibajelentési folyamat is."
+"Hiba jelentéséhez telepítse az apport csomagot, és adja ki az „apport-bug "
+"ubuntu-release-upgrader” parancsot."
 
 #: ../DistUpgrade/DistUpgradeController.py:1717
 msgid "Updating repository information"
@@ -892,9 +888,8 @@ msgid "The error message is '%s'."
 msgstr "A hibaüzenet: „%s”."
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:137
-#, fuzzy
 msgid "&Upgrade"
-msgstr "Frissítés"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:140
 #: ../DistUpgrade/DistUpgradeViewKDE.py:579
@@ -941,30 +936,30 @@ msgid "Media Change"
 msgstr "Adathordozó-csere"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:164
-#, fuzzy
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
-"Videokártyája nem biztos, hogy teljesen támogatott lesz Ubuntu 12.04 LTS "
-"alatt."
+"A videokártyája nem biztos, hogy megfelelően lesz támogatva az Ubuntu 14.04 "
+"verziójában."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:166
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "Az Ön grafikus hardvere nem támogatja teljesen a „unity” asztali környezet "
 "futtatását. Várhatóan a frissítés után nagyon lassú környezetet fog kapni. "
 "Azt tanácsoljuk, most még tartsa meg az LTS változatot. További "
-"információért látogassa meg a https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D oldalt. Még így is szeretné folytatni a "
-"frissítést?"
+"információért látogassa meg a "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D oldalt. Még "
+"így is szeretné folytatni a frissítést?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:190
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Videokártyája nem biztos, hogy teljesen támogatott lesz Ubuntu 12.04 LTS "
 "alatt."
@@ -1056,7 +1051,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:412
 msgid "PAE not enabled"
-msgstr ""
+msgstr "A PAE nincs bekapcsolva"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:413
 msgid ""
@@ -1065,6 +1060,10 @@ msgid ""
 "you must enable PAE (if this is possible) see:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
+"A rendszere olyan processzort használ, amelyen a PAE nincs bekapcsolva. Az "
+"Ubuntu csak az Ubuntu 12.04-ig támogatta a PAE nélküli rendszereket. Az "
+"Ubuntu újabb verziójára frissítéshez be kell kapcsolnia a PAE-t (ha ez "
+"lehetséges), lásd:  http://help.ubuntu.com/community/EnablingPAE"
 
 #: ../DistUpgrade/DistUpgradeMain.py:59
 msgid "Sandbox upgrade using aufs"
@@ -1103,7 +1102,7 @@ msgstr "Adatkönyvtár beállítása"
 
 #: ../DistUpgrade/DistUpgradeMain.py:81
 msgid "Upgrade to the development release"
-msgstr ""
+msgstr "Frissítés fejlesztési kiadásra"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
 #: ../DistUpgrade/DistUpgradeViewKDE.py:231
@@ -1192,15 +1191,15 @@ msgstr "Végzetes hiba történt"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:497
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Jelentse ezt a hibát (ha eddig még nem tette volna) és csatolja a /var/log/"
-"dist-upgrade/main.log és /var/log/dist-upgrade/apt.log nevű fájlokat. A "
-"frissítés megszakadt. Az eredeti sources.list /etc/apt/sources.list."
-"distUpgrade néven került mentésre."
+"Jelentse ezt a hibát (ha eddig még nem tette volna) és csatolja a "
+"/var/log/dist-upgrade/main.log és /var/log/dist-upgrade/apt.log nevű "
+"fájlokat. A frissítés megszakadt. Az eredeti sources.list "
+"/etc/apt/sources.list.distUpgrade néven került mentésre."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:524
 msgid "Ctrl-c pressed"
@@ -1281,9 +1280,8 @@ msgid "Information"
 msgstr "Információ"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:751
-#, fuzzy
 msgid "&Start Upgrade"
-msgstr "Frissítés _indítása"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:753
 #: ../DistUpgrade/DistUpgradeViewKDE.py:798
@@ -1381,10 +1379,10 @@ msgstr[1] "%li másodperc"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:102
 #, python-format
@@ -1395,10 +1393,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:120
 #, python-format
@@ -1544,13 +1542,13 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeViewText.py:78
 #, python-format
 msgid "Progress: [%3i%%]"
-msgstr ""
+msgstr "Folyamat: [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:136
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Jelentse ezt hibaként és a hibajelentéshez mellékelje a /var/log/dist-"
@@ -1708,7 +1706,7 @@ msgstr "Disztribúciófrissítés"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:19
 msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
-msgstr ""
+msgstr "<b><big>Az Ubuntu frissítése a 15.04-es verzióra</big></b>"
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
 msgid "    "
@@ -1731,7 +1729,8 @@ msgid "_Upgrade"
 msgstr "_Frissítés"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr "<b>Elérhető az Ubuntu egy új változata. Szeretné frissíteni?</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
@@ -1796,7 +1795,8 @@ msgstr "A kiadásfrissítő eszköz letöltése"
 
 #: ../do-release-upgrade:84 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
-msgstr "Ellenőrzi, hogy lehetséges-e frissíteni a legújabb fejlesztői kiadásra"
+msgstr ""
+"Ellenőrzi, hogy lehetséges-e frissíteni a legújabb fejlesztői kiadásra"
 
 #: ../do-release-upgrade:91 ../check-new-release-gtk:181
 msgid ""
@@ -1812,8 +1812,8 @@ msgid ""
 "for server systems are supported."
 msgstr ""
 "Futtatás speciális frissítő módban.\n"
-"Jelenleg a „desktop” (asztali rendszerek szabályos frissítése) és a "
-"„server” (kiszolgálórendszerek frissítése) módok támogatottak."
+"Jelenleg a „desktop” (asztali rendszerek szabályos frissítése) és a „server” "
+"(kiszolgálórendszerek frissítése) módok támogatottak."
 
 #: ../do-release-upgrade:103
 msgid "Test upgrade with a sandbox aufs overlay"
@@ -1829,11 +1829,11 @@ msgstr ""
 
 #: ../do-release-upgrade:120
 msgid "The options --devel-release and --proposed are"
-msgstr ""
+msgstr "A --devel-release és --proposed kapcsolók"
 
 #: ../do-release-upgrade:121
 msgid "mutually exclusive. Please use only one of them."
-msgstr ""
+msgstr "kölcsönösen kizárják egymást. Csak az egyiket használja."
 
 #: ../do-release-upgrade:125
 msgid "Checking for a new Ubuntu release"
@@ -1879,7 +1879,7 @@ msgstr "A frissítéshez futassa a „do-release-upgrade” parancsot."
 
 #: ../check-new-release-gtk:85
 msgid "Software Updater"
-msgstr ""
+msgstr "Frissítéskezelő"
 
 #: ../check-new-release-gtk:113
 msgid "Ubuntu %(version)s Upgrade Available"
@@ -1894,17 +1894,68 @@ msgstr "Ön elutasította az Ubuntu %s kiadásra történő frissítést"
 msgid "Add debug output"
 msgstr "Hibakeresési kimenet hozzáadása"
 
+#, python-format
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade:\n"
+#~ "%s\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Megoldhatatlan probléma adódott a frissítés előkészítése közben:\n"
+#~ "%s\n"
+#~ "\n"
+#~ " Ezt az alábbiak okozhatták:\n"
+#~ " * frissítés egy kiadás előtti Ubuntu verzióra\n"
+#~ " * Ön jelenleg egy kiadás előtti Ubuntu verziót használ\n"
+#~ " * az Ubuntu által nem támogatott csomagok\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
+#~ "version of Ubuntu you are running.\n"
+#~ " Please install one of the packages above first using synaptic or apt-get "
+#~ "before proceeding."
+#~ msgstr ""
+#~ "A rendszere nem tartalmazza az ubuntu-desktop, kubuntu-desktop, xubuntu-"
+#~ "desktop vagy edubuntu-desktop csomagok egyikét sem, és nem lehetett "
+#~ "megállapítani, hogy az Ubuntu mely változatát használja.\n"
+#~ " A folytatás előtt telepítse a fenti csomagok egyikét a synaptic vagy az apt-"
+#~ "get használatával."
+
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "A „debsig-verify” csomag telepítve van"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
 #~ msgstr ""
 #~ "A frissítés nem folytatódhat, ha ez a csomag telepítve van.\n"
 #~ "Távolítsa el a Synaptic vagy az „apt-get remove debsig-verify” parancs "
 #~ "kiadásával és futtassa újra a frissítést."
+
+#, python-format
+#~ msgid ""
+#~ "While scanning your repository information no mirror entry for the upgrade "
+#~ "was found. This can happen if you run a internal mirror or if the mirror "
+#~ "information is out of date.\n"
+#~ "\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "If you select 'No' the upgrade will cancel."
+#~ msgstr ""
+#~ "A tárolóinformációk elemzése során a program nem talált tükörbejegyzést a "
+#~ "frissítéshez. Ez akkor fordulhat elő, ha belső tükröt használ, vagy a "
+#~ "tükörinformációk elavultak.\n"
+#~ "\n"
+#~ "Mindenképpen újra kívánja írni a sources.list fájlt? Ha az „Igen” gombot "
+#~ "választja, akkor az összes „%s” bejegyzés „%s” bejegyzéssé lesz frissítve. A "
+#~ "„Nem” kiválasztása megszakítja a frissítést."
 
 #~ msgid "evms in use"
 #~ msgstr "Az evms használatban van"
@@ -1914,9 +1965,8 @@ msgstr "Hibakeresési kimenet hozzáadása"
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
 #~ msgstr ""
-#~ "A rendszer az „evms” kötetkezelőt használja a /proc/mounts alatt. Az "
-#~ "„evms” szoftver már nem támogatott, kapcsolja ki és futtassa újra a "
-#~ "frissítést."
+#~ "A rendszer az „evms” kötetkezelőt használja a /proc/mounts alatt. Az „evms” "
+#~ "szoftver már nem támogatott, kapcsolja ki és futtassa újra a frissítést."
 
 #~ msgid ""
 #~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
@@ -1925,9 +1975,9 @@ msgstr "Hibakeresési kimenet hozzáadása"
 #~ "\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "Ez a számítógép jelenleg az NVIDIA „nvidia” grafikus meghajtóját "
-#~ "használja. Ennek a meghajtónak nem érhető el a videokártyáját az Ubuntu "
-#~ "10.04 LTS alatt kezelni képes verziója.\n"
+#~ "Ez a számítógép jelenleg az NVIDIA „nvidia” grafikus meghajtóját használja. "
+#~ "Ennek a meghajtónak nem érhető el a videokártyáját az Ubuntu 10.04 LTS alatt "
+#~ "kezelni képes verziója.\n"
 #~ "\n"
 #~ "Biztosan folytatja?"
 

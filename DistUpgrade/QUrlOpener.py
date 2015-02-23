@@ -27,11 +27,11 @@ try:
     if get_dist() == 'trusty':
         raise ImportError
 
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
+    from PyQt5.QtCore import QObject, QCoreApplication, pyqtSlot, QUrl
+    from PyQt5.QtGui import QDesktopServices
 except ImportError:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
+    from PyQt4.QtCore import QObject, QCoreApplication, pyqtSlot, QUrl
+    from PyQt4.QtGui import QDesktopServices
 
 import os
 import subprocess

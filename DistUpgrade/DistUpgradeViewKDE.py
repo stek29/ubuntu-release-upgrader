@@ -32,13 +32,13 @@ try:
         raise ImportError
 
     from PyQt5 import uic
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
-    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import Qt, QLocale, QTranslator
+    from PyQt5.QtWidgets import QTextEdit, QApplication, QDialog, QTextOption, QMessageBox, QDialogButtonBox, QTreeWidgetItem, QPushButton, QWidget
+    from PyQt5.QtGui import QTextOption, QPixmap, QIcon, 
 except ImportError:
     from PyQt4 import uic
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
+    from PyQt4.QtCore import Qt, QLocale, QTranslator
+    from PyQt4.QtGui import QTextEdit, QDialog, QTextOption, QApplication, QMessageBox, QDialogButtonBox, QTreeWidgetItem, QPixmap, QIcon, QPushButton, QWidget
     # If we still throw an exception, bounce back to Main to try another UI.
 
 import sys
@@ -47,12 +47,10 @@ import logging
 import time
 import subprocess
 import traceback
-import tempfile
 
 import apt
 import apt_pkg
 import os
-import shutil
 
 import pty
 

@@ -31,18 +31,16 @@ try:
         raise ImportError
 
     from PyQt5 import uic
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
-    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import QApplication, QTranslator, PYQT_VERSION, \
+        QLocale, pyqtSlot, QUrl
+    from PyQt4.QtGui import QIcon
+    from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QMessageBox
 except ImportError:
-    from PyKDE4.kdecore import ki18n, KAboutData, KCmdLineOptions, KCmdLineArgs
-    from PyKDE4.kdeui import KIcon, KMessageBox, KApplication, KStandardGuiItem
-    from PyQt4.QtCore import QDir, QTimer
+    from PyKDE4.kdeui import KIcon, KMessageBox, KStandardGuiItem
     from PyQt4.QtGui import QDialog, QDialogButtonBox
     from PyQt4 import uic
 
 import apt_pkg
-import sys
 
 from DistUpgrade.utils import inhibit_sleep, allow_sleep
 from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore

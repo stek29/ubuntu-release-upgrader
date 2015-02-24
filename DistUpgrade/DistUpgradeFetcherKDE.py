@@ -31,13 +31,14 @@ try:
         raise ImportError
 
     from PyQt5 import uic
-    from PyQt5.QtCore import QApplication, QTranslator, PYQT_VERSION, \
+    from PyQt5.QtCore import QTranslator, PYQT_VERSION, \
         QLocale, pyqtSlot, QUrl
-    from PyQt4.QtGui import QIcon
-    from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QMessageBox
+    from PyQt5.QtGui import QIcon
+    from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QMessageBox, \
+        QApplication
 except ImportError:
     from PyKDE4.kdeui import KIcon, KMessageBox, KStandardGuiItem
-    from PyQt4.QtGui import QDialog, QDialogButtonBox
+    from PyQt4.QtGui import QDialog, QDialogButtonBox, QApplication, QIcon
     from PyQt4.QtCore import PYQT_VERSION
     from PyQt4 import uic
 

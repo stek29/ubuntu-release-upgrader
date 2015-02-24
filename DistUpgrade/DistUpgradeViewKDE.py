@@ -32,13 +32,17 @@ try:
         raise ImportError
 
     from PyQt5 import uic
-    from PyQt5.QtCore import Qt, QLocale, QTranslator
-    from PyQt5.QtWidgets import QTextEdit, QApplication, QDialog, QTextOption, QMessageBox, QDialogButtonBox, QTreeWidgetItem, QPushButton, QWidget
-    from PyQt5.QtGui import QTextOption, QPixmap, QIcon, 
+    from PyQt5.QtCore import Qt, QLocale, QTranslator, PYQT_VERSION, QTimer
+    from PyQt5.QtWidgets import QTextEdit, QApplication, QDialog,\
+        QMessageBox, QDialogButtonBox, QTreeWidgetItem, QPushButton, QWidget,\
+        QHBoxLayout, QLabel
+    from PyQt5.QtGui import QTextOption, QPixmap, QIcon, QTextCursor
 except ImportError:
     from PyQt4 import uic
-    from PyQt4.QtCore import Qt, QLocale, QTranslator
-    from PyQt4.QtGui import QTextEdit, QDialog, QTextOption, QApplication, QMessageBox, QDialogButtonBox, QTreeWidgetItem, QPixmap, QIcon, QPushButton, QWidget
+    from PyQt4.QtCore import Qt, QLocale, QTranslator, PYQT_VERSION, QTimer
+    from PyQt4.QtGui import QTextEdit, QDialog, QTextOption, QApplication,\
+        QMessageBox, QDialogButtonBox, QTreeWidgetItem, QPixmap, QIcon,\
+        QPushButton, QWidget, QTextCursor, QHBoxLayout, QLabel
     # If we still throw an exception, bounce back to Main to try another UI.
 
 import sys
@@ -605,7 +609,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             self.translate_widget_children(self.dialog)
             dialog.crash_detail.setText(tbtext)
             # Make sure we have a suitable size depending on whether or not the view is shown
-            dialogue.adjustSize()
+            dialog.adjustSize()
             dialog.exec_()
         sys.exit(1)
 

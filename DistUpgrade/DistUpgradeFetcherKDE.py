@@ -38,6 +38,7 @@ try:
 except ImportError:
     from PyKDE4.kdeui import KIcon, KMessageBox, KStandardGuiItem
     from PyQt4.QtGui import QDialog, QDialogButtonBox
+    from PyQt4.QtCore import PYQT_VERSION
     from PyQt4 import uic
 
 import apt_pkg

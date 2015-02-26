@@ -74,7 +74,7 @@ def _ensureQApplication():
         # QStandardButton translations.
         # FIXME: make sure we dep on l10n
         translator = QTranslator(app)
-        if PYQT_VERSION >= 0x50000:
+        if type(PYQT_VERSION) == int:
             translator.load(QLocale.system(), 'qt', '_',
                             '/usr/share/qt5/translations')
         else:
@@ -87,14 +87,14 @@ def _ensureQApplication():
 
 # Qt 5 vs. KDELibs4 compat functions
 def _warning(text):
-    if PYQT_VERSION >= 0x50000:
+    if type(PYQT_VERSION) == int:
         QMessageBox.warning(None, "", text)
     else:
         KMessageBox.sorry(None, text, "")
 
 
 def _icon(name):
-    if PYQT_VERSION >= 0x50000:
+    if type(PYQT_VERSION) == int:
         return QIcon.fromTheme(name)
     else:
         return KIcon(name)
@@ -115,7 +115,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         QApplication.processEvents()
 
     def error(self, summary, message):
-        if PYQT_VERSION >= 0x50000:
+        if type(PYQT_VERSION) == int:
             QMessageBox.critical(None, summary, message)
         else:
             KMessageBox.sorry(None, message, summary)
@@ -248,7 +248,7 @@ class KDEAcquireProgressAdapter(apt.progress.base.AcquireProgress):
 
     def mediaChange(self, medium, drive):
         msg = _("Please insert '%s' into the drive '%s'") % (medium, drive)
-        if PYQT_VERSION >= 0x50000:
+        if type(PYQT_VERSION) == int:
             change = QMessageBox.question(None, _("Media Change"), msg,
                                           QMessageBox.Ok, QMessageBox.Cancel)
             if change == QMessageBox.Ok:

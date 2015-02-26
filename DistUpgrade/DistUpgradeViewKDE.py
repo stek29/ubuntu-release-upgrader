@@ -504,7 +504,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         # Try to load default Qt translations so we don't have to worry about
         # QStandardButton translations.
         translator = QTranslator(self.app)
-        if PYQT_VERSION >= 0x50000:
+        if type(PYQT_VERSION) == int:
             translator.load(QLocale.system(), 'qt', '_', '/usr/share/qt5/translations')
         else:
             translator.load(QLocale.system(), 'qt', '_', '/usr/share/qt4/translations')

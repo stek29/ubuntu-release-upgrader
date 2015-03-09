@@ -40,6 +40,9 @@ def _apport_append_logfiles(report, logdir="/var/log/dist-upgrade/"):
 
 def apport_crash(type, value, tb):
     logging.debug("running apport_crash()")
+    if "RELEASE_UPRADER_NO_APPORT" in os.environ:
+        logging.debug("RELEASE_UPRADER_NO_APPORT env set")
+        return False
     try:
         # we don't depend on python3-apport because of servers
         from apport_python_hook import apport_excepthook
@@ -70,6 +73,9 @@ def apport_crash(type, value, tb):
 
 def apport_pkgfailure(pkg, errormsg):
     logging.debug("running apport_pkgfailure() %s: %s", pkg, errormsg)
+    if "RELEASE_UPRADER_NO_APPORT" in os.environ:
+        logging.debug("RELEASE_UPRADER_NO_APPORT env set")
+        return False
     LOGDIR = "/var/log/dist-upgrade/"
     s = "/usr/share/apport/package_hook"
 

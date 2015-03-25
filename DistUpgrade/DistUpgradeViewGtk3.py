@@ -374,15 +374,27 @@ class DistUpgradeVteTerminal(object):
         if hidden==False:
             self.parent.expander_terminal.set_expanded(True)
         self.finished = False
-        (success, pid) = self.term.spawn_sync(Vte.PtyFlags.DEFAULT,
-                                              "/",
-                                              cmd,
-                                              None,
-                                              0,    # GLib.SpawnFlags
-                                              None, # child_setup
-                                              None, # child_setup_data
-                                              None, # GCancellable
-                                              )
+        if hasattr(self.term, "fork_command_full"):
+            (success, pid) = self.term.fork_command_full(
+                Vte.PtyFlags.DEFAULT,
+                "/",
+                cmd,
+                None,
+                0,     # GLib.SpawnFlags
+                None,  # child_setup
+                None,  # child_setup_data
+                )
+        elif hasattr(self.term, "spawn_sync"):
+            (success, pid) = self.term.spawn_sync(
+                Vte.PtyFlags.DEFAULT,
+                "/",
+                cmd,
+                None,
+                0,     # GLib.SpawnFlags
+                None,  # child_setup
+                None,  # child_setup_data
+                None,  # GCancellable
+                )
         if not success or pid < 0:
             # error
             return

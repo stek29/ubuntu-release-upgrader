@@ -6,7 +6,7 @@ set -e
 export LANG='C.UTF-8'
 
 dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python-feedparser,
-			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose'
+			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose, pep8, python3-distutils-extra'
 
 # update demotions
 (cd utils && ./demotions.py utopic vivid > demoted.cfg)

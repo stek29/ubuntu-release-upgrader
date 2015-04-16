@@ -6,6 +6,7 @@ import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 
 from DistUpgrade.DistUpgradeVersion import VERSION
+from DistUpgrade.DistUpgradeGettext import gettext as _
 
 from UpdateManager.Core.MetaRelease import MetaReleaseCore
 from optparse import OptionParser
@@ -60,10 +61,6 @@ if __name__ == "__main__":
   gettext.bindtextdomain("ubuntu-release-upgrader", "/usr/share/locale")
   gettext.textdomain("ubuntu-release-upgrader")
   translation = gettext.translation("ubuntu-release-upgrader", fallback=True)
-  if sys.version >= '3':
-    _ = translation.gettext
-  else:
-    _ = translation.ugettext
 
   try:
     locale.setlocale(locale.LC_ALL, "")

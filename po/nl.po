@@ -15,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-04-02 05:44+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-05-16 05:34+0000\n"
+"X-Generator: Launchpad (build 17493)\n"
 "Language: \n"
 
 #. TRANSLATORS: %s is a country
@@ -127,8 +127,8 @@ msgstr ""
 "Er is een onoplosbaar probleem geconstateerd bij het berekenen van de "
 "opwaardering.\n"
 "\n"
-" Dit kan veroorzaakt worden door:\n"
-" * Opwaarderen naar een voorlopige versie van Ubuntu\n"
+" De oorzaak hiervan kan zijn:\n"
+" * Opwaardering naar een voorlopige versie van Ubuntu\n"
 " * Uitvoering van de huidige voorlopige versie van Ubuntu\n"
 " * Onofficiële softwarepakketten die niet door Ubuntu geleverd zijn.\n"
 "\n"
@@ -149,7 +149,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:659
 msgid "Could not calculate the upgrade"
-msgstr "Kon de opwaardering niet berekenen"
+msgstr "Berekenen van de opwaardering is mislukt"
 
 #: ../DistUpgrade/DistUpgradeCache.py:712
 msgid "Error authenticating some packages"
@@ -588,7 +588,7 @@ msgstr "De oorspronkelijke toestand wordt hersteld"
 #: ../DistUpgrade/DistUpgradeController.py:1177
 #: ../DistUpgrade/DistUpgradeController.py:1199
 msgid "Could not install the upgrades"
-msgstr "Kon de opwaarderingsbestanden niet installeren"
+msgstr "Installatie van de opwaarderingsbestanden is mislukt"
 
 #. invoke the frontend now and show a error message
 #: ../DistUpgrade/DistUpgradeController.py:1167
@@ -690,7 +690,7 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:1686
 msgid "Getting upgrade prerequisites failed"
 msgstr ""
-"Het verkrijgen van de vooraf benodigde zaken voor de opwaardering, is mislukt"
+"Het verkrijgen van de vooraf benodigde zaken voor de opwaardering is mislukt"
 
 #: ../DistUpgrade/DistUpgradeController.py:1677
 msgid ""
@@ -699,7 +699,7 @@ msgid ""
 "\n"
 "Additionally, a bug reporting process is being started."
 msgstr ""
-"Het systeem kon de vooraf benodigde zaken voor de opwaardering, niet "
+"Het systeem kon de vooraf benodigde zaken voor de opwaardering niet "
 "verkrijgen. De opwaardering wordt nu afgebroken en het systeem wordt in de "
 "originele staat hersteld.\n"
 "\n"
@@ -747,6 +747,13 @@ msgid ""
 "In the case of an overloaded mirror, you may want to try the upgrade again "
 "later."
 msgstr ""
+"Na het bijwerken van uw pakketinformatie, kon het essentiële pakket '%s' "
+"niet worden gevonden. Dit zou kunnen komen doordat er geen officiële "
+"spiegelservers in uw pakketbronnenlijst staan, of door bovenmatige belasting "
+"van de spiegelserver die u gebruikt. Zie /etc/apt/sources.list voor de "
+"huidige lijst van ingestelde pakketbronnen.\n"
+"In geval van een overbelaste spiegelserver, zou u op een later tijdstip de "
+"opwaardering wederom kunnen proberen."
 
 #: ../DistUpgrade/DistUpgradeController.py:1789
 #: ../DistUpgrade/DistUpgradeController.py:1845
@@ -820,14 +827,14 @@ msgstr "‘%s’ wordt uitgepakt"
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:158
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:159
 msgid "Could not run the upgrade tool"
-msgstr "Kon het opwaardeerprogramma niet uitvoeren"
+msgstr "Uitvoering van het opwaardeerprogramma is mislukt"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:160
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug "
 "using the command 'ubuntu-bug ubuntu-release-upgrader-core'."
 msgstr ""
-"Dit is waarschijnlijk een fout in het opwaardeergereedschap. Meld deze fout "
+"Dit is waarschijnlijk een fout in het opwaardeerprogramma. Meld deze fout "
 "a.u.b. met behulp van de terminalopdracht 'ubuntu-bug ubuntu-release-"
 "upgrader-core'."
 
@@ -1118,7 +1125,7 @@ msgstr "Datamap instellen"
 
 #: ../DistUpgrade/DistUpgradeMain.py:81
 msgid "Upgrade to the development release"
-msgstr "Upgraden naar de ontwikkelversie."
+msgstr "Opwaardering naar de ontwikkelversie"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:144
 #: ../DistUpgrade/DistUpgradeViewKDE.py:233
@@ -1790,15 +1797,15 @@ msgstr "Voer een gedeeltelijke opwaardering uit"
 msgid "To perform a partial upgrade, you need to authenticate."
 msgstr "Voor een gedeeltelijke upgrade is authenticatie vereist."
 
-#: ../do-partial-upgrade:74 ../do-release-upgrade:81
+#: ../do-partial-upgrade:74 ../do-release-upgrade:78
 msgid "Show version and exit"
 msgstr "Versie tonen en afsluiten"
 
-#: ../do-partial-upgrade:77 ../do-release-upgrade:88
+#: ../do-partial-upgrade:77 ../do-release-upgrade:85
 msgid "Directory that contains the data files"
 msgstr "Map die de gegevensbestanden bevat"
 
-#: ../do-partial-upgrade:80 ../do-release-upgrade:101
+#: ../do-partial-upgrade:80 ../do-release-upgrade:98
 msgid "Run the specified frontend"
 msgstr "De opgegeven 'frontend' uitvoeren"
 
@@ -1806,23 +1813,23 @@ msgstr "De opgegeven 'frontend' uitvoeren"
 msgid "Running partial upgrade"
 msgstr "Gedeeltelijke opwaardering aan het uitvoeren"
 
-#: ../do-release-upgrade:31 ../do-release-upgrade:43
+#: ../do-release-upgrade:32 ../do-release-upgrade:44
 msgid "Downloading the release upgrade tool"
 msgstr "Gereedschap voor versie-opwaardering aan het binnenhalen"
 
-#: ../do-release-upgrade:84 ../check-new-release-gtk:177
+#: ../do-release-upgrade:81 ../check-new-release-gtk:177
 msgid "Check if upgrading to the latest devel release is possible"
 msgstr ""
 "Controleer of opwaarderen naar de nieuwste ontwikkelversie mogelijk is"
 
-#: ../do-release-upgrade:91 ../check-new-release-gtk:181
+#: ../do-release-upgrade:88 ../check-new-release-gtk:181
 msgid ""
 "Try upgrading to the latest release using the upgrader from $distro-proposed"
 msgstr ""
 "Probeer op te waarderen naar de nieuwste versie door gebruik te maken van "
 "het opwaardeergereedschap van $distro-proposed"
 
-#: ../do-release-upgrade:95
+#: ../do-release-upgrade:92
 msgid ""
 "Run in a special upgrade mode.\n"
 "Currently 'desktop' for regular upgrades of a desktop system and 'server' "
@@ -1832,11 +1839,11 @@ msgstr ""
 "Momenteel worden 'desktop' en 'server' ondersteund voor opwaarderen van "
 "respectievelijk een bureaubladsysteem en een serversysteem."
 
-#: ../do-release-upgrade:103
+#: ../do-release-upgrade:100
 msgid "Test upgrade with a sandbox aufs overlay"
 msgstr "Opwaardering uitproberen met een sandbox-aufs-overlay"
 
-#: ../do-release-upgrade:106
+#: ../do-release-upgrade:103
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
@@ -1844,23 +1851,23 @@ msgstr ""
 "Alleen controleren wanneer er een nieuwe distributie-uitgave beschikbaar is, "
 "en het resultaat rapporteren via de afsluitstatus"
 
-#: ../do-release-upgrade:120
+#: ../do-release-upgrade:117
 msgid "The options --devel-release and --proposed are"
 msgstr "De opties --devel-release en --proposed zijn"
 
-#: ../do-release-upgrade:121
+#: ../do-release-upgrade:118
 msgid "mutually exclusive. Please use only one of them."
 msgstr "niet samen te gebruiken. Gebruik slechts een van de twee."
 
-#: ../do-release-upgrade:125
+#: ../do-release-upgrade:122
 msgid "Checking for a new Ubuntu release"
 msgstr "Er wordt gecontroleerd of er een nieuwe Ubuntu-uitgave is"
 
-#: ../do-release-upgrade:137
+#: ../do-release-upgrade:134
 msgid "Your Ubuntu release is not supported anymore."
 msgstr "Uw Ubuntu-versie wordt niet langer ondersteund."
 
-#: ../do-release-upgrade:138
+#: ../do-release-upgrade:135
 msgid ""
 "For upgrade information, please visit:\n"
 "%(url)s\n"
@@ -1868,15 +1875,15 @@ msgstr ""
 "Voor opwaardeerinformatie, bezoek:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:144
+#: ../do-release-upgrade:141
 msgid "No new release found"
 msgstr "Geen nieuwe versie gevonden"
 
-#: ../do-release-upgrade:149
+#: ../do-release-upgrade:146
 msgid "Release upgrade not possible right now"
 msgstr "Uitgave-opwaardering momenteel niet mogelijk"
 
-#: ../do-release-upgrade:150
+#: ../do-release-upgrade:147
 #, c-format
 msgid ""
 "The release upgrade can not be performed currently, please try again later. "
@@ -1885,12 +1892,12 @@ msgstr ""
 "De uitgave-opwaardering kan momenteel niet plaatsvinden, probeer het a.u.b. "
 "later nog eens. De server gaf als antwoord: ‘%s’"
 
-#: ../do-release-upgrade:156
+#: ../do-release-upgrade:153
 #, c-format
 msgid "New release '%s' available."
 msgstr "Nieuwe versie '%s' beschikbaar."
 
-#: ../do-release-upgrade:157
+#: ../do-release-upgrade:154
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr ""
 "Voer 'do-release-upgrade' uit om naar de nieuwe versie op te waarderen."

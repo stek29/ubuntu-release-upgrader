@@ -11,12 +11,12 @@
 
 from __future__ import print_function
 
+import apt
+import apt_pkg
 import os
 import sys
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
-import apt
-import apt_pkg
 #import xdg.Menu
 
 ARCHES = ["i386", "amd64"]
@@ -47,6 +47,14 @@ def get_replace(cache, pkgname):
             for depOr in depVerList:
                 replaces.add(depOr.target_pkg.name)
     return replaces
+
+
+def in_universe(pkg, new):
+    # check what moved to universe and what was removed (or renamed)
+    if pkg in new.pkgs_in_comp["universe"] or \
+            pkg in new.pkgs_in_comp["multiverse"]:
+        return True
+    return False
 
 
 if __name__ == "__main__":
@@ -90,15 +98,9 @@ if __name__ == "__main__":
     no_longer_main |= (old.pkgs_in_comp["restricted"] -
                        new.pkgs_in_comp["restricted"])
 
-    # check what moved to universe and what was removed (or renamed)
-    in_universe = lambda pkg: pkg in new.pkgs_in_comp["universe"] or \
-        pkg in new.pkgs_in_comp["multiverse"]
-
-    # debug
-    #print([pkg for pkg in no_longer_main if not in_universe(pkg)])
-
     # this stuff was demoted and is in universe
-    demoted = [pkg for pkg in no_longer_main if in_universe(pkg)]
+    #print([pkg for pkg in no_longer_main if not in_universe(pkg, new)])
+    demoted = [pkg for pkg in no_longer_main if in_universe(pkg, new)]
     demoted.sort()
 
     # remove items that are now in universe, but are replaced by something

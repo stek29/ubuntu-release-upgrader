@@ -7,12 +7,12 @@ import unittest
 
 from mock import patch
 
-sys.path.insert(0, "..")
 from DistUpgrade.DistUpgradeApport import (
     _apport_append_logfiles,
     apport_pkgfailure,
     APPORT_WHITELIST,
 )
+sys.path.insert(0, "..")
 
 
 class TestApportInformationLeak(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestApportInformationLeak(unittest.TestCase):
                 f.write("some-data")
         _apport_append_logfiles(report, tmpdir)
         self.assertEqual(
-            sorted([fname[0].name 
+            sorted([fname[0].name
                     for fname in report.values() if isinstance(f, tuple)]),
             sorted([os.path.join(tmpdir, "main.log"),
                     os.path.join(tmpdir, "apt.log")]))

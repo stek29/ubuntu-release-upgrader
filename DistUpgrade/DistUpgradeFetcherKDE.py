@@ -129,8 +129,8 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
                       self.script + " --frontend=DistUpgradeViewKDE"])
         else:
             os.execv(self.script,
-                     [self.script, "--frontend=DistUpgradeViewKDE" +
-                      self.run_options])
+                     [self.script, "--frontend=DistUpgradeViewKDE"] +
+                      self.run_options)
         # we shouldn't come to this point, but if we do, undo our
         # inhibit sleep
         allow_sleep()

@@ -130,7 +130,7 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         else:
             os.execv(self.script,
                      [self.script, "--frontend=DistUpgradeViewKDE"] +
-                      self.run_options)
+                     self.run_options)
         # we shouldn't come to this point, but if we do, undo our
         # inhibit sleep
         allow_sleep()
@@ -162,12 +162,12 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
                 primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                           _("Could not find the release notes")
                 secondary = _("The server may be overloaded. ")
-                self._warning(primary + "<br />" + secondary)
+                _warning(primary + "<br />" + secondary)
             except IOError:
                 primary = "<span weight=\"bold\" size=\"larger\">%s</span>" % \
                           _("Could not download the release notes")
                 secondary = _("Please check your internet connection.")
-                self._warning(primary + "<br />" + secondary)
+                _warning(primary + "<br />" + secondary)
             # user clicked cancel
             if result == QDialog.Accepted:
                 return True

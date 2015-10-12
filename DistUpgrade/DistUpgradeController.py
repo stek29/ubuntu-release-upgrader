@@ -890,6 +890,12 @@ class DistUpgradeController(object):
                                len(reqreinst)) % ", ".join(reqreinst)
             self._view.error(header, summary)
             return False
+        # Log MetaPkgs installed to see if there is more than one.
+        meta_pkgs = []
+        for pkg in self.config.getlist("Distro","MetaPkgs"):
+            if pkg in self.cache and self.cache[pkg].is_installed:
+                meta_pkgs.append(pkg)
+        logging.debug("MetaPkgs: %s" % " ".join(sorted(meta_pkgs)))
         # FIXME: check out what packages are downloadable etc to
         # compare the list after the update again
         self.obsolete_pkgs = self.cache._getObsoletesPkgs()

@@ -500,7 +500,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         # notifications or somesuch
         import traceback
         lines = traceback.format_exception(type, value, tb)
-        logging.error("not handled expection:\n%s" % "\n".join(lines))
+        logging.error("not handled exception:\n%s" % "\n".join(lines))
         # we can't be sure that apport will run in the middle of a upgrade
         # so we still show a error message here
         apport_crash(type, value, tb)

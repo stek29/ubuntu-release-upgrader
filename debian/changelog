@@ -1,3 +1,16 @@
+ubuntu-release-upgrader (1:15.10.11) wily; urgency=medium
+
+  * Change KDE fetcher UI from showing the HTML release notes to showing the
+    text notes. HTML notes apparently come back with 403 when fetched through
+    urllib...
+    Since we have no tested WebView code at hand to prefer over the text notes
+    we'll have to settle for text even though we could render HTML just fine.
+    This fixes the fetcher constantly coming up with a fatal error dialog due
+    to handling the 403 exception.
+    LP: #1507887
+
+ -- Harald Sitter <sitter@kde.org>  Tue, 20 Oct 2015 07:45:13 +0200
+
 ubuntu-release-upgrader (1:15.10.10) wily; urgency=medium
 
   * Log the installed meta packages to make troubleshooting upgrades easier.

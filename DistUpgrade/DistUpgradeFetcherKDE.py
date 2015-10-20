@@ -148,8 +148,8 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
         cancelButton.setIcon(_icon("dialog-cancel"))
         self.dialog.setWindowTitle(_("Release Notes"))
         self.dialog.show()
-        if self.new_dist.releaseNotesURI is not None:
-            uri = self._expandUri(self.new_dist.releaseNotesURI)
+        if self.new_dist.releaseNotesHtmlUri is not None:
+            uri = self._expandUri(self.new_dist.releaseNotesHtmlUri)
             # download/display the release notes
             # TODO: add some progress reporting here
             result = None

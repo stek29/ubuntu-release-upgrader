@@ -501,7 +501,7 @@ class MyCache(apt.Cache):
         # if the free drivers would give us a equally hard time, we would
         # never be able to release
         try:
-            from .NvidiaDetector.nvidiadetector import NvidiaDetection
+            from NvidiaDetector.nvidiadetector import NvidiaDetection
         except (ImportError, SyntaxError) as e:
             # SyntaxError is temporary until the port of NvidiaDetector to
             # Python 3 is in the archive.

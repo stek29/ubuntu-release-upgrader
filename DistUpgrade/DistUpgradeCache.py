@@ -565,7 +565,7 @@ class MyCache(apt.Cache):
         removeEssentialOk = self.config.getlist("Distro", "RemoveEssentialOk")
         # check now
         for pkg in self:
-            # WORKADOUND bug on the CD/python-apt #253255
+            # WORKAROUND bug on the CD/python-apt #253255
             ver = pkg._pcache._depcache.get_candidate_ver(pkg._pkg)
             if ver and ver.priority == 0:
                 logging.error("Package %s has no priority set" % pkg.name)

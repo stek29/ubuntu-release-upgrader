@@ -1268,7 +1268,7 @@ class DistUpgradeController(object):
             remove_candidates = set([p.name for p in self.installed_demotions])
         remove_candidates |= set(self.forced_obsoletes)
 
-        # no go for the unused dependencies
+        # now go for the unused dependencies
         unused_dependencies = self.cache._getUnusedDependencies()
         logging.debug("Unused dependencies: %s" %" ".join(unused_dependencies))
         remove_candidates |= set(unused_dependencies)

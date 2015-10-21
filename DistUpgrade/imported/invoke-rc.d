@@ -24,7 +24,6 @@
 RUNLEVELHELPER=/sbin/runlevel
 POLICYHELPER=/usr/sbin/policy-rc.d
 INITDPREFIX=/etc/init.d/
-UPSTARTDIR=/etc/init/
 RCDPREFIX=/etc/rc
 
 # Options
@@ -38,6 +37,7 @@ RETRY=
 RETURNFAILURE=
 RC=
 is_upstart=
+is_systemd=
 
 # Shell options
 set +e
@@ -267,17 +267,22 @@ case ${ACTION} in
 	;;
 esac
 
+# Operate against system upstart, not session
+unset UPSTART_SESSION
 # If we're running on upstart and there's an upstart job of this name, do
 # the rest with upstart instead of calling the init script.
-if which initctl >/dev/null && initctl version | grep -q upstart \
-   && [ -e "$UPSTARTDIR/${INITSCRIPTID}.conf" ]
+if which initctl >/dev/null && initctl version 2>/dev/null | grep -q upstart \
+   && initctl status ${INITSCRIPTID} 1>/dev/null 2>/dev/null
 then
     is_upstart=1
+elif test -d /run/systemd/system ; then
+    is_systemd=1
+    UNIT="${INITSCRIPTID%.sh}.service"
 elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
     ## Verifies if the given initscript ID is known
     ## For sysvinit, this error is critical
     printerror unknown initscript, ${INITDPREFIX}${INITSCRIPTID} not found.
-    if [ ! -e "$UPSTARTDIR/${INITSCRIPTID}.conf" ]; then
+    if [ ! -e "/etc/init/${INITSCRIPTID}.conf" ]; then
 	# If the init script doesn't exist, but the upstart job does, we
 	# defer the error exit; we might be running in a chroot and
 	# policy-rc.d might say not to start the job anyway, in which case
@@ -296,7 +301,7 @@ if test ! $? ; then
     RL=
 fi
 
-## Running ${RUNLEVELHELPER} to get current runlevel does not work in
+## Running ${RUNLEVELHELPER} to get current runlevel do not work in
 ## the boot runlevel (scripts in /etc/rcS.d/), as /var/run/utmp
 ## contains runlevel 0 or 6 (written at shutdown) at that point.
 if test x${RL} = x0 || test x${RL} = x6 ; then
@@ -393,7 +398,21 @@ case ${ACTION} in
 esac
 
 # test if /etc/init.d/initscript is actually executable
-if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+_executable=
+if [ -n "$is_upstart" ]; then
+    _executable=1
+elif [ -n "$is_systemd" ]; then
+    _state=$(systemctl -p LoadState show "${UNIT}" 2>/dev/null)
+    if [ "$_state" != "LoadState=masked" ]; then
+        _executable=1
+    else
+        printerror Unit ${UNIT} is masked
+        exit 0
+    fi
+elif testexec "${INITDPREFIX}${INITSCRIPTID}"; then
+   _executable=1
+fi
+if [ "$_executable" = "1" ]; then
     if test x${RC} = x && test x${MODE} = xquery ; then
         RC=105
     fi
@@ -452,6 +471,24 @@ getnextaction () {
     ACTION="$@"
 }
 
+clean_ldpreload () {
+    # clean_ldpreload(name): remove occurences of name from LD_PRELOAD
+    local name="$1" oifs="$IFS" found=0 tok="" nval="" delim=" "
+
+    # LD_PRELOAD can be space or colon separated items
+    # assume ':' in value indicates ':' otherwise space
+    [ "${LD_PRELOAD#*:}" = "$LD_PRELOAD" ] || delim=":"
+
+    IFS="$delim"
+    for tok in $LD_PRELOAD; do
+        [ "${tok##*/}" = "$name" ] && found=1 || nval="${nval}${delim}$tok"
+    done
+    IFS="$oifs"
+    # if we didn't find anything, dont change anything.
+    [ "$found" = "1" ] || return 0
+    LD_PRELOAD="${nval#$delim}"
+}
+
 if [ -n "$is_upstart" ]; then
     RUNNING=
     DISABLED=
@@ -466,11 +503,15 @@ if [ -n "$is_upstart" ]; then
     fi
 fi
 
+# remove eatmydata from LD_PRELOAD unless told not to (LP: #1257036)
+[ "${INVOKE_RCD_ALLOW_EATMYDATA:-0}" != "0" ] ||
+	clean_ldpreload "libeatmydata.so"
+
 ## Executes initscript
 ## note that $ACTION is a space-separated list of actions
 ## to be attempted in order until one suceeds.
 if test x${FORCE} != x || test ${RC} -eq 104 ; then
-    if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+    if [ -n "$is_upstart" ] || [ -n "$is_systemd" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
 	RC=102
 	setechoactions ${ACTION}
 	while test ! -z "${ACTION}" ; do
@@ -480,6 +521,10 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 	    fi
 
 	    if [ -n "$is_upstart" ]; then
+		# Force Upstart to re-scan /etc/init for filesystems with
+		# broken inotify (such as overlayfs (LP: #882147)).
+		initctl reload-configuration >/dev/null 2>&1
+
 		case $saction in
 		    status)
 			"$saction" "$INITSCRIPTID" && exit 0
@@ -518,6 +563,78 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 			initctl "$saction" "$INITSCRIPTID" && exit 0
 			;;
 		esac
+            elif [ -n "$is_systemd" ]; then
+                if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ]; then
+                    # If we are called by a maintainer script, chances are good that a
+                    # new or updated sysv init script was installed.  Reload daemon to
+                    # pick up any changes.
+                    systemctl daemon-reload
+                    # On system which already run on systemd, support upgrade for
+                    # packages containing only an upstart only job: we don't proceed any
+                    # action to avoid the previous prerm to fail on upgrade,
+                    # as there is no running job to stop or restart.
+                    _state=$(systemctl -p LoadState show "${UNIT}" 2>/dev/null)
+                    if [ "$_state" = "LoadState=not-found" ] && [ -e "/etc/init/${INITSCRIPTID}.conf" ]; then
+                        printerror "${UNIT} doesn't exist but the upstart job does. Nothing to start or stop until a systemd or init job is present."
+                        exit 0
+                    fi
+                fi
+                # avoid deadlocks during bootup and shutdown from units/hooks
+                # which call "invoke-rc.d service reload" and similar, since
+                # the synchronous wait plus systemd's normal behaviour of
+                # transactionally processing all dependencies first easily
+                # causes dependency loops
+                if ! OUT=$(systemctl is-system-running 2>/dev/null) && [ "$OUT" != "degraded" ]; then
+                    sctl_args="--job-mode=ignore-dependencies"
+                fi
+                case $saction in
+                    start|restart)
+                        # We never start disabled jobs; we only restart them if they are
+                        # already running (got started manually).
+                        # More rationale on https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768450
+                        # and https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768456
+                        #
+                        # Note that due to querypolicy() in case of a disabled init script installed,
+                        # restart won't be executed.
+                        # is-enabled can fail either because the unit is disabled, or it does not exist
+                        # (e. g. it might be from a generator)
+                        if ! ERR=$(systemctl --quiet is-enabled "${UNIT}" 2>&1) && [ -z "$ERR" ]; then
+                            if [ "$saction" = "start" ]; then
+                                exit 0
+                            elif [ "$saction" = "restart" ] && ! systemctl --quiet is-active "${UNIT}" 2>/dev/null; then
+                                exit 0
+                            fi
+                        fi
+                        systemctl $sctl_args "${saction}" "${UNIT}" && exit 0
+                        ;;
+                    stop|status)
+                        systemctl $sctl_args "${saction}" "${UNIT}" && exit 0
+                        ;;
+                    reload)
+                        _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
+                        if [ "$_canreload" = "CanReload=no" ]; then
+                            "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+                        else
+                            systemctl $sctl_args reload "${UNIT}" && exit 0
+                        fi
+                        ;;
+                    force-stop)
+                        systemctl --signal=KILL kill "${UNIT}" && exit 0
+                        ;;
+                    force-reload)
+                        _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
+                        if [ "$_canreload" = "CanReload=no" ]; then
+                           systemctl $sctl_args restart "${UNIT}" && exit 0
+                        else
+                           systemctl $sctl_args reload "${UNIT}" && exit 0
+                        fi
+                        ;;
+                    *)
+                        # We try to run non-standard actions by running
+                        # the init script directly.
+                        "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+                        ;;
+                esac
 	    else
 		"${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
 	    fi

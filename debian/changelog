@@ -1,7 +1,14 @@
 ubuntu-release-upgrader (1:15.10.13.1) UNRELEASED; urgency=medium
 
+  [ Brian Murray ]
   * data/DistUpgrade.cfg: Update kernel version and types that will be
     considered for removal. (LP: #1508539)
+
+  [ Martin Pitt ]
+  * DistUpgrade/imported/invoke-rc.d: Import current version with systemd
+    support, to fix upgrade failures of packages which only ship upstart and
+    systemd units, but no SysV init script (like lxc, ofono, or nfs-common).
+    (LP: #1504897)
 
  -- Brian Murray <brian@ubuntu.com>  Wed, 21 Oct 2015 09:17:13 -0700
 

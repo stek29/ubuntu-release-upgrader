@@ -9,9 +9,9 @@ dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python-feedp
 			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose, pep8, python3-distutils-extra'
 
 # update demotions
-(cd utils && ./demotions.py vivid wily > demoted.cfg)
+(cd utils && ./demotions.py wily xenial > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
-#(cd utils && ./demotions.py trusty w00t > demoted.cfg.trusty)
+(cd utils && ./demotions.py trusty xenial > demoted.cfg.trusty)
 
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine

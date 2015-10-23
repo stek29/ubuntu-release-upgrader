@@ -1,3 +1,14 @@
+ubuntu-release-upgrader (1:16.04.1) UNRELEASED; urgency=medium
+
+  [ Barry Warsaw ]
+  * Don't try to import janitor and NvidiaDetector in a package relative
+    to this one, to avoid the possibility of dangling symlinks when the
+    packages actually containing these modules is not installed.
+    (LP: #1485093)
+  * debian/python3-distupgrade.links: Removed.
+
+ -- Brian Murray <brian@ubuntu.com>  Fri, 23 Oct 2015 13:25:32 -0700
+
 ubuntu-release-upgrader (1:15.10.14) wily; urgency=medium
 
   [ Brian Murray ]

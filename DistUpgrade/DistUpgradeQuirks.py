@@ -32,7 +32,16 @@ from subprocess import PIPE, Popen
 from .utils import get_arch
 
 from .DistUpgradeGettext import gettext as _
-from .janitor.plugincore.manager import PluginManager
+try:
+    from janitor.plugincore.manager import PluginManager
+except ImportError:
+    # janitor is not available, so create a no-op plugin manager.
+    class PluginManager(object):
+        def __init__(self, *args, **kws):
+            pass
+
+        def get_plugins(self, *args, **kws):
+            return []
 
 
 class DistUpgradeQuirks(object):

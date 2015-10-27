@@ -628,14 +628,13 @@ class DistUpgradeQuirks(object):
         for pkg in cache:
             if ('linux-image' in pkg.name and
                 'extra' not in pkg.name and
-                cache[pkg.name].is_installed or
-                    cache[pkg.name].marked_install):
+                pkg.is_installed or
+                pkg.marked_install):
                 match = pattern.match(pkg.name)
                 # Here we filter out packages such as
                 # linux-generic-lts-quantal
                 if match:
-                    source = cache[pkg.name].candidate.\
-                             record['Source']
+                    source = pkg.candidate.record['Source']
                     current_version = '%s-%s' % (match.group(1),
                                                  match.group(2))
                     # See if the current version is greater than

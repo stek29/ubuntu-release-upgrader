@@ -24,6 +24,15 @@ class MockConfig(object):
     pass
 
 
+def make_mock_pkg(name, is_installed, candidate_rec):
+    mock_pkg = mock.Mock()
+    mock_pkg.name = name
+    mock_pkg.is_installed = is_installed
+    mock_pkg.candidate = mock.Mock()
+    mock_pkg.candidate.record = candidate_rec
+    return mock_pkg
+
+
 class TestPatches(unittest.TestCase):
 
     orig_chdir = ''
@@ -185,6 +194,19 @@ class TestQuirks(unittest.TestCase):
         quirks._pokeScreensaver()
         res = quirks._stopPokeScreensaver()
         res  # pyflakes
+
+    def test_get_linux_metapackage(self):
+        q = DistUpgradeQuirks(mock.Mock(), mock.Mock())
+        mock_cache = set([
+            make_mock_pkg(
+                name="linux-image-3.19-24-generic",
+                is_installed=True,
+                candidate_rec={"Source": "linux"},
+            ),
+        ])
+        pkgname = q._get_linux_metapackage(mock_cache, headers=False)
+        self.assertEqual(pkgname, "linux-generic")
+
 
 if __name__ == "__main__":
     import logging

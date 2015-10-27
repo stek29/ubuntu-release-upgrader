@@ -609,11 +609,7 @@ class DistUpgradeQuirks(object):
                                match2.group(2))
 
         logging.debug('Comparing %s with %s' % (term1, term2))
-        command = 'dpkg --compare-versions %s gt %s' % \
-                  (term1, term2)
-        process = subprocess.Popen(command.split(' '))
-        process.communicate()
-        return not process.returncode
+        return apt.apt_pkg.version_compare(term1, term2) > 0
 
     def _get_linux_metapackage(self, cache, headers):
         """ Get the linux headers or linux metapackage
@@ -626,10 +622,8 @@ class DistUpgradeQuirks(object):
         metapackage = ''
         version = ''
         for pkg in cache:
-            if ('linux-image' in pkg.name and
-                'extra' not in pkg.name and
-                pkg.is_installed or
-                pkg.marked_install):
+            if ('linux-image' in pkg.name and 'extra' not in pkg.name and
+                (pkg.is_installed or pkg.marked_install)):
                 match = pattern.match(pkg.name)
                 # Here we filter out packages such as
                 # linux-generic-lts-quantal

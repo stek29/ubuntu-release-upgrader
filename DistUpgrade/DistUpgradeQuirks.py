@@ -71,7 +71,7 @@ class DistUpgradeQuirks(object):
         - PreCacheOpen: run *before* the apt cache is opened the first time
                         to set options that affect the cache
         - PostInitialUpdate: run *before* the sources.list is rewritten but
-                             after a initial apt-get update
+                             after an initial apt-get update
         - PostDistUpgradeCache: run *after* the dist-upgrade was calculated
                                 in the cache
         - StartUpgrade: before the first package gets installed (but the
@@ -136,6 +136,13 @@ class DistUpgradeQuirks(object):
         self._killScreensaver()
         self._pokeScreensaver()
         self._stopDocvertConverter()
+
+    def xenialPostDistUpgradeCache(self):
+        """
+        this function works around quirks in the
+        xenial upgrade calculation
+        """
+        self._install_linux_metapackage()
 
     # helpers
     def _get_pci_ids(self):
@@ -587,6 +594,90 @@ class DistUpgradeQuirks(object):
                 pass
             with open(cfg, "w") as f:
                 f.write("foreign-architecture %s\n" % foreign_arch)
+
+    def _is_greater_than(self, term1, term2):
+        """ copied from ubuntu-drivers common """
+        # We don't want to take into account
+        # the flavour
+        pattern = re.compile('(.+)-([0-9]+)-(.+)')
+        match1 = pattern.match(term1)
+        match2 = pattern.match(term2)
+        if match1:
+            term1 = '%s-%s' % (match1.group(1),
+                               match1.group(2))
+            term2 = '%s-%s' % (match2.group(1),
+                               match2.group(2))
+
+        logging.debug('Comparing %s with %s' % (term1, term2))
+        command = 'dpkg --compare-versions %s gt %s' % \
+                  (term1, term2)
+        process = subprocess.Popen(command.split(' '))
+        process.communicate()
+        return not process.returncode
+
+    def _get_linux_metapackage(self, cache, headers):
+        """ Get the linux headers or linux metapackage
+            copied from ubuntu-drivers-common
+        """
+        suffix = headers and '-headers' or ''
+        pattern = re.compile('linux-image-(.+)-([0-9]+)-(.+)')
+        source_pattern = re.compile('linux-(.+)')
+
+        metapackage = ''
+        version = ''
+        for pkg in cache:
+            if ('linux-image' in pkg.name and
+                'extra' not in pkg.name and
+                cache[pkg.name].is_installed or
+                    cache[pkg.name].marked_install):
+                match = pattern.match(pkg.name)
+                # Here we filter out packages such as
+                # linux-generic-lts-quantal
+                if match:
+                    source = cache[pkg.name].candidate.\
+                             record['Source']
+                    current_version = '%s-%s' % (match.group(1),
+                                                 match.group(2))
+                    # See if the current version is greater than
+                    # the greatest that we've found so far
+                    if self._is_greater_than(current_version,
+                                             version):
+                        version = current_version
+                        match_source = source_pattern.match(source)
+                        # Set the linux-headers metapackage
+                        if '-lts-' in source and match_source:
+                            # This is the case of packages such as
+                            # linux-image-3.5.0-18-generic which
+                            # comes from linux-lts-quantal.
+                            # Therefore the linux-headers-generic
+                            # metapackage would be wrong here and
+                            # we should use
+                            # linux-headers-generic-lts-quantal
+                            # instead
+                            metapackage = 'linux%s-%s-%s' % (
+                                           suffix,
+                                           match.group(3),
+                                           match_source.group(1))
+                        else:
+                            # The scheme linux-headers-$flavour works
+                            # well here
+                            metapackage = 'linux%s-%s' % (
+                                           suffix,
+                                           match.group(3))
+        return metapackage
+
+    def _install_linux_metapackage(self):
+        """ Ensure the linux metapackage is installed for the newest_kernel
+            installed. (LP: #1509305)
+        """
+        cache = self.controller.cache
+        linux_metapackage = self._get_linux_metapackage(cache, False)
+        # install the package if it isn't installed
+        if not cache[linux_metapackage].is_installed:
+            logging.info("installing linux metapackage: %s" %
+                         linux_metapackage)
+            reason = "linux metapackage may have been accidentally uninstalled"
+            cache.mark_install(linux_metapackage, reason)
 
     def ensure_recommends_are_installed_on_desktops(self):
         """ ensure that on a desktop install recommends are installed

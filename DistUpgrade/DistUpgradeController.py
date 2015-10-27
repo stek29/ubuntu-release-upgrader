@@ -859,7 +859,6 @@ class DistUpgradeController(object):
         logging.debug("Remove: %s" % " ".join(rm))
         logging.debug("Install: %s" % " ".join(inst))
         logging.debug("Upgrade: %s" % " ".join(up))
-        
 
     def doPostInitialUpdate(self):
         # check if we have packages in ReqReinst state that are not

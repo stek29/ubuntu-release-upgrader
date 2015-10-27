@@ -94,7 +94,7 @@ class TestPatches(unittest.TestCase):
         self._verify_result_checksums()
 
     def test_patch_lowlevel(self):
-        #test lowlevel too
+        # test lowlevel too
         from DistUpgrade.DistUpgradePatcher import patch, PatchError
         self.assertRaises(PatchError, patch, CURDIR + "/patchdir/fail",
                           CURDIR + "/patchdir/patchdir_fail."
@@ -206,6 +206,42 @@ class TestQuirks(unittest.TestCase):
         ])
         pkgname = q._get_linux_metapackage(mock_cache, headers=False)
         self.assertEqual(pkgname, "linux-generic")
+
+    def test_get_lpae_linux_metapackage(self):
+        q = DistUpgradeQuirks(mock.Mock(), mock.Mock())
+        mock_cache = set([
+            make_mock_pkg(
+                name="linux-image-4.2.0-16-generic-lpae",
+                is_installed=True,
+                candidate_rec={"Source": "linux"},
+            ),
+        ])
+        pkgname = q._get_linux_metapackage(mock_cache, headers=False)
+        self.assertEqual(pkgname, "linux-generic-lpae")
+
+    def test_get_lowlatency_linux_metapackage(self):
+        q = DistUpgradeQuirks(mock.Mock(), mock.Mock())
+        mock_cache = set([
+            make_mock_pkg(
+                name="linux-image-4.2.0-16-lowlatency",
+                is_installed=True,
+                candidate_rec={"Source": "linux"},
+            ),
+        ])
+        pkgname = q._get_linux_metapackage(mock_cache, headers=False)
+        self.assertEqual(pkgname, "linux-lowlatency")
+
+    def test_get_lts_linux_metapackage(self):
+        q = DistUpgradeQuirks(mock.Mock(), mock.Mock())
+        mock_cache = set([
+            make_mock_pkg(
+                name="linux-image-3.13.0-24-generic",
+                is_installed=True,
+                candidate_rec={"Source": "linux-lts-quantal"},
+            ),
+        ])
+        pkgname = q._get_linux_metapackage(mock_cache, headers=False)
+        self.assertEqual(pkgname, "linux-generic-lts-quantal")
 
 
 if __name__ == "__main__":

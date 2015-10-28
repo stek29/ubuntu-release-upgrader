@@ -665,6 +665,12 @@ class DistUpgradeQuirks(object):
         """
         cache = self.controller.cache
         linux_metapackage = self._get_linux_metapackage(cache, False)
+        # Seen on errors.u.c with linux-rpi2 metapackage
+        # https://errors.ubuntu.com/problem/994bf05fae85fbcd44f721495db6518f2d5a126d
+        if linux_metapackage not in cache:
+            logging.info("linux metapackage (%s) not available" %
+                         linux_metapackage)
+            return
         # install the package if it isn't installed
         if not cache[linux_metapackage].is_installed:
             logging.info("installing linux metapackage: %s" %

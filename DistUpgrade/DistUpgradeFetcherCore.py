@@ -196,7 +196,7 @@ class DistUpgradeFetcherCore(object):
     def _expandUri(self, uri):
         """
         expand the uri so that it uses a mirror if the url starts
-        with a well know string (like archive.ubuntu.com)
+        with a well known string (like archive.ubuntu.com)
         """
         # try to guess the mirror from the sources.list
         if uri.startswith(self.DEFAULT_MIRROR):

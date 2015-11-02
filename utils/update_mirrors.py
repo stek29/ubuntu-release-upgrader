@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import feedparser
 import sys
@@ -15,6 +15,8 @@ d = feedparser.parse("https://launchpad.net/ubuntu/+archivemirrors-rss")
 #pp  = pprint.PrettyPrinter(indent=4)
 #pp.pprint(d)
 
+# the first 23 lines are permanent
+permanent_lines = 22
 lp_mirrors = set()
 new_mirrors = set()
 
@@ -24,16 +26,14 @@ for entry in d.entries:
         if link.href not in current_mirrors:
             new_mirrors.add(link.href)
 
-with open(sys.argv[1], "w") as outfile:
-    # the first 23 lines are permanent
-    for mirror in current_mirrors[:22]:
-        outfile.write(mirror + "\n")
-    for mirror in current_mirrors[22:]:
+with open(sys.argv[1], "w", encoding='utf-8') as outfile:
+    for mirror in current_mirrors[:permanent_lines]:
+        print(mirror, file=outfile)
+    for mirror in current_mirrors[permanent_lines:]:
         if mirror.startswith("#"):
-            outfile.write(mirror + "\n")
-        # its not a valid mirror anymore
-        if mirror not in lp_mirrors:
-            continue
-        outfile.write(mirror + "\n")
+            print(mirror, file=outfile)
+        # if it is not in lp_mirrors its not a valid mirror
+        if mirror in lp_mirrors:
+            print(mirror, file=outfile)
     for mirror in new_mirrors:
-        outfile.write(mirror + "\n")
+        print(mirror, file=outfile)

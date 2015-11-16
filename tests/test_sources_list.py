@@ -86,7 +86,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 """)
-
+    @mock.patch("DistUpgradeController.get_distro")
     def test_sources_list_rewrite(self):
         """
         test regular sources.list rewrite
@@ -96,8 +96,12 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
+        mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
+                                                          "Ubuntu Feisty Fawn",
+                                                          "7.04")
         d.openCache(lock=False)
         res = d.updateSourcesList()
+        self.assertTrue(mock_get_distro.called)
         self.assertTrue(res)
 
         # now test the result

@@ -18,7 +18,7 @@ from DistUpgrade.DistUpgradeViewNonInteractive import (
 )
 from DistUpgrade import DistUpgradeConfigParser
 from DistUpgrade.utils import url_downloadable
-from aptsources.distro import (
+from DistUpgrade.distro import (
     UbuntuDistribution,
     NoDistroTemplateException
 )
@@ -136,10 +136,9 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        # mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
-        #                                                   "Ubuntu Feisty Fawn",
-        #                                                   "7.04")
-        mock_get_distro.side_effect = NoDistroTemplateException("It failed.")
+        mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
+                                                          "Ubuntu Feisty Fawn",
+                                                          "7.04")
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(mock_get_distro.called)
@@ -156,9 +155,49 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 # deb-src http://mirror.mcs.anl.gov/ubuntu gutsy main restricted universe multiverse # disabled on upgrade to gutsy
 # deb-src http://mirror.mcs.anl.gov/ubuntu feisty-updates main restricted universe multiverse # disabled on upgrade to gutsy
 ##deb-src http://mirror.mcs.anl.gov/ubuntu feisty-proposed main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu/ gutsy restricted main
+deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted
 # deb-src http://mirror.mcs.anl.gov/ubuntu feisty-security main restricted universe multiverse # disabled on upgrade to gutsy
 """)
+        # check that the backup file was created correctly
+        self.assertEqual(0, subprocess.call(
+            ["cmp",
+             apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".obsolete_mirror",
+             apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
+             ]))
+
+    @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
+    def test_sources_list_no_template(self, mock_get_distro):
+        """
+        test sources.list rewrite when there is no distro template
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.obsolete_mirror"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v, datadir=self.testdir)
+        mock_get_distro.side_effect = NoDistroTemplateException("No distro template.")
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(mock_get_distro.called)
+        self.assertTrue(res)
+
+        # now test the result
+        #print(open(os.path.join(self.testdir,"sources.list")).read())
+        self._verifySources("""
+# main repo
+# deb http://mirror.mcs.anl.gov/ubuntu gutsy main restricted universe multiverse # disabled on upgrade to gutsy
+# deb http://mirror.mcs.anl.gov/ubuntu feisty-updates main restricted universe multiverse # disabled on upgrade to gutsy
+# deb http://mirror.mcs.anl.gov/ubuntu feisty-proposed main restricted universe multiverse
+# deb http://mirror.mcs.anl.gov/ubuntu feisty-security main restricted universe multiverse # disabled on upgrade to gutsy
+# deb-src http://mirror.mcs.anl.gov/ubuntu gutsy main restricted universe multiverse # disabled on upgrade to gutsy
+# deb-src http://mirror.mcs.anl.gov/ubuntu feisty-updates main restricted universe multiverse # disabled on upgrade to gutsy
+##deb-src http://mirror.mcs.anl.gov/ubuntu feisty-proposed main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu gutsy main restricted
+deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
+deb http://security.ubuntu.com/ubuntu gutsy-security main restricted
+# deb-src http://mirror.mcs.anl.gov/ubuntu feisty-security main restricted universe multiverse # disabled on upgrade to gutsy
+""")
+
         # check that the backup file was created correctly
         self.assertEqual(0, subprocess.call(
             ["cmp",

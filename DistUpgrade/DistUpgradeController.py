@@ -542,6 +542,7 @@ class DistUpgradeController(object):
                     logging.debug("BaseMetaPkg '%s' has no candidate.origins" % pkgname)
                     try:
                         distro = get_distro()
+                        logging.warning("Got distro returned: %s" % distro.codename)
                         distro.get_sources(self.sources)
                         distro.enable_component("main")
                     except NoDistroTemplateException:

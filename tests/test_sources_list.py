@@ -18,6 +18,7 @@ from DistUpgrade.DistUpgradeViewNonInteractive import (
 )
 from DistUpgrade import DistUpgradeConfigParser
 from DistUpgrade.utils import url_downloadable
+from aptsources.distro import UbuntuDistribution
 import logging
 import mock
 
@@ -86,8 +87,9 @@ deb http://archive.ubuntu.com/ubuntu gutsy main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 """)
-    @mock.patch("DistUpgradeController.get_distro")
-    def test_sources_list_rewrite(self):
+
+    @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
+    def test_sources_list_rewrite(self, mock_get_distro):
         """
         test regular sources.list rewrite
         """

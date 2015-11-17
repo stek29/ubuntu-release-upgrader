@@ -18,7 +18,10 @@ from DistUpgrade.DistUpgradeViewNonInteractive import (
 )
 from DistUpgrade import DistUpgradeConfigParser
 from DistUpgrade.utils import url_downloadable
-from aptsources.distro import UbuntuDistribution
+from aptsources.distro import (
+    UbuntuDistribution,
+    NoDistroTemplateException
+)
 import logging
 import mock
 
@@ -133,9 +136,10 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
-                                                          "Ubuntu Feisty Fawn",
-                                                          "7.04")
+        # mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
+        #                                                   "Ubuntu Feisty Fawn",
+        #                                                   "7.04")
+        mock_get_distro.side_effect = NoDistroTemplateException("It failed.")
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(mock_get_distro.called)
@@ -152,7 +156,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 # deb-src http://mirror.mcs.anl.gov/ubuntu gutsy main restricted universe multiverse # disabled on upgrade to gutsy
 # deb-src http://mirror.mcs.anl.gov/ubuntu feisty-updates main restricted universe multiverse # disabled on upgrade to gutsy
 ##deb-src http://mirror.mcs.anl.gov/ubuntu feisty-proposed main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu/ gutsy main
+deb http://archive.ubuntu.com/ubuntu/ gutsy restricted main
 # deb-src http://mirror.mcs.anl.gov/ubuntu feisty-security main restricted universe multiverse # disabled on upgrade to gutsy
 """)
         # check that the backup file was created correctly

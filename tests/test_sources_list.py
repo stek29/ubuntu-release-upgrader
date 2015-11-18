@@ -101,6 +101,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
+        d.config.set("Distro", "BaseMetaPkgs", "ubuntu-minimal")
         mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
@@ -136,6 +137,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
+        d.config.set("Distro", "BaseMetaPkgs", "ubuntu-minimal")
         mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
@@ -178,6 +180,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy-security main restricted universe mul
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
+        d.config.set("Distro", "BaseMetaPkgs", "ubuntu-minimal")
         mock_get_distro.side_effect = NoDistroTemplateException("No distro template.")
         d.openCache(lock=False)
         res = d.updateSourcesList()

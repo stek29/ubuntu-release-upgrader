@@ -506,7 +506,7 @@ class DistUpgradeController(object):
         logging.debug("verifySourcesListEntry: %s" % entry)
         # no way to verify without network
         if not self.useNetwork:
-            logging.debug("skiping downloadable check (no network)")
+            logging.debug("skipping downloadable check (no network)")
             return True
         # check if the entry points to something we can download
         uri = "%s/dists/%s/Release" % (entry.uri, entry.dist)
@@ -534,8 +534,8 @@ class DistUpgradeController(object):
             # the archive or only available as "now"
             # -> if not that means that "main" is missing and we
             #    need to enable it
-            logging.debug(self.config.getlist("Distro","BaseMetaPkgs"))
-            for pkgname in self.config.getlist("Distro","BaseMetaPkgs"):
+            logging.debug(self.config.getlist("Distro", "BaseMetaPkgs"))
+            for pkgname in self.config.getlist("Distro", "BaseMetaPkgs"):
                 logging.debug("Checking pkg: %s" % pkgname)
                 if ((not pkgname in self.cache or
                      not self.cache[pkgname].candidate or
@@ -552,7 +552,7 @@ class DistUpgradeController(object):
                         distro.enable_component("main")
                         main_was_missing = True
                     except NoDistroTemplateException as e:
-                        logging.debug('NoDistroTemplateException raised: %s' % e)
+                        logging.exception('NoDistroTemplateException raised: %s' % e)
                         # fallback if everything else does not work,
                         # we replace the sources.list with lines to
                         # main and restricted
@@ -724,7 +724,7 @@ class DistUpgradeController(object):
                           "%s-security" % self.toDist]:
                     # create entry if needed, ignore disabled
                     # entries and deb-src
-                    self.found_components.setdefault(d,set())
+                    self.found_components.setdefault(d, set())
                     if (not entry.disabled and entry.dist == d and
                         entry.type == "deb"):
                         for comp in entry.comps:
@@ -756,8 +756,8 @@ class DistUpgradeController(object):
                               "%s-updates" % self.toDist,
                               "%s-security" % self.toDist]:
                         # create entry if needed, ignore deb-src entries
-                        self.found_components.setdefault(d,set())
-                        if (entry.dist == d and entry.type == "deb"):
+                        self.found_components.setdefault(d, set())
+                        if entry.dist == d and entry.type == "deb":
                             for comp in entry.comps:
                                 # only sync components we know about
                                 if not comp in sync_components:

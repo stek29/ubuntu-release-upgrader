@@ -639,7 +639,7 @@ class DistUpgradeController(object):
 
             # special case for landscape.canonical.com because they
             # don't use a standard archive layout (gutsy->hardy)
-            # 2015-11-02 - is this still relevant?
+            # XXX - Is this still relevant?
             if (not entry.disabled and
                 entry.uri.startswith("http://landscape.canonical.com/packages/%s" % self.fromDist)):
                 logging.debug("commenting landscape.canonical.com out")
@@ -708,7 +708,7 @@ class DistUpgradeController(object):
                     logging.debug("entry '%s' was disabled (unknown dist)" % get_string_with_no_auth_from_source_entry(entry))
 
                 # if we make it to this point, we have an official or third-party mirror
-                # 2015-11-17 this seems crufty
+                # XXX - is this still relevant?
                 # check if the arch is powerpc or sparc and if so, transition
                 # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
                 # in hardy)
@@ -789,7 +789,6 @@ class DistUpgradeController(object):
 
     def updateSourcesList(self):
         logging.debug("updateSourcesList()")
-        # why is matcherPath = "." here?
         self.sources = SourcesList(matcherPath=".")
         # backup first!
         self.sources.backup(self.sources_backup_ext)

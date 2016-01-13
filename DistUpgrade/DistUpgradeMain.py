@@ -108,7 +108,9 @@ def setup_logging(options, config):
     # changes
     logging.info("Using config files '%s'" % config.config_files)
     logging.info("uname information: '%s'" % " ".join(os.uname()))
-    logging.info("apt version: '%s'" % apt.apt_pkg.VERSION)
+    cache = apt.apt_pkg.Cache(None)
+    apt_version = cache['apt'].current_ver.ver_str
+    logging.info("apt version: '%s'" % apt_version)
     logging.info("python version: '%s'" % sys.version)
     return logdir
 

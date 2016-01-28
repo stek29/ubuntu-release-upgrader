@@ -22,6 +22,7 @@
 import apt
 import apt_pkg
 import logging
+import locale
 import time
 import sys
 import os
@@ -225,7 +226,7 @@ class NonInteractiveInstallProgress(InstallProgress):
            self.last_activity = time.time()
            try:
                s = os.read(self.master_fd, 1)
-               sys.stdout.write("%s" % s)
+               sys.stdout.write("%s" % s.decode(locale.getpreferredencoding()))
            except OSError:
                # happens after we are finished because the fd is closed
                return

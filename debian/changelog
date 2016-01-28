@@ -1,9 +1,12 @@
-ubuntu-release-upgrader (1:16.04.4) xenial; urgency=medium
+ubuntu-release-upgrader (1:16.04.4) UNRELEASED; urgency=medium
 
   * DistUpgrade/DistUpgradeMain.py: check the apt cache to see what version of
     apt is installed rather than using the apt VERSION string. (LP: #1306065)
   * test/test_sources_list.py: resolve test failures.
   * DistUpgrade/DistUpgradeCache.py: log packages which will be downgraded.
+  * DistUpgrade/DistUpgradeNonInteractive.py: Ensure output when using
+    is not garbled as single bytestream escaped characters. Thanks to
+    Christopher Lee for the patch. (LP: #1538880)
 
  -- Brian Murray <brian@ubuntu.com>  Wed, 13 Jan 2016 11:33:25 -0800
 

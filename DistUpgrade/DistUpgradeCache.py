@@ -676,11 +676,13 @@ class MyCache(apt.Cache):
 
         # check the trust of the packages that are going to change
         untrusted = []
+        downgrade = []
         for pkg in self.get_changes():
             if pkg.marked_delete:
                 continue
             # special case because of a bug in pkg.candidate.origins
             if pkg.marked_downgrade:
+                downgrade.append(pkg.name)
                 for ver in pkg._pkg.version_list:
                     # version is lower than installed one
                     if apt_pkg.version_compare(
@@ -706,6 +708,10 @@ class MyCache(apt.Cache):
                 return True
         except configparser.NoOptionError as e:
             pass
+        if len(downgrade) > 0:
+            downgrade.sort()
+            logging.error("Packages to downgrade found: '%s'" %
+                          " ".join(downgrade))
         if len(untrusted) > 0:
             untrusted.sort()
             logging.error("Unauthenticated packages found: '%s'" %

@@ -38,7 +38,7 @@ rm -rf utils/apt/lists utils/apt/*.bin
 
 # run the test-suite
 #echo "Running integrated tests"
-nosetests3
+xvfb-run nosetests3
 
 # test leftovers
 rm -f ./tests/data-sources-list-test/apt.log

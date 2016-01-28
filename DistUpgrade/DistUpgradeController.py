@@ -826,7 +826,7 @@ class DistUpgradeController(object):
 
                     # add some defaults here
                     # FIXME: find mirror here
-                    logging.info("generate new default sources.list")
+                    logging.info("Generated new default sources.list")
                     uri = "http://archive.ubuntu.com/ubuntu"
                     comps = ["main","restricted"]
                     self.sources.add("deb", uri, self.toDist, comps)

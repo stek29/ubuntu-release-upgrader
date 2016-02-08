@@ -228,7 +228,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
         logging.exception("Exception during pm.DoInstall()")
         with open("/var/run/ubuntu-release-upgrader-apt-exception","w") as f:
             f.write(str(e))
-        os._exit(pm.ResultFailed)
+        os._exit(pm.RESULT_FAILED)
       os._exit(res)
     self.child_pid = pid
     res = os.WEXITSTATUS(self.wait_child())
@@ -239,7 +239,7 @@ class InstallProgress(apt.progress.base.InstallProgress):
       logging.info("doing rsync commit of the update")
       if not doAufsChrootRsync(os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
         logging.error("FATAL ERROR: doAufsChrootRsync() returned FALSE")
-        return pm.ResultFailed
+        return pm.RESULT_FAILED
     return res
   
   def error(self, pkg, errormsg):

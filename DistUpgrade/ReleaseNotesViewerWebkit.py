@@ -25,23 +25,31 @@
 #  USA
 
 from gi.repository import Gtk
-from gi.repository import WebKit
+from gi.repository import WebKit2
 
 from .ReleaseNotesViewer import open_url
 
 
-class ReleaseNotesViewerWebkit(WebKit.WebView):
+class ReleaseNotesViewerWebkit(WebKit2.WebView):
     def __init__(self, notes_url):
         super(ReleaseNotesViewerWebkit, self).__init__()
         self.load_uri(notes_url)
-        self.connect("navigation-policy-decision-requested",
-                     self._on_navigation_policy_decision_requested)
+        self.connect("decide-policy",
+                     self._on_decide_policy)
 
-    def _on_navigation_policy_decision_requested(self, view, frame, request,
-                                                 action, policy):
-        open_url(request.get_uri())
-        policy.ignore()
-        return True
+    def _on_decide_policy(self, web_view, decision, decision_type):
+        if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
+            navigation_action = decision.get_navigation_action()
+            navigation_request = navigation_action.get_request()
+            navigation_type = navigation_action.get_navigation_type()
+
+            if navigation_type == WebKit2.NavigationType.LINK_CLICKED:
+                uri = navigation_request.get_uri()
+                open_url(uri)
+                decision.ignore()
+                return True
+
+        return False
 
 
 if __name__ == "__main__":
@@ -49,7 +57,7 @@ if __name__ == "__main__":
     win.set_size_request(600, 400)
     scroll = Gtk.ScrolledWindow()
     rv = ReleaseNotesViewerWebkit("http://archive.ubuntu.com/ubuntu/dists/"
-                                  "natty/main/dist-upgrader-all/0.150/"
+                                  "devel/main/dist-upgrader-all/current/"
                                   "ReleaseAnnouncement.html")
     scroll.add(rv)
     win.add(scroll)

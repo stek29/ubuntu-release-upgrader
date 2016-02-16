@@ -20,18 +20,9 @@
 #  USA
 
 import gi
+gi.require_version("Vte", "2.91")
+from gi.repository import Vte
 gi.require_version("Gtk", "3.0")
-try:
-    gi.require_version("Vte", "2.91")
-    from gi.repository import Vte
-except Exception as e:
-    gi.require_version("Vte", "2.90")
-    # COMPAT: Dear upstream, this compat code below will be duplicated in
-    #         all python-vte using applications. Love, Michael
-    from gi.repository import Vte
-    Vte.Pty.new_sync = Vte.Pty.new
-
-
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -365,7 +356,7 @@ class DistUpgradeVteTerminal(object):
         self.term = term
         self.parent = parent
     def call(self, cmd, hidden=False):
-        def wait_for_child(widget):
+        def wait_for_child(terminal, status):
             #print("wait for child finished")
             self.finished=True
         self.term.show()
@@ -411,14 +402,16 @@ class HtmlView(object):
     def open(self, url):
         if not self._webkit_view:
             return
-        self._webkit_view.open(url)
-        self._webkit_view.connect("load-finished", self._on_load_finished)
+        self._webkit_view.load_uri(url)
+        self._webkit_view.connect("load-changed", self._on_load_changed)
     def show(self):
         self._webkit_view.show()
     def hide(self):
         self._webkit_view.hide()
-    def _on_load_finished(self, view, frame):
-        view.show()
+    def _on_load_changed(self, view, event, data):
+        from gi.repository import WebKit2
+        if event == WebKit2.LoadEvent.LOAD_FINISHED:
+            view.show()
 
 
 class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
@@ -520,8 +513,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     def getHtmlView(self):
         if self._webkit_view is None:
             try:
-                from gi.repository import WebKit
-                self._webkit_view = WebKit.WebView()
+                from gi.repository import WebKit2
+                self._webkit_view = WebKit2.WebView()
                 settings = self._webkit_view.get_settings()
                 settings.set_property("enable-plugins", False)
                 self.vbox_main.pack_end(self._webkit_view, True, True, 0)

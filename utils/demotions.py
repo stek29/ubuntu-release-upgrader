@@ -84,6 +84,7 @@ if __name__ == "__main__":
             # and the archs
             for arch in ARCHES:
                 apt_pkg.config.set("APT::Architecture", arch)
+                apt_pkg.config.set("APT::Architectures", arch)
                 cache = apt.Cache(apt.progress.base.OpProgress())
                 prog = apt.progress.base.AcquireProgress()
                 cache.update(prog)
@@ -112,6 +113,7 @@ if __name__ == "__main__":
     dist.pkgs_in_comp[comp] = set()
     for arch in ARCHES:
         apt_pkg.config.set("APT::Architecture", arch)
+        apt_pkg.config.set("APT::Architectures", arch)
         cache = apt.Cache(apt.progress.base.OpProgress())
         prog = apt.progress.base.AcquireProgress()
         cache.update(prog)

@@ -20,9 +20,19 @@
 #  USA
 
 import gi
-gi.require_version("Vte", "2.91")
-from gi.repository import Vte
-gi.require_version("Gtk", "3.0")
+
+vte291 = False
+try:
+    gi.require_version("Vte", "2.91")
+    from gi.repository import Vte
+    vte291 = True
+except Exception as e:
+    gi.require_version("Vte", "2.90")
+    # COMPAT: Dear upstream, this compat code below will be duplicated in
+    #         all python-vte using applications. Love, Michael
+    from gi.repository import Vte
+    Vte.Pty.new_sync = Vte.Pty.new
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -356,26 +366,21 @@ class DistUpgradeVteTerminal(object):
         self.term = term
         self.parent = parent
     def call(self, cmd, hidden=False):
-        def wait_for_child(terminal, status):
-            #print("wait for child finished")
-            self.finished=True
+        if vte291:
+            def wait_for_child(terminal, status):
+                #print("wait for child finished")
+                self.finished=True
+        else:
+            def wait_for_child(widget):
+                #print("wait for child finished")
+                self.finished=True
         self.term.show()
         self.term.connect("child-exited", wait_for_child)
         self.parent.expander_terminal.set_sensitive(True)
         if hidden==False:
             self.parent.expander_terminal.set_expanded(True)
         self.finished = False
-        if hasattr(self.term, "fork_command_full"):
-            (success, pid) = self.term.fork_command_full(
-                Vte.PtyFlags.DEFAULT,
-                "/",
-                cmd,
-                None,
-                0,     # GLib.SpawnFlags
-                None,  # child_setup
-                None,  # child_setup_data
-                )
-        elif hasattr(self.term, "spawn_sync"):
+        if vte291:
             (success, pid) = self.term.spawn_sync(
                 Vte.PtyFlags.DEFAULT,
                 "/",
@@ -385,6 +390,16 @@ class DistUpgradeVteTerminal(object):
                 None,  # child_setup
                 None,  # child_setup_data
                 None,  # GCancellable
+                )
+        else:
+            (success, pid) = self.term.fork_command_full(
+                Vte.PtyFlags.DEFAULT,
+                "/",
+                cmd,
+                None,
+                0,     # GLib.SpawnFlags
+                None,  # child_setup
+                None,  # child_setup_data
                 )
         if not success or pid < 0:
             # error
@@ -402,12 +417,20 @@ class HtmlView(object):
     def open(self, url):
         if not self._webkit_view:
             return
-        self._webkit_view.load_uri(url)
-        self._webkit_view.connect("load-changed", self._on_load_changed)
+        try:
+            from gi.repository import WebKit2
+            assert WebKit2 # silence pep8
+            self._webkit_view.load_uri(url)
+            self._webkit_view.connect("load-changed", self._on_load_changed)
+        except ImportError:
+            self._webkit_view.open(url)
+            self._webkit_view.connect("load-finished", self._on_load_finished)
     def show(self):
         self._webkit_view.show()
     def hide(self):
         self._webkit_view.hide()
+    def _on_load_finished(self, view, frame):
+        view.show()
     def _on_load_changed(self, view, event, data):
         from gi.repository import WebKit2
         if event == WebKit2.LoadEvent.LOAD_FINISHED:
@@ -513,8 +536,11 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     def getHtmlView(self):
         if self._webkit_view is None:
             try:
-                from gi.repository import WebKit2
-                self._webkit_view = WebKit2.WebView()
+                try:
+                    from gi.repository import WebKit2 as WebKit
+                except ImportError:
+                    from gi.repository import WebKit
+                self._webkit_view = WebKit.WebView()
                 settings = self._webkit_view.get_settings()
                 settings.set_property("enable-plugins", False)
                 self.vbox_main.pack_end(self._webkit_view, True, True, 0)

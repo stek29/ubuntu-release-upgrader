@@ -24,26 +24,42 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #  USA
 
-from gi.repository import Gtk
-from gi.repository import WebKit2
-
 from .ReleaseNotesViewer import open_url
 
+from gi.repository import Gtk
 
-class ReleaseNotesViewerWebkit(WebKit2.WebView):
+webkit2 = False
+try:
+    from gi.repository import WebKit2 as WebKit
+    webkit2 = True
+except ImportError:
+    from gi.repository import WebKit
+
+
+class ReleaseNotesViewerWebkit(WebKit.WebView):
     def __init__(self, notes_url):
         super(ReleaseNotesViewerWebkit, self).__init__()
         self.load_uri(notes_url)
-        self.connect("decide-policy",
-                     self._on_decide_policy)
+        if webkit2:
+            self.connect("decide-policy",
+                         self._on_decide_policy)
+        else:
+            self.connect("navigation-policy-decision-requested",
+                         self._on_navigation_policy_decision_requested)
+
+        def _on_navigation_policy_decision_requested(self, view, frame,
+                                                     request, action, policy):
+            open_url(request.get_uri())
+            policy.ignore()
+            return True
 
     def _on_decide_policy(self, web_view, decision, decision_type):
-        if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
+        if decision_type == WebKit.PolicyDecisionType.NAVIGATION_ACTION:
             navigation_action = decision.get_navigation_action()
             navigation_request = navigation_action.get_request()
             navigation_type = navigation_action.get_navigation_type()
 
-            if navigation_type == WebKit2.NavigationType.LINK_CLICKED:
+            if navigation_type == WebKit.NavigationType.LINK_CLICKED:
                 uri = navigation_request.get_uri()
                 open_url(uri)
                 decision.ignore()

@@ -224,7 +224,7 @@ class AptCdrom(object):
                     logging.info("ignoring missing '%s'" % f)
                     continue
                 with open(f) as fp:
-                    sum = apt_pkg.sha256sum(open(fp))
+                    sum = apt_pkg.sha256sum(fp)
                 if not (sum == hash):
                     logging.error(
                         "hash sum mismatch expected %s but got %s" % (

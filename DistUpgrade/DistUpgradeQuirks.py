@@ -136,6 +136,7 @@ class DistUpgradeQuirks(object):
         self._killScreensaver()
         self._pokeScreensaver()
         self._stopDocvertConverter()
+        self._fixupDbusDaemonLaunchHelperPerms()
 
     def xenialPostDistUpgradeCache(self):
         """
@@ -360,6 +361,17 @@ class DistUpgradeQuirks(object):
         if os.path.exists("/etc/init.d/docvert-converter"):
             logging.debug("/etc/init.d/docvert-converter stop")
             subprocess.call(["/etc/init.d/docvert-converter", "stop"])
+
+    def _fixupDbusDaemonLaunchHelperPerms(self):
+        """force permissions update on dbus-daemon-launch-helper"""
+        DDLH = "/usr/lib/dbus-1.0/dbus-daemon-launch-helper"
+        if os.path.exists(DDLH):
+            logging.debug("forcing permissions on dbus-daemon-launch-helper")
+            try:
+                subprocess.call(["dpkg-statoverride", "--update", "--add",
+                                 "root", "messagebus", "4754", DDLH])
+            except Exception as e:
+                logging.warning("error running dbus helper quirk (%s)" % e)
 
     def _killUpdateNotifier(self):
         "kill update-notifier"

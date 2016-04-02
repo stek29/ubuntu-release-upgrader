@@ -1,5 +1,6 @@
-ubuntu-release-upgrader (1:16.04.9) UNRELEASED; urgency=medium
+ubuntu-release-upgrader (1:16.04.9ubuntu1) UNRELEASED; urgency=medium
 
+  [ Mathieu Trudel-Lapierre ]
   * DistUpgrade/DistUpgradeController.py: fix typo in variable name for
     RELEASE_UPGRADER_ALLOW_THIRD_PARTY; this will help running with third-
     party mirrors in sources via just the environment variable for one-shot
@@ -10,7 +11,11 @@ ubuntu-release-upgrader (1:16.04.9) UNRELEASED; urgency=medium
     since the upgrade might try to reload dbus a few times before the postinst
     actually runs.
 
- -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 29 Mar 2016 23:18:01 -0400
+  [ Tim Lunn ]
+  * DistUpgradeQuirks.py: add a quirk to add a gnome-session idle inhibitor
+    this will fix the screensaver activating on Ubuntu GNOME (LP: #1565177)
+
+ -- Tim Lunn <tim@feathertop.org>  Sat, 02 Apr 2016 14:28:20 +1100
 
 ubuntu-release-upgrader (1:16.04.8) xenial; urgency=medium
 

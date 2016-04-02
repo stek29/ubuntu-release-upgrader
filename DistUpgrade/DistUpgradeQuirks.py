@@ -135,6 +135,7 @@ class DistUpgradeQuirks(object):
         self._killKBluetooth()
         self._killScreensaver()
         self._pokeScreensaver()
+        self._inhibitIdle()
         self._stopDocvertConverter()
         self._fixupDbusDaemonLaunchHelperPerms()
 
@@ -404,6 +405,12 @@ class DistUpgradeQuirks(object):
                 atexit.register(self._stopPokeScreensaver)
             except:
                 logging.exception("failed to setup screensaver poke")
+
+    def _inhibitIdle(self):
+        if os.path.exists("/usr/bin/gnome-session-inhibit"):
+            logging.debug("inhibit gnome-session idle")
+            _idle = subprocess.Popen(["gnome-session-inhibit","--inhibit", "idle", "--inhibit-only"])
+            atexit.register(_idle.terminate);
 
     def _stopPokeScreensaver(self):
         res = False

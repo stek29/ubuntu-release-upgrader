@@ -409,8 +409,14 @@ class DistUpgradeQuirks(object):
     def _inhibitIdle(self):
         if os.path.exists("/usr/bin/gnome-session-inhibit"):
             logging.debug("inhibit gnome-session idle")
-            _idle = subprocess.Popen(["gnome-session-inhibit","--inhibit", "idle", "--inhibit-only"])
-            atexit.register(_idle.terminate);
+            _idle = subprocess.Popen(["gnome-session-inhibit","--inhibit", 
+                                      "idle", "--inhibit-only"])
+            # leave the inhibitor in place on Ubuntu GNOME, since the
+            # lock screen will be broken after upgrade
+            desktop = os.environ.get("XDG_CURRENT_DESKTOP").split(':')
+            if "GNOME" not in desktop:
+                atexit.register(_idle.terminate);
+
 
     def _stopPokeScreensaver(self):
         res = False

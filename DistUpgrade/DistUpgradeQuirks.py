@@ -60,6 +60,8 @@ class DistUpgradeQuirks(object):
         self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
         self._poke = None
+        self._uid = os.environ['SUDO_UID']
+        self._user_env = {}
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -406,16 +408,40 @@ class DistUpgradeQuirks(object):
             except:
                 logging.exception("failed to setup screensaver poke")
 
+    def _getUserEnv(self):
+        try:
+            pid = subprocess.check_output(["pgrep","-u",self._uid,
+                                           "gnome-session"])
+            pid = pid.decode().split('\n')[0]
+            with open('/proc/'+pid+'/environ','r') as f:
+                data = f.read().split('\x00')
+            for line in data:
+                if len(line):
+                    env = line.split('=', 1)
+                    self._user_env[env[0]] = env[1]
+        except:
+            logging.exception("failed to read user env")
+
     def _inhibitIdle(self):
         if os.path.exists("/usr/bin/gnome-session-inhibit"):
+            self._getUserEnv()
+            #seteuid so dbus user session can be accessed
+            os.seteuid(int(self._uid))
+        
             logging.debug("inhibit gnome-session idle")
-            _idle = subprocess.Popen(["gnome-session-inhibit","--inhibit", 
-                                      "idle", "--inhibit-only"])
-            # leave the inhibitor in place on Ubuntu GNOME, since the
-            # lock screen will be broken after upgrade
-            desktop = os.environ.get("XDG_CURRENT_DESKTOP").split(':')
-            if "GNOME" not in desktop:
-                atexit.register(_idle.terminate);
+            try:
+                idle = subprocess.Popen(["gnome-session-inhibit","--inhibit", 
+                                          "idle", "--inhibit-only"],
+                                          env=self._user_env)
+                # leave the inhibitor in place on Ubuntu GNOME, since the
+                # lock screen will be broken after upgrade (LP :#1565178)
+                xdg_desktop = self._user_env["XDG_CURRENT_DESKTOP"].split(':')
+                for desktop in xdg_desktop:
+                    if "GNOME" not in desktop:
+                        atexit.register(idle.terminate);
+            except:
+                logging.exception("failed to inhibit gnome-session idle")
+            os.seteuid(os.getuid())
 
 
     def _stopPokeScreensaver(self):

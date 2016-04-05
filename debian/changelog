@@ -4,11 +4,6 @@ ubuntu-release-upgrader (1:16.04.9) UNRELEASED; urgency=medium
     RELEASE_UPGRADER_ALLOW_THIRD_PARTY; this will help running with third-
     party mirrors in sources via just the environment variable for one-shot
     deals.
-  * DistUpgrade/DistUpgradeQuirks.py: add quirk for dbus's launch-helper; we
-    really need it to always be setuid while doing the upgrade, and the
-    postinst may reset the permissions via dpkg-statoverride too late for us
-    since the upgrade might try to reload dbus a few times before the postinst
-    actually runs.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 29 Mar 2016 23:18:01 -0400
 

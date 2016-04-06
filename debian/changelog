@@ -1,11 +1,18 @@
 ubuntu-release-upgrader (1:16.04.9) UNRELEASED; urgency=medium
 
+  [ Mathieu Trudel-Lapierre ]
   * DistUpgrade/DistUpgradeController.py: fix typo in variable name for
     RELEASE_UPGRADER_ALLOW_THIRD_PARTY; this will help running with third-
     party mirrors in sources via just the environment variable for one-shot
     deals.
 
- -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 29 Mar 2016 23:18:01 -0400
+  [ Tim Lunn ]
+  * DistUpgrade/DistUpgradeController.py: set a logind sleep inhibitor
+  * DistUpgrade/DistUpgradeFetcher{KDE}.py: remove calls to inhibit_sleep
+    logind inhibitor will be released when os.exec is called as we lose
+    reference on the fd (LP: #1566141)
+
+ -- Tim Lunn <tim@feathertop.org>  Wed, 06 Apr 2016 14:49:19 +1000
 
 ubuntu-release-upgrader (1:16.04.8) xenial; urgency=medium
 

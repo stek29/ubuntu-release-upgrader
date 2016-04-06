@@ -44,7 +44,6 @@ except ImportError:
 
 import apt_pkg
 
-from DistUpgrade.utils import inhibit_sleep, allow_sleep
 from DistUpgrade.DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from gettext import gettext as _
 from urllib.request import urlopen
@@ -121,7 +120,6 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
             KMessageBox.sorry(None, message, summary)
 
     def runDistUpgrader(self):
-        inhibit_sleep()
         # now run it with sudo
         if os.getuid() != 0:
             os.execv("/usr/bin/kdesudo",
@@ -131,9 +129,6 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
             os.execv(self.script,
                      [self.script, "--frontend=DistUpgradeViewKDE"] +
                      self.run_options)
-        # we shouldn't come to this point, but if we do, undo our
-        # inhibit sleep
-        allow_sleep()
 
     def showReleaseNotes(self):
         # FIXME: care about i18n! (append -$lang or something)

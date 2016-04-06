@@ -94,6 +94,7 @@ class testPreRequists(unittest.TestCase):
         os.makedirs(tmpdir + "/lists/partial")
         apt_pkg.config.set("Dir::State", tmpdir)
         apt_pkg.config.set("Dir::State::status", tmpdir + "/status")
+        apt_pkg.config.clear("APT::Update::Post-Invoke-Success")
         self.dc.openCache(lock=False)
         exp = False
         try:

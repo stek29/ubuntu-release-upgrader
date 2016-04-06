@@ -154,7 +154,7 @@ class TestQuirks(unittest.TestCase):
                            ["pci:v00001002d00006702sv*sd*bc03sc*i*",
                             "pci:v00001001d00006702sv*sd*bc03sc*i*"])])
 
-    def testFglrx(self):
+    def disabled__as_fglrx_is_gone_testFglrx(self):
         mock_lspci_good = set(['1002:9990'])
         mock_lspci_bad = set(['8086:ac56'])
         config = mock.Mock()

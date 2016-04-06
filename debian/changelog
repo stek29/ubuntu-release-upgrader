@@ -1,9 +1,15 @@
 ubuntu-release-upgrader (1:16.04.9) UNRELEASED; urgency=medium
 
+  [ Mathieu Trudel-Lapierre ]
   * DistUpgrade/DistUpgradeController.py: fix typo in variable name for
     RELEASE_UPGRADER_ALLOW_THIRD_PARTY; this will help running with third-
     party mirrors in sources via just the environment variable for one-shot
     deals.
+
+  [ Brian Murray ]
+  * demotions.py: clear Apt::Update settings so that Post-Invoke-Success jobs
+    are not run.
+  * tests/test_quirks.py: disable fglrx test since it is not in xenial.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 29 Mar 2016 23:18:01 -0400
 

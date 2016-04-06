@@ -63,6 +63,7 @@ if __name__ == "__main__":
     apt_pkg.config.set("Dir::state", "./apt/")
     apt_pkg.config.set("Dir::Etc", "./apt")
     apt_pkg.config.set("Dir::State::status", "./apt/status")
+    apt_pkg.config.clear("APT::Update")
     try:
         os.makedirs("apt/lists/partial")
     except OSError:

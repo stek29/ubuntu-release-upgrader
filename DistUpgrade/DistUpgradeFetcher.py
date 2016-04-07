@@ -23,7 +23,7 @@
 from gi.repository import Gtk, Gdk
 
 from .ReleaseNotesViewer import ReleaseNotesViewer
-from .utils import error, inhibit_sleep, allow_sleep
+from .utils import error
 from .DistUpgradeFetcherCore import DistUpgradeFetcherCore
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 from gettext import gettext as _
@@ -45,7 +45,6 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         return error(self.window_main, summary, message)
 
     def runDistUpgrader(self):
-        inhibit_sleep()
         # now run it as root
         if os.getuid() != 0:
             os.execv("/usr/bin/gksu",
@@ -56,9 +55,6 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
                       self.script] + self.run_options)
         else:
             os.execv(self.script, [self.script] + self.run_options)
-        # we shouldn't come to this point, but if we do, undo our
-        # inhibit sleep
-        allow_sleep()
 
     def showReleaseNotes(self):
         # first try showing the webkit version, this may fail (return None

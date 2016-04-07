@@ -1,9 +1,16 @@
 ubuntu-release-upgrader (1:16.04.10) UNRELEASED; urgency=medium
 
+  [ Tim Lunn ]
+  * DistUpgrade/DistUpgradeController.py: set a logind sleep inhibitor
+  * DistUpgrade/DistUpgradeFetcher{KDE}.py: remove calls to inhibit_sleep
+    logind inhibitor will be released when os.exec is called as we lose
+    reference on the fd (LP: #1566141)
+
+  [ Brian Murray ]
   * DistUpgrade/DistUpgradeViewKDE.py: Really fix call to showConffile.
     (LP: #1509655)
 
- -- Brian Murray <brian@ubuntu.com>  Wed, 06 Apr 2016 16:20:38 -0700
+ -- Brian Murray <brian@ubuntu.com>  Thu, 07 Apr 2016 11:25:27 -0700
 
 ubuntu-release-upgrader (1:16.04.9) xenial; urgency=medium
 

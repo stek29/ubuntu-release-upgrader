@@ -40,7 +40,8 @@ from .utils import (country_mirror,
                     iptables_active,
                     inside_chroot,
                     get_string_with_no_auth_from_source_entry,
-                    is_child_of_process_name)
+                    is_child_of_process_name,
+                    inhibit_sleep)
 from string import Template
 from urllib.parse import urlsplit
 
@@ -156,6 +157,9 @@ class DistUpgradeController(object):
         
         # install the quirks handler
         self.quirks = DistUpgradeQuirks(self, self.config)
+
+        # install a logind sleep inhibitor
+        self.inhibitor_fd = inhibit_sleep()
 
         # setup env var 
         os.environ["RELEASE_UPGRADE_IN_PROGRESS"] = "1"

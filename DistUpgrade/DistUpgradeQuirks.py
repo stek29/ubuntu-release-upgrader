@@ -60,7 +60,7 @@ class DistUpgradeQuirks(object):
         self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
         self._poke = None
-        self._uid = os.environ['SUDO_UID']
+        self._uid = ''
         self._user_env = {}
 
     # the quirk function have the name:
@@ -407,26 +407,43 @@ class DistUpgradeQuirks(object):
                 if len(line):
                     env = line.split('=', 1)
                     self._user_env[env[0]] = env[1]
-        except:
-            logging.exception("failed to read user env")
+        except subprocess.CalledProcessError as e:
+            if e.returncode == 1:
+                logging.debug("gnome-session not running for user")
+            else:
+                logging.exception("failed to read user env")
 
     def _inhibitIdle(self):
         if os.path.exists("/usr/bin/gnome-session-inhibit"):
+            self._uid = os.environ.get('SUDO_UID', '')
+            if not self._uid:
+                self._uid = os.environ.get('PKEXEC_UID', '')
+            if not self._uid:
+                logging.debug("failed to determine user upgrading")
+                logging.error("failed to inhibit gnome-session idle")
+                return
             self._getUserEnv()
+            if not self._user_env:
+                return
             #seteuid so dbus user session can be accessed
             os.seteuid(int(self._uid))
-        
+
             logging.debug("inhibit gnome-session idle")
             try:
-                idle = subprocess.Popen(["gnome-session-inhibit","--inhibit", 
-                                          "idle", "--inhibit-only"],
-                                          env=self._user_env)
+                xdg_desktop = self._user_env.get("XDG_CURRENT_DESKTOP", "")
+                if not xdg_desktop:
+                    logging.debug("failed to find XDG_CURRENT_DESKTOP")
+                    logging.error("failed to inhibit gnome-session idle")
+                    return
+                xdg_desktop = xdg_desktop.split(':')
+                idle = subprocess.Popen(["gnome-session-inhibit", "--inhibit",
+                                         "idle", "--inhibit-only"],
+                                        env=self._user_env)
                 # leave the inhibitor in place on Ubuntu GNOME, since the
-                # lock screen will be broken after upgrade (LP :#1565178)
-                xdg_desktop = self._user_env["XDG_CURRENT_DESKTOP"].split(':')
+                # lock screen will be broken after upgrade (LP: #1565178)
                 for desktop in xdg_desktop:
                     if "GNOME" not in desktop:
-                        atexit.register(idle.terminate);
+                        atexit.register(idle.terminate)
             except:
                 logging.exception("failed to inhibit gnome-session idle")
             os.seteuid(os.getuid())

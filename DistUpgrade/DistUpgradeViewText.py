@@ -208,15 +208,15 @@ class DistUpgradeViewText(DistUpgradeView):
       print(twrap(self.confirmChangesMessage))
       print(" %s %s" % (_("Continue [yN] "), _("Details [d]")), end="")
       while True:
-        res = readline()
+        res = readline().strip().lower()
         # TRANSLATORS: the "y" is "yes"
-        if res.strip().lower().startswith(_("y")):
+        if res.startswith(_("y")):
           return True
         # TRANSLATORS: the "n" is "no"
-        elif res.strip().lower().startswith(_("n")):
+        elif not res or res.startswith(_("n")):
           return False
         # TRANSLATORS: the "d" is "details"
-        elif res.strip().lower().startswith(_("d")):
+        elif res.startswith(_("d")):
           output = ""
           if len(self.demotions) > 0:
               output += "\n"  

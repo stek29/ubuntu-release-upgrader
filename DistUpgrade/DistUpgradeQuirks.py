@@ -398,10 +398,10 @@ class DistUpgradeQuirks(object):
 
     def _getUserEnv(self):
         try:
-            pid = subprocess.check_output(["pgrep","-u",self._uid,
+            pid = subprocess.check_output(["pgrep", "-u", self._uid,
                                            "gnome-session"])
             pid = pid.decode().split('\n')[0]
-            with open('/proc/'+pid+'/environ','r') as f:
+            with open('/proc/'+pid+'/environ', 'r') as f:
                 data = f.read().split('\x00')
             for line in data:
                 if len(line):
@@ -447,7 +447,6 @@ class DistUpgradeQuirks(object):
             except:
                 logging.exception("failed to inhibit gnome-session idle")
             os.seteuid(os.getuid())
-
 
     def _stopPokeScreensaver(self):
         res = False

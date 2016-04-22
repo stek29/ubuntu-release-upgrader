@@ -401,7 +401,7 @@ class DistUpgradeQuirks(object):
             pid = subprocess.check_output(["pgrep", "-u", self._uid,
                                            "gnome-session"])
             pid = pid.decode().split('\n')[0]
-            with open('/proc/'+pid+'/environ', 'r') as f:
+            with open('/proc/' + pid + '/environ', 'r') as f:
                 data = f.read().split('\x00')
             for line in data:
                 if len(line):

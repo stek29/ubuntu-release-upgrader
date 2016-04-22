@@ -5,7 +5,7 @@ set -e
 # The testsuite has a sad if you're in a non-UTF-8 locale:
 export LANG='C.UTF-8'
 
-dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python-feedparser,
+dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python3-feedparser,
 			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose, pep8, python3-distutils-extra'
 
 # update demotions

@@ -46,9 +46,10 @@ from .utils import twrap
 def readline():
     """ py2/py3 compatible readline from stdin """
     sys.stdout.flush()
-    s = sys.stdin.readline()
-    if hasattr(s, "decode"):
-        return s.decode(ENCODING, "backslashreplace")
+    try:
+        s = input()
+    except EOFError:
+        s = ''
     return s
 
 

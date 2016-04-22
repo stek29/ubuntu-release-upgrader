@@ -4,6 +4,9 @@ ubuntu-release-upgrader (1:16.04.13) UNRELEASED; urgency=medium
   * Properly handle the indicated default option on the 'confirm changes'
     prompt.
   * DistUpgrade/DistUpgradeQuirks.py: pep8 fixes.
+  * Use python3's native input() function instead of trying to read directly
+    from stdin, since the latter fails to handle backspacing over unicode
+    characters.
 
  -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 21 Apr 2016 16:31:38 -0700
 

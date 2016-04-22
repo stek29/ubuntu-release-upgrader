@@ -50,6 +50,8 @@ def readline():
         s = input()
     except EOFError:
         s = ''
+    if hasattr(s, "decode"):
+        return s.decode(ENCODING, "backslashreplace")
     return s
 
 

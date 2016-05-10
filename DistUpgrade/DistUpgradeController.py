@@ -793,7 +793,7 @@ class DistUpgradeController(object):
 
     def updateSourcesList(self):
         logging.debug("updateSourcesList()")
-        self.sources = SourcesList(matcherPath=".")
+        self.sources = SourcesList(matcherPath=self.datadir)
         # backup first!
         self.sources.backup(self.sources_backup_ext)
         if not self.rewriteSourcesList(mirror_check=True):
@@ -813,7 +813,7 @@ class DistUpgradeController(object):
                                ) % (self.fromDist, self.toDist))
             if res:
                 # re-init the sources and try again
-                self.sources = SourcesList(matcherPath=".")
+                self.sources = SourcesList(matcherPath=self.datadir)
                 # its ok if rewriteSourcesList fails here if
                 # we do not use a network, the sources.list may be empty
                 if (not self.rewriteSourcesList(mirror_check=False)

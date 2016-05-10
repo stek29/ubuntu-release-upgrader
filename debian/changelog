@@ -1,10 +1,29 @@
-ubuntu-release-upgrader (1:16.04.14) UNRELEASED; urgency=medium
+ubuntu-release-upgrader (1:16.10.1) yakkety; urgency=medium
 
+  * DistUpgrade/{EOL,}ReleaseAnnouncement,
+    DistUpgrade/DistUpgrade/window_main.ui,
+    data/gtkbuilder/DistUpgrade.ui,
+    data/DistUpgrade.cfg,
+    pre-build.sh:
+    - updated for 16.04 -> 16.10
+  * tests/test_country_mirror.py: modify how the LANG environment variable was
+    being modified there by fixing a test failure in test_sources_list.py.
+
+ -- Brian Murray <brian@ubuntu.com>  Tue, 03 May 2016 08:54:38 -0700
+
+ubuntu-release-upgrader (1:16.04.14) xenial; urgency=medium
+
+  [ Steve Langasek ]
   * No-change rebuild to pick up translations from Launchpad (including the
     Greek translations, which had been accidentally dropped in the previous
     upload due to a collision with the importer).
 
- -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 25 Apr 2016 10:58:43 -0700
+  [ Brian Murray ]
+  * Ensure that the system being upgraded has the version of apt which fixes
+    LP: #1560797 installed and that 14.04 systems have the version of dpkg
+    which fixes LP: #1574285 installed.
+
+ -- Brian Murray <brian@ubuntu.com>  Mon, 25 Apr 2016 15:01:58 -0700
 
 ubuntu-release-upgrader (1:16.04.13) xenial-proposed; urgency=medium
 

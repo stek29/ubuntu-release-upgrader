@@ -46,7 +46,7 @@ xvfb-run nosetests3
 # test leftovers
 # echo "Cleaning up after tests"
 rm -f ./tests/data-sources-list-test/apt.log
-rm -f ./tests/data-sources-list-test/Ubuntu.*
+rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)

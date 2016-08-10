@@ -1177,12 +1177,14 @@ class DistUpgradeController(object):
             # FIXME: take this into account for diskspace calculation
             self._maybe_create_apt_btrfs_snapshot()
         res = False
+        exception = None
         while currentRetry < maxRetries:
             try:
                 res = self.cache.commit(fprogress,iprogress)
                 logging.debug("cache.commit() returned %s" % res)
             except SystemError as e:
                 logging.error("SystemError from cache.commit(): %s" % e)
+                exception = e
                 # if its a ordering bug we can cleanly revert to
                 # the previous release, no packages have been installed
                 # yet (LP: #328655, #356781)
@@ -1207,7 +1209,7 @@ class DistUpgradeController(object):
                             self._view.error(_("Could not install the upgrades"), msg)
                             # abort() exits cleanly
                             self.abort()
-                
+
                 # invoke the frontend now and show a error message
                 msg = _("The upgrade has aborted. Your system "
                         "could be in an unusable state. A recovery "
@@ -1231,11 +1233,13 @@ class DistUpgradeController(object):
                 # fetch failed, will be retried
                 logging.error("IOError in cache.commit(): '%s'. Retrying (currentTry: %s)" % (e,currentRetry))
                 currentRetry += 1
+                exception = e
                 continue
             except OSError as e:
                 logging.exception("cache.commit()")
                 # deal gracefully with:
                 #  OSError: [Errno 12] Cannot allocate memory
+                exception = e
                 if e.errno == 12:
                     self._enableAptCronJob()
                     msg = _("Error during commit")
@@ -1247,14 +1251,14 @@ class DistUpgradeController(object):
             # no exception, so all was fine, we are done
             self._enableAptCronJob()
             return True
-        
+
         # maximum fetch-retries reached without a successful commit
         logging.error("giving up on fetching after maximum retries")
         self._view.error(_("Could not download the upgrades"),
                          _("The upgrade has aborted. Please check your "\
                            "Internet connection or "\
                            "installation media and try again. "),
-                           "%s" % e)
+                           "%s" % exception)
         # abort here because we want our sources.list back
         self.abort()
 

@@ -24,6 +24,7 @@ import os
 import apt
 import apt_pkg
 import logging
+import glob
 import gzip
 import shutil
 import subprocess
@@ -46,6 +47,7 @@ class AptCdrom(object):
         self.packages = set()
         self.signatures = set()
         self.i18n = set()
+        apt_pkg.init_config()
 
     def restore_backup(self, backup_ext):
         """ restore the backup copy of the cdroms.list file 
@@ -200,15 +202,19 @@ class AptCdrom(object):
     def _verifyRelease(self, signatures):
         " verify the signatues and hashes "
         gpgv = apt_pkg.config.find("Dir::Bin::gpg", "/usr/bin/gpgv")
-        keyring = apt_pkg.config.find("Apt::GPGV::TrustedKeyring",
-                                      "/etc/apt/trusted.gpg")
+        trusted = apt_pkg.config.find_file("Dir::Etc::trusted")
+        trustedparts = apt_pkg.config.find_dir("Dir::Etc::trustedparts")
+        keyrings = glob.glob(trustedparts + '*.gpg')
+        keyrings.append(trusted)
         for sig in signatures:
             basepath = os.path.split(sig)[0]
             # do gpg checking
             releasef = os.path.splitext(sig)[0]
-            cmd = [gpgv, "--keyring", keyring,
-                   "--ignore-time-conflict",
-                   sig, releasef]
+            cmd = [gpgv,]
+            for keyring in keyrings:
+                cmd += ['--keyring', keyring]
+            cmd += ["--ignore-time-conflict",
+                    sig, releasef]
             ret = subprocess.call(cmd)
             if not (ret == 0):
                 return False

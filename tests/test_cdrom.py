@@ -26,9 +26,9 @@ class TestAptCdrom(unittest.TestCase):
 
     def testWriteDatabase(self):
         expect = \
-            "CD::0380987599d9f666b749fbfe29d5b440-2 " \
+            "CD::47dd35831a1e27f9a0ca8c8c50014981-2 " \
             "\"Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)\";\n" \
-            "CD::0380987599d9f666b749fbfe29d5b440-2::Label " \
+            "CD::47dd35831a1e27f9a0ca8c8c50014981-2::Label " \
             "\"Ubuntu 8.10 _Intrepid Ibex_ - Beta amd64 (20080930.4)\";\n"
         p = CURDIR + "/test-data-cdrom/"
         database = CURDIR + "/test-data-cdrom/cdrom.list"
@@ -106,6 +106,7 @@ class TestAptCdrom(unittest.TestCase):
 
     def testVerifyRelease(self):
         cdrom = AptCdrom(None, CURDIR + "/test-data-cdrom")
+        apt_pkg.config.set("Dir::Etc::trusted", CURDIR + "/test-data/mvo.gpg")
         (p, s, i18n) = cdrom._scanCD()
         res = cdrom._verifyRelease(s)
         self.assertTrue(res)
@@ -135,6 +136,7 @@ class TestAptCdrom(unittest.TestCase):
     def test_comment_out(self):
         tmpdir = tempfile.mkdtemp()
         sourceslist = os.path.join(tmpdir, "sources.list")
+        open(sourceslist, 'w').close()
         apt_pkg.config.set("dir::etc::sourcelist", sourceslist)
         apt_pkg.config.set("dir::state::lists", tmpdir)
         view = Mock()

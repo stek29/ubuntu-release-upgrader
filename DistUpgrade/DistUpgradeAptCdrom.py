@@ -210,7 +210,7 @@ class AptCdrom(object):
             basepath = os.path.split(sig)[0]
             # do gpg checking
             releasef = os.path.splitext(sig)[0]
-            cmd = [gpgv,]
+            cmd = [gpgv]
             for keyring in keyrings:
                 cmd += ['--keyring', keyring]
             cmd += ["--ignore-time-conflict",

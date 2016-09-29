@@ -24,11 +24,11 @@ import os
 import apt
 import apt_pkg
 import logging
-import glob
 import gzip
 import shutil
 import subprocess
 import sys
+import tempfile
 from gettext import gettext as _
 
 
@@ -201,21 +201,16 @@ class AptCdrom(object):
 
     def _verifyRelease(self, signatures):
         " verify the signatues and hashes "
-        gpgv = apt_pkg.config.find("Dir::Bin::gpg", "/usr/bin/gpgv")
-        trusted = apt_pkg.config.find_file("Dir::Etc::trusted")
-        trustedparts = apt_pkg.config.find_dir("Dir::Etc::trustedparts")
-        keyrings = glob.glob(trustedparts + '*.gpg')
-        keyrings.append(trusted)
         for sig in signatures:
             basepath = os.path.split(sig)[0]
             # do gpg checking
             releasef = os.path.splitext(sig)[0]
-            cmd = [gpgv]
-            for keyring in keyrings:
-                cmd += ['--keyring', keyring]
-            cmd += ["--ignore-time-conflict",
-                    sig, releasef]
-            ret = subprocess.call(cmd)
+            verify_env = os.environ.copy()
+            cmd = ["apt-key", "--quiet", "verify", sig, releasef]
+            with tempfile.NamedTemporaryFile() as fp:
+                fp.write(apt_pkg.config.dump())
+                verify_env["APT_CONFIG"] = fp.name
+                ret = subprocess.call(cmd, env=verify_env)
             if not (ret == 0):
                 return False
             # now do the hash sum checks

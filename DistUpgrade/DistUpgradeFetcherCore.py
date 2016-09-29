@@ -78,7 +78,7 @@ class DistUpgradeFetcherCore(object):
         return False
 
     def gpgauthenticate(self, file, signature,
-                        keyring='/etc/apt/trusted.gpg'):
+                        keyring=None):
         """ authenticated a file against a given signature, if no keyring
             is given use the apt default keyring
         """
@@ -87,17 +87,21 @@ class DistUpgradeFetcherCore(object):
         if sys.version_info >= (3, 4):
             os.set_inheritable(status_pipe[1], 1)
             os.set_inheritable(logger_pipe[1], 1)
+
+        # Can I use apt-key verify here?! which calls gpgv without
+        # status-fds & logger-fds?
         gpg = [
-            "gpg",
+            "apt-key",
+            "--quiet",
+            "adv",
             "--status-fd", "%d" % status_pipe[1],
             "--logger-fd", "%d" % logger_pipe[1],
-            "--no-options",
-            "--homedir", self.tmpdir,
-            "--no-default-keyring",
-            "--ignore-time-conflict",
-            "--keyring", keyring,
-            "--verify", signature, file,
         ]
+
+        if keyring:
+            gpg += ["--keyring", keyring]
+            
+        gpg += ["--verify", signature, file]
 
         def gpg_preexec():
             os.close(status_pipe[0])

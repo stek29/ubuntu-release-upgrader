@@ -35,7 +35,7 @@ class testPreRequists(unittest.TestCase):
         self.orig_sourceparts = apt_pkg.config.get("Dir::Etc::sourceparts")
         self.orig_state = apt_pkg.config.get("Dir::State")
         self.orig_status = apt_pkg.config.get("Dir::State::status")
-        self.orig_trusted = apt_pkg.config.get("APT::GPGV::TrustedKeyring")
+        self.orig_trusted = apt_pkg.config.get("Dir::Etc::trusted")
 
         apt_pkg.config.set("Dir::Etc", self.testdir)
         apt_pkg.config.set("Dir::Etc::sourceparts",
@@ -48,7 +48,7 @@ class testPreRequists(unittest.TestCase):
         apt_pkg.config.set("Dir::Etc::sourceparts", self.orig_sourceparts)
         apt_pkg.config.set("Dir::State", self.orig_state)
         apt_pkg.config.set("Dir::State::status", self.orig_status)
-        apt_pkg.config.set("APT::GPGV::TrustedKeyring", self.orig_trusted)
+        apt_pkg.config.set("Dir::Etc::trusted", self.orig_trusted)
 
     def testPreReqSourcesListAddingSimple(self):
         " test adding the prerequists when a mirror is known "
@@ -112,7 +112,7 @@ class testPreRequists(unittest.TestCase):
         tmpdir = tempfile.mkdtemp()
         #apt_pkg.config.set("Debug::pkgAcquire::Auth","true")
         #apt_pkg.config.set("Debug::Acquire::gpgv","true")
-        apt_pkg.config.set("APT::GPGV::TrustedKeyring",
+        apt_pkg.config.set("Dir::Etc::trusted",
                            self.testdir + "/trusted.gpg")
         # set sourceparts
         apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
@@ -137,7 +137,7 @@ class testPreRequists(unittest.TestCase):
         tmpdir = tempfile.mkdtemp()
         #apt_pkg.config.set("Debug::pkgAcquire::Auth","true")
         #apt_pkg.config.set("Debug::Acquire::gpgv","true")
-        apt_pkg.config.set("APT::GPGV::TrustedKeyring",
+        apt_pkg.config.set("Dir::Etc::trusted",
                            self.testdir + "/trusted.gpg")
         # set sourceparts
         apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)
@@ -164,7 +164,7 @@ class testPreRequists(unittest.TestCase):
         tmpdir = tempfile.mkdtemp()
         #apt_pkg.config.set("Debug::pkgAcquire::Auth","true")
         #apt_pkg.config.set("Debug::Acquire::gpgv","true")
-        apt_pkg.config.set("APT::GPGV::TrustedKeyring",
+        apt_pkg.config.set("Dir::Etc::trusted",
                            self.testdir + "/trusted.gpg")
         # set sourceparts
         apt_pkg.config.set("Dir::Etc::sourceparts", tmpdir)

@@ -6,7 +6,7 @@ import subprocess
 import unittest
 
 # pep8 is overdoing it a bit IMO
-IGNORE_PEP8 = "W,E125,E126,E265"
+IGNORE_PEP8 = "W,E125,E126,E265,E402"
 # FIXME: this list should be empty
 IGNORE_FILES = (
     "DistUpgradeViewKDE.py",

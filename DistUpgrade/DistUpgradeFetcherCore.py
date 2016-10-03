@@ -78,58 +78,18 @@ class DistUpgradeFetcherCore(object):
         return False
 
     def gpgauthenticate(self, file, signature,
-                        keyring='/etc/apt/trusted.gpg'):
+                        keyring=None):
         """ authenticated a file against a given signature, if no keyring
             is given use the apt default keyring
         """
-        status_pipe = os.pipe()
-        logger_pipe = os.pipe()
-        if sys.version_info >= (3, 4):
-            os.set_inheritable(status_pipe[1], 1)
-            os.set_inheritable(logger_pipe[1], 1)
-        gpg = [
-            "gpg",
-            "--status-fd", "%d" % status_pipe[1],
-            "--logger-fd", "%d" % logger_pipe[1],
-            "--no-options",
-            "--homedir", self.tmpdir,
-            "--no-default-keyring",
-            "--ignore-time-conflict",
-            "--keyring", keyring,
-            "--verify", signature, file,
-        ]
+        gpg = ["apt-key"]
 
-        def gpg_preexec():
-            os.close(status_pipe[0])
-            os.close(logger_pipe[0])
+        if keyring:
+            gpg += ["--keyring", keyring]
 
-        proc = subprocess.Popen(
-            gpg, stderr=subprocess.PIPE, preexec_fn=gpg_preexec,
-            close_fds=False, universal_newlines=True)
-        os.close(status_pipe[1])
-        os.close(logger_pipe[1])
-        status_handle = os.fdopen(status_pipe[0])
-        logger_handle = os.fdopen(logger_pipe[0])
-        try:
-            gpgres = status_handle.read()
-            ret = proc.wait()
-            if ret != 0:
-                # gnupg returned a problem (non-zero exit)
-                print("gpg exited %d" % ret)
-                print("Debug information: ")
-                print(status_handle.read())
-                print(proc.stderr.read())
-                print(logger_handle.read())
-                return False
-            if "VALIDSIG" in gpgres:
-                return True
-            print("invalid result from gpg:")
-            print(gpgres)
-            return False
-        finally:
-            status_handle.close()
-            proc.stderr.close()
-            logger_handle.close()
+        gpg += ["verify", signature, file]
+        ret = subprocess.call(gpg, stderr=subprocess.PIPE)
+        return ret == 0
 
     def extractDistUpgrader(self):
         # extract the tarball

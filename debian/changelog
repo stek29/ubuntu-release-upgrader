@@ -1,9 +1,15 @@
 ubuntu-release-upgrader (1:16.10.4) UNRELEASED; urgency=medium
 
+  [ Brian Murray ]
   * DistUpgradeController.py: fix UnboundLocalError - thanks to Launchpad user
     MissionSix for the patch.  (LP: #1611470)
   * po/POTFILES.in: use check_new_release_gtk.py to allow for fuzzy
     translations.
+
+  [ Dimitri John Ledkov ]
+  * Mirgrate to using apt-key, instead of gpg/gpgv directly to gain
+    support for apt-secure trustedparts (key fragments in
+    /etc/apt/trusted.gpg.d).
 
  -- Brian Murray <brian@ubuntu.com>  Mon, 15 Aug 2016 14:10:55 -0700
 

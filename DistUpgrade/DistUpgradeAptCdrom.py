@@ -28,6 +28,7 @@ import gzip
 import shutil
 import subprocess
 import sys
+import tempfile
 from gettext import gettext as _
 
 
@@ -46,6 +47,7 @@ class AptCdrom(object):
         self.packages = set()
         self.signatures = set()
         self.i18n = set()
+        apt_pkg.init_config()
 
     def restore_backup(self, backup_ext):
         """ restore the backup copy of the cdroms.list file 
@@ -199,17 +201,16 @@ class AptCdrom(object):
 
     def _verifyRelease(self, signatures):
         " verify the signatues and hashes "
-        gpgv = apt_pkg.config.find("Dir::Bin::gpg", "/usr/bin/gpgv")
-        keyring = apt_pkg.config.find("Apt::GPGV::TrustedKeyring",
-                                      "/etc/apt/trusted.gpg")
         for sig in signatures:
             basepath = os.path.split(sig)[0]
             # do gpg checking
             releasef = os.path.splitext(sig)[0]
-            cmd = [gpgv, "--keyring", keyring,
-                   "--ignore-time-conflict",
-                   sig, releasef]
-            ret = subprocess.call(cmd)
+            verify_env = os.environ.copy()
+            cmd = ["apt-key", "--quiet", "verify", sig, releasef]
+            with tempfile.NamedTemporaryFile() as fp:
+                fp.write(apt_pkg.config.dump())
+                verify_env["APT_CONFIG"] = fp.name
+                ret = subprocess.call(cmd, env=verify_env)
             if not (ret == 0):
                 return False
             # now do the hash sum checks

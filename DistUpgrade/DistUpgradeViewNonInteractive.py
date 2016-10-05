@@ -226,7 +226,8 @@ class NonInteractiveInstallProgress(InstallProgress):
            self.last_activity = time.time()
            try:
                s = os.read(self.master_fd, 1)
-               sys.stdout.write("%s" % s.decode(locale.getpreferredencoding()))
+               sys.stdout.write("%s" % s.decode(
+                    locale.getpreferredencoding(), errors='ignore'))
            except OSError:
                # happens after we are finished because the fd is closed
                return

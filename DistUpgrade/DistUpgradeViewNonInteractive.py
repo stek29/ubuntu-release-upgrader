@@ -256,10 +256,13 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         self._installProgress = NonInteractiveInstallProgress(logdir)
         self._opProgress = apt.progress.base.OpProgress()
         sys.__excepthook__ = self.excepthook
-    def excepthook(self, type, value, traceback):
+    def excepthook(self, type, value, tb):
         " on uncaught exceptions -> print error and reboot "
+        import traceback
         logging.exception("got exception '%s': %s " % (type, value))
-        #sys.excepthook(type, value, traceback)
+        lines = traceback.format_exception(type, value, tb)
+        logging.error("not handled exception:\n%s" % "".join(lines))
+        #sys.excepthook(type, value, tb)
         self.confirmRestart()
     def getOpCacheProgress(self):
         " return a OpProgress() subclass for the given graphic"

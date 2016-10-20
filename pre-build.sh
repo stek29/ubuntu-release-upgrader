@@ -28,9 +28,23 @@ if [ ! -x /usr/bin/parsewiki ]; then
     echo "please sudo apt-get install parsewiki"
     exit 1
 fi
-(cd DistUpgrade; 
+# confirm we have the release version appearing the right number of times in each Announcement
+DEBRELEASE=$(LC_ALL=C dpkg-parsechangelog | sed -n -e '/^Distribution:/s/^Distribution: //p' | sed s/-.\*//)
+(cd DistUpgrade;
+ if [ $(grep -ic $DEBRELEASE DevelReleaseAnnouncement) != 1 ]; then
+    echo "Confirm $DEBRELEASE is correct in DevelReleaseAnnouncement"
+    exit 1
+ fi
  parsewiki DevelReleaseAnnouncement > DevelReleaseAnnouncement.html;
+ if [ $(grep -ic $DEBRELEASE ReleaseAnnouncement) != 3 ]; then
+    echo "Confirm $DEBRELEASE is correct in ReleaseAnnouncement"
+    exit 1
+ fi
  parsewiki ReleaseAnnouncement > ReleaseAnnouncement.html;
+ if [ $(grep -ic $DEBRELEASE EOLReleaseAnnouncement) != 1 ]; then
+    echo "Confirm $DEBRELEASE is correct in EOLReleaseAnnouncement"
+    exit 1
+ fi
  parsewiki EOLReleaseAnnouncement > EOLReleaseAnnouncement.html;
 )
 

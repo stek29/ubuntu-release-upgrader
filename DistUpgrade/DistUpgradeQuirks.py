@@ -140,11 +140,11 @@ class DistUpgradeQuirks(object):
         self._inhibitIdle()
         self._stopDocvertConverter()
 
-    def xenialPostDistUpgradeCache(self):
-        """
-        this function works around quirks in the
-        xenial upgrade calculation
-        """
+    # individual quirks handler that run *after* the dist-upgrade was
+    # calculated in the cache
+    def PostDistUpgradeCache(self):
+        """ run after calculating the dist-upgrade """
+        logging.debug("running Quirks.PostDistUpgradeCache")
         self._install_linux_metapackage()
 
     # helpers

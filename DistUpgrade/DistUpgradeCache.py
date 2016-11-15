@@ -1113,7 +1113,9 @@ class MyCache(apt.Cache):
             # we match against everything that looks like a kernel
             # and add space check to filter out metapackages
             if re.match("^linux-(image|image-debug)-[0-9.]*-.*", pkg.name):
-                if pkg.marked_install:
+                # upgrade because early in the release cycle the major version
+                # may be the same or they might be -lts- kernels
+                if pkg.marked_install or pkg.marked_upgrade:
                     logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
                     # multiply the KERNEL_INITRD_SIZE by two as we store a
                     # copy of the old initrd when creating a new one

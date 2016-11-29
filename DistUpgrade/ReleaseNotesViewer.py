@@ -181,6 +181,7 @@ class ReleaseNotesViewer(Gtk.TextView):
                 self.get_window(Gtk.TextWindowType.TEXT).set_cursor(
                     Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
 
+
 if __name__ == "__main__":
     # some simple test code
     win = Gtk.Window()

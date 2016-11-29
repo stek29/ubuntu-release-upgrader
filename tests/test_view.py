@@ -33,5 +33,6 @@ class TestDistUpradeView(unittest.TestCase):
         with open(output.name, "rb") as fp:
             self.assertEqual(fp.read().decode("utf-8"), "äää")
 
+
 if __name__ == "__main__":
     unittest.main()

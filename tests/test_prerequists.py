@@ -195,5 +195,6 @@ class testPreRequists(unittest.TestCase):
                                 "got:\n%s" % (l, filename,
                                               sources_list))
 
+
 if __name__ == "__main__":
     unittest.main()

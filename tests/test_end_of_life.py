@@ -65,6 +65,7 @@ class TestDistroEndOfLife(unittest.TestCase):
         while Gtk.events_pending():
             Gtk.main_iteration()
 
+
 if __name__ == "__main__":
     import logging
     logging.basicConfig(level=logging.DEBUG)

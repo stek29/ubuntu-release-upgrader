@@ -251,11 +251,13 @@ class DistUpgradeQuirks(object):
                 "libamdxvba1"
             ]
             logging.debug("remove %s" % ", ".join(removals))
-            l = self.controller.config.getlist("Distro", "PostUpgradePurge")
+            postupgradepurge = self.controller.config.getlist(
+                "Distro",
+                "PostUpgradePurge")
             for remove in removals:
-                l.append(remove)
+                postupgradepurge.append(remove)
             self.controller.config.set("Distro", "PostUpgradePurge",
-                                       ",".join(l))
+                                       ",".join(postupgradepurge))
 
     def _test_and_fail_on_non_i686(self):
         """

@@ -277,6 +277,7 @@ class DistUpgradeFetcherCore(object):
                            _("The error message is '%s'.") % e.strerror)
         return True
 
+
 if __name__ == "__main__":
     d = DistUpgradeFetcherCore(None, None)
 #    print(d.authenticate('/tmp/Release','/tmp/Release.gpg'))

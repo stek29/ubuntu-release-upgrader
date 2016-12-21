@@ -92,7 +92,7 @@ class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
     def testfetcher(self):
         progress = TestAcquireProgress()
         fetcher = TestDistUpgradeFetcherCore(self.new_dist, progress)
-        #fetcher.DEBUG=True
+        #fetcher.DEBUG = True
         res = fetcher.run()
         self.assertTrue(res)
         self.assertTrue(progress.started)

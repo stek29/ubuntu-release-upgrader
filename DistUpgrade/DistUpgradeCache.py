@@ -21,6 +21,7 @@
 
 import apt
 import apt_pkg
+import glob
 import locale
 import os
 import re
@@ -34,8 +35,7 @@ from subprocess import Popen, PIPE
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import ngettext
 
-from .utils import inside_chroot, estimate_kernel_size_in_boot
-
+from .utils import inside_chroot
 
 class CacheException(Exception):
     pass
@@ -49,17 +49,36 @@ class CacheExceptionDpkgInterrupted(CacheException):
     pass
 
 
-# the initrd/vmlinuz/abi space required in /boot for each kernel
-# we estimate based on the current kernel size and add a safety marging
-def _set_kernel_initrd_size():
-    size = estimate_kernel_size_in_boot()
-    if size == 0:
-        logging.warning("estimate_kernel_size_in_boot() returned '0'?")
-        size = 28*1024*1024
+def estimate_kernel_initrd_size_in_boot():
+    """estimate the amount of space used by the kernel and initramfs in /boot,
+    including a safety margin
+    """
+    kernel = 0
+    initrd = 0
+    kver = os.uname()[2]
+    for f in glob.glob("/boot/*%s*" % kver):
+        if f == '/boot/initrd.img-%s' % kver:
+            initrd += os.path.getsize(f)
+        # don't include in the estimate any files that are left behind by
+        # an interrupted package manager run
+        elif (f.find('initrd.img') >= 0 or f.find('.bak') >= 0
+              or f.find('.dpkg-') >= 0):
+            continue
+        else:
+            kernel += os.path.getsize(f)
+    if kernel == 0:
+        logging.warning(
+            "estimate_kernel_initrd_size_in_boot() returned '0' for kernel?")
+        kernel = 28*1024*1024
+    if initrd == 0:
+        logging.warning(
+            "estimate_kernel_initrd_size_in_boot() returned '0' for initrd?")
+        initrd = 45*1024*1024
     # add small safety buffer
-    size += 1*1024*1024
-    return size
-KERNEL_INITRD_SIZE = _set_kernel_initrd_size()
+    kernel += 1*1024*1024
+    initrd += 1*1024*1024
+    return kernel,initrd
+KERNEL_SIZE, INITRD_SIZE = estimate_kernel_initrd_size_in_boot()
 
 
 class FreeSpaceRequired(object):
@@ -1108,20 +1127,19 @@ class MyCache(apt.Cache):
         # now calculate the space that is required on /boot
         # we do this by checking how many linux-image-$ver packages
         # are installed or going to be installed
-        space_in_boot = 0
+        kernel_count = 0
         for pkg in self:
             # we match against everything that looks like a kernel
             # and add space check to filter out metapackages
             if re.match("^linux-(image|image-debug)-[0-9.]*-.*", pkg.name):
-                if pkg.marked_install:
-                    logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                    # multiply the KERNEL_INITRD_SIZE by two as we store a
-                    # copy of the old initrd when creating a new one
-                    space_in_boot += (KERNEL_INITRD_SIZE * 2)
-                # mvo: jaunty does not create .bak files anymore
-                #elif (pkg.marked_upgrade or pkg.is_installed):
-                #    logging.debug("%s (upgrade|installed) added with %s to boot space" % (pkg.name, KERNEL_INITRD_SIZE))
-                #    space_in_boot += KERNEL_INITRD_SIZE # creates .bak
+                # upgrade because early in the release cycle the major version
+                # may be the same or they might be -lts- kernels
+                if pkg.marked_install or pkg.marked_upgrade:
+                    logging.debug("%s (new-install) added with %s to boot space" % (pkg.name, KERNEL_SIZE))
+                    kernel_count += 1
+        # space calculated per LP: #1646222
+        space_in_boot = (kernel_count * KERNEL_SIZE
+                         + (kernel_count + 1) * INITRD_SIZE)
 
         # we check for various sizes:
         # archivedir is were we download the debs

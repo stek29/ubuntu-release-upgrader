@@ -47,11 +47,11 @@ class ReleaseNotesViewerWebkit(WebKit.WebView):
             self.connect("navigation-policy-decision-requested",
                          self._on_navigation_policy_decision_requested)
 
-        def _on_navigation_policy_decision_requested(self, view, frame,
-                                                     request, action, policy):
-            open_url(request.get_uri())
-            policy.ignore()
-            return True
+    def _on_navigation_policy_decision_requested(self, view, frame,
+                                                 request, action, policy):
+        open_url(request.get_uri())
+        policy.ignore()
+        return True
 
     def _on_decide_policy(self, web_view, decision, decision_type):
         if decision_type == WebKit.PolicyDecisionType.NAVIGATION_ACTION:

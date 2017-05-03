@@ -193,7 +193,6 @@ def run_new_gnu_screen_window_or_reattach():
     # unset escape key with -e, enable log with -L, set name with -S
     cmd = ["screen", 
            "-e", "\\0\\0",
-           "-L", 
            "-c", "screenrc",
            "-S", SCREENNAME]+sys.argv
     logging.info("re-exec inside screen: '%s'" % cmd)

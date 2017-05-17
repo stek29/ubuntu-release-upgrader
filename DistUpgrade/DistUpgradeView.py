@@ -30,7 +30,6 @@ import logging
 import signal
 import select
 
-from .DistUpgradeAufs import doAufsChroot, doAufsChrootRsync
 from .DistUpgradeApport import apport_pkgfailure
 
 
@@ -212,11 +211,9 @@ class InstallProgress(apt.progress.base.InstallProgress):
   def run(self, pm):
     pid = self.fork()
     if pid == 0:
-      # check if we need to setup/enable the aufs chroot stuff
+      # aufs support was removed LP: #1605259
       if "RELEASE_UPGRADE_USE_AUFS_CHROOT" in os.environ:
-        if not doAufsChroot(os.environ["RELEASE_UPGRADE_AUFS_RWDIR"],
-                            os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
-          print("ERROR: failed to setup aufs chroot overlay")
+          print("ERROR: Upgrading using an aufs chroot is no longer supported.")
           os._exit(1)
       # child, ignore sigpipe, there are broken scripts out there
       # like etckeeper (LP: #283642)
@@ -232,14 +229,6 @@ class InstallProgress(apt.progress.base.InstallProgress):
       os._exit(res)
     self.child_pid = pid
     res = os.WEXITSTATUS(self.wait_child())
-    # check if we want to sync the changes back, *only* do that
-    # if res is positive
-    if (res == 0 and
-        "RELEASE_UPGRADE_RSYNC_AUFS_CHROOT" in os.environ):
-      logging.info("doing rsync commit of the update")
-      if not doAufsChrootRsync(os.environ["RELEASE_UPGRADE_USE_AUFS_CHROOT"]):
-        logging.error("FATAL ERROR: doAufsChrootRsync() returned FALSE")
-        return pm.RESULT_FAILED
     return res
   
   def error(self, pkg, errormsg):

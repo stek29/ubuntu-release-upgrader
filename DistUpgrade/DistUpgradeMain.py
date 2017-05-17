@@ -33,8 +33,8 @@ from datetime import datetime
 from optparse import OptionParser
 from gettext import gettext as _
 
-# dirs that the packages will touch, this is needed for AUFS/overlayfs
-# and also for the sanity check before the upgrade
+# dirs that the packages will touch, this is needed for the sanity check
+# before the upgrade
 SYSTEM_DIRS = ["/bin",
               "/boot",
               "/etc",
@@ -54,9 +54,6 @@ from .DistUpgradeConfigParser import DistUpgradeConfig
 def do_commandline():
     " setup option parser and parse the commandline "
     parser = OptionParser()
-    parser.add_option("-s", "--sandbox", dest="useAufs", default=False,
-                      action="store_true",
-                      help=_("Sandbox upgrade using aufs"))
     parser.add_option("-c", "--cdrom", dest="cdromPath", default=None,
                       help=_("Use the given path to search for a cdrom with upgradable packages"))
     parser.add_option("--have-prerequists", dest="havePrerequists",

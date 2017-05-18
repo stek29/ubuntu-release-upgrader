@@ -57,7 +57,6 @@ from .DistUpgradeCache import MyCache
 from .DistUpgradeConfigParser import DistUpgradeConfig
 from .DistUpgradeQuirks import DistUpgradeQuirks
 from .DistUpgradeAptCdrom import AptCdrom
-from .DistUpgradeAufs import setupAufs, aufsOptionsAndEnvironmentSetup
 
 # workaround broken relative import in python-apt (LP: #871007), we
 # want the local version of distinfo.py from oneiric, but because of
@@ -137,9 +136,6 @@ class DistUpgradeController(object):
         # ConfigParser deals only with strings it seems *sigh*
         self.config.add_section("Options")
         self.config.set("Options","withNetwork", str(self.useNetwork))
-
-        # aufs stuff
-        aufsOptionsAndEnvironmentSetup(self.options, self.config)
 
         # some constants here
         self.fromDist = self.config.get("Sources","From")
@@ -398,27 +394,6 @@ class DistUpgradeController(object):
                              _("An upgrade from '%s' to '%s' is not "
                                "supported with this tool." % (release, self.toDist)))
             sys.exit(1)
-
-        # setup aufs
-        if self.config.getWithDefault("Aufs", "EnableFullOverlay", False):
-            aufs_rw_dir = self.config.get("Aufs","RWDir")
-            if not setupAufs(aufs_rw_dir):
-                logging.error("aufs setup failed")
-                self._view.error(_("Sandbox setup failed"),
-                                 _("It was not possible to create the sandbox "
-                                   "environment."))
-                return False
-
-            # all good, tell the user about the sandbox mode
-            logging.info("running in aufs overlay mode")
-            self._view.information(_("Sandbox mode"),
-                                   _("This upgrade is running in sandbox "
-                                     "(test) mode. All changes are written "
-                                     "to '%s' and will be lost on the next "
-                                     "reboot.\n\n"
-                                     "*No* changes written to a system directory "
-                                     "from now until the next reboot are "
-                                     "permanent.") % aufs_rw_dir)
 
         # setup backports (if we have them)
         if self.options and self.options.havePrerequists:

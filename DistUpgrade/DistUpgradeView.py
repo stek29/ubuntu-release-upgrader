@@ -211,10 +211,6 @@ class InstallProgress(apt.progress.base.InstallProgress):
   def run(self, pm):
     pid = self.fork()
     if pid == 0:
-      # aufs support was removed LP: #1605259
-      if "RELEASE_UPGRADE_USE_AUFS_CHROOT" in os.environ:
-          print("ERROR: Upgrading using an aufs chroot is no longer supported.")
-          os._exit(1)
       # child, ignore sigpipe, there are broken scripts out there
       # like etckeeper (LP: #283642)
       signal.signal(signal.SIGPIPE,signal.SIG_IGN) 

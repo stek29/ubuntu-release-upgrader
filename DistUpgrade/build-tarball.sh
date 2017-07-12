@@ -28,9 +28,6 @@ if [ ! -h $DIST ]; then
 	ln -s dist-upgrade.py $DIST
 fi
 
-# copy nvidia obsoleted drivers data
-cp /usr/share/ubuntu-drivers-common/obsolete ubuntu-drivers-obsolete.pkgs
-
 # create the tarball, copy links in place
 tar -c -h -v --exclude DistUpgrade --exclude=$DIST.tar --exclude=$0 -X build-exclude.txt -f $DIST.tar  ./*
 

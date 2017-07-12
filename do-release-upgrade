@@ -78,8 +78,8 @@ if __name__ == "__main__":
                      help=_("Show version and exit"))
   parser.add_option ("-d", "--devel-release", action="store_true",
                      dest="devel_release", default=False,
-                     help=_("Check if upgrading to the latest devel release "
-                          "is possible"))
+                     help=_("If using the latest supported release, "
+                            "upgrade to the development release"))
   parser.add_option ("--data-dir", "",
                      default="/usr/share/ubuntu-release-upgrader/",
                      help=_("Directory that contains the data files"))
@@ -136,7 +136,11 @@ if __name__ == "__main__":
   # now inform about a new release
   if m.new_dist is None:
     if not options.quiet:
-      print(_("No new release found"))
+      if options.devel_release:
+        print(_("Upgrades to the development release are only "))
+        print(_("available from the latest supported release."))
+      else:
+        print(_("No new release found."))
     sys.exit(NO_RELEASE_AVAILABLE)
 
   if m.new_dist.upgrade_broken:

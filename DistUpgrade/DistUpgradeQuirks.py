@@ -325,7 +325,7 @@ class DistUpgradeQuirks(object):
         # verver test (LP: #454783), see if there is a init around
         try:
             os.kill(1, 0)
-        except:
+        except OSError:
             logging.warning("no init found")
             res = self._view.askYesNoQuestion(
                 _("No init available"),
@@ -395,7 +395,7 @@ class DistUpgradeQuirks(object):
             try:
                 self._poke = subprocess.Popen(cmd, shell=True)
                 atexit.register(self._stopPokeScreensaver)
-            except:
+            except (OSError, ValueError):
                 logging.exception("failed to setup screensaver poke")
 
     def _getUserEnv(self):
@@ -446,7 +446,7 @@ class DistUpgradeQuirks(object):
                 for desktop in xdg_desktop:
                     if "GNOME" not in desktop:
                         atexit.register(idle.terminate)
-            except:
+            except (OSError, ValueError):
                 logging.exception("failed to inhibit gnome-session idle")
             os.seteuid(os.getuid())
 
@@ -456,7 +456,7 @@ class DistUpgradeQuirks(object):
             try:
                 self._poke.terminate()
                 res = self._poke.wait()
-            except:
+            except OSError:
                 logging.exception("failed to stop screensaver poke")
             self._poke = None
         return res
@@ -621,7 +621,7 @@ class DistUpgradeQuirks(object):
                             self.controller.toDist, ["main"],
                             "Third party developers repository")
                 sources.save()
-        except:
+        except Exception:
             logging.exception("error adding extras.ubuntu.com")
 
     def _gutenprint_fixup(self):
@@ -638,7 +638,7 @@ class DistUpgradeQuirks(object):
                 cache.mark_install(
                     "ijsgutenprint-ppds",
                     "foomatic-db-gutenprint -> ijsgutenprint-ppds rule")
-        except:
+        except Exception:
             logging.exception("_gutenprint_fixup failed")
 
     def _enable_multiarch(self, foreign_arch="i386"):

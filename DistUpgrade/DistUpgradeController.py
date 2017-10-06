@@ -959,13 +959,23 @@ class DistUpgradeController(object):
     def _checkFreeSpace(self):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
-        err_long= _("The upgrade has aborted. "
+        err_msg = _("The upgrade has aborted. "
                     "The upgrade needs a total of %s free space on disk '%s'. "
                     "Please free at least an additional %s of disk "
-                    "space on '%s'. "
-                    "Empty your trash and remove temporary "
-                    "packages of former installations using "
-                    "'sudo apt-get clean'.")
+                    "space on '%s'. %s")
+        # specific ways to resolve lack of free space
+        remedy_archivedir = _("Remove temporary packages of former "
+                              "installations using 'sudo apt clean'.")
+        remedy_boot = _("You can remove old kernels using "
+                        "'sudo apt autoremove' and you could also "
+                        "set COMPRESS=xz in "
+                        "/etc/initramfs-tools/initramfs.conf to "
+                        "reduce the size of your initramfs.")
+        remedy_root = _("Empty your trash and remove temporary "
+                        "packages of former installations using "
+                        "'sudo apt-get clean'.")
+        remedy_tmp = _("Reboot to clean up files in /tmp.")
+        remedy_usr = _("")
         # allow override
         if self.config.getWithDefault("FreeSpace","SkipCheck",False):
             logging.warning("free space check skipped via config override")
@@ -978,11 +988,32 @@ class DistUpgradeController(object):
             # ok, showing multiple error dialog sucks from the UI
             # perspective, but it means we do not need to break the
             # string freeze
-            for required in e.free_space_required_list:
-                self._view.error(err_sum, err_long % (required.size_total,
-                                                      required.dir,
-                                                      required.size_needed,
-                                                      required.dir))
+            archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")
+            err_long = ""
+            for req in e.free_space_required_list:
+                if err_long != "":
+                     err_long += " "
+                if req.dir == archivedir:
+                    err_long += err_msg % (req.size_total, req.dir,
+                                           req.size_needed, req.dir,
+                                           remedy_archivedir)
+                elif req.dir == "/boot":
+                    err_long += err_msg % (req.size_total, req.dir,
+                                           req.size_needed, req.dir,
+                                           remedy_boot)
+                elif req.dir == "/":
+                    err_long += err_msg % (req.size_total, req.dir,
+                                           req.size_needed, req.dir,
+                                           remedy_root)
+                elif req.dir == "/tmp":
+                    err_long += err_msg % (req.size_total, req.dir,
+                                           req.size_needed, req.dir,
+                                           remedy_tmp)
+                elif req.dir == "/usr":
+                    err_long += err_msg % (req.size_total, req.dir,
+                                           req.size_needed, req.dir,
+                                           remedy_usr)
+            self._view.error(err_sum, err_long)
             return False
         return True
 

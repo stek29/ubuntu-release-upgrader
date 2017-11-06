@@ -10,10 +10,10 @@ dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python3-feed
 
 # update demotions
 # echo "Running demotions"
-(cd utils && ./demotions.py zesty artful > demoted.cfg)
+(cd utils && ./demotions.py artful bionic > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
 # echo "Running lts demotions"
-(cd utils && ./demotions.py xenial artful > demoted.cfg.xenial)
+(cd utils && ./demotions.py xenial bionic > demoted.cfg.xenial)
 
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine

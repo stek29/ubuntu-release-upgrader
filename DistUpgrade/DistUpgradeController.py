@@ -993,7 +993,7 @@ class DistUpgradeController(object):
             for req in e.free_space_required_list:
                 if err_long != "":
                      err_long += " "
-                if req.dir == archivedir:
+                if req.dir in (archivedir, '/var'):
                     err_long += err_msg % (req.size_total, req.dir,
                                            req.size_needed, req.dir,
                                            remedy_archivedir)
@@ -1013,6 +1013,10 @@ class DistUpgradeController(object):
                     err_long += err_msg % (req.size_total, req.dir,
                                            req.size_needed, req.dir,
                                            remedy_usr)
+                else:
+                    err_long += err_msg % (req.size_total, req.dir,
+                                           req.size_needed, req.dir,
+                                           '')
             self._view.error(err_sum, err_long)
             return False
         return True

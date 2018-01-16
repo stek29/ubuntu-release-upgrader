@@ -19,7 +19,10 @@ IGNORE_FILES = (
     "DistUpgradeCache.py",
     "GtkProgress.py",
     "apt_btrfs_snapshot.py",
+    "apt_clone.py",
+    "distro.py",
     "source_ubuntu-release-upgrader.py",
+    "sourceslist.py",
     "setup.py",
     "test_sources_list.py",
 )

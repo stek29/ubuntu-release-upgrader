@@ -1,3 +1,17 @@
+ubuntu-release-upgrader (1:18.04.5) bionic; urgency=medium
+
+  * DistUpgrade/DistUpgradeFetcher.py,
+    check-new-release-gtk,
+    do-release-upgrade:
+    - Raise privileges in do-release-upgrade using pkexec when GUI is used
+    - Drop gksu usage
+    - Use os.execv in check-new-release-gtk instead of os.execl
+    - Apply the workaround "xhost +si:localuser:root" under Wayland to let
+      upgrades finish (LP: #1732185)
+  * Skip Python files from other packages in PEP 8 tests
+
+ -- Balint Reczey <rbalint@ubuntu.com>  Mon, 15 Jan 2018 17:09:44 +0100
+
 ubuntu-release-upgrader (1:18.04.4) bionic; urgency=medium
 
   * DistUpgradeController.py: Check that /boot/efi is a rw-mounted partition

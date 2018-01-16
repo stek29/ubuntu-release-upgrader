@@ -122,14 +122,14 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
 
   def on_button_upgrade_now_clicked(self, button):
     logging.debug("upgrade now")
-    extra_args = ""
+    extra_args = []
     if options.devel_release:
-        extra_args = extra_args + " --devel-release"
+        extra_args += ["--devel-release"]
     if options.proposed_release:
-        extra_args = extra_args + " --proposed"
-    os.execl("/bin/sh", "/bin/sh", "-c",
-             "/usr/bin/pkexec /usr/bin/do-release-upgrade "
-             "--frontend=DistUpgradeViewGtk3%s" % extra_args)
+        extra_args += ["--proposed"]
+    os.execv("/usr/bin/do-release-upgrade",
+             ["do-release-upgrade",
+             "--frontend=DistUpgradeViewGtk3"] + extra_args)
 
   def on_button_ask_me_later_clicked(self, button):
     logging.debug("ask me later")

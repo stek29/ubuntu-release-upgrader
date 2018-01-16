@@ -956,6 +956,55 @@ class DistUpgradeController(object):
         return False
 
 
+    def _checkBootEfi(self):
+        " check that /boot/efi is a mounted partition on an EFI system"
+
+        # Not an UEFI system
+        if not os.path.exists("/sys/firmware/efi"):
+            logging.debug("Not an UEFI system")
+            return True
+
+        # Stuff we know about that would write to the ESP
+        bootloaders = ["shim-signed", "grub-efi-amd64", "grub-efi-ia32", "grub-efi-arm", "grub-efi-arm64", "sicherboot"]
+
+        if not any(bl in self.cache and self.cache[bl].is_installed for bl in bootloaders):
+            logging.debug("UEFI system, but no UEFI grub installed")
+            return True
+
+        mounted=False
+
+        with open("/proc/mounts") as mounts:
+            for line in mounts:
+                line=line.strip()
+                try:
+                    (what, where, fs, options, a, b) = line.split()
+                except ValueError as e:
+                    logging.debug("line '%s' in /proc/mounts not understood (%s)" % (line, e))
+                    continue
+
+                if where != "/boot/efi":
+                    continue
+
+                mounted=True
+
+                if "rw" in options.split(","):
+                    logging.debug("Found writable ESP %s", line)
+                    return True
+
+        if not mounted:
+            self._view.error(_("UEFI Boot partition not usable"),
+                             _("The UEFI boot partition of your system "
+                               "is not mounted on /boot/efi. "
+                               "Please ensure that it is properly configured "
+                               "and retry."))
+        else:
+            self._view.error(_("UEFI Boot partition not usable"),
+                             _("The UEFI boot partition of your system "
+                               "(/boot/efi) is not writable. "
+                               "Please ensure that it is properly configured "
+                               "and retry."))
+        return False
+
     def _checkFreeSpace(self):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
@@ -1042,6 +1091,11 @@ class DistUpgradeController(object):
         # check if we have enough free space 
         if not self._checkFreeSpace():
             return False
+
+        # check that ESP is sane
+        if not self._checkBootEfi():
+            return False
+
         self._view.processEvents()
 
         # get the demotions

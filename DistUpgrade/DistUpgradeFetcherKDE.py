@@ -2,7 +2,7 @@
 # -*- Mode: Python; indent-tabs-mode: nil; tab-width: 4; coding: utf-8 -*-
 #
 #  Copyright (c) 2008 Canonical Ltd
-#  Copyright (c) 2014 Harald Sitter <apachelogger@kubuntu.org>
+#  Copyright (c) 2014-2018 Harald Sitter <sitter@kde.org>
 #
 #  Author: Jonathan Riddell <jriddell@ubuntu.com>
 #
@@ -68,7 +68,19 @@ from .QUrlOpener import QUrlOpener
 # pretty much equal to the process' one we might as well singleton up.
 def _ensureQApplication():
     if not QApplication.instance():
+        # Force environment to make sure Qt uses suitable theming and UX.
+        os.environ["QT_PLATFORM_PLUGIN"] = "kde"
+        # For above settings to apply automatically we need to indicate that we
+        # are inside a full KDE session.
+        os.environ["KDE_FULL_SESSION"] = "TRUE"
+        # We also need to indicate version as otherwise KDElibs3 compatibility
+        # might kick in such as in QIconLoader.cpp:QString fallbackTheme.
+        os.environ["KDE_SESSION_VERSION"] = "5"
+        # Pretty much all of the above but for Qt5
+        os.environ["QT_QPA_PLATFORMTHEME"] = "kde"
+
         app = QApplication(["ubuntu-release-upgrader"])
+
         # Try to load default Qt translations so we don't have to worry about
         # QStandardButton translations.
         # FIXME: make sure we dep on l10n
@@ -167,28 +179,6 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
             if result == QDialog.Accepted:
                 return True
         return False
-
-    # FIXME: largely code copy from ReleaseNotesViewer which imports GTK.
-    @pyqtSlot(QUrl)
-    def openUrl(self, url):
-        url = url.toString()
-        import subprocess
-        """Open the specified URL in a browser"""
-        # Find an appropiate browser
-        if os.path.exists("/usr/bin/kde-open"):
-            command = ["kde-open", url]
-        elif os.path.exists("/usr/bin/xdg-open"):
-            command = ["xdg-open", url]
-        elif os.path.exists("/usr/bin/exo-open"):
-            command = ["exo-open", url]
-        elif os.path.exists('/usr/bin/gnome-open'):
-            command = ['gnome-open', url]
-        else:
-            command = ['x-www-browser', url]
-        # Avoid to run the browser as user root
-        if os.getuid() == 0 and 'SUDO_USER' in os.environ:
-            command = ['sudo', '-u', os.environ['SUDO_USER']] + command
-        subprocess.Popen(command)
 
 
 class KDEAcquireProgressAdapter(apt.progress.base.AcquireProgress):

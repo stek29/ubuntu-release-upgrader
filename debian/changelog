@@ -1,3 +1,11 @@
+ubuntu-release-upgrader (1:18.04.6) UNRELEASED; urgency=medium
+
+  * DistUpgradeFetcherKDE.py:
+    - ensure theming is correct across all Qt versions and Plasma versions
+    - drop unused openUrl helper (replaced by QUrlOpener)
+
+ -- Harald Sitter <sitter@kde.org>  Fri, 19 Jan 2018 13:34:32 +0100
+
 ubuntu-release-upgrader (1:18.04.5) bionic; urgency=medium
 
   * DistUpgrade/DistUpgradeFetcher.py,
@@ -713,7 +721,7 @@ ubuntu-release-upgrader (1:15.04.0) vivid; urgency=low
   * DistUpgrade/{EOL,}ReleaseAnnouncement,
     DistUpgrade/{data,}/window_main.ui,
     data/DistUpgrade.cfg,
-    pre-build.sh:    
+    pre-build.sh:
     - updated for 14.10->15.04
   * DistUpgrade/DistUpgradeController.py:
     - do not abort when debsig-verify is installed anymore, the
@@ -772,7 +780,7 @@ ubuntu-release-upgrader (1:14.10.5) utopic; urgency=medium
   [ Brian Murray ]
   * DistUpgrade/DistUpgradeController.py:
     - ensure that error variable is empty if not set (LP: #1321959)
-  
+
   [ Michael Vogt ]
   * pep8 fixes to fix autopkgtest failure about the new E265
     error condition
@@ -856,7 +864,7 @@ ubuntu-release-upgrader (1:14.10.0) utopic; urgency=low
     - automatic launchpad translation update
   * lp:~mvo/ubuntu-release-upgrader/partial-upgrade-cleanup:
     - fix crash when the DistUpgradeViewText is used with py3
-    - fixes a bug with the logging setup (LP: #1302380) 
+    - fixes a bug with the logging setup (LP: #1302380)
       Thanks to Brian Murray for the fix!
     - fixes a crash when do-partial-upgrade is used without a DISPLAY
   * lp:~mvo/ubuntu-release-upgrader/text-install-progress:
@@ -873,7 +881,7 @@ ubuntu-release-upgrader (1:0.220.3) trusty-proposed; urgency=low
     - fix str/unicode crash in certain locales when a package is
       found in the removal blacklist (LP: #1310053)
   * DistUpgrade/DistUpgradeViewGtk3.py:
-   - make details dialog resize when details are expanded/collapsed 
+   - make details dialog resize when details are expanded/collapsed
      (LP: #1072460)
     - load webkit only when needed
   * DistUpgrade/DistUpgradeView.py:
@@ -908,11 +916,11 @@ ubuntu-release-upgrader (1:0.220.1) trusty; urgency=low
 
 ubuntu-release-upgrader (1:0.220) trusty; urgency=low
 
-  * DistUpgrade/DistUpgradeCache.py: 
+  * DistUpgrade/DistUpgradeCache.py:
     - add Debug::pkgDepCache::Marker into the apt.log debug output
-  * data/removal_blacklist.cfg: 
+  * data/removal_blacklist.cfg:
     - gnome-session does not need special protection anymore
-  * DistUpgrade/DistUpgradeViewText.py: 
+  * DistUpgrade/DistUpgradeViewText.py:
     - do not crash on EPIPE from the pager (e.g. if the user
       closes the pager early)
 
@@ -930,7 +938,7 @@ ubuntu-release-upgrader (1:0.219.4) trusty; urgency=low
 ubuntu-release-upgrader (1:0.219.3) trusty; urgency=low
 
   * DistUpgrade/DistUpgradeView.py:
-    - do not crash if a pkg is in Reinstall state (e.g. from 
+    - do not crash if a pkg is in Reinstall state (e.g. from
       pkgApplyStatus) LP: #1294124
   * DistUpgrade/DistUpgradeViewGtk3.py:
     - disable plugins in html webkit view
@@ -1021,7 +1029,7 @@ ubuntu-release-upgrader (1:0.213) trusty; urgency=medium
 
 ubuntu-release-upgrader (1:0.212) trusty; urgency=medium
 
-  * tests/test_quirks.py: Only run fglrx tests on amd64 and i386 
+  * tests/test_quirks.py: Only run fglrx tests on amd64 and i386
 
  -- Brian Murray <brian@ubuntu.com>  Thu, 27 Feb 2014 15:05:32 -0800
 
@@ -1325,7 +1333,7 @@ ubuntu-release-upgrader (1:0.191.1) raring-proposed; urgency=low
   * update all string for quantal->raring upgrade
 
   [ Brian Murray ]
-  * rewrite sources if using a local mirror without backports (LP: #1067393) 
+  * rewrite sources if using a local mirror without backports (LP: #1067393)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 05 Nov 2012 09:44:11 +0100
 
@@ -1406,7 +1414,7 @@ ubuntu-release-upgrader (1:0.184.1) quantal; urgency=low
      - reverting cleanly if the cache open fails after a sources.list update
        but before anything got installed
      (LP: #1052605)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 02 Oct 2012 18:44:01 +0200
 
 ubuntu-release-upgrader (1:0.184) quantal; urgency=low
@@ -1431,7 +1439,7 @@ ubuntu-release-upgrader (1:0.183) quantal; urgency=low
 ubuntu-release-upgrader (1:0.182) quantal; urgency=low
 
   * source_ubuntu_release_upgrader.py: Do not try to add apt-clone system
-    state if it does not exist 
+    state if it does not exist
   * DistUpgradeApport.py: handle the case where python-apport is not installed
     (LP: #1059403)
 
@@ -1881,7 +1889,7 @@ update-manager (1:0.156.12) precise; urgency=low
   * debian/control:
     - Restore gksu dependency, needed by e.g. check-new-release-gtk
       (LP: #980637).
-  
+
   [ Michael Vogt ]
   * UpdateManager/UpdateManager.py:
     - disconnect model and clear store before rebuilding the cache,
@@ -1943,7 +1951,7 @@ update-manager (1:0.156.9) precise; urgency=low
     - when selecting a new default kernel from base-installer, ensure
       to install the matching kernel headers too if previously kernel
       headers were installed (LP: #959307)
-  
+
   [ Brian Murray ]
   * debian/source_update-manager.py: pass if attach_gsettings fails like on a
     server
@@ -1951,14 +1959,14 @@ update-manager (1:0.156.9) precise; urgency=low
   [ Gabor Kelemen ]
   * lp:~kelemeng/update-manager/bug957552:
     - Mark two accessible descriptions for translation. LP: #957552
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 20 Mar 2012 17:35:34 +0100
 
 update-manager (1:0.156.8) precise; urgency=low
 
   [ Robert Roth ]
   * Update icon name to use FD.o standard (LP: #921310)
-  
+
   [ Julien Lavergne ]
   * DistUpgrade/DistUpgrade.cfg, DistUpgrade/removal_blacklist.cfg,
     UpdateManager/Core/utils.py,
@@ -1971,7 +1979,7 @@ update-manager (1:0.156.8) precise; urgency=low
     detected. (LP: #941172)
 
   [ Brian Murray ]
-  * DistUpgrade/removal_blacklist.cfg: 
+  * DistUpgrade/removal_blacklist.cfg:
     - blacklist gnome-session so that users can always login after a failed
       partial upgrade (LP: #946539)
 
@@ -1983,7 +1991,7 @@ update-manager (1:0.156.8) precise; urgency=low
   * Use 'from dbus.mainloop.glib import DBusGMainLoop;
     DBusGMainLoop(set_as_default=True)' to set up the main loop, rather than
     importing the deprecated dbus.glib.
-  
+
   [ Gabor Kelemen ]
   * Fix misplaced parentheses. LP: #952959
 
@@ -2003,7 +2011,7 @@ update-manager (1:0.156.7) precise; urgency=low
     - fix inaccurate string, thanks to JohnNapster (LP: #942590)
 
   [ Brian Murray ]
-  * DistUpgrade/removal_blacklist.cfg: 
+  * DistUpgrade/removal_blacklist.cfg:
     - Only blacklist unity-2d, not all packages whose names start with
       unity-2d.  (LP: #940196)
 
@@ -2011,10 +2019,10 @@ update-manager (1:0.156.7) precise; urgency=low
 
 update-manager (1:0.156.6) precise; urgency=low
 
-  [ Robert Roth ]  
+  [ Robert Roth ]
   * lp:~evfool/update-manager/lp930177:
-    - Add missing space (LP: #930177) 
-  
+    - Add missing space (LP: #930177)
+
   [ Michael Vogt ]
   * DistUpgrade/DevelReleaseAnnouncement:
     - change label from alpha to beta release
@@ -2047,7 +2055,7 @@ update-manager (1:0.156.3) precise; urgency=low
   * lp:~jibel/update-manager/AutoUpgradeTester-desktoptests:
     New tests for Ubuntu Desktop LTS upgrade:
     * autologin check
-    * user settings check: wallpaper, theme, keyboard layout, custom 
+    * user settings check: wallpaper, theme, keyboard layout, custom
       launchers (desktop and panel)
   * lp:~jibel/update-manager/AutoUpgradeTester-portlocking:
     - automatically allocate free ssh/vnc ports
@@ -2058,12 +2066,12 @@ update-manager (1:0.156.3) precise; urgency=low
     - Make sure main.log is actually created.
   * DistUpgrade/removal_blacklist.cfg:
     - Only blacklist unity, not all packages whose names start with unity.
-  
+
   [ Robert Roth ]
   * lp:~evfool/update-manager/lp351665:
     -  Use ngettext to humanize size (LP: #351665)
   * lp:~evfool/update-manager/distupgradefixes:
-    - DistUpgrade changes dialog text fixes 
+    - DistUpgrade changes dialog text fixes
       (LP: #348517, LP: #513908)
     - Fix resize on changes dialog to stretch the details
       (LP: #294293)
@@ -2075,7 +2083,7 @@ update-manager (1:0.156.3) precise; urgency=low
     - always pyflakes as part of the pre-build process to ensure
       we are clean
   * disable apply_dselect_upgrades()
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 03 Feb 2012 09:56:29 +0100
 
 update-manager (1:0.156.2) precise; urgency=low
@@ -2088,10 +2096,10 @@ update-manager (1:0.156.2) precise; urgency=low
   * debian/source_update-manager.py: use attach_file for dist-upgrade log
     files rather than attach_root_command_outputs resolving the double gzipped
     apt clone attachment issue
-  
+
   [ Matthew Linscott ]
   * UpdateManager/Core/utils.py
-    - fixed typos in docstring for ExecutionTime 
+    - fixed typos in docstring for ExecutionTime
 
   [ Daniel Polehn ]
   * DistUpgrade/DistUpgradeView.py
@@ -2128,7 +2136,7 @@ update-manager (1:0.155.3) precise; urgency=low
   * DistUpgrade/removal_blacklist.cfg:
     - add screen as the server upgrade runs inside it, thanks to
       Steve Langasek
-  * DistUpgrade/DistUpgradeController.py, 
+  * DistUpgrade/DistUpgradeController.py,
     DistUpgrade/prerequists-sources.list:
     - use the release-upgrader-python-apt from lucid-updates instead
       of lucid-proposed
@@ -2148,7 +2156,7 @@ update-manager (1:0.155.2) precise; urgency=low
   [ Brian Murray ]
   * debian/source_update-manager.py:
     - Use attach_gesttings_package instead of attach_gconf
-  
+
   [ Jean-Baptiste Lallement ]
   * lp:~jibel/update-manager/AutoUpgradeTester-aptclone:
     - support building a profile from a apt-clone file and testing
@@ -2173,7 +2181,7 @@ update-manager (1:0.155) precise; urgency=low
 
   [ Gabor Kelemen ]
   * Mark a few strings for translation, make variables reorderable
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 09 Dec 2011 15:12:13 +0100
 
 update-manager (1:0.154.6) precise; urgency=low
@@ -2192,13 +2200,13 @@ update-manager (1:0.154.5) precise; urgency=low
     - Removed gnome-power-manager dbus interface completely and
       only use freedesktop interface.
       Thanks to Nicholas Skaggs (LP: #702418)
-  
+
   [ Gabor Kelemen ]
   * Replace gettext.install() with bindtextdomain() calls.
     Work around crash in OptionParser when displaying
     localized --help text, to not regress on bug LP: #557804
   * Extract strings for translation from u-m-t and u-s-s executables
-  
+
   [ Marc Deslauriers ]
   * SECURITY UPDATE: arbitrary code execution via directory traversal
     (LP: #881548)
@@ -2208,7 +2216,7 @@ update-manager (1:0.154.5) precise; urgency=low
   * SECURITY UPDATE: information leak via insecure temp file (LP: #881541)
     - DistUpgrade/DistUpgradeViewKDE.py: use mkstemp instead of mktemp.
     - CVE-2011-3154
-  
+
   [ Michael Vogt ]
   * UpdateManager/UpdateManager.py:
     - ensure that the origin headers state of "select all/dselect all"
@@ -2234,7 +2242,7 @@ update-manager (1:0.154.2) precise; urgency=low
   * UpdateManager/backend/InstallBackendSynaptic.py
     - fix crash when using synaptic (LP: #878719)
   * DistUpgrade/DistUpgradeController.py, DistUpgrade/DistUpgradeMain.py:
-    - before doing the upgrade test if all systemdirs are actually 
+    - before doing the upgrade test if all systemdirs are actually
       writable, thanks to Brian Murray (LP: #889921)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 17 Nov 2011 10:15:29 +0100
@@ -2243,7 +2251,7 @@ update-manager (1:0.154.1) precise; urgency=low
 
   [ Robert Roth ]
   *  Change up-to-date text to up to date (LP: #864336)
-  
+
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeController.py:
     - add precise as a LTS release
@@ -2254,7 +2262,7 @@ update-manager (1:0.154.1) precise; urgency=low
   * AutoUpgradeTester/profile/server-amd64/DistUpgrade.cfg:
     - add amd64 server upgrade test profile
   * DistUpgrade/DistUpgradeConfigParser.py:
-    - add new "defaults_dir" argument to allow simplifying the 
+    - add new "defaults_dir" argument to allow simplifying the
       auto-upgrade-tester config
   * DistUpgrade/DistUpgrade.cfg.lucid:
     - add lucid->precise upgrade config
@@ -2323,7 +2331,7 @@ update-manager (1:0.152.25) oneiric; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
     - add workaround for a python-apt bug that causes the release
-      upgrade to import the old version of "DistInfo" intead of the 
+      upgrade to import the old version of "DistInfo" intead of the
       one that is bundled with the release-upgrader (LP: #871007)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 10 Oct 2011 13:15:29 +0200
@@ -2349,7 +2357,7 @@ update-manager (1:0.152.22) oneiric; urgency=low
   * tests/test_update_origin.py, Janitor/computerjanitor/plugin.py:
     - fix tests
   * .bzr-builddeb/default.conf:
-    - re-enable pre-build script to ensure we get a updated 
+    - re-enable pre-build script to ensure we get a updated
       base-installer, demotions and html Announcements
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 07 Oct 2011 10:07:26 +0200
@@ -2357,7 +2365,7 @@ update-manager (1:0.152.22) oneiric; urgency=low
 update-manager (1:0.152.21) oneiric; urgency=low
 
   * DistUpgrade/DistUpgradeQuirks.py:
-    - increase the amd64 cache size to 48mb to workaround bug 
+    - increase the amd64 cache size to 48mb to workaround bug
       LP: #854090 during the natty -> oneiric upgrade
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 30 Sep 2011 21:26:10 +0200
@@ -2395,18 +2403,18 @@ update-manager (1:0.152.18) oneiric; urgency=low
     - removed, no longer needed
   * debian/rules:
     - fix incorrect invocation of --with=python2
-  
+
   [ Robert Roth ]
   * lp:~evfool/update-manager/handlewarning:
     - Only disconnect handler if it's still connected (LP: #133139)
   * lp:~evfool/update-manager/glibchangefix:
-    - Call glib.markup_escape_text() correctly as per current 
+    - Call glib.markup_escape_text() correctly as per current
       gir (don't pass in string length; LP: #832745)
   * lp:~evfool/update-manager/fixcopylink:
     - Fix the "Copy web link" context menu item of the ChangeLog viewer.
-      It did not work before of some Gtk changes, now it does work. 
+      It did not work before of some Gtk changes, now it does work.
       Fixes LP: #831944.
-  
+
   [ Stefano Rivera ]
   * extras is another special case where validTo=False (LP: #775694)
 
@@ -2429,9 +2437,9 @@ update-manager (1:0.152.16) oneiric; urgency=low
 update-manager (1:0.152.15) oneiric; urgency=low
 
   [ Brian Murray ]
-  * DistUpgrade/DistUpgradeApport.py: 
+  * DistUpgrade/DistUpgradeApport.py:
     - properly add the tag 'dist-upgrade' to the bug report
-  
+
   [ Michael Vogt ]
   * UpdateManager/backend/InstallBackendAptdaemon.py:
     - fix incorrect initialization
@@ -2445,10 +2453,10 @@ update-manager (1:0.152.14) oneiric; urgency=low
 
   * DistUpgrade/DistUpgradeQuirks.py:
     - enable multiarch on amd64 during the upgrade
-    - add new "PreCacheOpen" hook and use it for the multiarch 
+    - add new "PreCacheOpen" hook and use it for the multiarch
       enabling
   * DistUpgrade/DistUpgradeCache.py:
-    - when checking for missing "priority: required" packages 
+    - when checking for missing "priority: required" packages
       ignore the foreign architecture ones
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 16 Aug 2011 10:52:23 +0200
@@ -2457,10 +2465,10 @@ update-manager (1:0.152.13) oneiric; urgency=low
 
   [ Robert Roth ]
   * Fix link context menu in changelog viewer (LP: #824957)
-  
+
   [ Michael Vogt ]
   * debian/control:
-    - bump unity dependency to gir1.2-unity-4.0 
+    - bump unity dependency to gir1.2-unity-4.0
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 12 Aug 2011 17:45:51 +0200
 
@@ -2473,7 +2481,7 @@ update-manager (1:0.152.12) oneiric; urgency=low
       for e.g. testing a new apt or dpkg)
 
   [ Robert Roth ]
-  * Added default value to be able to start UpdateManager without 
+  * Added default value to be able to start UpdateManager without
     having gir-unity installed (LP: #823935)
   * Fixed changelog test with the new wording
   * Specify default -1 length for terminal response (LP: #817785)
@@ -2483,7 +2491,7 @@ update-manager (1:0.152.12) oneiric; urgency=low
 update-manager (1:0.152.11) oneiric; urgency=low
 
   * DistUpgrade/DistUpgradeViewGtk3.py:
-    - use vte.for_command_full() instead of fork_command() as 
+    - use vte.for_command_full() instead of fork_command() as
       fork_command is no longer available in the gir-2.90
       (LP: #808738)
 
@@ -2504,9 +2512,9 @@ update-manager (1:0.152.10) oneiric; urgency=low
     - when upgrading do not disable deb-src entries in /etc/apt/sources.list
   * DistUpgrade/DistUpgradeMain.py:
     - string fix thanks to David Stansby for the fix (LP: #510681)
-  
+
   [ Robert Roth ]
-  * Give clear instructions when the last update timestamp is 
+  * Give clear instructions when the last update timestamp is
     not found (LP: #821345)
   * Fix operation between NoneType and int (LP: #820126)
 
@@ -2516,7 +2524,7 @@ update-manager (1:0.152.9) oneiric; urgency=low
 
   * remove old UpdateManager.glade file
   * rename data/glade to data/gtkbuilder
-  * merged lp:~rodrigo-moya/update-manager/use-new-power-interface, 
+  * merged lp:~rodrigo-moya/update-manager/use-new-power-interface,
     thanks to Rodrigo Moya
   * DistUpgrade/DistUpgradeQuirks.py:
     - when upgrading, ensure that zz-update-grub is early in
@@ -2540,26 +2548,26 @@ update-manager (1:0.152.8) oneiric; urgency=low
   * data/glade/UpdateManager.ui:
     - fix the xalign and expand properties of the various alert
       labels
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 27 Jul 2011 10:42:31 +0200
 
 update-manager (1:0.152.7) oneiric; urgency=low
 
   [ Michael Vogt ]
-  * merged lp:~mterry/update-manager/813778 to fix crash in 
+  * merged lp:~mterry/update-manager/813778 to fix crash in
     initCache() LP: #813778. Many thanks to Michael Terry
   * add jenkins slave setup (config, upstart job), similar to the
     server-isotesting  (disabled by default)
   * DistUpgrade/DistUpgrade.ui:
-    - add minimal size for the details expander (and let glade 
+    - add minimal size for the details expander (and let glade
       reindent/reformat the entire file along the way)
   * merged lp:~evfool/update-manager/stringfixes
-  
+
   [ Robert Roth ]
   * Updated translator comment to follow the Ubuntu Units policy
   * Display sizes according to the Ubuntu Units Policy (LP: #410310)
   * Fix ambiguous text explaining updates to running release (LP: #461780)
-  * Added label to distinguish candidate version from installed version 
+  * Added label to distinguish candidate version from installed version
     (LP: #537942)
   * Rename Check all/Uncheck all to Select/Deselect all
 
@@ -2576,7 +2584,7 @@ update-manager (1:0.152.6) oneiric; urgency=low
 update-manager (1:0.152.5) oneiric; urgency=low
 
   * DistUpgrade/DistUpgrade{Cache,Controller}.py:
-    - if  btrfs snapshots are used, add the additional required 
+    - if  btrfs snapshots are used, add the additional required
       diskspace requierd into the free space calculation
   * debian/{rules,control}:
     - move to debhelper 7
@@ -2651,12 +2659,12 @@ update-manager (1:0.151.8) oneiric; urgency=low
 
   * DistUpgrade/DistUpgradeViewGtk.py:
     - set DPKG_UNTRANSLATED_MESSAGES to force untranslated dpkg
-      terminal messages for easier package failure duplication 
+      terminal messages for easier package failure duplication
       detection
   * DistUpgrade/DistUpgradeCache.py:
     - when calculating the size of the space required in /boot use
       the size of the currently running kernel as the base and add
-      a small safety margin (LP: #798462). 
+      a small safety margin (LP: #798462).
   * import new apt-btrfs-snapshot to fix crash for certain fstab
     entries (LP: #806065)
 
@@ -2689,7 +2697,7 @@ update-manager (1:0.151.5) oneiric; urgency=low
 update-manager (1:0.151.4) oneiric; urgency=low
 
   [ Robert Roth ]
-  * Fix problem of showing only integer MB count and causing 
+  * Fix problem of showing only integer MB count and causing
     size inconsistencies
 
   [ Brendan Donegan ]
@@ -2708,7 +2716,7 @@ update-manager (1:0.151.4) oneiric; urgency=low
 update-manager (1:0.151.3) oneiric; urgency=low
 
   [ Michael Vogt ]
-  * merged 
+  * merged
     lp:~brendan-donegan/update-manager/bug699660-fix-settings-shortcut
     thanks to Brendan Donegan
   * AutoUpgradeTester/profile/*:
@@ -2716,7 +2724,7 @@ update-manager (1:0.151.3) oneiric; urgency=low
   * DistUpgrade/DistUpgradeViewGtk.py:
     - use VteTerminal "child-exit" signal instead of the Reaper object
   * optionally use webkit for the release notes viewer
- 
+
   [ Brian Murray ]
   * do-release-upgrade: display version of the new release available not the
     code name
@@ -2736,7 +2744,7 @@ update-manager (1:0.151.1) oneiric; urgency=low
   * merged lp:~bilalakhtar/update-manager/unity-quicklist,  many
     thanks to Bilal Akhtar for adding quickly support
   * merged lp:~mvo/update-manager/for-unity to make the support
-    optional and to add updates count into the update-manager 
+    optional and to add updates count into the update-manager
     icon in unity
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 02 May 2011 18:15:21 +0200
@@ -2769,7 +2777,7 @@ update-manager (1:0.150.2) natty-proposed; urgency=low
 update-manager (1:0.150.1) natty-proposed; urgency=low
 
   [ Brian Murray ]
-  * DistUpgrade/DistUpgradeApport.py: 
+  * DistUpgrade/DistUpgradeApport.py:
     - do not report zero size attachments (LP: #772052)
   * DistUpgrade/DistUpgrade.cfg:
     - enable apport for distribution upgrades (LP: #772913)
@@ -2789,7 +2797,7 @@ update-manager (1:0.150) natty; urgency=low
     - don't print a error for already patched files, this removes
       a misleading error from the upgrade logs
     - update tests
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 20 Apr 2011 14:25:15 +0200
 
 update-manager (1:0.147.6) natty; urgency=low
@@ -2803,7 +2811,7 @@ update-manager (1:0.147.6) natty; urgency=low
     - make user confirm information() messages before continuing
       (important for e.g. the "sshd has started" message)
   * DistUpgrade/DistUpgradeQuirks.py, DistUpgrade/DistUpgradeController.py:
-    - ensure that new recommends are installed on a desktop mode upgrade 
+    - ensure that new recommends are installed on a desktop mode upgrade
       even if that got disabled e.g. via synaptic (LP: #759262)
     - add test for this feature
 
@@ -2828,9 +2836,9 @@ update-manager (1:0.147.3) natty; urgency=low
   * merged lp:~evfool/update-manager/fix665173 (LP: #665173),
     many thanks to Robert Roth (update the test a bit)
   * merged lp:~evfool/update-manager/fix150677 (LP: #150677),
-    many thanks to Robert Roth 
+    many thanks to Robert Roth
   * merged lp:~evfool/update-manager/fix727069 (LP: #727069),
-    many thanks to Robert Roth 
+    many thanks to Robert Roth
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 06 Apr 2011 17:32:35 +0200
 
@@ -2846,8 +2854,8 @@ update-manager (1:0.147.1) natty; urgency=low
 
   * UpdateManager/backend/InstallBackendAptdaemon.py:
     - use pkgsystem_unlock, improve exception handling, add test
-  * DistUpgrade/DistUpgradeQuirks.py: 
-    - add quirks handler for maverick->natty upgrade for the 
+  * DistUpgrade/DistUpgradeQuirks.py:
+    - add quirks handler for maverick->natty upgrade for the
       kdegames-card-data case (LP: #745396)
   * tests/test_quirks.py:
     - add test for LP: #745396
@@ -2866,8 +2874,8 @@ update-manager (1:0.147) natty; urgency=low
 
   [ Brian Murray]
   * UpdateManager/ReleaseNotesViewer.py: fix the path for gnome-open
-    and default to xdg-open (LP: #693131) 
-  
+    and default to xdg-open (LP: #693131)
+
   [ Michael Vogt ]
   * DistUpgrade/apt_clone.py:
     - use apt_clone.py from the apt-clone package
@@ -2875,7 +2883,7 @@ update-manager (1:0.147) natty; urgency=low
     - add apt-clone to the build-depends
   * DistUpgrade/DistUpgradePatcher.py:
     - add native ed-style patch implementation as e.g. chroots
-      may not have ed installed and its critical to be able to 
+      may not have ed installed and its critical to be able to
       ensure that pycompile is correct before the upgrade starts
   * do-release-upgrade:
     - use apt.progress.text.AcquireProgress to fix deprecation warning
@@ -2905,7 +2913,7 @@ update-manager (1:0.146.5) natty; urgency=low
 
 update-manager (1:0.146.4) natty; urgency=low
 
-  * DistUpgrade/DistUpgradeMain.py, DistUpgrade/apt_clone.py: 
+  * DistUpgrade/DistUpgradeMain.py, DistUpgrade/apt_clone.py:
     Use apt-clone to create system-state instead of custom one
     (apt-clone_system_state.tar.gz)
     This makes reproducing problems a lot easier as apt-clone restore
@@ -2952,7 +2960,7 @@ update-manager (1:0.146.1) natty; urgency=low
     - Some basic string fixes (lp:#689034), thanks to Robert Roth
   * UpdateManager/Core/roam.py:
     - add backend for roaming detection, thanks to Alex Chiang
-    - display warning when on 3g and when roaming (fixes half of 
+    - display warning when on 3g and when roaming (fixes half of
       LP: 323108)
   * merged lp:~thibault-lemaitre/ubuntu/natty/update-manager/from_pkg.isInstalled_to_pkg.is_installed
     that fixes a bunch of deprecated python-apt issues (many thanks!)
@@ -2976,7 +2984,7 @@ update-manager (1:0.146) natty; urgency=low
   * UpdateManager/ReleaseNotesViewer.py:
     - use monospace font (LP: #153228)
   * DistUpgrade/DistUpgradeController.py:
-    - perform btrfs snapshot on upgrade if apt-btrfs-snapshot is 
+    - perform btrfs snapshot on upgrade if apt-btrfs-snapshot is
       available
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 16 Feb 2011 21:19:12 +0100
@@ -3007,7 +3015,7 @@ update-manager (1:0.145.11) natty; urgency=low
   * pre-build.sh:
     - auto generate html files from the *ReleaseAnnoucement
       files
-  * merged 
+  * merged
     lp:~brendan-donegan/update-manager/updated-signal-and-no-update-option
     (many thanks)
 
@@ -3110,7 +3118,7 @@ update-manager (1:0.145.3) natty; urgency=low
     - output if the current release is no longer supported
       (part of other-ps-n-testing-upgrades-for-preinstall-hw)
   * check-new-release-gtk:
-    - show "dist-no-longer-supported" dialog if the current 
+    - show "dist-no-longer-supported" dialog if the current
       release is no longer supported
     - automatically "unignore" a previously ignored upgrade if
       the current release becomes EOL
@@ -3125,10 +3133,10 @@ update-manager (1:0.145.2) natty; urgency=low
 
   [ Barry Warsaw ]
   * Add required details to .emit() call.  (LP: #631328)
-  
+
   [ Michael Vogt ]
   * debian/control:
-    - add or-dependency for python-aptdaemon-gtk and drop gksu 
+    - add or-dependency for python-aptdaemon-gtk and drop gksu
       dependency (its either brought in via synaptic or not needed)
   * UpdateManager/Core/utils.py:
     - add get_arch() call
@@ -3151,7 +3159,7 @@ update-manager (1:0.145.1) natty; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - properly log excepition in the child to the main.log, thanks
       to Jonathan Davies
-  
+
   [ Barry Warsaw ]
   * In Python 2.7, locale.format() input test has gotten more strict.  It
     does not allow trailing text after the format string.  Change this to
@@ -3167,14 +3175,14 @@ update-manager (1:0.145) natty; urgency=low
   * tests/test_prerequists.py:
     - fix jaunty test now that this is moved to old-releases.ubuntu.com
   * pre-build.sh:
-    - run testsuite on bzr-buildpackage 
+    - run testsuite on bzr-buildpackage
   * tests/test_dist_upgrade_fetcher_core.py:
     - fix test failures and ensure its python-apt 0.8 clean
   * po/update-manager.pot:
     - updated
   * DistUpgrade/DistUpgradeCache.py:
     - do not crash if no acquire progress is given
-  * DistUpgrade/DistUpgradeController.py, 
+  * DistUpgrade/DistUpgradeController.py,
     DistUpgrade/DistUpgradeViewNonInteractive.py,
     UpdateManager/Core/DistUpgradeFetcherCore.py,
     tests/test_update_origin.py,
@@ -3194,7 +3202,7 @@ update-manager (1:0.142.22) maverick-proposed; urgency=low
   [ Barry Warsaw ]
   * Add required details to .emit() call when running with
     synaptic as the backend (LP: #631328)
-  
+
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeQuirks.py:
     - fixes in the cmov quirks handler (LP: #587186)
@@ -3218,7 +3226,7 @@ update-manager (1:0.142.20) maverick-proposed; urgency=low
   * DistUpgrade/DistUpgrade.cfg:
     - add blcr-dkms to the "BadVersions" variable. The current blcr-dkms
       source will not build with 2.6.35. Adding it here will cause the
-      upgrade to abort with a message if it is installed. 
+      upgrade to abort with a message if it is installed.
       It also means that if support for 2.6.35 is added to blcr-dkms via
       a SRU that will automatically unblock the upgrade (LP: #555729)
   * DistUpgrade/DistUpgradeViewGtk.py,
@@ -3228,7 +3236,7 @@ update-manager (1:0.142.20) maverick-proposed; urgency=low
 
   [ Jonathan Riddell ]
   * DistUpgrade/DistUpgradeViewKDE.py:
-    - disable confDialogue.show_difference_button, workaround for 
+    - disable confDialogue.show_difference_button, workaround for
       "distupgrade crashed during conf file change review" (LP: #656876)
       requires release note that user needs to view changes manually on command line
 
@@ -3251,15 +3259,15 @@ update-manager (1:0.142.18) maverick; urgency=low
 
   [ Jonathan Riddell ]
   * Add kubuntu-devel-release-upgrade to setup.py
- 
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 04 Oct 2010 13:19:18 +0200
 
 update-manager (1:0.142.17) maverick; urgency=low
 
   [ Jonathan Riddell]
-  * Add kubuntu-devel-release-upgrade script to run the upgrade 
+  * Add kubuntu-devel-release-upgrade script to run the upgrade
     command for Kubuntu
-  
+
   [ Michael Vogt ]
   * if foomatic-db-gutenprint needs to be removed during the upgrade
     because its not compatible with foomatic-db-compressed-ppds,
@@ -3275,8 +3283,8 @@ update-manager (1:0.142.16) maverick; urgency=low
     - add link to http://www.ubuntu.com/desktop/features to tell
       users about the new features in this release
   * DistUpgrade/DistUpgrade.cfg:
-    - help the upgrade by removing printconf, foomatic-db-gutenprint 
-      and ebox-printers as they are not compatible with 
+    - help the upgrade by removing printconf, foomatic-db-gutenprint
+      and ebox-printers as they are not compatible with
       foomatic-db-compressed-ppds (LP: #647460)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 30 Sep 2010 20:22:36 +0200
@@ -3300,11 +3308,11 @@ update-manager (1:0.142.14) maverick; urgency=low
   * AutoUpgradeTester/jeos/create-base-image.sh:
     - add workaround for issue with python-vm-builder that generates
       random filenames in maverick
-  
+
   [ Gabor Kelemen ]
   * Fix invocation of gksu, use the correct .desktop file.
     Fixes LP: #640906
-  * Correct misplaced parentheses, so that l10n of strings will 
+  * Correct misplaced parentheses, so that l10n of strings will
     work. Fixes LP: #640972
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 21 Sep 2010 17:00:34 +0200
@@ -3349,9 +3357,9 @@ update-manager (1:0.142.9) maverick; urgency=low
   * DistUpgrade/DistUpgradeView.py: There won't be two spaces in
     FuzzyTimeToStr when days or hours are > 0 and hours or minutes are
     equal to 0 (LP: #288912)
-  
+
   [ Michael Vogt ]
-  * remove the seperate demotions dialog and move it into the 
+  * remove the seperate demotions dialog and move it into the
     "Confirm changes" step
   * use a treeview instead of a list to show the details of the
     changes in the gtk frontend
@@ -3366,28 +3374,28 @@ update-manager (1:0.142.8) maverick; urgency=low
     - fix typo (LP: #615923)
   * UpdateManager/UpdateManager.py:
     - when NM thinks we have no network, do not disable the buttons
-      because for dialup users NM is frequently wrong and does not 
+      because for dialup users NM is frequently wrong and does not
       get that there is a network-connection (thanks to "gambs")
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 12 Aug 2010 11:53:47 +0200
 
 update-manager (1:0.142.7) maverick; urgency=low
-  
+
   [ Mohamed Amine IL Idrissi ]
-  * Cache is no 
+  * Cache is no
   longer initialized when an operation is not authorized.
     LP: #394608
   * List of updates is active when there are only kept packages.
     LP: #601127 (thanks, Nicolò Chieffo)
-  
+
   [ Michael Vogt ]
   * merged  lp:~simono/update-manager/fixes-bug-563640, many thanks
     (LP: #563640)
   * merged lp:~yofel/update-manager/lp601127 (LP: #601127)
-  
+
   [ Jean-Baptiste Lallement ]
   * UpdateManager/Core/MyCache.py:
-    - catch network error when fetching 3rd party changelogs 
+    - catch network error when fetching 3rd party changelogs
       (LP: #565896)
 
   [ Brian Murray ]
@@ -3448,9 +3456,9 @@ update-manager (1:0.142.3) maverick; urgency=low
 update-manager (1:0.142.2) maverick; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
-    - use privileged port 1022 instead of 9004 when (optinally) 
+    - use privileged port 1022 instead of 9004 when (optinally)
       starting a additional sshd
-  * UpdateManager/UpdateManager.py: 
+  * UpdateManager/UpdateManager.py:
     - fix crash with --no-focus-on-map
   * data/release-upgrades:
     - set release upgrade policy to "normal" for maverick (instead
@@ -3462,7 +3470,7 @@ update-manager (1:0.142.1) maverick; urgency=low
 
   * UpdateManager/UpdateManager.py:
     - Show reboot required dialog inline instead of doing a popup
-      dialog. When morphing windows land into maverick they can 
+      dialog. When morphing windows land into maverick they can
       be used to make the inline information more pretty. But
       it should be better than the previous popup dialog
 
@@ -3471,7 +3479,7 @@ update-manager (1:0.142.1) maverick; urgency=low
 update-manager (1:0.142) maverick; urgency=low
 
   [ Michael Vogt ]
-  * check-new-release-gtk: 
+  * check-new-release-gtk:
     - fix "ask me later" button time
   * DistUpgrade/DistUpgradeController.py,
     DistUpgrade/DistUpgradeCache.py,
@@ -3509,7 +3517,7 @@ update-manager (1:0.141) maverick; urgency=low
     - fix typo (thanks to seb128)
   * DistUpgrade/mirrors.cfg:
     - support upgrades when sources.list uses the new
-      mirror://mirrors.ubuntu.com/mirrors.txt 
+      mirror://mirrors.ubuntu.com/mirrors.txt
       uri
   * UpdateManager/GtkProgress.py:
     - do not open a cache open progress window, instead show the
@@ -3567,7 +3575,7 @@ update-manager (1:0.134.4) lucid; urgency=low
       (LP: #561872)
   * UpdateManager/UpdateManager.py:
     - provide a LIST_TOGGLE_CHECKED column as a workaround for orca
-      that does not work with values updated via 
+      that does not work with values updated via
       column_install.set_cell_data_func (LP: #561563)
   * update-manager:
     - use gettext.install(unicode=True) to avoid breaking with
@@ -3617,7 +3625,7 @@ update-manager (1:0.134.1) lucid; urgency=low
     - fix i18n bug in details output
   * UpdateManager/Core/MyCache.py:
     - support third party changelogs by using  ArchiveURI() and
-      append a similar structure as changelogs.ubuntu.com uses 
+      append a similar structure as changelogs.ubuntu.com uses
       (LP: #45129)
   * UpdateManager/Core/MetaRelease.py:
     - do not crash if meta-release file can not be parsed, just remove
@@ -3630,7 +3638,7 @@ update-manager (1:0.134) lucid; urgency=low
   [ Barry Warsaw ]
   * Bump up the amount of /boot space calculated per kernel.  The current
     value appears to undercount by about 260K/kernel. (LP: #132311)
-  
+
   [ Michael Vogt ]
   * refresh translations from launchpad
   * update "10.04" strings to "10.04 LTS" and unfuzzy translations
@@ -3640,7 +3648,7 @@ update-manager (1:0.134) lucid; urgency=low
   * DistUpgrade/DistUpgrade.cfg, DistUpgrade/DistUpgrade.cfg.hardy:
     - add extra protection against video driver removal (LP: #556629)
   * DistUpgrade/DistUpgradeMain.py:
-    - improve logging and save system state before performing the 
+    - improve logging and save system state before performing the
       upgrade. Suggested by Matt Zimmerman (LP: #551646)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 09 Apr 2010 23:18:25 +0200
@@ -3652,7 +3660,7 @@ update-manager (1:0.133.11) lucid; urgency=low
   * check-new-release-gtk:
     - if no ReleaseNotesHtml key is found, do nothing (it means the
       meta-release file does not support this client)
-  * check-new-release-gtk, UpdateManager/Core/MetaRelease.py: 
+  * check-new-release-gtk, UpdateManager/Core/MetaRelease.py:
     - improve debugging
   * UpdateManager/Core/utils.py:
     - add META_RELEASE_FAKE_CODENAME environment that can be used to
@@ -3665,7 +3673,7 @@ update-manager (1:0.133.11) lucid; urgency=low
 
 update-manager (1:0.133.10) lucid; urgency=low
 
-  * help upgrade by hinting usplash gets removed in favor of 
+  * help upgrade by hinting usplash gets removed in favor of
     plymouth
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 31 Mar 2010 19:38:15 +0200
@@ -3677,7 +3685,7 @@ update-manager (1:0.133.9) lucid; urgency=low
   * DistUpgrade/DistUpgrade.cfg, DistUpgrade/DistUpgrade.cfg.hardy:
     - remove deskbar-applet, and nautilus-cd-burner on ubuntu-desktop
       upgrade   (as discussed with the desktop team)
-    - remove notification-daemon in favor of notify-osd in 
+    - remove notification-daemon in favor of notify-osd in
       xubuntu-desktop (LP: #546857)
   * DistUpgrade/DistUpgrade.cfg.hardy:
     - remove tracker on hardy ubuntu-desktop upgrade
@@ -3687,8 +3695,8 @@ update-manager (1:0.133.9) lucid; urgency=low
 update-manager (1:0.133.8) lucid; urgency=low
 
   * DistUpgrade/sources.list.py, distro.py, distinfo.py:
-    - temporarily stop embedding from the python-apt build host 
-      because of the python-apt api changes, use 0.7.13.5 version 
+    - temporarily stop embedding from the python-apt build host
+      because of the python-apt api changes, use 0.7.13.5 version
     instead
   * debian/control:
     - point to lp:~ubuntu-core-dev/update-manager/lucid
@@ -3706,7 +3714,7 @@ update-manager (1:0.133.7) lucid; urgency=low
   [ Barry Warsaw ]
   * README
     - Minor clean up.
-  
+
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeCache.py:
     - check if the kernel returned from base-installer is upgradable
@@ -3742,9 +3750,9 @@ update-manager (1:0.133.5) lucid; urgency=low
   [ Markus Korn ]
   * UpdateManager/Core/utils.py:
     - Modified UpdateManager.Core.utils.on_battery() to use UPower per default
-      (and DeviceKit.Power as fallback) to check if a system is running 
+      (and DeviceKit.Power as fallback) to check if a system is running
       on battery (LP: #539211)
-  
+
   [ Michael Vogt ]
   * DistUpgrade/DistUpgrade.cfg:
     - hint that libparted1.8-12 can be removed to help the upgrader
@@ -3766,13 +3774,13 @@ update-manager (1:0.133.4) lucid; urgency=low
       to the old system state
   * DistUpgrade/DistUpgradeCache.py:
     - only ensure translations are kept if they are still downloadable,
-      there is a lot of churn in the translations area so its not 
+      there is a lot of churn in the translations area so its not
       feasible to keep them all
     - when checking the kernel list from base-installer, also consider
       kernels that are marked install (LP: #540114)
-    - check rdepends of all packages (including auto-removal ones) 
+    - check rdepends of all packages (including auto-removal ones)
       again ensure the removal blacklist is honored in all cases
-      (LP: #540823) 
+      (LP: #540823)
   * DistUpgrade/DistUpgradeController.py:
     - show progress information when searching for obsolete software
       (this can take a bit on a big install)
@@ -3797,7 +3805,7 @@ update-manager (1:0.133.2) lucid; urgency=low
 
   * DistUpgrade/DistUpgradeViewNonInteractive.py:
     - fix regression in conffile prompt handling (LP: #538206)
-    - add default to the "NonInteractive", "DebugBrokenScripts" 
+    - add default to the "NonInteractive", "DebugBrokenScripts"
       config option
   * DistUpgrade/DistUpgradeController.py:
     - honor "DEBIAN_FRONTEND=noninteractive" in recovery mode as
@@ -3813,9 +3821,9 @@ update-manager (1:0.133.1) lucid; urgency=low
   * Fix obvious NameError by adding a missing import. (LP: #537250)
 
   [ David Planella ]
-  * Made some strings translatable and extractable as a fix for 
+  * Made some strings translatable and extractable as a fix for
     LP: #537277
- 
+
   [ Michael Vogt ]
   * po/*.po:
     - updated from rosetta
@@ -3955,7 +3963,7 @@ update-manager (1:0.131.3) lucid; urgency=low
   * UpdateManager/Core/MyCache.py:
     - do not crash if the lock can not be released (LP: #410574)
   * UpdateManager/SafeGConfClient.py
-    - implement gconfclient that does not crash if gconf is not 
+    - implement gconfclient that does not crash if gconf is not
       working (LP: #261471)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 12 Jan 2010 18:15:52 +0100
@@ -3973,11 +3981,11 @@ update-manager (1:0.131.2) lucid; urgency=low
     - update kernel removal rules and BaseNames
     - fix belocs-locales-bin upgrade issue (LP: #474543)
   * DistUpgrade/DistUpgradeController.py:
-    - check forh reboot-required files in partial upgrade mode, 
+    - check forh reboot-required files in partial upgrade mode,
       update-notifier is no longer doing that by default
       (foundations-lucid-restart-required-dialog spec)
   * DistUpgrade/DistUpgrade.ui:
-    - add a bunch of missing "<property name="orientation">" 
+    - add a bunch of missing "<property name="orientation">"
     - improve restart-required dialog
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 14 Dec 2009 10:59:51 +0100
@@ -4003,7 +4011,7 @@ update-manager (1:0.131) lucid; urgency=low
 
   * UpdateManager/UpdateManager.py:
     - do not crash if setlocale() fails (LP: #471378)
-  * UpdateManager/Core/DistUpgradeFetcherCore.py: 
+  * UpdateManager/Core/DistUpgradeFetcherCore.py:
     - add missing "logging" import (LP: #475941)
   * DistUpgrade/DistUpgradeController.py:
     - better message for upgrades over ssh (LP: #463257)
@@ -4110,7 +4118,7 @@ update-manager (1:0.126.5) karmic; urgency=low
     - add waitChild implementation from python-apt to ensure
       its working for buggy hardy python-apt
   * DistUpgrade/DistUpgradeQuirks.py:
-    - mark mysql-{client,server}-5.0 manual installed in the 
+    - mark mysql-{client,server}-5.0 manual installed in the
       cluster check (LP: #453513)
     - check if running under a vserver setup and error if this
       is the case. upstart does not support this kind of setup
@@ -4118,7 +4126,7 @@ update-manager (1:0.126.5) karmic; urgency=low
   * UpdateManager/Core/utils.py:
     - do not show error if DeviceKit.Power is not available
       (LP: #452004)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 20 Oct 2009 18:14:28 +0200
 
 update-manager (1:0.126.4) karmic; urgency=low
@@ -4129,7 +4137,7 @@ update-manager (1:0.126.4) karmic; urgency=low
     - add check if NBD clustering is in use in mysql server
       and do not upgrade to 5.1 is it is (LP: #450837)
   * DistUpgrade/DistUpgrade.cfg:
-    - remove mysql-server rule, this is now done in the above 
+    - remove mysql-server rule, this is now done in the above
       quirks handler
   * DistUpgrade/DistUpgradeController.py:
     - do not do list cleanup so that cancel restores all of the
@@ -4149,7 +4157,7 @@ update-manager (1:0.126.3) karmic; urgency=low
     - add or-dependency to qemu-kvm
   * DistUpgrade/DistUpgrade.cfg:
     - add policykit-gnome and gnome-mount to the forced obsoleted
-      packages (thanks to seb128) 
+      packages (thanks to seb128)
   * merge translations from rosetta
   * DistUpgrade/DistUpgradeQuirks.py:
     - stop docvert-converter when the upgrade starts, otherwise
@@ -4196,15 +4204,15 @@ update-manager (1:0.126) karmic; urgency=low
   * DistUpgrade/DistUpgradeQuirks.py:
     - add quirk handler to mark the dependencies of
       language-support-translations-* as manual on upgrade
-  
-      The language-support-translations- packages are removed in 
+
+      The language-support-translations- packages are removed in
       karmic and would otherwise be marked as auto-removable.
       (LP: #439296)
     - convert PASS value from 1 to 0 for ntfs entries in
       /etc/fstab (LP: #441242) and add tests for it
     - put 386 to generic transition code here and decouple from
       the kernel selection
-    - inhibit gnome-screensaver once the upgrade started 
+    - inhibit gnome-screensaver once the upgrade started
       to avoid X crash (LP: #439594)
   * DistUpgrade/DistUpgradeCache.py:
     - workaround issues with kdesu when it drop the permission bits
@@ -4213,7 +4221,7 @@ update-manager (1:0.126) karmic; urgency=low
     - fix log dir does not exist, create it (LP: #441959)
   * UpdateManager/backend/InstallBackendAptdaemon.py:
     - give up lock before running aptdaemon (LP: #445920)
-  * po/ 
+  * po/
     - updated from launchpad (required as during a release upgrade
       we can't use langpacks)
 
@@ -4236,7 +4244,7 @@ update-manager (1:0.125.6) karmic; urgency=low
 
 update-manager (1:0.125.5) karmic; urgency=low
 
-  * DistUpgrade/DistUpgradeQuirks.py 
+  * DistUpgrade/DistUpgradeQuirks.py
     - fix kbluetooth name to kbluetooth4
 
  -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 28 Sep 2009 20:18:49 +0100
@@ -4264,7 +4272,7 @@ update-manager (1:0.125.3) karmic; urgency=low
     - fix i18n issues with gtkbuilder
   * DistUpgrade/DistUpgradeQuirks.py:
     - stop kblueplugd kbluetooth when the upgrade starts to
-      avoid them crashing during the upgrade 
+      avoid them crashing during the upgrade
       (thanks to Jonathan Riddell)
   * UpdateManager/backend/InstallBackendAptdaemon.py
     - setup correct window icon
@@ -4290,11 +4298,11 @@ update-manager (1:0.125.2) karmic; urgency=low
     - close app when ESC is pressed in the battery warning
   * UpdateManager/UpdateManager.py:
     - ensure that the changelog always matches the currently selected
-      pkg by fixing race during download (LP: #424918) 
+      pkg by fixing race during download (LP: #424918)
   * UpdateManager/backend/InstallBackendAptdaemon.py:
     - do not hang when cancel is clicked (LP: #426718)
-  * add sed patch facility and patch the gnome debconf frontend 
-    before the upgrade starts so that it can not crash when 
+  * add sed patch facility and patch the gnome debconf frontend
+    before the upgrade starts so that it can not crash when
     perl moves from 5.8.0 to 5.10.0 (LP: #387112)
   * data/glade/UpdateManager.ui:
     - use bigger default width (LP: #418201)
@@ -4308,10 +4316,10 @@ update-manager (1:0.125.1) karmic; urgency=low
 
   [ Josh Holland ]
   * Fixed several typos (LP: #93804, LP: #277731, LP: #404435)
-  
+
   [ Rugby471 ]
   * Center window on the screen (LP: #423355)
-  
+
   [ Michael Vogt ]
   * DistUpgrade/DistUpgrade.ui:
     - remove unused "destroy_event" handler (LP: #428842)
@@ -4346,7 +4354,7 @@ update-manager (1:0.125) karmic; urgency=low
   * data/glade/UpdateManager.ui:
     - set explicit translation domain
   * integrate base-installer component into auto-upgrade-tester
-  
+
   [ Steve Langasek ]
   * Refresh .pot file (and .po files) so that new UI strings are available
     for translation in LP.  LP: #425014.
@@ -4356,7 +4364,7 @@ update-manager (1:0.125) karmic; urgency=low
 update-manager (1:0.124.11) karmic; urgency=low
 
   * DistUpgrade/DistUpgradeView.py:
-    - capture exceptions from pm.DoInstall() properly (fixes a 
+    - capture exceptions from pm.DoInstall() properly (fixes a
       hang when a package fails to install)
   * DistUpgrade/DistUpgradeViewGtk.py, DistUpgrade/DistUpgradeViewKDE.py:
     - return the full status of the exited child, not only the
@@ -4367,7 +4375,7 @@ update-manager (1:0.124.11) karmic; urgency=low
 update-manager (1:0.124.10) karmic; urgency=low
 
   * DistUpgrade/removal_blacklist.cfg:
-    - add update-manager so that it does not 
+    - add update-manager so that it does not
   * typo fixes (thanks to Brian Murray, LP: #418127)
   * merge the changes of seb128 into bzr
   * po/POTFILES.in:
@@ -4426,8 +4434,8 @@ update-manager (1:0.124.7) karmic; urgency=low
 update-manager (1:0.124.6) karmic; urgency=low
 
   [ Oliver Grawert ]
-  * DistUpgrade/DistUpgradeQuirks.py: add check for ARMv6 or 
-    greater to prevent jaunty->karmic upgrades on unsupported 
+  * DistUpgrade/DistUpgradeQuirks.py: add check for ARMv6 or
+    greater to prevent jaunty->karmic upgrades on unsupported
     armel CPU arches
 
   [ Michael Vogt ]
@@ -4436,7 +4444,7 @@ update-manager (1:0.124.6) karmic; urgency=low
   * update-manager:
     - add "--data-dir" switch
   * use aptdaemon as the install backend (if avaialble)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 24 Jul 2009 15:49:09 +0200
 
 update-manager (1:0.124.5) karmic; urgency=low
@@ -4465,7 +4473,7 @@ update-manager (1:0.124.3) karmic; urgency=low
     - deal with errors from apport better (LP: #357339),
       thanks to Patrick Horn)
   * UpdateManager/ChangelogViewer.py:
-    - fix problem for http://host/document.html. style 
+    - fix problem for http://host/document.html. style
       entries (LP: #396393)
 
   [ Dustin Kirkland ]
@@ -4482,7 +4490,7 @@ update-manager (1:0.124.2) karmic; urgency=low
     - make it clearer if a package is a new install
       (as opposed to a upgrade) - thanks to Cody Sommerville
     - show amount of selected updates in the UI (LP: #330439)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 07 Jul 2009 15:11:31 +0200
 
 update-manager (1:0.124.1) karmic; urgency=low
@@ -4539,7 +4547,7 @@ update-manager (1:0.122) karmic; urgency=low
     - add "NonInteractive/DebugBrokenScripts" option that will re-run
       failed maintainer scripts with debug options
   * DistUpgrade/DistUpgrade.cfg:
-    - add defaults for the NonInteractive section that match the 
+    - add defaults for the NonInteractive section that match the
       interactive upgrades (for better landscape support)
     - enable apport again
   * AutoUpgradeTester/chart_dpkg_progress.py:
@@ -4554,7 +4562,7 @@ update-manager (1:0.121) karmic; urgency=low
   * DistUpgrade/DistUpgradeCache.py:
     - when guessing missing meta-packages stop after
       the first one was found
-    - use internal _lookupPkgRecord() instead of 
+    - use internal _lookupPkgRecord() instead of
       pkg._lookupRecord
   * DistUpgrade/DistUpgradeQuirks.py:
     - move the kubuntu-kde4-desktop key dependency transition
@@ -4572,7 +4580,7 @@ update-manager (1:0.121) karmic; urgency=low
       is not the case (thanks to Ulrich Kalkkuhl) LP: #370062
   * UpdateManager/UpdateManager.py:
     - show origin field for other updates (like PPAs) to make it
-      easier to see what comes from where (part of the 
+      easier to see what comes from where (part of the
       foundations-karmic-apturl-policy spec)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 05 Jun 2009 20:53:37 +0200
@@ -4633,7 +4641,7 @@ update-manager (1:0.111.8) jaunty-proposed; urgency=low
       (LP: #363465)
     - ensure brasero is upgraded (thanks to Chris Jones for
       the report) (LP: #364136)
-    - ensure guidance-power-manager is removed on upgrade 
+    - ensure guidance-power-manager is removed on upgrade
       (LP: #364620)
   * DistUpgrade/DistUpgradeCache.py:
     - support DistUpgradeCache.markUpgrade()
@@ -4809,7 +4817,7 @@ update-manager (1:0.101.0) jaunty; urgency=low
   [ Brian Murray ]
   * UpdateManagerHildon/UpdateManagerHildon.py:
      - wording fix "will be" to "are being" (LP: #338943)
-  
+
   [ Michael Vogt ]
   * UpdateManager/UpdateManagerText.py:
     - fix crash in changelog display (LP: #341577)
@@ -4821,7 +4829,7 @@ update-manager (1:0.101.0) jaunty; urgency=low
   [ Gabor Kelemen ]
   * data/glade/UpdateManager.glade:
     - fix missing "translatable" property (LP: #342011)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 13 Mar 2009 10:09:30 +0100
 
 update-manager (1:0.100.1) jaunty; urgency=low
@@ -4844,7 +4852,7 @@ update-manager (1:0.100) jaunty; urgency=low
   [ Michael Vogt ]
   * fix crash when help is not avaialble (LP: #338098)
   * data/glade/UpdateManager.glade:
-    - remove the "Keep your system up-to-date" text (design team, 
+    - remove the "Keep your system up-to-date" text (design team,
       LP: #336800)
   * fix crash when no network is avaialble for changelog fetching
     (LP: #334002)
@@ -4858,7 +4866,7 @@ update-manager (1:0.100) jaunty; urgency=low
     - support copy to clipboard for URLs (LP: #85644), thanks to
       Richie
   * UpdateManager/UpdateManager.py:
-    - disable fixed-hight mode, it can cause incorrect height 
+    - disable fixed-hight mode, it can cause incorrect height
       calculation (thanks to Richie), LP: #273184
   * DistUpgrade/DistUpgradeController.py:
     - do not allow gtk/kde upgrades over ssh session (LP: #322482)
@@ -4878,14 +4886,14 @@ update-manager (1:0.99) jaunty; urgency=low
   * ensure pidgin-libnotify is upgraded (LP: #332328)
   * better wording for aborts (thanks to Gabor Kelemen and
     Jean-Baptiste Lallement), LP: #289303
-  * wording fixes, thanks to Brian Murray and Gabor Kelemen 
+  * wording fixes, thanks to Brian Murray and Gabor Kelemen
     LP: #269583
   * i18n fix, thanks to Gabor Kelemen, LP: #331821
   * support /etc/update-manager/release-upgrades.d/ directory
     for local overrides of the upgrade process. Useful to force
     certain site-specific options (like third party repository
     handling)
-  * allow "[FreeSpace]\nSkipCheck=yes" override to skip free 
+  * allow "[FreeSpace]\nSkipCheck=yes" override to skip free
     space checks (useful for testing)
   * support "[Sources"]\nAllowThirdParty=yes" override to skip
     commenting out of unknown repositories (LP: #147080)
@@ -4928,7 +4936,7 @@ update-manager (1:0.98) jaunty; urgency=low
 
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeController.py:
-    - fixes in the error string (thanks to Jean-Baptiste 
+    - fixes in the error string (thanks to Jean-Baptiste
       Lallement, LP: #298296)
   * support getting NEWS.Debian information in addition
     to the changelog
@@ -4957,11 +4965,11 @@ update-manager (1:0.97.1) jaunty; urgency=low
     - do not crash on disk full (LP: #321872)
   * DistUpgrade/DistUpgradeController.py:
     - when commenting out third party repositories add a comment
-      why they were disabled and update them to the current dist  
+      why they were disabled and update them to the current dist
       to make re-enabling easier
   * DistUpgrade/DistUpgradeQuirks.py:
     - run dpkg --forget-old-unvail after the upgrade finished
-    - add "PostCleanup" hook 
+    - add "PostCleanup" hook
   * DistUpgrade/cdromupgrade:
     - fixed typo (LP: #312184)
   * add "--no-focus-on-map option to bring update-manager up
@@ -4993,7 +5001,7 @@ update-manager (1:0.97) jaunty; urgency=low
       * check apt setting
       * check synaptic setting
       * check users gconf
-      * check http_proxy environment 
+      * check http_proxy environment
     (LP: #24250)
   * UpdateManager/Core/DistUpgradeFetcherCore.py:
     - ensure correct error message if downloading failed
@@ -5006,28 +5014,28 @@ update-manager (1:0.97) jaunty; urgency=low
     - re-factor and make code more modular
     - do not overwrite existing log files on upgrade
       (LP: #111819)
-  * reorganize the imports and get rid of "Common" submodule 
+  * reorganize the imports and get rid of "Common" submodule
     and merge that all into "Core"
   * improve the debug output via the "DEBUG_UPDATE_MANAGER"
     environment
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 26 Jan 2009 17:26:40 +0100
 
 update-manager (1:0.96.4) jaunty; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
-    - do not generate apport report against update-manager if 
+    - do not generate apport report against update-manager if
       cache.commit() failed. the report is generated against
       the failing package instead (LP: #311220)
-    - honor RELEASE_UPRADER_ALLOW_THIRD_PARTY environment and do   
-      not  comment out third party repositories in this case 
-      (useful internal repositories, make sure that sudo does 
+    - honor RELEASE_UPRADER_ALLOW_THIRD_PARTY environment and do
+      not  comment out third party repositories in this case
+      (useful internal repositories, make sure that sudo does
        not clean this env when you make use of it)
   * DistUpgrade/DistUpgrade.cfg:
-    - remove powermanagement-interface on upgrades for ubuntu 
+    - remove powermanagement-interface on upgrades for ubuntu
       and kubuntu (no longer needed by them)
   * DistUpgrade/DevelReleaseAnnouncement:
-    - include a different release announcement for the 
+    - include a different release announcement for the
       development releases
   * pre-build.sh:
     - fix version parsing
@@ -5047,7 +5055,7 @@ update-manager (1:0.96.3) jaunty; urgency=low
 update-manager (1:0.96.2) jaunty; urgency=low
 
   * AutoUpgradeTester/UpgradeTestBackendQemu.py:
-    - add "NonInteractive","NoVirtio" switch 
+    - add "NonInteractive","NoVirtio" switch
     - enable virtio in the kvm backend by default
   * AutoUpgradeTester/profile/server/DistUpgrade.cfg:
     - updated for intrepid->jaunty
@@ -5070,7 +5078,7 @@ update-manager (1:0.96.2) jaunty; urgency=low
 
 update-manager (1:0.96.1) jaunty; urgency=low
 
-  * DistUpgrade/DistUpgradeController.py: 
+  * DistUpgrade/DistUpgradeController.py:
     - deal better with upgrades from EOL releases by
       testing if the new release is on the country mirror
       or archive.ubuntu.com or still on old-releases.ubuntu.com
@@ -5103,26 +5111,26 @@ update-manager (1:0.96) jaunty; urgency=low
 
 update-manager (1:0.95.2) jaunty; urgency=low
 
-  * DistUpgrade/DistUpgradeQuirks.py: 
+  * DistUpgrade/DistUpgradeQuirks.py:
     - check the support of fglrx against the current
       PCI card (LP: #284408)
   * DistUpgrade/xorg_fix_intrepid.py:
     - do not rewrite multiseat configs (LP: #292774)
   * UpdateManager/Common/MyCache.py,
     UpdateManager/Common/UpdateList.py:
-    - move the cache,updatelist implementation out into  
+    - move the cache,updatelist implementation out into
       its own file
-  * fix free space check on regular update-manager 
+  * fix free space check on regular update-manager
     invocations (LP: #105113)
-  * debian/rules 
+  * debian/rules
     - remove the arch-build target
   * DistUpgrade/DistUpgradeController.py:
     - improvements to the sources.list rewriting, better tests
     - when rewriting sources.list check for inconsistencies between what
-      components are enabled in intrepid vs intrepid-updates and 
+      components are enabled in intrepid vs intrepid-updates and
       intrepid-security and automatically enable missing ones for
       intrepid-updates and intrepid-security
-    - new test if the upgrade is run from a remote 
+    - new test if the upgrade is run from a remote
       login (LP: #301787)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 15 Dec 2008 10:39:27 +0100
@@ -5172,15 +5180,15 @@ update-manager (1:0.93.33) intrepid; urgency=low
 
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeQuirks.py:
-    - add detection for cards no longer supported via fglrx 
-      and ensure transition to "ati" (LP: #284408) 
+    - add detection for cards no longer supported via fglrx
+      and ensure transition to "ati" (LP: #284408)
   * DistUpgrade/DistUpgradeCache.py:
-    - check if the package is actually downloadable in the 
+    - check if the package is actually downloadable in the
       removal blacklist checking (LP: #293486)
 
   [ Jonathan Riddell ]
   * DistUpgrade/DistUpgradeViewKDE.py:
-    - handle translations of non-ascii string on Cancel button 
+    - handle translations of non-ascii string on Cancel button
       correctly (LP: #291115)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Nov 2008 14:58:10 +0100
@@ -5199,13 +5207,13 @@ update-manager (1:0.93.31) intrepid; urgency=low
   * DistUpgrade/DistUpgrade.cfg:
     - remove goubuntu-desktop from metapackages, we do no
       longer build it (LP: #283712)
-  * DistUpgrade/DistUpgradeCache.py: 
+  * DistUpgrade/DistUpgradeCache.py:
     - never remove packages in the "KeepInstalled" section
     - keep the GUI alive when calculating the packages
       to cleanup
   * DistUpgrade/DistUpgradeQuirks.py:
     - mark "language-pack-$lang" as manual installed to
-      workaround changes in "language-support-$lang" 
+      workaround changes in "language-support-$lang"
       (LP: #287551)
    * po/:
      - updated to the latest translations.launchpad.net
@@ -5224,7 +5232,7 @@ update-manager (1:0.93.30) intrepid; urgency=low
   * DistUpgrade/ReleaseAnnouncement:
     - updated for final release
   * DistUpgrade/DistUpgradeAptCdrom.py:
-    - ignore "dist-upgrader" dirs when scanning for 
+    - ignore "dist-upgrader" dirs when scanning for
       packages (LP: #288169)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 23 Oct 2008 16:53:43 +0200
@@ -5268,7 +5276,7 @@ update-manager (1:0.93.26) intrepid; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - workaround kde tmpfile permissions (LP: #277431)
   * UpdateManager/Common/utils.py:
-    - do not crash if gconfd is not availabe/unusable 
+    - do not crash if gconfd is not availabe/unusable
       (LP: #281248)
   * DistUpgrade/DistUpgradeViewKDE.py:
     - do not use "kde" frontend during the upgrade, it
@@ -5287,7 +5295,7 @@ update-manager (1:0.93.25) intrepid; urgency=low
   [ Jonathan Riddell ]
   * DistUpgrade/DistUpgradeQuirks.py:
     - Fix crash from not having gettext imported
-  
+
   [ Michael Vogt ]
   * revert the fglrx->ati transition (LP: #247376)
 
@@ -5308,8 +5316,8 @@ update-manager (1:0.93.24) intrepid; urgency=low
 update-manager (1:0.93.23) intrepid; urgency=low
 
   * DistUpgrade/xorg_fix_intrepid.py:
-    - comment out input devices from xorg.conf (handled via 
-      hal now). Thanks to Alberto Milone for his help, 
+    - comment out input devices from xorg.conf (handled via
+      hal now). Thanks to Alberto Milone for his help,
       LP: #247608
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 13 Oct 2008 20:35:06 +0200
@@ -5350,7 +5358,7 @@ update-manager (1:0.93.19) intrepid; urgency=low
   * UpdateManager/Core/MetaRelease.py:
     - fix crash in CDROM upgrade  (LP: #276363)
   * DistUpgrade/DistUpgradeQuirks.py:
-    - fix crash in nvidia handling (thanks to 
+    - fix crash in nvidia handling (thanks to
       Spencer Janssen)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 02 Oct 2008 11:26:30 +0200
@@ -5376,9 +5384,9 @@ update-manager (1:0.93.18) intrepid; urgency=low
       version information (disabled by default, LP: #189406)
   * DistUpgrade/DistUpgradeQuirks.py:
     - add intrepidPreUpgrade() handler that detects
-      fglrx in xorg.conf and warns about it before the upgrade 
+      fglrx in xorg.conf and warns about it before the upgrade
     - consolidate the various quirks into this file
-    - add check for the nvidia-glx-71 and nvidia-glx-96 drivers 
+    - add check for the nvidia-glx-71 and nvidia-glx-96 drivers
       and warn if they will be required
   * DistUpgrade/xorg_fix_intrepid.py:
     - add script that is run after the upgrade that ensures that
@@ -5386,7 +5394,7 @@ update-manager (1:0.93.18) intrepid; urgency=low
       the proprietary one does not work for intrepid
     - transition from fglrx and nvidia-glx-{71,96} to the free
       driver (LP: #274303)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Sep 2008 14:16:56 +0200
 
 update-manager (1:0.93.17) intrepid; urgency=low
@@ -5400,7 +5408,7 @@ update-manager (1:0.93.17) intrepid; urgency=low
 
   [ Jonathan Riddell ]
   * DistUpgrade/DistUpgradeViewKDE.py fix crash when translating dialogue
-	
+
  -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 19 Sep 2008 00:24:58 +0100
 
 update-manager (1:0.93.16) intrepid; urgency=low
@@ -5412,7 +5420,7 @@ update-manager (1:0.93.16) intrepid; urgency=low
   * UpdateManager/Core/MetaRelease.py:
     - fix typo (thanks to Daniel Garcia)
   * DistUpgrade/DistUpgradeCache.py:
-    - fix the removal of obsolete kernel packages when the 
+    - fix the removal of obsolete kernel packages when the
       old kernel abi package gets removed from -update and/or
       -security
   * UpdateManager/UpdateManager.py:
@@ -5424,10 +5432,10 @@ update-manager (1:0.93.16) intrepid; urgency=low
   * DistUpgrade/DistUpgradeView.py:#
     - make FuzzyTimeToStr() properly deal with plural forms
       (LP: #267234)
-  
+
   [ Brian Murray ]
   * UpdateManager/UpdateManager.py:
-    - preserve epoch in package version for changelogs at 
+    - preserve epoch in package version for changelogs at
       launchpad.net (LP: #270527)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 16 Sep 2008 14:15:18 +0200
@@ -5452,7 +5460,7 @@ update-manager (1:0.93.14) intrepid; urgency=low
 update-manager (1:0.93.13) intrepid; urgency=low
 
   * DistUpgrade/DistUpgrade.cfg:
-    - better KeyDependencies for ubuntu-desktop to make the 
+    - better KeyDependencies for ubuntu-desktop to make the
       detection more robust
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 12 Sep 2008 21:56:11 +0200
@@ -5470,7 +5478,7 @@ update-manager (1:0.93.11) intrepid; urgency=low
   [ Jonathan Riddell ]
   * DistUpgradeViewKDE: don't use setHeaderHidden, doesn't exist in Qt 4.3
   * DistUpgradeViewKDE: Disable terminal button until terminal exists
-	
+
   [ Michael Vogt ]
   * rename DistUpgradeViewKDE4.py to DistUpgradeViewKDE.py
     because adept runs this frontend explicitely (instead
@@ -5482,7 +5490,7 @@ update-manager (1:0.93.10) intrepid; urgency=low
 
   [ Jonathan Riddell ]
   * Add missing debian/update-manager-kde.install
-  
+
   [ Michael Vogt ]
   * transition landscape.canonical.com to the main repository
     (LP: #268551)
@@ -5507,7 +5515,7 @@ update-manager (1:0.93.8) intrepid; urgency=low
       Conrad)
   * debian/update-manager-hildon.install:
     - install only selected bits from Comon/
-  
+
   [ Emmet Hikory ]
   * Removed check to set automatic notifications in update-manager-hildon
 
@@ -5577,14 +5585,14 @@ update-manager (1:0.93.2) intrepid; urgency=low
     - work around problem with packages with no priority
       (LP: #253255)
   * DistUpgrade/DistUpgradeViewGtk.py:
-    - detect ctrl-c presses in the terminal and warn the 
+    - detect ctrl-c presses in the terminal and warn the
       user that it will kill the upgrade (LP: #90866)
   * DistUpgrade/DistUpgrade.cfg:
-    - when being run by the sandbox-upgrader, do not 
+    - when being run by the sandbox-upgrader, do not
       reboot automatically after the upgrade finished
   * DistUpgrade/DistUpgradeController.py:
-    - when a upgrade is cancelt due to network errors, 
-      inform that the downloaded files will be kept 
+    - when a upgrade is cancelt due to network errors,
+      inform that the downloaded files will be kept
       (LP: #242111)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 05 Aug 2008 20:37:52 +0200
@@ -5592,7 +5600,7 @@ update-manager (1:0.93.2) intrepid; urgency=low
 update-manager (1:0.93.1) intrepid; urgency=low
 
   * UpdateManager/UpdateManager.py:
-    - make the init_proxy stuff look for the apt.conf proxy 
+    - make the init_proxy stuff look for the apt.conf proxy
       as well (thanks to vega--)
   * do-release-upgrade:
     - unify proxy configuration between gtk and cli UI
@@ -5608,7 +5616,7 @@ update-manager (1:0.93) intrepid; urgency=low
     - fix typo (LP: #252195)
   * DistUpgrade/DistUpgradeController.py:
     - fix crash in cleanup code
-  
+
   [ Jonathan Riddell ]
   * port the kde frontend to qt4
 
@@ -5618,7 +5626,7 @@ update-manager (1:0.92) intrepid; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
     - use nvidia-common to detect what driver package is needed
-      and install it if the user had a previous nvidia driver 
+      and install it if the user had a previous nvidia driver
     (thanks to Alberto Milone)
   * improvements to the NonInteractive frontend
 
@@ -5630,7 +5638,7 @@ update-manager (1:0.91.10) intrepid; urgency=low
     - improved error handling for people who run
       /tmp with noexec (LP: #219518)
   * DistUpgrade/ReleaseAnnouncement:
-    - fixes in the announcement text (thanks to 
+    - fixes in the announcement text (thanks to
       Brian Murray, LP: #250693)
   * DistUpgrade/removal_blacklist.cfg:
     - remove nvidia-glx from the removal blacklist,
@@ -5642,7 +5650,7 @@ update-manager (1:0.91.10) intrepid; urgency=low
 update-manager (1:0.91.9) intrepid; urgency=low
 
   * UpdateManager/Core/MetaRelease.py:
-    - make the default meta-release location easily 
+    - make the default meta-release location easily
       changable via /etc/update-manager/meta-release
   * data/meta-release:
     - make the default configuration easier configurable
@@ -5674,7 +5682,7 @@ update-manager (1:0.91.7) intrepid; urgency=low
   * DistUpgrade/DistUpgradeView{Gtk,KDE}.py:
     - do not show a error dialog for folloup errors from
       earlier errors (thanks to Alexander Sack for the report)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 02 Jul 2008 13:10:56 +0200
 
 update-manager (1:0.91.6) intrepid; urgency=low
@@ -5695,7 +5703,7 @@ update-manager (1:0.91.5) intrepid; urgency=low
 
   * DistUpgrade/DistUpgradeController.py:
     - support "old-releases.ubuntu.com" as a valid mirror and
-      auto transition from that to the regular archive 
+      auto transition from that to the regular archive
       (LP: #235527)
     - add extra paraonoia when adding a missing admin group
       (thanks to LaMont Jones) LP: #241723
@@ -5720,7 +5728,7 @@ update-manager (1:0.91.4) intrepid; urgency=low
   * update-manager:
     - string fixes (LP: #230865)
   * UpdateManager/UpdateManager.py:
-    - support selecting/dselecting entire update 
+    - support selecting/dselecting entire update
       categories by double clicking on the list header
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 16 Jun 2008 12:22:35 +0200
@@ -5758,10 +5766,10 @@ update-manager (1:0.91) intrepid; urgency=low
     - fix bug in withNetwork value propergation (LP: #227197)
   * DistUpgrade/DistUpgradeController.py:
     - fix bug with sources.list rewriting when mixed
-      deb http://unknown-miror\ndeb-src http://known-mirror 
+      deb http://unknown-miror\ndeb-src http://known-mirror
       entries are used (#221730)
   * UpdateManager/Common/utils.py:
-    - fix inhibit path (LP: #140754), thanks to 
+    - fix inhibit path (LP: #140754), thanks to
       Andreas Dalsgaard
   * DistUpgrade/DistUpgradeViewText.py:
     - use sensible-pager first and fallback to "more" if
@@ -5785,7 +5793,7 @@ update-manager (1:0.90.0) intrepid; urgency=low
     to Peter Cordes
   * AutoUpgradeTester/automatic-upgrade-testing:
     - add "--additional-pkgs" argument that can be used to install
-      the given packages (seperated with ",") into the VM before 
+      the given packages (seperated with ",") into the VM before
       the upgrade is performed
   * DistUpgrade/DistUpgradeConfigParser.py:
     - write error to log in getListFromFile() if file is not
@@ -5799,7 +5807,7 @@ update-manager (1:0.90.0) intrepid; urgency=low
       expose it with --partial in dist-upgrade.py
   * DistUpgrade/DistUpgrade.cfg:
     - prepare for hardy->intrepid upgrades
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 06 May 2008 10:02:16 +0200
 
 update-manager (1:0.87.27) hardy-proposed; urgency=low
@@ -5828,7 +5836,7 @@ update-manager (1:0.87.26) hardy-proposed; urgency=low
       to better support server upgrades with the dvd
       (LP: #222895)
   * po/uk.po:
-    - fix translation so that it gets the expected 
+    - fix translation so that it gets the expected
       number of arguments (LP: #224294)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 30 Apr 2008 22:15:44 +0200
@@ -5838,17 +5846,17 @@ update-manager (1:0.87.25) hardy-proposed; urgency=low
   * DistUpgrade/DistUpgradeApport.py:
     - fix typo in log dir (LP: #223743)
   * DistUpgrade/DistUpgradeController.py:
-    - if the "Crux" theme is used on dapper during the upgrade, 
-      switch to "Human" because Crux is known to crash 
+    - if the "Crux" theme is used on dapper during the upgrade,
+      switch to "Human" because Crux is known to crash
       (LP: #69124)
   * DistUpgrade/DistUpgradeCache.py:
-    - do not crash if a meta package is not available in 
-      the cache (e.g. xubuntu-desktop that moved from main 
+    - do not crash if a meta package is not available in
+      the cache (e.g. xubuntu-desktop that moved from main
       to universe)
   * DistUpgrade/DistUpgrade.cfg.dapper:
     - fix incorrect xubuntu-desktop detection
   * DistUpgrade/DistUpgradeView.py:
-    - make sure that self.confirmChangesMessage is always 
+    - make sure that self.confirmChangesMessage is always
       initialized (LP: #221023)
   * DistUpgrade/mirrors.cfg:
     - added missing russion mirror (LP: #221730)
@@ -5890,12 +5898,12 @@ update-manager (1:0.87.22) hardy; urgency=low
 
   * UpdateManager/UpdateManager.py:
     - only set http proxy if hostname/port is valid (LP: #219227)
-  * DistUpgrade/DistUpgradeController.py: 
-    - some more debug logging 
+  * DistUpgrade/DistUpgradeController.py:
+    - some more debug logging
     - fix missing cache open
     - smaller default network time out
     - run the initial cache.update() on the unmodified sources.list
-      with only a single retry because it may contain sources that 
+      with only a single retry because it may contain sources that
       do not respond
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 19 Apr 2008 00:18:25 +0200
@@ -5905,7 +5913,7 @@ update-manager (1:0.87.21) hardy; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - transition sparc users to ports.ubuntu.com on upgrade
   * DistUpgrade/DistUpgrade.cfg.dapper:
-    - point to ports.ubuntu.com when fetching 
+    - point to ports.ubuntu.com when fetching
       release-upgrader-{apt,dpkg} on dapper->hardy upgrades
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 17 Apr 2008 20:24:19 +0200
@@ -5925,8 +5933,8 @@ update-manager (1:0.87.20) hardy; urgency=low
 update-manager (1:0.87.19) hardy; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
-    - only try to upgrade held-back packages in the 
-      edgyQuirks handler if they are actually upgradable 
+    - only try to upgrade held-back packages in the
+      edgyQuirks handler if they are actually upgradable
       (thanks to Lamont Jones and James Troup)
   * po/fi.po
     - unfuzzy string (thanks to Timo Jyrinki)
@@ -5936,7 +5944,7 @@ update-manager (1:0.87.19) hardy; urgency=low
 update-manager (1:0.87.18) hardy; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
-    - remove mail-notificaton, gnome-translate from hardy 
+    - remove mail-notificaton, gnome-translate from hardy
       quirks list (LP: #215690)
   * UpdateManager/DistUpgradeFetcher.py:
     - use sensible gksu prompt when asking for release
@@ -5964,10 +5972,10 @@ update-manager (1:0.87.17) hardy; urgency=low
 update-manager (1:0.87.16) hardy; urgency=low
 
   * DistUpgrade/DistUpgradeViewText.py:
-    - show prompt again after showing details 
+    - show prompt again after showing details
     - use pager for long change entries
     (thanks to James Troup)
-    - fix text wrap to not break lines on "-" (e.g. in package 
+    - fix text wrap to not break lines on "-" (e.g. in package
       names)
   * DistUpgradeController.py:
     - do not leave 20archive.save files around
@@ -5991,7 +5999,7 @@ update-manager (1:0.87.16) hardy; urgency=low
 update-manager (1:0.87.15) hardy; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
-    - fix fd leak 
+    - fix fd leak
   * DistUpgrade/DistUpgradeController.py:
     - abort when debsig-verify is installed, it makes any
       upgrade fail (LP: #208957)
@@ -6021,7 +6029,7 @@ update-manager (1:0.87.14) hardy; urgency=low
   * DistUpgrade/window_main.ui:
     - Sync strings with GTK frontend to pick up translations
     - Update icon to Oxygen
-	
+
  -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 21 Mar 2008 12:04:51 +0000
 
 update-manager (1:0.87.13) hardy; urgency=low
@@ -6042,7 +6050,7 @@ update-manager (1:0.87.13) hardy; urgency=low
       manner
     - use textwrap when displaying text
   * DistUpgrade/DistUpgradeCache.py:
-    - fix bug that prevented proper error message on 
+    - fix bug that prevented proper error message on
       upgrade calculation error in the text frontend
     - fix text download progress
   * DistUpgrade/ReleaseAnnouncement
@@ -6054,7 +6062,7 @@ update-manager (1:0.87.12) hardy; urgency=low
 
   * DistUpgrade/DistUpgradeViewKDE.py:
     - fix display of non-ascii chars
-    - improve editing capabilities of the terminal (should be 
+    - improve editing capabilities of the terminal (should be
       fine with the readline fontend now)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 11 Mar 2008 22:01:36 +0100
@@ -6085,7 +6093,7 @@ update-manager (1:0.87.10) hardy; urgency=low
   * DistUpgrade/DistUpgradeController.py:
     - when adding prerequists, ensure that no duplicated lines are
       added, plus add test for this (thanks to Kolbjørn Barmen)
-    - honor APT::Get::AllowUnauthenticated (thanks to Kolbjørn 
+    - honor APT::Get::AllowUnauthenticated (thanks to Kolbjørn
       Barmen)
   * DistUpgrade/cdromupgrade:
     - updated to hardy
@@ -6118,7 +6126,7 @@ update-manager (1:0.87.7) hardy; urgency=low
     - honor DEBUG_UPDATE_MANAGER environment and give some
       debug output on the meta-release fetching/parsing
   * UpdateManager/DistUpgradeFetcher.py:
-    - cancel if the ReleaseNotes window is closed via the 
+    - cancel if the ReleaseNotes window is closed via the
       window close control (thanks to Matthew Paul Thomas)
   * DistUpgrade/DistUpgradeViewGtk.py:
     - show update details in smaller font instead of italic
@@ -6126,11 +6134,11 @@ update-manager (1:0.87.7) hardy; urgency=low
   * DistUpgrade/DistUpgradeControler.py:
     - enforce KeepInstalledSection rule only when running on
       a network, otherwise we run into CD upgrade issues
-    - when fetching the prerequists, be more robust in the 
+    - when fetching the prerequists, be more robust in the
       mirror selection (and add tests for this)
   * DistUpgrade/DistUpgrade.cfg:
     - add slocate to the force obsoletes, mlocate replaces it
-  
+
   [ Brian Murray ]
   * Dialog enhancements and typo fixes (LP: 182055)
 
@@ -6170,11 +6178,11 @@ update-manager (1:0.87.4) hardy; urgency=low
       if the dependencies on the system are not ok
       (it will fix most problems)
   * DistUpgrade/DistUpgradeController.py, DistUpgradeCache.py:
-    - if dpkg was interrupted, run "dpkg --configure -a" 
+    - if dpkg was interrupted, run "dpkg --configure -a"
       automatically
-    - if the prerequists can not be authenticated, 
+    - if the prerequists can not be authenticated,
   * DistUpgradeView/DistUpgradeView.py:
-    - when calculating the download time in estimatedDownloadTime, 
+    - when calculating the download time in estimatedDownloadTime,
       use the average download speed so far (if available)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 25 Jan 2008 15:59:53 +0000
@@ -6195,7 +6203,7 @@ update-manager (1:0.87.2) hardy; urgency=low
       earlier
   * DistUpgrade/DistUpgradeController.py:
     - Be more tolerant against errors in the initial apt-get update
-      operation. We disable third party sources on the later 
+      operation. We disable third party sources on the later
       sources.list rewrite anyway
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 16 Jan 2008 15:06:00 +0100
@@ -6216,23 +6224,23 @@ update-manager (1:0.87.1) hardy; urgency=low
 update-manager (1:0.87) hardy; urgency=low
 
   * typo fixes (thanks to Brian Murray, LP: #99513, LP: #158175)
-  * fix incorrect textual description (thanks to Brian Murray, 
+  * fix incorrect textual description (thanks to Brian Murray,
     LP: #145130)
   * support release-upgrades from dapper for architectures on
     ports.ubuntu.com
   * UpdateManager/UpdateManager.py:
-    - remove the "from $version to $version" from the main 
+    - remove the "from $version to $version" from the main
       list as this is duplicated information from the details tab
     - wording fixes (thanks to Matthew Paul Thomas)
     - if the update was successful, automatically close the install
       window
-    - when no updates are available, display the information when the 
+    - when no updates are available, display the information when the
       last apt-get update like operation was performed
-    - if there are broken dependencies on the system, try to fix 
+    - if there are broken dependencies on the system, try to fix
       them on startup
   * data/UpdateManager.glade:
     - do not display what software updates are in startup progress
-      dialog, this is already displayed in the main UI 
+      dialog, this is already displayed in the main UI
       (thanks to Matthew Paul Thomas)
     - align the ""Download size:" text so that it matches the text
       inside the buttons
@@ -6247,7 +6255,7 @@ update-manager (1:0.86) hardy; urgency=low
     - fix getting prerequists for ports.ubuntu.com
       (thanks to lamont)
   * DistUpgrade/DistUpgradeCache.py:
-    - keep the lists dir locked all the time to avoid a 
+    - keep the lists dir locked all the time to avoid a
       possible race
   * DistUpgrade/DistUpgrade.cfg:
     - added gobuntu-desktop to the list of supported
@@ -6255,7 +6263,7 @@ update-manager (1:0.86) hardy; urgency=low
   * data/update-manager.desktop.in:
     - remove deprecated entries (thanks to Kmos)
   * UpdateManager/Core/MetaRelease.py:
-    - add support to prompt only for specifc release upgrades 
+    - add support to prompt only for specifc release upgrades
       (e.g. lts->lts)
   * data/release-upgrades:
     - set the default prompting for hardy to "Prompt only for
@@ -6270,7 +6278,7 @@ update-manager (1:0.86) hardy; urgency=low
   * data/update-manager.schemas.in:
     - /apps/update-manager/check_dist_upgrades is deprecated
   * utils/demotions.py:
-    - make it more flexible to support generating both 
+    - make it more flexible to support generating both
       dapper and gutsy demotions
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Dec 2007 15:56:22 +0100
@@ -6285,14 +6293,14 @@ update-manager (1:0.85.4) hardy; urgency=low
 
 update-manager (1:0.85.3) hardy; urgency=low
 
-  * DistUpgrade/DistUpgrade.cfg, 
+  * DistUpgrade/DistUpgrade.cfg,
     DistUpgrade/DistUpgrade.glade,
     DistUpgrade/ReleaseAnnouncement,
     DistUpgrade/window_main.ui:
     - updated for hardy
   * DistUpgrade/DistUpgradeControler.py,:
     DistUpgrade/DistUpgradeCache.py:
-    - better description whats happening when calculating the 
+    - better description whats happening when calculating the
       release-upgrade
     - keep the GUI responsive while calculating the upgrade
 
@@ -6301,7 +6309,7 @@ update-manager (1:0.85.3) hardy; urgency=low
 update-manager (1:0.85.2) hardy; urgency=low
 
   * debian/control:
-    - added missing "XS-Vcs-Bzr" header (thanks to Brian 
+    - added missing "XS-Vcs-Bzr" header (thanks to Brian
   * debian/rules:
     - dh_iconcache is obsolete, use dh_icons instead
 
@@ -6329,11 +6337,11 @@ update-manager (1:0.81) gutsy; urgency=low
   [ Jonathan Riddell ]
   * DistUpgrade/DistUpgradeViewKDE.py:
    - Add word wrap to quesiton dialogue
-  
+
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeControler.py:
     - make the commercial archive transition more robust
-    - when forcing the evms removal, ensure that all 
+    - when forcing the evms removal, ensure that all
       evms rdepends get obsoleted so that the safety checks
       in the upgrader do not kick in and prevent the removal
     - when calculating the size required in /boot take into account
@@ -6347,7 +6355,7 @@ update-manager (1:0.81) gutsy; urgency=low
 update-manager (1:0.80) gutsy; urgency=low
 
   * DistUpgrade/DistUpgradeControler.py:
-    - enable transition to gutsy partner repository on 
+    - enable transition to gutsy partner repository on
       upgrade now that we have a archive
     - workaround kde tempdir handling (LP: #149186)
 
@@ -6359,9 +6367,9 @@ update-manager (1:0.79) gutsy; urgency=low
     - do not log apts debug output to the user in server
       upgrade mode
     - when running in partial upgrade mode, do not run apport,
-      this is handled by the libapt apport integration now, 
+      this is handled by the libapt apport integration now,
       (LP:#139394)
-  * DistUpgrade/DistUpgradeCache.py,DistUpgradeControler.py:  
+  * DistUpgrade/DistUpgradeCache.py,DistUpgradeControler.py:
     - detect and workaround upgrade issues with envy
   * update-manager:
     - show version with --version (LP: #137353)
@@ -6372,7 +6380,7 @@ update-manager (1:0.79) gutsy; urgency=low
   * DistUpgrade/DistUpgradeControler.py:
     - fix lock detection (LP: #145463)
   * UpdateManager/Common/utils.py:
-    - show "0 KB" download size if there is nothing to download 
+    - show "0 KB" download size if there is nothing to download
       (LP: #145308)
   * DistUpgrade/demoted.cfg, utils/demotions.py:
     - do not display demotions if they are replaced by something that is
@@ -6385,7 +6393,7 @@ update-manager (1:0.79) gutsy; urgency=low
     - tighten update-manager depend on update-manager-core
   * UpdateManager/Core/DistUpgradeFetcherCore.py:
     - move country_mirror code into Core (LP: #145116)
-  * UpdateManager/Core/MetaReleaseCore.py, 
+  * UpdateManager/Core/MetaReleaseCore.py,
     tests/interactive_fetch-release_upgrader.py:
     - fix test failure
 
@@ -6436,7 +6444,7 @@ update-manager (1:0.75) gutsy; urgency=low
 update-manager (1:0.74) gutsy; urgency=low
 
   * DistUpgrade/DistUpgradeCache.py:
-    - ensure that users with the "lowlatency" kernel get 
+    - ensure that users with the "lowlatency" kernel get
       transitioned correctly to a new kernel (LP: #129458)
   * DistUpgrade/DistUpgradeControler.py:
     - work around kde being too clever in tempdirs (LP: #139319)
@@ -6458,8 +6466,8 @@ update-manager (1:0.73) gutsy; urgency=low
     - support pre-requists on the CD as well
     - preserve the logs on self update from the net
   * DistUpgrade/build-tarball.sh:
-    - fix auto-generation of target distro in cdromupgrade 
-      script (LP:#138354) 
+    - fix auto-generation of target distro in cdromupgrade
+      script (LP:#138354)
   * data/update-manager.8:
     - new manpage (thanks to  Bruno Mangin, LP: #107015)
 
@@ -6468,7 +6476,7 @@ update-manager (1:0.73) gutsy; urgency=low
 update-manager (1:0.72) gutsy; urgency=low
 
   * UpdateManager/Core/MetaRelease.py:
-    - fix target filename for meta-release files so that 
+    - fix target filename for meta-release files so that
       correct I-M-S information is used
   * DistUpgrade/DistUpgrade.cfg:
     - use "release-upgrader-dpkg", "release-upgrader-apt" as
@@ -6514,7 +6522,7 @@ update-manager (1:0.70) gutsy; urgency=low
 
   [ Michael Vogt ]
   * DistUpgrade/DistUpgradeControler.py:
-    - show human readable size when displaying "not enough free space" 
+    - show human readable size when displaying "not enough free space"
       error
     - when rewriting sources.list, transition the commercial
       package archive to the new location and "partner" name
@@ -6523,7 +6531,7 @@ update-manager (1:0.70) gutsy; urgency=low
   * DistUpgrade/DistUpgradeViewGtk.py:
     - remove debug messages
   * DistUpgrade/DistUpgrade.cfg:
-    - remove gnome-cups-manager on upgrade, system-config-printer 
+    - remove gnome-cups-manager on upgrade, system-config-printer
       replaces it (LP: #107766)
     - set cursor to the start of the details list (LP: #134873)
     - added ubuntustudio-desktop, ichthux-desktop to valid metapackages
@@ -6559,7 +6567,7 @@ update-manager (1:0.69) gutsy; urgency=low
 update-manager (1:0.68) gutsy; urgency=low
 
   * UpdateManager/DistUpgradeFetcherCore.py:
-    - be extra paranoid when using ${countrymirror} 
+    - be extra paranoid when using ${countrymirror}
   * DistUpgrade/DistUpgradeControler.py:
     - support countrymirror in prerequists.sources.list file
       too
@@ -6577,7 +6585,7 @@ update-manager (1:0.67) gutsy; urgency=low
       too
     - added test for the new matcher behaviour
   * DistUpgrade/DistUpgradeControler.py:
-    - fix PreRequists fetching 
+    - fix PreRequists fetching
     - better error checking/logging
   * DistUpgrade/DistUpgradeViewGtk.py,
     DistUpgrade/DistUpgradeViewKDE.py,:
@@ -6585,7 +6593,7 @@ update-manager (1:0.67) gutsy; urgency=low
       (thanks to Chris Jones)
   * DistUpgrade/DistUpgradeViewGtk.py:
     - show "cancel" button while fetching stuff
-  * UpdateManager/DistUpgradeFetcher.py, 
+  * UpdateManager/DistUpgradeFetcher.py,
     UpdateManager/DistUpgradeFetcherCore.py:
     - support ${countrymirror} in meta-release information
   * setup.py, setup.cfg:
@@ -6606,13 +6614,13 @@ update-manager (1:0.66) gutsy; urgency=low
   * DistUpgrade/Core/DistUpgradeFetcherCore.py:
     - added ignore-time-conflict when calling gpg (thanks to
       Evan)
-  * utils/demoted.cfg, DistUpgrade/mirrors.cfg, 
+  * utils/demoted.cfg, DistUpgrade/mirrors.cfg,
     DistUpgrade/ReleaseAnnouncement:
-    - updated for current gutsy 
+    - updated for current gutsy
   * DistUpgrade/DistUpgrade.cfg:
     - mark desktop-effects as obsolete on ubuntu-desktop upgrades
       (the appearance capplet replaces it)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 10 Jul 2007 10:57:02 +0100
 
 update-manager (1:0.65) gutsy; urgency=low
@@ -6638,10 +6646,10 @@ update-manager (1:0.63) gutsy; urgency=low
 
   * fix i18n issue (Fixes LP:#114207)
   * DistUpgrade/DistUpgradeCache.py:
-    - if "386" (UP) kernel is installed on SMP machine, automatically 
+    - if "386" (UP) kernel is installed on SMP machine, automatically
       switch to SMP kernel (Fixes LP: #106387)
   * DistUpgrade/DistUpgrade.cfg:
-    - set python2.3 to remove list to ensure smooth upgrade 
+    - set python2.3 to remove list to ensure smooth upgrade
       (Fixes LP: #108147)
   * DistUpgrade/DistUpgradeControler.py:
     - show total needed space in not-enough-free-space message
@@ -6654,7 +6662,7 @@ update-manager (1:0.63) gutsy; urgency=low
   * Separate downloading and upgrading (Fixes LP: #91978)
   * Show demotions before runing the upgrade (Fixes LP: #91998)
   * UpdateManager/UpdateManager.py:
-    - re-check for new releases too when the user clicks on 
+    - re-check for new releases too when the user clicks on
       "Check" (Fixes LP: #107452)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 13 Jun 2007 18:33:23 +0200
@@ -6682,7 +6690,7 @@ update-manager (1:0.60) gutsy; urgency=low
       (LP#106804)
     - increase minAge for the apt cleanup cron job during the upgrade
       to fix race for people with very slow network (LP#109548)
-    - deal with invalid lines in /proc/mounts when calculating 
+    - deal with invalid lines in /proc/mounts when calculating
       the free space (LP#108284)
   * cdromupgrade:
     - do not call any authentication mechanism, that is the
@@ -6718,7 +6726,7 @@ update-manager (1:0.59.21) feisty-proposed; urgency=low
 update-manager (1:0.59.20) feisty; urgency=low
 
   * DistUpgrade/DistUpgradeViewKDE.py:
-    - do not crash in utf8() if the str is already unicode 
+    - do not crash in utf8() if the str is already unicode
       (LP#106863)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 16 Apr 2007 19:07:04 +0200
@@ -6728,7 +6736,7 @@ update-manager (1:0.59.19) feisty; urgency=low
   * DistUpgrade/DistUpgradeViewKDE.py:
     - disable apt-listchanges in the kde frontend too
     - fix broken terminal interaction (LP#106367)
-    - ensure that there is only a single konsole widget 
+    - ensure that there is only a single konsole widget
       visible (LP#106541)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 14 Apr 2007 23:27:48 +0200
@@ -6757,12 +6765,12 @@ update-manager (1:0.59.17) feisty; urgency=low
     - prepare for the final version
   * po/
     - updated to the latest translations from rosetta
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 13 Apr 2007 11:22:01 +0200
 
 update-manager (1:0.59.16) feisty; urgency=low
 
-  * set useDevelopmentRelease=False in the self updater on 
+  * set useDevelopmentRelease=False in the self updater on
     the CD (LP#99171)
   * fix another issue with a unresponsive GUI
   * work around upgrade issue with pango-libthai (LP#104384)
@@ -6792,7 +6800,7 @@ update-manager (1:0.59.13) feisty; urgency=low
   * po/POTFILES.in:
     - reomove [type: ] this confused intltool
   * DistUpgradeControler.py:
-    - work around problem with kde tempfile extraction 
+    - work around problem with kde tempfile extraction
       (LP#99380)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon,  2 Apr 2007 11:46:40 +0200
@@ -6810,7 +6818,7 @@ update-manager (1:0.59.12) feisty; urgency=low
   * DistUpgrade/DistUpgradeViewText.py:
     - support details in text-mode (LP#94129)
   * DistUpgrade/DistUpgradeControler.py:
-    - fix incorrect auto-installed information from meta-pkgs 
+    - fix incorrect auto-installed information from meta-pkgs
       (LP#86921)
     - rewrite /etc/fstab cdrom entries (LP#86424,#79327)
     - fix upgrade for people with no admin group (LP#93279)
@@ -6847,7 +6855,7 @@ update-manager (1:0.59.10) feisty; urgency=low
   * DistUpgrade/DistUpgradeViewKDE.py:
     - i18n KDE frontend fixes, LP#95638, LP#94927
     - set text on confirm dialogue buttons
-    - (re)spawn embedded konsole for each fork, 
+    - (re)spawn embedded konsole for each fork,
       fixes crash when removing packages
     - Add on_window_main_delete_event, stops the user closing the window
 
@@ -6862,7 +6870,7 @@ update-manager (1:0.59.9) feisty; urgency=low
   * Fix bug in writable check for /var/lib/update-manager (LP#95599)
   * Ensure that /var/lib/update-manager is available
   * inhibit sleep when runing the release upgrader(LP#70058)
-  * make sure that we do not run with a interactive debconf frontend 
+  * make sure that we do not run with a interactive debconf frontend
     on server upgrade (for packages like quagga)
   * fix race condition in free space checking (LP#96482), thanks
     to Jane Silber for reporting
@@ -6881,7 +6889,7 @@ update-manager (1:0.59.8) feisty; urgency=low
   * DistUpgrade/DistUpgrade.cfg:
     - fix KeyDependency for xubuntu detection
   * UpdateManager/UpdateManager.py:
-    - do not crash if UnInhibit dbus signal can not be send 
+    - do not crash if UnInhibit dbus signal can not be send
       (LP#86572)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 24 Mar 2007 15:39:47 +0100
@@ -6900,7 +6908,7 @@ update-manager (1:0.59.7) feisty; urgency=low
       Zimmerman for reporting the issue)
   * do-release-upgrade:
     - added option --frontend, --mode
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 21 Mar 2007 10:04:45 +0100
 
 update-manager (1:0.59.6) feisty; urgency=low
@@ -6978,11 +6986,11 @@ update-manager (1:0.58) feisty; urgency=low
 
   * UpdateManager/UpdateManager.py:
     - do not crash if download size can not be calculated (LP#90547)
-  * fix build for all python versions (thanks to doko for help!) 
+  * fix build for all python versions (thanks to doko for help!)
     (LP#90269)
   * strip changelog epoch too (LP#45566)
   * fix spelling mistakes (thanks to Bruce Cowan, LP#90833)
-  * update download size if "check/uncheck" all was selected from 
+  * update download size if "check/uncheck" all was selected from
     right-click menu
   * correct download speed string (LP#73721)
   * fix in the german translation (LP#68384)
@@ -7042,7 +7050,7 @@ update-manager (0.57.3) feisty; urgency=low
     - build a raw-dist-upgrader in additon to the debs
   * data/glade/UpdateManager.glade:
     - fix bad grammar (thanks to Matthew Thomas) LP#85258
-    - make Update Manager the consistent name (thanks to Matthew Thomas) 
+    - make Update Manager the consistent name (thanks to Matthew Thomas)
       LP#85253
   * merged ReleaseAnnouncement wording update from Brian Murray
   * UpdateManager/Core/MetaRelease.py:
@@ -7074,7 +7082,7 @@ update-manager (0.57) feisty; urgency=low
 
 update-manager (0.56.1) feisty; urgency=low
 
-  * fix FTBFS 
+  * fix FTBFS
   * update po/
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed,  7 Feb 2007 21:18:39 +0100
@@ -7106,7 +7114,7 @@ update-manager (0.55) feisty; urgency=low
 
 update-manager (0.53.6) feisty; urgency=low
 
-  * properly extract the package name that fails before 
+  * properly extract the package name that fails before
     calling out to apports package_hook
   * fix crash on exit before the main loop is run (lp: #82744)
 
@@ -7124,13 +7132,13 @@ update-manager (0.53.4) feisty; urgency=low
 
   * fix python dependency (lp: #80976)
   * add apport support to send in bugreports
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 25 Jan 2007 15:40:34 +0100
 
 update-manager (0.53.3) feisty; urgency=low
 
   * fix python dependency (lp: #80976)
-  * fix the GenericName in update-manager and software-properties 
+  * fix the GenericName in update-manager and software-properties
     (lp: #78932)
   * workaround problem when a meta-release file is created by root
     in the users homedir (lp: #80713)
@@ -7226,7 +7234,7 @@ update-manager (0.44.13) edgy; urgency=low
   * data/glade/SoftwareProperties.glade:
     - fix missing "translatable" property (lp: #62681)
   * DistUpgrade:
-    - deal better with the python transition and the hpijs 
+    - deal better with the python transition and the hpijs
       upgrade (lp: #62948)
   * UpdateManager/UpdateManager.py:
     - put the cancel button inside the text-area to avoid flickering
@@ -7267,7 +7275,7 @@ update-manager (0.44.10) edgy; urgency=low
       about the available mirrors
   * debian/control:
     - updated dbus dependencies (lp: #59862)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 11 Sep 2006 09:38:21 +0200
 
 update-manager (0.44.9) edgy; urgency=low
@@ -7305,7 +7313,7 @@ update-manager (0.44.5) edgy; urgency=low
 
   * install the DistUpgrade package too
   * data/channels/Ubuntu.info.in:
-    - warty is no longer officially supported 
+    - warty is no longer officially supported
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 30 Aug 2006 11:32:24 +0200
 
@@ -7323,9 +7331,9 @@ update-manager (0.44.3) edgy; urgency=low
   * help/C/update-manager-C.omf:
     - fix url (thanks to daniel holbach, lp: #45548)
   * show the units better
-  * don't jump around on row activation 
+  * don't jump around on row activation
     (thanks to Sebastian Heinlein)
-  * send "inhibit sleep" to power-manager while applying 
+  * send "inhibit sleep" to power-manager while applying
     updates  (lp #40697)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 15 Aug 2006 18:06:53 +0200
@@ -7334,7 +7342,7 @@ update-manager (0.44.2) edgy; urgency=low
 
   * added select all/unselect all (thanks to Sebastian Heinlein)
   * wording fixes
-  * fix update counting bug 
+  * fix update counting bug
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Thu,  3 Aug 2006 17:52:09 +0200
 
@@ -7342,7 +7350,7 @@ update-manager (0.44.1) edgy; urgency=low
 
   * make UpdateManager check for new distribution releases by
     default again
-  * fix dist-upgrade fetching when run as non-root. 
+  * fix dist-upgrade fetching when run as non-root.
   * sort the package list by the origin (UpdateManagerEdgy spec)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed,  2 Aug 2006 13:00:42 +0200
@@ -7375,8 +7383,8 @@ update-manager (0.42.2ubuntu22) dapper; urgency=low
 update-manager (0.42.2ubuntu21) dapper; urgency=low
 
   * UpdateManager/UpdateManager.py:
-    - when a distribution release becomes available, display the 
-      version, not the codename (as per 
+    - when a distribution release becomes available, display the
+      version, not the codename (as per
       https://wiki.ubuntu.com/CodeNamesToVersionNumbers)
     - fix a string that was not marked transltable
 
@@ -7385,7 +7393,7 @@ update-manager (0.42.2ubuntu21) dapper; urgency=low
 update-manager (0.42.2ubuntu20) dapper; urgency=low
 
   * SoftwareProperties/aptsources.py, channels/Ubuntu.info.in:
-    - remove the codenames from the releases (as per 
+    - remove the codenames from the releases (as per
       https://wiki.ubuntu.com/CodeNamesToVersionNumbers)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 23 May 2006 16:04:39 +0200
@@ -7435,7 +7443,7 @@ update-manager (0.42.2ubuntu15) dapper; urgency=low
     (Thanks to Sebastian Heinlein)
   * show main window *after* restoring the size (ubuntu: #42277)
     (Thanks to Sebastian Heinlein)
-  * fix broken spelling, typos, wording (ubuntu: #42431, #28777, 
+  * fix broken spelling, typos, wording (ubuntu: #42431, #28777,
     #40425, #40727)
   * help/C: merged from the docteam svn (ubuntu: 36092)
 
@@ -7451,7 +7459,7 @@ update-manager (0.42.2ubuntu14) dapper; urgency=low
 update-manager (0.42.2ubuntu13) dapper; urgency=low
 
   * po/POTFILES.in: add missing desktop file (ubuntu: #39410)
-  * UpdateManager/UpdateManager.py: 
+  * UpdateManager/UpdateManager.py:
     - fix in the get_changelog logic (ubuntu: #40058)
     - correct a error in the changelog parser (ubuntu: #40060)
     - fix download size reporting (ubuntu: #39579)
@@ -7472,12 +7480,12 @@ update-manager (0.42.2ubuntu12) dapper; urgency=low
     changed via a gconf setting/commandline switch)
   * fix UI issue of the edit dialog for given templates (thanks to
     Chipzz for the patch)
-   
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 12 Apr 2006 20:23:21 +0200
 
 update-manager (0.42.2ubuntu11) dapper; urgency=low
 
-  * debian/control: 
+  * debian/control:
     - depend on unattended-upgrades
     - move python-gnome2 to recommends (we only use gconf from it)
   * UpdateManager/fakegconf.py: update for xubuntu (thanks to Jani Monoses)
@@ -7493,7 +7501,7 @@ update-manager (0.42.2ubuntu10) dapper; urgency=low
   * calc the update before downloading the changelog (#36140)
   * add a fake gconf interface for xubuntu (nop for normal ubuntu)
     (Thanks to Jani Monoses for the patch)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue,  4 Apr 2006 18:17:16 +0200
 
 update-manager (0.42.2ubuntu9) dapper; urgency=low
@@ -7514,13 +7522,13 @@ update-manager (0.42.2ubuntu8) dapper; urgency=low
 
 update-manager (0.42.2ubuntu7) dapper; urgency=low
 
-  * various spelling fixes and ui-glitches 
+  * various spelling fixes and ui-glitches
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 14 Mar 2006 16:58:01 +0000
 
 update-manager (0.42.2ubuntu6) dapper; urgency=low
 
-  * po/pt_BR.po: updated translation 
+  * po/pt_BR.po: updated translation
     (thanks to Carlos Eduardo Pedroza Santiviago)
   * po/pt.po: updated Portugise translation (thanks to Rui Azevedo)
   * debian/control: arch: all now
@@ -7542,7 +7550,7 @@ update-manager (0.42.2ubuntu5) dapper; urgency=low
 update-manager (0.42.2ubuntu4) dapper; urgency=low
 
   * removed some of the gnome dependencies (gconf still in)
-  * the ReleaseNotes dialog has clickable links now (thanks to Sebastian 
+  * the ReleaseNotes dialog has clickable links now (thanks to Sebastian
     Heinlein)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 20 Feb 2006 13:24:55 +0100
@@ -7566,7 +7574,7 @@ update-manager (0.42.2ubuntu2) dapper; urgency=low
 
 update-manager (0.42.2ubuntu1) dapper; urgency=low
 
-  * UpdateManager/MetaRelease.py: 
+  * UpdateManager/MetaRelease.py:
     - never offer a upgrade to a unsupported (i.e. developer) dist
   * data/gnome-software-properties.desktop.in: use X-KDE-SubstituteUID=true
   * small UI layout changes (should fix the cancel/close button problem)
@@ -7595,7 +7603,7 @@ update-manager (0.42ubuntu1) dapper; urgency=low
      - Align and capitalize the button "Cancel downloading"
     (ubuntu: #28453)
   * bugfixes in the cache locking
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 16 Jan 2006 12:56:29 +0100
 
 update-manager (0.40.2) dapper; urgency=low
@@ -7619,7 +7627,7 @@ update-manager (0.40) dapper; urgency=low
 
   * new upstream release:
     - switched from autotools to distutils
-    - massive code cleanups 
+    - massive code cleanups
     - use SimpleGladeApp now
     - SoftwareProperties has a new GUI
     - UpdateManager has support for upgrading from one dist to another
@@ -7628,9 +7636,9 @@ update-manager (0.40) dapper; urgency=low
     - use python-apt for "reload" and "add cdrom" now
     - improved the handling of sources.list a lot (including support for
       /etc/apt/sources.list.d)
-  * support for the AutomaticUpgrades spec added via the meta-release 
+  * support for the AutomaticUpgrades spec added via the meta-release
     information
-  * data/update-manager.desktop.in: 
+  * data/update-manager.desktop.in:
     - use X-KDE-SubstituteUID added and use gksu now
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 15 Nov 2005 17:22:12 +0100
@@ -7673,7 +7681,7 @@ update-manager (0.37.1+svn20050404.11) breezy; urgency=low
 
 update-manager (0.37.1+svn20050404.10) breezy; urgency=low
 
-  * fix for a typo in the source of the last upload (*cough*) 
+  * fix for a typo in the source of the last upload (*cough*)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 31 Aug 2005 15:39:53 +0200
 
@@ -7692,7 +7700,7 @@ update-manager (0.37.1+svn20050404.8) breezy; urgency=low
 
 update-manager (0.37.1+svn20050404.7) breezy; urgency=low
 
-  * if running from inside another application (e.g. synaptic), make sure 
+  * if running from inside another application (e.g. synaptic), make sure
     the dialogs get a correct parent (ubuntu #14001)
   * if nothing changed, do not run "reload" if runing from inside synaptic
 
@@ -7763,7 +7771,7 @@ update-manager (0.37.1+svn20050403) hoary; urgency=low
     - some missing i18n strings marked as such (thanks to Zygmunt Krynicki)
     - don't fail on missing net connections
     - always update the status label
- 
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Sun,  3 Apr 2005 20:54:42 +0200
 
 update-manager (0.37.1+svn20050323) hoary; urgency=low
@@ -7817,7 +7825,7 @@ update-manager (0.37.1+svn20050228) hoary; urgency=low
 update-manager (0.37.1+svn20050221) hoary; urgency=low
 
   * new svn snapshot, fixes:
-    - #6756: window size too big 
+    - #6756: window size too big
     - #6767, #6780: gnome-software-properties window broken
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 21 Feb 2005 11:30:52 +0100
@@ -7836,7 +7844,7 @@ update-manager (0.37.1) hoary; urgency=low
 
   * typo (#6542)
   * package list is sorted now
-  * applied "hide details if system is update-to-date" patch 
+  * applied "hide details if system is update-to-date" patch
     (#6578, thanks to Jorge Bernal)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 15 Feb 2005 10:49:17 +0100
@@ -7845,12 +7853,12 @@ update-manager (0.37) hoary; urgency=low
 
   * test for lock file and show error if the lock is already taken
   * use utf8 for the description
-  * changelogs are fetched from http://changelogs.ubuntu.com/ now 
+  * changelogs are fetched from http://changelogs.ubuntu.com/ now
     (closes: #6315)
   * handle 404 from http and set the error accordingly
   * set main_window to not sensitive when downloading changelogs
   * if no updates are available, hide the checkbox column (closes: #6443)
-  
+
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 14 Feb 2005 15:08:06 +0100
 
 update-manager (0.36.6) hoary; urgency=low
@@ -7883,7 +7891,7 @@ update-manager (0.36.3) hoary; urgency=low
 
 update-manager (0.36.2) hoary; urgency=low
 
-  * new main window layout in update-manager 
+  * new main window layout in update-manager
     (Michiel design, looks _so_ nice)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 28 Jan 2005 12:20:57 +0100
@@ -7962,4 +7970,3 @@ update-manager (0.1-1) unstable; urgency=low
   * Initial Release.
 
  -- Michiel Sikkes <michiel@eyesopened.nl>  Mon, 25 Oct 2004 21:49:07 +0200
-

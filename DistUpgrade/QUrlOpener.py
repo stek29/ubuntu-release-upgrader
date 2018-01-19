@@ -1,7 +1,7 @@
 # QUrlOpener.py
 # -*- Mode: Python; indent-tabs-mode: nil; tab-width: 4; coding: utf-8 -*-
 #
-#  Copyright (c) 2014 Harald Sitter <apachelogger@kubuntu.org>
+#  Copyright (c) 2014-2018 Harald Sitter <apachelogger@kubuntu.org>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -79,5 +79,7 @@ class QUrlOpener(QObject):
             command = ['x-www-browser', url]
         # Avoid to run the browser as user root
         if os.getuid() == 0 and 'SUDO_USER' in os.environ:
-            command = ['sudo', '-u', os.environ['SUDO_USER']] + command
+            command = ['sudo',
+                       '--set-home',
+                       '-u', os.environ['SUDO_USER']] + command
         subprocess.Popen(command)

@@ -3,6 +3,9 @@ ubuntu-release-upgrader (1:18.04.6) UNRELEASED; urgency=medium
   * DistUpgradeFetcherKDE.py:
     - ensure theming is correct across all Qt versions and Plasma versions
     - drop unused openUrl helper (replaced by QUrlOpener)
+  * QUrlOpener.py:
+    - make sure to pass --set-home to sudo when dropping back to user, prevents
+      browsers from getting confused which HOME to use
 
  -- Harald Sitter <sitter@kde.org>  Fri, 19 Jan 2018 13:34:32 +0100
 

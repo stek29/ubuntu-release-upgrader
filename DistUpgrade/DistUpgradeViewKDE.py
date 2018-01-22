@@ -1,20 +1,20 @@
-# DistUpgradeViewKDE.py 
+# DistUpgradeViewKDE.py
 #
 #  Copyright (c) 2007 Canonical Ltd
-#  Copyright (c) 2014 Harald Sitter <apachelogger@kubuntu.org>
+#  Copyright (c) 2014-2018 Harald Sitter <sitter@kde.org>
 #
 #  Author: Jonathan Riddell <jriddell@ubuntu.com>
 #
-#  This program is free software; you can redistribute it and/or 
-#  modify it under the terms of the GNU General Public License as 
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
 #  published by the Free Software Foundation; either version 2 of the
 #  License, or (at your option) any later version.
-# 
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-# 
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
@@ -54,6 +54,7 @@ import traceback
 
 import apt
 import apt_pkg
+import shlex # for osrelease
 import os
 
 import pty
@@ -84,6 +85,85 @@ def loadUi(file, parent):
         #FIXME find file
         print("error, can't find file: " + file)
 
+def _find_pixmap(path):
+    if os.path.exists(path):
+        return QPixmap(path)
+    return None
+
+def _icon(name, fallbacks = []):
+    if type(PYQT_VERSION) == int:
+        return QIcon.fromTheme(name)
+    else:
+        for path in fallbacks:
+            pixmap = _find_pixmap(path)
+            if pixmap:
+                return QIcon(pixmap)
+    return None
+
+# QWidget adjustSize when run on a maximized window will make Qt 5.9, earlier,
+# and probably also later, lose its state. Qt will think the window is no longer
+# maximized, while in fact it is. This results in parts of the window no longer
+# getting redrawn as the window manager will think it maximized but Qt thinks it
+# is not and thus not send repaints for the regions it thinks do not exist.
+# To prevent this from happening monkey patch adjustSize to not ever run on
+# maximized windows.
+def adjustSize(self):
+    if not self.isMaximized():
+        self.origAdjustSize(self)
+QWidget.origAdjustSize = QWidget.adjustSize
+QWidget.adjustSize = adjustSize
+
+class _OSRelease:
+    DEFAULT_OS_RELEASE_FILE = '/etc/os-release'
+    OS_RELEASE_FILE = '/etc/os-release'
+
+    def __init__(self, lsb_compat=True):
+        self.result = {}
+        self.valid = False
+        self.file = _OSRelease.OS_RELEASE_FILE
+
+        if not os.path.isfile(self.file):
+            return
+
+        self.parse()
+        self.valid = True
+
+        if lsb_compat:
+            self.inject_lsb_compat()
+
+    def inject_lsb_compat(self):
+        self.result['Distributor ID'] = self.result['ID']
+        self.result['Description'] = self.result['PRETTY_NAME']
+        # Optionals as per os-release spec.
+        self.result['Codename'] = self.result.get('VERSION_CODENAME')
+        if not self.result['Codename']:
+            # Transient Ubuntu 16.04 field (LP: #1598212)
+            self.result['Codename'] = self.result.get('UBUNTU_CODENAME')
+        self.result['Release'] = self.result.get('VERSION_ID')
+
+    def parse(self):
+        f = open(self.file, 'r')
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            self.parse_entry(*line.split('=', 1))
+        f.close()
+
+    def parse_entry(self, key, value):
+        value = self.parse_value(value) # Values can be shell strings...
+        if key == "ID_LIKE" and isinstance(value, str):
+            # ID_LIKE is specified as quoted space-separated list. This will
+            # be parsed as string that we need to split manually.
+            value = value.split(' ')
+        self.result[key] = value
+
+    def parse_value(self, value):
+        values = shlex.split(value)
+        if len(values) == 1:
+            return values[0]
+        return values
+
 
 class DumbTerminal(QTextEdit):
     """ A very dumb terminal """
@@ -98,7 +178,7 @@ class DumbTerminal(QTextEdit):
         self.setUndoRedoEnabled(False)
         self.setOverwriteMode(True)
         self._block = False
-        #self.connect(self, SIGNAL("cursorPositionChanged()"), 
+        #self.connect(self, SIGNAL("cursorPositionChanged()"),
         #             self.onCursorPositionChanged)
 
     def fork(self):
@@ -144,7 +224,7 @@ class DumbTerminal(QTextEdit):
             #print("sent backspace")
             os.write(self.installProgress.master_fd, chr(8))
             return
-        # do nothing for events like "shift" 
+        # do nothing for events like "shift"
         if not ev.text():
             return
         # now sent the key event to the termianl as utf-8
@@ -286,7 +366,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         self.finished = False
         # FIXME: add support for the timeout
         # of the terminal (to display something useful then)
-        # -> longer term, move this code into python-apt 
+        # -> longer term, move this code into python-apt
         self.label_status.setText(_("Applying changes"))
         self.progress.setValue(0)
         self.progress_text.setText(" ")
@@ -338,7 +418,7 @@ class KDEInstallProgressAdapter(InstallProgress):
         #self.confDialogue.resize(self.confDialogue.minimumSizeHint())
         self.confDialogue.show_difference_button.clicked.connect(self.showConffile)
 
-        # workaround silly dpkg 
+        # workaround silly dpkg
         if not os.path.exists(current):
           current = current+".dpkg-dist"
 
@@ -495,10 +575,22 @@ class DistUpgradeViewKDE(DistUpgradeView):
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
 
-        # we test for DISPLAY here, QApplication does not throw a 
+        # we test for DISPLAY here, QApplication does not throw a
         # exception when run without DISPLAY but dies instead
         if not "DISPLAY" in os.environ:
             raise Exception("No DISPLAY in os.environ found")
+
+        # Force environment to make sure Qt uses suitable theming and UX.
+        os.environ["QT_PLATFORM_PLUGIN"] = "kde"
+        # For above settings to apply automatically we need to indicate that we
+        # are inside a full KDE session.
+        os.environ["KDE_FULL_SESSION"] = "TRUE"
+        # We also need to indicate version as otherwise KDElibs3 compatibility
+        # might kick in such as in QIconLoader.cpp:QString fallbackTheme.
+        os.environ["KDE_SESSION_VERSION"] = "5"
+        # Pretty much all of the above but for Qt5
+        os.environ["QT_QPA_PLATFORMTHEME"] = "kde"
+
         self.app = QApplication(["ubuntu-release-upgrader"])
 
         # Try to load default Qt translations so we don't have to worry about
@@ -512,11 +604,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         QUrlOpener().setupUrlHandles()
 
-        if os.path.exists("/usr/share/icons/oxygen/48x48/apps/system-software-update.png"):
-            messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/apps/system-software-update.png")
-        else:
-            messageIcon = QPixmap("/usr/share/icons/hicolor/48x48/apps/adept_manager.png")
-        self.app.setWindowIcon(QIcon(messageIcon))
+        messageIcon = _icon("system-software-update",
+                            fallbacks=["/usr/share/icons/oxygen/48x48/apps/system-software-update.png",
+                                       "/usr/share/icons/hicolor/48x48/apps/adept_manager.png"])
+        self.app.setWindowIcon(messageIcon)
 
         self.window_main = UpgraderMainWindow()
         self.window_main.setParent(self)
@@ -540,7 +631,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
         gettext.bindtextdomain("ubuntu-release-upgrader",localedir)
         gettext.textdomain("ubuntu-release-upgrader")
         self.translate_widget_children()
-        self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", "Kubuntu"))
+        name = _OSRelease().result["PRETTY_NAME"]
+        if not name or name == "Ubuntu":
+            name = "Kubuntu"
+        self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", name))
 
         # setup terminal text in hidden by default spot
         self.window_main.konsole_frame.hide()
@@ -620,7 +714,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             self.window_main.konsole_frame.show()
             self.window_main.showTerminalButton.setText(_("<<< Hide Terminal"))
-        self.window_main.resize(self.window_main.sizeHint())
+        self.window_main.adjustSize()
 
     def getAcquireProgress(self):
         return self._acquireProgress
@@ -648,41 +742,34 @@ class DistUpgradeViewKDE(DistUpgradeView):
         step = self.prev_step
         if step > 0:
             image = getattr(self.window_main,"image_step%i" % step)
-            if os.path.exists("/usr/share/icons/oxygen/16x16/actions/dialog-cancel.png"):
-                cancelIcon = QPixmap("/usr/share/icons/oxygen/16x16/actions/dialog-cancel.png")
-            elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-cancel.png"):
-                cancelIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-cancel.png")
-            else:
-                cancelIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/cancel.png")
-            image.setPixmap(cancelIcon)
+            cancelIcon = _icon("dialog-cancel",
+                               fallbacks=["/usr/share/icons/oxygen/16x16/actions/dialog-cancel.png",
+                                          "/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-cancel.png",
+                                          "/usr/share/icons/crystalsvg/16x16/actions/cancel.png"])
+            image.setPixmap(cancelIcon.pixmap(16, 16))
             image.show()
 
     def setStep(self, step):
-        if os.path.exists("/usr/share/icons/oxygen/16x16/actions/dialog-ok.png"):
-            okIcon = QPixmap("/usr/share/icons/oxygen/16x16/actions/dialog-ok.png")
-        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-ok.png"):
-            okIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-ok.png")
-        else:
-            okIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/ok.png")
-
-        if os.path.exists("/usr/share/icons/oxygen/16x16/actions/arrow-right.png"):
-            arrowIcon = QPixmap("/usr/share/icons/oxygen/16x16/actions/arrow-right.png")
-        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/16x16/actions/arrow-right.png"):
-            arrowIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/16x16/actions/arrow-right.png")
-        else:
-            arrowIcon = QPixmap("/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png")
+        okIcon = _icon("dialog-ok",
+                       fallbacks=["/usr/share/icons/oxygen/16x16/actions/dialog-ok.png",
+                                  "/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-ok.png",
+                                  "/usr/share/icons/crystalsvg/16x16/actions/ok.png"])
+        arrowIcon = _icon("arrow-right",
+                          fallbacks=["/usr/share/icons/oxygen/16x16/actions/arrow-right.png",
+                                     "/usr/lib/kde4/share/icons/oxygen/16x16/actions/arrow-right.png",
+                                     "/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png"])
 
         if self.prev_step:
             image = getattr(self.window_main,"image_step%i" % self.prev_step)
             label = getattr(self.window_main,"label_step%i" % self.prev_step)
-            image.setPixmap(okIcon)
+            image.setPixmap(okIcon.pixmap(16, 16))
             image.show()
             ##arrow.hide()
         self.prev_step = step
         # show the an arrow for the current step and make the label bold
         image = getattr(self.window_main,"image_step%i" % step)
         label = getattr(self.window_main,"label_step%i" % step)
-        image.setPixmap(arrowIcon)
+        image.setPixmap(arrowIcon.pixmap(16, 16))
         image.show()
         label.setText("<b>" + label.text() + "</b>")
 
@@ -700,13 +787,11 @@ class DistUpgradeViewKDE(DistUpgradeView):
             dialogue.textview_error.hide()
         dialogue.setWindowTitle(_("Information"))
 
-        if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-information.png"):
-            messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-information.png")
-        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-information.png"):
-            messageIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-information.png")
-        else:
-            messageIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_info.png")
-        dialogue.image.setPixmap(messageIcon)
+        messageIcon = _icon("dialog-information",
+                            fallbacks=["/usr/share/icons/oxygen/48x48/status/dialog-information.png",
+                                       "/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-information.png",
+                                       "/usr/share/icons/crystalsvg/32x32/actions/messagebox_info.png"])
+        dialogue.image.setPixmap(messageIcon.pixmap(48, 48))
         # Make sure we have a suitable size depending on whether or not the view is shown
         dialogue.adjustSize()
         dialogue.exec_()
@@ -724,25 +809,23 @@ class DistUpgradeViewKDE(DistUpgradeView):
         else:
             dialogue.textview_error.hide()
 
-        if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-error.png"):
-            messageIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-error.png")
-        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-error.png"):
-            messageIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-error.png")
-        else:
-            messageIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_critical.png")
-        dialogue.image.setPixmap(messageIcon)
+        messageIcon = _icon("dialog-error",
+                            fallbacks=["/usr/share/icons/oxygen/48x48/status/dialog-error.png",
+                                       "/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-error.png",
+                                       "/usr/share/icons/crystalsvg/32x32/actions/messagebox_critical.png"])
+        dialogue.image.setPixmap(messageIcon.pixmap(48, 48))
         # Make sure we have a suitable size depending on whether or not the view is shown
         dialogue.adjustSize()
         dialogue.exec_()
 
         return False
 
-    def confirmChanges(self, summary, changes, demotions, downloadSize, 
+    def confirmChanges(self, summary, changes, demotions, downloadSize,
                        actions=None, removal_bold=True):
         """show the changes dialogue"""
         # FIXME: add a whitelist here for packages that we expect to be
         # removed (how to calc this automatically?)
-        DistUpgradeView.confirmChanges(self, summary, changes, demotions, 
+        DistUpgradeView.confirmChanges(self, summary, changes, demotions,
                                        downloadSize)
         self.changesDialogue = QDialog(self.window_main)
         loadUi("dialog_changes.ui", self.changesDialogue)
@@ -753,16 +836,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.changesDialogue.buttonBox.button(QDialogButtonBox.Ok).setText(_("&Start Upgrade"))
         self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setIcon(QIcon())
         self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setText(_("Details") + " >>>")
-        self.changesDialogue.resize(self.changesDialogue.sizeHint())
 
-        if os.path.exists("/usr/share/icons/oxygen/48x48/status/dialog-warning.png"):
-            warningIcon = QPixmap("/usr/share/icons/oxygen/48x48/status/dialog-warning.png")
-        elif os.path.exists("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-warning.png"):
-            warningIcon = QPixmap("/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-warning.png")
-        else:
-            warningIcon = QPixmap("/usr/share/icons/crystalsvg/32x32/actions/messagebox_warning.png")
-
-        self.changesDialogue.question_pixmap.setPixmap(warningIcon)
+        messageIcon = _icon("dialog-warning",
+                            fallbacks=["/usr/share/icons/oxygen/48x48/status/dialog-warning.png",
+                                       "/usr/lib/kde4/share/icons/oxygen/48x48/status/dialog-warning.png",
+                                       "/usr/share/icons/crystalsvg/32x32/actions/messagebox_warning.png"])
+        self.changesDialogue.question_pixmap.setPixmap(messageIcon.pixmap(48, 48))
 
         if actions != None:
             cancel = actions[0].replace("_", "")
@@ -788,6 +867,9 @@ class DistUpgradeViewKDE(DistUpgradeView):
         for up in self.toUpgrade:
             self.changesDialogue.treeview_details.insertTopLevelItem(0, QTreeWidgetItem(self.changesDialogue.treeview_details, [_("Upgrade %s") % up.name]) )
 
+        # Use a suitable size for the window given the current content.
+        self.changesDialogue.adjustSize()
+
         #FIXME resize label, stop it being shrinkable
         res = self.changesDialogue.exec_()
         if res == QDialog.Accepted:
@@ -798,12 +880,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
         if self.changesDialogue.treeview_details.isVisible():
             self.changesDialogue.treeview_details.hide()
             self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setText(_("Details") + " >>>")
-            # Make sure we shrink the dialog otherwise it looks silly
-            self.changesDialogue.adjustSize()
         else:
             self.changesDialogue.treeview_details.show()
             self.changesDialogue.buttonBox.button(QDialogButtonBox.Help).setText("<<< " + _("Details"))
-        self.changesDialogue.resize(self.changesDialogue.sizeHint())
+        self.changesDialogue.adjustSize()
 
     def askYesNoQuestion(self, summary, msg, default='No'):
         answer = QMessageBox.question(self.window_main, summary, "<font>" + msg, QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
@@ -844,7 +924,7 @@ The system could be in an unusable state if you cancel the upgrade. You are stro
 
 
 if __name__ == "__main__":
-  
+
   view = DistUpgradeViewKDE()
   view.askYesNoQuestion("input box test","bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar bar ")
 

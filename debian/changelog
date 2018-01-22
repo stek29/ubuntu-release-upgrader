@@ -6,6 +6,19 @@ ubuntu-release-upgrader (1:18.04.6) UNRELEASED; urgency=medium
   * QUrlOpener.py:
     - make sure to pass --set-home to sudo when dropping back to user, prevents
       browsers from getting confused which HOME to use
+  * DistUpgradeViewKDE.py:
+    - force KDE theming for Qt5
+    - fix icon & pixmap lookup by running them throw a compatibility helper
+      using either Qt3/4 static lookup or Qt5 theme-based lookup (theme is
+      determined by the QPA ideally)
+    - let name mangling use os-release' PRETTY_NAME if present
+    - do not resize windows, adjustsize() them (same as resize albeit readable)
+    - introduce an override for QWidget.adjustSize() which prevents adjustment
+      iff the window is maximized. as noted in the documentation adjusting a
+      maximized yields unexpected results due to a control mismatch between
+      X11 window managers and Qt (in short: Qt cannot unmaximize, so adjustsize
+      does nothing useful in this case and in fact causes only part of the
+      window to be marked dirty by Qt causing sever rendering artifacts)
 
  -- Harald Sitter <sitter@kde.org>  Fri, 19 Jan 2018 13:34:32 +0100
 

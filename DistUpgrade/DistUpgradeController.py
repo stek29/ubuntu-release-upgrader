@@ -1039,29 +1039,19 @@ class DistUpgradeController(object):
             # string freeze
             archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")
             err_long = ""
+            remedy = {archivedir: remedy_archivedir,
+                      '/var': remedy_archivedir,
+                      '/boot:' remedy_boot,
+                      '/': remedy_root,
+                      '/tmp': remedy_tmp,
+                      '/usr': remedy_usr}
             for req in e.free_space_required_list:
                 if err_long != "":
                      err_long += " "
-                if req.dir in (archivedir, '/var'):
+                if req.dir in remedy:
                     err_long += err_msg % (req.size_total, req.dir,
                                            req.size_needed, req.dir,
-                                           remedy_archivedir)
-                elif req.dir == "/boot":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_boot)
-                elif req.dir == "/":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_root)
-                elif req.dir == "/tmp":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_tmp)
-                elif req.dir == "/usr":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_usr)
+                                           remedy[req.dir])
                 else:
                     err_long += err_msg % (req.size_total, req.dir,
                                            req.size_needed, req.dir,

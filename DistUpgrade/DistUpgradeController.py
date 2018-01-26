@@ -1041,7 +1041,7 @@ class DistUpgradeController(object):
             err_long = ""
             remedy = {archivedir: remedy_archivedir,
                       '/var': remedy_archivedir,
-                      '/boot:' remedy_boot,
+                      '/boot': remedy_boot,
                       '/': remedy_root,
                       '/tmp': remedy_tmp,
                       '/usr': remedy_usr}

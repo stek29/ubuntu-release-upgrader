@@ -992,17 +992,15 @@ class DistUpgradeController(object):
                     return True
 
         if not mounted:
-            self._view.error(_("UEFI Boot partition not usable"),
-                             _("The UEFI boot partition of your system "
-                               "is not mounted on /boot/efi. "
-                               "Please ensure that it is properly configured "
-                               "and retry."))
+            self._view.error(_("EFI System Partition (ESP) not usable"),
+                             _("Your EFI System Partition (ESP) is not "
+                               "mounted at /boot/efi. Please ensure that "
+                               "it is properly configured and try again."))
         else:
-            self._view.error(_("UEFI Boot partition not usable"),
-                             _("The UEFI boot partition of your system "
-                               "(/boot/efi) is not writable. "
-                               "Please ensure that it is properly configured "
-                               "and retry."))
+            self._view.error(_("EFI System Partition (ESP) not usable"),
+                             _("The EFI System Partition (ESP) mounted at "
+                               "/boot/efi is not writable. Please mount "
+                               "this partition read-write and try again."))
         return False
 
     def _checkFreeSpace(self):

@@ -1006,10 +1006,12 @@ class DistUpgradeController(object):
     def _checkFreeSpace(self):
         " this checks if we have enough free space on /var and /usr"
         err_sum = _("Not enough free disk space")
+        # TRANSLATORS: you can change the order of the sentence,
+        # make sure to keep all {str_*} string untranslated.
         err_msg = _("The upgrade has aborted. "
-                    "The upgrade needs a total of %s free space on disk '%s'. "
-                    "Please free at least an additional %s of disk "
-                    "space on '%s'. %s")
+                    "The upgrade needs a total of {str_total} free space on disk '{str_dir}'. "
+                    "Please free at least an additional {str_needed} of disk "
+                    "space on '{str_dir}'. {str_remedy}")
         # specific ways to resolve lack of free space
         remedy_archivedir = _("Remove temporary packages of former "
                               "installations using 'sudo apt clean'.")
@@ -1037,33 +1039,23 @@ class DistUpgradeController(object):
             # string freeze
             archivedir = apt_pkg.config.find_dir("Dir::Cache::archives")
             err_long = ""
+            remedy = {archivedir: remedy_archivedir,
+                      '/var': remedy_archivedir,
+                      '/boot:' remedy_boot,
+                      '/': remedy_root,
+                      '/tmp': remedy_tmp,
+                      '/usr': remedy_usr}
             for req in e.free_space_required_list:
                 if err_long != "":
                      err_long += " "
-                if req.dir in (archivedir, '/var'):
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_archivedir)
-                elif req.dir == "/boot":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_boot)
-                elif req.dir == "/":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_root)
-                elif req.dir == "/tmp":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_tmp)
-                elif req.dir == "/usr":
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           remedy_usr)
+                if req.dir in remedy:
+                    err_long += err_msg.format(str_total=req.size_total, str_dir=req.dir,
+                                               str_needed=req.size_needed,
+                                               str_remedy=remedy[req.dir])
                 else:
-                    err_long += err_msg % (req.size_total, req.dir,
-                                           req.size_needed, req.dir,
-                                           '')
+                    err_long += err_msg.format(str_total=req.size_total, str_dir=req.dir,
+                                               str_needed=req.size_needed,
+                                               str_remedy='')
             self._view.error(err_sum, err_long)
             return False
         return True

@@ -32,7 +32,7 @@ try:
 
     from PyQt5 import uic
     from PyQt5.QtCore import QTranslator, PYQT_VERSION, \
-        QLocale, pyqtSlot, QUrl
+        QLocale
     from PyQt5.QtGui import QIcon
     from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QMessageBox, \
         QApplication

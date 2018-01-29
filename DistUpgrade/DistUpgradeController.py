@@ -730,6 +730,8 @@ class DistUpgradeController(object):
                 if main_was_missing:
                     if entry.dist in fromDists:
                         entry.dist = toDists[fromDists.index(entry.dist)]
+                    if entry.dist not in toDists:
+                        continue    # Unknown target, do not add this
                     # gather what components are enabled and are inconsistent
                     for d in ["%s" % self.toDist,
                               "%s-updates" % self.toDist,

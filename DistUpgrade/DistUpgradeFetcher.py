@@ -45,16 +45,7 @@ class DistUpgradeFetcherGtk(DistUpgradeFetcherCore):
         return error(self.window_main, summary, message)
 
     def runDistUpgrader(self):
-        # now run it as root
-        if os.getuid() != 0:
-            os.execv("/usr/bin/gksu",
-                     ["gksu",
-                      "--desktop",
-                      "/usr/share/applications/update-manager.desktop",
-                      "--",
-                      self.script] + self.run_options)
-        else:
-            os.execv(self.script, [self.script] + self.run_options)
+        os.execv(self.script, [self.script] + self.run_options)
 
     def showReleaseNotes(self):
         # first try showing the webkit version, this may fail (return None

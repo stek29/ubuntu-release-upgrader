@@ -14,6 +14,7 @@ import locale
 import gettext
 
 import os
+import subprocess
 import sys
 import time
 from UpdateManager.Core.utils import init_proxy
@@ -155,6 +156,14 @@ if __name__ == "__main__":
     print(_("New release '%s' available.") % m.new_dist.version)
     print(_("Run 'do-release-upgrade' to upgrade to it."))
     sys.exit(RELEASE_AVAILABLE)
+
+  # GTK 3 fetcher starts setting up the the GUI and KDE GUI needs to start GUI
+  # later, too.
+  if (options.frontend in {"DistUpgradeViewGtk3", "DistUpgradeViewKDE"} and
+      os.getuid() != 0):
+    if 'WAYLAND_DISPLAY' in os.environ:
+        subprocess.run(['xhost', '+si:localuser:root'])
+    os.execv("/usr/bin/pkexec", ["pkexec"] + sys.argv)
 
   fetcher = get_fetcher(options.frontend, m.new_dist, options.data_dir)
   fetcher.run_options += ["--mode=%s" % options.mode,

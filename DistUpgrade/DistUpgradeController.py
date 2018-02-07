@@ -772,7 +772,7 @@ class DistUpgradeController(object):
         logging.debug("updateSourcesList()")
         self.sources = SourcesList(matcherPath=self.datadir)
         
-        if not any(e.dist == self.fromDist for e in self.sources):
+        if not any(e.type == "deb" and e.dist == self.fromDist for e in self.sources):
             res = self._view.askYesNoQuestion(_("No valid sources.list entry found"),
                              _("While scanning your repository "
                                "information no entry about %s could be "

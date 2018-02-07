@@ -771,6 +771,17 @@ class DistUpgradeController(object):
     def updateSourcesList(self):
         logging.debug("updateSourcesList()")
         self.sources = SourcesList(matcherPath=self.datadir)
+        
+        if not any(e.dist == self.fromDist for e in self.sources):
+            res = self._view.askYesNoQuestion(_("No valid sources.list entry found"),
+                             _("While scanning your repository "
+                               "information no entry about %s could be "
+                               "found.\n\n"
+                               "An upgrade might not succeed.\n\n"
+                               "Do you want to continue anyway?") % self.fromDist)
+            if not res:
+                self.abort()
+
         # backup first!
         self.sources.backup(self.sources_backup_ext)
         if not self.rewriteSourcesList(mirror_check=True):

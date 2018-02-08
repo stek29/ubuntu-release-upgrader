@@ -131,7 +131,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_double_check_source_distribution_reject(self, mock_abort, mock_get_distro):
         """
-        test regular sources.list rewrite
+        test that an upgrade from feisty with a sources.list containing
+        hardy asks a question, and if rejected, aborts the upgrade.
         """
         shutil.copy(os.path.join(self.testdir, "sources.list.hardy"),
                     os.path.join(self.testdir, "sources.list"))
@@ -158,7 +159,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_double_check_source_distribution_continue(self, mock_get_distro):
         """
-        test regular sources.list rewrite
+        test that an upgrade from feisty with a sources.list containing
+        hardy asks a question, and if continued, does something.
         """
         shutil.copy(os.path.join(self.testdir, "sources.list.hardy"),
                     os.path.join(self.testdir, "sources.list"))

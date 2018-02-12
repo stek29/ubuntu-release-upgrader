@@ -26,6 +26,7 @@
 from __future__ import print_function
 
 import os
+import subprocess
 import sys
 
 from DistUpgrade.DistUpgradeVersion import VERSION
@@ -86,6 +87,14 @@ if __name__ == "__main__":
     if options.show_version:
         print("%s: version %s" % (os.path.basename(sys.argv[0]), VERSION))
         sys.exit(0)
+
+    # raise privileges when not started as root
+    if os.getuid() != 0:
+        # apply workaround for Wayland
+        if ((options.frontend in {"DistUpgradeViewGtk3"} and
+             'WAYLAND_DISPLAY' in os.environ)):
+            subprocess.run(['xhost', '+si:localuser:root'])
+        os.execv("/usr/bin/pkexec", ["pkexec"] + sys.argv)
 
     # we are by definition in partial upgrade mode
     options.partial = True

@@ -1752,7 +1752,7 @@ class DistUpgradeController(object):
         self._view.setStep(STEP_PREPARE)
 
         if not self.prepare():
-            logging.error("self.prepared() failed")
+            logging.error("self.prepare() failed")
             if os.path.exists("/usr/bin/apport-bug"):
                 self._view.error(_("Preparing the upgrade failed"),
                                  _("Preparing the system for the upgrade "
@@ -1767,7 +1767,7 @@ class DistUpgradeController(object):
                                    "ubuntu-release-upgrader'."))
                 logging.error("Missing apport-bug, bug report not "
                               "autocreated")
-            sys.exit(1)
+            self.abort()
 
         # mvo: commented out for now, see #54234, this needs to be
         #      refactored to use a arch=any tarball
@@ -1828,7 +1828,7 @@ class DistUpgradeController(object):
             not self.aptcdrom.add(self.sources_backup_ext)):
             self._view.error(_("Failed to add the cdrom"),
                              _("Sorry, adding the cdrom was not successful."))
-            sys.exit(1)
+            self.abort()
 
         # then update the package index files
         if not self.doUpdate():
@@ -1893,6 +1893,7 @@ class DistUpgradeController(object):
         self._view.setStep(STEP_FETCH)
         self._view.updateStatus(_("Fetching"))
         if not self.doDistUpgradeFetching():
+            self._enableAptCronJob()
             self.abort()
 
         # now do the upgrade
@@ -1906,8 +1907,9 @@ class DistUpgradeController(object):
                                    _("The upgrade has completed but there "
                                      "were errors during the upgrade "
                                      "process."))
-            sys.exit(1) 
-            
+            # do not abort because we are part of the way through the process
+            sys.exit(1)
+
         # do post-upgrade stuff
         self._view.setStep(STEP_CLEANUP)
         self._view.updateStatus(_("Searching for obsolete software"))

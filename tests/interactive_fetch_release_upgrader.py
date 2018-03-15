@@ -39,7 +39,7 @@ class TestMetaReleaseGUI(unittest.TestCase):
 
     def testnewdist(self):
         meta = MetaRelease()
-        uri = "http://changelogs.ubuntu.com/meta-release-unit-testing"
+        uri = "https://changelogs.ubuntu.com/meta-release-unit-testing"
         meta.METARELEASE_URI = uri
         meta.connect("new_dist_available", self.new_dist_available)
         meta.download()
@@ -55,7 +55,7 @@ class TestReleaseUpgradeFetcherGUI(unittest.TestCase):
 
     def setUp(self):
         meta = MetaRelease()
-        uri = "http://changelogs.ubuntu.com/meta-release-unit-testing"
+        uri = "https://changelogs.ubuntu.com/meta-release-unit-testing"
         meta.METARELEASE_URI = uri
         meta.connect("new_dist_available", self._new_dist_available)
         meta.download()

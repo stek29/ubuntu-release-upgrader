@@ -34,7 +34,7 @@ def get_new_dist():
     #meta.DEBUG = True
     meta.current_dist_name = "trusty"
     meta.METARELEASE_URI = \
-        "http://changelogs.ubuntu.com/meta-release-development"
+        "https://changelogs.ubuntu.com/meta-release-development"
     meta.downloaded.wait()
     meta._buildMetaReleaseFile()
     meta.download()

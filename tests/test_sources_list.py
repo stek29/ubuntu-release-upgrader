@@ -126,6 +126,81 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".in",
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
              ]))
+             
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController.abort")
+    @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
+    def test_double_check_source_distribution_reject(self, mock_abort, mock_get_distro):
+        """
+        test that an upgrade from feisty with a sources.list containing
+        hardy asks a question, and if rejected, aborts the upgrade.
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.hardy"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = mock.Mock()
+        v.askYesNoQuestion.return_value=False
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.config.set("Distro", "BaseMetaPkgs", "ubuntu-minimal")
+        mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
+                                                          "Ubuntu Feisty Fawn",
+                                                          "7.04")
+        
+        class AbortException(Exception):
+            """Exception"""
+                
+        mock_abort.side_effect = AbortException
+        d.openCache(lock=False)
+        with self.assertRaises(AbortException):
+            d.updateSourcesList()
+        self.assertTrue(mock_abort.called)
+        self.assertTrue(mock_get_distro.called)
+        self.assertTrue(v.askYesNoQuestion.called)
+
+    @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
+    def test_double_check_source_distribution_continue(self, mock_get_distro):
+        """
+        test that an upgrade from feisty with a sources.list containing
+        hardy asks a question, and if continued, does something.
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.hardy"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = mock.Mock()
+        v.askYesNoQuestion.return_value=True
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.config.set("Distro", "BaseMetaPkgs", "ubuntu-minimal")
+        mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
+                                                          "Ubuntu Feisty Fawn",
+                                                          "7.04")
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(mock_get_distro.called)
+        self.assertTrue(res)
+
+        # now test the result
+        #print(open(os.path.join(self.testdir,"sources.list")).read())
+        
+        # The result here is not really all that helpful, hence we
+        # added the question in the first place. But still better to
+        # check what it does than to not check it.
+        self._verifySources2Way("""
+# main repo
+# deb cdrom:[Ubuntu 8.10 _foo]/ hardy main
+# deb ftp://uk.archive.ubuntu.com/ubuntu/ hardy main restricted multiverse universe
+# deb http://de.archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
+deb-src http://uk.archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
+
+# deb http://security.ubuntu.com/ubuntu/ hardy-security main restricted
+# deb http://security.ubuntu.com/ubuntu/ hardy-security universe
+
+deb http://archive.ubuntu.com/ubuntu/ gutsy main
+""")
+        # check that the backup file was created correctly
+        self.assertEqual(0, subprocess.call(
+            ["cmp",
+             apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".hardy",
+             apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
+             ]))
 
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_sources_list_inactive_mirror(self, mock_get_distro):

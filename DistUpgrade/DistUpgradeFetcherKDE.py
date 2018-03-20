@@ -134,8 +134,8 @@ class DistUpgradeFetcherKDE(DistUpgradeFetcherCore):
     def runDistUpgrader(self):
         # now run it with sudo
         if os.getuid() != 0:
-            os.execv("/usr/bin/kdesudo",
-                     ["kdesudo",
+            os.execv("/usr/bin/pkexec",
+                     ["pkexec",
                       self.script + " --frontend=DistUpgradeViewKDE"])
         else:
             os.execv(self.script,

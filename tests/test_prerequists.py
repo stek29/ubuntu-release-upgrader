@@ -40,6 +40,7 @@ class testPreRequists(unittest.TestCase):
         apt_pkg.config.set("Dir::Etc", self.testdir)
         apt_pkg.config.set("Dir::Etc::sourceparts",
                            os.path.join(self.testdir, "sources.list.d"))
+        apt_pkg.config.set("APT::Default-Release", "")
         self.dc = DistUpgradeController(DistUpgradeView(),
                                         datadir=self.testdir)
 

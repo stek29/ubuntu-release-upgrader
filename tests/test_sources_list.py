@@ -70,6 +70,7 @@ class TestSourcesListUpdate(unittest.TestCase):
                            os.path.join(self.testdir, "sources.list.d"))
         if os.path.exists(os.path.join(self.testdir, "sources.list")):
             os.unlink(os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("APT::Default-Release", "")
 
     def test_sources_list_with_nothing(self):
         """

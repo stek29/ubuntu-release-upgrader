@@ -76,7 +76,11 @@ def estimate_kernel_initrd_size_in_boot():
         initrd = 45*1024*1024
     # add small safety buffer
     kernel += 1*1024*1024
-    initrd += 1*1024*1024
+    # safety buffer as a percentage of the existing initrd's size
+    initrd_buffer = 1*1024*1024
+    if initrd * 0.05 > initrd_buffer:
+        initrd_buffer = initrd * 0.05
+    initrd += initrd_buffer
     return kernel,initrd
 KERNEL_SIZE, INITRD_SIZE = estimate_kernel_initrd_size_in_boot()
 

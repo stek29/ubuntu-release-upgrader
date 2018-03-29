@@ -149,6 +149,9 @@ class MyCache(apt.Cache):
             not "RELEASE_UPGRADE_NO_RECOMMENDS" in os.environ):
             apt_pkg.config.set("APT::Install-Recommends", "true")
 
+
+        apt_pkg.config.set("APT::AutoRemove::SuggestsImportant", "false")
+
     def _apply_dselect_upgrade(self):
         """ honor the dselect install state """
         for pkg in self:

@@ -40,9 +40,9 @@ class DistUpgradeConfig(SafeConfigParser):
             ["lsb_release", "-c", "-s"], stdout=subprocess.PIPE,
             universal_newlines=True).communicate()[0].strip()
         self.datadir = datadir
-        if os.path.exists(name + "." + from_release):
-            name = name + "." + from_release
         maincfg = os.path.join(datadir, name)
+        if os.path.exists(maincfg + "." + from_release):
+            maincfg += "." + from_release
         # defaults are read first
         self.config_files = []
         if defaults_dir:

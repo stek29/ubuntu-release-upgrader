@@ -44,6 +44,8 @@ def open_url(url):
     # Avoid to run the browser as user root
     if os.getuid() == 0 and 'SUDO_USER' in os.environ:
         command = ['sudo', '-u', os.environ['SUDO_USER']] + command
+    elif os.getuid() == 0 and 'PKEXEC_UID' in os.environ:
+        command = ['sudo', '-H', '-u', '#' + os.environ['PKEXEC_UID']] + command
     subprocess.Popen(command)
 
 

@@ -62,6 +62,7 @@ import pty
 from .DistUpgradeApport import run_apport, apport_crash
 
 from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, AcquireProgress
+from .telemetry import get as get_telemetry
 
 import select
 import gettext
@@ -560,6 +561,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None, logdir=None):
         DistUpgradeView.__init__(self)
+
+        get_telemetry().set_updater_type('KDE')
         # silence the PyQt4 logger
         logger = logging.getLogger("PyQt4")
         logger.setLevel(logging.INFO)

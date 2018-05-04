@@ -36,6 +36,7 @@ from .DistUpgradeView import (
     ENCODING,
     InstallProgress,
     )
+from .telemetry import get as get_telemetry
 import apt.progress
 
 import gettext
@@ -101,6 +102,7 @@ class DistUpgradeViewText(DistUpgradeView):
     def __init__(self, datadir=None, logdir=None):
         # indicate that we benefit from using gnu screen
         self.needs_screen = True
+        get_telemetry().set_updater_type('Text')
         # its important to have a debconf frontend for
         # packages like "quagga"
         if "DEBIAN_FRONTEND" not in os.environ:

@@ -33,6 +33,7 @@ import time
 import copy
 from configparser import NoOptionError
 from configparser import ConfigParser as SafeConfigParser
+from .telemetry import get as get_telemetry
 from .utils import (country_mirror,
                     url_downloadable,
                     check_and_fix_xbit,
@@ -1930,6 +1931,7 @@ class DistUpgradeController(object):
         # done, ask for reboot
         self._view.setStep(Step.REBOOT)
         self._view.updateStatus(_("System upgrade is complete."))            
+        get_telemetry().done()
         # FIXME should we look into /var/run/reboot-required here?
         if (not inside_chroot() and
             self._view.confirmRestart()):

@@ -36,6 +36,7 @@ from configparser import NoSectionError, NoOptionError
 from subprocess import PIPE, Popen
 
 from .DistUpgradeView import DistUpgradeView, InstallProgress, AcquireProgress
+from .telemetry import get as get_telemetry
 from .DistUpgradeConfigParser import DistUpgradeConfig
 
 
@@ -251,6 +252,7 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
     " non-interactive version of the upgrade view "
     def __init__(self, datadir=None, logdir=None):
         DistUpgradeView.__init__(self)
+        get_telemetry().set_updater_type('NonInteractive')
         self.config = DistUpgradeConfig(".")
         self._acquireProgress = NonInteractiveAcquireProgress()
         self._installProgress = NonInteractiveInstallProgress(logdir)

@@ -52,6 +52,7 @@ import os
 from .DistUpgradeApport import run_apport, apport_crash
 
 from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, AcquireProgress
+from .telemetry import get as get_telemetry
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 import gettext
@@ -451,6 +452,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
 
         # check if we have a display etc
         Gtk.init_check(sys.argv)
+
+        get_telemetry().set_updater_type('GTK')
 
         try:
             locale.bindtextdomain("ubuntu-release-upgrader",localedir)

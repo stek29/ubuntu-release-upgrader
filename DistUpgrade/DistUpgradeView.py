@@ -21,6 +21,7 @@
 
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import ngettext
+from .telemetry import get as get_telemetry
 import apt
 from enum import Enum
 import errno
@@ -306,6 +307,7 @@ class DistUpgradeView(object):
         4. Post upgrade stuff
         5. Complete
         """
+        get_telemetry().add_stage(step.name)
         pass
     def hideStep(self, step):
         " hide a certain step from the GUI "

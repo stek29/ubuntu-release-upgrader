@@ -45,14 +45,7 @@ from .utils import (country_mirror,
 from string import Template
 from urllib.parse import urlsplit
 
-from .DistUpgradeView import (
-    STEP_PREPARE,
-    STEP_MODIFY_SOURCES,
-    STEP_FETCH,
-    STEP_INSTALL,
-    STEP_CLEANUP,
-    STEP_REBOOT,
-)
+from .DistUpgradeView import Step
 from .DistUpgradeCache import MyCache
 from .DistUpgradeConfigParser import DistUpgradeConfig
 from .DistUpgradeQuirks import DistUpgradeQuirks
@@ -1760,7 +1753,7 @@ class DistUpgradeController(object):
     def fullUpgrade(self):
         # sanity check (check for ubuntu-desktop, brokenCache etc)
         self._view.updateStatus(_("Checking package manager"))
-        self._view.setStep(STEP_PREPARE)
+        self._view.setStep(Step.PREPARE)
 
         if not self.prepare():
             logging.error("self.prepare() failed")
@@ -1829,7 +1822,7 @@ class DistUpgradeController(object):
             self.abort()
 
         # update sources.list
-        self._view.setStep(STEP_MODIFY_SOURCES)
+        self._view.setStep(Step.MODIFY_SOURCES)
         self._view.updateStatus(_("Updating repository information"))
         if not self.updateSourcesList():
             self.abort()
@@ -1901,14 +1894,14 @@ class DistUpgradeController(object):
             self.abort()
 
         # fetch the stuff
-        self._view.setStep(STEP_FETCH)
+        self._view.setStep(Step.FETCH)
         self._view.updateStatus(_("Fetching"))
         if not self.doDistUpgradeFetching():
             self._enableAptCronJob()
             self.abort()
 
         # now do the upgrade
-        self._view.setStep(STEP_INSTALL)
+        self._view.setStep(Step.INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
             # run the post install scripts (for stuff like UUID conversion)
@@ -1922,7 +1915,7 @@ class DistUpgradeController(object):
             sys.exit(1)
 
         # do post-upgrade stuff
-        self._view.setStep(STEP_CLEANUP)
+        self._view.setStep(Step.CLEANUP)
         self._view.updateStatus(_("Searching for obsolete software"))
         self.doPostUpgrade()
 
@@ -1935,7 +1928,7 @@ class DistUpgradeController(object):
             os.unlink("/var/lib/ubuntu-release-upgrader/release-upgrade-available")
 
         # done, ask for reboot
-        self._view.setStep(STEP_REBOOT)
+        self._view.setStep(Step.REBOOT)
         self._view.updateStatus(_("System upgrade is complete."))            
         # FIXME should we look into /var/run/reboot-required here?
         if (not inside_chroot() and
@@ -1950,20 +1943,20 @@ class DistUpgradeController(object):
     
     def doPartialUpgrade(self):
         " partial upgrade mode, useful for repairing "
-        self._view.setStep(STEP_PREPARE)
-        self._view.hideStep(STEP_MODIFY_SOURCES)
-        self._view.hideStep(STEP_REBOOT)
+        self._view.setStep(Step.PREPARE)
+        self._view.hideStep(Step.MODIFY_SOURCES)
+        self._view.hideStep(Step.REBOOT)
         self._partialUpgrade = True
         self.prepare()
         if not self.doPostInitialUpdate():
             return False
         if not self.askDistUpgrade():
             return False
-        self._view.setStep(STEP_FETCH)
+        self._view.setStep(Step.FETCH)
         self._view.updateStatus(_("Fetching"))
         if not self.doDistUpgradeFetching():
             return False
-        self._view.setStep(STEP_INSTALL)
+        self._view.setStep(Step.INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgrade():
             self._view.information(_("Upgrade complete"),
@@ -1971,7 +1964,7 @@ class DistUpgradeController(object):
                                      "were errors during the upgrade "
                                      "process."))
             return False
-        self._view.setStep(STEP_CLEANUP)
+        self._view.setStep(Step.CLEANUP)
         if not self.doPostUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade has completed but there "

@@ -88,7 +88,7 @@ class TextCdromProgressAdapter(apt.progress.base.CdromProgress):
     def update(self, text, step):
         """ update is called regularly so that the gui can be redrawn """
         if text:
-          print("%s (%f)" % (text, step/float(self.totalSteps)*100))
+          print("%s (%f)" % (text, step.value/float(self.totalSteps)*100))
     def ask_cdrom_name(self):
         return (False, "")
     def change_cdrom(self):
@@ -116,7 +116,7 @@ class DistUpgradeViewText(DistUpgradeView):
         except Exception as e:
           logging.warning("Error setting locales (%s)" % e)
 
-        self.last_step = 0 # keep a record of the latest step
+        self.last_step = None # keep a record of the latest step
         self._opCacheProgress = apt.progress.text.OpProgress()
         self._acquireProgress = TextAcquireProgress()
         self._cdromProgress = TextCdromProgressAdapter()
@@ -162,6 +162,7 @@ class DistUpgradeViewText(DistUpgradeView):
       print()
       print(_("Aborting"))
     def setStep(self, step):
+      super(DistUpgradeViewText, self).setStep(step)
       self.last_step = step
     def showDemotions(self, summary, msg, demotions):
         self.information(summary, msg, 

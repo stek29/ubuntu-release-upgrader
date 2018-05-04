@@ -22,6 +22,7 @@
 from .DistUpgradeGettext import gettext as _
 from .DistUpgradeGettext import ngettext
 import apt
+from enum import Enum
 import errno
 import os
 import apt_pkg 
@@ -252,13 +253,14 @@ class DummyHtmlView(object):
     def hide(self):
       pass
 
-(STEP_PREPARE,
- STEP_MODIFY_SOURCES,
- STEP_FETCH,
- STEP_INSTALL,
- STEP_CLEANUP,
- STEP_REBOOT,
- STEP_N) = range(1,8)
+class Step(Enum):
+    PREPARE = 1
+    MODIFY_SOURCES = 2
+    FETCH = 3
+    INSTALL = 4
+    CLEANUP = 5
+    REBOOT = 6
+    N = 7
 
 # Declare these translatable strings from the .ui files here so that
 # xgettext picks them up.

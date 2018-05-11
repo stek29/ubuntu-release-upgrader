@@ -737,7 +737,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
     def hideStep(self, step):
         image = getattr(self.window_main,"image_step%i" % step.value)
-        label = getattr(self.window_main, "label_step%i" % step.value)
+        label = getattr(self.window_main,"label_step%i" % step.value)
         image.hide()
         label.hide()
 

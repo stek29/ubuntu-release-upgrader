@@ -602,13 +602,13 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         self.label_status.set_text("%s" % msg)
     def hideStep(self, step):
         image = getattr(self,"image_step%i" % step.value)
-        label = getattr(self, "label_step%i" % step.value)
+        label = getattr(self,"label_step%i" % step.value)
         #arrow = getattr(self,"arrow_step%i" % step.value)
         image.hide()
         label.hide()
     def showStep(self, step):
         image = getattr(self,"image_step%i" % step.value)
-        label = getattr(self, "label_step%i" % step.value)
+        label = getattr(self,"label_step%i" % step.value)
         image.show()
         label.show()
     def abort(self):

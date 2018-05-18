@@ -860,6 +860,7 @@ class DistUpgradeController(object):
                                "'software-properties' tool or "
                                "your package manager."
                                ))
+        get_telemetry().set_using_third_party_sources(self.sources_disabled)
         return True
 
     def _logChanges(self):

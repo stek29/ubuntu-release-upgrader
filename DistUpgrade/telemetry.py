@@ -69,6 +69,10 @@ class _Telemetry():
         """Record updater type"""
         self._metrics['Type'] = updater_type
 
+    def set_using_third_party_sources(self, using):
+        """Record if the user had third party sources"""
+        self._metrics['ThirdPartySources'] = using
+
     def done(self):
         """Close telemetry collection
 

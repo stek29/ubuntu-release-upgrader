@@ -25,7 +25,6 @@ import json
 import os
 import stat
 import subprocess
-import time
 
 
 def get():
@@ -42,16 +41,29 @@ class _Telemetry():
     def __init__(self):
         self._metrics = {}
         self._stages_hist = {}
-        self._start_time = time.time()
+        self._start_time = self._get_current_uptime()
         self._metrics["From"] = subprocess.Popen(
             ["lsb_release", "-r", "-s"], stdout=subprocess.PIPE,
             universal_newlines=True).communicate()[0].strip()
         self.add_stage('start')
         self._dest_path = '/var/log/upgrade/telemetry'
 
+    def _get_current_uptime(self):
+        """Get current uptime info. None if we couldn't fetch it."""
+        uptime = None
+        try:
+            with open('/proc/uptime') as f:
+                uptime = float(f.read().split()[0])
+        except (FileNotFoundError, OSError, ValueError) as e:
+            logging.warning("Exception while fetching current uptime: " + str(e))
+        return uptime
+
     def add_stage(self, stage_name):
         """Record installer stage with current time"""
-        self._stages_hist[int(time.time() - self._start_time)] = stage_name
+        now = self._get_current_uptime()
+        if self._start_time is None or now is None:
+            return
+        self._stages_hist[int(now-self._start_time)] = stage_name
 
     def set_updater_type(self, updater_type):
         """Record updater type"""

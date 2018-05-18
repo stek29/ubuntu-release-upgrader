@@ -47,6 +47,11 @@ class _Telemetry():
             universal_newlines=True).communicate()[0].strip()
         self.add_stage('start')
         self._dest_path = '/var/log/upgrade/telemetry'
+        try:
+            with open('/var/log/installer/media-info') as f:
+                self._metrics['InstallMedia'] = f.readline()
+        except FileNotFoundError:
+            pass
 
     def _get_current_uptime(self):
         """Get current uptime info. None if we couldn't fetch it."""

@@ -60,7 +60,8 @@ class _Telemetry():
             with open('/proc/uptime') as f:
                 uptime = float(f.read().split()[0])
         except (FileNotFoundError, OSError, ValueError) as e:
-            logging.warning("Exception while fetching current uptime: " + str(e))
+            logging.warning("Exception while fetching current uptime: " +
+                            str(e))
         return uptime
 
     def add_stage(self, stage_name):
@@ -68,7 +69,7 @@ class _Telemetry():
         now = self._get_current_uptime()
         if self._start_time is None or now is None:
             return
-        self._stages_hist[int(now-self._start_time)] = stage_name
+        self._stages_hist[int(now - self._start_time)] = stage_name
 
     def set_updater_type(self, updater_type):
         """Record updater type"""

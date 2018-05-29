@@ -52,6 +52,7 @@ import os
 from .DistUpgradeApport import run_apport, apport_crash
 
 from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, AcquireProgress
+from .telemetry import get as get_telemetry
 from .SimpleGtk3builderApp import SimpleGtkbuilderApp
 
 import gettext
@@ -70,7 +71,7 @@ class GtkCdromProgressAdapter(apt.progress.base.CdromProgress):
         """ update is called regularly so that the gui can be redrawn """
         if text:
             self.status.set_text(text)
-        self.progress.set_fraction(step/float(self.totalSteps))
+        self.progress.set_fraction(step.value/float(self.totalSteps))
         while Gtk.events_pending():
             Gtk.main_iteration()
     def ask_cdrom_name(self):
@@ -452,6 +453,8 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         # check if we have a display etc
         Gtk.init_check(sys.argv)
 
+        get_telemetry().set_updater_type('GTK')
+
         try:
             locale.bindtextdomain("ubuntu-release-upgrader",localedir)
             gettext.textdomain("ubuntu-release-upgrader")
@@ -472,7 +475,7 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
         # terminal stuff
         self.create_terminal()
 
-        self.prev_step = 0 # keep a record of the latest step
+        self.prev_step = None # keep a record of the latest step
         # we don't use this currently
         #self.window_main.set_keep_above(True)
         self.icontheme = Gtk.IconTheme.get_default()
@@ -598,44 +601,45 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
     def updateStatus(self, msg):
         self.label_status.set_text("%s" % msg)
     def hideStep(self, step):
-        image = getattr(self,"image_step%i" % step)
-        label = getattr(self,"label_step%i" % step)
-        #arrow = getattr(self,"arrow_step%i" % step)
+        image = getattr(self,"image_step%i" % step.value)
+        label = getattr(self,"label_step%i" % step.value)
+        #arrow = getattr(self,"arrow_step%i" % step.value)
         image.hide()
         label.hide()
     def showStep(self, step):
-        image = getattr(self,"image_step%i" % step)
-        label = getattr(self,"label_step%i" % step)
+        image = getattr(self,"image_step%i" % step.value)
+        label = getattr(self,"label_step%i" % step.value)
         image.show()
         label.show()
     def abort(self):
         size = Gtk.IconSize.MENU
         step = self.prev_step
-        if step > 0:
-            image = getattr(self,"image_step%i" % step)
-            arrow = getattr(self,"arrow_step%i" % step)
+        if step:
+            image = getattr(self,"image_step%i" % step.value)
+            arrow = getattr(self,"arrow_step%i" % step.value)
             image.set_from_stock(Gtk.STOCK_CANCEL, size)
             image.show()
             arrow.hide()
     def setStep(self, step):
+        super(DistUpgradeViewGtk3, self).setStep(step)
         if self.icontheme.rescan_if_needed():
             logging.debug("icon theme changed, re-reading")
         # first update the "previous" step as completed
         size = Gtk.IconSize.MENU
         attrlist=Pango.AttrList()
         if self.prev_step:
-            image = getattr(self,"image_step%i" % self.prev_step)
-            label = getattr(self,"label_step%i" % self.prev_step)
-            arrow = getattr(self,"arrow_step%i" % self.prev_step)
+            image = getattr(self,"image_step%i" % self.prev_step.value)
+            label = getattr(self,"label_step%i" % self.prev_step.value)
+            arrow = getattr(self,"arrow_step%i" % self.prev_step.value)
             label.set_property("attributes",attrlist)
             image.set_from_stock(Gtk.STOCK_APPLY, size)
             image.show()
             arrow.hide()
         self.prev_step = step
         # show the an arrow for the current step and make the label bold
-        image = getattr(self,"image_step%i" % step)
-        label = getattr(self,"label_step%i" % step)
-        arrow = getattr(self,"arrow_step%i" % step)
+        image = getattr(self,"image_step%i" % step.value)
+        label = getattr(self,"label_step%i" % step.value)
+        arrow = getattr(self,"arrow_step%i" % step.value)
         # check if that step was not hidden with hideStep()
         if not label.get_property("visible"):
             return

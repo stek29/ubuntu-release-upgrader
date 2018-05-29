@@ -62,6 +62,7 @@ import pty
 from .DistUpgradeApport import run_apport, apport_crash
 
 from .DistUpgradeView import DistUpgradeView, FuzzyTimeToStr, InstallProgress, AcquireProgress
+from .telemetry import get as get_telemetry
 
 import select
 import gettext
@@ -251,7 +252,7 @@ class KDECdromProgressAdapter(apt.progress.base.CdromProgress):
         """ update is called regularly so that the gui can be redrawn """
         if text:
           self.status.setText(text)
-        self.progressbar.setValue(step/float(self.totalSteps))
+        self.progressbar.setValue(step.value/float(self.totalSteps))
         QApplication.processEvents()
 
     def ask_cdrom_name(self):
@@ -560,6 +561,8 @@ class DistUpgradeViewKDE(DistUpgradeView):
     """KDE frontend of the distUpgrade tool"""
     def __init__(self, datadir=None, logdir=None):
         DistUpgradeView.__init__(self)
+
+        get_telemetry().set_updater_type('KDE')
         # silence the PyQt4 logger
         logger = logging.getLogger("PyQt4")
         logger.setLevel(logging.INFO)
@@ -613,7 +616,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.window_main.setParent(self)
         self.window_main.show()
 
-        self.prev_step = 0 # keep a record of the latest step
+        self.prev_step = None # keep a record of the latest step
 
         self._opCacheProgress = KDEOpProgress(self.window_main.progressbar_cache, self.window_main.progress_text)
         self._acquireProgress = KDEAcquireProgressAdapter(self)
@@ -733,15 +736,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
         self.window_main.label_status.setText(msg)
 
     def hideStep(self, step):
-        image = getattr(self.window_main,"image_step%i" % step)
-        label = getattr(self.window_main,"label_step%i" % step)
+        image = getattr(self.window_main,"image_step%i" % step.value)
+        label = getattr(self.window_main,"label_step%i" % step.value)
         image.hide()
         label.hide()
 
     def abort(self):
         step = self.prev_step
-        if step > 0:
-            image = getattr(self.window_main,"image_step%i" % step)
+        if step:
+            image = getattr(self.window_main,"image_step%i" % step.value)
             cancelIcon = _icon("dialog-cancel",
                                fallbacks=["/usr/share/icons/oxygen/16x16/actions/dialog-cancel.png",
                                           "/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-cancel.png",
@@ -750,6 +753,7 @@ class DistUpgradeViewKDE(DistUpgradeView):
             image.show()
 
     def setStep(self, step):
+        super(DistUpgradeViewKDE , self).setStep(step)
         okIcon = _icon("dialog-ok",
                        fallbacks=["/usr/share/icons/oxygen/16x16/actions/dialog-ok.png",
                                   "/usr/lib/kde4/share/icons/oxygen/16x16/actions/dialog-ok.png",
@@ -760,15 +764,15 @@ class DistUpgradeViewKDE(DistUpgradeView):
                                      "/usr/share/icons/crystalsvg/16x16/actions/1rightarrow.png"])
 
         if self.prev_step:
-            image = getattr(self.window_main,"image_step%i" % self.prev_step)
-            label = getattr(self.window_main,"label_step%i" % self.prev_step)
+            image = getattr(self.window_main,"image_step%i" % self.prev_step.value)
+            label = getattr(self.window_main,"label_step%i" % self.prev_step.value)
             image.setPixmap(okIcon.pixmap(16, 16))
             image.show()
             ##arrow.hide()
         self.prev_step = step
         # show the an arrow for the current step and make the label bold
-        image = getattr(self.window_main,"image_step%i" % step)
-        label = getattr(self.window_main,"label_step%i" % step)
+        image = getattr(self.window_main,"image_step%i" % step.value)
+        label = getattr(self.window_main,"label_step%i" % step.value)
         image.setPixmap(arrowIcon.pixmap(16, 16))
         image.show()
         label.setText("<b>" + label.text() + "</b>")

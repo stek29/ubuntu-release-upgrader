@@ -124,6 +124,36 @@ class DistUpgradeQuirks(object):
         """ run before the apt cache is opened the first time """
         logging.debug("running Quirks.PreCacheOpen")
 
+    # individual quirks handler that run *after* the cache is opened
+    def bionicPostInitialUpdate(self):
+        #PreCacheOpen would be better but controller.abort fails terribly
+        """ run after the apt cache is opened the first time """
+        logging.debug("running Quirks.bionicPostInitialUpdate")
+        if self.controller.cache['ubuntu-desktop'].is_installed:
+            self._checkStoreConnectivity()
+
+    def bionicPostUpgrade(self):
+        # install a snap and mark its corresponding package for removal
+        # all the packages w/ snaps are part of the ubuntu-budgie-desktop task
+
+        # gtk-common-themes isn't a packge name but is this risky?
+        snaps = ['gtk-common-themes', 'gnome-calculator', 'gnome-characters',
+                 'gnome-logs', 'gnome-system-monitor']
+        logging.debug("running Quirks.bionicPostUpgrade")
+        for snap in snaps:
+            # should check and see if the snap is already installed and if it
+            # is upgrade it
+            proc = subprocess.Popen(["snap", "install", snap],
+                                    stdout=subprocess.PIPE)
+            try:
+                proc.wait(timeout=180)
+            except TimeoutExpired:
+                proc.kill()
+                logging.debug("Install of %s failed" % snap)
+            if proc.returncode == 0:
+                logging.debug("Install of %s succeeded" % snap)
+                self.controller.forced_obsoletes.append(snap)
+
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
         " run after cleanup "
@@ -131,6 +161,7 @@ class DistUpgradeQuirks(object):
 
     # run right before the first packages get installed
     def StartUpgrade(self):
+        logging.debug("running Quirks.StartUpgrade")
         self._applyPatches()
         self._removeOldApportCrashes()
         self._killUpdateNotifier()
@@ -470,6 +501,22 @@ class DistUpgradeQuirks(object):
                     os.unlink(f)
         except Exception as e:
             logging.warning("error during unlink of old crash files (%s)" % e)
+
+    def _checkStoreConnectivity(self):
+        " check for connectivity to the snap store "
+        # this should only run for upgrades to Bionic and on ubuntu-desktop
+        # somehow need to figure out if ubuntu-desktop is installed
+        # maybe change need_server_mode() to set what desktop metapackages are
+        # installed
+        connected = False
+        if not connected:
+            logging.error("No store connectivity")
+            summary = _("No Snap Store Connection")
+            msg = _("Your system does not have a connection to the Ubuntu "
+                    "Snap store. For the best upgrade experience make sure "
+                    "that your system can connect to ???.")
+            self._view.error(summary, msg)
+            self.controller.abort()
 
     def _checkPae(self):
         " check PAE in /proc/cpuinfo "

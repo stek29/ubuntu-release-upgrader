@@ -1358,7 +1358,7 @@ class DistUpgradeController(object):
         self.forced_obsoletes.extend(self.cache.identifyObsoleteKernels())
         logging.debug("forced_obsoletes: %s" % self.forced_obsoletes)
 
-        # mark packages that are now obsolete (and where not obsolete
+        # mark packages that are now obsolete (and were not obsolete
         # before) to be deleted. make sure to not delete any foreign
         # (that is, not from ubuntu) packages
         if self.useNetwork:

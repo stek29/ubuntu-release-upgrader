@@ -519,19 +519,29 @@ class DistUpgradeQuirks(object):
         # gtk-common-themes isn't a package name but is this risky?
         snaps = ['gtk-common-themes', 'gnome-calculator', 'gnome-characters',
                  'gnome-logs', 'gnome-system-monitor']
+        installed_snaps = subprocess.Popen(["snap", "list"], stdout=PIPE,
+                                           universal_newlines=True).communicate()
         for snap in snaps:
-            # should check and see if the snap is already installed and if it
-            # is upgrade it
-            proc = subprocess.Popen(["snap", "install", "--channel",
-                                     "stable/ubuntu-18.04", snap],
-                                    stdout=subprocess.PIPE)
-            try:
-                proc.wait(timeout=180)
-            except TimeoutExpired:
-                proc.kill()
-                logging.debug("Install of snap %s failed" % snap)
-            if proc.returncode == 0:
-                logging.debug("Install of snap %s succeeded" % snap)
+            # check to see if the snap is already installed
+            installed = False
+            if re.search("^%s " % snap, installed_snaps[0], re.MULTILINE):
+                logging.debug("Snap %s is already installed" % snap)
+                installed = True
+            else:
+                installed = False
+            if not installed:
+                proc = subprocess.Popen(["snap", "install", "--channel",
+                                         "stable/ubuntu-18.04", snap],
+                                        stdout=subprocess.PIPE)
+                try:
+                    proc.wait(timeout=180)
+                except TimeoutExpired:
+                    proc.kill()
+                    logging.debug("Install of snap %s failed" % snap)
+                if proc.returncode == 0:
+                    logging.debug("Install of snap %s succeeded" % snap)
+                    installed = True
+            if installed:
                 self.controller.forced_obsoletes.append(snap)
 
     def _checkPae(self):

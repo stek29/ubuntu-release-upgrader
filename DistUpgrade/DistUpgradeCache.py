@@ -973,7 +973,7 @@ class MyCache(apt.Cache):
                 if (pkg.name not in remove_candidates or
                       pkg.name in foreign_pkgs or
                       self._inRemovalBlacklist(pkg.name)):
-                    logging.debug("package '%s' has an unwanted removal: %s, skipping" % (pkgname, pkg.name))
+                    logging.debug("package '%s' produces an unwanted removal: %s, skipping" % (pkgname, pkg.name))
                     self.restore_snapshot()
                     return False
         except (SystemError, KeyError) as e:

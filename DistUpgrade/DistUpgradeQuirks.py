@@ -495,8 +495,8 @@ class DistUpgradeQuirks(object):
             return
         # can't connect
         elif re.search("^ \*.*unreachable", connected[0], re.MULTILINE):
-            logging.error("No store connectivity")
-            summary = _("No Snap Store Connection")
+            logging.error("No snap store connectivity")
+            summary = _("Connecting to Snap Store Failed")
             msg = _("Your system does not have a connection to the Ubuntu "
                     "Snap store. For the best upgrade experience make sure "
                     "that your system can connect to api.snapcraft.io.")
@@ -522,8 +522,8 @@ class DistUpgradeQuirks(object):
         installed_snaps = subprocess.Popen(["snap", "list"], stdout=PIPE,
                                            universal_newlines=True).communicate()
         for snap in snaps:
-            # check to see if the snap is already installed
             installed = False
+            # check to see if the snap is already installed
             if re.search("^%s " % snap, installed_snaps[0], re.MULTILINE):
                 logging.debug("Snap %s is already installed" % snap)
                 installed = True

@@ -496,23 +496,29 @@ class DistUpgradeQuirks(object):
         # can't connect
         elif re.search("^ \*.*unreachable", connected[0], re.MULTILINE):
             logging.error("No snap store connectivity")
-            summary = _("Connecting to Snap Store Failed")
-            msg = _("Your system does not have a connection to the Ubuntu "
-                    "Snap store. For the best upgrade experience make sure "
-                    "that your system can connect to api.snapcraft.io.")
+            res = self._view.askYesNoQuestion(
+                _("Connection to Snap Store failed"),
+                _("Your system does not have a connection to the Snap "
+                  "Store. For the best upgrade experience make sure "
+                  "that your system can connect to api.snapcraft.io.\n"
+                  "Do you still want to continue with the upgrade?")
+            )
         # debug command not available
         elif 'error: unknown command' in connected[1]:
             logging.error("snap debug command not available")
-            summary = _("Outdated Snapd Package")
-            msg = _("Your system does not have the latest version of snapd. "
-                    "Please update the version of snapd on your system to "
-                    "improve the upgrade experience.")
+            res = self._view.askYesNoQuestion(
+                _("Outdated snapd package"),
+                _("Your system does not have the latest version of snapd. "
+                  "Please update the version of snapd on your system to "
+                  "improve the upgrade experience.\n"
+                  "Do you still want to continue with the upgrade?")
+            )
         # not running as root
         elif 'error: access denied' in connected[1]:
+            res = False
             logging.error("Not running as root!")
-        if summary and msg:
-            self._view.error(summary, msg)
-        self.controller.abort()
+        if not res:
+            self.controller.abort()
 
     def _replaceDebsWithSnaps(self):
         """ install a snap and mark its corresponding package for removal """
@@ -527,8 +533,6 @@ class DistUpgradeQuirks(object):
             if re.search("^%s " % snap, installed_snaps[0], re.MULTILINE):
                 logging.debug("Snap %s is already installed" % snap)
                 installed = True
-            else:
-                installed = False
             if not installed:
                 proc = subprocess.Popen(["snap", "install", "--channel",
                                          "stable/ubuntu-18.04", snap],

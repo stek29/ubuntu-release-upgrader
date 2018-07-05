@@ -534,13 +534,12 @@ class DistUpgradeQuirks(object):
                 logging.debug("Snap %s is already installed" % snap)
                 installed = True
             if not installed:
-                proc = subprocess.Popen(["snap", "install", "--channel",
-                                         "stable/ubuntu-18.04", snap],
-                                        stdout=subprocess.PIPE)
                 try:
-                    proc.wait(timeout=180)
-                except TimeoutExpired:
-                    proc.kill()
+                    proc = subprocess.run(["snap", "install", "--channel",
+                                           "stable/ubuntu-18.04", snap],
+                                          stdout=subprocess.PIPE,
+                                          check=True)
+                except subprocess.CalledProcessError:
                     logging.debug("Install of snap %s failed" % snap)
                 if proc.returncode == 0:
                     logging.debug("Install of snap %s succeeded" % snap)

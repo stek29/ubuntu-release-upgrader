@@ -188,6 +188,9 @@ class DistUpgradeController(object):
 
         # apt cron job
         self._aptCronJobPerms = 0o755
+        # for inhibiting idle
+        self._uid = ''
+        self._user_env = {}
 
     def openCache(self, lock=True, restore_sources_list_on_fail=False):
         logging.debug("openCache()")
@@ -1894,6 +1897,7 @@ class DistUpgradeController(object):
         self._view.updateStatus(_("Calculating the changes"))
         if not self.askDistUpgrade():
             self.abort()
+        self._inhibitIdle()
 
         # fetch the stuff
         self._view.setStep(Step.FETCH)
@@ -1983,6 +1987,57 @@ class DistUpgradeController(object):
             self._view.information(_("Upgrade complete"),
                                    _("The partial upgrade was completed."))
         return True
+
+    def _inhibitIdle(self):
+        if os.path.exists("/usr/bin/gnome-session-inhibit"):
+            self._uid = os.environ.get('SUDO_UID', '')
+            if not self._uid:
+                self._uid = os.environ.get('PKEXEC_UID', '')
+            if not self._uid:
+                logging.debug("failed to determine user upgrading")
+                logging.error("failed to inhibit gnome-session idle")
+                return
+            self._getUserEnv()
+            if not self._user_env:
+                return
+            #seteuid so dbus user session can be accessed
+            os.seteuid(int(self._uid))
+
+            logging.debug("inhibit gnome-session idle")
+            try:
+                xdg_desktop = self._user_env.get("XDG_CURRENT_DESKTOP", "")
+                if not xdg_desktop:
+                    logging.debug("failed to find XDG_CURRENT_DESKTOP")
+                    logging.error("failed to inhibit gnome-session idle")
+                    return
+                idle = subprocess.Popen(["gnome-session-inhibit", "--inhibit",
+                                         "idle", "--inhibit-only"],
+                                        env=self._user_env)
+                self._view.information(_("Lock screen disabled"),
+                                       _("Your lock screen has been "
+                                         "disabled and will continue "
+                                         "to be so until you reboot."))
+            except (OSError, ValueError):
+                logging.exception("failed to inhibit gnome-session idle")
+            os.seteuid(os.getuid())
+
+    def _getUserEnv(self):
+        try:
+            pid = subprocess.check_output(["pgrep", "-u", self._uid,
+                                           "gnome-session"])
+            pid = pid.decode().split('\n')[0]
+            with open('/proc/' + pid + '/environ', 'r') as f:
+                data = f.read().split('\x00')
+            for line in data:
+                if len(line):
+                    env = line.split('=', 1)
+                    self._user_env[env[0]] = env[1]
+        except subprocess.CalledProcessError as e:
+            if e.returncode == 1:
+                logging.debug("gnome-session not running for user")
+            else:
+                logging.exception("failed to read user env")
+
 
 
 if __name__ == "__main__":

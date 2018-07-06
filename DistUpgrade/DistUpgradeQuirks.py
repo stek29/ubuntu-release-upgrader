@@ -60,8 +60,6 @@ class DistUpgradeQuirks(object):
         self.arch = get_arch()
         self.plugin_manager = PluginManager(self.controller, ["./plugins"])
         self._poke = None
-        self._uid = ''
-        self._user_env = {}
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -137,7 +135,6 @@ class DistUpgradeQuirks(object):
         self._killKBluetooth()
         self._killScreensaver()
         self._pokeScreensaver()
-        self._inhibitIdle()
         self._stopDocvertConverter()
 
     # individual quirks handler that run *after* the dist-upgrade was
@@ -388,7 +385,7 @@ class DistUpgradeQuirks(object):
     def _pokeScreensaver(self):
         if (os.path.exists("/usr/bin/xdg-screensaver") and
                 os.environ.get('DISPLAY')):
-            logging.debug("setup poke timer for the scrensaver")
+            logging.debug("setup poke timer for the screensaver")
             cmd = "while true;"
             cmd += " do /usr/bin/xdg-screensaver reset >/dev/null 2>&1;"
             cmd += " sleep 30; done"
@@ -397,58 +394,6 @@ class DistUpgradeQuirks(object):
                 atexit.register(self._stopPokeScreensaver)
             except (OSError, ValueError):
                 logging.exception("failed to setup screensaver poke")
-
-    def _getUserEnv(self):
-        try:
-            pid = subprocess.check_output(["pgrep", "-u", self._uid,
-                                           "gnome-session"])
-            pid = pid.decode().split('\n')[0]
-            with open('/proc/' + pid + '/environ', 'r') as f:
-                data = f.read().split('\x00')
-            for line in data:
-                if len(line):
-                    env = line.split('=', 1)
-                    self._user_env[env[0]] = env[1]
-        except subprocess.CalledProcessError as e:
-            if e.returncode == 1:
-                logging.debug("gnome-session not running for user")
-            else:
-                logging.exception("failed to read user env")
-
-    def _inhibitIdle(self):
-        if os.path.exists("/usr/bin/gnome-session-inhibit"):
-            self._uid = os.environ.get('SUDO_UID', '')
-            if not self._uid:
-                self._uid = os.environ.get('PKEXEC_UID', '')
-            if not self._uid:
-                logging.debug("failed to determine user upgrading")
-                logging.error("failed to inhibit gnome-session idle")
-                return
-            self._getUserEnv()
-            if not self._user_env:
-                return
-            #seteuid so dbus user session can be accessed
-            os.seteuid(int(self._uid))
-
-            logging.debug("inhibit gnome-session idle")
-            try:
-                xdg_desktop = self._user_env.get("XDG_CURRENT_DESKTOP", "")
-                if not xdg_desktop:
-                    logging.debug("failed to find XDG_CURRENT_DESKTOP")
-                    logging.error("failed to inhibit gnome-session idle")
-                    return
-                xdg_desktop = xdg_desktop.split(':')
-                idle = subprocess.Popen(["gnome-session-inhibit", "--inhibit",
-                                         "idle", "--inhibit-only"],
-                                        env=self._user_env)
-                # leave the inhibitor in place on Ubuntu GNOME, since the
-                # lock screen will be broken after upgrade (LP: #1565178)
-                for desktop in xdg_desktop:
-                    if "GNOME" not in desktop:
-                        atexit.register(idle.terminate)
-            except (OSError, ValueError):
-                logging.exception("failed to inhibit gnome-session idle")
-            os.seteuid(os.getuid())
 
     def _stopPokeScreensaver(self):
         res = False

@@ -125,15 +125,15 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.PreCacheOpen")
 
     # individual quirks handler that run *after* the cache is opened
-    def bionicPostInitialUpdate(self):
+    def cosmicPostInitialUpdate(self):
         #PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
-        logging.debug("running Quirks.bionicPostInitialUpdate")
+        logging.debug("running Quirks.cosmicPostInitialUpdate")
         if self.controller.cache['ubuntu-desktop'].is_installed:
             self._checkStoreConnectivity()
 
-    def bionicPostUpgrade(self):
-        logging.debug("running Quirks.bionicPostUpgrade")
+    def cosmicPostUpgrade(self):
+        logging.debug("running Quirks.cosmicPostUpgrade")
         if self.controller.cache['ubuntu-desktop'].is_installed:
             self._replaceDebsWithSnaps()
 

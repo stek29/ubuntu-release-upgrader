@@ -122,6 +122,19 @@ class DistUpgradeQuirks(object):
         """ run before the apt cache is opened the first time """
         logging.debug("running Quirks.PreCacheOpen")
 
+    # individual quirks handler that run *after* the cache is opened
+    def cosmicPostInitialUpdate(self):
+        #PreCacheOpen would be better but controller.abort fails terribly
+        """ run after the apt cache is opened the first time """
+        logging.debug("running Quirks.cosmicPostInitialUpdate")
+        if self.controller.cache['ubuntu-desktop'].is_installed:
+            self._checkStoreConnectivity()
+
+    def cosmicPostUpgrade(self):
+        logging.debug("running Quirks.cosmicPostUpgrade")
+        if self.controller.cache['ubuntu-desktop'].is_installed:
+            self._replaceDebsWithSnaps()
+
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
         " run after cleanup "
@@ -129,6 +142,7 @@ class DistUpgradeQuirks(object):
 
     # run right before the first packages get installed
     def StartUpgrade(self):
+        logging.debug("running Quirks.StartUpgrade")
         self._applyPatches()
         self._removeOldApportCrashes()
         self._killUpdateNotifier()
@@ -415,6 +429,68 @@ class DistUpgradeQuirks(object):
                     os.unlink(f)
         except Exception as e:
             logging.warning("error during unlink of old crash files (%s)" % e)
+
+    def _checkStoreConnectivity(self):
+        """ check for connectivity to the snap store to install snaps"""
+        msg = ""
+        summary = ""
+        connected = Popen(["snap", "debug", "connectivity"], stdout=PIPE,
+                          stderr=PIPE, universal_newlines=True).communicate()
+        if re.search("^ \* PASS", connected[0], re.MULTILINE):
+            return
+        # can't connect
+        elif re.search("^ \*.*unreachable", connected[0], re.MULTILINE):
+            logging.error("No snap store connectivity")
+            res = self._view.askYesNoQuestion(
+                _("Connection to Snap Store failed"),
+                _("Your system does not have a connection to the Snap "
+                  "Store. For the best upgrade experience make sure "
+                  "that your system can connect to api.snapcraft.io.\n"
+                  "Do you still want to continue with the upgrade?")
+            )
+        # debug command not available
+        elif 'error: unknown command' in connected[1]:
+            logging.error("snap debug command not available")
+            res = self._view.askYesNoQuestion(
+                _("Outdated snapd package"),
+                _("Your system does not have the latest version of snapd. "
+                  "Please update the version of snapd on your system to "
+                  "improve the upgrade experience.\n"
+                  "Do you still want to continue with the upgrade?")
+            )
+        # not running as root
+        elif 'error: access denied' in connected[1]:
+            res = False
+            logging.error("Not running as root!")
+        if not res:
+            self.controller.abort()
+
+    def _replaceDebsWithSnaps(self):
+        """ install a snap and mark its corresponding package for removal """
+        # gtk-common-themes isn't a package name but is this risky?
+        snaps = ['gtk-common-themes', 'gnome-calculator', 'gnome-characters',
+                 'gnome-logs', 'gnome-system-monitor']
+        installed_snaps = subprocess.Popen(["snap", "list"], stdout=PIPE,
+                                           universal_newlines=True).communicate()
+        for snap in snaps:
+            installed = False
+            # check to see if the snap is already installed
+            if re.search("^%s " % snap, installed_snaps[0], re.MULTILINE):
+                logging.debug("Snap %s is already installed" % snap)
+                installed = True
+            if not installed:
+                try:
+                    proc = subprocess.run(["snap", "install", "--channel",
+                                           "stable/ubuntu-18.04", snap],
+                                          stdout=subprocess.PIPE,
+                                          check=True)
+                except subprocess.CalledProcessError:
+                    logging.debug("Install of snap %s failed" % snap)
+                if proc.returncode == 0:
+                    logging.debug("Install of snap %s succeeded" % snap)
+                    installed = True
+            if installed:
+                self.controller.forced_obsoletes.append(snap)
 
     def _checkPae(self):
         " check PAE in /proc/cpuinfo "

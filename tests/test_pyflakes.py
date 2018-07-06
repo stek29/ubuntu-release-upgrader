@@ -45,7 +45,7 @@ class TestPyflakesClean(unittest.TestCase):
     def test_pyflakes_clean(self):
         # mvo: type -f here to avoid running pyflakes on imported files
         #      that are symlinks to other packages
-        cmd = 'find %s/.. -type f -name "*.py" | xargs pyflakes' % CURDIR
+        cmd = 'find %s/.. -type f -name "*.py" | xargs pyflakes3' % CURDIR
         p = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             close_fds=True, shell=True, universal_newlines=True)

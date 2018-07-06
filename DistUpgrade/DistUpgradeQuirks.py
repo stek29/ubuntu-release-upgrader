@@ -486,7 +486,7 @@ class DistUpgradeQuirks(object):
             logging.warning("error during unlink of old crash files (%s)" % e)
 
     def _checkStoreConnectivity(self):
-        " check for connectivity to the snap store so snaps can be installed "
+        """ check for connectivity to the snap store to install snaps"""
         msg = ""
         summary = ""
         connected = Popen(["snap", "debug", "connectivity"], stdout=PIPE,

@@ -2015,8 +2015,8 @@ class DistUpgradeController(object):
                                         env=self._user_env)
                 self._view.information(_("Lock screen disabled"),
                                        _("Your lock screen has been "
-                                         "disabled and will continue "
-                                         "to be so until you reboot."))
+                                         "disabled and will remain "
+                                         "disabled until you reboot."))
             except (OSError, ValueError):
                 logging.exception("failed to inhibit gnome-session idle")
             os.seteuid(os.getuid())

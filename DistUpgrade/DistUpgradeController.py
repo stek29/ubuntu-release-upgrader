@@ -2010,9 +2010,9 @@ class DistUpgradeController(object):
                     logging.debug("failed to find XDG_CURRENT_DESKTOP")
                     logging.error("failed to inhibit gnome-session idle")
                     return
-                idle = subprocess.Popen(["gnome-session-inhibit", "--inhibit",
-                                         "idle", "--inhibit-only"],
-                                        env=self._user_env)
+                subprocess.Popen(["gnome-session-inhibit", "--inhibit",
+                                  "idle", "--inhibit-only"],
+                                 env=self._user_env)
                 self._view.information(_("Lock screen disabled"),
                                        _("Your lock screen has been "
                                          "disabled and will remain "

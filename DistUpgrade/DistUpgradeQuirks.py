@@ -124,7 +124,7 @@ class DistUpgradeQuirks(object):
 
     # individual quirks handler that run *after* the cache is opened
     def cosmicPostInitialUpdate(self):
-        #PreCacheOpen would be better but controller.abort fails terribly
+        # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.cosmicPostInitialUpdate")
         if self.controller.cache['ubuntu-desktop'].is_installed:
@@ -432,8 +432,6 @@ class DistUpgradeQuirks(object):
 
     def _checkStoreConnectivity(self):
         """ check for connectivity to the snap store to install snaps"""
-        msg = ""
-        summary = ""
         connected = Popen(["snap", "debug", "connectivity"], stdout=PIPE,
                           stderr=PIPE, universal_newlines=True).communicate()
         if re.search("^ \* PASS", connected[0], re.MULTILINE):
@@ -470,8 +468,9 @@ class DistUpgradeQuirks(object):
         # gtk-common-themes isn't a package name but is this risky?
         snaps = ['gtk-common-themes', 'gnome-calculator', 'gnome-characters',
                  'gnome-logs', 'gnome-system-monitor']
-        installed_snaps = subprocess.Popen(["snap", "list"], stdout=PIPE,
-                                           universal_newlines=True).communicate()
+        installed_snaps = subprocess.Popen(["snap", "list"],
+                                           universal_newlines=True,
+                                           stdout=PIPE).communicate()
         for snap in snaps:
             installed = False
             # check to see if the snap is already installed

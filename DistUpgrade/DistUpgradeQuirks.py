@@ -127,12 +127,14 @@ class DistUpgradeQuirks(object):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.cosmicPostInitialUpdate")
-        if self.controller.cache['ubuntu-desktop'].is_installed:
+        if self.controller.cache['ubuntu-desktop'].is_installed and \
+                self.controller.cache['snapd'].is_installed:
             self._checkStoreConnectivity()
 
     def cosmicPostUpgrade(self):
         logging.debug("running Quirks.cosmicPostUpgrade")
-        if self.controller.cache['ubuntu-desktop'].is_installed:
+        if self.controller.cache['ubuntu-desktop'].is_installed and \
+                self.controller.cache['snapd'].is_installed:
             self._replaceDebsWithSnaps()
 
     # individual quirks handler when the dpkg run is finished ---------

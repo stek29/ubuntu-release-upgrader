@@ -469,11 +469,13 @@ class DistUpgradeQuirks(object):
     def _replaceDebsWithSnaps(self):
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
-        snaps = ['gtk-common-themes', 'gnome-calculator', 'gnome-characters',
-                 'gnome-logs', 'gnome-system-monitor']
+        snaps = ['gnome-3-26-1604', 'gtk-common-themes', 'gnome-calculator',
+                 'gnome-characters', 'gnome-logs', 'gnome-system-monitor']
+        self._view.updateStatus(_("Checking for installed snaps"))
         installed_snaps = subprocess.Popen(["snap", "list"],
                                            universal_newlines=True,
                                            stdout=PIPE).communicate()
+        self._view.processEvents()
         for snap in snaps:
             installed = False
             # check to see if the snap is already installed
@@ -482,10 +484,12 @@ class DistUpgradeQuirks(object):
                 installed = True
             if not installed:
                 try:
+                    self._view.updateStatus(_("Installing snap %s" % snap))
                     proc = subprocess.run(["snap", "install", "--channel",
                                            "stable/ubuntu-18.04", snap],
                                           stdout=subprocess.PIPE,
                                           check=True)
+                    self._view.processEvents()
                 except subprocess.CalledProcessError:
                     logging.debug("Install of snap %s failed" % snap)
                     continue

@@ -1921,9 +1921,9 @@ class DistUpgradeController(object):
             sys.exit(1)
 
         # do post-upgrade stuff
+        self.doPostUpgrade()
         self._view.setStep(Step.CLEANUP)
         self._view.updateStatus(_("Searching for obsolete software"))
-        self.doPostUpgrade()
 
         # comment out cdrom source
         if self.aptcdrom:

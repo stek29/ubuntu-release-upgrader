@@ -435,8 +435,11 @@ class DistUpgradeQuirks(object):
     def _checkStoreConnectivity(self):
         """ check for connectivity to the snap store to install snaps"""
         res = False
+        snap_env = os.environ.copy()
+        snap_env["LANG"] = "C.UTF-8"
         connected = Popen(["snap", "debug", "connectivity"], stdout=PIPE,
-                          stderr=PIPE, universal_newlines=True).communicate()
+                          stderr=PIPE, env=snap_env,
+                          universal_newlines=True).communicate()
         if re.search("^ \* PASS", connected[0], re.MULTILINE):
             return
         # can't connect

@@ -1229,6 +1229,22 @@ class DistUpgradeController(object):
         res = apt_btrfs.create_btrfs_root_snapshot(prefix)
         logging.info("creating snapshot '%s' (success=%s)" % (prefix, res))
 
+    def doDistUpgradeSimulation(self):
+        backups = {}
+        backups["dir::bin::dpkg"] = [apt_pkg.config["dir::bin::dpkg"]]
+        apt_pkg.config["dir::bin::dpkg"] = "/bin/true"
+
+        for lst in "dpkg::pre-invoke", "dpkg::pre-install-pkgs", "dpkg::post-invoke", "dpkg::post-install-pkgs":
+            backups[lst + "::"] = apt_pkg.config.value_list(lst)
+            apt_pkg.config.clear(lst)
+
+        try:
+            return self.doDistUpgrade()
+        finally:
+            for lst in backups:
+                for item in backups[lst]:
+                    apt_pkg.config.set(lst, item)
+
     def doDistUpgrade(self):
         # add debug code only here
         #apt_pkg.config.set("Debug::pkgDpkgPM", "1")

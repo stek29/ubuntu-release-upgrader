@@ -1072,7 +1072,7 @@ class DistUpgradeController(object):
         return True
 
 
-    def askDistUpgrade(self):
+    def calcDistUpgrade(self):
         self._view.updateStatus(_("Calculating the changes"))
         if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
             return False
@@ -1108,6 +1108,10 @@ class DistUpgradeController(object):
 
         # flush UI
         self._view.processEvents()
+        return changes
+
+    def askDistUpgrade(self):
+        changes = calcDistUpgrade()
 
         # ask the user
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),

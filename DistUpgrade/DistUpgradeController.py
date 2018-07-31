@@ -111,6 +111,7 @@ class DistUpgradeController(object):
         self._view = distUpgradeView
         self._view.updateStatus(_("Reading cache"))
         self.cache = None
+        self.fetcher = None
 
         if not self.options or self.options.withNetwork == None:
             self.useNetwork = True
@@ -1166,8 +1167,8 @@ class DistUpgradeController(object):
         while currentRetry < maxRetries:
             try:
                 pm = apt_pkg.PackageManager(self.cache._depcache)
-                fetcher = apt_pkg.Acquire(fprogress)
-                self.cache._fetch_archives(fetcher, pm)
+                self.fetcher = apt_pkg.Acquire(fprogress)
+                self.cache._fetch_archives(self.fetcher, pm)
             except apt.cache.FetchCancelledException as e:
                 logging.info("user canceled")
                 user_canceled = True
@@ -1328,6 +1329,17 @@ class DistUpgradeController(object):
         self.abort()
 
     def doPostUpgrade(self):
+        # clean up downloaded packages
+        archivedir = os.path.dirname(
+            apt_pkg.config.find_dir("Dir::Cache::archives"))
+        for item in self.fetcher.items:
+            logging.debug("Checking: %s" % item.destfile)
+            if os.path.dirname(os.path.abspath(item.destfile)) == archivedir:
+                try:
+                    os.unlink(item.destfile)
+                except OSError:
+                    pass
+
         # reopen cache
         self.openCache()
         # run the quirks handler that does does like things adding

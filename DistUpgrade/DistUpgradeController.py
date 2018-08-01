@@ -1329,6 +1329,7 @@ class DistUpgradeController(object):
         self.abort()
 
     def doPostUpgrade(self):
+        get_telemetry().add_stage('POSTUPGRADE')
         # clean up downloaded packages
         archivedir = os.path.dirname(
             apt_pkg.config.find_dir("Dir::Cache::archives"))
@@ -1348,6 +1349,8 @@ class DistUpgradeController(object):
         self.quirks.run("PostUpgrade")
         # check out what packages are cruft now
         # use self.{foreign,obsolete}_pkgs here and see what changed
+        self._view.setStep(Step.CLEANUP)
+        self._view.updateStatus(_("Searching for obsolete software"))
         now_obsolete = self.cache._getObsoletesPkgs()
         now_foreign = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
         logging.debug("Obsolete: %s" % " ".join(sorted(now_obsolete)))
@@ -1934,8 +1937,6 @@ class DistUpgradeController(object):
 
         # do post-upgrade stuff
         self.doPostUpgrade()
-        self._view.setStep(Step.CLEANUP)
-        self._view.updateStatus(_("Searching for obsolete software"))
 
         # comment out cdrom source
         if self.aptcdrom:
@@ -1983,7 +1984,6 @@ class DistUpgradeController(object):
                                      "were errors during the upgrade "
                                      "process."))
             return False
-        self._view.setStep(Step.CLEANUP)
         if not self.doPostUpgrade():
             self._view.information(_("Upgrade complete"),
                                    _("The upgrade has completed but there "

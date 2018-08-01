@@ -7,8 +7,11 @@ ubuntu-release-upgrader (1:18.10.6) UNRELEASED; urgency=medium
       installed. (LP: #1783593)
     - when checking for connectivity to the snap store use C.UTF-8 for the
       language so error message matching works. (LP: #1783738)
-  * DistUpgradeController.py: Remove debs from apt's "Dir::Cache::archives"
-    folder after the upgrade has completed successfully.
+  * DistUpgradeController.py:
+    - Remove debs from apt's "Dir::Cache::archives" folder after the upgrade
+      has completed successfully.
+    - Add a telemetry marker to report the time to process migration from deb
+      to snaps.
 
  -- Brian Murray <brian@ubuntu.com>  Wed, 25 Jul 2018 08:59:38 -0700
 

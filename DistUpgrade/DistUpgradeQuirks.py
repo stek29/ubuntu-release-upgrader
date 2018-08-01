@@ -488,6 +488,7 @@ class DistUpgradeQuirks(object):
             if not installed:
                 try:
                     self._view.updateStatus(_("Installing snap %s" % snap))
+                    self._view.processEvents()
                     proc = subprocess.run(["snap", "install", "--channel",
                                            "stable/ubuntu-18.04", snap],
                                           stdout=subprocess.PIPE,

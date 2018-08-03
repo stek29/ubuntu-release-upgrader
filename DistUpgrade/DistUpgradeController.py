@@ -1926,6 +1926,18 @@ class DistUpgradeController(object):
             self._enableAptCronJob()
             self.abort()
 
+        # simulate an upgrade
+        self._view.setStep(Step.INSTALL)
+        self._view.updateStatus(_("Upgrading"))
+        if not self.doDistUpgradeSimulation():
+            # don't abort here, because it would restore the sources.list
+            self._view.information(_("Upgrade infeasible"),
+                                   _("The upgrade could not be completed, there "
+                                     "were errors during the upgrade "
+                                     "process."))
+            # do not abort because we are part of the way through the process
+            sys.exit(1)
+
         # now do the upgrade
         self._view.setStep(Step.INSTALL)
         self._view.updateStatus(_("Upgrading"))

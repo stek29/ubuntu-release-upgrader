@@ -1073,7 +1073,7 @@ class DistUpgradeController(object):
         return True
 
 
-    def askDistUpgrade(self):
+    def calcDistUpgrade(self):
         self._view.updateStatus(_("Calculating the changes"))
         if not self.cache.distUpgrade(self._view, self.serverMode, self._partialUpgrade):
             return False
@@ -1109,6 +1109,13 @@ class DistUpgradeController(object):
 
         # flush UI
         self._view.processEvents()
+        return changes
+
+    def askDistUpgrade(self):
+        changes = self.calcDistUpgrade()
+
+        if not changes:
+            return False
 
         # ask the user
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),
@@ -1225,6 +1232,22 @@ class DistUpgradeController(object):
         prefix = "release-upgrade-%s-" % self.toDist
         res = apt_btrfs.create_btrfs_root_snapshot(prefix)
         logging.info("creating snapshot '%s' (success=%s)" % (prefix, res))
+
+    def doDistUpgradeSimulation(self):
+        backups = {}
+        backups["dir::bin::dpkg"] = [apt_pkg.config["dir::bin::dpkg"]]
+        apt_pkg.config["dir::bin::dpkg"] = "/bin/true"
+
+        for lst in "dpkg::pre-invoke", "dpkg::pre-install-pkgs", "dpkg::post-invoke", "dpkg::post-install-pkgs":
+            backups[lst + "::"] = apt_pkg.config.value_list(lst)
+            apt_pkg.config.clear(lst)
+
+        try:
+            return self.doDistUpgrade()
+        finally:
+            for lst in backups:
+                for item in backups[lst]:
+                    apt_pkg.config.set(lst, item)
 
     def doDistUpgrade(self):
         # add debug code only here
@@ -1919,6 +1942,39 @@ class DistUpgradeController(object):
         self._view.updateStatus(_("Fetching"))
         if not self.doDistUpgradeFetching():
             self._enableAptCronJob()
+            self.abort()
+
+        # simulate an upgrade
+        self._view.setStep(Step.INSTALL)
+        self._view.updateStatus(_("Upgrading"))
+        if not self.doDistUpgradeSimulation():
+            self._view.error(_("Upgrade infeasible"),
+                             _("The upgrade could not be completed, there "
+                               "were errors during the upgrade "
+                               "process."))
+            self.abort()
+
+        # Just upgrade libc6 first
+        self.cache.clear()
+        self.cache["libc6"].mark_install()
+        self._view.setStep(Step.INSTALL)
+        self._view.updateStatus(_("Upgrading"))
+        if not self.doDistUpgrade():
+            # don't abort here, because it would restore the sources.list
+            self._view.information(_("Upgrade incomplete"),
+                                   _("The upgrade has partially completed but there "
+                                     "were errors during the upgrade "
+                                     "process."))
+            # do not abort because we are part of the way through the process
+            sys.exit(1)
+
+        # Reopen ask above
+        self.openCache(restore_sources_list_on_fail=True)
+        self.serverMode = self.cache.need_server_mode()
+        self.quirks.ensure_recommends_are_installed_on_desktops()
+
+        self._view.updateStatus(_("Calculating the changes"))
+        if not self.calcDistUpgrade():
             self.abort()
 
         # now do the upgrade

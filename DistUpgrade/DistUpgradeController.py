@@ -1930,13 +1930,11 @@ class DistUpgradeController(object):
         self._view.setStep(Step.INSTALL)
         self._view.updateStatus(_("Upgrading"))
         if not self.doDistUpgradeSimulation():
-            # don't abort here, because it would restore the sources.list
-            self._view.information(_("Upgrade infeasible"),
-                                   _("The upgrade could not be completed, there "
-                                     "were errors during the upgrade "
-                                     "process."))
-            # do not abort because we are part of the way through the process
-            sys.exit(1)
+            self._view.error(_("Upgrade infeasible"),
+                             _("The upgrade could not be completed, there "
+                               "were errors during the upgrade "
+                               "process."))
+            self.abort()
 
         # Just upgrade libc6 first
         self.cache.clear()

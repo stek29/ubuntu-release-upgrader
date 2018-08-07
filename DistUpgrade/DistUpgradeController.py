@@ -1958,8 +1958,6 @@ class DistUpgradeController(object):
         self._view.updateStatus(_("Calculating the changes"))
         if not self.calcDistUpgrade():
             self.abort()
-        self._inhibitIdle()
-
 
         # now do the upgrade
         self._view.setStep(Step.INSTALL)

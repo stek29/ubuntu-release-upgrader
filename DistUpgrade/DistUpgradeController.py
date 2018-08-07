@@ -1111,7 +1111,7 @@ class DistUpgradeController(object):
         return changes
 
     def askDistUpgrade(self):
-        changes = calcDistUpgrade()
+        changes = self.calcDistUpgrade()
 
         # ask the user
         res = self._view.confirmChanges(_("Do you want to start the upgrade?"),

@@ -1938,6 +1938,17 @@ class DistUpgradeController(object):
             # do not abort because we are part of the way through the process
             sys.exit(1)
 
+        # Reopen ask above
+        self.openCache(restore_sources_list_on_fail=True)
+        self.serverMode = self.cache.need_server_mode()
+        self.quirks.ensure_recommends_are_installed_on_desktops()
+
+        self._view.updateStatus(_("Calculating the changes"))
+        if not self.calcDistUpgrade():
+            self.abort()
+        self._inhibitIdle()
+
+
         # now do the upgrade
         self._view.setStep(Step.INSTALL)
         self._view.updateStatus(_("Upgrading"))

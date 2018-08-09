@@ -1357,7 +1357,6 @@ class DistUpgradeController(object):
         archivedir = os.path.dirname(
             apt_pkg.config.find_dir("Dir::Cache::archives"))
         for item in self.fetcher.items:
-            logging.debug("Checking: %s" % item.destfile)
             if os.path.dirname(os.path.abspath(item.destfile)) == archivedir:
                 try:
                     os.unlink(item.destfile)

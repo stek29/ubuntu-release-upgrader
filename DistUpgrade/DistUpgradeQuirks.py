@@ -480,27 +480,26 @@ class DistUpgradeQuirks(object):
                                            stdout=PIPE).communicate()
         self._view.processEvents()
         for snap in snaps:
-            installed = False
             # check to see if the snap is already installed
             if re.search("^%s " % snap, installed_snaps[0], re.MULTILINE):
                 logging.debug("Snap %s is already installed" % snap)
-                installed = True
-            if not installed:
-                try:
-                    self._view.updateStatus(_("Installing snap %s" % snap))
-                    self._view.processEvents()
-                    proc = subprocess.run(["snap", "install", "--channel",
-                                           "stable/ubuntu-18.04", snap],
-                                          stdout=subprocess.PIPE,
-                                          check=True)
-                    self._view.processEvents()
-                except subprocess.CalledProcessError:
-                    logging.debug("Install of snap %s failed" % snap)
-                    continue
-                if proc.returncode == 0:
-                    logging.debug("Install of snap %s succeeded" % snap)
-                    installed = True
-            if installed:
+                command = 'refresh'
+            else:
+                command = 'install'
+            try:
+                self._view.updateStatus(_("Installing snap %s" % snap))
+                self._view.processEvents()
+                proc = subprocess.run(["snap", command, "--channel",
+                                       "stable/ubuntu-18.10", snap],
+                                      stdout=subprocess.PIPE,
+                                      check=True)
+                self._view.processEvents()
+            except subprocess.CalledProcessError:
+                logging.debug("Install of snap %s failed" % snap)
+                continue
+            if proc.returncode == 0:
+                logging.debug("Install of snap %s succeeded" % snap)
+            if command == 'install':
                 self.controller.forced_obsoletes.append(snap)
 
     def _checkPae(self):

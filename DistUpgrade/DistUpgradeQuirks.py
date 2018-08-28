@@ -485,19 +485,25 @@ class DistUpgradeQuirks(object):
         snaps = ['gnome-3-26-1604', 'gtk-common-themes', 'gnome-calculator',
                  'gnome-characters', 'gnome-logs', 'gnome-system-monitor']
         self._view.updateStatus(_("Checking for installed snaps"))
-        installed_snaps = subprocess.Popen(["snap", "list"],
-                                           universal_newlines=True,
-                                           stdout=PIPE).communicate()
-        self._view.processEvents()
         for snap in snaps:
             # check to see if the snap is already installed
-            if re.search("^%s " % snap, installed_snaps[0], re.MULTILINE):
-                logging.debug("Snap %s is already installed" % snap)
+            snap_info = subprocess.Popen(["snap", "info", snap],
+                                         universal_newlines=True,
+                                         stdout=subprocess.PIPE).communicate()
+            self._view.processEvents()
+            if re.search("^installed: ", snap_info[0], re.MULTILINE):
+                logging.debug("Snap %s is installed" % snap)
+                # its not tracking the release channel so don't refresh
+                if not re.search("^tracking:.*ubuntu-18.04", snap_info[0],
+                                 re.MULTILINE):
+                    logging.debug("Snap %s is not tracking the release channel"
+                                  % snap)
+                    continue
                 command = 'refresh'
             else:
                 command = 'install'
             try:
-                self._view.updateStatus(_("Installing snap %s" % snap))
+                self._view.updateStatus(_("%sing snap %s" % (command, snap)))
                 self._view.processEvents()
                 proc = subprocess.run(["snap", command, "--channel",
                                        "stable/ubuntu-18.10", snap],
@@ -505,10 +511,10 @@ class DistUpgradeQuirks(object):
                                       check=True)
                 self._view.processEvents()
             except subprocess.CalledProcessError:
-                logging.debug("Install of snap %s failed" % snap)
+                logging.debug("%s of snap %s failed" % (command, snap))
                 continue
             if proc.returncode == 0:
-                logging.debug("Install of snap %s succeeded" % snap)
+                logging.debug("%s of snap %s succeeded" % (command, snap))
             if command == 'install':
                 self.controller.forced_obsoletes.append(snap)
 

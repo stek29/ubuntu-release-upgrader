@@ -649,11 +649,12 @@ class DistUpgradeViewKDE(DistUpgradeView):
 
         # for some reason we need to start the main loop to get everything displayed
         # this app mostly works with processEvents but run main loop briefly to keep it happily displaying all widgets
-        QTimer.singleShot(10, self.exitMainLoop)
+        QTimer.singleShot(10, self.exitMainLoopMidFlight)
         self.app.exec_()
 
-    def exitMainLoop(self):
-        print("exitMainLoop")
+    def exitMainLoopMidFlight(self):
+        # This is run shortly after startup. Do not add actual exit logic here!
+        print("exitMainLoopMidFlight")
         self.app.exit()
 
     def translate_widget_children(self, parentWidget=None):

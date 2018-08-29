@@ -1,11 +1,16 @@
 ubuntu-release-upgrader (1:18.10.10) UNRELEASED; urgency=medium
 
+  [ Harald Sitter ]
   * DistUpgradeViewKDE.py:
     - exitMainLoop is now exitMainLoopMidFlight to make it clearer that
       it is run while the app is still running. it's a hack and not
       the actual exit point
     - inhibit kscreenlocker while the UI is up to prevent the lock screen
       from breaking during upgrades and then complain to the user
+
+  [ Brian Murray ]
+  * DistUpgradeQuirks.py: add a quirk which checks for an apt architecture
+    of i386 and prevents the upgrade as the architecture may be dropped.
 
  -- Harald Sitter <sitter@kde.org>  Wed, 29 Aug 2018 14:03:55 +0200
 

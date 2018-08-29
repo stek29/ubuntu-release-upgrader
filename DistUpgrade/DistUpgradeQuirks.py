@@ -127,6 +127,7 @@ class DistUpgradeQuirks(object):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.cosmicPostInitialUpdate")
+        self._test_and_fail_on_i386()
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
                 'snapd' not in cache:
@@ -282,45 +283,20 @@ class DistUpgradeQuirks(object):
             self.controller.config.set("Distro", "PostUpgradePurge",
                                        ",".join(postupgradepurge))
 
-    def _test_and_fail_on_non_i686(self):
+    def _test_and_fail_on_i386(self):
         """
-        Test and fail if the cpu is not i686 or more or if its a newer
-        CPU but does not have the cmov feature (LP: #587186)
+        Test and fail if the package architecture is i386 as we
+        may drop support for this architecture.
         """
         # check on i386 only
         if self.arch == "i386":
-            logging.debug("checking for i586 CPU")
-            if not self._cpu_is_i686_and_has_cmov():
-                logging.error("not a i686 or no cmov")
-                summary = _("No i686 CPU")
-                msg = _("Your system uses an i586 CPU or a CPU that does "
-                        "not have the 'cmov' extension. "
-                        "All packages were built with "
-                        "optimizations requiring i686 as the "
-                        "minimal architecture. It is not possible to "
-                        "upgrade your system to a new Ubuntu release "
-                        "with this hardware.")
-                self._view.error(summary, msg)
-                self.controller.abort()
-
-    def _cpu_is_i686_and_has_cmov(self, cpuinfo_path="/proc/cpuinfo"):
-        if not os.path.exists(cpuinfo_path):
-            logging.error("cannot open %s ?!?" % cpuinfo_path)
-            return True
-        with open(cpuinfo_path) as f:
-            cpuinfo = f.read()
-        # check family
-        if re.search("^cpu family\s*:\s*[345]\s*", cpuinfo, re.MULTILINE):
-            logging.debug("found cpu family [345], no i686+")
-            return False
-        # check flags for cmov
-        match = re.search("^flags\s*:\s*(.*)", cpuinfo, re.MULTILINE)
-        if match:
-            if "cmov" not in match.group(1).split():
-                logging.debug("found flags '%s'" % match.group(1))
-                logging.debug("can not find cmov in flags")
-                return False
-        return True
+            logging.error("package arch is i386")
+            summary = _("apt architecture is i386")
+            msg = _("Upgrades from 18.04 on the i386 "
+                    "architecture are not supported "
+                    "at this time.")
+            self._view.error(summary, msg)
+            self.controller.abort()
 
     def _test_and_fail_on_non_arm_v6(self):
         """

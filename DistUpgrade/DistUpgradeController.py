@@ -1955,17 +1955,26 @@ class DistUpgradeController(object):
 
         # Just upgrade libc6 first
         self.cache.clear()
-        self.cache["libc6"].mark_install()
-        self._view.setStep(Step.INSTALL)
-        self._view.updateStatus(_("Upgrading"))
-        if not self.doDistUpgrade():
-            # don't abort here, because it would restore the sources.list
-            self._view.information(_("Upgrade incomplete"),
-                                   _("The upgrade has partially completed but there "
-                                     "were errors during the upgrade "
-                                     "process."))
-            # do not abort because we are part of the way through the process
-            sys.exit(1)
+        libc6_possible = False
+        try:
+            self.cache["libc6"].mark_install()
+            libc6_possible = True
+        except SystemError as e:
+            if "pkgProblemResolver" in str(e):
+                logging.debug("Unable to mark libc6 alone for install.")
+                pass
+
+        if libc6_possible:
+            self._view.setStep(Step.INSTALL)
+            self._view.updateStatus(_("Upgrading"))
+            if not self.doDistUpgrade():
+                # don't abort here, because it would restore the sources.list
+                self._view.information(_("Upgrade incomplete"),
+                                       _("The upgrade has partially completed but there "
+                                         "were errors during the upgrade "
+                                         "process."))
+                # do not abort because we are part of the way through the process
+                sys.exit(1)
 
         # Reopen ask above
         self.openCache(restore_sources_list_on_fail=True)

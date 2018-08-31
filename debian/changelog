@@ -11,6 +11,9 @@ ubuntu-release-upgrader (1:18.10.10) UNRELEASED; urgency=medium
   [ Brian Murray ]
   * DistUpgradeQuirks.py: add a quirk which checks for an apt architecture
     of i386 and prevents the upgrade as the architecture may be dropped.
+  * DistUpgradeController.py: If the attempt to only upgrade libc6 ends up
+    creating an issue with apt's problem resolver try the full upgrade. This
+    is what would have happened before the fix for bug 1766890. (LP: #1787649)
 
  -- Harald Sitter <sitter@kde.org>  Wed, 29 Aug 2018 14:03:55 +0200
 

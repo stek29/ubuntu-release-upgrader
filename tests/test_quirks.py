@@ -167,21 +167,6 @@ class TestQuirks(unittest.TestCase):
         self.assertTrue(q._supportInModaliases("fglrx", mock_lspci_good))
         self.assertFalse(q._supportInModaliases("fglrx", mock_lspci_bad))
 
-    def test_cpu_is_i686(self):
-        q = DistUpgradeQuirks(MockController(), MockConfig)
-        q.arch = "i386"
-        testdir = CURDIR + "/test-data/"
-        self.assertTrue(
-            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-with-sse"))
-        self.assertFalse(
-            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-without-cmov"))
-        self.assertFalse(
-            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i586"))
-        self.assertFalse(
-            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-i486"))
-        self.assertTrue(
-            q._cpu_is_i686_and_has_cmov(testdir + "cpuinfo-via-c7m"))
-
     def test_screensaver_poke(self):
         # fake nothing is installed
         empty_status = tempfile.NamedTemporaryFile()

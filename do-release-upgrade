@@ -13,6 +13,7 @@ from optparse import OptionParser
 import locale
 import gettext
 
+import apt_pkg
 import os
 import subprocess
 import sys
@@ -156,6 +157,24 @@ if __name__ == "__main__":
     print(_("New release '%s' available.") % m.new_dist.version)
     print(_("Run 'do-release-upgrade' to upgrade to it."))
     sys.exit(RELEASE_AVAILABLE)
+
+  depcache = apt_pkg.DepCache(apt_pkg.Cache(None))
+  depcache.upgrade()
+  install_count = depcache.inst_count
+  if install_count > 0:
+    if not options.quiet:
+      print(_("Please install all available updates "
+              "for your release before upgrading."))
+    sys.exit(1)
+  if os.path.exists('/var/run/reboot-required.pkgs'):
+    return_code = subprocess.call(['grep', 'libc6',
+                                   '/var/run/reboot-required.pkgs'],
+                                  stdout=open(os.devnull, 'w'))
+    if return_code == 0:
+      if not options.quiet:
+        print(_("You have not rebooted after a previous libc6 "
+                "update. Please reboot before upgrading."))
+      sys.exit(1)
 
   # GTK 3 fetcher starts setting up the the GUI and KDE GUI needs to start GUI
   # later, too.

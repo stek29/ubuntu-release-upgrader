@@ -167,13 +167,16 @@ if __name__ == "__main__":
               "for your release before upgrading."))
     sys.exit(1)
   if os.path.exists('/var/run/reboot-required.pkgs'):
-    return_code = subprocess.call(['grep', 'libc6',
-                                   '/var/run/reboot-required.pkgs'],
-                                  stdout=open(os.devnull, 'w'))
-    if return_code == 0:
+    reboot = False
+    with open('/var/run/reboot-required.pkgs', 'rb') as f:
+        for line in f:
+            if line == b'libc6\n':
+                reboot = True
+                break
+    if reboot:
       if not options.quiet:
-        print(_("You have not rebooted after a previous libc6 "
-                "update. Please reboot before upgrading."))
+        print(_("You have not rebooted after updating a package which "
+                "requires a reboot. Please reboot before upgrading."))
       sys.exit(1)
 
   # GTK 3 fetcher starts setting up the the GUI and KDE GUI needs to start GUI

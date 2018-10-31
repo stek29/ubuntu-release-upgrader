@@ -359,23 +359,30 @@ class DistUpgradeController(object):
             breaks stuff in obscure ways (Ubuntu #75557).
         """
         logging.debug("_pythonSymlinkCheck run")
-        if os.path.exists('/usr/share/python/debian_defaults'):
-            config = SafeConfigParser()
-            with open('/usr/share/python/debian_defaults') as f:
-                config.readfp(f)
-            try:
-                expected_default = config.get('DEFAULT', 'default-version')
-            except NoOptionError:
-                logging.debug("no default version for python found in '%s'" % config)
-                return False
-            try:
-                fs_default_version = os.readlink('/usr/bin/python')
-            except OSError as e:
-                logging.error("os.readlink failed (%s)" % e)
-                return False
-            if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)):
-                logging.debug("python symlink points to: '%s', but expected is '%s' or '%s'" % (fs_default_version, expected_default, os.path.join('/usr/bin', expected_default)))
-                return False
+        binaries_and_dirnames = [("python", "python"), ("python2", "python"),
+                                 ("python3", "python3")]
+        for binary, dirname in binaries_and_dirnames:
+            debian_defaults = '/usr/share/%s/debian_defaults' % dirname
+            if os.path.exists(debian_defaults):
+                config = SafeConfigParser()
+                with open(debian_defaults) as f:
+                    config.readfp(f)
+                try:
+                    expected_default = config.get('DEFAULT', 'default-version')
+                except NoOptionError:
+                    logging.debug("no default version for %s found in '%s'" %
+                                  (binary, config))
+                    return False
+                try:
+                    fs_default_version = os.readlink('/usr/bin/%s' % binary)
+                except OSError as e:
+                    logging.error("os.readlink failed (%s)" % e)
+                    return False
+                if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)) \
+                        and not (binary == 'python' and fs_default_version in ('python2', '/usr/bin/python2')):
+                    logging.debug("%s symlink points to: '%s', but expected is '%s' or '%s'" %
+                                  (binary, fs_default_version, expected_default, os.path.join('/usr/bin', expected_default)))
+                    return False
         return True
 
 
@@ -413,8 +420,8 @@ class DistUpgradeController(object):
         if not self._pythonSymlinkCheck():
             logging.error("pythonSymlinkCheck() failed, aborting")
             self._view.error(_("Can not upgrade"),
-                             _("Your python install is corrupted. "
-                               "Please fix the '/usr/bin/python' symlink."))
+                             _("Your python3 install is corrupted. "
+                               "Please fix the '/usr/bin/python3' symlink."))
             sys.exit(1)
         # open cache
         try:

@@ -13,7 +13,7 @@ from optparse import OptionParser
 import locale
 import gettext
 
-import apt_pkg
+import apt
 import os
 import subprocess
 import sys
@@ -158,9 +158,18 @@ if __name__ == "__main__":
     print(_("Run 'do-release-upgrade' to upgrade to it."))
     sys.exit(RELEASE_AVAILABLE)
 
-  depcache = apt_pkg.DepCache(apt_pkg.Cache(None))
-  depcache.upgrade()
-  install_count = depcache.inst_count
+  cache = apt.Cache()
+  cache.open()
+  install_count = 0
+  upgradable = [pkg for pkg in cache if pkg.is_upgradable]
+  for pkg in upgradable:
+    if 'Phased-Update-Percentage' in pkg.candidate.record:
+      # P-U-P does not exist if it is fully phased
+      continue
+    else:
+      install_count += 1
+      # one upgradeable package is enough to stop the dist-upgrade
+      break
   if install_count > 0:
     if not options.quiet:
       print(_("Please install all available updates "

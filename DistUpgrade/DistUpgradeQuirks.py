@@ -32,16 +32,6 @@ from subprocess import PIPE, Popen
 from .utils import get_arch
 
 from .DistUpgradeGettext import gettext as _
-try:
-    from janitor.plugincore.manager import PluginManager
-except ImportError:
-    # janitor is not available, so create a no-op plugin manager.
-    class PluginManager(object):
-        def __init__(self, *args, **kws):
-            pass
-
-        def get_plugins(self, *args, **kws):
-            return []
 
 
 class DistUpgradeQuirks(object):
@@ -58,7 +48,6 @@ class DistUpgradeQuirks(object):
         self.uname = Popen(["uname", "-r"], stdout=PIPE,
                            universal_newlines=True).communicate()[0].strip()
         self.arch = get_arch()
-        self.plugin_manager = PluginManager(self.controller, ["./plugins"])
         self._poke = None
 
     # the quirk function have the name:
@@ -86,15 +75,6 @@ class DistUpgradeQuirks(object):
             return
         to_release = self.config.get("Sources", "To")
         from_release = self.config.get("Sources", "From")
-        # first check for matching plugins
-        for condition in [
-                quirksName,
-                "%s%s" % (to_release, quirksName),
-                "from_%s%s" % (from_release, quirksName)
-        ]:
-            for plugin in self.plugin_manager.get_plugins(condition):
-                logging.debug("running quirks plugin %s" % plugin)
-                plugin.do_cleanup_cruft()
 
         # run the handler that is common to all dists
         funcname = "%s" % quirksName

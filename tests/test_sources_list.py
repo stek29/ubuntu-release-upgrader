@@ -505,8 +505,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
     def test_private_ppa_transition(self):
-        if "RELEASE_UPRADER_ALLOW_THIRD_PARTY" in os.environ:
-            del os.environ["RELEASE_UPRADER_ALLOW_THIRD_PARTY"]
+        if "RELEASE_UPGRADER_ALLOW_THIRD_PARTY" in os.environ:
+            del os.environ["RELEASE_UPGRADER_ALLOW_THIRD_PARTY"]
         shutil.copy(
             os.path.join(self.testdir,
                          "sources.list.commercial-ppa-uploaders"),

@@ -1149,7 +1149,7 @@ class MyCache(apt.Cache):
                          + (kernel_count + 1) * INITRD_SIZE)
 
         # we check for various sizes:
-        # archivedir is were we download the debs
+        # archivedir is where we download the debs
         # /usr is assumed to get *all* of the install space (incorrect,
         #      but as good as we can do currently + safety buffer
         # /     has a small safety buffer as well
@@ -1175,8 +1175,8 @@ class MyCache(apt.Cache):
 
         # sum up space requirements
         for (dir, size) in [(archivedir, self.required_download),
-                            # plus 50M safety buffer in /usr
                             ("/usr", self.additional_required_space),
+                            # plus 50M safety buffer in /usr
                             ("/usr", 50*1024*1024),
                             ("/boot", space_in_boot),
                             ("/tmp", 5*1024*1024),   # /tmp for dkms LP: #427035
@@ -1185,6 +1185,9 @@ class MyCache(apt.Cache):
                             # if snapshots are in use
                             ("/usr", required_for_snapshots),
                            ]:
+            # we are ensuring we have more than enough free space not less
+            if size < 0:
+                continue
             dir = os.path.realpath(dir)
             logging.debug("dir '%s' needs '%s' of '%s' (%f)" % (dir, size, fs_free[dir], fs_free[dir].free))
             fs_free[dir].free -= size

@@ -680,8 +680,16 @@ class DistUpgradeController(object):
                     foundToDist |= validTo
                 elif entry.dist in fromDists:
                     foundToDist |= validTo
-                    entry.dist = toDists[fromDists.index(entry.dist)]
-                    logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
+                    # check to see whether the archive provides the new dist
+                    test_entry = copy.copy(entry)
+                    test_entry.dist = self.toDist
+                    if not self._sourcesListEntryDownloadable(test_entry):
+                        entry.disabled = True
+                        self.sources_disabled = True
+                        logging.debug("entry '%s' was disabled (no Release file)" % get_string_with_no_auth_from_source_entry(entry))
+                    else:
+                        entry.dist = toDists[fromDists.index(entry.dist)]
+                        logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
                 elif entry.type == 'deb-src':
                     continue
                 elif validMirror:
@@ -1486,7 +1494,7 @@ class DistUpgradeController(object):
                 self._view.getTerminal().call([script], hidden=True)
             except Exception as e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
-        
+
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
         logging.debug("abort called")
@@ -1518,7 +1526,7 @@ class DistUpgradeController(object):
                     return True
         logging.error("depends '%s' is not satisfied" % depstr)
         return False
-                
+
     def checkViewDepends(self):
         " check if depends are satisfied "
         logging.debug("checkViewDepends()")
@@ -1537,7 +1545,7 @@ class DistUpgradeController(object):
                                  _("The required dependency '%s' is not "
                                    "installed. " % dep))
                 sys.exit(1)
-        return res 
+        return res
 
     def _verifyBackports(self):
         # run update (but ignore errors in case the countrymirror

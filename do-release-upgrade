@@ -103,6 +103,11 @@ if __name__ == "__main__":
                      help=_("Check only if a new distribution release is "
                             "available and report the result via the "
                             "exit code"))
+  parser.add_option ("--allow-third-party", default=False,
+                     action="store_true", dest="allow_third_party",
+                     help=_("Try the upgrade with third party "
+                            "mirrors and repositories enabled "
+                            "instead of commenting them out."))
   parser.add_option ("-q", "--quiet", default=False, action="store_true",
                      dest="quiet")
 
@@ -195,12 +200,19 @@ if __name__ == "__main__":
                 "requires a reboot. Please reboot before upgrading."))
       sys.exit(1)
 
+  if options.allow_third_party:
+    # the env variable is used by code in the dist-upgrader tarball
+    os.environ["RELEASE_UPGRADER_ALLOW_THIRD_PARTY"] = "True"
+
   # GTK 3 fetcher starts setting up the the GUI and KDE GUI needs to start GUI
   # later, too.
   if (options.frontend in {"DistUpgradeViewGtk3", "DistUpgradeViewKDE"} and
       os.getuid() != 0):
     if 'WAYLAND_DISPLAY' in os.environ:
         subprocess.run(['xhost', '+si:localuser:root'])
+    # this is needed because pkexec doesn't pass on the env
+    if 'RELEASE_UPGRADER_ALLOW_THIRD_PARTY' in os.environ:
+        sys.argv.append('--allow-third-party')
     os.execv("/usr/bin/pkexec", ["pkexec"] + sys.argv)
 
   fetcher = get_fetcher(options.frontend, m.new_dist, options.data_dir)

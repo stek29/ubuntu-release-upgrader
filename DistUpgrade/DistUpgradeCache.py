@@ -691,6 +691,9 @@ class MyCache(apt.Cache):
             else:
                 details += _("If none of this applies, then please report this bug using "
                              "the command 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal.")
+                details += _("If you want to investigate this yourself the log files in "
+                             "'/var/log/dist-upgrade' will contain details about the upgrade. "
+                             "Specifically, look at 'main.log' and 'apt.log'.")
             # make the error text available again on stdout for the
             # text frontend
             self._stopAptResolverLog()

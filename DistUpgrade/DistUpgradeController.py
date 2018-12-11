@@ -131,6 +131,11 @@ class DistUpgradeController(object):
         # ConfigParser deals only with strings it seems *sigh*
         self.config.add_section("Options")
         self.config.set("Options","withNetwork", str(self.useNetwork))
+        if self.options:
+            if self.options.devel_release:
+                self.config.set("Options","devRelease", "True")
+            else:
+                self.config.set("Options","devRelease", "False")
 
         # some constants here
         self.fromDist = self.config.get("Sources","From")
@@ -535,6 +540,7 @@ class DistUpgradeController(object):
                         distro.get_sources(self.sources)
                         distro.enable_component("main")
                         main_was_missing = True
+                        logging.debug('get_distro().enable_component("main") succeeded')
                     except NoDistroTemplateException as e:
                         logging.exception('NoDistroTemplateException raised: %s' % e)
                         # fallback if everything else does not work,
@@ -680,8 +686,16 @@ class DistUpgradeController(object):
                     foundToDist |= validTo
                 elif entry.dist in fromDists:
                     foundToDist |= validTo
-                    entry.dist = toDists[fromDists.index(entry.dist)]
-                    logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
+                    # check to see whether the archive provides the new dist
+                    test_entry = copy.copy(entry)
+                    test_entry.dist = self.toDist
+                    if not self._sourcesListEntryDownloadable(test_entry):
+                        entry.disabled = True
+                        self.sources_disabled = True
+                        logging.debug("entry '%s' was disabled (no Release file)" % get_string_with_no_auth_from_source_entry(entry))
+                    else:
+                        entry.dist = toDists[fromDists.index(entry.dist)]
+                        logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
                 elif entry.type == 'deb-src':
                     continue
                 elif validMirror:
@@ -933,6 +947,12 @@ class DistUpgradeController(object):
         # compare the list after the update again
         self.obsolete_pkgs = self.cache._getObsoletesPkgs()
         self.foreign_pkgs = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
+        # If a PPA has already been disabled the pkgs won't be considered
+        # foreign
+        if len(self.foreign_pkgs) > 0:
+            self.config.set("Options","foreignPkgs", "True")
+        else:
+            self.config.set("Options","foreignPkgs", "False")
         if self.serverMode:
             self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(sorted(self.foreign_pkgs)))
@@ -1486,7 +1506,7 @@ class DistUpgradeController(object):
                 self._view.getTerminal().call([script], hidden=True)
             except Exception as e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
-        
+
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """
         logging.debug("abort called")
@@ -1518,7 +1538,7 @@ class DistUpgradeController(object):
                     return True
         logging.error("depends '%s' is not satisfied" % depstr)
         return False
-                
+
     def checkViewDepends(self):
         " check if depends are satisfied "
         logging.debug("checkViewDepends()")
@@ -1537,7 +1557,7 @@ class DistUpgradeController(object):
                                  _("The required dependency '%s' is not "
                                    "installed. " % dep))
                 sys.exit(1)
-        return res 
+        return res
 
     def _verifyBackports(self):
         # run update (but ignore errors in case the countrymirror

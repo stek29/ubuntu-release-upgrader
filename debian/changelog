@@ -4,6 +4,21 @@ ubuntu-release-upgrader (1:19.04.7) UNRELEASED; urgency=medium
   * DistUpgrade/DistUpgradeCache.py: When calculating free space needed for
     mount points don't use a negative number as the buffer. (LP: #1786484)
   * fix more typos re RELEASE_UPRADER_ALLOW_THIRD_PARTY
+  * DistUpgrade/DistUpgradeCache.py: When calculating free space needed for
+    mount points don't use a negative number as the buffer. (LP: #1786484)
+  * fix more typos re RELEASE_UPRADER_ALLOW_THIRD_PARTY
+  * DistUpgrade/DistUpgradeController.py: When rewriting sources.list entries
+    check to see if the source provides packages for the release to which the
+    upgrade is occurring. If it doesn't the entry is disabled thereby
+    improving upgrades with PPAs. (LP: #1807043)
+  * do-release-upgrade: add a parameter to allow third party mirrors and
+    repositories, additionally pass along the environmental variable
+    RELEASE_UPGRADER_ALLOW_THIRD_PARTY via pkexec and sudo. (LP: #1807032)
+  * DistUpgrade/DistUpgradeCache.py: improve messaging regarding failures to
+    calculate the upgrade and suggest using ppa-purge if PPAs are an issue.
+  * DistUpgrade/DistUpgradeCache.py: in the event there is a failure to
+    calculate the upgrade provide information about the log files in
+    /var/log/dist-upgrade. (LP: #1771387)
 
   [ Jeremy Bicha ]
   * autopkgtest: Update dependency from gir1.2-webkit-3.0 to gir1.2-webkit2-4.0

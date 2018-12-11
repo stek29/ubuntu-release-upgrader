@@ -666,14 +666,23 @@ class MyCache(apt.Cache):
             # rationale why it doesn't
             lock.release()
             t.join()
-            # FIXME: change the text to something more useful
+            # the most likely problem is the 3rd party pkgs so don't address
+            # foreignPkgs and devRelease being True
             details =  _("An unresolvable problem occurred while "
-                         "calculating the upgrade.\n\n "
-                         "This can be caused by:\n"
-                         " * Upgrading to a pre-release version of Ubuntu\n"
-                         " * Running the current pre-release version of Ubuntu\n"
-                         " * Unofficial software packages not provided by Ubuntu\n"
-                         "\n")
+                         "calculating the upgrade.\n\n ")
+            if self.config.get("Options", "foreignPkgs") == "True":
+                details += _("This was likely caused by:\n"
+                             " * Unofficial software packages not provided by Ubuntu\n"
+                             "Please use the tool 'ppa-purge' from the ppa-purge \n"
+                             "package to remove third party software and try the \n"
+                             "upgrade again.\n"
+                             "\n")
+            elif self.config.get("Options", "foreignPkgs") == "False" and \
+                self.config.get("Options", "devRelease") == "True":
+                details +=  _("This was caused by:\n"
+                              " * Upgrading to a pre-release version of Ubuntu\n"
+                              "This is most likely a transient problem, \n"
+                              "please try again later.\n")
             # we never have partialUpgrades (including removes) on a stable system
             # with only ubuntu sources so we do not recommend reporting a bug
             if partialUpgrade:

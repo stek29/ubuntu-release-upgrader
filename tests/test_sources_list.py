@@ -92,8 +92,9 @@ deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 """)
 
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
-    def test_sources_list_rewrite(self, mock_get_distro):
+    def test_sources_list_rewrite(self, mock_get_distro, mock_sourcesListEntryDownloadable):
         """
         test regular sources.list rewrite
         """
@@ -107,8 +108,10 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
         self.assertTrue(mock_get_distro.called)
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # now test the result
@@ -127,7 +130,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".in",
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
              ]))
-             
+
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController.abort")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_double_check_source_distribution_reject(self, mock_abort, mock_get_distro):
@@ -145,10 +148,10 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
-        
+
         class AbortException(Exception):
             """Exception"""
-                
+
         mock_abort.side_effect = AbortException
         d.openCache(lock=False)
         with self.assertRaises(AbortException):
@@ -157,8 +160,9 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         self.assertTrue(mock_get_distro.called)
         self.assertTrue(v.askYesNoQuestion.called)
 
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
-    def test_double_check_source_distribution_continue(self, mock_get_distro):
+    def test_double_check_source_distribution_continue(self, mock_get_distro, mock_sourcesListEntryDownloadable):
         """
         test that an upgrade from feisty with a sources.list containing
         hardy asks a question, and if continued, does something.
@@ -174,13 +178,15 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
         self.assertTrue(mock_get_distro.called)
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # now test the result
         #print(open(os.path.join(self.testdir,"sources.list")).read())
-        
+
         # The result here is not really all that helpful, hence we
         # added the question in the first place. But still better to
         # check what it does than to not check it.
@@ -195,6 +201,7 @@ deb-src http://uk.archive.ubuntu.com/ubuntu/ hardy main restricted multiverse
 # deb http://security.ubuntu.com/ubuntu/ hardy-security universe
 
 deb http://archive.ubuntu.com/ubuntu/ gutsy main
+
 """)
         # check that the backup file was created correctly
         self.assertEqual(0, subprocess.call(
@@ -203,8 +210,9 @@ deb http://archive.ubuntu.com/ubuntu/ gutsy main
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
              ]))
 
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
-    def test_sources_list_inactive_mirror(self, mock_get_distro):
+    def test_sources_list_inactive_mirror(self, mock_get_distro, mock_sourcesListEntryDownloadable):
         """
         test sources.list rewrite of an obsolete mirror
         """
@@ -218,8 +226,10 @@ deb http://archive.ubuntu.com/ubuntu/ gutsy main
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
         self.assertTrue(mock_get_distro.called)
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # now test the result
@@ -311,8 +321,9 @@ deb http://security.ubuntu.com/ubuntu gutsy-security main restricted # auto gene
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
-    def test_extras_removal(self, mock_get_distro):
+    def test_extras_removal(self, mock_get_distro, mock_sourcesListEntryDownloadable):
         """
         test removal of extras.ubuntu.com archives
         """
@@ -328,7 +339,9 @@ deb http://archive.canonical.com/ubuntu gutsy partner
                                                           "Ubuntu Feisty Fawn",
                                                           "7.04")
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
@@ -338,7 +351,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 
 """)
 
-    def test_powerpc_transition(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_powerpc_transition(self, mock_sourcesListEntryDownloadable):
         """
         test transition of powerpc to ports.ubuntu.com
         """
@@ -351,7 +365,9 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
         # now test the result
         self._verifySources("""
@@ -362,7 +378,8 @@ deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted univers
 """)
         apt_pkg.config.set("APT::Architecture", arch)
 
-    def test_sparc_transition(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_sparc_transition(self, mock_sourcesListEntryDownloadable):
         """
         test transition of sparc to ports.ubuntu.com
         """
@@ -377,7 +394,9 @@ deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted univers
         d.fromDist = "gutsy"
         d.toDist = "hardy"
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
         # now test the result
         self._verifySources("""
@@ -480,7 +499,8 @@ deb-src http://archive.ubuntu.com/ubuntu precise main restricted multiverse
 deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 """)
 
-    def test_partner_update(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_partner_update(self, mock_sourcesListEntryDownloadable):
         """
         test transition partner repository updates
         """
@@ -491,7 +511,9 @@ deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe m
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # now test the result
@@ -504,7 +526,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe m
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
-    def test_private_ppa_transition(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_private_ppa_transition(self, mock_sourcesListEntryDownloadable):
         if "RELEASE_UPGRADER_ALLOW_THIRD_PARTY" in os.environ:
             del os.environ["RELEASE_UPGRADER_ALLOW_THIRD_PARTY"]
         shutil.copy(
@@ -516,7 +539,9 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # now test the result
@@ -533,7 +558,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe m
 deb https://user:pass@private-ppa.launchpad.net/commercial-ppa-uploaders gutsy main
 """)
 
-    def test_apt_cacher_and_apt_bittorent(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_apt_cacher_and_apt_bittorent(self, mock_sourcesListEntryDownloadable):
         """
         test transition of apt-cacher/apt-torrent uris
         """
@@ -544,7 +570,9 @@ deb https://user:pass@private-ppa.launchpad.net/commercial-ppa-uploaders gutsy m
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # now test the result
@@ -593,7 +621,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 # deb http://ppa.launchpad.net/random-ppa quantal main # ppa of Víctor R. Ruiz (vrruiz) disabled on upgrade to gutsy
 """)
 
-    def test_local_mirror(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_local_mirror(self, mock_sourcesListEntryDownloadable):
         """
         test that a local mirror with official -backports works (LP:# 1067393)
         """
@@ -603,7 +632,9 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         # verify it
@@ -614,7 +645,8 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe multiverse
 """)
 
-    def test_disable_proposed(self):
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    def test_disable_proposed(self, mock_sourcesListEntryDownloadable):
         """
         Test that proposed is disabled when upgrading to a development
         release.
@@ -628,7 +660,9 @@ deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe mu
         options.devel_release = True
         d = DistUpgradeController(v, options, datadir=self.testdir)
         d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = True
         res = d.updateSourcesList()
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
         self._verifySources("""

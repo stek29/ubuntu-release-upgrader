@@ -131,6 +131,11 @@ class DistUpgradeController(object):
         # ConfigParser deals only with strings it seems *sigh*
         self.config.add_section("Options")
         self.config.set("Options","withNetwork", str(self.useNetwork))
+        if self.options:
+            if self.options.devel_release:
+                self.config.set("Options","devRelease", "True")
+            else:
+                self.config.set("Options","devRelease", "False")
 
         # some constants here
         self.fromDist = self.config.get("Sources","From")
@@ -535,6 +540,7 @@ class DistUpgradeController(object):
                         distro.get_sources(self.sources)
                         distro.enable_component("main")
                         main_was_missing = True
+                        logging.debug('get_distro().enable_component("main") succeeded')
                     except NoDistroTemplateException as e:
                         logging.exception('NoDistroTemplateException raised: %s' % e)
                         # fallback if everything else does not work,
@@ -941,6 +947,12 @@ class DistUpgradeController(object):
         # compare the list after the update again
         self.obsolete_pkgs = self.cache._getObsoletesPkgs()
         self.foreign_pkgs = self.cache._getForeignPkgs(self.origin, self.fromDist, self.toDist)
+        # If a PPA has already been disabled the pkgs won't be considered
+        # foreign
+        if len(self.foreign_pkgs) > 0:
+            self.config.set("Options","foreignPkgs", "True")
+        else:
+            self.config.set("Options","foreignPkgs", "False")
         if self.serverMode:
             self.tasks = self.cache.installedTasks
         logging.debug("Foreign: %s" % " ".join(sorted(self.foreign_pkgs)))

@@ -674,8 +674,8 @@ class MyCache(apt.Cache):
                 details += _("This was likely caused by:\n"
                              " * Unofficial software packages not provided by Ubuntu\n"
                              "Please use the tool 'ppa-purge' from the ppa-purge \n"
-                             "package to remove third party software and try the \n"
-                             "upgrade again.\n"
+                             "package to remove software from a Launchpad PPA and \n"
+                             "try the upgrade again.\n"
                              "\n")
             elif self.config.get("Options", "foreignPkgs") == "False" and \
                 self.config.get("Options", "devRelease") == "True":

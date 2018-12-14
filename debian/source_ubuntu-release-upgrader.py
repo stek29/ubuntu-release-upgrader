@@ -38,6 +38,8 @@ def add_info(report, ui):
         'VarLogDistupgradeMainlog')
     attach_file_if_exists(report, '/var/log/dist-upgrade/term.log',
         'VarLogDistupgradeTermlog')
+    attach_file_if_exists(report, '/var/log/dist-upgrade/xorg_fixup.log',
+        'VarLogDistupgradeXorgFixuplog')
     attach_file_if_exists(report, '/var/log/dist-upgrade/screenlog.0',
         'VarLogDistupgradeScreenlog')
     attach_root_command_outputs(

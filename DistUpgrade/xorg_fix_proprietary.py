@@ -107,7 +107,8 @@ if __name__ == "__main__":
     try:
         mods = [l.split()[0] for l in open('/proc/modules')]
     except IOError:
-        return None
+        logging.info("Can't read /proc/modules")
+        sys.exit(0)
     for m in mods:
         if m == 'nvidia':
             nvidia = True

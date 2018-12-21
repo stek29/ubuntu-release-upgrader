@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # this script will examine /etc/xorg/xorg.conf and
 # transition from broken proprietary drivers to the free ones

@@ -690,7 +690,7 @@ class MyCache(apt.Cache):
                              "please try again later.")
             else:
                 details += _("If none of this applies, then please report this bug using "
-                             "the command 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal.")
+                             "the command 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. ")
                 details += _("If you want to investigate this yourself the log files in "
                              "'/var/log/dist-upgrade' will contain details about the upgrade. "
                              "Specifically, look at 'main.log' and 'apt.log'.")

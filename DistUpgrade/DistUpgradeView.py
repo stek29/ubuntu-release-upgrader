@@ -417,6 +417,9 @@ class DistUpgradeView(object):
     def askYesNoQuestion(self, summary, msg, default='No'):
         " ask a Yes/No question and return True on 'Yes' "
         pass
+    def askCancelContinueQuestion(self, summary, msg, default='Cancel'):
+        " ask a Cancel/Continue question and return True on 'Continue'"
+        pass
     def confirmRestart(self):
         " generic ask about the restart, can be overridden "
         summary = _("Reboot required")

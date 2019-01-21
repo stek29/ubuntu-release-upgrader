@@ -22,6 +22,7 @@
 
 import apt
 import apt_pkg
+import distro_info
 import sys
 import os
 import subprocess
@@ -1151,6 +1152,23 @@ class DistUpgradeController(object):
                                         self.cache.required_download)
         return res
 
+    def _isLivepatchEnabled(self):
+        return os.path.isfile('/var/snap/canonical-livepatch/common/machine-token')
+
+    def askLivepatch(self):
+        di = distro_info.UbuntuDistroInfo()
+
+        if not self._isLivepatchEnabled() or di.is_lts(self.toDist):
+            return True
+
+        version = next((r.version for r in di.get_all("object") if r.series == self.toDist), self.toDist)
+
+        res = self._view.askCancelContinueQuestion(None,
+            _("Livepatch security updates are not available for Ubuntu %s. "
+              "If you upgrade, Livepatch will turn off.") % version)
+        return res
+
+
     def _disableAptCronJob(self):
         if os.path.exists("/etc/cron.daily/apt"):
             #self._aptCronJobPerms = os.stat("/etc/cron.daily/apt")[ST_MODE]
@@ -1873,6 +1891,9 @@ class DistUpgradeController(object):
                     logging.error("Missing apport-bug, bug report not "
                                   "autocreated")
                 self.abort()
+
+        if not self.askLivepatch():
+            self.abort()
 
         # run a "apt-get update" now, its ok to ignore errors, 
         # because 

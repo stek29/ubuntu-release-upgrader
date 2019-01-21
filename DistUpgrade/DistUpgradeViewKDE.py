@@ -929,6 +929,26 @@ class DistUpgradeViewKDE(DistUpgradeView):
             return True
         return False
 
+    def askCancelContinueQuestion(self, summary, msg, default='Cancel'):
+        messageBox = QMessageBox(QMessageBox.Warning, summary, msg, QMessageBox.NoButton, self.window_main)
+        continueButton = messageBox.addButton(QMessageBox.Apply)
+        cancelButton = messageBox.addButton(QMessageBox.Cancel)
+        continueButton.setText(_("Continue"))
+
+        if default == 'Cancel':
+            messageBox.setDefaultButton(cancelButton)
+        else:
+            messageBox.setDefaultButton(continueButton)
+
+        if summary is None:
+            flags = messageBox.windowFlags()
+            messageBox.setWindowFlags(flags | Qt.FramelessWindowHint)
+
+        answer = messageBox.exec_()
+        if answer == QMessageBox.Apply:
+            return True
+        return False
+
     def confirmRestart(self):
         messageBox = QMessageBox(QMessageBox.Question, _("Restart required"), _("<b><big>Restart the system to complete the upgrade</big></b>"), QMessageBox.NoButton, self.window_main)
         yesButton = messageBox.addButton(QMessageBox.Yes)

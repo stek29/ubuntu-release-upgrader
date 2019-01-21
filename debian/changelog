@@ -1,3 +1,19 @@
+ubuntu-release-upgrader (1:19.04.9) UNRELEASED; urgency=medium
+
+  * DistUpgrade/DistUpgradeView.py,
+    DistUpgrade/DistUpgradeViewGtk3.py,
+    DistUpgrade/DistUpgradeViewKDE.py,
+    DistUpgrade/DistUpgradeViewNonInteractive.py,
+    DistUpgrade/DistUpgradeViewText.py:
+    - add askCancelContinueQuestion for all the supported views.
+  * DistUpgrade/DistUpgradeController.py: Ask for confirmation if Livepatch
+    is turned on, and you are upgrading to a version where Livepatch is not
+    available. (LP: #1799310)
+  * debian/control: add an explicit python3-distro-info dependency to
+    python3-distupgrade as it is now required by DistUpgradeController.
+
+ -- Andrea Azzarone <andrea.azzarone@canonical.com>  Thu, 17 Jan 2019 04:16:29 -0800
+
 ubuntu-release-upgrader (1:19.04.9) disco; urgency=medium
 
   * DistUpgrade/xorg_fix_proprietary.py: shebang needs to use python3 not

@@ -254,7 +254,8 @@ class DistUpgradeViewText(DistUpgradeView):
 
     def askYesNoQuestion(self, summary, msg, default='No'):
       print()
-      print(twrap(summary))
+      if summary:
+        print(twrap(summary))
       print(twrap(msg))
       if default == 'No':
           print(_("Continue [yN] "), end="")
@@ -270,6 +271,10 @@ class DistUpgradeViewText(DistUpgradeView):
           if res.strip().lower().startswith(_("n")):
               return False
           return True
+
+    def askCancelContinueQuestion(self, summary, msg, default='Cancel'):
+      return self.askYesNoQuestion(summary, msg,
+        default='No' if default == 'Cancel' else 'Yes')
 
 # FIXME: when we need this most the resolver is writing debug logs
 #        and we redirect stdout/stderr    

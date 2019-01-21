@@ -305,6 +305,8 @@ class DistUpgradeViewNonInteractive(DistUpgradeView):
         #if default.lower() == "no":
         #    return False
         return True
+    def askCancelContinueQuestion(self, summary, msg, default='Cancel'):
+        return True
     def confirmRestart(self):
         " generic ask about the restart, can be overridden "
         logging.debug("confirmRestart() called")

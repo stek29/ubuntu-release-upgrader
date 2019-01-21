@@ -756,6 +756,30 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
             return True
         return False
 
+    def askCancelContinueQuestion(self, summary, msg, default='Cancel'):
+        if summary:
+            msg = "<big><b>%s</b></big>\n\n%s" % (summary,msg)
+
+        dialog = Gtk.MessageDialog(parent=self.window_main,
+                                   flags=Gtk.DialogFlags.MODAL,
+                                   type=Gtk.MessageType.WARNING,
+                                   buttons=Gtk.ButtonsType.NONE)
+        dialog.set_title("")
+        dialog.set_markup(msg)
+        dialog.add_buttons(_('Cancel'), Gtk.ResponseType.CANCEL,
+                           _('Continue'), Gtk.ResponseType.ACCEPT)
+
+        if default == 'Cancel':
+            dialog.set_default_response(Gtk.ResponseType.CANCEL)
+        else:
+            dialog.set_default_response(Gtk.ResponseType.ACCEPT)
+
+        res = dialog.run()
+        dialog.destroy()
+        if res == Gtk.ResponseType.ACCEPT:
+            return True
+        return False
+
     def confirmRestart(self):
         self.dialog_restart.set_transient_for(self.window_main)
         self.dialog_restart.set_title("")

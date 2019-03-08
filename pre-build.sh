@@ -8,6 +8,15 @@ export LANG='C.UTF-8'
 dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python3-feedparser,
 			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose, pep8, python3-distutils-extra, python3-update-manager'
 
+# run the test-suite
+# echo "Running integrated tests"
+xvfb-run nosetests3
+
+# test leftovers
+# echo "Cleaning up after tests"
+rm -f ./tests/data-sources-list-test/apt.log
+rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
+
 # update demotions
 # echo "Running demotions"
 (cd utils && ./demotions.py cosmic disco > demoted.cfg)
@@ -52,15 +61,6 @@ DEBRELEASE=$(LC_ALL=C dpkg-parsechangelog | sed -n -e '/^Distribution:/s/^Distri
 rm -rf utils/apt/lists utils/apt/*.bin
 # echo "Running update mirrors"
 (cd utils && ./update_mirrors.py ../data/mirrors.cfg)
-
-# run the test-suite
-# echo "Running integrated tests"
-xvfb-run nosetests3
-
-# test leftovers
-# echo "Cleaning up after tests"
-rm -f ./tests/data-sources-list-test/apt.log
-rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)

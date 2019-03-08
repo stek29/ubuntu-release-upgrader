@@ -744,7 +744,7 @@ class MyCache(apt.Cache):
             if b:
                 logging.warning("AllowUnauthenticated set!")
                 return True
-        except configparser.NoOptionError as e:
+        except configparser.NoOptionError:
             pass
         if len(downgrade) > 0:
             downgrade.sort()
@@ -966,7 +966,7 @@ class MyCache(apt.Cache):
         # check if we want to purge
         try:
             purge = self.config.getboolean("Distro", "PurgeObsoletes")
-        except configparser.NoOptionError as e:
+        except configparser.NoOptionError:
             purge = False
 
         # this is a delete candidate, only actually delete,

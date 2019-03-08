@@ -26,7 +26,7 @@ try:
     gi.require_version("Vte", "2.91")
     from gi.repository import Vte
     vte291 = True
-except Exception as e:
+except Exception:
     gi.require_version("Vte", "2.90")
     # COMPAT: Dear upstream, this compat code below will be duplicated in
     #         all python-vte using applications. Love, Michael

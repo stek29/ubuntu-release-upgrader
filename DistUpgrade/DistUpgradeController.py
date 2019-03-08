@@ -1153,7 +1153,8 @@ class DistUpgradeController(object):
         return res
 
     def _isLivepatchEnabled(self):
-        return os.path.isfile('/var/snap/canonical-livepatch/common/machine-token')
+        di = distro_info.UbuntuDistroInfo()
+        return di.is_lts(self.fromDist) and os.path.isfile('/var/snap/canonical-livepatch/common/machine-token')
 
     def askLivepatch(self):
         di = distro_info.UbuntuDistroInfo()
@@ -1768,7 +1769,7 @@ class DistUpgradeController(object):
         self._addPreRequistsSourcesList(prereq_template, outfile) 
         try:
             self._verifyBackports()
-        except NoBackportsFoundException as e:
+        except NoBackportsFoundException:
             self._addPreRequistsSourcesList(prereq_template, outfile, dumb=True) 
             try:
                 self._verifyBackports()

@@ -57,11 +57,11 @@ from .DistUpgradeAptCdrom import AptCdrom
 # want the local version of distinfo.py from oneiric, but because of
 # a bug in python-apt we will get the natty version that does not
 # know about "Component.parent_component" leading to a crash
-from . import distinfo
-from . import sourceslist
+from aptsources import distinfo
+from aptsources import sourceslist
 sourceslist.DistInfo = distinfo.DistInfo
 
-from .sourceslist import SourcesList, is_mirror
+from aptsources.sourceslist import SourcesList, is_mirror
 from .distro import get_distro, NoDistroTemplateException
 
 from .DistUpgradeGettext import gettext as _

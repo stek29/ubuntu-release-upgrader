@@ -44,3 +44,10 @@ override_dh_auto_install:
 	set -ex; for python in $(PY3); do \
 		LANG=C.UTF-8 LC_ALL=C.UTF-8 $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
 	done
+
+override_dh_python3:
+	mkdir -p debian/ubuntu-release-upgrader-gtk/usr/bin
+	cp ./debian/ubuntu-release-upgrader-gtk/usr/lib/ubuntu-release-upgrader/check-new-release-gtk debian/ubuntu-release-upgrader-gtk/usr/bin
+	dh_python3
+	rm ./debian/ubuntu-release-upgrader-gtk/usr/bin/check-new-release-gtk
+	rmdir debian/ubuntu-release-upgrader-gtk/usr/bin

@@ -131,6 +131,39 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
              ]))
 
+    @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
+    @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
+    def test_sources_list_rewrite(self, mock_get_distro, mock_sourcesListEntryDownloadable):
+        """
+        test sources.list rewrite no network
+        """
+        shutil.copy(os.path.join(self.testdir, "sources.list.in"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.config.set("Distro", "BaseMetaPkgs", "ubuntu-minimal")
+        mock_get_distro.return_value = UbuntuDistribution("Ubuntu", "feisty",
+                                                          "Ubuntu Feisty Fawn",
+                                                          "7.04")
+        d.openCache(lock=False)
+        mock_sourcesListEntryDownloadable.return_value = False
+        res = d.updateSourcesList()
+        self.assertTrue(mock_get_distro.called)
+        self.assertTrue(mock_sourcesListEntryDownloadable.called)
+        self.assertTrue(res)
+
+        # now test the result
+        #print(open(os.path.join(self.testdir,"sources.list")).read())
+        self._verifySources("""
+# main repo
+# deb http://archive.ubuntu.com/ubuntu/ feisty main restricted multiverse universe
+# deb http://de.archive.ubuntu.com/ubuntu/ feisty main restricted multiverse
+# deb-src http://archive.ubuntu.com/ubuntu/ feisty main restricted multiverse
+# deb http://security.ubuntu.com/ubuntu/ feisty-security main restricted
+# deb http://security.ubuntu.com/ubuntu/ feisty-security universe
+""")
+
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController.abort")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_double_check_source_distribution_reject(self, mock_abort, mock_get_distro):
@@ -424,8 +457,6 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted univers
 
     def testEOL2EOLUpgrades(self):
         " test upgrade from EOL release to EOL release "
-        v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeController(v, datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir, "sources.list.EOL"),
                     os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("Dir::Etc::sourceparts",
@@ -454,8 +485,6 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted univers
         # data center, unlike most mirrors.  This lets this test pass when
         # when run in their Jenkins test environment.
         os.environ["LANG"] = "en_US.UTF-8"
-        v = DistUpgradeViewNonInteractive()
-        d = DistUpgradeController(v, datadir=self.testdir)
         shutil.copy(os.path.join(self.testdir, "sources.list.EOL2Supported"),
                     os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("Dir::Etc::sourceparts",
@@ -624,7 +653,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     def test_local_mirror(self, mock_sourcesListEntryDownloadable):
         """
-        test that a local mirror with official -backports works (LP:# 1067393)
+        test that a local mirror with official -backports works (LP: #1067393)
         """
         shutil.copy(os.path.join(self.testdir, "sources.list.local"),
                     os.path.join(self.testdir, "sources.list"))

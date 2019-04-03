@@ -592,7 +592,7 @@ class DistUpgradeController(object):
         self.found_components = {}
         entry_uri_test_results = {}
         for entry in self.sources.list[:]:
-            if not entry.uri in entry_uri_test_results:
+            if entry.uri not in entry_uri_test_results:
                 entry_uri_test_results[entry.uri] = 'unknown'
 
             # ignore invalid records or disabled ones
@@ -664,6 +664,8 @@ class DistUpgradeController(object):
                     if self._sourcesListEntryDownloadable(test_entry):
                         logging.info("transition from old-release.u.c to %s" % uri)
                         entry.uri = uri
+                        if entry.uri not in entry_uri_test_results:
+                            entry_uri_test_results[entry.uri] = 'unknown'
                         break
 
             logging.debug("examining: '%s'" %  get_string_with_no_auth_from_source_entry(entry))

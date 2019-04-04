@@ -137,7 +137,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
-    def test_sources_list_rewrite(self, mock_get_distro, mock_sourcesListEntryDownloadable):
+    def test_sources_list_rewrite_no_network(self, mock_get_distro, mock_sourcesListEntryDownloadable):
         """
         test sources.list rewrite no network
         """

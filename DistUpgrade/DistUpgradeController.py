@@ -690,27 +690,22 @@ class DistUpgradeController(object):
                     # distro
                     logging.debug("entry '%s' is already set to new dist" % get_string_with_no_auth_from_source_entry(entry))
                     foundToDist |= validTo
-                elif entry_uri_test_results[entry.uri] == 'passed':
-                    entry.dist = toDists[fromDists.index(entry.dist)]
-                    logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
-                elif entry_uri_test_results[entry.uri] == 'failed':
-                    entry.disabled = True
-                    self.sources_disabled = True
-                    logging.debug("entry '%s' was disabled (no Release file)" % get_string_with_no_auth_from_source_entry(entry))
-                elif entry.dist in fromDists and \
-                        entry_uri_test_results[entry.uri] == 'unknown':
-                    foundToDist |= validTo
-                    # check to see whether the archive provides the new dist
-                    test_entry = copy.copy(entry)
-                    test_entry.dist = self.toDist
-                    if not self._sourcesListEntryDownloadable(test_entry):
+                elif entry.dist in fromDists:
+                    if entry_uri_test_results[entry.uri] == 'unknown':
+                        foundToDist |= validTo
+                        # check to see whether the archive provides the new dist
+                        test_entry = copy.copy(entry)
+                        test_entry.dist = self.toDist
+                        if not self._sourcesListEntryDownloadable(test_entry):
+                            entry_uri_test_results[entry.uri] = 'failed'
+                        else:
+                            entry_uri_test_results[entry.uri] = 'passed'
+                    if entry_uri_test_results[entry.uri] == 'failed':
                         entry.disabled = True
                         self.sources_disabled = True
-                        entry_uri_test_results[entry.uri] = 'failed'
                         logging.debug("entry '%s' was disabled (no Release file)" % get_string_with_no_auth_from_source_entry(entry))
                     else:
                         entry.dist = toDists[fromDists.index(entry.dist)]
-                        entry_uri_test_results[entry.uri] = 'passed'
                         logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
                 elif entry.type == 'deb-src':
                     continue

@@ -72,6 +72,10 @@ class TestSourcesListUpdate(unittest.TestCase):
             os.unlink(os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("APT::Default-Release", "")
 
+    def tearDown(self):
+        if os.path.exists(os.path.join(self.testdir, "sources.list")):
+            os.unlink(os.path.join(self.testdir, "sources.list"))
+
     def test_sources_list_with_nothing(self):
         """
         test sources.list rewrite with nothing in it

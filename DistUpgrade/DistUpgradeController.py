@@ -590,7 +590,10 @@ class DistUpgradeController(object):
         # collect information on what components (main,universe) are enabled for what distro (sub)version
         # e.g. found_components = { 'hardy':set("main","restricted"), 'hardy-updates':set("main") }
         self.found_components = {}
+        entry_uri_test_results = {}
         for entry in self.sources.list[:]:
+            if entry.uri not in entry_uri_test_results:
+                entry_uri_test_results[entry.uri] = 'unknown'
 
             # ignore invalid records or disabled ones
             if entry.invalid or entry.disabled:
@@ -661,6 +664,8 @@ class DistUpgradeController(object):
                     if self._sourcesListEntryDownloadable(test_entry):
                         logging.info("transition from old-release.u.c to %s" % uri)
                         entry.uri = uri
+                        if entry.uri not in entry_uri_test_results:
+                            entry_uri_test_results[entry.uri] = 'unknown'
                         break
 
             logging.debug("examining: '%s'" %  get_string_with_no_auth_from_source_entry(entry))
@@ -686,11 +691,16 @@ class DistUpgradeController(object):
                     logging.debug("entry '%s' is already set to new dist" % get_string_with_no_auth_from_source_entry(entry))
                     foundToDist |= validTo
                 elif entry.dist in fromDists:
-                    foundToDist |= validTo
-                    # check to see whether the archive provides the new dist
-                    test_entry = copy.copy(entry)
-                    test_entry.dist = self.toDist
-                    if not self._sourcesListEntryDownloadable(test_entry):
+                    if entry_uri_test_results[entry.uri] == 'unknown':
+                        foundToDist |= validTo
+                        # check to see whether the archive provides the new dist
+                        test_entry = copy.copy(entry)
+                        test_entry.dist = self.toDist
+                        if not self._sourcesListEntryDownloadable(test_entry):
+                            entry_uri_test_results[entry.uri] = 'failed'
+                        else:
+                            entry_uri_test_results[entry.uri] = 'passed'
+                    if entry_uri_test_results[entry.uri] == 'failed':
                         entry.disabled = True
                         self.sources_disabled = True
                         logging.debug("entry '%s' was disabled (no Release file)" % get_string_with_no_auth_from_source_entry(entry))

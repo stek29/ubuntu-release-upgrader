@@ -665,7 +665,7 @@ class DistUpgradeController(object):
                         logging.info("transition from old-release.u.c to %s" % uri)
                         entry.uri = uri
                         if entry.uri not in entry_uri_test_results:
-                            entry_uri_test_results[entry.uri] = 'unknown'
+                            entry_uri_test_results[entry.uri] = 'passed'
                         break
 
             logging.debug("examining: '%s'" %  get_string_with_no_auth_from_source_entry(entry))
@@ -705,6 +705,7 @@ class DistUpgradeController(object):
                         self.sources_disabled = True
                         logging.debug("entry '%s' was disabled (no Release file)" % get_string_with_no_auth_from_source_entry(entry))
                     else:
+                        foundToDist |= validTo
                         entry.dist = toDists[fromDists.index(entry.dist)]
                         logging.debug("entry '%s' updated to new dist" % get_string_with_no_auth_from_source_entry(entry))
                 elif entry.type == 'deb-src':

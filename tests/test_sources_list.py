@@ -508,6 +508,33 @@ deb-src http://us.archive.ubuntu.com/ubuntu precise main restricted multiverse
 deb http://us.archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 """)
 
+    @unittest.skipUnless(url_downloadable(
+        "https://mirrors.kernel.org/ubuntu", logging.debug),
+        "Could not reach mirror")
+    def testSupportedWithHttpsMirrorUpgrade(self):
+        " test upgrade from to a supported release with https mirror "
+        # Use mirrors.kernel.org because it supports https, when the main
+        # archive does we should switch that.
+        os.environ["LANG"] = "en_US.UTF-8"
+        shutil.copy(os.path.join(self.testdir, "sources.list.https"),
+                    os.path.join(self.testdir, "sources.list"))
+        apt_pkg.config.set("Dir::Etc::sourceparts",
+                           os.path.join(self.testdir, "sources.list.d"))
+        v = DistUpgradeViewNonInteractive()
+        d = DistUpgradeController(v, datadir=self.testdir)
+        d.fromDist = "xenial"
+        d.toDist = "bionic"
+        d.openCache(lock=False)
+        res = d.updateSourcesList()
+        self.assertTrue(res)
+        self._verifySources("""
+# main repo
+deb https://mirrors.kernel.org/ubuntu bionic main restricted multiverse universe
+deb-src https://mirrors.kernel.org/ubuntu bionic main restricted multiverse
+
+deb https://mirrors.kernel.org/ubuntu bionic-security main restricted universe multiverse
+""")
+
     def testEOL2SupportedUpgrade(self):
         " test upgrade from a EOL release to a supported release "
         os.environ["LANG"] = "C"

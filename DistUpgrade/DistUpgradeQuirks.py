@@ -103,10 +103,10 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.PreCacheOpen")
 
     # individual quirks handler that run *after* the cache is opened
-    def cosmicPostInitialUpdate(self):
+    def discoPostInitialUpdate(self):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
-        logging.debug("running Quirks.cosmicPostInitialUpdate")
+        logging.debug("running Quirks.discoPostInitialUpdate")
         self._test_and_fail_on_i386()
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
@@ -117,8 +117,8 @@ class DistUpgradeQuirks(object):
                 cache['snapd'].is_installed:
             self._checkStoreConnectivity()
 
-    def cosmicPostUpgrade(self):
-        logging.debug("running Quirks.cosmicPostUpgrade")
+    def discoPostUpgrade(self):
+        logging.debug("running Quirks.discoPostUpgrade")
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
                 'snapd' not in cache:
@@ -438,8 +438,9 @@ class DistUpgradeQuirks(object):
     def _replaceDebsWithSnaps(self):
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
-        snaps = ['gnome-3-26-1604', 'gtk-common-themes', 'gnome-calculator',
-                 'gnome-characters', 'gnome-logs', 'gnome-system-monitor']
+        snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',
+                 'gnome-calculator', 'gnome-characters', 'gnome-logs',
+                 'gnome-system-monitor']
         self._view.updateStatus(_("Checking for installed snaps"))
         for snap in snaps:
             # check to see if the snap is already installed

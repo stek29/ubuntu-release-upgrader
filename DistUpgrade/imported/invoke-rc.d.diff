@@ -1,6 +1,6 @@
---- /usr/sbin/invoke-rc.d	2007-08-10 18:15:28.000000000 +0200
-+++ invoke-rc.d	2007-09-07 18:43:48.000000000 +0200
-@@ -314,6 +314,10 @@
+--- /usr/sbin/invoke-rc.d	2018-11-21 15:15:24.000000000 -0800
++++ DistUpgrade/imported/invoke-rc.d	2019-04-12 09:48:59.230957528 -0700
+@@ -346,6 +346,10 @@ verifyrclink () {
      shift
    done
    if test x${doexit} != x && test x${RETRY} = x; then
@@ -11,14 +11,14 @@
       exit ${doexit}
    fi
    return 0
-@@ -431,6 +435,10 @@
- 	    fi
- 	done
- 	printerror initscript ${INITSCRIPTID}, action \"${saction}\" failed.
-+	if [ -n "$RELEASE_UPGRADE_IN_PROGRESS" ]; then
-+	    printerror "release upgrade in progress, error is not fatal"
-+	    exit 0
-+	fi
+@@ -562,6 +566,10 @@ if test x${FORCE} != x || test ${RC} -eq
+ 	if [ -n "$is_systemd" ] && [ "$saction" = start -o "$saction" = restart -o "$saction" = "try-restart" ]; then
+ 	    systemctl status --full --no-pager "${UNIT}" || true
+ 	fi
++ 	if [ -n "$RELEASE_UPGRADE_IN_PROGRESS" ]; then
++ 	    printerror "release upgrade in progress, error is not fatal"
++ 	    exit 0
++ 	fi
  	exit ${RC}
      fi
      exit 102

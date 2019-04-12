@@ -30,7 +30,23 @@ if [ ! -e /usr/lib/python3/dist-packages/apt_btrfs_snapshot.py ]; then
     echo "please sudo apt-get install apt-btrfs-snapshot"
     exit 1
 fi
+echo "copying apt_btrfs_snapshot.py for the upgrader tarball"
 cp /usr/lib/python3/dist-packages/apt_btrfs_snapshot.py DistUpgrade
+
+# update invoke-rc.d copy, requires init-system-helpers
+if [ ! -e /usr/sbin/invoke-rc.d ]; then
+    echo "please sudo apt install init-system-helpers"
+    exit 1
+fi
+if [ ! -e /usr/bin/patch ]; then
+    echo "please sudo apt install patch"
+    exit 1
+fi
+echo "copying invoke-rc.d for the upgrader tarball"
+cp /usr/sbin/invoke-rc.d DistUpgrade/imported/
+# now patch the file so the upgrade can continue even if there are errors
+patch --fuzz=0 -p0 DistUpgrade/imported/invoke-rc.d DistUpgrade/imported/invoke-rc.d.diff || { echo "patch didn't apply cleanly" && exit 1; }
+
 
 # (auto) generate the required html
 if [ ! -x /usr/bin/parsewiki ]; then

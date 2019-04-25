@@ -12,6 +12,7 @@ dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python3-feed
 SYMLINK=$(readlink -q DistUpgrade/DistUpgrade)
 if [ $SYMLINK != "." ]; then
    echo "DistUpgrade/DistUpgrade is not a symlink to itself"
+   exit 1
 fi
 
 # run the test-suite

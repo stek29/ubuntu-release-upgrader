@@ -103,10 +103,10 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.PreCacheOpen")
 
     # individual quirks handler that run *after* the cache is opened
-    def discoPostInitialUpdate(self):
+    def eoanPostInitialUpdate(self):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
-        logging.debug("running Quirks.discoPostInitialUpdate")
+        logging.debug("running Quirks.eoanPostInitialUpdate")
         self._test_and_fail_on_i386()
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
@@ -117,8 +117,8 @@ class DistUpgradeQuirks(object):
                 cache['snapd'].is_installed:
             self._checkStoreConnectivity()
 
-    def discoPostUpgrade(self):
-        logging.debug("running Quirks.discoPostUpgrade")
+    def eoanPostUpgrade(self):
+        logging.debug("running Quirks.eoanPostUpgrade")
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
                 'snapd' not in cache:

@@ -26,7 +26,7 @@ rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 
 # update demotions
 # echo "Running demotions"
-(cd utils && ./demotions.py cosmic disco > demoted.cfg)
+(cd utils && ./demotions.py disco eoan > demoted.cfg)
 # when this gets enabled, make sure to add symlink in DistUpgrade
 # echo "Running lts demotions"
 #(cd utils && ./demotions.py xenial bionic > demoted.cfg.xenial)

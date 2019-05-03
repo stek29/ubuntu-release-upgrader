@@ -26,12 +26,12 @@ rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 
 # update demotions
 max_age=$(($(date +%s) - 3600))
-if [ $(stat -c '%Y' utils/demoted.cfg) -gt $max_age ]; then
+if [ $(stat -c '%Y' utils/demoted.cfg) -lt $max_age ]; then
     # echo "Running demotions"
     (cd utils && ./demotions.py disco eoan > demoted.cfg)
 fi
 # when this gets enabled, make sure to add symlink in DistUpgrade
-if [ $(stat -c "%Y" utils/demoted.cfg.bionic) -gt $max_age ]; then
+if [ $(stat -c "%Y" utils/demoted.cfg.bionic) -lt $max_age ]; then
     # echo "Running lts demotions"
     (cd utils && ./demotions.py bionic eoan > demoted.cfg.bionic)
 fi
@@ -88,7 +88,7 @@ DEBRELEASE=$(LC_ALL=C dpkg-parsechangelog | sed -n -e '/^Distribution:/s/^Distri
 # cleanup
 rm -rf utils/apt/lists utils/apt/*.bin
 max_age=$(($(date +%s) - 3600))
-if [ $(stat -c "%Y" data/mirrors.cfg) -gt $max_age ]; then
+if [ $(stat -c "%Y" data/mirrors.cfg) -lt $max_age ]; then
     # echo "Running update mirrors"
     (cd utils && ./update_mirrors.py ../data/mirrors.cfg)
 fi

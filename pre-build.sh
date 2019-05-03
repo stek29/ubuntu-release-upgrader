@@ -25,11 +25,16 @@ rm -f ./tests/data-sources-list-test/apt.log
 rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 
 # update demotions
-# echo "Running demotions"
-(cd utils && ./demotions.py disco eoan > demoted.cfg)
+max_age=$(($(date +%s) - 3600))
+if [ $(stat -c '%Y' utils/demoted.cfg) -gt $max_age ]; then
+    # echo "Running demotions"
+    (cd utils && ./demotions.py disco eoan > demoted.cfg)
+fi
 # when this gets enabled, make sure to add symlink in DistUpgrade
-# echo "Running lts demotions"
-(cd utils && ./demotions.py bionic eoan > demoted.cfg.bionic)
+if [ $(stat -c "%Y" utils/demoted.cfg.bionic) -gt $max_age ]; then
+    # echo "Running lts demotions"
+    (cd utils && ./demotions.py bionic eoan > demoted.cfg.bionic)
+fi
 
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine
@@ -82,8 +87,11 @@ DEBRELEASE=$(LC_ALL=C dpkg-parsechangelog | sed -n -e '/^Distribution:/s/^Distri
 
 # cleanup
 rm -rf utils/apt/lists utils/apt/*.bin
-# echo "Running update mirrors"
-(cd utils && ./update_mirrors.py ../data/mirrors.cfg)
+max_age=$(($(date +%s) - 3600))
+if [ $(stat -c "%Y" data/mirrors.cfg) -gt $max_age ]; then
+    # echo "Running update mirrors"
+    (cd utils && ./update_mirrors.py ../data/mirrors.cfg)
+fi
 
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)

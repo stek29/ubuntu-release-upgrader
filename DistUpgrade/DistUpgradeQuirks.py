@@ -21,6 +21,7 @@
 
 import apt
 import atexit
+import distro_info
 import glob
 import logging
 import os
@@ -436,6 +437,9 @@ class DistUpgradeQuirks(object):
             self.controller.abort()
 
     def _replaceDebsWithSnaps(self):
+        di = distro_info.UbuntuDistroInfo()
+        fromVersion = di.version('%s' % self.controller.fromDist).split()[0]
+        toVersion = di.version('%s' % self.controller.toDist).split()[0]
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
         snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',
@@ -451,8 +455,8 @@ class DistUpgradeQuirks(object):
             if re.search("^installed: ", snap_info[0], re.MULTILINE):
                 logging.debug("Snap %s is installed" % snap)
                 # its not tracking the release channel so don't refresh
-                if not re.search("^tracking:.*ubuntu-18.04", snap_info[0],
-                                 re.MULTILINE):
+                if not re.search("^tracking:.*ubuntu-%s" % fromVersion,
+                                 snap_info[0], re.MULTILINE):
                     logging.debug("Snap %s is not tracking the release channel"
                                   % snap)
                     continue
@@ -463,7 +467,7 @@ class DistUpgradeQuirks(object):
                 self._view.updateStatus(_("%sing snap %s" % (command, snap)))
                 self._view.processEvents()
                 proc = subprocess.run(["snap", command, "--channel",
-                                       "stable/ubuntu-18.10", snap],
+                                       "stable/ubuntu-%s" % toVersion, snap],
                                       stdout=subprocess.PIPE,
                                       check=True)
                 self._view.processEvents()

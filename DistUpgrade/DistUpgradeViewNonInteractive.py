@@ -179,14 +179,17 @@ class NonInteractiveInstallProgress(InstallProgress):
         logging.debug("re-running '%s' (%s)" % (cmd, environ))
         ret = subprocess.call(cmd, env=environ)
         logging.debug("%s script returned: %s" % (name,ret))
-        
+
     def conffile(self, current, new):
-        logging.warning("got a conffile-prompt from dpkg for file: '%s'" % current)
+        logging.warning("got a conffile-prompt from dpkg for file: '%s'" %
+                        current)
         # looks like we have a race here *sometimes*
         time.sleep(5)
         try:
           # don't overwrite
-          os.write(self.master_fd,"n\n")
+          os.write(self.master_fd, b"n\n")
+          logging.warning("replied no to the conffile-prompt for file: '%s'" %
+                          current)
         except Exception as e:
           logging.error("error '%s' when trying to write to the conffile"%e)
 

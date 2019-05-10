@@ -135,8 +135,8 @@ class DistUpgradeController(object):
         if self.options:
             if self.options.devel_release:
                 self.config.set("Options","devRelease", "True")
-            else:
-                self.config.set("Options","devRelease", "False")
+        else:
+            self.config.set("Options","devRelease", "False")
 
         # some constants here
         self.fromDist = self.config.get("Sources","From")

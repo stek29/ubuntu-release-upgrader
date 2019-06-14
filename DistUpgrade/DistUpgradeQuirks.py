@@ -461,10 +461,11 @@ class DistUpgradeQuirks(object):
                                   % snap)
                     continue
                 command = 'refresh'
+                self._view.updateStatus(_("refreshing snap %s" % snap))
             else:
                 command = 'install'
+                self._view.updateStatus(_("installing snap %s" % snap))
             try:
-                self._view.updateStatus(_("%sing snap %s" % (command, snap)))
                 self._view.processEvents()
                 proc = subprocess.run(["snap", command, "--channel",
                                        "stable/ubuntu-%s" % toVersion, snap],

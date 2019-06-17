@@ -3,14 +3,16 @@
 # This file is distributed under the same license as the update-manager package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
+#: ../DistUpgrade/DistUpgradeController.py:1078
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2015-10-07 09:44-0700\n"
+"POT-Creation-Date: 2019-06-17 16:02-0700\n"
 "PO-Revision-Date: 2015-10-28 17:28+0000\n"
 "Last-Translator: Akerbeltz <fios@akerbeltz.org>\n"
 "Language-Team: Gaelic; Scottish <gd@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,7 +20,6 @@ msgstr ""
 "(n > 2 && n < 20) ? 2 : 3;\n"
 "X-Launchpad-Export-Date: 2019-05-17 05:45+0000\n"
 "X-Generator: Launchpad (build 18962)\n"
-"Language: \n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:215 ../DistUpgrade/distro.py:446
@@ -123,26 +124,35 @@ msgstr ""
 "chàradh leis a' bhathar-bhog seo. Feuch is càraich iad an toiseach le "
 "synaptic no apt-get mus lean thu air adhart."
 
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:640
+#. the most likely problem is the 3rd party pkgs so don't address
+#. foreignPkgs and devRelease being True
+#: ../DistUpgrade/DistUpgradeCache.py:671
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
+" "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:674
+msgid ""
+"This was likely caused by:\n"
 " * Unofficial software packages not provided by Ubuntu\n"
+"Please use the tool 'ppa-purge' from the ppa-purge \n"
+"package to remove software from a Launchpad PPA and \n"
+"try the upgrade again.\n"
 "\n"
 msgstr ""
-"Thachair duilgheadas nach gabh a chàradh fhad 's a bha sinn ag àireamhachadh "
-"an àrdachaidh.\n"
-"\n"
-"Tachraidh seo:\n"
-" * ma nithear àrdachadh gu tionndadh ro-sgaoilidh de Ubuntu\n"
-" * ma ruithear an ro-sgaoileadh làithreach de Ubuntu\n"
-" * ma tha pacaidean bathair-bog neo-oifigeil agad nach deach a sholar le "
-"Ubuntu\n"
-"\n"
+
+#: ../DistUpgrade/DistUpgradeCache.py:682
+#, fuzzy
+msgid ""
+"This was caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+"This is most likely a transient problem, \n"
+"please try again later.\n"
+msgstr ""
+"Tha deagh-theans nach mair an duilgheadas seo. Feuch ris a-rithist an ceann "
+"greis."
 
 #: ../DistUpgrade/DistUpgradeCache.py:689
 msgid "This is most likely a transient problem, please try again later."
@@ -151,12 +161,20 @@ msgstr ""
 "greis."
 
 #: ../DistUpgrade/DistUpgradeCache.py:692
+#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug using the command "
-"'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
+"'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
 "Mur eil gin dhiubh seo iomchaidh, nach dèan thu aithris air a' bhuga seo "
 "leis an àithne \"ubuntu-bug ubuntu-release-upgrader-core\" ann an tèirmineal."
+
+#: ../DistUpgrade/DistUpgradeCache.py:694
+msgid ""
+"If you want to investigate this yourself the log files in '/var/log/dist-"
+"upgrade' will contain details about the upgrade. Specifically, look at 'main."
+"log' and 'apt.log'."
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:700
 msgid "Could not calculate the upgrade"
@@ -228,15 +246,15 @@ msgstr ""
 "Feuch an stàlaich thu aon dhe na pacaidean gu h-àrd an toiseach le synaptic "
 "no apt-get mus lean thu air adhart."
 
-#: ../DistUpgrade/DistUpgradeController.py:112
+#: ../DistUpgrade/DistUpgradeController.py:113
 msgid "Reading cache"
 msgstr "A' leughadh an tasgadain"
 
-#: ../DistUpgrade/DistUpgradeController.py:225
+#: ../DistUpgrade/DistUpgradeController.py:226
 msgid "Unable to get exclusive lock"
 msgstr "Chan urrainn dhuinn glas às-dùnach fhaighinn"
 
-#: ../DistUpgrade/DistUpgradeController.py:226
+#: ../DistUpgrade/DistUpgradeController.py:227
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -245,11 +263,11 @@ msgstr ""
 "(mar apt-get no aptitude) a' ruith mu thràth. Dùin an aplacaid ud an "
 "toiseach."
 
-#: ../DistUpgrade/DistUpgradeController.py:284
+#: ../DistUpgrade/DistUpgradeController.py:285
 msgid "Upgrading over remote connection not supported"
 msgstr "Chan eil taic ri àrdachadh thairis air ceangal cèin"
 
-#: ../DistUpgrade/DistUpgradeController.py:285
+#: ../DistUpgrade/DistUpgradeController.py:286
 msgid ""
 "You are running the upgrade over a remote ssh connection with a frontend "
 "that does not support this. Please try a text mode upgrade with 'do-release-"
@@ -263,11 +281,11 @@ msgstr ""
 "\n"
 "Thig an t-àrdachadh gu crìoch a-nis. Feuch ris as aonais ssh."
 
-#: ../DistUpgrade/DistUpgradeController.py:299
+#: ../DistUpgrade/DistUpgradeController.py:300
 msgid "Continue running under SSH?"
 msgstr "A bheil thu airson cumail a' dol 'ga ruith fo ssh?"
 
-#: ../DistUpgrade/DistUpgradeController.py:300
+#: ../DistUpgrade/DistUpgradeController.py:301
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -285,11 +303,11 @@ msgstr ""
 "air a' phort \"%s\".\n"
 "A bheil thu airson leantainn air adhart?"
 
-#: ../DistUpgrade/DistUpgradeController.py:314
+#: ../DistUpgrade/DistUpgradeController.py:315
 msgid "Starting additional sshd"
 msgstr "A' tòiseachadh sshd eile"
 
-#: ../DistUpgrade/DistUpgradeController.py:315
+#: ../DistUpgrade/DistUpgradeController.py:316
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -300,7 +318,7 @@ msgstr ""
 "fhasa aiseag ma dh'fhàilligeas e. Ma thèid dad cearr leis an ssh a tha 'na "
 "ruith, bidh cothrom agad air an fhear eile fhathast.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:323
+#: ../DistUpgrade/DistUpgradeController.py:324
 #, python-format
 msgid ""
 "If you run a firewall, you may need to temporarily open this port. As this "
@@ -314,60 +332,31 @@ msgstr ""
 "eisimpleir, le:\n"
 "\"%s\""
 
-#: ../DistUpgrade/DistUpgradeController.py:403
-#: ../DistUpgrade/DistUpgradeController.py:427
+#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:428
 msgid "Can not upgrade"
 msgstr "Cha ghabh an t-àrdachadh a dhèanamh"
 
-#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:405
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr ""
 "Chan urrainn dhut àrdachadh \"%s\" àrdachadh gu \"%s\" leis an inneal seo."
 
-#: ../DistUpgrade/DistUpgradeController.py:410
-msgid "Sandbox setup failed"
-msgstr "Dh'fhàillig suidheachadh a' bhogsa-ghainmhich"
-
-#: ../DistUpgrade/DistUpgradeController.py:411
-msgid "It was not possible to create the sandbox environment."
-msgstr ""
-"Cha b' urrainn dhuinn àrainneachd a' bhogsa-ghainmhich a chruthachadh."
-
-#: ../DistUpgrade/DistUpgradeController.py:417
-msgid "Sandbox mode"
-msgstr "Modh a' bhogsa-ghainmhich"
-
-#: ../DistUpgrade/DistUpgradeController.py:418
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:429
+#, fuzzy
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
-"\n"
-"*No* changes written to a system directory from now until the next reboot "
-"are permanent."
+"Your python3 install is corrupted. Please fix the '/usr/bin/python3' symlink."
 msgstr ""
-"Tha an t-ùrachadh seo a' ruith ann am modh a' bhogsa-ghainmhich "
-"(deuchainneil). Thèid gach atharrachadh a sgrìobhadh ann an \"%s\" agus "
-"thèid iad air chall an ath-thuras a thòisicheas tu an siostam.\n"
-"\n"
-"Chan bhi *gin* dhe na h-atharraichean a thèid an sgrìobadh ann am pasgan "
-"siostaim a-mach o seo gus an ath-thuras a thèid an siostam a thòiseachadh "
-"buan."
+"Tha an stàladh python agad coirbte. Feuch is càraich an symlink \"/usr/bin/"
+"python\"."
 
-#: ../DistUpgrade/DistUpgradeController.py:446
-msgid ""
-"Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
-msgstr ""
-"Tha an stàladh python agad coirbte. Feuch is càraich an symlink "
-"\"/usr/bin/python\"."
-
-#: ../DistUpgrade/DistUpgradeController.py:457
+#: ../DistUpgrade/DistUpgradeController.py:458
 #, python-format
 msgid "Can not write to '%s'"
 msgstr "Chan urrainn dhuinn sgrìobhadh ann an \"%s\""
 
-#: ../DistUpgrade/DistUpgradeController.py:458
+#: ../DistUpgrade/DistUpgradeController.py:459
 #, python-format
 msgid ""
 "Its not possible to write to the system directory '%s' on your system. The "
@@ -378,13 +367,13 @@ msgstr ""
 "siostam agad. Cha lean an t-àrdachadh air adhart.\n"
 "Dèan cinnteach gun urrainnear sgrìobhadh an am pasgan an t-siostaim."
 
-#: ../DistUpgrade/DistUpgradeController.py:469
+#: ../DistUpgrade/DistUpgradeController.py:470
 msgid "Include latest updates from the Internet?"
 msgstr ""
 "A bheil thu airson na h-ùrachaidhean as ùire on eadar-lìon a ghabhail a-"
 "staigh?"
 
-#: ../DistUpgrade/DistUpgradeController.py:470
+#: ../DistUpgrade/DistUpgradeController.py:471
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -405,21 +394,37 @@ msgstr ""
 "àrdachadh.\n"
 "Ma thaghas tu \"Chan eil\" an-seo, cha dèid an lìonra a chleachdadh idir."
 
-#: ../DistUpgrade/DistUpgradeController.py:648
+#: ../DistUpgrade/DistUpgradeController.py:649
 #, python-format
 msgid "Not for humans during development stage of release %s"
 msgstr "Chan ann do mhac an duine rè ìre leasachadh an sgaoilidh %s"
 
-#: ../DistUpgrade/DistUpgradeController.py:749
+#: ../DistUpgrade/DistUpgradeController.py:750
 #, python-format
 msgid "disabled on upgrade to %s"
 msgstr "à comas an dèidh an àrdachaidh gu %s"
 
-#: ../DistUpgrade/DistUpgradeController.py:819
+#: ../DistUpgrade/DistUpgradeController.py:807
+#, fuzzy
+msgid "No valid sources.list entry found"
+msgstr "Cha b' urrainn dhuinn an t-innteart sources.list àireamhachadh"
+
+#: ../DistUpgrade/DistUpgradeController.py:808
+#, python-format
+msgid ""
+"While scanning your repository information no entry about %s could be "
+"found.\n"
+"\n"
+"An upgrade might not succeed.\n"
+"\n"
+"Do you want to continue anyway?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:820
 msgid "No valid mirror found"
 msgstr "Cha deach mirror dligheach a lorg"
 
-#: ../DistUpgrade/DistUpgradeController.py:820
+#: ../DistUpgrade/DistUpgradeController.py:821
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -439,11 +444,11 @@ msgstr ""
 "Ma thaghas tu \"Chan eil\", sguiridh an t-àrdachadh."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:840
+#: ../DistUpgrade/DistUpgradeController.py:841
 msgid "Generate default sources?"
 msgstr "A bheil thu airson na tùsan bunaiteach a chruthachadh?"
 
-#: ../DistUpgrade/DistUpgradeController.py:841
+#: ../DistUpgrade/DistUpgradeController.py:842
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -457,12 +462,12 @@ msgstr ""
 "A bheil thu airson 's gun cuir sinn innteartan bunaiteach ris airson \"%s\"? "
 "Ma thaghas tu \"Chan eil\", thèid crìoch a chur air an àrdachadh."
 
-#: ../DistUpgrade/DistUpgradeController.py:876
-#: ../DistUpgrade/DistUpgradeController.py:882
+#: ../DistUpgrade/DistUpgradeController.py:877
+#: ../DistUpgrade/DistUpgradeController.py:883
 msgid "Repository information invalid"
 msgstr "Tha fiosrachadh an repository mì-dhligheach"
 
-#: ../DistUpgrade/DistUpgradeController.py:877
+#: ../DistUpgrade/DistUpgradeController.py:878
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
@@ -470,7 +475,7 @@ msgstr ""
 "Dh'adhbharaich àrdachadh fiosrachadh an ionaid-thasgaidh faidhle mì-"
 "dhligheach agus tha sinn a' tòiseachadh air aithris buga ri linn sin."
 
-#: ../DistUpgrade/DistUpgradeController.py:883
+#: ../DistUpgrade/DistUpgradeController.py:884
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
@@ -479,11 +484,11 @@ msgstr ""
 "dhligheach. Gus aithris air buga a chur thugainn,  stàlaich apport 's an "
 "uairsin ruith \"apport-bug ubuntu-release-upgrader\"."
 
-#: ../DistUpgrade/DistUpgradeController.py:892
+#: ../DistUpgrade/DistUpgradeController.py:893
 msgid "Third party sources disabled"
 msgstr "Tha tùsan treas-phàrtaidhean à comas"
 
-#: ../DistUpgrade/DistUpgradeController.py:893
+#: ../DistUpgrade/DistUpgradeController.py:894
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -493,7 +498,7 @@ msgstr ""
 "agad a chur à comas. 'S urrainn dhut an cur an comas an dèidh dhut àrdachadh "
 "leis an inneal \"software-properties\" no manaidsear nam pacaidean agad."
 
-#: ../DistUpgrade/DistUpgradeController.py:935
+#: ../DistUpgrade/DistUpgradeController.py:936
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Pacaid ann an staid neo-chunbhalach"
@@ -501,7 +506,7 @@ msgstr[1] "Pacaidean ann an staid neo-chunbhalach"
 msgstr[2] "Pacaidean ann an staid neo-chunbhalach"
 msgstr[3] "Pacaidean ann an staid neo-chunbhalach"
 
-#: ../DistUpgrade/DistUpgradeController.py:938
+#: ../DistUpgrade/DistUpgradeController.py:939
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -528,11 +533,11 @@ msgstr[3] ""
 "stàladh às ùr ach cha do lorg sinn tasg-lann air a shon. Stàlaich a' phacaid "
 "a làimh no thoirt e air falbh on t-siostam."
 
-#: ../DistUpgrade/DistUpgradeController.py:1001
+#: ../DistUpgrade/DistUpgradeController.py:1002
 msgid "Error during update"
 msgstr "Thachair mearachd rè an ùrachaidh"
 
-#: ../DistUpgrade/DistUpgradeController.py:1002
+#: ../DistUpgrade/DistUpgradeController.py:1003
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -540,41 +545,89 @@ msgstr ""
 "Thachair mearachd rè an ùrachaidh. 'S e an lìonra a bhios coireach às mar is "
 "trice, thoir sùil air a cheangal agad ris is feuch ris a-rithist."
 
-#: ../DistUpgrade/DistUpgradeController.py:1058
+#: ../DistUpgrade/DistUpgradeController.py:1046
+#: ../DistUpgrade/DistUpgradeController.py:1051
+msgid "EFI System Partition (ESP) not usable"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1047
+msgid ""
+"Your EFI System Partition (ESP) is not mounted at /boot/efi. Please ensure "
+"that it is properly configured and try again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1052
+msgid ""
+"The EFI System Partition (ESP) mounted at /boot/efi is not writable. Please "
+"mount this partition read-write and try again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1059
 msgid "Not enough free disk space"
 msgstr "Chan eil àite saor gu leòr air an diosg"
 
-#: ../DistUpgrade/DistUpgradeController.py:954
-#, python-format
+#. TRANSLATORS: you can change the order of the sentence,
+#. make sure to keep all {str_*} string untranslated.
+#: ../DistUpgrade/DistUpgradeController.py:1062
+#, fuzzy, python-brace-format
 msgid ""
-"The upgrade has aborted. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
+"The upgrade has aborted. The upgrade needs a total of {str_total} free space "
+"on disk '{str_dir}'. Please free at least an additional {str_needed} of disk "
+"space on '{str_dir}'. {str_remedy}"
 msgstr ""
 "Sguireadh dhen àrdachadh. Feumaidh an t-àrdachadh %s a dh'àite saor air an "
 "diosg \"%s\". Saor co-dhiù %s a dh'àite air an diosg \"%s\". Falamhaich an "
 "sgudal, thoirt air falbh pacaidean sealach de sheann-stàlaidhean leis an "
 "àithne \"sudo apt-get clean\"."
 
+#. specific ways to resolve lack of free space
+#: ../DistUpgrade/DistUpgradeController.py:1067
+msgid ""
+"Remove temporary packages of former installations using 'sudo apt clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1069
+msgid ""
+"You can remove old kernels using 'sudo apt autoremove' and you could also "
+"set COMPRESS=xz in /etc/initramfs-tools/initramfs.conf to reduce the size of "
+"your initramfs."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1074
+msgid ""
+"Empty your trash and remove temporary packages of former installations using "
+"'sudo apt-get clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1077
+msgid "Reboot to clean up files in /tmp."
+msgstr ""
+
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:1115
-#: ../DistUpgrade/DistUpgradeController.py:1972
-#: ../DistUpgrade/DistUpgradeController.py:2022
+#: ../DistUpgrade/DistUpgradeController.py:1116
+#: ../DistUpgrade/DistUpgradeController.py:1994
+#: ../DistUpgrade/DistUpgradeController.py:2044
 msgid "Calculating the changes"
 msgstr "Ag àireamhachadh nan atharraichean"
 
 #. ask the user
-#: ../DistUpgrade/DistUpgradeController.py:1159
+#: ../DistUpgrade/DistUpgradeController.py:1160
 msgid "Do you want to start the upgrade?"
 msgstr "A bheil thu airson tòiseachadh air an àrdachadh?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1232
+#: ../DistUpgrade/DistUpgradeController.py:1179
+#, python-format
+msgid ""
+"Livepatch security updates are not available for Ubuntu %s. If you upgrade, "
+"Livepatch will turn off."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1251
 msgid "Upgrade canceled"
 msgstr "Sguireadh dhen àrdachadh"
 
-#: ../DistUpgrade/DistUpgradeController.py:1233
+#: ../DistUpgrade/DistUpgradeController.py:1252
 msgid ""
 "The upgrade will cancel now and the original system state will be restored. "
 "You can resume the upgrade at a later time."
@@ -582,12 +635,12 @@ msgstr ""
 "Sguiridh sinn dhen àrdachadh an-dràsta agus thèid staid thùsail an t-"
 "siostaim aiseag. 'S urrainn dhut leantainn air an àrdachadh uaireigin eile."
 
-#: ../DistUpgrade/DistUpgradeController.py:1239
-#: ../DistUpgrade/DistUpgradeController.py:1384
+#: ../DistUpgrade/DistUpgradeController.py:1258
+#: ../DistUpgrade/DistUpgradeController.py:1403
 msgid "Could not download the upgrades"
 msgstr "Cha b' urrainn dhuinn na h-àrdachaidhean a luchdadh a-nuas"
 
-#: ../DistUpgrade/DistUpgradeController.py:1240
+#: ../DistUpgrade/DistUpgradeController.py:1259
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far have been kept."
@@ -598,27 +651,27 @@ msgstr ""
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
-#: ../DistUpgrade/DistUpgradeController.py:1333
-#: ../DistUpgrade/DistUpgradeController.py:1372
-#: ../DistUpgrade/DistUpgradeController.py:1490
+#: ../DistUpgrade/DistUpgradeController.py:1352
+#: ../DistUpgrade/DistUpgradeController.py:1391
+#: ../DistUpgrade/DistUpgradeController.py:1509
 msgid "Error during commit"
 msgstr "Thachair mearachd rè a' commit"
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1335
-#: ../DistUpgrade/DistUpgradeController.py:1374
-#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:1354
+#: ../DistUpgrade/DistUpgradeController.py:1393
+#: ../DistUpgrade/DistUpgradeController.py:1548
 msgid "Restoring original system state"
 msgstr "Ag aiseag staid thùsail an t-siostaim"
 
-#: ../DistUpgrade/DistUpgradeController.py:1336
-#: ../DistUpgrade/DistUpgradeController.py:1351
-#: ../DistUpgrade/DistUpgradeController.py:1375
+#: ../DistUpgrade/DistUpgradeController.py:1355
+#: ../DistUpgrade/DistUpgradeController.py:1370
+#: ../DistUpgrade/DistUpgradeController.py:1394
 msgid "Could not install the upgrades"
 msgstr "Cha b' urrainn dhuinn na h-àrdachaidhean a stàladh"
 
 #. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:1341
+#: ../DistUpgrade/DistUpgradeController.py:1360
 msgid ""
 "The upgrade has aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
@@ -627,24 +680,24 @@ msgstr ""
 "nach gabh a chleachdadh. Cuiridh sinn gu dol gleus aisig an-dràsta (dpkg --"
 "configure -a)."
 
-#: ../DistUpgrade/DistUpgradeController.py:1346
+#: ../DistUpgrade/DistUpgradeController.py:1365
 #, python-format
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Nach dèan thu aithris air a' bhuga seo ann am brabhsair aig "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug is "
-"cuir na faidhlichean ann an /var/log/dist-upgrade/ ri aithris a' bhuga.\n"
+"Nach dèan thu aithris air a' bhuga seo ann am brabhsair aig http://bugs."
+"launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug is cuir na "
+"faidhlichean ann an /var/log/dist-upgrade/ ri aithris a' bhuga.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:1385
+#: ../DistUpgrade/DistUpgradeController.py:1404
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. "
@@ -652,22 +705,26 @@ msgstr ""
 "Sguireadh dhen àrdachadh. Thoir sùil air a' cheangal agad ris an eadar-lìon "
 "no air a' mheadhan stàladh is feuch ris a-rithist. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1478
+#: ../DistUpgrade/DistUpgradeController.py:1432
+msgid "Searching for obsolete software"
+msgstr "A' lorg bathar-bog air nach eil feum tuilleadh"
+
+#: ../DistUpgrade/DistUpgradeController.py:1497
 msgid "Remove obsolete packages?"
 msgstr ""
 "A bheil thu airson na pacaidean air nach eil feum tuilleadh a thoirt air "
 "falbh?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1479
+#: ../DistUpgrade/DistUpgradeController.py:1498
 #: ../data/gtkbuilder/DistUpgrade.ui.h:8
 msgid "_Keep"
 msgstr "_Cum iad"
 
-#: ../DistUpgrade/DistUpgradeController.py:1479
+#: ../DistUpgrade/DistUpgradeController.py:1498
 msgid "_Remove"
 msgstr "_Thoir air falbh iad"
 
-#: ../DistUpgrade/DistUpgradeController.py:1491
+#: ../DistUpgrade/DistUpgradeController.py:1510
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -677,28 +734,28 @@ msgstr ""
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1567
+#: ../DistUpgrade/DistUpgradeController.py:1586
 msgid "Required depends is not installed"
 msgstr "Tha eisimeileachdan ann air a bheil feum ach nach eil stàlaichte"
 
-#: ../DistUpgrade/DistUpgradeController.py:1568
+#: ../DistUpgrade/DistUpgradeController.py:1587
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Chan eil an eisimeileachd \"%s\" stàlaichte ach tha feum air. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1835
-#: ../DistUpgrade/DistUpgradeController.py:1922
+#: ../DistUpgrade/DistUpgradeController.py:1854
+#: ../DistUpgrade/DistUpgradeController.py:1944
 msgid "Checking package manager"
 msgstr "A' sgrùdadh manaidsear nam pacaidean"
 
-#: ../DistUpgrade/DistUpgradeController.py:1841
-#: ../DistUpgrade/DistUpgradeController.py:1847
+#: ../DistUpgrade/DistUpgradeController.py:1860
+#: ../DistUpgrade/DistUpgradeController.py:1866
 msgid "Preparing the upgrade failed"
 msgstr "Dh'fhàillig an t-àrdachadh"
 
-#: ../DistUpgrade/DistUpgradeController.py:1842
+#: ../DistUpgrade/DistUpgradeController.py:1861
 msgid ""
 "Preparing the system for the upgrade failed so a bug reporting process is "
 "being started."
@@ -706,7 +763,7 @@ msgstr ""
 "Dh'fhàgail ullachadh an t-siostam airson leasachadh agus tha sinn a' "
 "tòiseachadh air aithris buga ri linn sin."
 
-#: ../DistUpgrade/DistUpgradeController.py:1848
+#: ../DistUpgrade/DistUpgradeController.py:1867
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
@@ -715,12 +772,12 @@ msgstr ""
 "buga a chur thugainn,  stàlaich apport 's an uairsin ruith \"apport-bug "
 "ubuntu-release-upgrader\"."
 
-#: ../DistUpgrade/DistUpgradeController.py:1865
-#: ../DistUpgrade/DistUpgradeController.py:1875
+#: ../DistUpgrade/DistUpgradeController.py:1884
+#: ../DistUpgrade/DistUpgradeController.py:1894
 msgid "Getting upgrade prerequisites failed"
 msgstr "Dh'fhairtlich oirnn ro-ghoireasan an àrdachaidh fhaighinn"
 
-#: ../DistUpgrade/DistUpgradeController.py:1866
+#: ../DistUpgrade/DistUpgradeController.py:1885
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -733,7 +790,7 @@ msgstr ""
 "\n"
 "A bharrachd air sin, tha sinn a' tòiseachadh air aithris buga."
 
-#: ../DistUpgrade/DistUpgradeController.py:1876
+#: ../DistUpgrade/DistUpgradeController.py:1895
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -748,23 +805,23 @@ msgstr ""
 "Gus aithris air buga a chur thugainn,  stàlaich apport 's an uairsin ruith "
 "\"apport-bug ubuntu-release-upgrader\"."
 
-#: ../DistUpgrade/DistUpgradeController.py:1906
+#: ../DistUpgrade/DistUpgradeController.py:1928
 msgid "Updating repository information"
 msgstr "Ag ùrachadh fiosrachadh a' repository"
 
-#: ../DistUpgrade/DistUpgradeController.py:1913
+#: ../DistUpgrade/DistUpgradeController.py:1935
 msgid "Failed to add the cdrom"
 msgstr "Cha b' urrainn dhuinn an cdrom a chur ris"
 
-#: ../DistUpgrade/DistUpgradeController.py:1914
+#: ../DistUpgrade/DistUpgradeController.py:1936
 msgid "Sorry, adding the cdrom was not successful."
 msgstr "Tha sinn duilich ach cha b' urrainn dhuinn an cdrom a chur ris."
 
-#: ../DistUpgrade/DistUpgradeController.py:1949
+#: ../DistUpgrade/DistUpgradeController.py:1971
 msgid "Invalid package information"
 msgstr "Tha fiosrachadh na pacaid mì-dhligheach"
 
-#: ../DistUpgrade/DistUpgradeController.py:1950
+#: ../DistUpgrade/DistUpgradeController.py:1972
 #, python-format
 msgid ""
 "After updating your package information, the essential package '%s' could "
@@ -783,44 +840,74 @@ msgstr ""
 "Ma tha cus dhaoine a' cleachdadh an sgàthain an-dràsta, feuch ris an "
 "àrdachadh a-rithist an ceann greis."
 
-#: ../DistUpgrade/DistUpgradeController.py:1979
-#: ../DistUpgrade/DistUpgradeController.py:2078
+#: ../DistUpgrade/DistUpgradeController.py:2001
+#: ../DistUpgrade/DistUpgradeController.py:2100
 msgid "Fetching"
 msgstr "'Ga fhaighinn"
 
-#: ../DistUpgrade/DistUpgradeController.py:1986
-#: ../DistUpgrade/DistUpgradeController.py:2007
-#: ../DistUpgrade/DistUpgradeController.py:2028
-#: ../DistUpgrade/DistUpgradeController.py:2082
+#: ../DistUpgrade/DistUpgradeController.py:2008
+#: ../DistUpgrade/DistUpgradeController.py:2029
+#: ../DistUpgrade/DistUpgradeController.py:2050
+#: ../DistUpgrade/DistUpgradeController.py:2104
 msgid "Upgrading"
 msgstr "'Ga àrdachadh"
 
+#: ../DistUpgrade/DistUpgradeController.py:2010
+#, fuzzy
+msgid "Upgrade infeasible"
+msgstr "Sguireadh dhen àrdachadh"
+
+#: ../DistUpgrade/DistUpgradeController.py:2011
+#, fuzzy
+msgid ""
+"The upgrade could not be completed, there were errors during the upgrade "
+"process."
+msgstr "Tha an t-àrdachadh deiseil ach thachair mearachdan rè an àrdachaidh."
+
 #. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:2032
+#, fuzzy
+msgid "Upgrade incomplete"
+msgstr "Tha an t-àrdachadh deiseil"
+
 #: ../DistUpgrade/DistUpgradeController.py:2033
-#: ../DistUpgrade/DistUpgradeController.py:2084
-#: ../DistUpgrade/DistUpgradeController.py:2090
-#: ../DistUpgrade/DistUpgradeController.py:2101
+#, fuzzy
+msgid ""
+"The upgrade has partially completed but there were errors during the upgrade "
+"process."
+msgstr "Tha an t-àrdachadh deiseil ach thachair mearachdan rè an àrdachaidh."
+
+#. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:2055
+#: ../DistUpgrade/DistUpgradeController.py:2106
+#: ../DistUpgrade/DistUpgradeController.py:2112
+#: ../DistUpgrade/DistUpgradeController.py:2123
 msgid "Upgrade complete"
 msgstr "Tha an t-àrdachadh deiseil"
 
-#: ../DistUpgrade/DistUpgradeController.py:2034
-#: ../DistUpgrade/DistUpgradeController.py:2085
-#: ../DistUpgrade/DistUpgradeController.py:2091
+#: ../DistUpgrade/DistUpgradeController.py:2056
+#: ../DistUpgrade/DistUpgradeController.py:2107
+#: ../DistUpgrade/DistUpgradeController.py:2113
 msgid ""
 "The upgrade has completed but there were errors during the upgrade process."
 msgstr "Tha an t-àrdachadh deiseil ach thachair mearachdan rè an àrdachaidh."
 
-#: ../DistUpgrade/DistUpgradeController.py:1413
-msgid "Searching for obsolete software"
-msgstr "A' lorg bathar-bog air nach eil feum tuilleadh"
-
-#: ../DistUpgrade/DistUpgradeController.py:2053
+#: ../DistUpgrade/DistUpgradeController.py:2075
 msgid "System upgrade is complete."
 msgstr "Tha àrdachadh an t-siostaim a choileanadh."
 
-#: ../DistUpgrade/DistUpgradeController.py:2102
+#: ../DistUpgrade/DistUpgradeController.py:2124
 msgid "The partial upgrade was completed."
 msgstr "Chaidh an t-àrdachadh pàirteach a choileanadh."
+
+#: ../DistUpgrade/DistUpgradeController.py:2152
+msgid "Lock screen disabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:2153
+msgid ""
+"Your lock screen has been disabled and will remain disabled until you reboot."
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:105
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
@@ -942,6 +1029,7 @@ msgid "&Upgrade"
 msgstr "Àrd&aich"
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:154
+#: ../DistUpgrade/DistUpgradeViewKDE.py:715
 msgid "&Cancel"
 msgstr "&Sguir dheth"
 
@@ -972,7 +1060,7 @@ msgstr "Faidhle %s de %s"
 #. print("mediaChange %s %s" % (medium, drive))
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:235
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:125
-#: ../DistUpgrade/DistUpgradeViewKDE.py:300
+#: ../DistUpgrade/DistUpgradeViewKDE.py:302
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Cuir a-steach \"%s\" dhan draibh \"%s\""
@@ -980,40 +1068,38 @@ msgstr "Cuir a-steach \"%s\" dhan draibh \"%s\""
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:237
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:242
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:243
-#: ../DistUpgrade/DistUpgradeViewKDE.py:301
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 msgid "Media Change"
 msgstr "Atharrachadh meadhain"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
+#: ../DistUpgrade/DistUpgradeQuirks.py:190
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 "Dh'fhaoidte nach cuirear làn-taic ris  a' bhathar-chruaidh ghrafaigeachd "
 "agad ann an Ubuntu 14.04."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:211
+#: ../DistUpgrade/DistUpgradeQuirks.py:192
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "Chan eil am bathar-cruaidh grafaigeachd agad a' cur làn-taic ri àrainneachd "
 "deasga \"unity\". Bhiodh àrainneachd air leth slaodach agad an dèidh dhut "
 "àrdachadh. Mholamaid dhut an tionndadh LTS a chumail an-dràsta fhèin. Airson "
-"barrachd fiosrachaidh, faic "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D A bheil thu "
-"airson àrdachadh fhathast?"
+"barrachd fiosrachaidh, faic https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D A bheil thu airson àrdachadh fhathast?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:235
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+#: ../DistUpgrade/DistUpgradeQuirks.py:216
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Dh'fhaoidte nach eil làn-taic ris a' bhathar-chruaidh ghrafaigeachd ann an "
 "Ubuntu 12.04 LTS."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:237
+#: ../DistUpgrade/DistUpgradeQuirks.py:218
 msgid ""
 "The support in Ubuntu 12.04 LTS for your Intel graphics hardware is limited "
 "and you may encounter problems after the upgrade. For more information see "
@@ -1022,11 +1108,10 @@ msgid ""
 msgstr ""
 "Chan eil Ubuntu 12.04 LTS a' cur làn-taic ris a' bhathar-chruaidh "
 "ghrafaigeachd Intel agus dh'fhaoidte gum biodh duilgheadasan agad an dèidh "
-"dhut àrdachadh. Airson barrachd fiosrachaidh, faic "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx A bheil thu "
-"airson àrdachadh fhathast?"
+"dhut àrdachadh. Airson barrachd fiosrachaidh, faic https://wiki.ubuntu.com/X/"
+"Bugs/UpdateManagerWarningForI8xx A bheil thu airson àrdachadh fhathast?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:257
+#: ../DistUpgrade/DistUpgradeQuirks.py:238
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -1035,7 +1120,7 @@ msgstr ""
 "geamannan is rudan eile a tha feumach air grafaigean gu mòr ma nì thu "
 "àrdachadh."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:261
+#: ../DistUpgrade/DistUpgradeQuirks.py:242
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
 "of this driver is available that works with your hardware in Ubuntu 10.04 "
@@ -1049,27 +1134,20 @@ msgstr ""
 "\n"
 "A bheil thu airson leantainn air adhart?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:298
-msgid "No i686 CPU"
-msgstr "As aonais CPU i686"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
-"extension. All packages were built with optimizations requiring i686 as the "
-"minimal architecture. It is not possible to upgrade your system to a new "
-"Ubuntu release with this hardware."
+#: ../DistUpgrade/DistUpgradeQuirks.py:277
+msgid "apt architecture is i386"
 msgstr ""
-"Tha an siostam agad a' cleachdadh CPU i586 no CPU aig nach eil an leudachan "
-"\"cmov\". Chaidh gach pacaid a chruthachadh air dòigh piseachaidh a tha "
-"feumach air i686 air a' char as lugha. Chan urrainn dhut an siostam agad "
-"àrdachadh gu tionndadh Ubuntu ùr leis a' bhathar-chruaidh seo."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:336
+#: ../DistUpgrade/DistUpgradeQuirks.py:278
+msgid ""
+"Upgrades from 18.04 on the i386 architecture are not supported at this time."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:292
 msgid "No ARMv6 CPU"
 msgstr "As aonais CPU ARMv6"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:337
+#: ../DistUpgrade/DistUpgradeQuirks.py:293
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -1081,11 +1159,11 @@ msgstr ""
 "a tha feumach air ARMv6 air a' char as lugha. Chan urrainn dhut an siostam "
 "agad àrdachadh gu tionndadh Ubuntu ùr leis a' bhathar-chruaidh seo."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:357
+#: ../DistUpgrade/DistUpgradeQuirks.py:313
 msgid "No init available"
 msgstr "Chan eil init ri làimh"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:358
+#: ../DistUpgrade/DistUpgradeQuirks.py:314
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
 "e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
@@ -1101,11 +1179,49 @@ msgstr ""
 "\n"
 "A bheil thu cinnteach gu bheil thu airson leantainn air adhart?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:582
+#: ../DistUpgrade/DistUpgradeQuirks.py:419
+msgid "Connection to Snap Store failed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:420
+msgid ""
+"Your system does not have a connection to the Snap Store. For the best "
+"upgrade experience make sure that your system can connect to api.snapcraft."
+"io.\n"
+"Do you still want to continue with the upgrade?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:429
+msgid "Outdated snapd package"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:430
+msgid ""
+"Your system does not have the latest version of snapd. Please update the "
+"version of snapd on your system to improve the upgrade experience.\n"
+"Do you still want to continue with the upgrade?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#, fuzzy
+msgid "Checking for installed snaps"
+msgstr "A' toirt sùil a bheil sgaoileadh Ubuntu ùr ann"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:467
+#, python-format
+msgid "refreshing snap %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:470
+#, fuzzy, python-format
+msgid "installing snap %s"
+msgstr "Stàlaich %s"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:497
 msgid "PAE not enabled"
 msgstr "Chan eil PAE an comas"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:583
+#: ../DistUpgrade/DistUpgradeQuirks.py:498
 msgid ""
 "Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
 "non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
@@ -1117,10 +1233,6 @@ msgstr ""
 "chur an comas (ma ghabhas seo dèanamh) gus àrdachadh gu tionndadh as ùire de "
 "Ubuntu. Thoir sùil air:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
-
-#: ../DistUpgrade/DistUpgradeMain.py:64
-msgid "Sandbox upgrade using aufs"
-msgstr "Àrdachadh bogsa-gainmhich a' cleachdadh aufs"
 
 #: ../DistUpgrade/DistUpgradeMain.py:58
 msgid "Use the given path to search for a cdrom with upgradable packages"
@@ -1157,26 +1269,26 @@ msgid "Upgrade to the development release"
 msgstr "Àrdaich gun sgaoileadh luchd-leasachaidh"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:146
-#: ../DistUpgrade/DistUpgradeViewKDE.py:314
+#: ../DistUpgrade/DistUpgradeViewKDE.py:316
 msgid "Fetching is complete"
 msgstr "Fhuaras e"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
-#: ../DistUpgrade/DistUpgradeViewKDE.py:330
+#: ../DistUpgrade/DistUpgradeViewKDE.py:332
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "A' faighinn faidhle %li de %li air %sB/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:163
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:321
-#: ../DistUpgrade/DistUpgradeViewKDE.py:331
-#: ../DistUpgrade/DistUpgradeViewKDE.py:481
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:325
+#: ../DistUpgrade/DistUpgradeViewKDE.py:333
+#: ../DistUpgrade/DistUpgradeViewKDE.py:483
 #, python-format
 msgid "About %s remaining"
 msgstr "Mu thuaiream %s air fhàgail"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:166
-#: ../DistUpgrade/DistUpgradeViewKDE.py:333
+#: ../DistUpgrade/DistUpgradeViewKDE.py:335
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "A' faighinn faidhle %li de %li"
@@ -1185,25 +1297,24 @@ msgstr "A' faighinn faidhle %li de %li"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:198
-#: ../DistUpgrade/DistUpgradeViewKDE.py:371
+#: ../DistUpgrade/DistUpgradeViewKDE.py:373
 msgid "Applying changes"
 msgstr "A' cur an sàs nan atharraichean"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:224
-#: ../DistUpgrade/DistUpgradeViewKDE.py:384
+#: ../DistUpgrade/DistUpgradeViewKDE.py:386
 msgid "dependency problems - leaving unconfigured"
-msgstr ""
-"duilgheadasan leis na h-eisimeileachdan - 'ga fhàgail gun rèiteachadh"
+msgstr "duilgheadasan leis na h-eisimeileachdan - 'ga fhàgail gun rèiteachadh"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:229
-#: ../DistUpgrade/DistUpgradeViewKDE.py:386
+#: ../DistUpgrade/DistUpgradeViewKDE.py:388
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Cha b' urrainn dhuinn \"%s\" a stàladh"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:230
-#: ../DistUpgrade/DistUpgradeViewKDE.py:387
+#: ../DistUpgrade/DistUpgradeViewKDE.py:389
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1214,7 +1325,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:247
-#: ../DistUpgrade/DistUpgradeViewKDE.py:409
+#: ../DistUpgrade/DistUpgradeViewKDE.py:411
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1224,7 +1335,7 @@ msgstr ""
 "\"%s\"?"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:248
-#: ../DistUpgrade/DistUpgradeViewKDE.py:410
+#: ../DistUpgrade/DistUpgradeViewKDE.py:412
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1233,33 +1344,33 @@ msgstr ""
 "seo ma chuireas tu romhad tionndadh nas ùire a chur 'na àite."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:268
-#: ../DistUpgrade/DistUpgradeViewKDE.py:433
+#: ../DistUpgrade/DistUpgradeViewKDE.py:435
 msgid "The 'diff' command was not found"
 msgstr "Cha b' urrainn dhuinn an àithne \"diff\" a lorg"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:527
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:535
 #: ../DistUpgrade/DistUpgradeViewText.py:140
 msgid "A fatal error occurred"
 msgstr "Thachair mearachd mharbhtach"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:528
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:536
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Nach dèan thu aithris air a' buga seo (mur an do rinn thu seo mu thràth)?  "
-"Feuch is cuir na faidhlichean ann an /var/log/dist-upgrade/main.log agus "
-"/var/log/dist-upgrade/apt.log ris an aithris. Sguir sinn dhen àrdachadh.\n"
-"Chaidh an sources.list tùsail agad a shàbhaladh ann an "
-"/etc/apt/sources.list.distUpgrade."
+"Feuch is cuir na faidhlichean ann an /var/log/dist-upgrade/main.log agus /"
+"var/log/dist-upgrade/apt.log ris an aithris. Sguir sinn dhen àrdachadh.\n"
+"Chaidh an sources.list tùsail agad a shàbhaladh ann an /etc/apt/sources.list."
+"distUpgrade."
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:558
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:566
 msgid "Ctrl-c pressed"
 msgstr "Ctrl-c air a bhrùthadh"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:559
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:567
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
@@ -1268,123 +1379,135 @@ msgstr ""
 "briste. A bheil thu cinnteach gu bheil thu airson sin a dhèanamh?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:698
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:706
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "Dùin a h-uile aplacaid is sgrìobhainn fhosgailte gus call dàta a sheachnadh."
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:712
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:720
 #, python-format
 msgid "No longer supported by Canonical (%s)"
 msgstr "Chan eil Canonical (%s) a' cur taic ris tuilleadh"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:713
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:721
 #, python-format
 msgid "<b>Downgrade (%s)</b>"
 msgstr "<b>Ìslich (%s)</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:714
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:722
 #, python-format
 msgid "Remove (%s)"
 msgstr "Thoir air falbh (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:715
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:723
 #, python-format
 msgid "No longer needed (%s)"
 msgstr "Chan eil feum air tuilleadh (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:716
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:724
 #, python-format
 msgid "Install (%s)"
 msgstr "Stàlaich (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:717
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:725
 #, python-format
 msgid "Upgrade (%s)"
 msgstr "Àrdaich (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:445
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:773
+#, fuzzy
+msgid "Cancel"
+msgstr "&Sguir dheth"
+
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:774
+#: ../DistUpgrade/DistUpgradeViewKDE.py:939
+#, fuzzy
+msgid "Continue"
+msgstr "_Lean air adhart"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Difference >>>"
 msgstr "Seall an diofar >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:448
+#: ../DistUpgrade/DistUpgradeViewKDE.py:450
 msgid "<<< Hide Difference"
 msgstr "<<< Falaich an diofar"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:664
+#: ../DistUpgrade/DistUpgradeViewKDE.py:701
 msgid "Error"
 msgstr "Mearachd"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:903
+#: ../DistUpgrade/DistUpgradeViewKDE.py:719
+#: ../DistUpgrade/DistUpgradeViewKDE.py:960
 msgid "&Close"
 msgstr "&Dùin"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:716
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 msgid "Show Terminal >>>"
 msgstr "Seall an tèirmineal >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:719
+#: ../DistUpgrade/DistUpgradeViewKDE.py:756
 msgid "<<< Hide Terminal"
 msgstr "<<< Falaich an tèirmineal"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:829
 msgid "Information"
 msgstr "Fiosrachadh"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:840
+#: ../DistUpgrade/DistUpgradeViewKDE.py:877
 msgid "&Start Upgrade"
 msgstr "Tòi&sich air an àrdachadh"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:842
-#: ../DistUpgrade/DistUpgradeViewKDE.py:886
-#: ../DistUpgrade/DistUpgradeViewKDE.py:889
+#: ../DistUpgrade/DistUpgradeViewKDE.py:879
+#: ../DistUpgrade/DistUpgradeViewKDE.py:923
+#: ../DistUpgrade/DistUpgradeViewKDE.py:926
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Mion-fhiosrachadh"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:864
+#: ../DistUpgrade/DistUpgradeViewKDE.py:901
 #, python-format
 msgid "No longer supported %s"
 msgstr "%s ris nach eil taic tuilleadh"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:866
+#: ../DistUpgrade/DistUpgradeViewKDE.py:903
 #, python-format
 msgid "Remove %s"
 msgstr "Thoir air falbh %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:868
+#: ../DistUpgrade/DistUpgradeViewKDE.py:905
 #: ../DistUpgrade/DistUpgradeViewText.py:239
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Thoir air falbh %s (chaidh a stàladh gu fèin-obrachail)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:870
+#: ../DistUpgrade/DistUpgradeViewKDE.py:907
 #, python-format
 msgid "Install %s"
 msgstr "Stàlaich %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:872
+#: ../DistUpgrade/DistUpgradeViewKDE.py:909
 #, python-format
 msgid "Upgrade %s"
 msgstr "Àrdaich %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:899
-#: ../DistUpgrade/DistUpgradeViewText.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:956
+#: ../DistUpgrade/DistUpgradeViewText.py:292
 msgid "Restart required"
 msgstr "Feumaidh tu ath-thòiseachadh"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:899
+#: ../DistUpgrade/DistUpgradeViewKDE.py:956
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr ""
 "<b><big>Ath-thòisich an siostam gus an t-àrdachadh a choileanadh</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:902
+#: ../DistUpgrade/DistUpgradeViewKDE.py:959
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "_Ath-thòisich an-dràsta"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:920
+#: ../DistUpgrade/DistUpgradeViewKDE.py:977
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1396,7 +1519,7 @@ msgstr ""
 "Dh'fhaoidte gum fàs an siostam neo-sheasmhach ma sguireas tu dhen àrdachadh. "
 "Mholamaid dhut gu mòr leantainn air adhart leis."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:924
+#: ../DistUpgrade/DistUpgradeViewKDE.py:981
 msgid "Cancel Upgrade?"
 msgstr "A bheil thu airson sgur dhen àrdachadh?"
 
@@ -1440,10 +1563,10 @@ msgstr[3] "%li diog"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:103
 #, python-format
@@ -1454,10 +1577,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:121
 #, python-format
@@ -1483,7 +1606,7 @@ msgstr "Bheir seo mu thuaiream %s 'ga luchdadh a-nuas air a' cheangal agad. "
 
 #. Declare these translatable strings from the .ui files here so that
 #. xgettext picks them up.
-#: ../DistUpgrade/DistUpgradeView.py:268 ../data/gtkbuilder/DistUpgrade.ui.h:21
+#: ../DistUpgrade/DistUpgradeView.py:268 ../data/gtkbuilder/DistUpgrade.ui.h:22
 msgid "Preparing to upgrade"
 msgstr "Ag ullachadh gus àrdachadh"
 
@@ -1491,15 +1614,15 @@ msgstr "Ag ullachadh gus àrdachadh"
 msgid "Getting new software channels"
 msgstr "A' faighinn seanailean bathair-bhog ùra"
 
-#: ../DistUpgrade/DistUpgradeView.py:270 ../data/gtkbuilder/DistUpgrade.ui.h:23
+#: ../DistUpgrade/DistUpgradeView.py:270 ../data/gtkbuilder/DistUpgrade.ui.h:24
 msgid "Getting new packages"
 msgstr "A' faighinn nam pacaidean ùra"
 
-#: ../DistUpgrade/DistUpgradeView.py:271 ../data/gtkbuilder/DistUpgrade.ui.h:26
+#: ../DistUpgrade/DistUpgradeView.py:271 ../data/gtkbuilder/DistUpgrade.ui.h:27
 msgid "Installing the upgrades"
 msgstr "A' stàladh nan àrdachaidhean"
 
-#: ../DistUpgrade/DistUpgradeView.py:272 ../data/gtkbuilder/DistUpgrade.ui.h:25
+#: ../DistUpgrade/DistUpgradeView.py:272 ../data/gtkbuilder/DistUpgrade.ui.h:26
 msgid "Cleaning up"
 msgstr "'Ga sgioblachadh"
 
@@ -1599,11 +1722,11 @@ msgstr ""
 "Chan eil àrdachadh sam bith ann airson an t-siostaim agad. Sguiridh sinn "
 "dheth an-dràsta."
 
-#: ../DistUpgrade/DistUpgradeView.py:422
+#: ../DistUpgrade/DistUpgradeView.py:425
 msgid "Reboot required"
 msgstr "Tha feum air ath-thòiseachadh an t-siostaim"
 
-#: ../DistUpgrade/DistUpgradeView.py:423
+#: ../DistUpgrade/DistUpgradeView.py:426
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
@@ -1617,16 +1740,16 @@ msgstr "Adhartas: [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:141
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Nach dèan thu aithris air a' bhuga seo 's cuir na faidhlichean ann an "
-"/var/log/dist-upgrade/main.log agus /var/log/dist-upgrade/apt.log ris an "
-"aithris. Sguireadh dhen àrdachadh.\n"
-"Chaidh an sources.list tùsail agad a shàbhaladh ann an "
-"/etc/apt/sources.list.distUpgrade."
+"Nach dèan thu aithris air a' bhuga seo 's cuir na faidhlichean ann an /var/"
+"log/dist-upgrade/main.log agus /var/log/dist-upgrade/apt.log ris an aithris. "
+"Sguireadh dhen àrdachadh.\n"
+"Chaidh an sources.list tùsail agad a shàbhaladh ann an /etc/apt/sources.list."
+"distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:165
 msgid "Aborting"
@@ -1642,7 +1765,7 @@ msgstr "Brùth [ENTER] gus leantainn air adhart"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:215
 #: ../DistUpgrade/DistUpgradeViewText.py:253
-#: ../DistUpgrade/DistUpgradeViewText.py:260
+#: ../DistUpgrade/DistUpgradeViewText.py:261
 msgid "Continue [yN] "
 msgstr "A bheil thu airson leantainn air adhart? [tC] "
 
@@ -1654,14 +1777,14 @@ msgstr "Mion-fhiosrachadh [m]"
 #. TRANSLATORS: the "y" is "yes"
 #. TRANSLATORS: first letter of a positive (yes) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:219
-#: ../DistUpgrade/DistUpgradeViewText.py:263
+#: ../DistUpgrade/DistUpgradeViewText.py:264
 msgid "y"
 msgstr "t"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:222
-#: ../DistUpgrade/DistUpgradeViewText.py:270
+#: ../DistUpgrade/DistUpgradeViewText.py:271
 msgid "n"
 msgstr "c"
 
@@ -1690,11 +1813,11 @@ msgstr "Stàlaich: %s\n"
 msgid "Upgrade: %s\n"
 msgstr "Àrdaich: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:267
+#: ../DistUpgrade/DistUpgradeViewText.py:268
 msgid "Continue [Yn] "
 msgstr "A bheil thu airson leantainn air adhart? [Tc] "
 
-#: ../DistUpgrade/DistUpgradeViewText.py:288
+#: ../DistUpgrade/DistUpgradeViewText.py:293
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
@@ -1705,8 +1828,7 @@ msgstr ""
 #: ../DistUpgrade/GtkProgress.py:71
 #, python-format
 msgid "Downloading file %(current)li of %(total)li with %(speed)s/s"
-msgstr ""
-"A' luchdadh a-nuas faidhle %(current)li de %(total)li air %(speed)s/s"
+msgstr "A' luchdadh a-nuas faidhle %(current)li de %(total)li air %(speed)s/s"
 
 #: ../DistUpgrade/GtkProgress.py:77
 #, python-format
@@ -1733,8 +1855,8 @@ msgid ""
 "The system could be in an unusable state if you cancel the upgrade. You are "
 "strongly adviced to resume the upgrade."
 msgstr ""
-"<b><big>A bheil thu airson sgur dhen àrdachadh a tha a' dol air "
-"adhart?</big></b>\n"
+"<b><big>A bheil thu airson sgur dhen àrdachadh a tha a' dol air adhart?</"
+"big></b>\n"
 "\n"
 "Dh'fhaoidte nach obraich an siostam ma sguireas tu dheth. Mholamaid gu mòr "
 "gun lean thu air an àrdachadh."
@@ -1777,23 +1899,24 @@ msgstr ""
 msgid "Distribution Upgrade"
 msgstr "Àrdachadh an sgaoilidh"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:19
+#: ../data/gtkbuilder/DistUpgrade.ui.h:20
+#, no-c-format
 msgid "<b><big>Upgrading Ubuntu to version %s</big></b>"
 msgstr "<b><big>Ag àrdachadh Ubuntu gu tionndadh %s</big></b>"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:20
+#: ../data/gtkbuilder/DistUpgrade.ui.h:21
 msgid "    "
 msgstr "    "
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:22
+#: ../data/gtkbuilder/DistUpgrade.ui.h:23
 msgid "Setting new software channels"
 msgstr "A' suidheachadh nan seanailean bathair-bog ùra"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:24
+#: ../data/gtkbuilder/DistUpgrade.ui.h:25
 msgid "Restarting the computer"
 msgstr "Ag ath-thòiseachadh an coimpiutair"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:27
+#: ../data/gtkbuilder/DistUpgrade.ui.h:28
 msgid "Terminal"
 msgstr "Tèirmineal"
 
@@ -1802,8 +1925,7 @@ msgid "_Upgrade"
 msgstr "Àr_daich"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Tha tionndadh ùr de Ubuntu ri làimh. A bheil thu airson àrdachadh?</b>"
 
@@ -1868,11 +1990,11 @@ msgstr "A' ruith àrdachadh leth-phàirteach"
 msgid "Downloading the release upgrade tool"
 msgstr "A' luchdadh a-nuas inneal àrdachadh an sgaoilidh"
 
-#: ../check_new_release_gtk.py:177
-msgid "Check if upgrading to the latest devel release is possible"
-msgstr ""
-"Thoir sùil an urrainn dhomh àrdachadh gun sgaoileadh luchd-leasachaidh as "
-"ùire"
+#: ../do-release-upgrade:83
+#, fuzzy
+msgid ""
+"If using the latest supported release, upgrade to the development release"
+msgstr "Àrdaich gun sgaoileadh luchd-leasachaidh"
 
 #: ../do-release-upgrade:90 ../check_new_release_gtk.py:181
 msgid ""
@@ -1891,10 +2013,6 @@ msgstr ""
 "Tha taic ri \"desktop\" airson àrdachaidhean àbhaisteach de shiostam deasg "
 "agus \"server\" airson siostaman frithealaiche aig an àm seo."
 
-#: ../do-release-upgrade:91
-msgid "Test upgrade with a sandbox aufs overlay"
-msgstr "Cuir an t-àrdachadh fo dheuchainn le tar-chòmhdachadh sandbox aufs"
-
 #: ../do-release-upgrade:103
 msgid ""
 "Check only if a new distribution release is available and report the result "
@@ -1903,14 +2021,19 @@ msgstr ""
 "Thoir sùil a-mhàin a bheil sgaoileadh ùr ri fhaighinn agus innis dhomh "
 "slighe an exit code"
 
+#: ../do-release-upgrade:108
+msgid ""
+"Try the upgrade with third party mirrors and repositories enabled instead of "
+"commenting them out."
+msgstr ""
+
 #: ../do-release-upgrade:122
 msgid "The options --devel-release and --proposed are"
 msgstr "Chan urrainn dhut na roghainnean --devel-release agus --proposed"
 
 #: ../do-release-upgrade:123
 msgid "mutually exclusive. Please use only one of them."
-msgstr ""
-"a chleachdadh aig an aon àm. Feuch nach cleachd thu ach aonan dhiubh."
+msgstr "a chleachdadh aig an aon àm. Feuch nach cleachd thu ach aonan dhiubh."
 
 #: ../do-release-upgrade:127
 msgid "Checking for a new Ubuntu release"
@@ -1928,8 +2051,39 @@ msgstr ""
 "Airson stiùireadh air àrdachadh, tadhail air:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
-msgid "No new release found"
+#: ../do-release-upgrade:147
+msgid "In /etc/update-manager/release-upgrades Prompt "
+msgstr ""
+
+#: ../do-release-upgrade:148
+msgid "is set to never so upgrading is not possible."
+msgstr ""
+
+#: ../do-release-upgrade:150
+msgid "There is no development version of an LTS available."
+msgstr ""
+
+#: ../do-release-upgrade:151
+#, fuzzy
+msgid "To upgrade to the latest non-LTS development release "
+msgstr "Àrdaich gun sgaoileadh luchd-leasachaidh"
+
+#: ../do-release-upgrade:152
+msgid "set Prompt=normal in /etc/update-manager/release-upgrades."
+msgstr ""
+
+#: ../do-release-upgrade:154
+#, fuzzy
+msgid "Upgrades to the development release are only "
+msgstr "Àrdaich gun sgaoileadh luchd-leasachaidh"
+
+#: ../do-release-upgrade:155
+msgid "available from the latest supported release."
+msgstr ""
+
+#: ../do-release-upgrade:157
+#, fuzzy
+msgid "No new release found."
 msgstr "Cha deach sgaoileadh ùr a lorg"
 
 #: ../do-release-upgrade:162
@@ -1954,6 +2108,16 @@ msgstr "Tha an sgaoileadh ùr \"%s\" ri fhaighinn."
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Ruith \"do-release-upgrade\" gus àrdachadh thuige."
 
+#: ../do-release-upgrade:187
+msgid "Please install all available updates for your release before upgrading."
+msgstr ""
+
+#: ../do-release-upgrade:199
+msgid ""
+"You have not rebooted after updating a package which requires a reboot. "
+"Please reboot before upgrading."
+msgstr ""
+
 #: ../check_new_release_gtk.py:85
 msgid "Software Updater"
 msgstr "Ùraichear a' bhathair-bhog"
@@ -1969,9 +2133,80 @@ msgstr "Tha àrdachadh gu Ubuntu %(version)s ri fhaighinn"
 msgid "You have declined the upgrade to Ubuntu %s"
 msgstr "Chuir thu romhad an t-àrdachadh gu Ubuntu %s a dhiùltadh"
 
+#: ../check_new_release_gtk.py:177
+msgid "Check if upgrading to the latest devel release is possible"
+msgstr ""
+"Thoir sùil an urrainn dhomh àrdachadh gun sgaoileadh luchd-leasachaidh as "
+"ùire"
+
 #: ../check_new_release_gtk.py:186
 msgid "Add debug output"
 msgstr "Cuir ris às-chur dì-bhugachaidh"
+
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Thachair duilgheadas nach gabh a chàradh fhad 's a bha sinn ag "
+#~ "àireamhachadh an àrdachaidh.\n"
+#~ "\n"
+#~ "Tachraidh seo:\n"
+#~ " * ma nithear àrdachadh gu tionndadh ro-sgaoilidh de Ubuntu\n"
+#~ " * ma ruithear an ro-sgaoileadh làithreach de Ubuntu\n"
+#~ " * ma tha pacaidean bathair-bog neo-oifigeil agad nach deach a sholar le "
+#~ "Ubuntu\n"
+#~ "\n"
+
+#~ msgid "Sandbox setup failed"
+#~ msgstr "Dh'fhàillig suidheachadh a' bhogsa-ghainmhich"
+
+#~ msgid "It was not possible to create the sandbox environment."
+#~ msgstr ""
+#~ "Cha b' urrainn dhuinn àrainneachd a' bhogsa-ghainmhich a chruthachadh."
+
+#~ msgid "Sandbox mode"
+#~ msgstr "Modh a' bhogsa-ghainmhich"
+
+#~ msgid ""
+#~ "This upgrade is running in sandbox (test) mode. All changes are written "
+#~ "to '%s' and will be lost on the next reboot.\n"
+#~ "\n"
+#~ "*No* changes written to a system directory from now until the next reboot "
+#~ "are permanent."
+#~ msgstr ""
+#~ "Tha an t-ùrachadh seo a' ruith ann am modh a' bhogsa-ghainmhich "
+#~ "(deuchainneil). Thèid gach atharrachadh a sgrìobhadh ann an \"%s\" agus "
+#~ "thèid iad air chall an ath-thuras a thòisicheas tu an siostam.\n"
+#~ "\n"
+#~ "Chan bhi *gin* dhe na h-atharraichean a thèid an sgrìobadh ann am pasgan "
+#~ "siostaim a-mach o seo gus an ath-thuras a thèid an siostam a thòiseachadh "
+#~ "buan."
+
+#~ msgid "No i686 CPU"
+#~ msgstr "As aonais CPU i686"
+
+#~ msgid ""
+#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
+#~ "extension. All packages were built with optimizations requiring i686 as "
+#~ "the minimal architecture. It is not possible to upgrade your system to a "
+#~ "new Ubuntu release with this hardware."
+#~ msgstr ""
+#~ "Tha an siostam agad a' cleachdadh CPU i586 no CPU aig nach eil an "
+#~ "leudachan \"cmov\". Chaidh gach pacaid a chruthachadh air dòigh "
+#~ "piseachaidh a tha feumach air i686 air a' char as lugha. Chan urrainn "
+#~ "dhut an siostam agad àrdachadh gu tionndadh Ubuntu ùr leis a' bhathar-"
+#~ "chruaidh seo."
+
+#~ msgid "Sandbox upgrade using aufs"
+#~ msgstr "Àrdachadh bogsa-gainmhich a' cleachdadh aufs"
+
+#~ msgid "Test upgrade with a sandbox aufs overlay"
+#~ msgstr "Cuir an t-àrdachadh fo dheuchainn le tar-chòmhdachadh sandbox aufs"
 
 #~ msgid "Authentication is required to perform a partial upgrade"
 #~ msgstr "Tha dearbhachadh ga iarraidh son dèanamh leasachadh leth-phàirteach"
@@ -1979,7 +2214,6 @@ msgstr "Cuir ris às-chur dì-bhugachaidh"
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr "Tha dearbhachadh ga iarraidh son dèanamh leasachadh sgaoilidh"
 
-#, python-format
 #~ msgid ""
 #~ "An unresolvable problem occurred while calculating the upgrade:\n"
 #~ "%s\n"
@@ -2003,21 +2237,21 @@ msgstr "Cuir ris às-chur dì-bhugachaidh"
 
 #~ msgid ""
 #~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
-#~ "version of Ubuntu you are running.\n"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect "
+#~ "which version of Ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
-#~ "Chan eil pacaid ubuntu-desktop, kubuntu-desktop, xubuntu-desktop no edubuntu-"
-#~ "desktop package air an t-siostam agad agus cha b' urrainn dhuinn fiosrachadh "
-#~ "dè an tionndadh de Ubuntu a tha agad.\n"
-#~ " Feuch is stàlaich aon dhe na pacaidean gu h-àrd le synaptic no apt-get mus "
-#~ "lean thu air adhart."
+#~ "Chan eil pacaid ubuntu-desktop, kubuntu-desktop, xubuntu-desktop no "
+#~ "edubuntu-desktop package air an t-siostam agad agus cha b' urrainn dhuinn "
+#~ "fiosrachadh dè an tionndadh de Ubuntu a tha agad.\n"
+#~ " Feuch is stàlaich aon dhe na pacaidean gu h-àrd le synaptic no apt-get "
+#~ "mus lean thu air adhart."
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-#~ "run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
 #~ msgstr ""
 #~ "Chan urrainn dhan àdrachadh leantainn air adhart is a' phacaid sin "
 #~ "stàlaichte.\n"
@@ -2027,29 +2261,28 @@ msgstr "Cuir ris às-chur dì-bhugachaidh"
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "Tha a' phacaid \"debsig-verify\" stàlaichte"
 
-#, python-format
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the upgrade "
-#~ "was found. This can happen if you run a internal mirror or if the mirror "
-#~ "information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the "
+#~ "upgrade was found. This can happen if you run a internal mirror or if the "
+#~ "mirror information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
-#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
+#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'No' the upgrade will cancel."
 #~ msgstr ""
-#~ "Thug sinn sùil air fiosrachadh an repository ach cha do lorg sinn innteart a "
-#~ "thaobh a' mirror airson an àrdachaidh. Tachraidh seo ma tha mirror "
-#~ "inntearnail agad no ma tha fiosrachadh a' mirror ro shean.\n"
+#~ "Thug sinn sùil air fiosrachadh an repository ach cha do lorg sinn "
+#~ "innteart a thaobh a' mirror airson an àrdachaidh. Tachraidh seo ma tha "
+#~ "mirror inntearnail agad no ma tha fiosrachadh a' mirror ro shean.\n"
 #~ "\n"
-#~ "A bheil thu airson am faidhle \"sources.list\" agad ath-sgrìobhadh co-dhiù? "
-#~ "Ma thaghas tu \"Tha\", an-seo, nì e innteartan \"%2s\" de gach innteart "
-#~ "\"%1s\".\n"
+#~ "A bheil thu airson am faidhle \"sources.list\" agad ath-sgrìobhadh co-"
+#~ "dhiù? Ma thaghas tu \"Tha\", an-seo, nì e innteartan \"%2s\" de gach "
+#~ "innteart \"%1s\".\n"
 #~ "Ma thaghas tu \"Chan eil\", thèid crìoch a chur air an àrdachadh."
 
 #~ msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
 #~ msgstr ""
-#~ "Dh'fhaoidte nach eil làn-taic ris a' bhathar-chruaidh ghrafaigeachd ann an "
-#~ "Ubuntu 13.04."
+#~ "Dh'fhaoidte nach eil làn-taic ris a' bhathar-chruaidh ghrafaigeachd ann "
+#~ "an Ubuntu 13.04."
 
 #~ msgid "evms in use"
 #~ msgstr "evms a tha 'gan cleachdadh"
@@ -2059,9 +2292,9 @@ msgstr "Cuir ris às-chur dì-bhugachaidh"
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
 #~ msgstr ""
-#~ "Tha an siostam agad a' cleachdadh manaidsear nan draibhean evms ann an "
-#~ "/proc/mounts. Chan eil taic ris a' bhathar-bhog evms tuilleadh, cuir dheth e "
-#~ "agus ruith an t-àrdachadh a-rithist nuair a rinn thu sin."
+#~ "Tha an siostam agad a' cleachdadh manaidsear nan draibhean evms ann an /"
+#~ "proc/mounts. Chan eil taic ris a' bhathar-bhog evms tuilleadh, cuir dheth "
+#~ "e agus ruith an t-àrdachadh a-rithist nuair a rinn thu sin."
 
 #~ msgid ""
 #~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
@@ -2070,8 +2303,8 @@ msgstr "Cuir ris às-chur dì-bhugachaidh"
 #~ "\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "Tha an coimpiutair seo a' cleachdadh draibhear grafaigean NVIDIA \"nvidia\". "
-#~ "Chan eil tionndadh eile dhen draibhear seo ri fhaighinn a dh'obraicheas leis "
-#~ "a' chairt video agad ann an Ubuntu 10.04 LTS.\n"
+#~ "Tha an coimpiutair seo a' cleachdadh draibhear grafaigean NVIDIA \"nvidia"
+#~ "\". Chan eil tionndadh eile dhen draibhear seo ri fhaighinn a "
+#~ "dh'obraicheas leis a' chairt video agad ann an Ubuntu 10.04 LTS.\n"
 #~ "\n"
 #~ "A bheil thu airson leantainn air adhart?"

@@ -476,6 +476,10 @@ class DistUpgradeViewGtk3(DistUpgradeView,SimpleGtkbuilderApp):
             logging.debug("error setting default icon, ignoring (%s)" % e)
             pass
 
+        title_string = self.label_title.get_label()
+        title_string = title_string.replace("%s", "19.10")
+        self.label_title.set_label(title_string)
+
         # terminal stuff
         self.create_terminal()
 

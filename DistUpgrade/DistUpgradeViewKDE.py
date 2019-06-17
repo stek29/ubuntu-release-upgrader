@@ -639,7 +639,10 @@ class DistUpgradeViewKDE(DistUpgradeView):
         name = _OSRelease().result["PRETTY_NAME"]
         if not name or name == "Ubuntu":
             name = "Kubuntu"
-        self.window_main.label_title.setText(self.window_main.label_title.text().replace("Ubuntu", name))
+        title_string = self.window_main.label_title.text()
+        title_string = title_string.replace("Ubuntu", name)
+        title_string = title_string.replace("%s", "19.10")
+        self.window_main.label_title.setText(title_string)
 
         # setup terminal text in hidden by default spot
         self.window_main.konsole_frame.hide()

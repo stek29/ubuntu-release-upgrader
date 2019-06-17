@@ -50,6 +50,7 @@ class DistUpgradeQuirks(object):
                            universal_newlines=True).communicate()[0].strip()
         self.arch = get_arch()
         self._poke = None
+        self._snapstore_reachable = False
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -126,7 +127,8 @@ class DistUpgradeQuirks(object):
             logging.debug("package required for Quirk not in cache")
             return
         if cache['ubuntu-desktop'].is_installed and \
-                cache['snapd'].is_installed:
+                cache['snapd'].is_installed and \
+                self._snapstore_reachable:
             self._replaceDebsWithSnaps()
 
     # individual quirks handler when the dpkg run is finished ---------
@@ -408,6 +410,7 @@ class DistUpgradeQuirks(object):
                           stderr=PIPE, env=snap_env,
                           universal_newlines=True).communicate()
         if re.search("^ \* PASS", connected[0], re.MULTILINE):
+            self._snapstore_reachable = True
             return
         # can't connect
         elif re.search("^ \*.*unreachable", connected[0], re.MULTILINE):

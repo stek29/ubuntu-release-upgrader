@@ -5,21 +5,22 @@
 #
 # YunQiang Su <wzssyqa@gmail.com>, 2012.
 #
+#: ../DistUpgrade/DistUpgradeController.py:1078
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager HEAD\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2015-10-07 09:44-0700\n"
+"POT-Creation-Date: 2019-06-17 16:02-0700\n"
 "PO-Revision-Date: 2013-07-20 01:56+0000\n"
 "Last-Translator: Wang Dianjin <Unknown>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Launchpad-Export-Date: 2019-05-17 05:46+0000\n"
 "X-Generator: Launchpad (build 18962)\n"
-"Language: \n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:215 ../DistUpgrade/distro.py:446
@@ -82,7 +83,9 @@ msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
 "but no archives can be found for them. Do you want to remove these packages "
 "now to continue?"
-msgstr[0] "软件包“%s”处于不一致的状态，需要重新安装，但是没有找到对应的存档。您希望现在删除这个软件包以进行下一步吗？"
+msgstr[0] ""
+"软件包“%s”处于不一致的状态，需要重新安装，但是没有找到对应的存档。您希望现在"
+"删除这个软件包以进行下一步吗？"
 
 #. FIXME: not ideal error message, but we just reuse a
 #. existing one here to avoid a new string
@@ -98,37 +101,57 @@ msgstr "破损的软件包"
 msgid ""
 "Your system contains broken packages that couldn't be fixed with this "
 "software. Please fix them first using synaptic or apt-get before proceeding."
-msgstr "您的系统包含有本软件不能修复的破损软件包，在您继续前请先用新立得或者 apt-get 修复它们。"
+msgstr ""
+"您的系统包含有本软件不能修复的破损软件包，在您继续前请先用新立得或者 apt-get "
+"修复它们。"
 
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:640
+#. the most likely problem is the 3rd party pkgs so don't address
+#. foreignPkgs and devRelease being True
+#: ../DistUpgrade/DistUpgradeCache.py:671
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
+" "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:674
+msgid ""
+"This was likely caused by:\n"
 " * Unofficial software packages not provided by Ubuntu\n"
+"Please use the tool 'ppa-purge' from the ppa-purge \n"
+"package to remove software from a Launchpad PPA and \n"
+"try the upgrade again.\n"
 "\n"
 msgstr ""
-"在筹划升级时，一个不可解决问题发生了：\n"
-"\n"
-" 这可能是由以下原因造成的：\n"
-" *升级为 Ubuntu 的预发行版本\n"
-" *运行目前的 Ubuntu 预发布版本\n"
-" *不是由 Ubuntu 提供的非官方软件包\n"
-"\n"
+
+#: ../DistUpgrade/DistUpgradeCache.py:682
+#, fuzzy
+msgid ""
+"This was caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+"This is most likely a transient problem, \n"
+"please try again later.\n"
+msgstr "很可能发生了一个传输问题，请稍后重试。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:689
 msgid "This is most likely a transient problem, please try again later."
 msgstr "很可能发生了一个传输问题，请稍后重试。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:692
+#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug using the command "
-"'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
+"'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
-"如果这些都不生效，请在终端中使用命令 'ubuntu-bug ubuntu-release-upgrader-core' 来报告 bug。"
+"如果这些都不生效，请在终端中使用命令 'ubuntu-bug ubuntu-release-upgrader-"
+"core' 来报告 bug。"
+
+#: ../DistUpgrade/DistUpgradeCache.py:694
+msgid ""
+"If you want to investigate this yourself the log files in '/var/log/dist-"
+"upgrade' will contain details about the upgrade. Specifically, look at 'main."
+"log' and 'apt.log'."
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:700
 msgid "Could not calculate the upgrade"
@@ -143,7 +166,9 @@ msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
 "unauthenticated packages."
-msgstr "一些软件包无法通过签名验证。这可能是暂时的网络问题，您可以在稍后再试。以下是未认证软件包的列表。"
+msgstr ""
+"一些软件包无法通过签名验证。这可能是暂时的网络问题，您可以在稍后再试。以下是"
+"未认证软件包的列表。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:781
 #, python-format
@@ -170,7 +195,9 @@ msgstr "无法安装 '%s'"
 msgid ""
 "It was impossible to install a required package. Please report this as a bug "
 "using 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
-msgstr "无法安装所需的软件包。请在终端使用“ubuntu-bug ubuntu-release-upgrader-core”将其报为 bug。"
+msgstr ""
+"无法安装所需的软件包。请在终端使用“ubuntu-bug ubuntu-release-upgrader-core”将"
+"其报为 bug。"
 
 #: ../DistUpgrade/DistUpgradeCache.py:927
 msgid "Can't guess meta-package"
@@ -187,25 +214,27 @@ msgstr ""
 "您的系统没有包含 %s 或 %s 包，不可能检测到您正在运行的 Ubuntu 版本。\n"
 "请先使用 synaptic 安装上述软件包之一或 apt-get 。"
 
-#: ../DistUpgrade/DistUpgradeController.py:112
+#: ../DistUpgrade/DistUpgradeController.py:113
 msgid "Reading cache"
 msgstr "正在读取缓存"
 
-#: ../DistUpgrade/DistUpgradeController.py:225
+#: ../DistUpgrade/DistUpgradeController.py:226
 msgid "Unable to get exclusive lock"
 msgstr "无法获得排它锁"
 
-#: ../DistUpgrade/DistUpgradeController.py:226
+#: ../DistUpgrade/DistUpgradeController.py:227
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
-msgstr "这通常意味着另一个软件包管理程序(如 apt-get 或 aptitude)正在运行。请先关闭那个程序。"
+msgstr ""
+"这通常意味着另一个软件包管理程序(如 apt-get 或 aptitude)正在运行。请先关闭那"
+"个程序。"
 
-#: ../DistUpgrade/DistUpgradeController.py:284
+#: ../DistUpgrade/DistUpgradeController.py:285
 msgid "Upgrading over remote connection not supported"
 msgstr "不支持通过远程连接升级"
 
-#: ../DistUpgrade/DistUpgradeController.py:285
+#: ../DistUpgrade/DistUpgradeController.py:286
 msgid ""
 "You are running the upgrade over a remote ssh connection with a frontend "
 "that does not support this. Please try a text mode upgrade with 'do-release-"
@@ -213,15 +242,16 @@ msgid ""
 "\n"
 "The upgrade will abort now. Please try without ssh."
 msgstr ""
-"您正在通过远程 SSH 升级，而前端程序不支持这种方式。请尝试在文本模式下通过 'do-release-upgrade' 命令进行升级。\n"
+"您正在通过远程 SSH 升级，而前端程序不支持这种方式。请尝试在文本模式下通过 "
+"'do-release-upgrade' 命令进行升级。\n"
 "\n"
 "现在将退出升级。请试试不使用 ssh 的方式。"
 
-#: ../DistUpgrade/DistUpgradeController.py:299
+#: ../DistUpgrade/DistUpgradeController.py:300
 msgid "Continue running under SSH?"
 msgstr "继续在 SSH 下执行？"
 
-#: ../DistUpgrade/DistUpgradeController.py:300
+#: ../DistUpgrade/DistUpgradeController.py:301
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -231,25 +261,27 @@ msgid ""
 "If you continue, an additional ssh daemon will be started at port '%s'.\n"
 "Do you want to continue?"
 msgstr ""
-"此会话似乎是在 SSH 下运行。目前不推荐通过 SSH 执行升级，因为升级失败时较难恢复。\n"
+"此会话似乎是在 SSH 下运行。目前不推荐通过 SSH 执行升级，因为升级失败时较难恢"
+"复。\n"
 "\n"
 "如果您选择继续，将在 '%s' 端口上建立额外的 SSH 守护进程。\n"
 "您想要继续吗？"
 
-#: ../DistUpgrade/DistUpgradeController.py:314
+#: ../DistUpgrade/DistUpgradeController.py:315
 msgid "Starting additional sshd"
 msgstr "正在启用额外的 ssh 守护进程"
 
-#: ../DistUpgrade/DistUpgradeController.py:315
+#: ../DistUpgrade/DistUpgradeController.py:316
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
 "started on port '%s'. If anything goes wrong with the running ssh you can "
 "still connect to the additional one.\n"
 msgstr ""
-"为了在失败时更容易恢复，将在端口“%s”开启一个额外的 ssh 守护进程。如果当前运行的 ssh 发生错误，您仍能够通过该额外的 ssh 进行连接。\n"
+"为了在失败时更容易恢复，将在端口“%s”开启一个额外的 ssh 守护进程。如果当前运行"
+"的 ssh 发生错误，您仍能够通过该额外的 ssh 进行连接。\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:323
+#: ../DistUpgrade/DistUpgradeController.py:324
 #, python-format
 msgid ""
 "If you run a firewall, you may need to temporarily open this port. As this "
@@ -257,55 +289,32 @@ msgid ""
 "with e.g.:\n"
 "'%s'"
 msgstr ""
-"如果您运行了一个防火墙，可能需要临时打开这个端口。这可能有些危险，因此没有自动进行这个操作。您可以通过类似这样的命令打开端口：\n"
+"如果您运行了一个防火墙，可能需要临时打开这个端口。这可能有些危险，因此没有自"
+"动进行这个操作。您可以通过类似这样的命令打开端口：\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:403
-#: ../DistUpgrade/DistUpgradeController.py:427
+#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:428
 msgid "Can not upgrade"
 msgstr "无法升级"
 
-#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:405
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "此工具不支持从 '%s' 到 ‘%s' 的升级。"
 
-#: ../DistUpgrade/DistUpgradeController.py:410
-msgid "Sandbox setup failed"
-msgstr "安装沙盒失败"
-
-#: ../DistUpgrade/DistUpgradeController.py:411
-msgid "It was not possible to create the sandbox environment."
-msgstr "不能创建沙盒环境"
-
-#: ../DistUpgrade/DistUpgradeController.py:417
-msgid "Sandbox mode"
-msgstr "沙盒模式"
-
-#: ../DistUpgrade/DistUpgradeController.py:418
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:429
+#, fuzzy
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
-"\n"
-"*No* changes written to a system directory from now until the next reboot "
-"are permanent."
-msgstr ""
-"本次更新运行在沙盘(测试)模式，所有变更都将写入 '%s' 并会在重启后丢失。\n"
-"\n"
-"从现在起对系统目录的变更重启后都将 *不复存在* 。"
-
-#: ../DistUpgrade/DistUpgradeController.py:446
-msgid ""
-"Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
+"Your python3 install is corrupted. Please fix the '/usr/bin/python3' symlink."
 msgstr "您的 python 安装错误，请修复“/usr/bin/python”符号链接。"
 
-#: ../DistUpgrade/DistUpgradeController.py:457
+#: ../DistUpgrade/DistUpgradeController.py:458
 #, python-format
 msgid "Can not write to '%s'"
 msgstr "无法写入 '%s'"
 
-#: ../DistUpgrade/DistUpgradeController.py:458
+#: ../DistUpgrade/DistUpgradeController.py:459
 #, python-format
 msgid ""
 "Its not possible to write to the system directory '%s' on your system. The "
@@ -315,11 +324,11 @@ msgstr ""
 "无法写入您的系统目录 %s ，升级无法继续。\n"
 "请确保系统目录可写。"
 
-#: ../DistUpgrade/DistUpgradeController.py:469
+#: ../DistUpgrade/DistUpgradeController.py:470
 msgid "Include latest updates from the Internet?"
 msgstr "包括网络上的最新更新？"
 
-#: ../DistUpgrade/DistUpgradeController.py:470
+#: ../DistUpgrade/DistUpgradeController.py:471
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -330,26 +339,44 @@ msgid ""
 "latest updates soon after upgrading.\n"
 "If you answer 'no' here, the network is not used at all."
 msgstr ""
-"升级系统能够从网络上自动下载最新的更新文件并自动安装。如果网络连接可用，强烈建议启用此选项。\n"
+"升级系统能够从网络上自动下载最新的更新文件并自动安装。如果网络连接可用，强烈"
+"建议启用此选项。\n"
 "\n"
-"升级时间可能加长，但升级结束后，您的系统将是最新的。您也可以选择在升级结束后再进行系统更新。\n"
+"升级时间可能加长，但升级结束后，您的系统将是最新的。您也可以选择在升级结束后"
+"再进行系统更新。\n"
 "如果选择\"否\"，就不会使用网络。"
 
-#: ../DistUpgrade/DistUpgradeController.py:648
+#: ../DistUpgrade/DistUpgradeController.py:649
 #, python-format
 msgid "Not for humans during development stage of release %s"
 msgstr "%s 版本尚在开发阶段，不适合普通用户使用"
 
-#: ../DistUpgrade/DistUpgradeController.py:749
+#: ../DistUpgrade/DistUpgradeController.py:750
 #, python-format
 msgid "disabled on upgrade to %s"
 msgstr "已禁止升级到 %s"
 
-#: ../DistUpgrade/DistUpgradeController.py:819
+#: ../DistUpgrade/DistUpgradeController.py:807
+#, fuzzy
+msgid "No valid sources.list entry found"
+msgstr "无法计算 sources.list 条目"
+
+#: ../DistUpgrade/DistUpgradeController.py:808
+#, python-format
+msgid ""
+"While scanning your repository information no entry about %s could be "
+"found.\n"
+"\n"
+"An upgrade might not succeed.\n"
+"\n"
+"Do you want to continue anyway?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:820
 msgid "No valid mirror found"
 msgstr "未找到可用的镜像"
 
-#: ../DistUpgrade/DistUpgradeController.py:820
+#: ../DistUpgrade/DistUpgradeController.py:821
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -360,17 +387,18 @@ msgid ""
 "here it will update all '%s' to '%s' entries.\n"
 "If you select 'No' the upgrade will cancel."
 msgstr ""
-"在扫描您的仓库信息时，未发现升级可用的镜像条目。可能是由于您运行一个内部镜像或者镜像信息过时。\n"
+"在扫描您的仓库信息时，未发现升级可用的镜像条目。可能是由于您运行一个内部镜像"
+"或者镜像信息过时。\n"
 "\n"
 "您要重写您的 ‘sources.list’ 文件？选择“是”，将更新所有从'%s'到'%s'的条目。\n"
 "选择“否”取消升级。"
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:840
+#: ../DistUpgrade/DistUpgradeController.py:841
 msgid "Generate default sources?"
 msgstr "生成默认的源？"
 
-#: ../DistUpgrade/DistUpgradeController.py:841
+#: ../DistUpgrade/DistUpgradeController.py:842
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -382,42 +410,44 @@ msgstr ""
 "\n"
 "是否为“%s”添加默认项？如果选择“否”，将会取消升级。"
 
-#: ../DistUpgrade/DistUpgradeController.py:876
-#: ../DistUpgrade/DistUpgradeController.py:882
+#: ../DistUpgrade/DistUpgradeController.py:877
+#: ../DistUpgrade/DistUpgradeController.py:883
 msgid "Repository information invalid"
 msgstr "仓库信息无效"
 
-#: ../DistUpgrade/DistUpgradeController.py:877
+#: ../DistUpgrade/DistUpgradeController.py:878
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
 msgstr "更新软件源时返回了无效文件，已启动错误报告进程。"
 
-#: ../DistUpgrade/DistUpgradeController.py:883
+#: ../DistUpgrade/DistUpgradeController.py:884
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"升级软件仓库信息时得到了无效的文件。如果您想报告这个错误，请安装 apport 软件，然后执行 apport-bug ubuntu-release-"
-"upgrader 命令。"
+"升级软件仓库信息时得到了无效的文件。如果您想报告这个错误，请安装 apport 软"
+"件，然后执行 apport-bug ubuntu-release-upgrader 命令。"
 
-#: ../DistUpgrade/DistUpgradeController.py:892
+#: ../DistUpgrade/DistUpgradeController.py:893
 msgid "Third party sources disabled"
 msgstr "第三方源被禁用"
 
-#: ../DistUpgrade/DistUpgradeController.py:893
+#: ../DistUpgrade/DistUpgradeController.py:894
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
 "package manager."
-msgstr "您的 sources.list 中的一些第三方源被禁用。您可以在升级后用\"软件源\"工具或包管理器来重新启用它们。"
+msgstr ""
+"您的 sources.list 中的一些第三方源被禁用。您可以在升级后用\"软件源\"工具或包"
+"管理器来重新启用它们。"
 
-#: ../DistUpgrade/DistUpgradeController.py:935
+#: ../DistUpgrade/DistUpgradeController.py:936
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "软件包存在冲突"
 
-#: ../DistUpgrade/DistUpgradeController.py:938
+#: ../DistUpgrade/DistUpgradeController.py:939
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -427,103 +457,156 @@ msgid_plural ""
 "The packages '%s' are in an inconsistent state and need to be reinstalled, "
 "but no archive can be found for them. Please reinstall the packages manually "
 "or remove them from the system."
-msgstr[0] "软件包“%s”处于冲突状态，需要重新安装， 但是没能找到它的存档。请重新手动安装这个软件包或者将其从系统中删除。"
+msgstr[0] ""
+"软件包“%s”处于冲突状态，需要重新安装， 但是没能找到它的存档。请重新手动安装这"
+"个软件包或者将其从系统中删除。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1001
+#: ../DistUpgrade/DistUpgradeController.py:1002
 msgid "Error during update"
 msgstr "升级时出错"
 
-#: ../DistUpgrade/DistUpgradeController.py:1002
+#: ../DistUpgrade/DistUpgradeController.py:1003
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
 msgstr "升级过程中出错。这通常是一些网络问题，请检查您的网络连接后再试"
 
-#: ../DistUpgrade/DistUpgradeController.py:1058
+#: ../DistUpgrade/DistUpgradeController.py:1046
+#: ../DistUpgrade/DistUpgradeController.py:1051
+msgid "EFI System Partition (ESP) not usable"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1047
+msgid ""
+"Your EFI System Partition (ESP) is not mounted at /boot/efi. Please ensure "
+"that it is properly configured and try again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1052
+msgid ""
+"The EFI System Partition (ESP) mounted at /boot/efi is not writable. Please "
+"mount this partition read-write and try again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1059
 msgid "Not enough free disk space"
 msgstr "磁盘空间不足"
 
-#: ../DistUpgrade/DistUpgradeController.py:954
-#, python-format
+#. TRANSLATORS: you can change the order of the sentence,
+#. make sure to keep all {str_*} string untranslated.
+#: ../DistUpgrade/DistUpgradeController.py:1062
+#, fuzzy, python-brace-format
 msgid ""
-"The upgrade has aborted. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
+"The upgrade has aborted. The upgrade needs a total of {str_total} free space "
+"on disk '{str_dir}'. Please free at least an additional {str_needed} of disk "
+"space on '{str_dir}'. {str_remedy}"
 msgstr ""
-"升级已被中断。此次升级需要有 %s 的可用空间在磁盘 %s 上。请释放至少 %s 的空间在磁盘 %s 上。您可以清空回收站并使用“sudo apt-"
-"get clean”命令以清除之前安装操作留下的临时文件。"
+"升级已被中断。此次升级需要有 %s 的可用空间在磁盘 %s 上。请释放至少 %s 的空间"
+"在磁盘 %s 上。您可以清空回收站并使用“sudo apt-get clean”命令以清除之前安装操"
+"作留下的临时文件。"
+
+#. specific ways to resolve lack of free space
+#: ../DistUpgrade/DistUpgradeController.py:1067
+msgid ""
+"Remove temporary packages of former installations using 'sudo apt clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1069
+msgid ""
+"You can remove old kernels using 'sudo apt autoremove' and you could also "
+"set COMPRESS=xz in /etc/initramfs-tools/initramfs.conf to reduce the size of "
+"your initramfs."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1074
+msgid ""
+"Empty your trash and remove temporary packages of former installations using "
+"'sudo apt-get clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1077
+msgid "Reboot to clean up files in /tmp."
+msgstr ""
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:1115
-#: ../DistUpgrade/DistUpgradeController.py:1972
-#: ../DistUpgrade/DistUpgradeController.py:2022
+#: ../DistUpgrade/DistUpgradeController.py:1116
+#: ../DistUpgrade/DistUpgradeController.py:1994
+#: ../DistUpgrade/DistUpgradeController.py:2044
 msgid "Calculating the changes"
 msgstr "正在计算变更"
 
 #. ask the user
-#: ../DistUpgrade/DistUpgradeController.py:1159
+#: ../DistUpgrade/DistUpgradeController.py:1160
 msgid "Do you want to start the upgrade?"
 msgstr "您要开始升级么？"
 
-#: ../DistUpgrade/DistUpgradeController.py:1232
+#: ../DistUpgrade/DistUpgradeController.py:1179
+#, python-format
+msgid ""
+"Livepatch security updates are not available for Ubuntu %s. If you upgrade, "
+"Livepatch will turn off."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1251
 msgid "Upgrade canceled"
 msgstr "升级已取消"
 
-#: ../DistUpgrade/DistUpgradeController.py:1233
+#: ../DistUpgrade/DistUpgradeController.py:1252
 msgid ""
 "The upgrade will cancel now and the original system state will be restored. "
 "You can resume the upgrade at a later time."
 msgstr "升级将会取消，系统会恢复到原始状态。您可以在之后继续升级。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1239
-#: ../DistUpgrade/DistUpgradeController.py:1384
+#: ../DistUpgrade/DistUpgradeController.py:1258
+#: ../DistUpgrade/DistUpgradeController.py:1403
 msgid "Could not download the upgrades"
 msgstr "无法下载升级包"
 
-#: ../DistUpgrade/DistUpgradeController.py:1240
+#: ../DistUpgrade/DistUpgradeController.py:1259
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far have been kept."
-msgstr "已中止升级。请检查您的互联网连接或安装媒体并重试。所有已下载的文件都已保存。"
+msgstr ""
+"已中止升级。请检查您的互联网连接或安装媒体并重试。所有已下载的文件都已保存。"
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
-#: ../DistUpgrade/DistUpgradeController.py:1333
-#: ../DistUpgrade/DistUpgradeController.py:1372
-#: ../DistUpgrade/DistUpgradeController.py:1490
+#: ../DistUpgrade/DistUpgradeController.py:1352
+#: ../DistUpgrade/DistUpgradeController.py:1391
+#: ../DistUpgrade/DistUpgradeController.py:1509
 msgid "Error during commit"
 msgstr "确认时出错"
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1335
-#: ../DistUpgrade/DistUpgradeController.py:1374
-#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:1354
+#: ../DistUpgrade/DistUpgradeController.py:1393
+#: ../DistUpgrade/DistUpgradeController.py:1548
 msgid "Restoring original system state"
 msgstr "正在恢复原始系统状态"
 
-#: ../DistUpgrade/DistUpgradeController.py:1336
-#: ../DistUpgrade/DistUpgradeController.py:1351
-#: ../DistUpgrade/DistUpgradeController.py:1375
+#: ../DistUpgrade/DistUpgradeController.py:1355
+#: ../DistUpgrade/DistUpgradeController.py:1370
+#: ../DistUpgrade/DistUpgradeController.py:1394
 msgid "Could not install the upgrades"
 msgstr "无法安装升级"
 
 #. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:1341
+#: ../DistUpgrade/DistUpgradeController.py:1360
 msgid ""
 "The upgrade has aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
-msgstr "更新已取消。您的系统可能处在不稳定状态。正在恢复 (dpkg --configure -a)。"
+msgstr ""
+"更新已取消。您的系统可能处在不稳定状态。正在恢复 (dpkg --configure -a)。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1346
+#: ../DistUpgrade/DistUpgradeController.py:1365
 #, python-format
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
@@ -532,26 +615,30 @@ msgstr ""
 "upgrader/+filebug 并将 /var/log/dist-upgrade/ 文件作为附件上传到问题报告。\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:1385
+#: ../DistUpgrade/DistUpgradeController.py:1404
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. "
 msgstr "更新已取消。请检查您的因特网连接或安装媒体，然后再试一遍。 "
 
-#: ../DistUpgrade/DistUpgradeController.py:1478
+#: ../DistUpgrade/DistUpgradeController.py:1432
+msgid "Searching for obsolete software"
+msgstr "正在搜索废弃的软件"
+
+#: ../DistUpgrade/DistUpgradeController.py:1497
 msgid "Remove obsolete packages?"
 msgstr "删除陈旧的软件包？"
 
-#: ../DistUpgrade/DistUpgradeController.py:1479
+#: ../DistUpgrade/DistUpgradeController.py:1498
 #: ../data/gtkbuilder/DistUpgrade.ui.h:8
 msgid "_Keep"
 msgstr "保持(_K)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1479
+#: ../DistUpgrade/DistUpgradeController.py:1498
 msgid "_Remove"
 msgstr "删除(_R)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1491
+#: ../DistUpgrade/DistUpgradeController.py:1510
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -559,47 +646,47 @@ msgstr "清理时出现问题。更多信息请查看以下消息。 "
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1567
+#: ../DistUpgrade/DistUpgradeController.py:1586
 msgid "Required depends is not installed"
 msgstr "需要的依赖关系未安装"
 
-#: ../DistUpgrade/DistUpgradeController.py:1568
+#: ../DistUpgrade/DistUpgradeController.py:1587
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "需要的依赖关系“%s”未安装 。 "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1835
-#: ../DistUpgrade/DistUpgradeController.py:1922
+#: ../DistUpgrade/DistUpgradeController.py:1854
+#: ../DistUpgrade/DistUpgradeController.py:1944
 msgid "Checking package manager"
 msgstr "正在检查软件包管理器"
 
-#: ../DistUpgrade/DistUpgradeController.py:1841
-#: ../DistUpgrade/DistUpgradeController.py:1847
+#: ../DistUpgrade/DistUpgradeController.py:1860
+#: ../DistUpgrade/DistUpgradeController.py:1866
 msgid "Preparing the upgrade failed"
 msgstr "升级准备失败"
 
-#: ../DistUpgrade/DistUpgradeController.py:1842
+#: ../DistUpgrade/DistUpgradeController.py:1861
 msgid ""
 "Preparing the system for the upgrade failed so a bug reporting process is "
 "being started."
 msgstr "更新时的系统准备失败，已启动错误报告进程。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1848
+#: ../DistUpgrade/DistUpgradeController.py:1867
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
 msgstr ""
-"更新时的系统准备失败。如果您想报告这个错误，请安装 apport 软件，然后执行 apport-bug ubuntu-release-upgrader "
-"命令。"
+"更新时的系统准备失败。如果您想报告这个错误，请安装 apport 软件，然后执行 "
+"apport-bug ubuntu-release-upgrader 命令。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1865
-#: ../DistUpgrade/DistUpgradeController.py:1875
+#: ../DistUpgrade/DistUpgradeController.py:1884
+#: ../DistUpgrade/DistUpgradeController.py:1894
 msgid "Getting upgrade prerequisites failed"
 msgstr "准备升级失败"
 
-#: ../DistUpgrade/DistUpgradeController.py:1866
+#: ../DistUpgrade/DistUpgradeController.py:1885
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -610,7 +697,7 @@ msgstr ""
 "\n"
 "此外，错误报告进程也将启动。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1876
+#: ../DistUpgrade/DistUpgradeController.py:1895
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -620,25 +707,26 @@ msgid ""
 msgstr ""
 "系统不能满足升级先决条件。现在会中止升级并恢复原来的系统状态。\n"
 "\n"
-"如果您想报告这个错误，请安装 apport 软件，然后执行 apport-bug ubuntu-release-upgrader 命令。"
+"如果您想报告这个错误，请安装 apport 软件，然后执行 apport-bug ubuntu-release-"
+"upgrader 命令。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1906
+#: ../DistUpgrade/DistUpgradeController.py:1928
 msgid "Updating repository information"
 msgstr "正在更新软件仓库信息"
 
-#: ../DistUpgrade/DistUpgradeController.py:1913
+#: ../DistUpgrade/DistUpgradeController.py:1935
 msgid "Failed to add the cdrom"
 msgstr "添加光驱失败"
 
-#: ../DistUpgrade/DistUpgradeController.py:1914
+#: ../DistUpgrade/DistUpgradeController.py:1936
 msgid "Sorry, adding the cdrom was not successful."
 msgstr "对不起，没有成功添加光驱。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1949
+#: ../DistUpgrade/DistUpgradeController.py:1971
 msgid "Invalid package information"
 msgstr "无效的软件包信息"
 
-#: ../DistUpgrade/DistUpgradeController.py:1950
+#: ../DistUpgrade/DistUpgradeController.py:1972
 #, python-format
 msgid ""
 "After updating your package information, the essential package '%s' could "
@@ -650,44 +738,74 @@ msgid ""
 "later."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1979
-#: ../DistUpgrade/DistUpgradeController.py:2078
+#: ../DistUpgrade/DistUpgradeController.py:2001
+#: ../DistUpgrade/DistUpgradeController.py:2100
 msgid "Fetching"
 msgstr "正在获取"
 
-#: ../DistUpgrade/DistUpgradeController.py:1986
-#: ../DistUpgrade/DistUpgradeController.py:2007
-#: ../DistUpgrade/DistUpgradeController.py:2028
-#: ../DistUpgrade/DistUpgradeController.py:2082
+#: ../DistUpgrade/DistUpgradeController.py:2008
+#: ../DistUpgrade/DistUpgradeController.py:2029
+#: ../DistUpgrade/DistUpgradeController.py:2050
+#: ../DistUpgrade/DistUpgradeController.py:2104
 msgid "Upgrading"
 msgstr "正在升级"
 
+#: ../DistUpgrade/DistUpgradeController.py:2010
+#, fuzzy
+msgid "Upgrade infeasible"
+msgstr "升级已取消"
+
+#: ../DistUpgrade/DistUpgradeController.py:2011
+#, fuzzy
+msgid ""
+"The upgrade could not be completed, there were errors during the upgrade "
+"process."
+msgstr "升级已完成，但其间出现错误。"
+
 #. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:2032
+#, fuzzy
+msgid "Upgrade incomplete"
+msgstr "升级完成"
+
 #: ../DistUpgrade/DistUpgradeController.py:2033
-#: ../DistUpgrade/DistUpgradeController.py:2084
-#: ../DistUpgrade/DistUpgradeController.py:2090
-#: ../DistUpgrade/DistUpgradeController.py:2101
+#, fuzzy
+msgid ""
+"The upgrade has partially completed but there were errors during the upgrade "
+"process."
+msgstr "升级已完成，但其间出现错误。"
+
+#. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:2055
+#: ../DistUpgrade/DistUpgradeController.py:2106
+#: ../DistUpgrade/DistUpgradeController.py:2112
+#: ../DistUpgrade/DistUpgradeController.py:2123
 msgid "Upgrade complete"
 msgstr "升级完成"
 
-#: ../DistUpgrade/DistUpgradeController.py:2034
-#: ../DistUpgrade/DistUpgradeController.py:2085
-#: ../DistUpgrade/DistUpgradeController.py:2091
+#: ../DistUpgrade/DistUpgradeController.py:2056
+#: ../DistUpgrade/DistUpgradeController.py:2107
+#: ../DistUpgrade/DistUpgradeController.py:2113
 msgid ""
 "The upgrade has completed but there were errors during the upgrade process."
 msgstr "升级已完成，但其间出现错误。"
 
-#: ../DistUpgrade/DistUpgradeController.py:1413
-msgid "Searching for obsolete software"
-msgstr "正在搜索废弃的软件"
-
-#: ../DistUpgrade/DistUpgradeController.py:2053
+#: ../DistUpgrade/DistUpgradeController.py:2075
 msgid "System upgrade is complete."
 msgstr "系统升级完成"
 
-#: ../DistUpgrade/DistUpgradeController.py:2102
+#: ../DistUpgrade/DistUpgradeController.py:2124
 msgid "The partial upgrade was completed."
 msgstr "部分升级完成。"
+
+#: ../DistUpgrade/DistUpgradeController.py:2152
+msgid "Lock screen disabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:2153
+msgid ""
+"Your lock screen has been disabled and will remain disabled until you reboot."
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:105
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
@@ -729,7 +847,8 @@ msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug "
 "using the command 'ubuntu-bug ubuntu-release-upgrader-core'."
 msgstr ""
-"这很有可能是升级工具中的一个 bug。请使用命令“ubuntu-bug ubuntu-release-upgrader-core”将其报为 bug。"
+"这很有可能是升级工具中的一个 bug。请使用命令“ubuntu-bug ubuntu-release-"
+"upgrader-core”将其报为 bug。"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:197
 msgid "Upgrade tool signature"
@@ -786,7 +905,9 @@ msgstr "不能运行升级"
 msgid ""
 "This usually is caused by a system where /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
-msgstr "可能的原因是系统的 /tmp 目录无可执行权限。请以可执行权限重新挂载该目录，重新升级。"
+msgstr ""
+"可能的原因是系统的 /tmp 目录无可执行权限。请以可执行权限重新挂载该目录，重新"
+"升级。"
 
 #: ../DistUpgrade/DistUpgradeFetcherCore.py:277
 #, python-format
@@ -798,6 +919,7 @@ msgid "&Upgrade"
 msgstr "升级"
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:154
+#: ../DistUpgrade/DistUpgradeViewKDE.py:715
 msgid "&Cancel"
 msgstr "取消(&C)"
 
@@ -828,7 +950,7 @@ msgstr "文件 %s/%s"
 #. print("mediaChange %s %s" % (medium, drive))
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:235
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:125
-#: ../DistUpgrade/DistUpgradeViewKDE.py:300
+#: ../DistUpgrade/DistUpgradeViewKDE.py:302
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "请将 '%s' 插入光驱 '%s'"
@@ -836,48 +958,49 @@ msgstr "请将 '%s' 插入光驱 '%s'"
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:237
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:242
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:243
-#: ../DistUpgrade/DistUpgradeViewKDE.py:301
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 msgid "Media Change"
 msgstr "改变介质"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
+#: ../DistUpgrade/DistUpgradeQuirks.py:190
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr "您的图形硬件可能无法在 Ubuntu 14.04 上完全支持。"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:211
+#: ../DistUpgrade/DistUpgradeQuirks.py:192
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
-"您的图形硬件不完全支持运行 'unity' 桌面环境。升级可能会产生一个非常缓慢的环境。我们建议暂时保持 LTS 版本。要获取更多信息，请访问 "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D 您是否要继续升级？"
+"您的图形硬件不完全支持运行 'unity' 桌面环境。升级可能会产生一个非常缓慢的环"
+"境。我们建议暂时保持 LTS 版本。要获取更多信息，请访问 https://wiki.ubuntu."
+"com/X/Bugs/UpdateManagerWarningForUnity3D 您是否要继续升级？"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:235
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+#: ../DistUpgrade/DistUpgradeQuirks.py:216
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr "Ubuntu 12.04 LTS 可能无法完全支持您的显卡。"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:237
+#: ../DistUpgrade/DistUpgradeQuirks.py:218
 msgid ""
 "The support in Ubuntu 12.04 LTS for your Intel graphics hardware is limited "
 "and you may encounter problems after the upgrade. For more information see "
 "https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx Do you want to "
 "continue with the upgrade?"
 msgstr ""
-"Ubuntu 12.04 LTS 对 Intel 图形硬件的支持有限制，升级后您可能会遭遇问题。更多信息，请查看 "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx 。仍然想要继续升级吗？"
+"Ubuntu 12.04 LTS 对 Intel 图形硬件的支持有限制，升级后您可能会遭遇问题。更多"
+"信息，请查看 https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx 。仍"
+"然想要继续升级吗？"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:257
+#: ../DistUpgrade/DistUpgradeQuirks.py:238
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
 msgstr "升级过程可能会降低桌面特效，游戏性能以及对显示要求高的程序。"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:261
+#: ../DistUpgrade/DistUpgradeQuirks.py:242
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
 "of this driver is available that works with your hardware in Ubuntu 10.04 "
@@ -885,43 +1008,40 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"此计算机正在使用 AMD “fglrx”显卡驱动。该驱动在 Ubuntu 10.04 LTS 中没有与您的硬件相适应的版本。\n"
+"此计算机正在使用 AMD “fglrx”显卡驱动。该驱动在 Ubuntu 10.04 LTS 中没有与您的"
+"硬件相适应的版本。\n"
 "\n"
 "您想继续吗？"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:298
-msgid "No i686 CPU"
-msgstr "非 i686 CPU"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
-"extension. All packages were built with optimizations requiring i686 as the "
-"minimal architecture. It is not possible to upgrade your system to a new "
-"Ubuntu release with this hardware."
+#: ../DistUpgrade/DistUpgradeQuirks.py:277
+msgid "apt architecture is i386"
 msgstr ""
-"您的系统使用的是 i586 或是没有“cmov”扩展的 CPU。所有优化生成的软件包都需要最低 i686 的架构。这样的硬件无法升级到新的 Ubuntu "
-"发行版。"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:336
+#: ../DistUpgrade/DistUpgradeQuirks.py:278
+msgid ""
+"Upgrades from 18.04 on the i386 architecture are not supported at this time."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:292
 msgid "No ARMv6 CPU"
 msgstr "没有 ARMv6 CPU"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:337
+#: ../DistUpgrade/DistUpgradeQuirks.py:293
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
 "minimal architecture. It is not possible to upgrade your system to a new "
 "Ubuntu release with this hardware."
 msgstr ""
-"您的系统使用的是比 ARMv6 架构旧的 ARM CPU。karmic 中所有软件包构建时进行的优化都需要至少 ARMv6 的 CPU "
-"架构。在这种硬件基础上无法将您的系统升级到一个新的 Ubuntu 发行版。"
+"您的系统使用的是比 ARMv6 架构旧的 ARM CPU。karmic 中所有软件包构建时进行的优"
+"化都需要至少 ARMv6 的 CPU 架构。在这种硬件基础上无法将您的系统升级到一个新的 "
+"Ubuntu 发行版。"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:357
+#: ../DistUpgrade/DistUpgradeQuirks.py:313
 msgid "No init available"
 msgstr "无可用的 init"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:358
+#: ../DistUpgrade/DistUpgradeQuirks.py:314
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
 "e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
@@ -930,28 +1050,63 @@ msgid ""
 "\n"
 "Are you sure you want to continue?"
 msgstr ""
-"您的系统似乎运行在一个没有 init daemon 的虚拟化环境中(如 Linux-VServer)，Ubuntu 10.04 LTS "
-"无法在这种环境中运行，您需要先更新您的虚拟机配置。\n"
+"您的系统似乎运行在一个没有 init daemon 的虚拟化环境中(如 Linux-VServer)，"
+"Ubuntu 10.04 LTS 无法在这种环境中运行，您需要先更新您的虚拟机配置。\n"
 "\n"
 "您确定要继续吗？"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:582
+#: ../DistUpgrade/DistUpgradeQuirks.py:419
+msgid "Connection to Snap Store failed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:420
+msgid ""
+"Your system does not have a connection to the Snap Store. For the best "
+"upgrade experience make sure that your system can connect to api.snapcraft."
+"io.\n"
+"Do you still want to continue with the upgrade?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:429
+msgid "Outdated snapd package"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:430
+msgid ""
+"Your system does not have the latest version of snapd. Please update the "
+"version of snapd on your system to improve the upgrade experience.\n"
+"Do you still want to continue with the upgrade?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#, fuzzy
+msgid "Checking for installed snaps"
+msgstr "正在检查新版 Ubuntu"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:467
+#, python-format
+msgid "refreshing snap %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:470
+#, fuzzy, python-format
+msgid "installing snap %s"
+msgstr "安装 %s"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:497
 msgid "PAE not enabled"
 msgstr "未启用 PAE 功能"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:583
+#: ../DistUpgrade/DistUpgradeQuirks.py:498
 msgid ""
 "Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
 "non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
 "you must enable PAE (if this is possible) see:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
-"您的系统使用的 CPU 没有启用 PAE (物理地址扩展)功能。Ubuntu 至多支持非 PAE 功能到 12.04 版。如果想升级到更高版本的 "
-"Ubuntu，您必须启用 PAE 功能(在可能的前提下)。请常见：http://help.ubuntu.com/community/EnablingPAE"
-
-#: ../DistUpgrade/DistUpgradeMain.py:64
-msgid "Sandbox upgrade using aufs"
-msgstr "使用 aufs 进行沙盒升级"
+"您的系统使用的 CPU 没有启用 PAE (物理地址扩展)功能。Ubuntu 至多支持非 PAE 功"
+"能到 12.04 版。如果想升级到更高版本的 Ubuntu，您必须启用 PAE 功能(在可能的前"
+"提下)。请常见：http://help.ubuntu.com/community/EnablingPAE"
 
 #: ../DistUpgrade/DistUpgradeMain.py:58
 msgid "Use the given path to search for a cdrom with upgradable packages"
@@ -986,26 +1141,26 @@ msgid "Upgrade to the development release"
 msgstr "升级到开发版"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:146
-#: ../DistUpgrade/DistUpgradeViewKDE.py:314
+#: ../DistUpgrade/DistUpgradeViewKDE.py:316
 msgid "Fetching is complete"
 msgstr "下载完成"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
-#: ../DistUpgrade/DistUpgradeViewKDE.py:330
+#: ../DistUpgrade/DistUpgradeViewKDE.py:332
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "正在下载文件 %li/%li 速度 %s/s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:163
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:321
-#: ../DistUpgrade/DistUpgradeViewKDE.py:331
-#: ../DistUpgrade/DistUpgradeViewKDE.py:481
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:325
+#: ../DistUpgrade/DistUpgradeViewKDE.py:333
+#: ../DistUpgrade/DistUpgradeViewKDE.py:483
 #, python-format
 msgid "About %s remaining"
 msgstr "大约还要 %s"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:166
-#: ../DistUpgrade/DistUpgradeViewKDE.py:333
+#: ../DistUpgrade/DistUpgradeViewKDE.py:335
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "下载第 %li 个文件(共 %li 个文件)"
@@ -1014,24 +1169,24 @@ msgstr "下载第 %li 个文件(共 %li 个文件)"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:198
-#: ../DistUpgrade/DistUpgradeViewKDE.py:371
+#: ../DistUpgrade/DistUpgradeViewKDE.py:373
 msgid "Applying changes"
 msgstr "正在应用更改"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:224
-#: ../DistUpgrade/DistUpgradeViewKDE.py:384
+#: ../DistUpgrade/DistUpgradeViewKDE.py:386
 msgid "dependency problems - leaving unconfigured"
 msgstr "依赖关系问题 - 保持未配置状态"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:229
-#: ../DistUpgrade/DistUpgradeViewKDE.py:386
+#: ../DistUpgrade/DistUpgradeViewKDE.py:388
 #, python-format
 msgid "Could not install '%s'"
 msgstr "无法安装“%s”"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:230
-#: ../DistUpgrade/DistUpgradeViewKDE.py:387
+#: ../DistUpgrade/DistUpgradeViewKDE.py:389
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1040,7 +1195,7 @@ msgstr "升级将继续进行，但“%s”可能没有工作。请考虑提交�
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:247
-#: ../DistUpgrade/DistUpgradeViewKDE.py:409
+#: ../DistUpgrade/DistUpgradeViewKDE.py:411
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1050,159 +1205,171 @@ msgstr ""
 "“%s”吗？"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:248
-#: ../DistUpgrade/DistUpgradeViewKDE.py:410
+#: ../DistUpgrade/DistUpgradeViewKDE.py:412
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
 msgstr "如果选择替换为新版本的配置文件，您将会失去所有已做的修改。"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:268
-#: ../DistUpgrade/DistUpgradeViewKDE.py:433
+#: ../DistUpgrade/DistUpgradeViewKDE.py:435
 msgid "The 'diff' command was not found"
 msgstr "找不到 diff 命令"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:527
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:535
 #: ../DistUpgrade/DistUpgradeViewText.py:140
 msgid "A fatal error occurred"
 msgstr "出现致命错误"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:528
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:536
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"请报告这个错误（如果还没有的话）并在报告中包括文件 /var/log/dist-upgrade/main.log 和 /var/log/dist-"
-"upgrade/apt.log 。升级已取消。\n"
+"请报告这个错误（如果还没有的话）并在报告中包括文件 /var/log/dist-upgrade/"
+"main.log 和 /var/log/dist-upgrade/apt.log 。升级已取消。\n"
 "您的原始 sources.list 已保存在 /etc/apt/sources.list.distUpgrade 。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:558
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:566
 msgid "Ctrl-c pressed"
 msgstr "Crtl+C 被按下"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:559
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:567
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
 msgstr "这将取消本次操作且可能使系统处于被破坏的状态。您确定要这样做？"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:698
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:706
 msgid "To prevent data loss close all open applications and documents."
 msgstr "为防止数据丢失，请关闭所有打开的应用程序和文档。"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:712
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:720
 #, python-format
 msgid "No longer supported by Canonical (%s)"
 msgstr "不再被 Canonical 支持 (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:713
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:721
 #, python-format
 msgid "<b>Downgrade (%s)</b>"
 msgstr "<b>降级 (%s)</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:714
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:722
 #, python-format
 msgid "Remove (%s)"
 msgstr "卸载 (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:715
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:723
 #, python-format
 msgid "No longer needed (%s)"
 msgstr "不再需要 (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:716
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:724
 #, python-format
 msgid "Install (%s)"
 msgstr "安装 (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:717
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:725
 #, python-format
 msgid "Upgrade (%s)"
 msgstr "升级 (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:445
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:773
+#, fuzzy
+msgid "Cancel"
+msgstr "取消(&C)"
+
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:774
+#: ../DistUpgrade/DistUpgradeViewKDE.py:939
+#, fuzzy
+msgid "Continue"
+msgstr "继续(_C)"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Difference >>>"
 msgstr "显示差别 >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:448
+#: ../DistUpgrade/DistUpgradeViewKDE.py:450
 msgid "<<< Hide Difference"
 msgstr "<<< 隐藏差别"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:664
+#: ../DistUpgrade/DistUpgradeViewKDE.py:701
 msgid "Error"
 msgstr "错误"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:903
+#: ../DistUpgrade/DistUpgradeViewKDE.py:719
+#: ../DistUpgrade/DistUpgradeViewKDE.py:960
 msgid "&Close"
 msgstr "关闭(&C)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:716
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 msgid "Show Terminal >>>"
 msgstr "显示终端 >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:719
+#: ../DistUpgrade/DistUpgradeViewKDE.py:756
 msgid "<<< Hide Terminal"
 msgstr "<<< 隐藏终端"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:829
 msgid "Information"
 msgstr "信息"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:840
+#: ../DistUpgrade/DistUpgradeViewKDE.py:877
 msgid "&Start Upgrade"
 msgstr "开始升级"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:842
-#: ../DistUpgrade/DistUpgradeViewKDE.py:886
-#: ../DistUpgrade/DistUpgradeViewKDE.py:889
+#: ../DistUpgrade/DistUpgradeViewKDE.py:879
+#: ../DistUpgrade/DistUpgradeViewKDE.py:923
+#: ../DistUpgrade/DistUpgradeViewKDE.py:926
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "细节"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:864
+#: ../DistUpgrade/DistUpgradeViewKDE.py:901
 #, python-format
 msgid "No longer supported %s"
 msgstr "不再支持 %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:866
+#: ../DistUpgrade/DistUpgradeViewKDE.py:903
 #, python-format
 msgid "Remove %s"
 msgstr "移除 %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:868
+#: ../DistUpgrade/DistUpgradeViewKDE.py:905
 #: ../DistUpgrade/DistUpgradeViewText.py:239
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "移除(被自动安装的) %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:870
+#: ../DistUpgrade/DistUpgradeViewKDE.py:907
 #, python-format
 msgid "Install %s"
 msgstr "安装 %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:872
+#: ../DistUpgrade/DistUpgradeViewKDE.py:909
 #, python-format
 msgid "Upgrade %s"
 msgstr "升级 %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:899
-#: ../DistUpgrade/DistUpgradeViewText.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:956
+#: ../DistUpgrade/DistUpgradeViewText.py:292
 msgid "Restart required"
 msgstr "需要重启"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:899
+#: ../DistUpgrade/DistUpgradeViewKDE.py:956
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
 msgstr "<b><big>重新启动系统以完成升级</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:902
+#: ../DistUpgrade/DistUpgradeViewKDE.py:959
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "现在重启(_R)"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:920
+#: ../DistUpgrade/DistUpgradeViewKDE.py:977
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1213,7 +1380,7 @@ msgstr ""
 "\n"
 "如果取消升级系统可能不稳定，强烈建议您继续升级。"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:924
+#: ../DistUpgrade/DistUpgradeViewKDE.py:981
 msgid "Cancel Upgrade?"
 msgstr "取消升级？"
 
@@ -1245,10 +1412,10 @@ msgstr[0] "%li 秒"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:103
 #, python-format
@@ -1259,10 +1426,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:121
 #, python-format
@@ -1276,7 +1443,9 @@ msgstr "%(str_hours)s %(str_minutes)s"
 msgid ""
 "This download will take about %s with a 1Mbit DSL connection and about %s "
 "with a 56k modem."
-msgstr "使用 1Mbit 的 DSL 连接下载需要大约 %s 秒的时间， 使用 56K 的调制解调器连接大约需要 %s 秒时间。"
+msgstr ""
+"使用 1Mbit 的 DSL 连接下载需要大约 %s 秒的时间， 使用 56K 的调制解调器连接大"
+"约需要 %s 秒时间。"
 
 #. if we have a estimated speed, use it
 #: ../DistUpgrade/DistUpgradeView.py:176
@@ -1286,7 +1455,7 @@ msgstr "根据您的连接速度，这次下载将要用大约 %s 的时间 "
 
 #. Declare these translatable strings from the .ui files here so that
 #. xgettext picks them up.
-#: ../DistUpgrade/DistUpgradeView.py:268 ../data/gtkbuilder/DistUpgrade.ui.h:21
+#: ../DistUpgrade/DistUpgradeView.py:268 ../data/gtkbuilder/DistUpgrade.ui.h:22
 msgid "Preparing to upgrade"
 msgstr "正在准备升级"
 
@@ -1294,15 +1463,15 @@ msgstr "正在准备升级"
 msgid "Getting new software channels"
 msgstr "获得新的软件源"
 
-#: ../DistUpgrade/DistUpgradeView.py:270 ../data/gtkbuilder/DistUpgrade.ui.h:23
+#: ../DistUpgrade/DistUpgradeView.py:270 ../data/gtkbuilder/DistUpgrade.ui.h:24
 msgid "Getting new packages"
 msgstr "获取新的软件包"
 
-#: ../DistUpgrade/DistUpgradeView.py:271 ../data/gtkbuilder/DistUpgrade.ui.h:26
+#: ../DistUpgrade/DistUpgradeView.py:271 ../data/gtkbuilder/DistUpgrade.ui.h:27
 msgid "Installing the upgrades"
 msgstr "正在安装升级"
 
-#: ../DistUpgrade/DistUpgradeView.py:272 ../data/gtkbuilder/DistUpgrade.ui.h:25
+#: ../DistUpgrade/DistUpgradeView.py:272 ../data/gtkbuilder/DistUpgrade.ui.h:26
 msgid "Cleaning up"
 msgstr "正在清理"
 
@@ -1314,7 +1483,8 @@ msgid ""
 msgid_plural ""
 "%(amount)d installed packages are no longer supported by Canonical. You can "
 "still get support from the community."
-msgstr[0] "%(amount)d 个已安装的软件包不再被 Canonical 支持。您仍然可以获得社区支持。"
+msgstr[0] ""
+"%(amount)d 个已安装的软件包不再被 Canonical 支持。您仍然可以获得社区支持。"
 
 #. FIXME: make those two separate lines to make it clear
 #. that the "%" applies to the result of ngettext
@@ -1357,7 +1527,8 @@ msgstr "安装升级可能会耗费几小时的时间。一旦下载完毕就不
 msgid ""
 "Fetching and installing the upgrade can take several hours. Once the "
 "download has finished, the process cannot be canceled."
-msgstr "升级文件的获取和安装可能会耗费几小时的时间。一旦下载完毕就不能取消该进程。"
+msgstr ""
+"升级文件的获取和安装可能会耗费几小时的时间。一旦下载完毕就不能取消该进程。"
 
 #: ../DistUpgrade/DistUpgradeView.py:403
 msgid "Removing the packages can take several hours. "
@@ -1374,11 +1545,11 @@ msgid ""
 "canceled."
 msgstr "你的系统没有可用升级。升级被取消。"
 
-#: ../DistUpgrade/DistUpgradeView.py:422
+#: ../DistUpgrade/DistUpgradeView.py:425
 msgid "Reboot required"
 msgstr "需要重启"
 
-#: ../DistUpgrade/DistUpgradeView.py:423
+#: ../DistUpgrade/DistUpgradeView.py:426
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr "升级已经完成并需要重启。您要现在重启么？"
@@ -1390,13 +1561,13 @@ msgstr "进度：[%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:141
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"请报告这个错误并在报告中包括文件 /var/log/dist-upgrade/main.log 和 /var/log/dist-"
-"upgrade/apt.log 。升级已取消。\n"
+"请报告这个错误并在报告中包括文件 /var/log/dist-upgrade/main.log 和 /var/log/"
+"dist-upgrade/apt.log 。升级已取消。\n"
 "您的原始 sources.list 已保存在 /etc/apt/sources.list.distUpgrade 。"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:165
@@ -1413,7 +1584,7 @@ msgstr "按 [ENTER] 键以继续"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:215
 #: ../DistUpgrade/DistUpgradeViewText.py:253
-#: ../DistUpgrade/DistUpgradeViewText.py:260
+#: ../DistUpgrade/DistUpgradeViewText.py:261
 msgid "Continue [yN] "
 msgstr "继续 [yN] "
 
@@ -1425,14 +1596,14 @@ msgstr "详细信息[d]"
 #. TRANSLATORS: the "y" is "yes"
 #. TRANSLATORS: first letter of a positive (yes) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:219
-#: ../DistUpgrade/DistUpgradeViewText.py:263
+#: ../DistUpgrade/DistUpgradeViewText.py:264
 msgid "y"
 msgstr "y"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:222
-#: ../DistUpgrade/DistUpgradeViewText.py:270
+#: ../DistUpgrade/DistUpgradeViewText.py:271
 msgid "n"
 msgstr "n"
 
@@ -1461,11 +1632,11 @@ msgstr "安装：%s\n"
 msgid "Upgrade: %s\n"
 msgstr "升级：%s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:267
+#: ../DistUpgrade/DistUpgradeViewText.py:268
 msgid "Continue [Yn] "
 msgstr "继续 [Yn] "
 
-#: ../DistUpgrade/DistUpgradeViewText.py:288
+#: ../DistUpgrade/DistUpgradeViewText.py:293
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
@@ -1544,23 +1715,24 @@ msgstr ""
 msgid "Distribution Upgrade"
 msgstr "发行版升级"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 15.10</big></b>"
-msgstr "<b><big>正将Ubuntu升级至15.10版</big></b>"
-
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
+#, no-c-format
+msgid "<b><big>Upgrading Ubuntu to version %s</big></b>"
+msgstr "<b><big>正将Ubuntu升级至%s版</big></b>"
+
+#: ../data/gtkbuilder/DistUpgrade.ui.h:21
 msgid "    "
 msgstr "    "
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:22
+#: ../data/gtkbuilder/DistUpgrade.ui.h:23
 msgid "Setting new software channels"
 msgstr "设定新的软件源"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:24
+#: ../data/gtkbuilder/DistUpgrade.ui.h:25
 msgid "Restarting the computer"
 msgstr "系统正在重新启动"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:27
+#: ../data/gtkbuilder/DistUpgrade.ui.h:28
 msgid "Terminal"
 msgstr "终端"
 
@@ -1569,8 +1741,7 @@ msgid "_Upgrade"
 msgstr "升级(_U)"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr "<b>有新版本的 Ubuntu 可用。您想升级吗？</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
@@ -1631,9 +1802,11 @@ msgstr "运行部分升级"
 msgid "Downloading the release upgrade tool"
 msgstr "正在下载发布升级工具"
 
-#: ../check_new_release_gtk.py:177
-msgid "Check if upgrading to the latest devel release is possible"
-msgstr "验证是否能够升级到最新版本"
+#: ../do-release-upgrade:83
+#, fuzzy
+msgid ""
+"If using the latest supported release, upgrade to the development release"
+msgstr "升级到开发版"
 
 #: ../do-release-upgrade:90 ../check_new_release_gtk.py:181
 msgid ""
@@ -1649,15 +1822,17 @@ msgstr ""
 "以特定模式升级。\n"
 "目前支持：用“桌面”为桌面系统，“服务器”为服务器系统升级。"
 
-#: ../do-release-upgrade:91
-msgid "Test upgrade with a sandbox aufs overlay"
-msgstr "进行带沙盒 aufs 隔离层的测试升级"
-
 #: ../do-release-upgrade:103
 msgid ""
 "Check only if a new distribution release is available and report the result "
 "via the exit code"
 msgstr "仅在有新的发行版发布时检查，并通过退出码(exit code)报告结果"
+
+#: ../do-release-upgrade:108
+msgid ""
+"Try the upgrade with third party mirrors and repositories enabled instead of "
+"commenting them out."
+msgstr ""
 
 #: ../do-release-upgrade:122
 msgid "The options --devel-release and --proposed are"
@@ -1683,8 +1858,39 @@ msgstr ""
 "要获得关于升级的信息，请访问：\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
-msgid "No new release found"
+#: ../do-release-upgrade:147
+msgid "In /etc/update-manager/release-upgrades Prompt "
+msgstr ""
+
+#: ../do-release-upgrade:148
+msgid "is set to never so upgrading is not possible."
+msgstr ""
+
+#: ../do-release-upgrade:150
+msgid "There is no development version of an LTS available."
+msgstr ""
+
+#: ../do-release-upgrade:151
+#, fuzzy
+msgid "To upgrade to the latest non-LTS development release "
+msgstr "升级到开发版"
+
+#: ../do-release-upgrade:152
+msgid "set Prompt=normal in /etc/update-manager/release-upgrades."
+msgstr ""
+
+#: ../do-release-upgrade:154
+#, fuzzy
+msgid "Upgrades to the development release are only "
+msgstr "升级到开发版"
+
+#: ../do-release-upgrade:155
+msgid "available from the latest supported release."
+msgstr ""
+
+#: ../do-release-upgrade:157
+#, fuzzy
+msgid "No new release found."
 msgstr "未发现新版本"
 
 #: ../do-release-upgrade:162
@@ -1707,6 +1913,16 @@ msgstr "有新版本“%s”可供使用"
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "运行“do-release-upgrade”来升级到新版本。"
 
+#: ../do-release-upgrade:187
+msgid "Please install all available updates for your release before upgrading."
+msgstr ""
+
+#: ../do-release-upgrade:199
+msgid ""
+"You have not rebooted after updating a package which requires a reboot. "
+"Please reboot before upgrading."
+msgstr ""
+
 #: ../check_new_release_gtk.py:85
 msgid "Software Updater"
 msgstr "软件更新器"
@@ -1722,11 +1938,69 @@ msgstr "Ubuntu %(version)s 升级可用"
 msgid "You have declined the upgrade to Ubuntu %s"
 msgstr "您已经拒绝升级到 Ubuntu %s"
 
+#: ../check_new_release_gtk.py:177
+msgid "Check if upgrading to the latest devel release is possible"
+msgstr "验证是否能够升级到最新版本"
+
 #: ../check_new_release_gtk.py:186
 msgid "Add debug output"
 msgstr "添加调试输出"
 
-#, python-format
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "在筹划升级时，一个不可解决问题发生了：\n"
+#~ "\n"
+#~ " 这可能是由以下原因造成的：\n"
+#~ " *升级为 Ubuntu 的预发行版本\n"
+#~ " *运行目前的 Ubuntu 预发布版本\n"
+#~ " *不是由 Ubuntu 提供的非官方软件包\n"
+#~ "\n"
+
+#~ msgid "Sandbox setup failed"
+#~ msgstr "安装沙盒失败"
+
+#~ msgid "It was not possible to create the sandbox environment."
+#~ msgstr "不能创建沙盒环境"
+
+#~ msgid "Sandbox mode"
+#~ msgstr "沙盒模式"
+
+#~ msgid ""
+#~ "This upgrade is running in sandbox (test) mode. All changes are written "
+#~ "to '%s' and will be lost on the next reboot.\n"
+#~ "\n"
+#~ "*No* changes written to a system directory from now until the next reboot "
+#~ "are permanent."
+#~ msgstr ""
+#~ "本次更新运行在沙盘(测试)模式，所有变更都将写入 '%s' 并会在重启后丢失。\n"
+#~ "\n"
+#~ "从现在起对系统目录的变更重启后都将 *不复存在* 。"
+
+#~ msgid "No i686 CPU"
+#~ msgstr "非 i686 CPU"
+
+#~ msgid ""
+#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
+#~ "extension. All packages were built with optimizations requiring i686 as "
+#~ "the minimal architecture. It is not possible to upgrade your system to a "
+#~ "new Ubuntu release with this hardware."
+#~ msgstr ""
+#~ "您的系统使用的是 i586 或是没有“cmov”扩展的 CPU。所有优化生成的软件包都需要"
+#~ "最低 i686 的架构。这样的硬件无法升级到新的 Ubuntu 发行版。"
+
+#~ msgid "Sandbox upgrade using aufs"
+#~ msgstr "使用 aufs 进行沙盒升级"
+
+#~ msgid "Test upgrade with a sandbox aufs overlay"
+#~ msgstr "进行带沙盒 aufs 隔离层的测试升级"
+
 #~ msgid ""
 #~ "An unresolvable problem occurred while calculating the upgrade:\n"
 #~ "%s\n"
@@ -1748,13 +2022,13 @@ msgstr "添加调试输出"
 
 #~ msgid ""
 #~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
-#~ "version of Ubuntu you are running.\n"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect "
+#~ "which version of Ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
-#~ "您的系统没有安装 ubuntu-desktop，kubuntu-desktop 或 eubuntu-desktop 软件包所以无法确定运行的 "
-#~ "ubuntu 的版本。\n"
+#~ "您的系统没有安装 ubuntu-desktop，kubuntu-desktop 或 eubuntu-desktop 软件包"
+#~ "所以无法确定运行的 ubuntu 的版本。\n"
 #~ " 请先用新立得或 APT 安装以上所举软件包中的一个。"
 
 #~ msgid "Package 'debsig-verify' is installed"
@@ -1762,25 +2036,26 @@ msgstr "添加调试输出"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-#~ "run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
 #~ msgstr ""
 #~ "由于安装了上述软件包而无法继续升级。\n"
-#~ "请使用新立得软件包管理器来移除它，或者先使用 “sudo apt-get remove debsig-verify”卸载后再重新尝试升级。"
+#~ "请使用新立得软件包管理器来移除它，或者先使用 “sudo apt-get remove debsig-"
+#~ "verify”卸载后再重新尝试升级。"
 
-#, python-format
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the upgrade "
-#~ "was found. This can happen if you run a internal mirror or if the mirror "
-#~ "information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the "
+#~ "upgrade was found. This can happen if you run a internal mirror or if the "
+#~ "mirror information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
-#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
+#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'No' the upgrade will cancel."
 #~ msgstr ""
 #~ "扫描仓库时未发现升级信息。可能您使用的是内部镜像或者镜像信息已经过期。\n"
 #~ "\n"
-#~ "是否依然重写 \"sources.list\" 文件？如果选择“是”，将会把所有 “%s” 升级到 “%s”。"
+#~ "是否依然重写 \"sources.list\" 文件？如果选择“是”，将会把所有 “%s” 升级到 "
+#~ "“%s”。"
 
 #~ msgid "evms in use"
 #~ msgstr "evms 使用中"
@@ -1789,7 +2064,9 @@ msgstr "添加调试输出"
 #~ "Your system uses the 'evms' volume manager in /proc/mounts. The 'evms' "
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
-#~ msgstr "您的系统在 /proc/mounts 中使用“evms”卷管理器。“evms”软件不再被支持，请关闭它并重新运行升级。"
+#~ msgstr ""
+#~ "您的系统在 /proc/mounts 中使用“evms”卷管理器。“evms”软件不再被支持，请关闭"
+#~ "它并重新运行升级。"
 
 #~ msgid ""
 #~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
@@ -1798,7 +2075,8 @@ msgstr "添加调试输出"
 #~ "\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "此计算机正在使用 NVIDIA “nvidia”显卡驱动。该驱动在 Ubuntu 10.04 LTS 中没有与您的硬件相适应的版本。\n"
+#~ "此计算机正在使用 NVIDIA “nvidia”显卡驱动。该驱动在 Ubuntu 10.04 LTS 中没有"
+#~ "与您的硬件相适应的版本。\n"
 #~ "\n"
 #~ "您想继续吗？"
 

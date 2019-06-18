@@ -3,21 +3,22 @@
 # This file is distributed under the same license as the update-manager package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
 #
+#: ../DistUpgrade/DistUpgradeController.py:1078
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2015-10-07 09:44-0700\n"
+"POT-Creation-Date: 2019-06-17 16:02-0700\n"
 "PO-Revision-Date: 2013-05-22 11:00+0000\n"
 "Last-Translator: Brian Murray <brian@ubuntu.com>\n"
 "Language-Team: Basque <eu@li.org>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2019-05-17 05:44+0000\n"
 "X-Generator: Launchpad (build 18962)\n"
-"Language: eu\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:215 ../DistUpgrade/distro.py:446
@@ -111,24 +112,34 @@ msgstr ""
 "Zure sistemak hautsitako paketeak ditu eta ezin izan dira konpondu aplikazio "
 "honekin. Lehenbailehen konpon itzazu synaptic edo apt-get erabiliz."
 
-#. FIXME: change the text to something more useful
-#: ../DistUpgrade/DistUpgradeCache.py:640
+#. the most likely problem is the 3rd party pkgs so don't address
+#. foreignPkgs and devRelease being True
+#: ../DistUpgrade/DistUpgradeCache.py:671
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
-" This can be caused by:\n"
-" * Upgrading to a pre-release version of Ubuntu\n"
-" * Running the current pre-release version of Ubuntu\n"
+" "
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeCache.py:674
+msgid ""
+"This was likely caused by:\n"
 " * Unofficial software packages not provided by Ubuntu\n"
+"Please use the tool 'ppa-purge' from the ppa-purge \n"
+"package to remove software from a Launchpad PPA and \n"
+"try the upgrade again.\n"
 "\n"
 msgstr ""
-"Bertsio-berritzea kalkulatzerakoan konpondu ezin den arazo bat gertatu da:\n"
-"\n"
-" Hauetako bat izan daiteke horren arrazoia:\n"
-" * Ubunturen argitaratu-aurreko bertsio batera eguneratzea\n"
-" * Egungo Ubunturen argitaratu-aurreko bertsio bat martxan edukitzea\n"
-" * Ubuntuk eskaintzen ez dituen software pakete ez-ofizialak\n"
-"\n"
+
+#: ../DistUpgrade/DistUpgradeCache.py:682
+#, fuzzy
+msgid ""
+"This was caused by:\n"
+" * Upgrading to a pre-release version of Ubuntu\n"
+"This is most likely a transient problem, \n"
+"please try again later.\n"
+msgstr ""
+"Arazo iragankor bat izango da hau ziurrenik, saia zaitez berriro geroago."
 
 #: ../DistUpgrade/DistUpgradeCache.py:689
 msgid "This is most likely a transient problem, please try again later."
@@ -136,12 +147,20 @@ msgstr ""
 "Arazo iragankor bat izango da hau ziurrenik, saia zaitez berriro geroago."
 
 #: ../DistUpgrade/DistUpgradeCache.py:692
+#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug using the command "
-"'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
+"'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
 "Hauetako bat ere ez bada arrazoia, eman arazo honen berri terminal batean "
 "'ubuntu-bug ubuntu-release-upgrader-core' agindua erabiliz."
+
+#: ../DistUpgrade/DistUpgradeCache.py:694
+msgid ""
+"If you want to investigate this yourself the log files in '/var/log/dist-"
+"upgrade' will contain details about the upgrade. Specifically, look at 'main."
+"log' and 'apt.log'."
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeCache.py:700
 msgid "Could not calculate the upgrade"
@@ -206,15 +225,15 @@ msgstr ""
 " Jarraitu baino lehen, Instalatu goiko paketeotako bat, synaptic edo apt-get "
 "erabiliz."
 
-#: ../DistUpgrade/DistUpgradeController.py:112
+#: ../DistUpgrade/DistUpgradeController.py:113
 msgid "Reading cache"
 msgstr "Cache-a irakurtzen"
 
-#: ../DistUpgrade/DistUpgradeController.py:225
+#: ../DistUpgrade/DistUpgradeController.py:226
 msgid "Unable to get exclusive lock"
 msgstr "Ezin izan da blokeo esklusiboa lortu"
 
-#: ../DistUpgrade/DistUpgradeController.py:226
+#: ../DistUpgrade/DistUpgradeController.py:227
 msgid ""
 "This usually means that another package management application (like apt-get "
 "or aptitude) already running. Please close that application first."
@@ -222,11 +241,11 @@ msgstr ""
 "Baliteke paketeak kudeatzeko beste aplikazio bat (apt-get edo aptitude "
 "gisakoa) exekutatzen aritzea. Mesedez, itxi ezazu aplikazio hori."
 
-#: ../DistUpgrade/DistUpgradeController.py:284
+#: ../DistUpgrade/DistUpgradeController.py:285
 msgid "Upgrading over remote connection not supported"
 msgstr "Ezin da urruneko konexio baten bidez bertsio-berritu"
 
-#: ../DistUpgrade/DistUpgradeController.py:285
+#: ../DistUpgrade/DistUpgradeController.py:286
 msgid ""
 "You are running the upgrade over a remote ssh connection with a frontend "
 "that does not support this. Please try a text mode upgrade with 'do-release-"
@@ -240,11 +259,11 @@ msgstr ""
 "\n"
 "Bertsio-berritzea bertan behera geldituko da. Saiatu ssh gabe."
 
-#: ../DistUpgrade/DistUpgradeController.py:299
+#: ../DistUpgrade/DistUpgradeController.py:300
 msgid "Continue running under SSH?"
 msgstr "SSH erabiliz jarraitu nahi al duzu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:300
+#: ../DistUpgrade/DistUpgradeController.py:301
 #, python-format
 msgid ""
 "This session appears to be running under ssh. It is not recommended to "
@@ -262,11 +281,11 @@ msgstr ""
 "atakan.\n"
 "Jarraitu nahi duzu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:314
+#: ../DistUpgrade/DistUpgradeController.py:315
 msgid "Starting additional sshd"
 msgstr "Aparteko sshd abiarazten"
 
-#: ../DistUpgrade/DistUpgradeController.py:315
+#: ../DistUpgrade/DistUpgradeController.py:316
 #, python-format
 msgid ""
 "To make recovery in case of failure easier, an additional sshd will be "
@@ -277,7 +296,7 @@ msgstr ""
 "abiaraziko da '%s' atakan. Orain martxan dagoen ssh konexioarekin arazoren "
 "bat badago, aipatutako bigarren horretara konekta zaitezke.\n"
 
-#: ../DistUpgrade/DistUpgradeController.py:323
+#: ../DistUpgrade/DistUpgradeController.py:324
 #, python-format
 msgid ""
 "If you run a firewall, you may need to temporarily open this port. As this "
@@ -290,57 +309,30 @@ msgstr ""
 "adibidea:\n"
 "'%s'"
 
-#: ../DistUpgrade/DistUpgradeController.py:403
-#: ../DistUpgrade/DistUpgradeController.py:427
+#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:428
 msgid "Can not upgrade"
 msgstr "Ezin da bertsio-berritu"
 
-#: ../DistUpgrade/DistUpgradeController.py:404
+#: ../DistUpgrade/DistUpgradeController.py:405
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "Ezin da '%s'(e)tik '%s'(e)ra bertsio-berritu tresna hau erabiliz."
 
-#: ../DistUpgrade/DistUpgradeController.py:410
-msgid "Sandbox setup failed"
-msgstr "Sandbox-en konfigurazioak huts egin du"
-
-#: ../DistUpgrade/DistUpgradeController.py:411
-msgid "It was not possible to create the sandbox environment."
-msgstr "Ezin izan da sandbox ingurunea sortu."
-
-#: ../DistUpgrade/DistUpgradeController.py:417
-msgid "Sandbox mode"
-msgstr "Sandbox modua"
-
-#: ../DistUpgrade/DistUpgradeController.py:418
-#, python-format
+#: ../DistUpgrade/DistUpgradeController.py:429
+#, fuzzy
 msgid ""
-"This upgrade is running in sandbox (test) mode. All changes are written to "
-"'%s' and will be lost on the next reboot.\n"
-"\n"
-"*No* changes written to a system directory from now until the next reboot "
-"are permanent."
-msgstr ""
-"Bertsio-berritze hau modu seguruan (test) exekutatzen ari da. Aldaketa "
-"guztiak '%s'-n idatziko dira eta hurrengo aldiz berrabiaraztean galdu egungo "
-"dira.\n"
-"\n"
-"Momentu honetatik hurrengo berrabiaraztera egingo diren aldaketak *ez* dira "
-"behin-betikoak."
-
-#: ../DistUpgrade/DistUpgradeController.py:446
-msgid ""
-"Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
+"Your python3 install is corrupted. Please fix the '/usr/bin/python3' symlink."
 msgstr ""
 "Zure python instalazioa oker dago. Mesedez, zuzendu ezazu '/usr/bin/python' "
 "esteka sinbolikoa."
 
-#: ../DistUpgrade/DistUpgradeController.py:457
+#: ../DistUpgrade/DistUpgradeController.py:458
 #, python-format
 msgid "Can not write to '%s'"
 msgstr "Ezin izan da '%s'(e)n idatzi"
 
-#: ../DistUpgrade/DistUpgradeController.py:458
+#: ../DistUpgrade/DistUpgradeController.py:459
 #, python-format
 msgid ""
 "Its not possible to write to the system directory '%s' on your system. The "
@@ -348,11 +340,11 @@ msgid ""
 "Please make sure that the system directory is writable."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:469
+#: ../DistUpgrade/DistUpgradeController.py:470
 msgid "Include latest updates from the Internet?"
 msgstr "Internet bidez azken eguneraketak barne hartu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:470
+#: ../DistUpgrade/DistUpgradeController.py:471
 msgid ""
 "The upgrade system can use the internet to automatically download the latest "
 "updates and install them during the upgrade.  If you have a network "
@@ -372,21 +364,37 @@ msgstr ""
 "azken eguneraketak.\n"
 "'Ez' erantzuten baduzu, sarea ez da ezertarako erabiliko."
 
-#: ../DistUpgrade/DistUpgradeController.py:648
+#: ../DistUpgrade/DistUpgradeController.py:649
 #, python-format
 msgid "Not for humans during development stage of release %s"
 msgstr "Ez da gizakientzat %s argitaratzearen garapen-aroan"
 
-#: ../DistUpgrade/DistUpgradeController.py:749
+#: ../DistUpgrade/DistUpgradeController.py:750
 #, python-format
 msgid "disabled on upgrade to %s"
 msgstr "ezgaituta %s(e)ra bertsio-berritzean"
 
-#: ../DistUpgrade/DistUpgradeController.py:819
+#: ../DistUpgrade/DistUpgradeController.py:807
+#, fuzzy
+msgid "No valid sources.list entry found"
+msgstr "Ezin izan da sources.list sarrera kalkulatu"
+
+#: ../DistUpgrade/DistUpgradeController.py:808
+#, python-format
+msgid ""
+"While scanning your repository information no entry about %s could be "
+"found.\n"
+"\n"
+"An upgrade might not succeed.\n"
+"\n"
+"Do you want to continue anyway?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:820
 msgid "No valid mirror found"
 msgstr "Ez da baliozko ispilurik aurkitu"
 
-#: ../DistUpgrade/DistUpgradeController.py:820
+#: ../DistUpgrade/DistUpgradeController.py:821
 #, python-format
 msgid ""
 "While scanning your repository information no mirror entry for the upgrade "
@@ -406,11 +414,11 @@ msgstr ""
 "'Ez' aukeratzen baduzu, bertsio-berritzea etengo da."
 
 #. hm, still nothing useful ...
-#: ../DistUpgrade/DistUpgradeController.py:840
+#: ../DistUpgrade/DistUpgradeController.py:841
 msgid "Generate default sources?"
 msgstr "Lehenetsitako jatorriak sortu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:841
+#: ../DistUpgrade/DistUpgradeController.py:842
 #, python-format
 msgid ""
 "After scanning your 'sources.list' no valid entry for '%s' was found.\n"
@@ -424,18 +432,18 @@ msgstr ""
 "Nahi al duzu '%s'(r)entzako jatorri lehenetsiak gehitzea? 'Ez' aukeratzen "
 "baduzu, bertsio-berritzea bertan behera utziko da."
 
-#: ../DistUpgrade/DistUpgradeController.py:876
-#: ../DistUpgrade/DistUpgradeController.py:882
+#: ../DistUpgrade/DistUpgradeController.py:877
+#: ../DistUpgrade/DistUpgradeController.py:883
 msgid "Repository information invalid"
 msgstr "Errepositorio-informazio baliogabea"
 
-#: ../DistUpgrade/DistUpgradeController.py:877
+#: ../DistUpgrade/DistUpgradeController.py:878
 msgid ""
 "Upgrading the repository information resulted in a invalid file so a bug "
 "reporting process is being started."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:883
+#: ../DistUpgrade/DistUpgradeController.py:884
 msgid ""
 "Upgrading the repository information resulted in a invalid file. To report a "
 "bug install apport and then execute 'apport-bug ubuntu-release-upgrader'."
@@ -444,11 +452,11 @@ msgstr ""
 "sortu da. Arazoaren berri emateko, instalatu apport eta exekutatu 'apport-"
 "bug ubuntu-release-upgrader'."
 
-#: ../DistUpgrade/DistUpgradeController.py:892
+#: ../DistUpgrade/DistUpgradeController.py:893
 msgid "Third party sources disabled"
 msgstr "Hirugarrengoen jatorriak ezgaituta"
 
-#: ../DistUpgrade/DistUpgradeController.py:893
+#: ../DistUpgrade/DistUpgradeController.py:894
 msgid ""
 "Some third party entries in your sources.list were disabled. You can re-"
 "enable them after the upgrade with the 'software-properties' tool or your "
@@ -458,13 +466,13 @@ msgstr ""
 "Berriro gaitu ditzakezu bertsio-berritzearen ondoren, 'software-properties' "
 "tresna edo zure pakete-kudeatzailea erabiliz."
 
-#: ../DistUpgrade/DistUpgradeController.py:935
+#: ../DistUpgrade/DistUpgradeController.py:936
 msgid "Package in inconsistent state"
 msgid_plural "Packages in inconsistent state"
 msgstr[0] "Paketea egoera ezegonkorrean"
 msgstr[1] "Paketeak egoera ezegonkorrean"
 
-#: ../DistUpgrade/DistUpgradeController.py:938
+#: ../DistUpgrade/DistUpgradeController.py:939
 #, python-format
 msgid ""
 "The package '%s' is in an inconsistent state and needs to be reinstalled, "
@@ -483,11 +491,11 @@ msgstr[1] ""
 "ezin dira haien artxiboak aurkitu. Instalatu pakete horiek eskuz edo kendu "
 "sistematik."
 
-#: ../DistUpgrade/DistUpgradeController.py:1001
+#: ../DistUpgrade/DistUpgradeController.py:1002
 msgid "Error during update"
 msgstr "Errorea eguneraketan"
 
-#: ../DistUpgrade/DistUpgradeController.py:1002
+#: ../DistUpgrade/DistUpgradeController.py:1003
 msgid ""
 "A problem occurred during the update. This is usually some sort of network "
 "problem, please check your network connection and retry."
@@ -495,52 +503,100 @@ msgstr ""
 "Arazo bat gertatu da eguneraketan zehar. Gehienetan sareko arazoren baten "
 "ondorio izaten da, egiaztatu ezazu zure sare-konexioa eta saiatu berriro."
 
-#: ../DistUpgrade/DistUpgradeController.py:1058
+#: ../DistUpgrade/DistUpgradeController.py:1046
+#: ../DistUpgrade/DistUpgradeController.py:1051
+msgid "EFI System Partition (ESP) not usable"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1047
+msgid ""
+"Your EFI System Partition (ESP) is not mounted at /boot/efi. Please ensure "
+"that it is properly configured and try again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1052
+msgid ""
+"The EFI System Partition (ESP) mounted at /boot/efi is not writable. Please "
+"mount this partition read-write and try again."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1059
 msgid "Not enough free disk space"
 msgstr "Ez dago behar beste leku libre diskoan"
 
-#: ../DistUpgrade/DistUpgradeController.py:954
-#, python-format
+#. TRANSLATORS: you can change the order of the sentence,
+#. make sure to keep all {str_*} string untranslated.
+#: ../DistUpgrade/DistUpgradeController.py:1062
+#, fuzzy, python-brace-format
 msgid ""
-"The upgrade has aborted. The upgrade needs a total of %s free space on disk "
-"'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
-"your trash and remove temporary packages of former installations using 'sudo "
-"apt-get clean'."
+"The upgrade has aborted. The upgrade needs a total of {str_total} free space "
+"on disk '{str_dir}'. Please free at least an additional {str_needed} of disk "
+"space on '{str_dir}'. {str_remedy}"
 msgstr ""
 "Bertsio-berritzea bertan behera gelditu da. Eguneraketak %s libre behar ditu "
 "'%s' diskoan. Utzi libre gutxienez beste %s '%s' diskoan. Hustu zakarrontzia "
 "eta kendu aurreko instalazioetako aldi baterako fitxategiak 'sudo apt-get "
 "clean' erabiliz."
 
+#. specific ways to resolve lack of free space
+#: ../DistUpgrade/DistUpgradeController.py:1067
+msgid ""
+"Remove temporary packages of former installations using 'sudo apt clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1069
+msgid ""
+"You can remove old kernels using 'sudo apt autoremove' and you could also "
+"set COMPRESS=xz in /etc/initramfs-tools/initramfs.conf to reduce the size of "
+"your initramfs."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1074
+msgid ""
+"Empty your trash and remove temporary packages of former installations using "
+"'sudo apt-get clean'."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1077
+msgid "Reboot to clean up files in /tmp."
+msgstr ""
+
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
-#: ../DistUpgrade/DistUpgradeController.py:1115
-#: ../DistUpgrade/DistUpgradeController.py:1972
-#: ../DistUpgrade/DistUpgradeController.py:2022
+#: ../DistUpgrade/DistUpgradeController.py:1116
+#: ../DistUpgrade/DistUpgradeController.py:1994
+#: ../DistUpgrade/DistUpgradeController.py:2044
 msgid "Calculating the changes"
 msgstr "Aldaketak kalkulatzen"
 
 #. ask the user
-#: ../DistUpgrade/DistUpgradeController.py:1159
+#: ../DistUpgrade/DistUpgradeController.py:1160
 msgid "Do you want to start the upgrade?"
 msgstr "Bertsio-berritzea abiarazi nahi al duzu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1232
+#: ../DistUpgrade/DistUpgradeController.py:1179
+#, python-format
+msgid ""
+"Livepatch security updates are not available for Ubuntu %s. If you upgrade, "
+"Livepatch will turn off."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:1251
 msgid "Upgrade canceled"
 msgstr "Bertsio-berritzea ezeztatuta"
 
-#: ../DistUpgrade/DistUpgradeController.py:1233
+#: ../DistUpgrade/DistUpgradeController.py:1252
 msgid ""
 "The upgrade will cancel now and the original system state will be restored. "
 "You can resume the upgrade at a later time."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1239
-#: ../DistUpgrade/DistUpgradeController.py:1384
+#: ../DistUpgrade/DistUpgradeController.py:1258
+#: ../DistUpgrade/DistUpgradeController.py:1403
 msgid "Could not download the upgrades"
 msgstr "Ezin izan dira bertsio-berritzeak deskargatu"
 
-#: ../DistUpgrade/DistUpgradeController.py:1240
+#: ../DistUpgrade/DistUpgradeController.py:1259
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. All files downloaded so far have been kept."
@@ -548,27 +604,27 @@ msgstr ""
 
 #. FIXME: strings are not good, but we are in string freeze
 #. currently
-#: ../DistUpgrade/DistUpgradeController.py:1333
-#: ../DistUpgrade/DistUpgradeController.py:1372
-#: ../DistUpgrade/DistUpgradeController.py:1490
+#: ../DistUpgrade/DistUpgradeController.py:1352
+#: ../DistUpgrade/DistUpgradeController.py:1391
+#: ../DistUpgrade/DistUpgradeController.py:1509
 msgid "Error during commit"
 msgstr "Errorea egiaztapenean"
 
 #. generate a new cache
-#: ../DistUpgrade/DistUpgradeController.py:1335
-#: ../DistUpgrade/DistUpgradeController.py:1374
-#: ../DistUpgrade/DistUpgradeController.py:1529
+#: ../DistUpgrade/DistUpgradeController.py:1354
+#: ../DistUpgrade/DistUpgradeController.py:1393
+#: ../DistUpgrade/DistUpgradeController.py:1548
 msgid "Restoring original system state"
 msgstr "Sistemaren jatorrizko egoera berreskuratzen"
 
-#: ../DistUpgrade/DistUpgradeController.py:1336
-#: ../DistUpgrade/DistUpgradeController.py:1351
-#: ../DistUpgrade/DistUpgradeController.py:1375
+#: ../DistUpgrade/DistUpgradeController.py:1355
+#: ../DistUpgrade/DistUpgradeController.py:1370
+#: ../DistUpgrade/DistUpgradeController.py:1394
 msgid "Could not install the upgrades"
 msgstr "Ezin izan dira bertsio-berritzeak instalatu"
 
 #. invoke the frontend now and show a error message
-#: ../DistUpgrade/DistUpgradeController.py:1341
+#: ../DistUpgrade/DistUpgradeController.py:1360
 msgid ""
 "The upgrade has aborted. Your system could be in an unusable state. A "
 "recovery will run now (dpkg --configure -a)."
@@ -577,25 +633,24 @@ msgstr ""
 "egoeran geldituko zen agian. Sistema berreskuratzen saiatuko gara oraintxe "
 "bertan (dpkg --configure -a)"
 
-#: ../DistUpgrade/DistUpgradeController.py:1346
+#: ../DistUpgrade/DistUpgradeController.py:1365
 #, python-format
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
+"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
+"dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Mesedez, eman arazo honen berri nabigatzailea erabiliz "
-"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
-"helbidean, eta atxiki /var/log/dist-upgrade/ direktorioko fitxategiak "
-"txostenean.\n"
+"Mesedez, eman arazo honen berri nabigatzailea erabiliz http://bugs.launchpad."
+"net/ubuntu/+source/ubuntu-release-upgrader/+filebug helbidean, eta atxiki /"
+"var/log/dist-upgrade/ direktorioko fitxategiak txostenean.\n"
 "%s"
 
-#: ../DistUpgrade/DistUpgradeController.py:1385
+#: ../DistUpgrade/DistUpgradeController.py:1404
 msgid ""
 "The upgrade has aborted. Please check your Internet connection or "
 "installation media and try again. "
@@ -603,20 +658,24 @@ msgstr ""
 "Eguneraketa bertan behera gelditu da. Egiaztatu zure Internet konexioa edo "
 "instalazioa egiteko erabili duzun euskarria eta saiatu berriro. "
 
-#: ../DistUpgrade/DistUpgradeController.py:1478
+#: ../DistUpgrade/DistUpgradeController.py:1432
+msgid "Searching for obsolete software"
+msgstr "Software zaharkitua bilatzen"
+
+#: ../DistUpgrade/DistUpgradeController.py:1497
 msgid "Remove obsolete packages?"
 msgstr "Zaharkitutako paketeak kendu?"
 
-#: ../DistUpgrade/DistUpgradeController.py:1479
+#: ../DistUpgrade/DistUpgradeController.py:1498
 #: ../data/gtkbuilder/DistUpgrade.ui.h:8
 msgid "_Keep"
 msgstr "_Mantendu"
 
-#: ../DistUpgrade/DistUpgradeController.py:1479
+#: ../DistUpgrade/DistUpgradeController.py:1498
 msgid "_Remove"
 msgstr "_Kendu"
 
-#: ../DistUpgrade/DistUpgradeController.py:1491
+#: ../DistUpgrade/DistUpgradeController.py:1510
 msgid ""
 "A problem occurred during the clean-up. Please see the below message for "
 "more information. "
@@ -626,34 +685,34 @@ msgstr ""
 
 #. FIXME: instead of error out, fetch and install it
 #. here
-#: ../DistUpgrade/DistUpgradeController.py:1567
+#: ../DistUpgrade/DistUpgradeController.py:1586
 msgid "Required depends is not installed"
 msgstr "Beharrezko mendekotasunen bat ez dago instalatua"
 
-#: ../DistUpgrade/DistUpgradeController.py:1568
+#: ../DistUpgrade/DistUpgradeController.py:1587
 #, python-format
 msgid "The required dependency '%s' is not installed. "
 msgstr "Beharrezko '%s' mendekotasuna ez dago instalatua. "
 
 #. sanity check (check for ubuntu-desktop, brokenCache etc)
 #. then open the cache (again)
-#: ../DistUpgrade/DistUpgradeController.py:1835
-#: ../DistUpgrade/DistUpgradeController.py:1922
+#: ../DistUpgrade/DistUpgradeController.py:1854
+#: ../DistUpgrade/DistUpgradeController.py:1944
 msgid "Checking package manager"
 msgstr "Pakete-kudeatzailea egiaztatzen"
 
-#: ../DistUpgrade/DistUpgradeController.py:1841
-#: ../DistUpgrade/DistUpgradeController.py:1847
+#: ../DistUpgrade/DistUpgradeController.py:1860
+#: ../DistUpgrade/DistUpgradeController.py:1866
 msgid "Preparing the upgrade failed"
 msgstr "Huts egin du bertsio-berritzea prestatzeak"
 
-#: ../DistUpgrade/DistUpgradeController.py:1842
+#: ../DistUpgrade/DistUpgradeController.py:1861
 msgid ""
 "Preparing the system for the upgrade failed so a bug reporting process is "
 "being started."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeController.py:1848
+#: ../DistUpgrade/DistUpgradeController.py:1867
 msgid ""
 "Preparing the system for the upgrade failed. To report a bug install apport "
 "and then execute 'apport-bug ubuntu-release-upgrader'."
@@ -661,12 +720,12 @@ msgstr ""
 "Sistema bertsio-berritzerako prestatzeak huts egin du. Arazoaren berri "
 "emateko, instalatu apport eta exekutatu 'apport-bug ubuntu-release-upgrader'."
 
-#: ../DistUpgrade/DistUpgradeController.py:1865
-#: ../DistUpgrade/DistUpgradeController.py:1875
+#: ../DistUpgrade/DistUpgradeController.py:1884
+#: ../DistUpgrade/DistUpgradeController.py:1894
 msgid "Getting upgrade prerequisites failed"
 msgstr "Huts egin du bertsio-berritzerako aurrebaldintzak eskuratzeak"
 
-#: ../DistUpgrade/DistUpgradeController.py:1866
+#: ../DistUpgrade/DistUpgradeController.py:1885
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -679,7 +738,7 @@ msgstr ""
 "\n"
 "Gainera, arazoaren berri emateko prozesua abiaraziko da."
 
-#: ../DistUpgrade/DistUpgradeController.py:1876
+#: ../DistUpgrade/DistUpgradeController.py:1895
 msgid ""
 "The system was unable to get the prerequisites for the upgrade. The upgrade "
 "will abort now and restore the original system state.\n"
@@ -694,23 +753,23 @@ msgstr ""
 "Arazoaren berri emateko, instalatu apport eta exekutatu 'apport-bug ubuntu-"
 "release-upgrader'."
 
-#: ../DistUpgrade/DistUpgradeController.py:1906
+#: ../DistUpgrade/DistUpgradeController.py:1928
 msgid "Updating repository information"
 msgstr "Errepositorio-informazioa eguneratzen"
 
-#: ../DistUpgrade/DistUpgradeController.py:1913
+#: ../DistUpgrade/DistUpgradeController.py:1935
 msgid "Failed to add the cdrom"
 msgstr "Errorea cdrom-a gehitzean"
 
-#: ../DistUpgrade/DistUpgradeController.py:1914
+#: ../DistUpgrade/DistUpgradeController.py:1936
 msgid "Sorry, adding the cdrom was not successful."
 msgstr "Barkatu, cdrom-a gehitzea ez da arrakastatsua izan"
 
-#: ../DistUpgrade/DistUpgradeController.py:1949
+#: ../DistUpgrade/DistUpgradeController.py:1971
 msgid "Invalid package information"
 msgstr "Pakete-informazio baliogabea"
 
-#: ../DistUpgrade/DistUpgradeController.py:1950
+#: ../DistUpgrade/DistUpgradeController.py:1972
 #, python-format
 msgid ""
 "After updating your package information, the essential package '%s' could "
@@ -723,48 +782,78 @@ msgid ""
 msgstr ""
 "Paketeen informazioa eguneratu ondoren, '%s' oinarrizko paketea ezin izan da "
 "aurkitu. Baliteke zure software-jatorrien zerrendan ispilu ofizialik ez "
-"izatea, edo darabilzun ispiluak karga handiegia izatea une honetan. Ikusi "
-"/etc/apt/sources.list une honetan konfiguratutako software-jatorrien "
-"zerrenda ezagutzeko."
+"izatea, edo darabilzun ispiluak karga handiegia izatea une honetan. Ikusi /"
+"etc/apt/sources.list une honetan konfiguratutako software-jatorrien zerrenda "
+"ezagutzeko."
 
-#: ../DistUpgrade/DistUpgradeController.py:1979
-#: ../DistUpgrade/DistUpgradeController.py:2078
+#: ../DistUpgrade/DistUpgradeController.py:2001
+#: ../DistUpgrade/DistUpgradeController.py:2100
 msgid "Fetching"
 msgstr "Eskuratzen"
 
-#: ../DistUpgrade/DistUpgradeController.py:1986
-#: ../DistUpgrade/DistUpgradeController.py:2007
-#: ../DistUpgrade/DistUpgradeController.py:2028
-#: ../DistUpgrade/DistUpgradeController.py:2082
+#: ../DistUpgrade/DistUpgradeController.py:2008
+#: ../DistUpgrade/DistUpgradeController.py:2029
+#: ../DistUpgrade/DistUpgradeController.py:2050
+#: ../DistUpgrade/DistUpgradeController.py:2104
 msgid "Upgrading"
 msgstr "Bertsio-berritzen"
 
+#: ../DistUpgrade/DistUpgradeController.py:2010
+#, fuzzy
+msgid "Upgrade infeasible"
+msgstr "Bertsio-berritzea ezeztatuta"
+
+#: ../DistUpgrade/DistUpgradeController.py:2011
+#, fuzzy
+msgid ""
+"The upgrade could not be completed, there were errors during the upgrade "
+"process."
+msgstr "Bertsio-berritzea burutu da, baina prozesuan erroreak egon dira."
+
 #. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:2032
+#, fuzzy
+msgid "Upgrade incomplete"
+msgstr "Bertsio-berritzea burututa"
+
 #: ../DistUpgrade/DistUpgradeController.py:2033
-#: ../DistUpgrade/DistUpgradeController.py:2084
-#: ../DistUpgrade/DistUpgradeController.py:2090
-#: ../DistUpgrade/DistUpgradeController.py:2101
+#, fuzzy
+msgid ""
+"The upgrade has partially completed but there were errors during the upgrade "
+"process."
+msgstr "Bertsio-berritzea burutu da, baina prozesuan erroreak egon dira."
+
+#. don't abort here, because it would restore the sources.list
+#: ../DistUpgrade/DistUpgradeController.py:2055
+#: ../DistUpgrade/DistUpgradeController.py:2106
+#: ../DistUpgrade/DistUpgradeController.py:2112
+#: ../DistUpgrade/DistUpgradeController.py:2123
 msgid "Upgrade complete"
 msgstr "Bertsio-berritzea burututa"
 
-#: ../DistUpgrade/DistUpgradeController.py:2034
-#: ../DistUpgrade/DistUpgradeController.py:2085
-#: ../DistUpgrade/DistUpgradeController.py:2091
+#: ../DistUpgrade/DistUpgradeController.py:2056
+#: ../DistUpgrade/DistUpgradeController.py:2107
+#: ../DistUpgrade/DistUpgradeController.py:2113
 msgid ""
 "The upgrade has completed but there were errors during the upgrade process."
 msgstr "Bertsio-berritzea burutu da, baina prozesuan erroreak egon dira."
 
-#: ../DistUpgrade/DistUpgradeController.py:1413
-msgid "Searching for obsolete software"
-msgstr "Software zaharkitua bilatzen"
-
-#: ../DistUpgrade/DistUpgradeController.py:2053
+#: ../DistUpgrade/DistUpgradeController.py:2075
 msgid "System upgrade is complete."
 msgstr "Sistemaren bertsio-berritzea burutu da."
 
-#: ../DistUpgrade/DistUpgradeController.py:2102
+#: ../DistUpgrade/DistUpgradeController.py:2124
 msgid "The partial upgrade was completed."
 msgstr "Bertsio-berritze partziala burutu da."
+
+#: ../DistUpgrade/DistUpgradeController.py:2152
+msgid "Lock screen disabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeController.py:2153
+msgid ""
+"Your lock screen has been disabled and will remain disabled until you reboot."
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:105
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
@@ -886,6 +975,7 @@ msgid "&Upgrade"
 msgstr "&Bertsio-berritu"
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:154
+#: ../DistUpgrade/DistUpgradeViewKDE.py:715
 msgid "&Cancel"
 msgstr "&Utzi"
 
@@ -916,7 +1006,7 @@ msgstr "%s fitxategitik %s.a"
 #. print("mediaChange %s %s" % (medium, drive))
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:235
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:125
-#: ../DistUpgrade/DistUpgradeViewKDE.py:300
+#: ../DistUpgrade/DistUpgradeViewKDE.py:302
 #, python-format
 msgid "Please insert '%s' into the drive '%s'"
 msgstr "Mesedez, sartu '%s' '%s' unitatean"
@@ -924,23 +1014,23 @@ msgstr "Mesedez, sartu '%s' '%s' unitatean"
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:237
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:242
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:243
-#: ../DistUpgrade/DistUpgradeViewKDE.py:301
+#: ../DistUpgrade/DistUpgradeViewKDE.py:303
 msgid "Media Change"
 msgstr "Euskarri aldaketa"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:209
+#: ../DistUpgrade/DistUpgradeQuirks.py:190
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 "Baliteke Ubuntu 14.04k zure grafikoen hardwarea guztiz ez sostengatzea."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:211
+#: ../DistUpgrade/DistUpgradeQuirks.py:192
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see "
-"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
-"want to continue with the upgrade?"
+"information see https://wiki.ubuntu.com/X/Bugs/"
+"UpdateManagerWarningForUnity3D Do you still want to continue with the "
+"upgrade?"
 msgstr ""
 "Zure grafikoen hardwareak ez du guztiz sostengatzen 'unity' mahaigain-"
 "ingurunea. Baliteke bertsio-berritzearen ondoren ingurune oso motela izatea. "
@@ -948,12 +1038,11 @@ msgstr ""
 "ikusi https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D. Hala "
 "ere, bertsio-berritzearekin aurrera egin nahi duzu?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:235
-msgid ""
-"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+#: ../DistUpgrade/DistUpgradeQuirks.py:216
+msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:237
+#: ../DistUpgrade/DistUpgradeQuirks.py:218
 msgid ""
 "The support in Ubuntu 12.04 LTS for your Intel graphics hardware is limited "
 "and you may encounter problems after the upgrade. For more information see "
@@ -961,7 +1050,7 @@ msgid ""
 "continue with the upgrade?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:257
+#: ../DistUpgrade/DistUpgradeQuirks.py:238
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -969,7 +1058,7 @@ msgstr ""
 "Bertsio-berritzeak mahaigaineko efektuak murriztu dezake, edo jokoen eta "
 "grafikoen erabilera intentsibodun programen errendimendua gutxitu."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:261
+#: ../DistUpgrade/DistUpgradeQuirks.py:242
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
 "of this driver is available that works with your hardware in Ubuntu 10.04 "
@@ -983,26 +1072,20 @@ msgstr ""
 "\n"
 "Jarraitu nahi duzu?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:298
-msgid "No i686 CPU"
-msgstr "Ez da i686 PUZa¡"
-
-#: ../DistUpgrade/DistUpgradeQuirks.py:299
-msgid ""
-"Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
-"extension. All packages were built with optimizations requiring i686 as the "
-"minimal architecture. It is not possible to upgrade your system to a new "
-"Ubuntu release with this hardware."
+#: ../DistUpgrade/DistUpgradeQuirks.py:277
+msgid "apt architecture is i386"
 msgstr ""
-"Zure sistemak i586 edo 'cmov' luzapena erabiltzen ez duen PUZ bat dauka. "
-"Pakete guztiak i686 behar duten optimizazioak eginez sortu dira. Ez da "
-"posible zure sistema Ubuntu banaketa berrira eguneratzea."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:336
+#: ../DistUpgrade/DistUpgradeQuirks.py:278
+msgid ""
+"Upgrades from 18.04 on the i386 architecture are not supported at this time."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:292
 msgid "No ARMv6 CPU"
 msgstr "Ez dago ARMv6 PUZik"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:337
+#: ../DistUpgrade/DistUpgradeQuirks.py:293
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -1014,11 +1097,11 @@ msgstr ""
 "ziren. Ezin da sistema Ubunturen bertsio berri batera bertsio-berritu "
 "hardware honekin."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:357
+#: ../DistUpgrade/DistUpgradeQuirks.py:313
 msgid "No init available"
 msgstr "Ez dago init-ik"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:358
+#: ../DistUpgrade/DistUpgradeQuirks.py:314
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
 "e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
@@ -1034,11 +1117,49 @@ msgstr ""
 "\n"
 "Ziur al zaude jarraitu nahi duzula?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:582
+#: ../DistUpgrade/DistUpgradeQuirks.py:419
+msgid "Connection to Snap Store failed"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:420
+msgid ""
+"Your system does not have a connection to the Snap Store. For the best "
+"upgrade experience make sure that your system can connect to api.snapcraft."
+"io.\n"
+"Do you still want to continue with the upgrade?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:429
+msgid "Outdated snapd package"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:430
+msgid ""
+"Your system does not have the latest version of snapd. Please update the "
+"version of snapd on your system to improve the upgrade experience.\n"
+"Do you still want to continue with the upgrade?"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:451
+#, fuzzy
+msgid "Checking for installed snaps"
+msgstr "Ubunturen bertsio berri baten bila"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:467
+#, python-format
+msgid "refreshing snap %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:470
+#, fuzzy, python-format
+msgid "installing snap %s"
+msgstr "%s instalatu"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:497
 msgid "PAE not enabled"
 msgstr "PAE gaitu gabe"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:583
+#: ../DistUpgrade/DistUpgradeQuirks.py:498
 msgid ""
 "Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
 "non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
@@ -1050,10 +1171,6 @@ msgstr ""
 "bertsio berriago batera eguneratzeko, PAE gaitu behar duzu (posible bada), "
 "ikusi:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
-
-#: ../DistUpgrade/DistUpgradeMain.py:64
-msgid "Sandbox upgrade using aufs"
-msgstr "Sandbox eguneratu aufs erabiliz"
 
 #: ../DistUpgrade/DistUpgradeMain.py:58
 msgid "Use the given path to search for a cdrom with upgradable packages"
@@ -1075,8 +1192,7 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeMain.py:70
 msgid "Perform a partial upgrade only (no sources.list rewriting)"
-msgstr ""
-"Bertsio-berritze partziala bakarrik (ez da sources.list berridatziko)"
+msgstr "Bertsio-berritze partziala bakarrik (ez da sources.list berridatziko)"
 
 #: ../DistUpgrade/DistUpgradeMain.py:73
 msgid "Disable GNU screen support"
@@ -1091,26 +1207,26 @@ msgid "Upgrade to the development release"
 msgstr "Bertsio-berritu garapeneko argitaratzera"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:146
-#: ../DistUpgrade/DistUpgradeViewKDE.py:314
+#: ../DistUpgrade/DistUpgradeViewKDE.py:316
 msgid "Fetching is complete"
 msgstr "Deskarga amaitu da"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:161
-#: ../DistUpgrade/DistUpgradeViewKDE.py:330
+#: ../DistUpgrade/DistUpgradeViewKDE.py:332
 #, python-format
 msgid "Fetching file %li of %li at %sB/s"
 msgstr "%li / %li fitxategia eskuratzen %sB/s abiaduran"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:163
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:321
-#: ../DistUpgrade/DistUpgradeViewKDE.py:331
-#: ../DistUpgrade/DistUpgradeViewKDE.py:481
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:325
+#: ../DistUpgrade/DistUpgradeViewKDE.py:333
+#: ../DistUpgrade/DistUpgradeViewKDE.py:483
 #, python-format
 msgid "About %s remaining"
 msgstr "%s inguru falta da"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:166
-#: ../DistUpgrade/DistUpgradeViewKDE.py:333
+#: ../DistUpgrade/DistUpgradeViewKDE.py:335
 #, python-format
 msgid "Fetching file %li of %li"
 msgstr "%li / %li fitxategia eskuratzen"
@@ -1119,24 +1235,24 @@ msgstr "%li / %li fitxategia eskuratzen"
 #. of the terminal (to display something useful then)
 #. -> longer term, move this code into python-apt
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:198
-#: ../DistUpgrade/DistUpgradeViewKDE.py:371
+#: ../DistUpgrade/DistUpgradeViewKDE.py:373
 msgid "Applying changes"
 msgstr "Aldaketak aplikatzen"
 
 #. we do not report followup errors from earlier failures
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:224
-#: ../DistUpgrade/DistUpgradeViewKDE.py:384
+#: ../DistUpgrade/DistUpgradeViewKDE.py:386
 msgid "dependency problems - leaving unconfigured"
 msgstr "mendekotasun arazoak - konfiguratu gabe utzi da"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:229
-#: ../DistUpgrade/DistUpgradeViewKDE.py:386
+#: ../DistUpgrade/DistUpgradeViewKDE.py:388
 #, python-format
 msgid "Could not install '%s'"
 msgstr "Ezin izan da '%s' instalatu"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:230
-#: ../DistUpgrade/DistUpgradeViewKDE.py:387
+#: ../DistUpgrade/DistUpgradeViewKDE.py:389
 #, python-format
 msgid ""
 "The upgrade will continue but the '%s' package may not be in a working "
@@ -1147,7 +1263,7 @@ msgstr ""
 
 #. self.expander.set_expanded(True)
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:247
-#: ../DistUpgrade/DistUpgradeViewKDE.py:409
+#: ../DistUpgrade/DistUpgradeViewKDE.py:411
 #, python-format
 msgid ""
 "Replace the customized configuration file\n"
@@ -1157,7 +1273,7 @@ msgstr ""
 "'%s'"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:248
-#: ../DistUpgrade/DistUpgradeViewKDE.py:410
+#: ../DistUpgrade/DistUpgradeViewKDE.py:412
 msgid ""
 "You will lose any changes you have made to this configuration file if you "
 "choose to replace it with a newer version."
@@ -1166,33 +1282,33 @@ msgstr ""
 "berriago batekin ordezkatzen baduzu."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:268
-#: ../DistUpgrade/DistUpgradeViewKDE.py:433
+#: ../DistUpgrade/DistUpgradeViewKDE.py:435
 msgid "The 'diff' command was not found"
 msgstr "Ez da 'diff' agindua aurkitu"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:527
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:535
 #: ../DistUpgrade/DistUpgradeViewText.py:140
 msgid "A fatal error occurred"
 msgstr "Errore larria gertatu da"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:528
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:536
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files "
-"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files /"
+"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Mesedez, gehitu ezazu hau bug bat bezala (jada egin ez baduzu) eta atxikitu "
-"/var/log/dist-upgrade/main.log eta /var/log/dist-upgrade/apt.log fitxategiak "
+"Mesedez, gehitu ezazu hau bug bat bezala (jada egin ez baduzu) eta atxikitu /"
+"var/log/dist-upgrade/main.log eta /var/log/dist-upgrade/apt.log fitxategiak "
 "zure mezuan. Eguneraketa bertan behera gelditu da.\n"
 "Zure jatorrizko sources.list fitxategia /etc/apt/sources.list.distUpgrade-n "
 "gorde dugu."
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:558
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:566
 msgid "Ctrl-c pressed"
 msgstr "Ktrl+C sakaturik"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:559
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:567
 msgid ""
 "This will abort the operation and may leave the system in a broken state. "
 "Are you sure you want to do that?"
@@ -1201,124 +1317,135 @@ msgstr ""
 "utz dezake. Ziur zaude hori egitea nahi duzula?"
 
 #. append warning
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:698
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:706
 msgid "To prevent data loss close all open applications and documents."
 msgstr ""
 "Datuen galera saihesteko, itxi itzazu irekitako aplikazio eta dokumentu "
 "guztiak."
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:712
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:720
 #, python-format
 msgid "No longer supported by Canonical (%s)"
 msgstr "Canonicalek ez du sostengatzen (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:713
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:721
 #, python-format
 msgid "<b>Downgrade (%s)</b>"
 msgstr "<b>Atzerantz-eguneratu (%s)</b>"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:714
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:722
 #, python-format
 msgid "Remove (%s)"
 msgstr "Kendu (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:715
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:723
 #, python-format
 msgid "No longer needed (%s)"
 msgstr "Ez da gehiago behar (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:716
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:724
 #, python-format
 msgid "Install (%s)"
 msgstr "Instalatu (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewGtk3.py:717
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:725
 #, python-format
 msgid "Upgrade (%s)"
 msgstr "Eguneratu (%s)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:445
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:773
+#, fuzzy
+msgid "Cancel"
+msgstr "&Utzi"
+
+#: ../DistUpgrade/DistUpgradeViewGtk3.py:774
+#: ../DistUpgrade/DistUpgradeViewKDE.py:939
+#, fuzzy
+msgid "Continue"
+msgstr "_Jarraitu"
+
+#: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Difference >>>"
 msgstr "Ezberdintasunak erakutsi >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:448
+#: ../DistUpgrade/DistUpgradeViewKDE.py:450
 msgid "<<< Hide Difference"
 msgstr "<<< Ezberdintasunak ezkutatu"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:664
+#: ../DistUpgrade/DistUpgradeViewKDE.py:701
 msgid "Error"
 msgstr "Errorea"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:903
+#: ../DistUpgrade/DistUpgradeViewKDE.py:719
+#: ../DistUpgrade/DistUpgradeViewKDE.py:960
 msgid "&Close"
 msgstr "&Itxi"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:716
+#: ../DistUpgrade/DistUpgradeViewKDE.py:753
 msgid "Show Terminal >>>"
 msgstr "Terminala erakutsi >>>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:719
+#: ../DistUpgrade/DistUpgradeViewKDE.py:756
 msgid "<<< Hide Terminal"
 msgstr "<<< Terminala ezkutatu"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:792
+#: ../DistUpgrade/DistUpgradeViewKDE.py:829
 msgid "Information"
 msgstr "Informazioa"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:840
+#: ../DistUpgrade/DistUpgradeViewKDE.py:877
 msgid "&Start Upgrade"
 msgstr "&Hasi bertsio-berritzea"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:842
-#: ../DistUpgrade/DistUpgradeViewKDE.py:886
-#: ../DistUpgrade/DistUpgradeViewKDE.py:889
+#: ../DistUpgrade/DistUpgradeViewKDE.py:879
+#: ../DistUpgrade/DistUpgradeViewKDE.py:923
+#: ../DistUpgrade/DistUpgradeViewKDE.py:926
 #: ../data/gtkbuilder/DistUpgrade.ui.h:7
 msgid "Details"
 msgstr "Xehetasunak"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:864
+#: ../DistUpgrade/DistUpgradeViewKDE.py:901
 #, python-format
 msgid "No longer supported %s"
 msgstr "Ez dago sostengatuta %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:866
+#: ../DistUpgrade/DistUpgradeViewKDE.py:903
 #, python-format
 msgid "Remove %s"
 msgstr "Kendu %s"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:868
+#: ../DistUpgrade/DistUpgradeViewKDE.py:905
 #: ../DistUpgrade/DistUpgradeViewText.py:239
 #, python-format
 msgid "Remove (was auto installed) %s"
 msgstr "Kendu %s (automatikoki instalatu zen)"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:870
+#: ../DistUpgrade/DistUpgradeViewKDE.py:907
 #, python-format
 msgid "Install %s"
 msgstr "%s instalatu"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:872
+#: ../DistUpgrade/DistUpgradeViewKDE.py:909
 #, python-format
 msgid "Upgrade %s"
 msgstr "%s bertsio-berritu"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:899
-#: ../DistUpgrade/DistUpgradeViewText.py:287
+#: ../DistUpgrade/DistUpgradeViewKDE.py:956
+#: ../DistUpgrade/DistUpgradeViewText.py:292
 msgid "Restart required"
 msgstr "Berrabiaraztea beharrezkoa"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:899
+#: ../DistUpgrade/DistUpgradeViewKDE.py:956
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr ""
-"<b><big>Berrabiarazi sistema bertsio-berritzea burutu dadin</big></b>"
+msgstr "<b><big>Berrabiarazi sistema bertsio-berritzea burutu dadin</big></b>"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:902
+#: ../DistUpgrade/DistUpgradeViewKDE.py:959
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
 msgid "_Restart Now"
 msgstr "_Berrabiarazi orain"
 
 #. FIXME make this user friendly
-#: ../DistUpgrade/DistUpgradeViewKDE.py:920
+#: ../DistUpgrade/DistUpgradeViewKDE.py:977
 msgid ""
 "<b><big>Cancel the running upgrade?</big></b>\n"
 "\n"
@@ -1330,7 +1457,7 @@ msgstr ""
 "Sistema erabili ezineko moduan gera daiteke bertsio-berritzea bertan behera "
 "uzten baduzu. Bertsio-berritzearekin jarraitzea biziki gomendatzen dizugu."
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:924
+#: ../DistUpgrade/DistUpgradeViewKDE.py:981
 msgid "Cancel Upgrade?"
 msgstr "Bertsio-berritzea ezeztatu?"
 
@@ -1366,10 +1493,10 @@ msgstr[1] "%li segundo"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:103
 #, python-format
@@ -1380,10 +1507,10 @@ msgstr "%(str_days)s eta %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#. 
+#.
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#. 
+#.
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:121
 #, python-format
@@ -1409,7 +1536,7 @@ msgstr "Deskarga honek %s inguru iraungo du zure konexioarekin. "
 
 #. Declare these translatable strings from the .ui files here so that
 #. xgettext picks them up.
-#: ../DistUpgrade/DistUpgradeView.py:268 ../data/gtkbuilder/DistUpgrade.ui.h:21
+#: ../DistUpgrade/DistUpgradeView.py:268 ../data/gtkbuilder/DistUpgrade.ui.h:22
 msgid "Preparing to upgrade"
 msgstr "Bertsio-berritzeko prestatzen"
 
@@ -1417,15 +1544,15 @@ msgstr "Bertsio-berritzeko prestatzen"
 msgid "Getting new software channels"
 msgstr "Software-kanal berriak eskuratzen"
 
-#: ../DistUpgrade/DistUpgradeView.py:270 ../data/gtkbuilder/DistUpgrade.ui.h:23
+#: ../DistUpgrade/DistUpgradeView.py:270 ../data/gtkbuilder/DistUpgrade.ui.h:24
 msgid "Getting new packages"
 msgstr "Pakete berriak eskuratzen"
 
-#: ../DistUpgrade/DistUpgradeView.py:271 ../data/gtkbuilder/DistUpgrade.ui.h:26
+#: ../DistUpgrade/DistUpgradeView.py:271 ../data/gtkbuilder/DistUpgrade.ui.h:27
 msgid "Installing the upgrades"
 msgstr "Bertsio-berritzeak instalatzen"
 
-#: ../DistUpgrade/DistUpgradeView.py:272 ../data/gtkbuilder/DistUpgrade.ui.h:25
+#: ../DistUpgrade/DistUpgradeView.py:272 ../data/gtkbuilder/DistUpgrade.ui.h:26
 msgid "Cleaning up"
 msgstr "Garbitzen"
 
@@ -1511,11 +1638,11 @@ msgstr ""
 "Ez dago bertsio-berritzerik zure sistemarako. Bertsio-berritzea bertan "
 "behera utziko da."
 
-#: ../DistUpgrade/DistUpgradeView.py:422
+#: ../DistUpgrade/DistUpgradeView.py:425
 msgid "Reboot required"
 msgstr "Berrabiaraztea beharrezkoa"
 
-#: ../DistUpgrade/DistUpgradeView.py:423
+#: ../DistUpgrade/DistUpgradeView.py:426
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
 msgstr ""
@@ -1529,16 +1656,16 @@ msgstr "Aurrerapena: [%%%3i]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:141
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-"
-"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
-"upgrade has aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-upgrade/main."
+"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
+"aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Eman ezazu honen berri errore edo bug gisa eta mezuarekin batera gehitu "
-"/var/log/dist-upgrade/main.log eta /var/log/dist-upgrade/apt.log fitxategia. "
+"Eman ezazu honen berri errore edo bug gisa eta mezuarekin batera gehitu /var/"
+"log/dist-upgrade/main.log eta /var/log/dist-upgrade/apt.log fitxategia. "
 "Eguneraketa bertan behera gelditu da.\n"
-"Zure jatorrizko sources.list fitxategia hemen gorde da: "
-"/etc/apt/sources.list.distUpgrade"
+"Zure jatorrizko sources.list fitxategia hemen gorde da: /etc/apt/sources."
+"list.distUpgrade"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:165
 msgid "Aborting"
@@ -1554,7 +1681,7 @@ msgstr "Jarraitzeko sakatu [ENTER]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:215
 #: ../DistUpgrade/DistUpgradeViewText.py:253
-#: ../DistUpgrade/DistUpgradeViewText.py:260
+#: ../DistUpgrade/DistUpgradeViewText.py:261
 msgid "Continue [yN] "
 msgstr "Jarraitu [bE] "
 
@@ -1566,14 +1693,14 @@ msgstr "Xehetasunak [x]"
 #. TRANSLATORS: the "y" is "yes"
 #. TRANSLATORS: first letter of a positive (yes) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:219
-#: ../DistUpgrade/DistUpgradeViewText.py:263
+#: ../DistUpgrade/DistUpgradeViewText.py:264
 msgid "y"
 msgstr "b"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer
 #: ../DistUpgrade/DistUpgradeViewText.py:222
-#: ../DistUpgrade/DistUpgradeViewText.py:270
+#: ../DistUpgrade/DistUpgradeViewText.py:271
 msgid "n"
 msgstr "e"
 
@@ -1602,11 +1729,11 @@ msgstr "%s instalatu\n"
 msgid "Upgrade: %s\n"
 msgstr "Bertsio-berritu: %s\n"
 
-#: ../DistUpgrade/DistUpgradeViewText.py:267
+#: ../DistUpgrade/DistUpgradeViewText.py:268
 msgid "Continue [Yn] "
 msgstr "Jarraitu [Be] "
 
-#: ../DistUpgrade/DistUpgradeViewText.py:288
+#: ../DistUpgrade/DistUpgradeViewText.py:293
 msgid ""
 "To finish the upgrade, a restart is required.\n"
 "If you select 'y' the system will be restarted."
@@ -1687,23 +1814,24 @@ msgstr ""
 msgid "Distribution Upgrade"
 msgstr "Banaketaren bertsio-berritzea"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:19
-msgid "<b><big>Upgrading Ubuntu to version 15.10</big></b>"
-msgstr ""
-
 #: ../data/gtkbuilder/DistUpgrade.ui.h:20
+#, no-c-format
+msgid "<b><big>Upgrading Ubuntu to version %s</big></b>"
+msgstr "<b><big>Ubuntu %sra bertsio-berritzen</big></b>"
+
+#: ../data/gtkbuilder/DistUpgrade.ui.h:21
 msgid "    "
 msgstr "    "
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:22
+#: ../data/gtkbuilder/DistUpgrade.ui.h:23
 msgid "Setting new software channels"
 msgstr "Software-kanal berriak ezartzen"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:24
+#: ../data/gtkbuilder/DistUpgrade.ui.h:25
 msgid "Restarting the computer"
 msgstr "Ordenagailua berrabiarazten"
 
-#: ../data/gtkbuilder/DistUpgrade.ui.h:27
+#: ../data/gtkbuilder/DistUpgrade.ui.h:28
 msgid "Terminal"
 msgstr "Terminala"
 
@@ -1712,11 +1840,10 @@ msgid "_Upgrade"
 msgstr "_Bertsio-berritu"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid ""
-"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
-"<b>Ubunturen bertsio berri bat eskuragarri dago. Bertsio-berritu nahi "
-"duzu?</b>"
+"<b>Ubunturen bertsio berri bat eskuragarri dago. Bertsio-berritu nahi duzu?</"
+"b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
 msgid "Don't Upgrade"
@@ -1778,9 +1905,11 @@ msgstr "Bertsio-berritze partziala exekutatzen"
 msgid "Downloading the release upgrade tool"
 msgstr "Bertsio-berritzeko tresna deskargatzen"
 
-#: ../check_new_release_gtk.py:177
-msgid "Check if upgrading to the latest devel release is possible"
-msgstr "Azken garapen-bertsiora eguneratzea posible den egiaztatu"
+#: ../do-release-upgrade:83
+#, fuzzy
+msgid ""
+"If using the latest supported release, upgrade to the development release"
+msgstr "Bertsio-berritu garapeneko argitaratzera"
 
 #: ../do-release-upgrade:90 ../check_new_release_gtk.py:181
 msgid ""
@@ -1799,10 +1928,6 @@ msgstr ""
 "Momentuz 'desktop' (mahaigaineko sistema baten ohiko bertsio-"
 "berritzeentzako) eta 'server' (zerbitzarientzat) jasaten dira."
 
-#: ../do-release-upgrade:91
-msgid "Test upgrade with a sandbox aufs overlay"
-msgstr "Bertsio berria probatu sandbox aufs gainjartze batekin"
-
 #: ../do-release-upgrade:103
 msgid ""
 "Check only if a new distribution release is available and report the result "
@@ -1810,6 +1935,12 @@ msgid ""
 msgstr ""
 "Bakarrik bilatu bertsioaren distribuzio berri bat erabilgarria dagoenean eta "
 "bidali emaitza irteera-kodigoa erabiliz"
+
+#: ../do-release-upgrade:108
+msgid ""
+"Try the upgrade with third party mirrors and repositories enabled instead of "
+"commenting them out."
+msgstr ""
 
 #: ../do-release-upgrade:122
 msgid "The options --devel-release and --proposed are"
@@ -1835,8 +1966,39 @@ msgstr ""
 "Bertsio-berritzearen informazio gehiago:\n"
 "%(url)s\n"
 
-#: ../do-release-upgrade:132
-msgid "No new release found"
+#: ../do-release-upgrade:147
+msgid "In /etc/update-manager/release-upgrades Prompt "
+msgstr ""
+
+#: ../do-release-upgrade:148
+msgid "is set to never so upgrading is not possible."
+msgstr ""
+
+#: ../do-release-upgrade:150
+msgid "There is no development version of an LTS available."
+msgstr ""
+
+#: ../do-release-upgrade:151
+#, fuzzy
+msgid "To upgrade to the latest non-LTS development release "
+msgstr "Bertsio-berritu garapeneko argitaratzera"
+
+#: ../do-release-upgrade:152
+msgid "set Prompt=normal in /etc/update-manager/release-upgrades."
+msgstr ""
+
+#: ../do-release-upgrade:154
+#, fuzzy
+msgid "Upgrades to the development release are only "
+msgstr "Bertsio-berritu garapeneko argitaratzera"
+
+#: ../do-release-upgrade:155
+msgid "available from the latest supported release."
+msgstr ""
+
+#: ../do-release-upgrade:157
+#, fuzzy
+msgid "No new release found."
 msgstr "Ez da bertsio berririk aurkitu"
 
 #: ../do-release-upgrade:162
@@ -1861,6 +2023,16 @@ msgstr "'%s' bertsio berria eskuragarri dago."
 msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Exekutatu 'do-release-upgrade' bertsio-berritzeko."
 
+#: ../do-release-upgrade:187
+msgid "Please install all available updates for your release before upgrading."
+msgstr ""
+
+#: ../do-release-upgrade:199
+msgid ""
+"You have not rebooted after updating a package which requires a reboot. "
+"Please reboot before upgrading."
+msgstr ""
+
 #: ../check_new_release_gtk.py:85
 msgid "Software Updater"
 msgstr "Software-eguneratzailea"
@@ -1876,11 +2048,74 @@ msgstr "Ubuntu %(version)s(r)en bertsio-berritzea eskuragarri"
 msgid "You have declined the upgrade to Ubuntu %s"
 msgstr "Ubuntu %s bertsio berria ezetsi duzu."
 
+#: ../check_new_release_gtk.py:177
+msgid "Check if upgrading to the latest devel release is possible"
+msgstr "Azken garapen-bertsiora eguneratzea posible den egiaztatu"
+
 #: ../check_new_release_gtk.py:186
 msgid "Add debug output"
 msgstr "Erroreak arazteko irteera-mezuak gehitu."
 
-#, python-format
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Bertsio-berritzea kalkulatzerakoan konpondu ezin den arazo bat gertatu "
+#~ "da:\n"
+#~ "\n"
+#~ " Hauetako bat izan daiteke horren arrazoia:\n"
+#~ " * Ubunturen argitaratu-aurreko bertsio batera eguneratzea\n"
+#~ " * Egungo Ubunturen argitaratu-aurreko bertsio bat martxan edukitzea\n"
+#~ " * Ubuntuk eskaintzen ez dituen software pakete ez-ofizialak\n"
+#~ "\n"
+
+#~ msgid "Sandbox setup failed"
+#~ msgstr "Sandbox-en konfigurazioak huts egin du"
+
+#~ msgid "It was not possible to create the sandbox environment."
+#~ msgstr "Ezin izan da sandbox ingurunea sortu."
+
+#~ msgid "Sandbox mode"
+#~ msgstr "Sandbox modua"
+
+#~ msgid ""
+#~ "This upgrade is running in sandbox (test) mode. All changes are written "
+#~ "to '%s' and will be lost on the next reboot.\n"
+#~ "\n"
+#~ "*No* changes written to a system directory from now until the next reboot "
+#~ "are permanent."
+#~ msgstr ""
+#~ "Bertsio-berritze hau modu seguruan (test) exekutatzen ari da. Aldaketa "
+#~ "guztiak '%s'-n idatziko dira eta hurrengo aldiz berrabiaraztean galdu "
+#~ "egungo dira.\n"
+#~ "\n"
+#~ "Momentu honetatik hurrengo berrabiaraztera egingo diren aldaketak *ez* "
+#~ "dira behin-betikoak."
+
+#~ msgid "No i686 CPU"
+#~ msgstr "Ez da i686 PUZa¡"
+
+#~ msgid ""
+#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
+#~ "extension. All packages were built with optimizations requiring i686 as "
+#~ "the minimal architecture. It is not possible to upgrade your system to a "
+#~ "new Ubuntu release with this hardware."
+#~ msgstr ""
+#~ "Zure sistemak i586 edo 'cmov' luzapena erabiltzen ez duen PUZ bat dauka. "
+#~ "Pakete guztiak i686 behar duten optimizazioak eginez sortu dira. Ez da "
+#~ "posible zure sistema Ubuntu banaketa berrira eguneratzea."
+
+#~ msgid "Sandbox upgrade using aufs"
+#~ msgstr "Sandbox eguneratu aufs erabiliz"
+
+#~ msgid "Test upgrade with a sandbox aufs overlay"
+#~ msgstr "Bertsio berria probatu sandbox aufs gainjartze batekin"
+
 #~ msgid ""
 #~ "An unresolvable problem occurred while calculating the upgrade:\n"
 #~ "%s\n"
@@ -1903,28 +2138,27 @@ msgstr "Erroreak arazteko irteera-mezuak gehitu."
 
 #~ msgid ""
 #~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
-#~ "version of Ubuntu you are running.\n"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect "
+#~ "which version of Ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
-#~ "Zure sisteman ez dago ubuntu-desktop, kubuntu-desktop, xubuntu-desktop edo "
-#~ "edubuntu-desktop paketerik eta ezin izan da detektatu zein Ubuntu bertsio "
-#~ "erabiltzen ari zaren.\n"
+#~ "Zure sisteman ez dago ubuntu-desktop, kubuntu-desktop, xubuntu-desktop "
+#~ "edo edubuntu-desktop paketerik eta ezin izan da detektatu zein Ubuntu "
+#~ "bertsio erabiltzen ari zaren.\n"
 #~ " Mesedez, jarraitu aurretik, aurreko paketeetakoren bat instalatu ezazu "
 #~ "synaptic edo apt-get erabiltzen."
 
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "Instalatuta dago 'debsig-verify' paketea"
 
-#, python-format
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the upgrade "
-#~ "was found. This can happen if you run a internal mirror or if the mirror "
-#~ "information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the "
+#~ "upgrade was found. This can happen if you run a internal mirror or if the "
+#~ "mirror information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
-#~ "here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
+#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'No' the upgrade will cancel."
 #~ msgstr ""
 #~ "Zure errepositorio-informazioa arakatzean ez da bertsio-berritzerako "
@@ -1932,7 +2166,8 @@ msgstr "Erroreak arazteko irteera-mezuak gehitu."
 #~ "ispiluaren informazioa zaharkituta dagoelako izatea.\n"
 #~ "\n"
 #~ "Edonola ere, nahi al duzu 'sources.list' fitxategia berridaztea? 'Bai' "
-#~ "aukeratzen baduzu '%s'(e)tik '%s'(e)rako sarrera guztiak eguneratuko dira.\n"
+#~ "aukeratzen baduzu '%s'(e)tik '%s'(e)rako sarrera guztiak eguneratuko "
+#~ "dira.\n"
 #~ "'Ez' aukeratzen baduzu bertsio-berritzea bertan behera utziko da."
 
 #~ msgid "evms in use"
@@ -1943,9 +2178,9 @@ msgstr "Erroreak arazteko irteera-mezuak gehitu."
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
 #~ msgstr ""
-#~ "Zure sistemak 'evms' bolumen-kudeatzailea darabil '/proc/mounts'-en. Jadanik "
-#~ "ez dago 'evms' softwarearentzako sostengurik; mesedez, itzali ezazu eta "
-#~ "eguneraketa berrabiarazi ezazu."
+#~ "Zure sistemak 'evms' bolumen-kudeatzailea darabil '/proc/mounts'-en. "
+#~ "Jadanik ez dago 'evms' softwarearentzako sostengurik; mesedez, itzali "
+#~ "ezazu eta eguneraketa berrabiarazi ezazu."
 
 #~ msgid ""
 #~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
@@ -1955,20 +2190,17 @@ msgstr "Erroreak arazteko irteera-mezuak gehitu."
 #~ "Do you want to continue?"
 #~ msgstr ""
 #~ "Ordenagailu honek une honetan NVIDIA \"nvidia\" kontrolatzaile grafikoa "
-#~ "erabiltzen ari da. Ez da aurkitu kontrolatzaile honen bertsiorik zure bideo "
-#~ "txartelarekin Ubuntu 10.04 LTS-en funtzionatzen duena.\n"
+#~ "erabiltzen ari da. Ez da aurkitu kontrolatzaile honen bertsiorik zure "
+#~ "bideo txartelarekin Ubuntu 10.04 LTS-en funtzionatzen duena.\n"
 #~ "\n"
 #~ "Jarraitu nahi duzu?"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
-#~ "run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
+#~ "and run the upgrade again."
 #~ msgstr ""
 #~ "Bertsio-berritzeak ezin du jarraitu pakete hori instalatuta dagoen "
 #~ "bitartean.\n"
 #~ "Synaptic edo 'apt-get remove debsig-verify' erabil ezazu pakete hori "
 #~ "kentzeko, eta abiarazi berriro bertsio-berritzea."
-
-#~ msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
-#~ msgstr "<b><big>Ubuntu 15.04ra bertsio-berritzen</big></b>"

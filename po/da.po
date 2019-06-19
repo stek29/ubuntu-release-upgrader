@@ -3,22 +3,21 @@
 # This file is distributed under the same license as the update-manager package.
 # Anders Jenbo <anders@jenbo.dk>, 2009.
 #
-#: ../DistUpgrade/DistUpgradeController.py:1078
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
 "POT-Creation-Date: 2019-06-17 16:02-0700\n"
-"PO-Revision-Date: 2013-06-19 19:08+0000\n"
+"PO-Revision-Date: 2019-06-18 17:54+0000\n"
 "Last-Translator: Aputsiak Niels Janussen <aj@isit.gl>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
-"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-05-17 05:44+0000\n"
-"X-Generator: Launchpad (build 18962)\n"
+"X-Launchpad-Export-Date: 2019-06-19 06:02+0000\n"
+"X-Generator: Launchpad (build 18986)\n"
+"Language: da\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:215 ../DistUpgrade/distro.py:446
@@ -118,6 +117,10 @@ msgid ""
 "\n"
 " "
 msgstr ""
+"Der opstod et problem, som ikke kunne løses, mens opgraderingen blev "
+"beregnet.\n"
+"\n"
+" "
 
 #: ../DistUpgrade/DistUpgradeCache.py:674
 msgid ""
@@ -128,35 +131,46 @@ msgid ""
 "try the upgrade again.\n"
 "\n"
 msgstr ""
+"Det skyldtes sandsynligvis:\n"
+" * Uofficielle programpakker som ikke blev leveret af Ubuntu\n"
+"Brug værktøjet \"ppa-purge\" fra pakken ppa-purge \n"
+"for at fjerne programmer fra et Launchpad-PPA og \n"
+"prøv at opgradere igen.\n"
+"\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:682
-#, fuzzy
 msgid ""
 "This was caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
 "This is most likely a transient problem, \n"
 "please try again later.\n"
-msgstr "Dette er højst sandsynligt et forbigående problem, prøv igen senere."
+msgstr ""
+"Det skyldtes:\n"
+" * Opgradering til en version af Ubuntu der ikke er officielt frigivet "
+"endnu\n"
+"Det er sandsynligvis et forbigående problem. \n"
+"Prøv igen senere.\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:689
 msgid "This is most likely a transient problem, please try again later."
 msgstr "Dette er højst sandsynligt et forbigående problem, prøv igen senere."
 
 #: ../DistUpgrade/DistUpgradeCache.py:692
-#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug using the command "
 "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
-"Hvis intet af dette gælder, så rapportér venligst denne fejl med brug af "
-"kommandoen \"ubuntu-bug ubuntu-release-upgrader-core\" i en terminal."
+"Hvis intet af dette er gældende, så rapportér fejlen ved at køre kommandoen "
+"\"ubuntu-bug ubuntu-release-upgrader-core\" i en terminal. "
 
 #: ../DistUpgrade/DistUpgradeCache.py:694
 msgid ""
 "If you want to investigate this yourself the log files in '/var/log/dist-"
-"upgrade' will contain details about the upgrade. Specifically, look at 'main."
-"log' and 'apt.log'."
+"upgrade' will contain details about the upgrade. Specifically, look at "
+"'main.log' and 'apt.log'."
 msgstr ""
+"Vil du selv undersøge det nærmere, indeholder logfilerne i \"/var/log/dist-"
+"upgrade\" detaljer om opgraderingen. Kig især i \"main.log\" og \"apt.log\"."
 
 #: ../DistUpgrade/DistUpgradeCache.py:700
 msgid "Could not calculate the upgrade"
@@ -276,8 +290,8 @@ msgstr ""
 "Denne session kører over ssh. Det er ikke anbefalet at udføre en opgradering "
 "over ssh i øjeblikket, da det i tilfælde af en fejl er sværere at genskabe.\n"
 "\n"
-"Hvis du vil fortsætte, vil en ekstra ssh-tjeneste blive startet på port \"%s"
-"\"\n"
+"Hvis du vil fortsætte, vil en ekstra ssh-tjeneste blive startet på port "
+"\"%s\"\n"
 "Vil du fortsætte?"
 
 #: ../DistUpgrade/DistUpgradeController.py:315
@@ -320,12 +334,11 @@ msgstr ""
 "En opgradering fra \"%s\" til \"%s\" er ikke understøttet med dette værktøj."
 
 #: ../DistUpgrade/DistUpgradeController.py:429
-#, fuzzy
 msgid ""
 "Your python3 install is corrupted. Please fix the '/usr/bin/python3' symlink."
 msgstr ""
-"Din python-installation er beskadiget. Ret venligst det symbolske link i \"/"
-"usr/bin/python\"."
+"Din python3-installation er beskadiget. Ret venligst '/usr/bin/python3'-"
+"symlinket."
 
 #: ../DistUpgrade/DistUpgradeController.py:458
 #, python-format
@@ -378,9 +391,8 @@ msgid "disabled on upgrade to %s"
 msgstr "slået fra under opgradering til %s"
 
 #: ../DistUpgrade/DistUpgradeController.py:807
-#, fuzzy
 msgid "No valid sources.list entry found"
-msgstr "Kunne ikke beregne sources.list-linje"
+msgstr "Ingen gyldig sources.list-linje fundet"
 
 #: ../DistUpgrade/DistUpgradeController.py:808
 #, python-format
@@ -392,6 +404,12 @@ msgid ""
 "\n"
 "Do you want to continue anyway?"
 msgstr ""
+"Under skanning af din arkivinformation, blev der ikke fundet nogen post om "
+"%s.\n"
+"\n"
+" En opgradering vil måske ikke lykkes.\n"
+"\n"
+"Vil du alligevel fortsætte?"
 
 #: ../DistUpgrade/DistUpgradeController.py:820
 msgid "No valid mirror found"
@@ -511,19 +529,23 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:1046
 #: ../DistUpgrade/DistUpgradeController.py:1051
 msgid "EFI System Partition (ESP) not usable"
-msgstr ""
+msgstr "EFI-systempartitionen (ESP) er ikke brugbar"
 
 #: ../DistUpgrade/DistUpgradeController.py:1047
 msgid ""
 "Your EFI System Partition (ESP) is not mounted at /boot/efi. Please ensure "
 "that it is properly configured and try again."
 msgstr ""
+"Din EFI-systempartition (ESP) er ikke monteret på /boot/efi. Sikr dig, at "
+"den er rigtigt konfigureret og prøv igen."
 
 #: ../DistUpgrade/DistUpgradeController.py:1052
 msgid ""
 "The EFI System Partition (ESP) mounted at /boot/efi is not writable. Please "
 "mount this partition read-write and try again."
 msgstr ""
+"EFI-systempartitionen monteret på /boot/efi er skrivebeskyttet. Montér "
+"partitionen som læs-skriv og prøv igen."
 
 #: ../DistUpgrade/DistUpgradeController.py:1059
 msgid "Not enough free disk space"
@@ -532,22 +554,23 @@ msgstr "Der er ikke nok fri diskplads"
 #. TRANSLATORS: you can change the order of the sentence,
 #. make sure to keep all {str_*} string untranslated.
 #: ../DistUpgrade/DistUpgradeController.py:1062
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The upgrade has aborted. The upgrade needs a total of {str_total} free space "
 "on disk '{str_dir}'. Please free at least an additional {str_needed} of disk "
 "space on '{str_dir}'. {str_remedy}"
 msgstr ""
-"Opgraderingen er blevet afbrudt. Opgraderingen kræver samlet %s fri "
-"diskplads på disken \"%s\". Frigør venligst mindst yderligere %s diskplads "
-"på \"%s\". Tøm papirkurven og fjern midlertidige pakker fra tidligere "
-"installationer ved hjælp af kommandoen \"sudo apt-get clean\"."
+"Opgraderingen er afbrudt. Opgraderingen behøver {str_total} ledig plads på "
+"disken \"{str_dir}\". Frigør venligst mindst {str_needed} plads på disken "
+"\"{str_dir}\". {str_remedy}"
 
 #. specific ways to resolve lack of free space
 #: ../DistUpgrade/DistUpgradeController.py:1067
 msgid ""
 "Remove temporary packages of former installations using 'sudo apt clean'."
 msgstr ""
+"Fjern midlertidige pakker fra tidligere installation ved brug af \"sudo apt "
+"clean\"."
 
 #: ../DistUpgrade/DistUpgradeController.py:1069
 msgid ""
@@ -555,16 +578,21 @@ msgid ""
 "set COMPRESS=xz in /etc/initramfs-tools/initramfs.conf to reduce the size of "
 "your initramfs."
 msgstr ""
+"Du kan fjerne gamle kerner med \"sudo apt autoremove\", og du kan også "
+"angive COMPRESS=xz i /etc/initramfs-tools/initramfs.conf for at reducere "
+"størrelsen af din initramfs."
 
 #: ../DistUpgrade/DistUpgradeController.py:1074
 msgid ""
 "Empty your trash and remove temporary packages of former installations using "
 "'sudo apt-get clean'."
 msgstr ""
+"Tøm din papirkurv og fjern midlertidige pakker fra tidligere installationer "
+"med \"sudo apt-get clean\"."
 
 #: ../DistUpgrade/DistUpgradeController.py:1077
 msgid "Reboot to clean up files in /tmp."
-msgstr ""
+msgstr "Genstart for at rydde op i filerne i /tmp."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
@@ -585,6 +613,8 @@ msgid ""
 "Livepatch security updates are not available for Ubuntu %s. If you upgrade, "
 "Livepatch will turn off."
 msgstr ""
+"Livepatch-sikkerhedsopdateringer er ikke tilgængelige til Ubuntu %s. "
+"Opgraderer du, vil Livepatch blive slået fra."
 
 #: ../DistUpgrade/DistUpgradeController.py:1251
 msgid "Upgrade canceled"
@@ -648,16 +678,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Rapportér venligst denne fejl i en browser via http://bugs.launchpad.net/"
-"ubuntu/+source/ubuntu-release-upgrader/+filebug og vedhæft filerne i /var/"
-"log/dist-upgrade/ til fejlrapporten.\n"
+"Rapportér venligst denne fejl i en browser via "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug og "
+"vedhæft filerne i /var/log/dist-upgrade/ til fejlrapporten.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1404
@@ -813,31 +843,29 @@ msgid "Upgrading"
 msgstr "Opgraderer"
 
 #: ../DistUpgrade/DistUpgradeController.py:2010
-#, fuzzy
 msgid "Upgrade infeasible"
-msgstr "Opgradering annulleret"
+msgstr "Opgradering umulig"
 
 #: ../DistUpgrade/DistUpgradeController.py:2011
-#, fuzzy
 msgid ""
 "The upgrade could not be completed, there were errors during the upgrade "
 "process."
 msgstr ""
-"Opgraderingen er afsluttet, men der opstod fejl under opgraderingsprocessen."
+"Opgraderingen kunne ikke gennemføres, da der opstod fejl under "
+"opgraderingsprocessen."
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:2032
-#, fuzzy
 msgid "Upgrade incomplete"
-msgstr "Opgradering gennemført"
+msgstr "Opgradering ufuldstændig"
 
 #: ../DistUpgrade/DistUpgradeController.py:2033
-#, fuzzy
 msgid ""
 "The upgrade has partially completed but there were errors during the upgrade "
 "process."
 msgstr ""
-"Opgraderingen er afsluttet, men der opstod fejl under opgraderingsprocessen."
+"Opgraderingen er delvist gennemført, men der opstod fejl under "
+"opgraderingsprocessen."
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:2055
@@ -865,12 +893,14 @@ msgstr "Den delvise opgradering er færdig."
 
 #: ../DistUpgrade/DistUpgradeController.py:2152
 msgid "Lock screen disabled"
-msgstr ""
+msgstr "Låst skærm deaktiveret"
 
 #: ../DistUpgrade/DistUpgradeController.py:2153
 msgid ""
 "Your lock screen has been disabled and will remain disabled until you reboot."
 msgstr ""
+"Din skærmlås er deaktiveret og vil forblive deaktiveret, indtil du "
+"genstarter."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:105
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
@@ -992,7 +1022,6 @@ msgid "&Upgrade"
 msgstr "&Opgradering"
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:154
-#: ../DistUpgrade/DistUpgradeViewKDE.py:715
 msgid "&Cancel"
 msgstr "&Annullér"
 
@@ -1044,19 +1073,20 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "Kørsel af skrivebordsmiljøet \"unity\" understøttes ikke fuldt ud af dit "
 "grafikudstyr. Du vil muligvis ende med et meget langsomt miljlø efter "
 "opgraderingen. Vores anbefaling er at bevare LTS-versionen indtil videre. "
-"For mere information, se https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D . Ønsker du stadig at fortsætte med "
-"opgraderingen?"
+"For mere information, se "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D . Ønsker du "
+"stadig at fortsætte med opgraderingen?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Din grafikhardware understøttes muligvis ikke fuldt ud i Ubuntu 12.04 LTS."
 
@@ -1096,12 +1126,14 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:277
 msgid "apt architecture is i386"
-msgstr ""
+msgstr "apt-arkitekturen er i386"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:278
 msgid ""
 "Upgrades from 18.04 on the i386 architecture are not supported at this time."
 msgstr ""
+"Opgraderinger fra 18.04 på i386-arkitekturen understøttes ikke for "
+"nærværende."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:292
 msgid "No ARMv6 CPU"
@@ -1140,19 +1172,22 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:419
 msgid "Connection to Snap Store failed"
-msgstr ""
+msgstr "Forbindelse til Snap Store mislykkedes"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:420
 msgid ""
 "Your system does not have a connection to the Snap Store. For the best "
-"upgrade experience make sure that your system can connect to api.snapcraft."
-"io.\n"
+"upgrade experience make sure that your system can connect to "
+"api.snapcraft.io.\n"
 "Do you still want to continue with the upgrade?"
 msgstr ""
+"Dit system er ikke forbundet til Snap-butikken. Sikr dig, at dit system kan "
+"forbinde til api.snapcraft.io for at få det bedste opgraderingsforløb.\n"
+"Vil du stadig fortsætte med opgraderingen?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:429
 msgid "Outdated snapd package"
-msgstr ""
+msgstr "Forældet snapd-pakke"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:430
 msgid ""
@@ -1160,11 +1195,12 @@ msgid ""
 "version of snapd on your system to improve the upgrade experience.\n"
 "Do you still want to continue with the upgrade?"
 msgstr ""
+"Dit system har ikke den seneste version af snapd. Opdatér snapd på dit "
+"system for at få det bedste opgraderingsforløb."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:451
-#, fuzzy
 msgid "Checking for installed snaps"
-msgstr "Kontrollerer for ny udgave af Ubuntu"
+msgstr "Leder efter installerede snapper"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:467
 #, python-format
@@ -1172,9 +1208,9 @@ msgid "refreshing snap %s"
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:470
-#, fuzzy, python-format
+#, python-format
 msgid "installing snap %s"
-msgstr "Installér %s"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:497
 msgid "PAE not enabled"
@@ -1312,14 +1348,14 @@ msgstr "En alvorlig fejl opstod"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:536
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Rapporter venligst dette som en fejl (hvis du ikke allerede har gjort det) "
-"og inkluder filerne /var/log/dist-upgrade/main.log og /var/log/dist-upgrade/"
-"apt.log i din rapport. Opgraderingen er blevet afbrudt.\n"
+"og inkluder filerne /var/log/dist-upgrade/main.log og /var/log/dist-"
+"upgrade/apt.log i din rapport. Opgraderingen er blevet afbrudt.\n"
 "Din originale sources.list blev gemt i /etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:566
@@ -1370,15 +1406,13 @@ msgid "Upgrade (%s)"
 msgstr "Opgrader (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:773
-#, fuzzy
 msgid "Cancel"
-msgstr "&Annullér"
+msgstr "Annullér"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:774
 #: ../DistUpgrade/DistUpgradeViewKDE.py:939
-#, fuzzy
 msgid "Continue"
-msgstr "_Fortsæt"
+msgstr "Fortsæt"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Difference >>>"
@@ -1392,7 +1426,6 @@ msgstr "<<< Skjul forskel"
 msgid "Error"
 msgstr "Fejl"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:719
 #: ../DistUpgrade/DistUpgradeViewKDE.py:960
 msgid "&Close"
 msgstr "&Luk"
@@ -1509,10 +1542,10 @@ msgstr[1] "%li sekunder"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:103
 #, python-format
@@ -1523,10 +1556,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:121
 #, python-format
@@ -1672,9 +1705,9 @@ msgstr "Status: [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:141
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Rapporter venligst dette som en fejl og inkluder filerne /var/log/dist-"
@@ -1855,8 +1888,10 @@ msgid "_Upgrade"
 msgstr "_Opgradér"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
-msgstr "<b>En ny udgave af Ubuntu er tilgængelig. Ønsker du at opgradere?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgstr ""
+"<b>En ny udgave af Ubuntu er tilgængelig. Ønsker du at opgradere?</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
 msgid "Don't Upgrade"
@@ -1919,10 +1954,11 @@ msgid "Downloading the release upgrade tool"
 msgstr "Hent værktøjet til udgivelsesopgraderingen"
 
 #: ../do-release-upgrade:83
-#, fuzzy
 msgid ""
 "If using the latest supported release, upgrade to the development release"
-msgstr "Opgradér til udviklingsversionen"
+msgstr ""
+"Hvis seneste supporterede udgivelse anvendes, så opgradér til "
+"udviklingsudgivelsen"
 
 #: ../do-release-upgrade:90 ../check_new_release_gtk.py:181
 msgid ""
@@ -1954,6 +1990,8 @@ msgid ""
 "Try the upgrade with third party mirrors and repositories enabled instead of "
 "commenting them out."
 msgstr ""
+"Prøv at opgradere med tredjepartsspejle og -arkiver aktiveret i stedet for "
+"at kommentere dem ud."
 
 #: ../do-release-upgrade:122
 msgid "The options --devel-release and --proposed are"
@@ -1981,38 +2019,35 @@ msgstr ""
 
 #: ../do-release-upgrade:147
 msgid "In /etc/update-manager/release-upgrades Prompt "
-msgstr ""
+msgstr "I /etc/update-manager/release-upgrades er Prompt "
 
 #: ../do-release-upgrade:148
 msgid "is set to never so upgrading is not possible."
-msgstr ""
+msgstr "sat til never (aldrig), så opgradering er ikke mulig."
 
 #: ../do-release-upgrade:150
 msgid "There is no development version of an LTS available."
-msgstr ""
+msgstr "Der er ikke en udviklingsversion af en LTS tilgængelig."
 
 #: ../do-release-upgrade:151
-#, fuzzy
 msgid "To upgrade to the latest non-LTS development release "
-msgstr "Opgradér til udviklingsversionen"
+msgstr "For at opgradere til den seneste ikke-LTS-udviklingsudgave "
 
 #: ../do-release-upgrade:152
 msgid "set Prompt=normal in /etc/update-manager/release-upgrades."
-msgstr ""
+msgstr "sættes Prompt=normal i /etc/update-manager/release-upgrades."
 
 #: ../do-release-upgrade:154
-#, fuzzy
 msgid "Upgrades to the development release are only "
-msgstr "Opgradér til udviklingsversionen"
+msgstr "Opgradering til udviklingsudgivelsen er kun "
 
 #: ../do-release-upgrade:155
 msgid "available from the latest supported release."
-msgstr ""
+msgstr "tilgængelig fra den seneste supporterede udgivelse."
 
 #: ../do-release-upgrade:157
-#, fuzzy
 msgid "No new release found."
-msgstr "Ingen ny udgave fundet"
+msgstr "Der blev ikke fundet en ny udgivelse."
 
 #: ../do-release-upgrade:162
 msgid "Release upgrade not possible right now"
@@ -2037,14 +2072,19 @@ msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Kør \"do-release-upgrade\" for at opgradere til den."
 
 #: ../do-release-upgrade:187
-msgid "Please install all available updates for your release before upgrading."
+msgid ""
+"Please install all available updates for your release before upgrading."
 msgstr ""
+"Installer venligst alle tilgængelige opdateringer til din udgivelse inden "
+"der opgraderes."
 
 #: ../do-release-upgrade:199
 msgid ""
 "You have not rebooted after updating a package which requires a reboot. "
 "Please reboot before upgrading."
 msgstr ""
+"Du har ikke genstartet efter opdatering af en pakke der kræver en genstart. "
+"Genstart venligst inden der opgraderes."
 
 #: ../check_new_release_gtk.py:85
 msgid "Software Updater"
@@ -2070,66 +2110,7 @@ msgstr ""
 msgid "Add debug output"
 msgstr "Tilføj fejlsøgningsuddata"
 
-#~ msgid ""
-#~ "An unresolvable problem occurred while calculating the upgrade.\n"
-#~ "\n"
-#~ " This can be caused by:\n"
-#~ " * Upgrading to a pre-release version of Ubuntu\n"
-#~ " * Running the current pre-release version of Ubuntu\n"
-#~ " * Unofficial software packages not provided by Ubuntu\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Et uløseligt problem opstod under beregning af opgraderingen.\n"
-#~ "\n"
-#~ " Det kan være fordi:\n"
-#~ " * Du opgraderer til en endnu ikke udgivet version af Ubuntu\n"
-#~ " * Du kører en endnu ikke udgivet version af Ubuntu\n"
-#~ " * Uofficielle softwarepakker som ikke er udgivet af Ubuntu, er "
-#~ "installeret.\n"
-#~ "\n"
-
-#~ msgid "Sandbox setup failed"
-#~ msgstr "Testopsætning mislykkedes"
-
-#~ msgid "It was not possible to create the sandbox environment."
-#~ msgstr "Det var ikke muligt at oprette testmiljøet."
-
-#~ msgid "Sandbox mode"
-#~ msgstr "Testtilstand"
-
-#~ msgid ""
-#~ "This upgrade is running in sandbox (test) mode. All changes are written "
-#~ "to '%s' and will be lost on the next reboot.\n"
-#~ "\n"
-#~ "*No* changes written to a system directory from now until the next reboot "
-#~ "are permanent."
-#~ msgstr ""
-#~ "Denne opgradering kører i sandkassetilstand (test). Alle ændringer "
-#~ "skrives til \"%s\" og vil gå tabt efter næste genstart.\n"
-#~ "\n"
-#~ "*Ingen* ændringer, der skrives til et systemkatalog fra nu af og indtil "
-#~ "næste genstart, er permanente."
-
-#~ msgid "No i686 CPU"
-#~ msgstr "Ikke en i686 cpu"
-
-#~ msgid ""
-#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
-#~ "extension. All packages were built with optimizations requiring i686 as "
-#~ "the minimal architecture. It is not possible to upgrade your system to a "
-#~ "new Ubuntu release with this hardware."
-#~ msgstr ""
-#~ "Dit system bruger en i586 cpu eller en cpu, der ikke har \"cmov-udvidelsen"
-#~ "\". Alle pakker er bygget med optimeringer, der kræver i686 som et "
-#~ "minimum. Det er ikke muligt at opgradere dit system til en nyere udgave "
-#~ "af Ubuntu med denne hardware."
-
-#~ msgid "Sandbox upgrade using aufs"
-#~ msgstr "Kør opgraderingen i et lukket miljø via aufs"
-
-#~ msgid "Test upgrade with a sandbox aufs overlay"
-#~ msgstr "Udfør en testopgradering med et aufs-testtilstandslag"
-
+#, python-format
 #~ msgid ""
 #~ "An unresolvable problem occurred while calculating the upgrade:\n"
 #~ "%s\n"
@@ -2151,46 +2132,88 @@ msgstr "Tilføj fejlsøgningsuddata"
 
 #~ msgid ""
 #~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop or edubuntu-desktop package and it was not possible to detect "
-#~ "which version of Ubuntu you are running.\n"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
+#~ "version of Ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
 #~ "Dit system indeholder ikke en ubuntu-desktop-, kubuntu-desktop-, xubuntu-"
-#~ "desktop- eller edubuntu-desktop-pakke, og det var ikke muligt at "
-#~ "genkende, hvilken Ubuntu-udgave du kører.\n"
+#~ "desktop- eller edubuntu-desktop-pakke, og det var ikke muligt at genkende, "
+#~ "hvilken Ubuntu-udgave du kører.\n"
 #~ "\n"
-#~ "Installér venligst en af ovenfor nævnte pakker ved hjælp af synaptic "
-#~ "eller apt-get, før du fortsætter."
+#~ "Installér venligst en af ovenfor nævnte pakker ved hjælp af synaptic eller "
+#~ "apt-get, før du fortsætter."
+
+#~ msgid "Sandbox setup failed"
+#~ msgstr "Testopsætning mislykkedes"
+
+#~ msgid "It was not possible to create the sandbox environment."
+#~ msgstr "Det var ikke muligt at oprette testmiljøet."
+
+#~ msgid "Sandbox mode"
+#~ msgstr "Testtilstand"
+
+#, python-format
+#~ msgid ""
+#~ "This upgrade is running in sandbox (test) mode. All changes are written to "
+#~ "'%s' and will be lost on the next reboot.\n"
+#~ "\n"
+#~ "*No* changes written to a system directory from now until the next reboot "
+#~ "are permanent."
+#~ msgstr ""
+#~ "Denne opgradering kører i sandkassetilstand (test). Alle ændringer skrives "
+#~ "til \"%s\" og vil gå tabt efter næste genstart.\n"
+#~ "\n"
+#~ "*Ingen* ændringer, der skrives til et systemkatalog fra nu af og indtil "
+#~ "næste genstart, er permanente."
+
+#~ msgid ""
+#~ "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
+#~ msgstr ""
+#~ "Din python-installation er beskadiget. Ret venligst det symbolske link i "
+#~ "\"/usr/bin/python\"."
 
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "Pakken \"debsig-verify\" er installeret"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
 #~ msgstr ""
 #~ "Opgraderingen kan ikke fortsætte med den pakke installeret.\n"
-#~ "Fjern den først med synaptic eller \"apt-get remove debsig-verify\" og "
-#~ "kør så opgraderingen igen."
+#~ "Fjern den først med synaptic eller \"apt-get remove debsig-verify\" og kør "
+#~ "så opgraderingen igen."
 
+#, python-format
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the "
-#~ "upgrade was found. This can happen if you run a internal mirror or if the "
-#~ "mirror information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the upgrade "
+#~ "was found. This can happen if you run a internal mirror or if the mirror "
+#~ "information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
-#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+#~ "here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'No' the upgrade will cancel."
 #~ msgstr ""
 #~ "Under scanning af dine softwarekilder blev et filspejl til opgraderingen "
-#~ "ikke fundet. Dette kan ske, hvis du anvender et internt filspejl, eller "
-#~ "hvis filspejlets oplysninger er forældede.\n"
+#~ "ikke fundet. Dette kan ske, hvis du anvender et internt filspejl, eller hvis "
+#~ "filspejlets oplysninger er forældede.\n"
 #~ "\n"
-#~ "Vil du ændre filen \"sources.list\" alligevel? Hvis du vælger \"Ja\" her "
-#~ "vil den opdatere alle \"%s\" til \"%s\" poster.\n"
+#~ "Vil du ændre filen \"sources.list\" alligevel? Hvis du vælger \"Ja\" her vil "
+#~ "den opdatere alle \"%s\" til \"%s\" poster.\n"
 #~ "Hvis du vælger \"Nej\" annulleres opgraderingen."
+
+#, python-format
+#~ msgid ""
+#~ "The upgrade has aborted. The upgrade needs a total of %s free space on disk "
+#~ "'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
+#~ "your trash and remove temporary packages of former installations using 'sudo "
+#~ "apt-get clean'."
+#~ msgstr ""
+#~ "Opgraderingen er blevet afbrudt. Opgraderingen kræver samlet %s fri "
+#~ "diskplads på disken \"%s\". Frigør venligst mindst yderligere %s diskplads "
+#~ "på \"%s\". Tøm papirkurven og fjern midlertidige pakker fra tidligere "
+#~ "installationer ved hjælp af kommandoen \"sudo apt-get clean\"."
 
 #~ msgid "evms in use"
 #~ msgstr "evms er i brug"
@@ -2200,8 +2223,8 @@ msgstr "Tilføj fejlsøgningsuddata"
 #~ "software is no longer supported, please switch it off and run the upgrade "
 #~ "again when this is done."
 #~ msgstr ""
-#~ "Dit system bruger diskområdehåndteringen \"evms\" i /proc/mounts. \"evms"
-#~ "\"-softwaren understøttes ikke længere. Slå den venligst fra og kør "
+#~ "Dit system bruger diskområdehåndteringen \"evms\" i /proc/mounts. \"evms\"-"
+#~ "softwaren understøttes ikke længere. Slå den venligst fra og kør "
 #~ "opgraderingen igen, når dette er gjort."
 
 #~ msgid ""
@@ -2211,15 +2234,71 @@ msgstr "Tilføj fejlsøgningsuddata"
 #~ "\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "Denne computer benytter i øjeblikket NVIDIA's \"nvidia\"-grafikdriver. "
-#~ "Der er ingen version af denne driver tilgængelig, som fungerer sammen med "
-#~ "dit grafikkort i Ubuntu 10.04 LTS.\n"
+#~ "Denne computer benytter i øjeblikket NVIDIA's \"nvidia\"-grafikdriver. Der "
+#~ "er ingen version af denne driver tilgængelig, som fungerer sammen med dit "
+#~ "grafikkort i Ubuntu 10.04 LTS.\n"
 #~ "\n"
 #~ "Vil du fortsætte?"
+
+#~ msgid "No i686 CPU"
+#~ msgstr "Ikke en i686 cpu"
+
+#~ msgid ""
+#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
+#~ "extension. All packages were built with optimizations requiring i686 as the "
+#~ "minimal architecture. It is not possible to upgrade your system to a new "
+#~ "Ubuntu release with this hardware."
+#~ msgstr ""
+#~ "Dit system bruger en i586 cpu eller en cpu, der ikke har \"cmov-"
+#~ "udvidelsen\". Alle pakker er bygget med optimeringer, der kræver i686 som et "
+#~ "minimum. Det er ikke muligt at opgradere dit system til en nyere udgave af "
+#~ "Ubuntu med denne hardware."
+
+#~ msgid "Sandbox upgrade using aufs"
+#~ msgstr "Kør opgraderingen i et lukket miljø via aufs"
+
+#~ msgid "Test upgrade with a sandbox aufs overlay"
+#~ msgstr "Udfør en testopgradering med et aufs-testtilstandslag"
+
+#~ msgid "No new release found"
+#~ msgstr "Ingen ny udgave fundet"
 
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr "Der kræves godkendelse for at udføre opgradering af udgivelse"
 
-#~ msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#~ msgid ""
+#~ "If none of this applies, then please report this bug using the command "
+#~ "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
 #~ msgstr ""
-#~ "Dit grafikudstyr understøttes muligvis ikke fuldt ud i Ubuntu 13.04."
+#~ "Hvis intet af dette gælder, så rapportér venligst denne fejl med brug af "
+#~ "kommandoen \"ubuntu-bug ubuntu-release-upgrader-core\" i en terminal."
+
+#~ msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
+#~ msgstr "Dit grafikudstyr understøttes muligvis ikke fuldt ud i Ubuntu 13.04."
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#~ msgstr "<b><big>Opgraderer Ubuntu til version 13.04</big></b>"
+
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Et uløseligt problem opstod under beregning af opgraderingen.\n"
+#~ "\n"
+#~ " Det kan være fordi:\n"
+#~ " * Du opgraderer til en endnu ikke udgivet version af Ubuntu\n"
+#~ " * Du kører en endnu ikke udgivet version af Ubuntu\n"
+#~ " * Uofficielle softwarepakker som ikke er udgivet af Ubuntu, er "
+#~ "installeret.\n"
+#~ "\n"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
+#~ msgstr "<b><big>Opgraderer Ubuntu til version 15.04</big></b>"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 15.10</big></b>"
+#~ msgstr "<b><big>Opgraderer Ubuntu til version 15.10</big></b>"

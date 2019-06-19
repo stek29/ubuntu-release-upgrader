@@ -3,23 +3,22 @@
 # This file is distributed under the same license as the update-manager package.
 # Igor Zubarev <igor4u@gmail.com>, 2006.
 #
-#: ../DistUpgrade/DistUpgradeController.py:1078
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
 "POT-Creation-Date: 2019-06-17 16:02-0700\n"
-"PO-Revision-Date: 2018-02-23 13:10+0000\n"
+"PO-Revision-Date: 2019-06-18 17:52+0000\n"
 "Last-Translator: Maxim Petrov <maximpetrov@yahoo.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2019-05-17 05:45+0000\n"
-"X-Generator: Launchpad (build 18962)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2019-06-19 06:03+0000\n"
+"X-Generator: Launchpad (build 18986)\n"
+"Language: ru\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:215 ../DistUpgrade/distro.py:446
@@ -127,6 +126,9 @@ msgid ""
 "\n"
 " "
 msgstr ""
+"Во время расчёта обновлений возникла нерешаемая проблема.\n"
+"\n"
+" "
 
 #: ../DistUpgrade/DistUpgradeCache.py:674
 msgid ""
@@ -137,35 +139,46 @@ msgid ""
 "try the upgrade again.\n"
 "\n"
 msgstr ""
+"Вероятно это было вызвано из-за того что:\n"
+" * Неофициальные пакеты программного обеспечения не поддерживаются Ubuntu\n"
+"Пожалуйста, используйте команду 'ppa-purge' из пакета ppa-purge \n"
+"для удаления программного обеспечения из Launchpad PPA и \n"
+"попробуйте обновиться ещё раз.\n"
+"\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:682
-#, fuzzy
 msgid ""
 "This was caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
 "This is most likely a transient problem, \n"
 "please try again later.\n"
-msgstr "Вероятно, это временная проблема. Попробуйте повторить позднее."
+msgstr ""
+"Вероятно это было вызвано из-за:\n"
+" * Обновления до пред-релизной версии Ubuntu\n"
+"Скорее всего, это временная проблема, \n"
+"пожалуйста, повторите попытку позже.\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:689
 msgid "This is most likely a transient problem, please try again later."
 msgstr "Вероятно, это временная проблема. Попробуйте повторить позднее."
 
 #: ../DistUpgrade/DistUpgradeCache.py:692
-#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug using the command "
 "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
-"Если ничего из перечисленного не подходит, сообщите об этой ошибке, выполнив "
-"команду «ubuntu-bug ubuntu-release-upgrader-core» в терминале."
+"Если ничего из этого не подходит, пожалуйста сообщите об ошибке используя "
+"команду 'ubuntu-bug ubuntu-release-upgrader-core' в терминале. "
 
 #: ../DistUpgrade/DistUpgradeCache.py:694
 msgid ""
 "If you want to investigate this yourself the log files in '/var/log/dist-"
-"upgrade' will contain details about the upgrade. Specifically, look at 'main."
-"log' and 'apt.log'."
+"upgrade' will contain details about the upgrade. Specifically, look at "
+"'main.log' and 'apt.log'."
 msgstr ""
+"Если вы хотите разобраться самостоятельно, файлы журнала в '/var/log/dist-"
+"upgrade' содержат подробности об обновлении. Особенно, обратите внимание на "
+"'main.log' и 'apt.log'."
 
 #: ../DistUpgrade/DistUpgradeCache.py:700
 msgid "Could not calculate the upgrade"
@@ -326,12 +339,11 @@ msgid "An upgrade from '%s' to '%s' is not supported with this tool."
 msgstr "Обновление от «%s» к «%s» не поддерживается этой утилитой."
 
 #: ../DistUpgrade/DistUpgradeController.py:429
-#, fuzzy
 msgid ""
 "Your python3 install is corrupted. Please fix the '/usr/bin/python3' symlink."
 msgstr ""
-"Python установлен некорректно. Пожалуйста, исправьте символическую ссылку «/"
-"usr/bin/python»."
+"Ваша установка python3 повреждена. Пожалуйста, исправьте символьную ссылку  "
+"'/usr/bin/python3'."
 
 #: ../DistUpgrade/DistUpgradeController.py:458
 #, python-format
@@ -384,9 +396,8 @@ msgid "disabled on upgrade to %s"
 msgstr "заблокировано при обновлении до %s"
 
 #: ../DistUpgrade/DistUpgradeController.py:807
-#, fuzzy
 msgid "No valid sources.list entry found"
-msgstr "Не удалось вычислить запись sources.list"
+msgstr "Не найдено достоверных записей sources.list."
 
 #: ../DistUpgrade/DistUpgradeController.py:808
 #, python-format
@@ -398,6 +409,11 @@ msgid ""
 "\n"
 "Do you want to continue anyway?"
 msgstr ""
+"При сканировании вашей информации о репозиториях не найдено записи о %s.\n"
+"\n"
+"Обновление может оказаться неудачным.\n"
+"\n"
+"Всё равно продолжить?"
 
 #: ../DistUpgrade/DistUpgradeController.py:820
 msgid "No valid mirror found"
@@ -521,19 +537,24 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:1046
 #: ../DistUpgrade/DistUpgradeController.py:1051
 msgid "EFI System Partition (ESP) not usable"
-msgstr ""
+msgstr "Системный раздел EFI (ESP) непригоден для использования"
 
 #: ../DistUpgrade/DistUpgradeController.py:1047
 msgid ""
 "Your EFI System Partition (ESP) is not mounted at /boot/efi. Please ensure "
 "that it is properly configured and try again."
 msgstr ""
+"Системный раздел EFI (ESP) не смонтирован в /boot/efi. Пожалуйста, "
+"убедитесь, что он правильно настроен и повторите снова."
 
 #: ../DistUpgrade/DistUpgradeController.py:1052
 msgid ""
 "The EFI System Partition (ESP) mounted at /boot/efi is not writable. Please "
 "mount this partition read-write and try again."
 msgstr ""
+"Системный раздел EFI (ESP), смонтированный в /boot/efi не доступен для "
+"записи. Пожалуйста, перемонтируйте этот раздел в режиме чтения-записи и "
+"повторите снова."
 
 #: ../DistUpgrade/DistUpgradeController.py:1059
 msgid "Not enough free disk space"
@@ -542,22 +563,22 @@ msgstr "Недостаточно свободного места на диске
 #. TRANSLATORS: you can change the order of the sentence,
 #. make sure to keep all {str_*} string untranslated.
 #: ../DistUpgrade/DistUpgradeController.py:1062
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The upgrade has aborted. The upgrade needs a total of {str_total} free space "
 "on disk '{str_dir}'. Please free at least an additional {str_needed} of disk "
 "space on '{str_dir}'. {str_remedy}"
 msgstr ""
-"Обновление было отменено. Обновлению необходимо всего %s свободного места на "
-"диске «%s». Пожалуйста освободите как минимум дополнительно %s места на "
-"«%s». Очистите корзину и удалите временные пакеты предыдущих установок, "
-"используя «sudo apt-get clean»."
+"Обновление прервано. Для обновления требуется {str_total} свободного места "
+"на диске '{str_dir}'. Освободите не менее {str_needed} дополнительного "
+"дискового пространства на '{str_dir}'. {str_remedy}"
 
 #. specific ways to resolve lack of free space
 #: ../DistUpgrade/DistUpgradeController.py:1067
 msgid ""
 "Remove temporary packages of former installations using 'sudo apt clean'."
 msgstr ""
+"Удалите временные пакеты от предыдущих установок с помощью «sudo apt clean»."
 
 #: ../DistUpgrade/DistUpgradeController.py:1069
 msgid ""
@@ -565,16 +586,21 @@ msgid ""
 "set COMPRESS=xz in /etc/initramfs-tools/initramfs.conf to reduce the size of "
 "your initramfs."
 msgstr ""
+"Можете удалить старые ядра с помощью «sudo apt autoremove» а также задать "
+"COMPRESS=xz в /etc/initramfs-tools/initramfs.conf, чтобы уменьшить размер "
+"initramfs."
 
 #: ../DistUpgrade/DistUpgradeController.py:1074
 msgid ""
 "Empty your trash and remove temporary packages of former installations using "
 "'sudo apt-get clean'."
 msgstr ""
+"Очистите корзину и удалите временные пакеты от предыдущих установок командой "
+"«sudo apt-get clean»."
 
 #: ../DistUpgrade/DistUpgradeController.py:1077
 msgid "Reboot to clean up files in /tmp."
-msgstr ""
+msgstr "Перезагрузите компьютер для удаления файлов из /tmp."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
@@ -658,16 +684,16 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Сообщите об этой ошибке, открыв в браузере страницу http://bugs.launchpad."
-"net/ubuntu/+source/ubuntu-release-upgrader/+filebug и прикрепив файлы из "
-"папки «/var/log/dist-upgrade/» к отчёту.\n"
+"Сообщите об этой ошибке, открыв в браузере страницу "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug и "
+"прикрепив файлы из папки «/var/log/dist-upgrade/» к отчёту.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1404
@@ -817,31 +843,28 @@ msgid "Upgrading"
 msgstr "Обновление"
 
 #: ../DistUpgrade/DistUpgradeController.py:2010
-#, fuzzy
 msgid "Upgrade infeasible"
-msgstr "Обновление отменено"
+msgstr "Обновление недопустимо"
 
 #: ../DistUpgrade/DistUpgradeController.py:2011
-#, fuzzy
 msgid ""
 "The upgrade could not be completed, there were errors during the upgrade "
 "process."
 msgstr ""
-"Обновление завершено, но во время процесса обновления произошли ошибки."
+"Невозможно завершить обновление, так как в процессе обновления возникли "
+"ошибки."
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:2032
-#, fuzzy
 msgid "Upgrade incomplete"
-msgstr "Обновление завершено"
+msgstr "Неполное обновление"
 
 #: ../DistUpgrade/DistUpgradeController.py:2033
-#, fuzzy
 msgid ""
 "The upgrade has partially completed but there were errors during the upgrade "
 "process."
 msgstr ""
-"Обновление завершено, но во время процесса обновления произошли ошибки."
+"Обновление частично завершено, однако в процессе обновления выявлены ошибки."
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:2055
@@ -869,12 +892,12 @@ msgstr "Частичное обновление завершено."
 
 #: ../DistUpgrade/DistUpgradeController.py:2152
 msgid "Lock screen disabled"
-msgstr ""
+msgstr "Блокировка экрана отключена"
 
 #: ../DistUpgrade/DistUpgradeController.py:2153
 msgid ""
 "Your lock screen has been disabled and will remain disabled until you reboot."
-msgstr ""
+msgstr "Экран блокировки отключен и останется отключенным до перезагрузки."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:105
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
@@ -994,7 +1017,6 @@ msgid "&Upgrade"
 msgstr "&Обновление"
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:154
-#: ../DistUpgrade/DistUpgradeViewKDE.py:715
 msgid "&Cancel"
 msgstr "&Отменить"
 
@@ -1048,9 +1070,9 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "Запуск Unity поддерживается вашим графическим оборудованием лишь частично. "
 "Поэтому, после обновления, вы можете получить очень медленную систему. Мы "
@@ -1059,8 +1081,10 @@ msgstr ""
 "хотите начать обновление?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
-msgstr "Ваша видеокарта не будет поддерживаться полностью в Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgstr ""
+"Ваша видеокарта не будет поддерживаться полностью в Ubuntu 12.04 LTS."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:218
 msgid ""
@@ -1070,9 +1094,9 @@ msgid ""
 "continue with the upgrade?"
 msgstr ""
 "Поддержка вашей видеокарты в Ubuntu 12.04 LTS будет ограниченной и вы можете "
-"столкнуться с проблемами после обновления. Прочтите подробности  https://"
-"wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx Вы действительно хотите "
-"продолжить обновление?"
+"столкнуться с проблемами после обновления. Прочтите подробности  "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx Вы действительно "
+"хотите продолжить обновление?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:238
 msgid ""
@@ -1098,12 +1122,13 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:277
 msgid "apt architecture is i386"
-msgstr ""
+msgstr "архитектура apt - i386"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:278
 msgid ""
 "Upgrades from 18.04 on the i386 architecture are not supported at this time."
 msgstr ""
+"Обновление с 18.04 на архитектуре i386 в настоящее время не поддерживается."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:292
 msgid "No ARMv6 CPU"
@@ -1143,19 +1168,23 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:419
 msgid "Connection to Snap Store failed"
-msgstr ""
+msgstr "Не удалось подключиться к Snap Store"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:420
 msgid ""
 "Your system does not have a connection to the Snap Store. For the best "
-"upgrade experience make sure that your system can connect to api.snapcraft."
-"io.\n"
+"upgrade experience make sure that your system can connect to "
+"api.snapcraft.io.\n"
 "Do you still want to continue with the upgrade?"
 msgstr ""
+"Ваша система не имеет подключения к Snap Store. Для обеспечения наилучшего "
+"обновления убедитесь, что ваша система может подключаться к "
+"api.snapcraft.io.\n"
+"Вы все еще хотите продолжить обновление?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:429
 msgid "Outdated snapd package"
-msgstr ""
+msgstr "Устаревший пакет snapd"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:430
 msgid ""
@@ -1163,11 +1192,13 @@ msgid ""
 "version of snapd on your system to improve the upgrade experience.\n"
 "Do you still want to continue with the upgrade?"
 msgstr ""
+"В вашей системе нет последней версии snapd. Обновите версию snapd в вашей "
+"системе, чтобы улучшить процесс обновления.\n"
+"Вы все еще хотите продолжить обновление?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:451
-#, fuzzy
 msgid "Checking for installed snaps"
-msgstr "Проверка наличия нового релиза Ubuntu"
+msgstr "Проверка установленных snap"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:467
 #, python-format
@@ -1175,9 +1206,9 @@ msgid "refreshing snap %s"
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:470
-#, fuzzy, python-format
+#, python-format
 msgid "installing snap %s"
-msgstr "Установить %s"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:497
 msgid "PAE not enabled"
@@ -1317,16 +1348,16 @@ msgstr "Произошла критическая ошибка"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:536
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Пожалуйста, сообщите об этом как об ошибке (если вы ещё этого не сделали) и "
-"включите файлы /var/log/dist-upgrade/main.log и /var/log/dist-upgrade/apt."
-"log в ваш отчёт. Обновление было отменено.\n"
-"Ваш оригинальный файл sources.list был сохранён в /etc/apt/sources.list."
-"distUpgrade."
+"включите файлы /var/log/dist-upgrade/main.log и /var/log/dist-"
+"upgrade/apt.log в ваш отчёт. Обновление было отменено.\n"
+"Ваш оригинальный файл sources.list был сохранён в "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:566
 msgid "Ctrl-c pressed"
@@ -1377,15 +1408,13 @@ msgid "Upgrade (%s)"
 msgstr "Обновление (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:773
-#, fuzzy
 msgid "Cancel"
-msgstr "&Отменить"
+msgstr "Отменить"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:774
 #: ../DistUpgrade/DistUpgradeViewKDE.py:939
-#, fuzzy
 msgid "Continue"
-msgstr "_Продолжить"
+msgstr "Продолжить"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Difference >>>"
@@ -1399,7 +1428,6 @@ msgstr "<<< Скрыть различия"
 msgid "Error"
 msgstr "Ошибка"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:719
 #: ../DistUpgrade/DistUpgradeViewKDE.py:960
 msgid "&Close"
 msgstr "&Закрыть"
@@ -1520,10 +1548,10 @@ msgstr[2] "%li секунд"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:103
 #, python-format
@@ -1534,10 +1562,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:121
 #, python-format
@@ -1677,7 +1705,8 @@ msgstr "Требуется перезагрузка"
 #: ../DistUpgrade/DistUpgradeView.py:426
 msgid ""
 "The upgrade is finished and a reboot is required. Do you want to do this now?"
-msgstr "Обновление завершено и требуется перезагрузка. Перезагрузиться сейчас?"
+msgstr ""
+"Обновление завершено и требуется перезагрузка. Перезагрузиться сейчас?"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:82
 #, python-format
@@ -1686,16 +1715,16 @@ msgstr "Выполнено: [%3i%%]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:141
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
-"Пожалуйста, сообщите об этой ошибке и включите файлы /var/log/dist-upgrade/"
-"main.log и /var/log/dist-upgrade/apt.log в ваш отчёт. Обновление было "
-"отменено.\n"
-"Ваш оригинальный файл sources.list был сохранён в /etc/apt/sources.list."
-"distUpgrade."
+"Пожалуйста, сообщите об этой ошибке и включите файлы /var/log/dist-"
+"upgrade/main.log и /var/log/dist-upgrade/apt.log в ваш отчёт. Обновление "
+"было отменено.\n"
+"Ваш оригинальный файл sources.list был сохранён в "
+"/etc/apt/sources.list.distUpgrade."
 
 #: ../DistUpgrade/DistUpgradeViewText.py:165
 msgid "Aborting"
@@ -1870,7 +1899,8 @@ msgid "_Upgrade"
 msgstr "_Обновить"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr "<b>Доступна новая версия Ubuntu. Хотите обновить?</b>"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:2
@@ -1934,10 +1964,11 @@ msgid "Downloading the release upgrade tool"
 msgstr "Загрузка программы для обновления дистрибутива"
 
 #: ../do-release-upgrade:83
-#, fuzzy
 msgid ""
 "If using the latest supported release, upgrade to the development release"
-msgstr "Обновиться до разрабатываемого выпуска"
+msgstr ""
+"Если используется последний поддерживаемый выпуск, обновление до "
+"разрабатываемого выпуска"
 
 #: ../do-release-upgrade:90 ../check_new_release_gtk.py:181
 msgid ""
@@ -2006,27 +2037,24 @@ msgid "There is no development version of an LTS available."
 msgstr ""
 
 #: ../do-release-upgrade:151
-#, fuzzy
 msgid "To upgrade to the latest non-LTS development release "
-msgstr "Обновиться до разрабатываемого выпуска"
+msgstr ""
 
 #: ../do-release-upgrade:152
 msgid "set Prompt=normal in /etc/update-manager/release-upgrades."
 msgstr ""
 
 #: ../do-release-upgrade:154
-#, fuzzy
 msgid "Upgrades to the development release are only "
-msgstr "Обновиться до разрабатываемого выпуска"
+msgstr "Обновление только до разрабатываемого выпуска "
 
 #: ../do-release-upgrade:155
 msgid "available from the latest supported release."
-msgstr ""
+msgstr "доступно только с последнего поддерживаемого выпуска."
 
 #: ../do-release-upgrade:157
-#, fuzzy
 msgid "No new release found."
-msgstr "Новая версия не обнаружена"
+msgstr "Новых выпусков не найдено."
 
 #: ../do-release-upgrade:162
 msgid "Release upgrade not possible right now"
@@ -2051,14 +2079,18 @@ msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Чтобы обновиться до него, выполните «do-release-upgrade»."
 
 #: ../do-release-upgrade:187
-msgid "Please install all available updates for your release before upgrading."
+msgid ""
+"Please install all available updates for your release before upgrading."
 msgstr ""
+"Перед обновлением установите все доступные обновления для своей версии."
 
 #: ../do-release-upgrade:199
 msgid ""
 "You have not rebooted after updating a package which requires a reboot. "
 "Please reboot before upgrading."
 msgstr ""
+"Вы не перезагрузились после обновления пакета, требующего перезагрузки. "
+"Перед обновлением перезагрузитесь."
 
 #: ../check_new_release_gtk.py:85
 msgid "Software Updater"
@@ -2084,65 +2116,7 @@ msgstr ""
 msgid "Add debug output"
 msgstr "Добавить результаты отладки"
 
-#~ msgid ""
-#~ "An unresolvable problem occurred while calculating the upgrade.\n"
-#~ "\n"
-#~ " This can be caused by:\n"
-#~ " * Upgrading to a pre-release version of Ubuntu\n"
-#~ " * Running the current pre-release version of Ubuntu\n"
-#~ " * Unofficial software packages not provided by Ubuntu\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Обнаружена неразрешимая проблема при расчёте обновления.\n"
-#~ "\n"
-#~ " Это может быть вызвано тем, что:\n"
-#~ " * Обновление до пре-релиза Ubuntu\n"
-#~ " * Использование текущей пре-релиз версии Ubuntu\n"
-#~ " * Неофициальное ПО, не предоставляемое Ubuntu\n"
-#~ "\n"
-
-#~ msgid "Sandbox setup failed"
-#~ msgstr "Установка безопасного окружения не удалась"
-
-#~ msgid "It was not possible to create the sandbox environment."
-#~ msgstr "Не удалось создать безопасное окружение."
-
-#~ msgid "Sandbox mode"
-#~ msgstr "Режим безопасного окружения («песочницы»)"
-
-#~ msgid ""
-#~ "This upgrade is running in sandbox (test) mode. All changes are written "
-#~ "to '%s' and will be lost on the next reboot.\n"
-#~ "\n"
-#~ "*No* changes written to a system directory from now until the next reboot "
-#~ "are permanent."
-#~ msgstr ""
-#~ "Это обновление запущенно в безопасном (тестовом) окружении. Все изменения "
-#~ "записываются в «%s» и будут потеряны после перезагрузки.\n"
-#~ "\n"
-#~ "До следующей перезагрузки никаких изменений в системном каталоге "
-#~ "производиться не будет."
-
-#~ msgid "No i686 CPU"
-#~ msgstr "Нет i686-совместимого процессора"
-
-#~ msgid ""
-#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
-#~ "extension. All packages were built with optimizations requiring i686 as "
-#~ "the minimal architecture. It is not possible to upgrade your system to a "
-#~ "new Ubuntu release with this hardware."
-#~ msgstr ""
-#~ "Ваша система использует i568-совместимый процессор, либо процессор в "
-#~ "котором нет расширения «cmov». Все пакеты были собраны с оптимизацией под "
-#~ "архитектуру i686 и выше. Обновить вашу систему до новой версии Ubuntu на "
-#~ "этом компьютере не получится."
-
-#~ msgid "Sandbox upgrade using aufs"
-#~ msgstr "Обновление в безопасном окружении, используя aufs"
-
-#~ msgid "Test upgrade with a sandbox aufs overlay"
-#~ msgstr "Протестировать обновление в безопасном режиме"
-
+#, python-format
 #~ msgid ""
 #~ "An unresolvable problem occurred while calculating the upgrade:\n"
 #~ "%s\n"
@@ -2159,42 +2133,71 @@ msgstr "Добавить результаты отладки"
 #~ " Это может быть вызвано:\n"
 #~ " * Обновлением к пред-релизной версии Ubuntu\n"
 #~ " * Запуском данной пред-релизной версии Ubuntu\n"
-#~ " * Неофициальным программным обеспечением, которое не поддерживается "
-#~ "Ubuntu\n"
+#~ " * Неофициальным программным обеспечением, которое не поддерживается Ubuntu\n"
 #~ "\n"
 
 #~ msgid ""
 #~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop or edubuntu-desktop package and it was not possible to detect "
-#~ "which version of Ubuntu you are running.\n"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
+#~ "version of Ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
 #~ "Ваша система не содержит пакетов ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop или edubuntu-desktop, и поэтому невозможно определить, какая "
-#~ "версия Ubuntu у вас запущена.\n"
-#~ " Пожалуйста, установите сначала один из этих пакетов с помощью synaptic "
-#~ "или apt-get перед продолжением."
+#~ "desktop или edubuntu-desktop, и поэтому невозможно определить, какая версия "
+#~ "Ubuntu у вас запущена.\n"
+#~ " Пожалуйста, установите сначала один из этих пакетов с помощью synaptic или "
+#~ "apt-get перед продолжением."
+
+#~ msgid "Sandbox setup failed"
+#~ msgstr "Установка безопасного окружения не удалась"
+
+#~ msgid "It was not possible to create the sandbox environment."
+#~ msgstr "Не удалось создать безопасное окружение."
+
+#~ msgid "Sandbox mode"
+#~ msgstr "Режим безопасного окружения («песочницы»)"
+
+#, python-format
+#~ msgid ""
+#~ "This upgrade is running in sandbox (test) mode. All changes are written to "
+#~ "'%s' and will be lost on the next reboot.\n"
+#~ "\n"
+#~ "*No* changes written to a system directory from now until the next reboot "
+#~ "are permanent."
+#~ msgstr ""
+#~ "Это обновление запущенно в безопасном (тестовом) окружении. Все изменения "
+#~ "записываются в «%s» и будут потеряны после перезагрузки.\n"
+#~ "\n"
+#~ "До следующей перезагрузки никаких изменений в системном каталоге "
+#~ "производиться не будет."
+
+#~ msgid ""
+#~ "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
+#~ msgstr ""
+#~ "Python установлен некорректно. Пожалуйста, исправьте символическую ссылку "
+#~ "«/usr/bin/python»."
 
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "Установлен пакет «debsig-verify»"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
 #~ msgstr ""
 #~ "Обновление не может быть продолжено, если установлен этот пакет.\n"
-#~ "Сначала удалите его в Synaptic или с помощью «apt-get remove debsig-"
-#~ "verify» и запустите обновление снова."
+#~ "Сначала удалите его в Synaptic или с помощью «apt-get remove debsig-verify» "
+#~ "и запустите обновление снова."
 
+#, python-format
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the "
-#~ "upgrade was found. This can happen if you run a internal mirror or if the "
-#~ "mirror information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the upgrade "
+#~ "was found. This can happen if you run a internal mirror or if the mirror "
+#~ "information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
-#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+#~ "here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'No' the upgrade will cancel."
 #~ msgstr ""
 #~ "В процессе сканирования информации о ваших репозиториях, не было найдено "
@@ -2204,6 +2207,18 @@ msgstr "Добавить результаты отладки"
 #~ "Желаете ли вы перезаписать файл «sources.list» в любом случае? Если вы "
 #~ "выберите «Да», то будут обновлены все «%s» записей до «%s».\n"
 #~ "Если же вы выберите «Нет», то обновление будет отменено."
+
+#, python-format
+#~ msgid ""
+#~ "The upgrade has aborted. The upgrade needs a total of %s free space on disk "
+#~ "'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
+#~ "your trash and remove temporary packages of former installations using 'sudo "
+#~ "apt-get clean'."
+#~ msgstr ""
+#~ "Обновление было отменено. Обновлению необходимо всего %s свободного места на "
+#~ "диске «%s». Пожалуйста освободите как минимум дополнительно %s места на "
+#~ "«%s». Очистите корзину и удалите временные пакеты предыдущих установок, "
+#~ "используя «sudo apt-get clean»."
 
 #~ msgid "evms in use"
 #~ msgstr "Программа «evms» используется"
@@ -2224,14 +2239,43 @@ msgstr "Добавить результаты отладки"
 #~ "\n"
 #~ "Do you want to continue?"
 #~ msgstr ""
-#~ "На этом компьютере используются драйвера NVIDIA. Нет доступных версий "
-#~ "этих драйверов, которые бы работали с вашей видеокартой в Ubuntu 10.04 "
-#~ "LTS.\n"
+#~ "На этом компьютере используются драйвера NVIDIA. Нет доступных версий этих "
+#~ "драйверов, которые бы работали с вашей видеокартой в Ubuntu 10.04 LTS.\n"
 #~ "\n"
 #~ "Вы хотите продолжить?"
 
+#~ msgid "No i686 CPU"
+#~ msgstr "Нет i686-совместимого процессора"
+
+#~ msgid ""
+#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
+#~ "extension. All packages were built with optimizations requiring i686 as the "
+#~ "minimal architecture. It is not possible to upgrade your system to a new "
+#~ "Ubuntu release with this hardware."
+#~ msgstr ""
+#~ "Ваша система использует i568-совместимый процессор, либо процессор в котором "
+#~ "нет расширения «cmov». Все пакеты были собраны с оптимизацией под "
+#~ "архитектуру i686 и выше. Обновить вашу систему до новой версии Ubuntu на "
+#~ "этом компьютере не получится."
+
+#~ msgid "Sandbox upgrade using aufs"
+#~ msgstr "Обновление в безопасном окружении, используя aufs"
+
+#~ msgid "Test upgrade with a sandbox aufs overlay"
+#~ msgstr "Протестировать обновление в безопасном режиме"
+
+#~ msgid "No new release found"
+#~ msgstr "Новая версия не обнаружена"
+
 #~ msgid "Authentication is required to perform a partial upgrade"
 #~ msgstr "Для выполнения частичного обновления требуется аутентификация"
+
+#~ msgid ""
+#~ "If none of this applies, then please report this bug using the command "
+#~ "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
+#~ msgstr ""
+#~ "Если ничего из перечисленного не подходит, сообщите об этой ошибке, выполнив "
+#~ "команду «ubuntu-bug ubuntu-release-upgrader-core» в терминале."
 
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr "Для обновления выпуска необходимо выполнить аутентификацию"
@@ -2240,3 +2284,29 @@ msgstr "Добавить результаты отладки"
 #~ msgstr ""
 #~ "Ваше графическое оборудование может не полностью поддерживаться в Ubuntu "
 #~ "13.04."
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#~ msgstr "<b><big>Обновление Ubuntu до версии 13.04</big></b>"
+
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Обнаружена неразрешимая проблема при расчёте обновления.\n"
+#~ "\n"
+#~ " Это может быть вызвано тем, что:\n"
+#~ " * Обновление до пре-релиза Ubuntu\n"
+#~ " * Использование текущей пре-релиз версии Ubuntu\n"
+#~ " * Неофициальное ПО, не предоставляемое Ubuntu\n"
+#~ "\n"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
+#~ msgstr "<b><big>Обновление Ubuntu до версии 15.04</big></b>"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 15.10</big></b>"
+#~ msgstr "<b><big>Обновление Ubuntu до версии 15.10</big></b>"

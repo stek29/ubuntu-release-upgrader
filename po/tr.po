@@ -3,22 +3,21 @@
 # This file is distributed under the same license as the update-manager package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
 #
-#: ../DistUpgrade/DistUpgradeController.py:1078
 msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
 "POT-Creation-Date: 2019-06-17 16:02-0700\n"
-"PO-Revision-Date: 2013-10-03 13:37+0000\n"
-"Last-Translator: Volkan Gezer <Unknown>\n"
+"PO-Revision-Date: 2019-06-18 17:53+0000\n"
+"Last-Translator: Brian Murray <brian@ubuntu.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-05-17 05:46+0000\n"
-"X-Generator: Launchpad (build 18962)\n"
+"X-Launchpad-Export-Date: 2019-06-19 06:03+0000\n"
+"X-Generator: Launchpad (build 18986)\n"
+"Language: tr\n"
 
 #. TRANSLATORS: %s is a country
 #: ../DistUpgrade/distro.py:215 ../DistUpgrade/distro.py:446
@@ -120,6 +119,9 @@ msgid ""
 "\n"
 " "
 msgstr ""
+"Yükseltmeyi hesaplarken çözülemez bir sorun oluştu.\n"
+"\n"
+" "
 
 #: ../DistUpgrade/DistUpgradeCache.py:674
 msgid ""
@@ -130,16 +132,24 @@ msgid ""
 "try the upgrade again.\n"
 "\n"
 msgstr ""
+"Olası nedenler:\n"
+"* Resmi olmayan yazılım paketleri Ubuntu tarafından sağlanmadı\n"
+"Lütfen ppa-purge'daki 'ppa-purge' aracını kullanın.\n"
+"Yazılımı bir Launchpad PPA'sından kaldırmak ve yükseltmeyi\n"
+"tekrar denemek için paketi kullanın.\n"
+"\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:682
-#, fuzzy
 msgid ""
 "This was caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
 "This is most likely a transient problem, \n"
 "please try again later.\n"
 msgstr ""
-"Bu geçici bir sorun gibi gözüküyor, lütfen daha sonra tekrar deneyiniz."
+"Olası nedenler:\n"
+"* Ubuntu'nun yayın öncesi bir sürümüne yükseltme\n"
+"Bu büyük olasılıkla geçici bir sorundur,\n"
+"lütfen tekrar deneyin.\n"
 
 #: ../DistUpgrade/DistUpgradeCache.py:689
 msgid "This is most likely a transient problem, please try again later."
@@ -147,20 +157,22 @@ msgstr ""
 "Bu geçici bir sorun gibi gözüküyor, lütfen daha sonra tekrar deneyiniz."
 
 #: ../DistUpgrade/DistUpgradeCache.py:692
-#, fuzzy
 msgid ""
 "If none of this applies, then please report this bug using the command "
 "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
-"Eğer bunlardan hiçbiri olmazsa lütfen bu hatayı uçbirimden izleyen komut ile "
-"bildirin: 'ubuntu-bug ubuntu-release-upgrader-core'."
+"Bunların hiçbiri geçerli değilse, lütfen bu hatayı bir uçbirim açıp 'ubuntu-"
+"bug ubuntu-release-upgrader-core' komutunu kullanarak bildirin. "
 
 #: ../DistUpgrade/DistUpgradeCache.py:694
 msgid ""
 "If you want to investigate this yourself the log files in '/var/log/dist-"
-"upgrade' will contain details about the upgrade. Specifically, look at 'main."
-"log' and 'apt.log'."
+"upgrade' will contain details about the upgrade. Specifically, look at "
+"'main.log' and 'apt.log'."
 msgstr ""
+"Hatayı araştırmak istiyorsanız, '/var/log/dist-upgrade' içindeki günlük "
+"dosyaları yükseltme hakkında detaylar içerecektir. Özellikle, 'main.log' ve "
+"'apt.log' bölümlerine bakın."
 
 #: ../DistUpgrade/DistUpgradeCache.py:700
 msgid "Could not calculate the upgrade"
@@ -319,15 +331,14 @@ msgstr "Yükseltilemiyor"
 #: ../DistUpgrade/DistUpgradeController.py:405
 #, python-format
 msgid "An upgrade from '%s' to '%s' is not supported with this tool."
-msgstr "Bu araçla, '%s' sürümünden '%s' sürümüne bir yükseltme desteklenmiyor."
+msgstr ""
+"Bu araçla, '%s' sürümünden '%s' sürümüne bir yükseltme desteklenmiyor."
 
 #: ../DistUpgrade/DistUpgradeController.py:429
-#, fuzzy
 msgid ""
 "Your python3 install is corrupted. Please fix the '/usr/bin/python3' symlink."
 msgstr ""
-"Python kurulumunuzda hata var. Lütfen '/usr/bin/python' sembolik bağını "
-"onarın."
+"Python3 yüklemeniz bozuk. Lütfen '/usr/bin/python3' bağlantısını kaldırın."
 
 #: ../DistUpgrade/DistUpgradeController.py:458
 #, python-format
@@ -381,9 +392,8 @@ msgid "disabled on upgrade to %s"
 msgstr "%s yükseltmesi iptal edildi"
 
 #: ../DistUpgrade/DistUpgradeController.py:807
-#, fuzzy
 msgid "No valid sources.list entry found"
-msgstr "'sources.list' girdisi hesaplanamadı"
+msgstr "Geçerli bir sources.list girişi bulunamadı"
 
 #: ../DistUpgrade/DistUpgradeController.py:808
 #, python-format
@@ -395,6 +405,11 @@ msgid ""
 "\n"
 "Do you want to continue anyway?"
 msgstr ""
+"Depo bilgileri taranırken %s hakkında hiç bir giriş bulunamadı.\n"
+"\n"
+"Yükseltme başarılı olmayabilir.\n"
+"\n"
+"Yinede devam etmek istiyor musunuz?"
 
 #: ../DistUpgrade/DistUpgradeController.py:820
 msgid "No valid mirror found"
@@ -513,19 +528,23 @@ msgstr ""
 #: ../DistUpgrade/DistUpgradeController.py:1046
 #: ../DistUpgrade/DistUpgradeController.py:1051
 msgid "EFI System Partition (ESP) not usable"
-msgstr ""
+msgstr "EFI Sistem bölümü (ESP) kullanılamıyor"
 
 #: ../DistUpgrade/DistUpgradeController.py:1047
 msgid ""
 "Your EFI System Partition (ESP) is not mounted at /boot/efi. Please ensure "
 "that it is properly configured and try again."
 msgstr ""
+"EFI Sistem Bölümünüz (ESP)  /boot/efi 'ye bağlanamadı. Lütfen düzgün bir "
+"şekilde yapılandırıldığından emin olun ve tekrar deneyin."
 
 #: ../DistUpgrade/DistUpgradeController.py:1052
 msgid ""
 "The EFI System Partition (ESP) mounted at /boot/efi is not writable. Please "
 "mount this partition read-write and try again."
 msgstr ""
+"/boot/efi 'ye bağlanan EFI Sistem Bölümünüz (ESP) yazılabilir değil. Lütfen "
+"bu bölümü okunabilir-yazılabilir olarak bağlayın ve yeniden deneyin."
 
 #: ../DistUpgrade/DistUpgradeController.py:1059
 msgid "Not enough free disk space"
@@ -534,22 +553,22 @@ msgstr "Yeterince boş disk alanı yok"
 #. TRANSLATORS: you can change the order of the sentence,
 #. make sure to keep all {str_*} string untranslated.
 #: ../DistUpgrade/DistUpgradeController.py:1062
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The upgrade has aborted. The upgrade needs a total of {str_total} free space "
 "on disk '{str_dir}'. Please free at least an additional {str_needed} of disk "
 "space on '{str_dir}'. {str_remedy}"
 msgstr ""
-"Yükseltme iptal edildi. Yükseltmenin '%s' disk üzerinde %s boş alana "
-"ihtiyacı var. Lütfen '%s' diski üzerinde en az %s alan açınız. Çöpü "
-"boşaltabilir ve 'sudo apt-get clean' komutu ile önceki yüklemelerinizin "
-"kullanılmayan paketlerini temizleyebilirsiniz."
+"Yükseltme işleminden çıkıldı. Yükseltme '{str_dir}' diskinizde toplamda "
+"{str_total} ihtiyaç duyuyor. Lütfen '{str_dir}' diskinizde en az  "
+"{str_needed} boş alan yaratın. {str_remedy}"
 
 #. specific ways to resolve lack of free space
 #: ../DistUpgrade/DistUpgradeController.py:1067
 msgid ""
 "Remove temporary packages of former installations using 'sudo apt clean'."
 msgstr ""
+"Eski kurulumların geçici paketlerini 'sudo apt clean' kullanarak silin."
 
 #: ../DistUpgrade/DistUpgradeController.py:1069
 msgid ""
@@ -557,16 +576,21 @@ msgid ""
 "set COMPRESS=xz in /etc/initramfs-tools/initramfs.conf to reduce the size of "
 "your initramfs."
 msgstr ""
+"Eski çekirdekleri 'sudo apt autoremove' kullanarak kaldırabilir ve "
+"initramfs'ınızın boyutunu azaltmak için /etc/initramfs-tools/initramfs.conf "
+"dosyasında COMPRESS=xz olarak ayarlayabilirsiniz."
 
 #: ../DistUpgrade/DistUpgradeController.py:1074
 msgid ""
 "Empty your trash and remove temporary packages of former installations using "
 "'sudo apt-get clean'."
 msgstr ""
+"Çöp kutusunu boşaltın ve 'sudo apt-get clean' yöntemini kullanarak eski "
+"kurulumların geçici paketlerini kaldırın."
 
 #: ../DistUpgrade/DistUpgradeController.py:1077
 msgid "Reboot to clean up files in /tmp."
-msgstr ""
+msgstr "/tmp içindeki dosyaları temizlemek için yeniden başlatın."
 
 #. calc the dist-upgrade and see if the removals are ok/expected
 #. do the dist-upgrade
@@ -587,6 +611,8 @@ msgid ""
 "Livepatch security updates are not available for Ubuntu %s. If you upgrade, "
 "Livepatch will turn off."
 msgstr ""
+"Livepatch güvenlik güncellemeleri,%s Ubuntu için mevcut değil. Yükseltme "
+"yaparsanız, Livepatch kapanır."
 
 #: ../DistUpgrade/DistUpgradeController.py:1251
 msgid "Upgrade canceled"
@@ -649,16 +675,17 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
-"Please report this bug in a browser at http://bugs.launchpad.net/ubuntu/"
-"+source/ubuntu-release-upgrader/+filebug and attach the files in /var/log/"
-"dist-upgrade/ to the bug report.\n"
+"Please report this bug in a browser at "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug "
+"and attach the files in /var/log/dist-upgrade/ to the bug report.\n"
 "%s"
 msgstr ""
 "\n"
 "\n"
-"Lütfen bu hatayı izleyen adresi tarayıcıda açarak bildirin http://bugs."
-"launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug ve /var/log/"
-"dist-upgrade/ dizini içindeki dosyaları hata bildirimi için ekleyin.\n"
+"Lütfen bu hatayı izleyen adresi tarayıcıda açarak bildirin "
+"http://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+filebug ve "
+"/var/log/dist-upgrade/ dizini içindeki dosyaları hata bildirimi için "
+"ekleyin.\n"
 "%s"
 
 #: ../DistUpgrade/DistUpgradeController.py:1404
@@ -810,29 +837,26 @@ msgid "Upgrading"
 msgstr "Yükseltiliyor"
 
 #: ../DistUpgrade/DistUpgradeController.py:2010
-#, fuzzy
 msgid "Upgrade infeasible"
-msgstr "Yükseltmeden vazgeçildi"
+msgstr "Yükseltme mümkün değil"
 
 #: ../DistUpgrade/DistUpgradeController.py:2011
-#, fuzzy
 msgid ""
 "The upgrade could not be completed, there were errors during the upgrade "
 "process."
-msgstr "Yükseltme tamamlandı, fakat yükseltme esnasında bazı hatalar oluştu."
+msgstr "Yükseltme tamamlanamadı. Yükseltme sırasında hatalar oluştu."
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:2032
-#, fuzzy
 msgid "Upgrade incomplete"
-msgstr "Yükseltme tamamlandı"
+msgstr "Yükseltme tamamlanamadı"
 
 #: ../DistUpgrade/DistUpgradeController.py:2033
-#, fuzzy
 msgid ""
 "The upgrade has partially completed but there were errors during the upgrade "
 "process."
-msgstr "Yükseltme tamamlandı, fakat yükseltme esnasında bazı hatalar oluştu."
+msgstr ""
+"Yükseltme kısmî olarak tamamlandı, ancak yükleme sırasında hatalar vardı."
 
 #. don't abort here, because it would restore the sources.list
 #: ../DistUpgrade/DistUpgradeController.py:2055
@@ -859,12 +883,14 @@ msgstr "Kısmi yükseltme tamamlandı."
 
 #: ../DistUpgrade/DistUpgradeController.py:2152
 msgid "Lock screen disabled"
-msgstr ""
+msgstr "Kilit ekranı devre dışı"
 
 #: ../DistUpgrade/DistUpgradeController.py:2153
 msgid ""
 "Your lock screen has been disabled and will remain disabled until you reboot."
 msgstr ""
+"Kilit ekranınız devre dışı bırakıldı ve yeniden başlatana kadar bu şekilde "
+"kalacak."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:105
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:170
@@ -983,7 +1009,6 @@ msgid "&Upgrade"
 msgstr "&Yükselt"
 
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:154
-#: ../DistUpgrade/DistUpgradeViewKDE.py:715
 msgid "&Cancel"
 msgstr "&İptal"
 
@@ -1037,18 +1062,19 @@ msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
 "the upgrade. Our advice is to keep the LTS version for now. For more "
-"information see https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForUnity3D Do you still want to continue with the "
-"upgrade?"
+"information see "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D Do you still "
+"want to continue with the upgrade?"
 msgstr ""
 "'Unity' masaüstü ortamını çalıştırmak ekran kartınız tarafından tam olarak "
 "desteklenmiyor. Yükseltmeden işleminiz çok yavaş bir ortamla sonuçlanabilir. "
-"Tavisyemiz şimdilik LTS sürümünde kalmanız yönündedir. Daha fazla bilgi "
-"için  https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D adresini "
+"Tavisyemiz şimdilik LTS sürümünde kalmanız yönündedir. Daha fazla bilgi için "
+" https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForUnity3D adresini "
 "ziyaret edin. Yine de yükseltme işlemine devam etmek istiyor musunuz?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:216
-msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
+msgid ""
+"Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 "Ekran kartınız Ubuntu 12.04 sürümünde tam olarak desteklenmiyor olabilir."
 
@@ -1061,9 +1087,9 @@ msgid ""
 msgstr ""
 "Ubuntu 12.04 LTS (Uzun Süreli Destek) sürümünün sizde bulunan Intel ekran "
 "kartı için desteği sınırlıdır ve yükseltmeden sonra sorunlarla "
-"karşılaşabilirsiniz. Daha fazla bilgi için https://wiki.ubuntu.com/X/Bugs/"
-"UpdateManagerWarningForI8xx bağlantısına göz atınız. Yükseltmeye devam etmek "
-"istiyor musunuz?"
+"karşılaşabilirsiniz. Daha fazla bilgi için "
+"https://wiki.ubuntu.com/X/Bugs/UpdateManagerWarningForI8xx bağlantısına göz "
+"atınız. Yükseltmeye devam etmek istiyor musunuz?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:238
 msgid ""
@@ -1088,12 +1114,13 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:277
 msgid "apt architecture is i386"
-msgstr ""
+msgstr "apt mimarisi i386"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:278
 msgid ""
 "Upgrades from 18.04 on the i386 architecture are not supported at this time."
 msgstr ""
+"Şu anda i386 mimarisinde 18.04 sürümünden yükseltmeler desteklenmiyor."
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:292
 msgid "No ARMv6 CPU"
@@ -1131,19 +1158,22 @@ msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:419
 msgid "Connection to Snap Store failed"
-msgstr ""
+msgstr "Snap Mağazasına bağlanma başarısız"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:420
 msgid ""
 "Your system does not have a connection to the Snap Store. For the best "
-"upgrade experience make sure that your system can connect to api.snapcraft."
-"io.\n"
+"upgrade experience make sure that your system can connect to "
+"api.snapcraft.io.\n"
 "Do you still want to continue with the upgrade?"
 msgstr ""
+"Sisteminizin Snap Store'a bağlantısı yok. En iyi yükseltme deneyimi için "
+"sisteminizin api.snapcraft.io'ya bağlanabildiğinden emin olun.\n"
+"Yükseltmeye devam etmek istiyor musunuz?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:429
 msgid "Outdated snapd package"
-msgstr ""
+msgstr "Eskimiş snapd paketi"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:430
 msgid ""
@@ -1151,11 +1181,13 @@ msgid ""
 "version of snapd on your system to improve the upgrade experience.\n"
 "Do you still want to continue with the upgrade?"
 msgstr ""
+"Sisteminizde en yeni snapd sürümü yok. Yükseltme deneyimini iyileştirmek "
+"için lütfen sisteminizde snapd sürümünü güncelleyin.\n"
+"Yükseltmeye devam etmek istiyor musunuz?"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:451
-#, fuzzy
 msgid "Checking for installed snaps"
-msgstr "Yeni Ubuntu sürümü denetleniyor"
+msgstr "Kurulu snap araması sürüyor"
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:467
 #, python-format
@@ -1163,9 +1195,9 @@ msgid "refreshing snap %s"
 msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:470
-#, fuzzy, python-format
+#, python-format
 msgid "installing snap %s"
-msgstr "Kur: %s"
+msgstr ""
 
 #: ../DistUpgrade/DistUpgradeQuirks.py:497
 msgid "PAE not enabled"
@@ -1304,14 +1336,14 @@ msgstr "Ölümcül bir hata oluştu"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:536
 msgid ""
-"Please report this as a bug (if you haven't already) and include the files /"
-"var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
+"Please report this as a bug (if you haven't already) and include the files "
+"/var/log/dist-upgrade/main.log and /var/log/dist-upgrade/apt.log in your "
 "report. The upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Lütfen bu durum için bir hata bildirimi yapın (eğer daha önce yapmadıysanız) "
-"ve bildiriminize /var/log/dist-upgrade/main.log ve /var/log/dist-upgrade/apt."
-"log dosyalarını da ekleyin. Yükseltme iptal edildi.\n"
+"ve bildiriminize /var/log/dist-upgrade/main.log ve /var/log/dist-"
+"upgrade/apt.log dosyalarını da ekleyin. Yükseltme iptal edildi.\n"
 "Özgün sources.list dosyanız /etc/apt/sources.list.distUpgrade konumuna "
 "kaydedildi."
 
@@ -1364,15 +1396,13 @@ msgid "Upgrade (%s)"
 msgstr "Yükselt (%s)"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:773
-#, fuzzy
 msgid "Cancel"
-msgstr "&İptal"
+msgstr "İptal"
 
 #: ../DistUpgrade/DistUpgradeViewGtk3.py:774
 #: ../DistUpgrade/DistUpgradeViewKDE.py:939
-#, fuzzy
 msgid "Continue"
-msgstr "_Devam"
+msgstr "Devam"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:447
 msgid "Show Difference >>>"
@@ -1386,7 +1416,6 @@ msgstr "<<< Farkı Gizle"
 msgid "Error"
 msgstr "Hata"
 
-#: ../DistUpgrade/DistUpgradeViewKDE.py:719
 #: ../DistUpgrade/DistUpgradeViewKDE.py:960
 msgid "&Close"
 msgstr "&Kapat"
@@ -1447,7 +1476,8 @@ msgstr "Yeniden başlatma gerekiyor"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:956
 msgid "<b><big>Restart the system to complete the upgrade</big></b>"
-msgstr "<b><big>Yükseltmeyi tamamlamak için sistemi yeniden başlatın</big></b>"
+msgstr ""
+"<b><big>Yükseltmeyi tamamlamak için sistemi yeniden başlatın</big></b>"
 
 #: ../DistUpgrade/DistUpgradeViewKDE.py:959
 #: ../data/gtkbuilder/DistUpgrade.ui.h:14
@@ -1503,10 +1533,10 @@ msgstr[1] "%li saniye"
 #. information here if you shuffle %(str_days)s %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:103
 #, python-format
@@ -1517,10 +1547,10 @@ msgstr "%(str_days)s %(str_hours)s"
 #. information here if you shuffle %(str_hours)s %(str_minutes)s
 #. around. Make sure to keep all '$(str_*)s' in the translated string
 #. and do NOT change anything appart from the ordering.
-#.
+#. 
 #. %(str_hours)s will be either "1 hour" or "2 hours" depending on the
 #. plural form
-#.
+#. 
 #. Note: most western languages will not need to change this
 #: ../DistUpgrade/DistUpgradeView.py:121
 #, python-format
@@ -1666,9 +1696,9 @@ msgstr "İlerleme: [%%%3i]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:141
 msgid ""
-"Please report this as a bug and include the files /var/log/dist-upgrade/main."
-"log and /var/log/dist-upgrade/apt.log in your report. The upgrade has "
-"aborted.\n"
+"Please report this as a bug and include the files /var/log/dist-"
+"upgrade/main.log and /var/log/dist-upgrade/apt.log in your report. The "
+"upgrade has aborted.\n"
 "Your original sources.list was saved in /etc/apt/sources.list.distUpgrade."
 msgstr ""
 "Lütfen bu durum için bir hata bildirimi yapın ve bildiriminize /var/log/dist-"
@@ -1816,8 +1846,8 @@ msgid ""
 "\n"
 "Please save your work before continuing."
 msgstr ""
-"<b><big>Yükseltme işlemini tamamlamak için sistemi yeniden başlatın</big></"
-"b>\n"
+"<b><big>Yükseltme işlemini tamamlamak için sistemi yeniden "
+"başlatın</big></b>\n"
 "Devam etmeden önce lütfen çalışmalarınızı kaydedin."
 
 #: ../data/gtkbuilder/DistUpgrade.ui.h:18
@@ -1850,7 +1880,8 @@ msgid "_Upgrade"
 msgstr "_Yükselt"
 
 #: ../data/gtkbuilder/UpgradePromptDialog.ui.h:1
-msgid "<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
+msgid ""
+"<b>A new version of Ubuntu is available. Would you like to upgrade?</b>"
 msgstr ""
 "<b>Ubuntu'nun yeni bir sürümü mevcut. Sürüm yükseltmek ister misiniz?</b>"
 
@@ -1915,10 +1946,9 @@ msgid "Downloading the release upgrade tool"
 msgstr "Sürüm yükseltme aracı indiriliyor"
 
 #: ../do-release-upgrade:83
-#, fuzzy
 msgid ""
 "If using the latest supported release, upgrade to the development release"
-msgstr "Geliştirme sürümüne yükselt"
+msgstr "Desteklenen son sürüm kullanılıyorsa geliştirme sürümüne yükselt"
 
 #: ../do-release-upgrade:90 ../check_new_release_gtk.py:181
 msgid ""
@@ -1951,6 +1981,8 @@ msgid ""
 "Try the upgrade with third party mirrors and repositories enabled instead of "
 "commenting them out."
 msgstr ""
+"Bunları yorumlamak yerine üçüncü taraf aynaları ve depoları etkin olan "
+"yükseltmeyi deneyin."
 
 #: ../do-release-upgrade:122
 msgid "The options --devel-release and --proposed are"
@@ -1978,38 +2010,35 @@ msgstr ""
 
 #: ../do-release-upgrade:147
 msgid "In /etc/update-manager/release-upgrades Prompt "
-msgstr ""
+msgstr "/etc/update-manager/release-upgrades İstemde "
 
 #: ../do-release-upgrade:148
 msgid "is set to never so upgrading is not possible."
-msgstr ""
+msgstr "hiçbir zaman ayarlanmadığı için yükseltme mümkün değildir."
 
 #: ../do-release-upgrade:150
 msgid "There is no development version of an LTS available."
-msgstr ""
+msgstr "LTS'nin geliştirme sürümü mevcut değil."
 
 #: ../do-release-upgrade:151
-#, fuzzy
 msgid "To upgrade to the latest non-LTS development release "
-msgstr "Geliştirme sürümüne yükselt"
+msgstr "En son LTS-dışı geliştirme sürümüne yükseltmek için "
 
 #: ../do-release-upgrade:152
 msgid "set Prompt=normal in /etc/update-manager/release-upgrades."
-msgstr ""
+msgstr "istemi ayarla=normal /etc/update-manager/release-upgrades."
 
 #: ../do-release-upgrade:154
-#, fuzzy
 msgid "Upgrades to the development release are only "
-msgstr "Geliştirme sürümüne yükselt"
+msgstr "Yalnızca geliştirme sürümüne yükseltmeler "
 
 #: ../do-release-upgrade:155
 msgid "available from the latest supported release."
-msgstr ""
+msgstr "desteklenen son sürümden beri mevcut."
 
 #: ../do-release-upgrade:157
-#, fuzzy
 msgid "No new release found."
-msgstr "Yeni sürüm bulunamadı"
+msgstr "Yeni sürüm bulunamadı."
 
 #: ../do-release-upgrade:162
 msgid "Release upgrade not possible right now"
@@ -2034,14 +2063,18 @@ msgid "Run 'do-release-upgrade' to upgrade to it."
 msgstr "Yükseltmek için 'do-release-upgrade' çalıştırın."
 
 #: ../do-release-upgrade:187
-msgid "Please install all available updates for your release before upgrading."
+msgid ""
+"Please install all available updates for your release before upgrading."
 msgstr ""
+"Yükseltmeye başlamadan önce mevcut sürüm için tüm güncellemeleri yükleyin."
 
 #: ../do-release-upgrade:199
 msgid ""
 "You have not rebooted after updating a package which requires a reboot. "
 "Please reboot before upgrading."
 msgstr ""
+"Yeniden başlatma gerektiren bir paketi güncelleme sonrası yeniden "
+"başlatılmadı. Lütfen yükseltmeden önce yeniden başlatın."
 
 #: ../check_new_release_gtk.py:85
 msgid "Software Updater"
@@ -2066,65 +2099,7 @@ msgstr "En son geliştirme sürümüne yükseltme olasılığını denetle"
 msgid "Add debug output"
 msgstr "Hata ayıklama çıktısını ekle"
 
-#~ msgid ""
-#~ "An unresolvable problem occurred while calculating the upgrade.\n"
-#~ "\n"
-#~ " This can be caused by:\n"
-#~ " * Upgrading to a pre-release version of Ubuntu\n"
-#~ " * Running the current pre-release version of Ubuntu\n"
-#~ " * Unofficial software packages not provided by Ubuntu\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Yükseltme sırasında çözülemeyen bir sorun oluştu.\n"
-#~ "\n"
-#~ " Olası nedenler:\n"
-#~ " * Sürüm öncesi bir Ubuntu'ya yükseltme yapılıyor\n"
-#~ " * Halihazırda sürüm öncesi bir Ubuntu çalışıyor\n"
-#~ " * Resmi olmayan yazılım paketleri Ubuntu tarafından sağlanmadı\n"
-#~ "\n"
-
-#~ msgid "Sandbox setup failed"
-#~ msgstr "Çalışma dizini kurulumu başarısız"
-
-#~ msgid "It was not possible to create the sandbox environment."
-#~ msgstr "Çalışma dizini ortamı oluşturmak mümkün değil."
-
-#~ msgid "Sandbox mode"
-#~ msgstr "Çalışma dizini kipi"
-
-#~ msgid ""
-#~ "This upgrade is running in sandbox (test) mode. All changes are written "
-#~ "to '%s' and will be lost on the next reboot.\n"
-#~ "\n"
-#~ "*No* changes written to a system directory from now until the next reboot "
-#~ "are permanent."
-#~ msgstr ""
-#~ "Bu yükseltme, kum havuzu (sınama) kipinde çalışıyor. Bütün değişiklikler "
-#~ "'%s' konumuna yazılacak ve bir sonraki yeniden başlatmada silinecek.\n"
-#~ "\n"
-#~ "Bir sonraki yeniden başlatmaya kadar şu andan itibaren sistem "
-#~ "dizinlerinde yapılacak *hiçbir* değişiklik kalıcı olmayacak."
-
-#~ msgid "No i686 CPU"
-#~ msgstr "i686 işlemci bulunamadı"
-
-#~ msgid ""
-#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
-#~ "extension. All packages were built with optimizations requiring i686 as "
-#~ "the minimal architecture. It is not possible to upgrade your system to a "
-#~ "new Ubuntu release with this hardware."
-#~ msgstr ""
-#~ "Sisteminiz bir i586 veya 'cmov' eklentisine sahip olmayan bir işlemci "
-#~ "kullanıyor. Tüm paketler en düşük i686 mimarisiyle çalışacak biçimde "
-#~ "iyileştirilerek inşa edilmiştir. Bu donanımla yeni bir Ubuntu sürümüne "
-#~ "yükseltme yapmanız mümkün değildir."
-
-#~ msgid "Sandbox upgrade using aufs"
-#~ msgstr "Çalışma dizini yükseltmesi 'aufs' kullanıyor"
-
-#~ msgid "Test upgrade with a sandbox aufs overlay"
-#~ msgstr "Yükseltmeyi, bir çalışma dizini 'aufs' yer paylaşımıyla sına"
-
+#, python-format
 #~ msgid ""
 #~ "An unresolvable problem occurred while calculating the upgrade:\n"
 #~ "%s\n"
@@ -2145,36 +2120,65 @@ msgstr "Hata ayıklama çıktısını ekle"
 
 #~ msgid ""
 #~ "Your system does not contain a ubuntu-desktop, kubuntu-desktop, xubuntu-"
-#~ "desktop or edubuntu-desktop package and it was not possible to detect "
-#~ "which version of Ubuntu you are running.\n"
+#~ "desktop or edubuntu-desktop package and it was not possible to detect which "
+#~ "version of Ubuntu you are running.\n"
 #~ " Please install one of the packages above first using synaptic or apt-get "
 #~ "before proceeding."
 #~ msgstr ""
-#~ "Sisteminiz bir ubuntu-desktop, kubuntu-desktop veya edubuntu-desktop "
-#~ "paketi içermiyor ve hangi Ubuntu sürümünü kullandığınız tespit "
-#~ "edilemedi.\n"
+#~ "Sisteminiz bir ubuntu-desktop, kubuntu-desktop veya edubuntu-desktop paketi "
+#~ "içermiyor ve hangi Ubuntu sürümünü kullandığınız tespit edilemedi.\n"
 #~ " Lütfen devam etmeden önce, synaptic veya apt-get kullanarak yukarıdaki "
 #~ "paketlerden birini kurun."
+
+#~ msgid "Sandbox setup failed"
+#~ msgstr "Çalışma dizini kurulumu başarısız"
+
+#~ msgid "It was not possible to create the sandbox environment."
+#~ msgstr "Çalışma dizini ortamı oluşturmak mümkün değil."
+
+#~ msgid "Sandbox mode"
+#~ msgstr "Çalışma dizini kipi"
+
+#, python-format
+#~ msgid ""
+#~ "This upgrade is running in sandbox (test) mode. All changes are written to "
+#~ "'%s' and will be lost on the next reboot.\n"
+#~ "\n"
+#~ "*No* changes written to a system directory from now until the next reboot "
+#~ "are permanent."
+#~ msgstr ""
+#~ "Bu yükseltme, kum havuzu (sınama) kipinde çalışıyor. Bütün değişiklikler "
+#~ "'%s' konumuna yazılacak ve bir sonraki yeniden başlatmada silinecek.\n"
+#~ "\n"
+#~ "Bir sonraki yeniden başlatmaya kadar şu andan itibaren sistem dizinlerinde "
+#~ "yapılacak *hiçbir* değişiklik kalıcı olmayacak."
+
+#~ msgid ""
+#~ "Your python install is corrupted. Please fix the '/usr/bin/python' symlink."
+#~ msgstr ""
+#~ "Python kurulumunuzda hata var. Lütfen '/usr/bin/python' sembolik bağını "
+#~ "onarın."
 
 #~ msgid "Package 'debsig-verify' is installed"
 #~ msgstr "'debsig-verify' paketi kuruldu"
 
 #~ msgid ""
 #~ "The upgrade can not continue with that package installed.\n"
-#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first "
-#~ "and run the upgrade again."
+#~ "Please remove it with synaptic or 'apt-get remove debsig-verify' first and "
+#~ "run the upgrade again."
 #~ msgstr ""
 #~ "Bu paket kuruluyken yükseltme devam edemez.\n"
-#~ "Lütfen önce synaptic veya 'apt-get remove debsig-verify' ile paketi "
-#~ "kaldırın ve yükseltmeyi tekrar çalıştırın."
+#~ "Lütfen önce synaptic veya 'apt-get remove debsig-verify' ile paketi kaldırın "
+#~ "ve yükseltmeyi tekrar çalıştırın."
 
+#, python-format
 #~ msgid ""
-#~ "While scanning your repository information no mirror entry for the "
-#~ "upgrade was found. This can happen if you run a internal mirror or if the "
-#~ "mirror information is out of date.\n"
+#~ "While scanning your repository information no mirror entry for the upgrade "
+#~ "was found. This can happen if you run a internal mirror or if the mirror "
+#~ "information is out of date.\n"
 #~ "\n"
-#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose "
-#~ "'Yes' here it will update all '%s' to '%s' entries.\n"
+#~ "Do you want to rewrite your 'sources.list' file anyway? If you choose 'Yes' "
+#~ "here it will update all '%s' to '%s' entries.\n"
 #~ "If you select 'No' the upgrade will cancel."
 #~ msgstr ""
 #~ "Paket deposu bilgileriniz taranırken yükseltme için hiç bir yansı bilgisi "
@@ -2183,6 +2187,18 @@ msgstr "Hata ayıklama çıktısını ekle"
 #~ "'sources.list' dosyanızı yeniden yazmak istiyor musunuz? Eğer 'Evet' "
 #~ "seçerseniz, tüm '%s' girdileri '%s' olarak güncelleştirilecek.\n"
 #~ "Eğer 'Hayır' seçerseniz yükseltme iptal edilecek."
+
+#, python-format
+#~ msgid ""
+#~ "The upgrade has aborted. The upgrade needs a total of %s free space on disk "
+#~ "'%s'. Please free at least an additional %s of disk space on '%s'. Empty "
+#~ "your trash and remove temporary packages of former installations using 'sudo "
+#~ "apt-get clean'."
+#~ msgstr ""
+#~ "Yükseltme iptal edildi. Yükseltmenin '%s' disk üzerinde %s boş alana "
+#~ "ihtiyacı var. Lütfen '%s' diski üzerinde en az %s alan açınız. Çöpü "
+#~ "boşaltabilir ve 'sudo apt-get clean' komutu ile önceki yüklemelerinizin "
+#~ "kullanılmayan paketlerini temizleyebilirsiniz."
 
 #~ msgid "evms in use"
 #~ msgstr "evms kullanımda"
@@ -2193,8 +2209,8 @@ msgstr "Hata ayıklama çıktısını ekle"
 #~ "again when this is done."
 #~ msgstr ""
 #~ "Sisteminiz /proc/mounts içindeki 'evms' birim yöneticisini kullanıyor. "
-#~ "'evms' yazılımı artık desteklenmiyor, lütfen 'evms'yi kapattıktan sonra, "
-#~ "bu bittiğinde yükseltmeyi yeniden çalıştırın."
+#~ "'evms' yazılımı artık desteklenmiyor, lütfen 'evms'yi kapattıktan sonra, bu "
+#~ "bittiğinde yükseltmeyi yeniden çalıştırın."
 
 #~ msgid ""
 #~ "This computer is currently using the NVIDIA 'nvidia' graphics driver. No "
@@ -2208,12 +2224,68 @@ msgstr "Hata ayıklama çıktısını ekle"
 #~ "\n"
 #~ "Devam etmek istiyor musunuz?"
 
+#~ msgid "No i686 CPU"
+#~ msgstr "i686 işlemci bulunamadı"
+
+#~ msgid ""
+#~ "Your system uses an i586 CPU or a CPU that does not have the 'cmov' "
+#~ "extension. All packages were built with optimizations requiring i686 as the "
+#~ "minimal architecture. It is not possible to upgrade your system to a new "
+#~ "Ubuntu release with this hardware."
+#~ msgstr ""
+#~ "Sisteminiz bir i586 veya 'cmov' eklentisine sahip olmayan bir işlemci "
+#~ "kullanıyor. Tüm paketler en düşük i686 mimarisiyle çalışacak biçimde "
+#~ "iyileştirilerek inşa edilmiştir. Bu donanımla yeni bir Ubuntu sürümüne "
+#~ "yükseltme yapmanız mümkün değildir."
+
+#~ msgid "Sandbox upgrade using aufs"
+#~ msgstr "Çalışma dizini yükseltmesi 'aufs' kullanıyor"
+
+#~ msgid "Test upgrade with a sandbox aufs overlay"
+#~ msgstr "Yükseltmeyi, bir çalışma dizini 'aufs' yer paylaşımıyla sına"
+
+#~ msgid "No new release found"
+#~ msgstr "Yeni sürüm bulunamadı"
+
 #~ msgid "Authentication is required to perform a release upgrade"
 #~ msgstr "Sürüm yükseltmeyi gerçekleştirmek için yetkilendirme gerekli"
 
 #~ msgid "Authentication is required to perform a partial upgrade"
 #~ msgstr "Kısmi bir yükseltme gerçekleştirmek için kimlik doğrulama gerekiyor"
 
+#~ msgid ""
+#~ "If none of this applies, then please report this bug using the command "
+#~ "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
+#~ msgstr ""
+#~ "Eğer bunlardan hiçbiri olmazsa lütfen bu hatayı uçbirimden izleyen komut ile "
+#~ "bildirin: 'ubuntu-bug ubuntu-release-upgrader-core'."
+
 #~ msgid "Your graphics hardware may not be fully supported in Ubuntu 13.04."
 #~ msgstr ""
 #~ "Grafik donanımınız Ubuntu 13.04'te tam olarak desteklenmiyor olabilir."
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 13.04</big></b>"
+#~ msgstr "<b><big>Ubuntu'yu 13.04 sürümüne yükseltme</big></b>"
+
+#~ msgid ""
+#~ "An unresolvable problem occurred while calculating the upgrade.\n"
+#~ "\n"
+#~ " This can be caused by:\n"
+#~ " * Upgrading to a pre-release version of Ubuntu\n"
+#~ " * Running the current pre-release version of Ubuntu\n"
+#~ " * Unofficial software packages not provided by Ubuntu\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Yükseltme sırasında çözülemeyen bir sorun oluştu.\n"
+#~ "\n"
+#~ " Olası nedenler:\n"
+#~ " * Sürüm öncesi bir Ubuntu'ya yükseltme yapılıyor\n"
+#~ " * Halihazırda sürüm öncesi bir Ubuntu çalışıyor\n"
+#~ " * Resmi olmayan yazılım paketleri Ubuntu tarafından sağlanmadı\n"
+#~ "\n"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 15.04</big></b>"
+#~ msgstr "<b><big>Ubuntu 15.04 sürümüne yükseltiliyor</big></b>"
+
+#~ msgid "<b><big>Upgrading Ubuntu to version 15.10</big></b>"
+#~ msgstr "<b><big>Ubuntu 15.10 sürümüne yükseltiliyor</big></b>"

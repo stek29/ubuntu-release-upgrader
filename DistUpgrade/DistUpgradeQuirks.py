@@ -441,8 +441,17 @@ class DistUpgradeQuirks(object):
 
     def _replaceDebsWithSnaps(self):
         di = distro_info.UbuntuDistroInfo()
-        fromVersion = di.version('%s' % self.controller.fromDist).split()[0]
-        toVersion = di.version('%s' % self.controller.toDist).split()[0]
+        try:
+            fromVersion = di.version('%s' % self.controller.fromDist).split()[0]
+            toVersion = di.version('%s' % self.controller.toDist).split()[0]
+        # Ubuntu 18.04's python3-distro-info does not have version
+        except AttributeError:
+            fromVersion = next((r.version for r in di.get_all("object")
+                               if r.series == self.controller.fromDist),
+                               self.controller.fromDist)
+            toVersion = next((r.version for r in di.get_all("object")
+                             if r.series == self.controller.toDist),
+                             self.controller.toDist)
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
         snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',

@@ -442,7 +442,8 @@ class DistUpgradeQuirks(object):
     def _replaceDebsWithSnaps(self):
         di = distro_info.UbuntuDistroInfo()
         try:
-            fromVersion = di.version('%s' % self.controller.fromDist).split()[0]
+            fromVersion = \
+                di.version('%s' % self.controller.fromDist).split()[0]
             toVersion = di.version('%s' % self.controller.toDist).split()[0]
         # Ubuntu 18.04's python3-distro-info does not have version
         except AttributeError:

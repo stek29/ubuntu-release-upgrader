@@ -59,6 +59,8 @@ cp /usr/sbin/invoke-rc.d DistUpgrade/imported/
 # now patch the file so the upgrade can continue even if there are errors
 patch --fuzz=0 -p0 DistUpgrade/imported/invoke-rc.d DistUpgrade/imported/invoke-rc.d.diff || { echo "patch didn't apply cleanly" && exit 1; }
 
+# update the translations
+cd po; make update-po; cd ../
 
 # (auto) generate the required html
 if [ ! -x /usr/bin/parsewiki ]; then

@@ -1451,8 +1451,6 @@ class DistUpgradeController(object):
         for pkg in self.config.getlist("Distro","MetaPkgs"):
             if pkg in self.cache and self.cache[pkg].is_installed:
                 self.forced_obsoletes.extend(self.config.getlist(pkg,"ForcedObsoletes"))
-        # now add the obsolete kernels to the forced obsoletes
-        self.forced_obsoletes.extend(self.cache.identifyObsoleteKernels())
         logging.debug("forced_obsoletes: %s" % self.forced_obsoletes)
 
         # mark packages that are now obsolete (and were not obsolete

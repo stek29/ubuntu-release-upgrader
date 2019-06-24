@@ -449,10 +449,10 @@ class DistUpgradeQuirks(object):
         except AttributeError:
             fromVersion = next((r.version for r in di.get_all("object")
                                if r.series == self.controller.fromDist),
-                               self.controller.fromDist)
+                               self.controller.fromDist).split()[0]
             toVersion = next((r.version for r in di.get_all("object")
                              if r.series == self.controller.toDist),
-                             self.controller.toDist)
+                             self.controller.toDist).split()[0]
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
         snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',

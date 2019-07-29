@@ -126,7 +126,7 @@ if __name__ == "__main__":
             for r in replaces:
                 if r in demoted:
                     #print("found '%s' that is demoted but replaced by '%s'" %
-                        #(r, pkgname))
+                    #(r, pkgname))
                     demoted.remove(r)
 
     #outfile = "demoted.cfg"

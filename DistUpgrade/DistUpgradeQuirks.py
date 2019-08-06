@@ -495,7 +495,7 @@ class DistUpgradeQuirks(object):
         # gtk-common-themes isn't a package name but is this risky?
         self._view.updateStatus(_("Processing snap replacements"))
         for snap, command in self.snap_replacement_list.items():
-            if command == 'refresh'
+            if command == 'refresh':
                 self._view.updateStatus(_("refreshing snap %s" % snap))
             else:
                 self._view.updateStatus(_("installing snap %s" % snap))
@@ -803,12 +803,14 @@ class DistUpgradeQuirks(object):
                 di.version('%s' % self.controller.toDist).split()[0]
         # Ubuntu 18.04's python3-distro-info does not have version
         except AttributeError:
-            self._from_version = next((r.version for r in di.get_all("object")
-                               if r.series == self.controller.fromDist),
-                               self.controller.fromDist).split()[0]
-            self._to_version = next((r.version for r in di.get_all("object")
-                             if r.series == self.controller.toDist),
-                             self.controller.toDist).split()[0]
+            self._from_version = next(
+                (r.version for r in di.get_all("object")
+                 if r.series == self.controller.fromDist),
+                self.controller.fromDist).split()[0]
+            self._to_version = next(
+                (r.version for r in di.get_all("object")
+                 if r.series == self.controller.toDist),
+                self.controller.toDist).split()[0]
         self._snap_list = {}
         # gtk-common-themes isn't a package name but is this risky?
         snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',

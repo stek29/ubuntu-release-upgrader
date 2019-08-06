@@ -49,8 +49,12 @@ class DistUpgradeQuirks(object):
         self.uname = Popen(["uname", "-r"], stdout=PIPE,
                            universal_newlines=True).communicate()[0].strip()
         self.arch = get_arch()
+        self.extra_snap_space = 0
         self._poke = None
         self._snapstore_reachable = False
+        self._snap_list = None
+        self._from_version = None
+        self._to_version = None
 
     # the quirk function have the name:
     #  $Name (e.g. PostUpgrade)
@@ -119,6 +123,12 @@ class DistUpgradeQuirks(object):
                 cache['snapd'].is_installed:
             self._checkStoreConnectivity()
 
+    def eoanPreCalcDistUpgrade(self):
+        """ run before the dist-upgrade is calculated """
+        logging.debug("running Quirks.eoanPreCalcDistUpgrade")
+        if self._snapstore_reachable:
+            self._calculateSnapSizeRequirements()
+
     def eoanPostUpgrade(self):
         logging.debug("running Quirks.eoanPostUpgrade")
         cache = self.controller.cache
@@ -128,7 +138,7 @@ class DistUpgradeQuirks(object):
             return
         if cache['ubuntu-desktop'].is_installed and \
                 cache['snapd'].is_installed and \
-                self._snapstore_reachable:
+                self._snap_list:
             self._replaceDebsWithSnaps()
 
     # individual quirks handler when the dpkg run is finished ---------
@@ -439,51 +449,63 @@ class DistUpgradeQuirks(object):
         if not res:
             self.controller.abort()
 
+    def _calculateSnapSizeRequirements(self):
+        import json
+        import urllib.request
+        from urllib.error import URLError
+
+        # first fetch the list of snap-deb replacements that will be needed
+        # and store them for future reference, along with other data we'll
+        # need in the process
+        self._get_snap_replacement_list()
+        # now perform direct API calls to the store, requesting size
+        # information for each of the snaps needing installation
+        self._view.updateStatus(_("Calculating snap size requirements"))
+        for snap, snap_object in self.snap_replacement_list.items():
+            if snap_object['command'] != 'install':
+                continue
+            action = {
+                "instance-key": "upgrade-size-check",
+                "action": "download",
+                "snap-id": snap_object['snap-id'],
+                "channel": "stable/ubuntu-%s" % self._to_version,
+            }
+            data = {
+                "context": [],
+                "actions": [action],
+            }
+            req = urllib.request.Request(
+                url='https://api.snapcraft.io/v2/snaps/refresh',
+                data=bytes(json.dumps(data), encoding='utf-8'))
+            req.add_header('Snap-Device-Series', '16')
+            req.add_header('Content-type', 'application/json')
+            req.add_header('Snap-Device-Architecture', self.arch)
+            try:
+                response = urllib.request.urlopen(req).read()
+                info = json.loads(response)
+                size = int(info['results']['snap']['download']['size'])
+            except KeyError, URLError, ValueError:
+                logging.debug("Failed fetching size of snap %s" % snap)
+                continue
+            # XXX: Should we substract the deb size?
+            self.extra_snap_space += size
+
     def _replaceDebsWithSnaps(self):
-        di = distro_info.UbuntuDistroInfo()
-        try:
-            fromVersion = \
-                di.version('%s' % self.controller.fromDist).split()[0]
-            toVersion = di.version('%s' % self.controller.toDist).split()[0]
-        # Ubuntu 18.04's python3-distro-info does not have version
-        except AttributeError:
-            fromVersion = next((r.version for r in di.get_all("object")
-                               if r.series == self.controller.fromDist),
-                               self.controller.fromDist).split()[0]
-            toVersion = next((r.version for r in di.get_all("object")
-                             if r.series == self.controller.toDist),
-                             self.controller.toDist).split()[0]
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
-        snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',
-                 'gnome-calculator', 'gnome-characters', 'gnome-logs',
-                 'gnome-system-monitor']
-        self._view.updateStatus(_("Checking for installed snaps"))
-        for snap in snaps:
-            # check to see if the snap is already installed
-            snap_info = subprocess.Popen(["snap", "info", snap],
-                                         universal_newlines=True,
-                                         stdout=subprocess.PIPE).communicate()
-            self._view.processEvents()
-            if re.search("^installed: ", snap_info[0], re.MULTILINE):
-                logging.debug("Snap %s is installed" % snap)
-                # its not tracking the release channel so don't refresh
-                if not re.search("^tracking:.*ubuntu-%s" % fromVersion,
-                                 snap_info[0], re.MULTILINE):
-                    logging.debug("Snap %s is not tracking the release channel"
-                                  % snap)
-                    continue
-                command = 'refresh'
+        self._view.updateStatus(_("Processing snap replacements"))
+        for snap, command in self.snap_replacement_list.items():
+            if command == 'refresh'
                 self._view.updateStatus(_("refreshing snap %s" % snap))
             else:
-                command = 'install'
                 self._view.updateStatus(_("installing snap %s" % snap))
             try:
                 self._view.processEvents()
-                proc = subprocess.run(["snap", command, "--channel",
-                                       "stable/ubuntu-%s" % toVersion, snap],
-                                      stdout=subprocess.PIPE,
-                                      check=True)
+                proc = subprocess.run(
+                    ["snap", command, "--channel",
+                     "stable/ubuntu-%s" % self._to_version, snap],
+                    stdout=subprocess.PIPE,
+                    check=True)
                 self._view.processEvents()
             except subprocess.CalledProcessError:
                 logging.debug("%s of snap %s failed" % (command, snap))
@@ -767,3 +789,55 @@ class DistUpgradeQuirks(object):
                 msg += " enabling it just for the upgrade"
                 logging.warning(msg)
                 apt.apt_pkg.config.set("Apt::Install-Recommends", "1")
+
+    def _prepare_snap_replacement_data(self):
+        """ Helper function fetching all required info for the deb-to-snap
+            migration: version strings for upgrade (from and to) and the list
+            of snaps (with actions).
+        """
+        di = distro_info.UbuntuDistroInfo()
+        try:
+            self._from_version = \
+                di.version('%s' % self.controller.fromDist).split()[0]
+            self._to_version = \
+                di.version('%s' % self.controller.toDist).split()[0]
+        # Ubuntu 18.04's python3-distro-info does not have version
+        except AttributeError:
+            self._from_version = next((r.version for r in di.get_all("object")
+                               if r.series == self.controller.fromDist),
+                               self.controller.fromDist).split()[0]
+            self._to_version = next((r.version for r in di.get_all("object")
+                             if r.series == self.controller.toDist),
+                             self.controller.toDist).split()[0]
+        self._snap_list = {}
+        # gtk-common-themes isn't a package name but is this risky?
+        snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',
+                 'gnome-calculator', 'gnome-characters', 'gnome-logs',
+                 'gnome-system-monitor']
+        self._view.updateStatus(_("Checking for installed snaps"))
+        for snap in snaps:
+            snap_object = {}
+            # check to see if the snap is already installed
+            snap_info = subprocess.Popen(["snap", "info", snap],
+                                         universal_newlines=True,
+                                         stdout=subprocess.PIPE).communicate()
+            self._view.processEvents()
+            if re.search("^installed: ", snap_info[0], re.MULTILINE):
+                logging.debug("Snap %s is installed" % snap)
+                # its not tracking the release channel so don't refresh
+                if not re.search("^tracking:.*ubuntu-%s" % self._from_version,
+                                 snap_info[0], re.MULTILINE):
+                    logging.debug("Snap %s is not tracking the release channel"
+                                  % snap)
+                    continue
+                snap_object['command'] = 'refresh'
+            else:
+                match = re.search("snap-id:\s*(\w*)", output)
+                if not match:
+                    logging.debug("Could not parse snap-id for the %s snap"
+                                  % snap)
+                    continue
+                snap_object['command'] = 'install'
+                snap_object['snap-id'] = match[1]
+            self._snap_list[snap] = snap_object
+        return self._snap_list

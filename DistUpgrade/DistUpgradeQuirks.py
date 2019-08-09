@@ -457,11 +457,11 @@ class DistUpgradeQuirks(object):
         # first fetch the list of snap-deb replacements that will be needed
         # and store them for future reference, along with other data we'll
         # need in the process
-        self._get_snap_replacement_list()
+        self._prepare_snap_replacement_data()
         # now perform direct API calls to the store, requesting size
         # information for each of the snaps needing installation
         self._view.updateStatus(_("Calculating snap size requirements"))
-        for snap, snap_object in self.snap_replacement_list.items():
+        for snap, snap_object in self._snap_list.items():
             if snap_object['command'] != 'install':
                 continue
             action = {
@@ -483,8 +483,8 @@ class DistUpgradeQuirks(object):
             try:
                 response = urllib.request.urlopen(req).read()
                 info = json.loads(response)
-                size = int(info['results']['snap']['download']['size'])
-            except KeyError, URLError, ValueError:
+                size = int(info['results'][0]['snap']['download']['size'])
+            except (KeyError, URLError, ValueError):
                 logging.debug("Failed fetching size of snap %s" % snap)
                 continue
             # XXX: Should we substract the deb size?
@@ -494,7 +494,10 @@ class DistUpgradeQuirks(object):
         """ install a snap and mark its corresponding package for removal """
         # gtk-common-themes isn't a package name but is this risky?
         self._view.updateStatus(_("Processing snap replacements"))
-        for snap, command in self.snap_replacement_list.items():
+        # _snap_list should be populated by the earlier
+        # _calculateSnapSizeRequirements call.
+        for snap, snap_object in self._snap_list.items():
+            command = snap_object['command']
             if command == 'refresh':
                 self._view.updateStatus(_("refreshing snap %s" % snap))
             else:
@@ -834,7 +837,7 @@ class DistUpgradeQuirks(object):
                     continue
                 snap_object['command'] = 'refresh'
             else:
-                match = re.search("snap-id:\s*(\w*)", output)
+                match = re.search("snap-id:\s*(\w*)", snap_info[0])
                 if not match:
                     logging.debug("Could not parse snap-id for the %s snap"
                                   % snap)

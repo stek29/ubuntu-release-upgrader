@@ -9,6 +9,7 @@ import os
 import unittest
 import shutil
 import tempfile
+import json
 
 from DistUpgrade.DistUpgradeQuirks import DistUpgradeQuirks
 
@@ -22,6 +23,104 @@ class MockController(object):
 
 class MockConfig(object):
     pass
+
+
+class MockPopenSnap():
+    def __init__(self, cmd, universal_newlines=True,
+                 stdout=None):
+        self.command = cmd
+
+    def communicate(self):
+        snap_name = self.command[2]
+        if (snap_name == 'gnome-logs' or
+                snap_name == 'gnome-system-monitor'):
+            return ["""
+name:      test-snap
+summary:   Test Snap
+publisher: Canonical
+license:   unset
+description: Some description
+commands:
+  - gnome-calculator
+snap-id:      1234
+tracking:     stable/ubuntu-19.04
+refresh-date: 2019-04-11
+channels:
+  stable:    3.32.1  2019-04-10 (406) 4MB -
+  candidate: 3.32.2  2019-06-26 (433) 4MB -
+  beta:      3.33.89 2019-08-06 (459) 4MB -
+  edge:      3.33.90 2019-08-06 (460) 4MB -
+installed:   3.32.1             (406) 4MB -
+"""]
+        else:
+            return ["""
+name:      test-snap
+summary:   Test Snap
+publisher: Canonical
+license:   unset
+description: Some description
+commands:
+  - gnome-calculator
+snap-id:      1234
+refresh-date: 2019-04-11
+channels:
+  stable:    3.32.1  2019-04-10 (406) 4MB -
+  candidate: 3.32.2  2019-06-26 (433) 4MB -
+  beta:      3.33.89 2019-08-06 (459) 4MB -
+  edge:      3.33.90 2019-08-06 (460) 4MB -
+"""]
+
+
+def mock_urlopen_snap(req):
+    result = """{{
+  "error-list": [],
+  "results": [
+    {{
+      "effective-channel": "stable",
+      "instance-key": "test",
+      "name": "{name}",
+      "released-at": "2019-04-10T18:54:15.717357+00:00",
+      "result": "download",
+      "snap": {{
+        "created-at": "2019-04-09T17:09:29.941588+00:00",
+        "download": {{
+          "deltas": [],
+          "size": {size},
+          "url": "SNAPURL"
+        }},
+        "license": "GPL-3.0+",
+        "name": "{name}",
+        "prices": {{ }},
+        "publisher": {{
+          "display-name": "Canonical",
+          "id": "canonical",
+          "username": "canonical",
+          "validation": "verified"
+        }},
+        "revision": 406,
+        "snap-id": "{snap_id}",
+        "summary": "GNOME Calculator",
+        "title": "GNOME Calculator",
+        "type": "app",
+        "version": "3.32.1"
+      }},
+      "snap-id": "{snap_id}"
+    }}
+  ]
+}}
+"""
+    test_snaps = {
+        '1': ("gnome-calculator", 4218880),
+        '2': ("test-snap", 2000000)
+    }
+    json_data = json.loads(req.data)
+    snap_id = json_data['actions'][0]['snap-id']
+    name = test_snaps[snap_id][0]
+    size = test_snaps[snap_id][1]
+    response_mock = mock.Mock()
+    response_mock.read.return_value = result.format(
+        name=name, snap_id=snap_id, size=size)
+    return response_mock
 
 
 def make_mock_pkg(name, is_installed, candidate_rec):
@@ -227,6 +326,108 @@ class TestQuirks(unittest.TestCase):
         ])
         pkgname = q._get_linux_metapackage(mock_cache, headers=False)
         self.assertEqual(pkgname, "linux-generic-lts-quantal")
+
+
+class TestSnapQuirks(unittest.TestCase):
+
+    @mock.patch("subprocess.Popen", MockPopenSnap)
+    def test_prepare_snap_replacement_data(self):
+        # Prepare the state for testing
+        controller = mock.Mock()
+        controller.fromDist = 'disco'
+        controller.toDist = 'eoan'
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        # Call method under test
+        q._prepare_snap_replacement_data()
+        self.assertEqual(q._from_version, '19.04')
+        self.assertEqual(q._to_version, '19.10')
+        # Check if the right snaps have been detected as installed and
+        # needing refresh and which ones need installation
+        self.assertDictEqual(
+            q._snap_list,
+            {'core18': {'command': 'install', 'snap-id': '1234'},
+             'gnome-3-28-1804': {'command': 'install', 'snap-id': '1234'},
+             'gtk-common-themes': {'command': 'install', 'snap-id': '1234'},
+             'gnome-calculator': {'command': 'install', 'snap-id': '1234'},
+             'gnome-characters': {'command': 'install', 'snap-id': '1234'},
+             'gnome-logs': {'command': 'refresh'},
+             'gnome-system-monitor': {'command': 'refresh'}})
+
+    @mock.patch("DistUpgrade.DistUpgradeQuirks.get_arch")
+    @mock.patch("urllib.request.urlopen")
+    def test_calculate_snap_size_requirements(self, urlopen, arch):
+        # Prepare the state for testing
+        arch.return_value = 'amd64'
+        controller = mock.Mock()
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        # We mock out _prepare_snap_replacement_data(), as this is tested
+        # separately.
+        q._prepare_snap_replacement_data = mock.Mock()
+        q._snap_list = {
+            'test-snap': {'command': 'install', 'snap-id': '2'},
+            'gnome-calculator': {'command': 'install', 'snap-id': '1'},
+            'gnome-system-monitor': {'command': 'refresh'}
+        }
+        q._to_version = "19.10"
+        # Mock out urlopen in such a way that we get a mocked response based
+        # on the parameters given but also allow us to check call arguments
+        # etc.
+        urlopen.side_effect = mock_urlopen_snap
+        # Call method under test
+        q._calculateSnapSizeRequirements()
+        # Check if the size was calculated correctly
+        self.assertEqual(q.extra_snap_space, 6218880)
+        # Check if we only sent queries for the two command: install snaps
+        self.assertEqual(urlopen.call_count, 2)
+        # Make sure each call had the right headers and parameters
+        for call in urlopen.call_args_list:
+            req = call[0][0]
+            self.assertIn(b"stable/ubuntu-19.10", req.data)
+            self.assertDictEqual(
+                req.headers,
+                {'Snap-device-series': '16',
+                 'Content-type': 'application/json',
+                 'Snap-device-architecture': 'amd64'})
+
+    @mock.patch("subprocess.run")
+    def test_replace_debs_with_snaps(self, run_mock):
+        controller = mock.Mock()
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        q._snap_list = {
+            'core18': {'command': 'install', 'snap-id': '1234'},
+            'gnome-3-28-1804': {'command': 'install', 'snap-id': '1234'},
+            'gtk-common-themes': {'command': 'install', 'snap-id': '1234'},
+            'gnome-calculator': {'command': 'install', 'snap-id': '1234'},
+            'gnome-characters': {'command': 'install', 'snap-id': '1234'},
+            'gnome-logs': {'command': 'refresh'},
+            'gnome-system-monitor': {'command': 'refresh'}
+        }
+        q._to_version = "19.10"
+        q._replaceDebsWithSnaps()
+        # Make sure all snaps have been handled
+        self.assertEqual(run_mock.call_count, 7)
+        snaps_refreshed = set()
+        snaps_installed = set()
+        # Check if all the snaps that needed to be installed were installed
+        # and those that needed a refresh - refreshed
+        for call in run_mock.call_args_list:
+            args = call[0][0]
+            if args[1] == 'install':
+                snaps_installed.add(args[4])
+            else:
+                snaps_refreshed.add(args[4])
+        self.assertSetEqual(
+            snaps_refreshed,
+            {'gnome-logs', 'gnome-system-monitor'})
+        self.assertSetEqual(
+            snaps_installed,
+            {'core18', 'gnome-3-28-1804', 'gtk-common-themes',
+             'gnome-calculator', 'gnome-characters'})
+        # Make sure we marked the replacing ones for removal
+        self.assertEqual(controller.forced_obsoletes.append.call_count, 5)
 
 
 if __name__ == "__main__":

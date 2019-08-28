@@ -122,10 +122,9 @@ class DistUpgradeQuirks(object):
         if cache['ubuntu-desktop'].is_installed and \
                 cache['snapd'].is_installed:
             self._checkStoreConnectivity()
-
-    def eoanPreCalcDistUpgrade(self):
-        """ run before the dist-upgrade is calculated """
-        logging.debug("running Quirks.eoanPreCalcDistUpgrade")
+        # If the snap store is accessible, at the same time calculate the
+        # extra size needed by to-be-installed snaps.  This also prepares
+        # the snaps-to-install list for the actual upgrade.
         if self._snapstore_reachable:
             self._calculateSnapSizeRequirements()
 
@@ -487,7 +486,6 @@ class DistUpgradeQuirks(object):
             except (KeyError, URLError, ValueError):
                 logging.debug("Failed fetching size of snap %s" % snap)
                 continue
-            # XXX: Should we substract the deb size?
             self.extra_snap_space += size
 
     def _replaceDebsWithSnaps(self):

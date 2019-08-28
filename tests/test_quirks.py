@@ -426,7 +426,7 @@ class TestSnapQuirks(unittest.TestCase):
             snaps_installed,
             {'core18', 'gnome-3-28-1804', 'gtk-common-themes',
              'gnome-calculator', 'gnome-characters'})
-        # Make sure we marked the replacing ones for removal
+        # Make sure we marked the replaced ones for removal
         self.assertEqual(controller.forced_obsoletes.append.call_count, 5)
 
 

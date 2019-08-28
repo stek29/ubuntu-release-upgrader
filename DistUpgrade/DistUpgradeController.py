@@ -1121,8 +1121,6 @@ class DistUpgradeController(object):
             if not self.cache.installTasks(self.tasks):
                 return False
 
-        self.quirks.run("PreCalcDistUpgrade")
-
         # show changes and confirm
         changes = self.cache.get_changes()
         self._view.processEvents()

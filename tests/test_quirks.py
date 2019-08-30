@@ -427,6 +427,9 @@ class TestSnapQuirks(unittest.TestCase):
             {'core18', 'gnome-3-28-1804', 'gtk-common-themes',
              'gnome-calculator', 'gnome-characters'})
         # Make sure we marked the replaced ones for removal
+        # Here we only check if the right number of 'packages' has been
+        # added to the forced_obsoletes list - not all of those packages are
+        # actual deb packages that will have to be removed during the upgrade
         self.assertEqual(controller.forced_obsoletes.append.call_count, 5)
 
 

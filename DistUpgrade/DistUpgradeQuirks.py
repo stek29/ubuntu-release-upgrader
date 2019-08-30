@@ -467,7 +467,7 @@ class DistUpgradeQuirks(object):
                 "instance-key": "upgrade-size-check",
                 "action": "download",
                 "snap-id": snap_object['snap-id'],
-                "channel": "stable/ubuntu-%s" % self._to_version,
+                "channel": snap_object['channel'],
             }
             data = {
                 "context": [],
@@ -496,6 +496,7 @@ class DistUpgradeQuirks(object):
         # _calculateSnapSizeRequirements call.
         for snap, snap_object in self._snap_list.items():
             command = snap_object['command']
+            channel = snap_object['channel']
             if command == 'refresh':
                 self._view.updateStatus(_("refreshing snap %s" % snap))
             else:
@@ -503,8 +504,7 @@ class DistUpgradeQuirks(object):
             try:
                 self._view.processEvents()
                 proc = subprocess.run(
-                    ["snap", command, "--channel",
-                     "stable/ubuntu-%s" % self._to_version, snap],
+                    ["snap", command, "--channel", channel, snap],
                     stdout=subprocess.PIPE,
                     check=True)
                 self._view.processEvents()
@@ -814,11 +814,16 @@ class DistUpgradeQuirks(object):
                 self.controller.toDist).split()[0]
         self._snap_list = {}
         # gtk-common-themes isn't a package name but is this risky?
-        snaps = ['core18', 'gnome-3-28-1804', 'gtk-common-themes',
-                 'gnome-calculator', 'gnome-characters', 'gnome-logs',
-                 'gnome-system-monitor']
+        stable_branch = "stable/ubuntu-%s" % self._to_version
+        snaps = {'core18': 'stable',
+                 'gnome-3-28-1804': stable_branch,
+                 'gtk-common-themes': stable_branch,
+                 'gnome-calculator': stable_branch,
+                 'gnome-characters': stable_branch,
+                 'gnome-logs': stable_branch,
+                 'gnome-system-monitor': stable_branch}
         self._view.updateStatus(_("Checking for installed snaps"))
-        for snap in snaps:
+        for snap, channel in snaps.items():
             snap_object = {}
             # check to see if the snap is already installed
             snap_info = subprocess.Popen(["snap", "info", snap],
@@ -842,5 +847,6 @@ class DistUpgradeQuirks(object):
                     continue
                 snap_object['command'] = 'install'
                 snap_object['snap-id'] = match[1]
+            snap_object['channel'] = channel
             self._snap_list[snap] = snap_object
         return self._snap_list

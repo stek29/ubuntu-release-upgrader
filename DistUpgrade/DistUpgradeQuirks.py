@@ -814,16 +814,17 @@ class DistUpgradeQuirks(object):
                 self.controller.toDist).split()[0]
         self._snap_list = {}
         # gtk-common-themes isn't a package name but is this risky?
-        stable_branch = "stable/ubuntu-%s" % self._to_version
-        snaps = {'core18': 'stable',
-                 'gnome-3-28-1804': stable_branch,
-                 'gtk-common-themes': stable_branch,
-                 'gnome-calculator': stable_branch,
-                 'gnome-characters': stable_branch,
-                 'gnome-logs': stable_branch,
-                 'gnome-system-monitor': stable_branch}
+        from_branch = "stable/ubuntu-%s" % self._from_version
+        to_branch = "stable/ubuntu-%s" % self._to_version
+        snaps = {'core18': ('stable', 'stable'),
+                 'gnome-3-28-1804': (from_branch, to_branch),
+                 'gtk-common-themes': (from_branch, to_branch),
+                 'gnome-calculator': (from_branch, to_branch),
+                 'gnome-characters': (from_branch, to_branch),
+                 'gnome-logs': (from_branch, to_branch),
+                 'gnome-system-monitor': (from_branch, to_branch)}
         self._view.updateStatus(_("Checking for installed snaps"))
-        for snap, channel in snaps.items():
+        for snap, (from_channel, to_channel) in snaps.items():
             snap_object = {}
             # check to see if the snap is already installed
             snap_info = subprocess.Popen(["snap", "info", snap],
@@ -833,7 +834,7 @@ class DistUpgradeQuirks(object):
             if re.search("^installed: ", snap_info[0], re.MULTILINE):
                 logging.debug("Snap %s is installed" % snap)
                 # its not tracking the release channel so don't refresh
-                if not re.search("^tracking:.*ubuntu-%s" % self._from_version,
+                if not re.search("^tracking:.*%s" % from_channel,
                                  snap_info[0], re.MULTILINE):
                     logging.debug("Snap %s is not tracking the release channel"
                                   % snap)
@@ -847,6 +848,6 @@ class DistUpgradeQuirks(object):
                     continue
                 snap_object['command'] = 'install'
                 snap_object['snap-id'] = match[1]
-            snap_object['channel'] = channel
+            snap_object['channel'] = to_channel
             self._snap_list[snap] = snap_object
         return self._snap_list

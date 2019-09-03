@@ -1,3 +1,15 @@
+ubuntu-release-upgrader (1:19.10.11) UNRELEASED; urgency=medium
+
+  * DistUpgrade/DistUpgradeQuirks.py, DistUpgrade/DistUpgradeCache.py:
+    Modify DistUpgradeQuirks to calculate extra space needed for snaps that
+    need to be installed during upgrade (replacing old debs) and add that to
+    estimates done in checkFreeSpace(). (LP: #1783597)
+  * DistUpgrade/DistUpgradeQuirks.py: Make sure snaps like core18 are not
+    refreshed/installed from the stable/ubuntu-VERSION branch but instead use
+    stable on upgrades. (LP: #1841225)
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Tue, 03 Sep 2019 15:58:38 +0200
+
 ubuntu-release-upgrader (1:19.10.10) eoan; urgency=medium
 
   [ Brian Murray ]

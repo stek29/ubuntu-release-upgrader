@@ -1157,6 +1157,8 @@ class MyCache(apt.Cache):
         # sum up space requirements
         for (dir, size) in [(archivedir, self.required_download),
                             ("/usr", self.additional_required_space),
+                            # this is only >0 for the deb-to-snap quirks
+                            ("/var", self.quirks.extra_snap_space),
                             # plus 50M safety buffer in /usr
                             ("/usr", 50*1024*1024),
                             ("/boot", space_in_boot),

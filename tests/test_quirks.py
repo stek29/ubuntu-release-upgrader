@@ -346,13 +346,34 @@ class TestSnapQuirks(unittest.TestCase):
         # needing refresh and which ones need installation
         self.assertDictEqual(
             q._snap_list,
-            {'core18': {'command': 'install', 'snap-id': '1234'},
-             'gnome-3-28-1804': {'command': 'install', 'snap-id': '1234'},
-             'gtk-common-themes': {'command': 'install', 'snap-id': '1234'},
-             'gnome-calculator': {'command': 'install', 'snap-id': '1234'},
-             'gnome-characters': {'command': 'install', 'snap-id': '1234'},
-             'gnome-logs': {'command': 'refresh'},
-             'gnome-system-monitor': {'command': 'refresh'}})
+            {'core18': {
+                'command': 'install', 'snap-id': '1234',
+                'channel': 'stable'
+                },
+             'gnome-3-28-1804': {
+                'command': 'install', 'snap-id': '1234',
+                'channel': 'stable/ubuntu-19.10'
+                },
+             'gtk-common-themes': {
+                'command': 'install', 'snap-id': '1234',
+                'channel': 'stable/ubuntu-19.10'
+                },
+             'gnome-calculator': {
+                'command': 'install', 'snap-id': '1234',
+                'channel': 'stable/ubuntu-19.10'
+                },
+             'gnome-characters': {
+                'command': 'install', 'snap-id': '1234',
+                'channel': 'stable/ubuntu-19.10'
+                },
+             'gnome-logs': {
+                'command': 'refresh',
+                'channel': 'stable/ubuntu-19.10'
+                },
+             'gnome-system-monitor': {
+                'command': 'refresh',
+                'channel': 'stable/ubuntu-19.10'
+                }})
 
     @mock.patch("DistUpgrade.DistUpgradeQuirks.get_arch")
     @mock.patch("urllib.request.urlopen")
@@ -366,9 +387,12 @@ class TestSnapQuirks(unittest.TestCase):
         # separately.
         q._prepare_snap_replacement_data = mock.Mock()
         q._snap_list = {
-            'test-snap': {'command': 'install', 'snap-id': '2'},
-            'gnome-calculator': {'command': 'install', 'snap-id': '1'},
-            'gnome-system-monitor': {'command': 'refresh'}
+            'test-snap': {'command': 'install', 'snap-id': '2',
+                          'channel': 'stable/ubuntu-19.10'},
+            'gnome-calculator': {'command': 'install', 'snap-id': '1',
+                                 'channel': 'stable/ubuntu-19.10'},
+            'gnome-system-monitor': {'command': 'refresh',
+                                     'channel': 'stable/ubuntu-19.10'}
         }
         q._to_version = "19.10"
         # Mock out urlopen in such a way that we get a mocked response based
@@ -397,35 +421,48 @@ class TestSnapQuirks(unittest.TestCase):
         config = mock.Mock()
         q = DistUpgradeQuirks(controller, config)
         q._snap_list = {
-            'core18': {'command': 'install', 'snap-id': '1234'},
-            'gnome-3-28-1804': {'command': 'install', 'snap-id': '1234'},
-            'gtk-common-themes': {'command': 'install', 'snap-id': '1234'},
-            'gnome-calculator': {'command': 'install', 'snap-id': '1234'},
-            'gnome-characters': {'command': 'install', 'snap-id': '1234'},
-            'gnome-logs': {'command': 'refresh'},
-            'gnome-system-monitor': {'command': 'refresh'}
+            'core18': {'command': 'install', 'snap-id': '1234',
+                       'channel': 'stable'},
+            'gnome-3-28-1804': {'command': 'install', 'snap-id': '1234',
+                                'channel': 'stable/ubuntu-19.10'},
+            'gtk-common-themes': {'command': 'install', 'snap-id': '1234',
+                                  'channel': 'stable/ubuntu-19.10'},
+            'gnome-calculator': {'command': 'install', 'snap-id': '1234',
+                                 'channel': 'stable/ubuntu-19.10'},
+            'gnome-characters': {'command': 'install', 'snap-id': '1234',
+                                 'channel': 'stable/ubuntu-19.10'},
+            'gnome-logs': {'command': 'refresh',
+                           'channel': 'stable/ubuntu-19.10'},
+            'gnome-system-monitor': {'command': 'refresh',
+                                     'channel': 'stable/ubuntu-19.10'}
         }
         q._to_version = "19.10"
         q._replaceDebsWithSnaps()
         # Make sure all snaps have been handled
         self.assertEqual(run_mock.call_count, 7)
-        snaps_refreshed = set()
-        snaps_installed = set()
+        snaps_refreshed = {}
+        snaps_installed = {}
         # Check if all the snaps that needed to be installed were installed
         # and those that needed a refresh - refreshed
+        # At the same time, let's check that all the snaps were acted upon
+        # while using the correct channel and branch
         for call in run_mock.call_args_list:
             args = call[0][0]
             if args[1] == 'install':
-                snaps_installed.add(args[4])
+                snaps_installed[args[4]] = args[3]
             else:
-                snaps_refreshed.add(args[4])
-        self.assertSetEqual(
+                snaps_refreshed[args[4]] = args[3]
+        self.assertDictEqual(
             snaps_refreshed,
-            {'gnome-logs', 'gnome-system-monitor'})
-        self.assertSetEqual(
+            {'gnome-logs': 'stable/ubuntu-19.10',
+             'gnome-system-monitor': 'stable/ubuntu-19.10'})
+        self.assertDictEqual(
             snaps_installed,
-            {'core18', 'gnome-3-28-1804', 'gtk-common-themes',
-             'gnome-calculator', 'gnome-characters'})
+            {'core18': 'stable',
+             'gnome-3-28-1804': 'stable/ubuntu-19.10',
+             'gtk-common-themes': 'stable/ubuntu-19.10',
+             'gnome-calculator': 'stable/ubuntu-19.10',
+             'gnome-characters': 'stable/ubuntu-19.10'})
         # Make sure we marked the replaced ones for removal
         # Here we only check if the right number of 'packages' has been
         # added to the forced_obsoletes list - not all of those packages are

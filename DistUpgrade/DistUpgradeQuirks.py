@@ -814,15 +814,15 @@ class DistUpgradeQuirks(object):
                 self.controller.toDist).split()[0]
         self._snap_list = {}
         # gtk-common-themes isn't a package name but is this risky?
-        from_branch = "stable/ubuntu-%s" % self._from_version
-        to_branch = "stable/ubuntu-%s" % self._to_version
+        from_channel = "stable/ubuntu-%s" % self._from_version
+        to_channel = "stable/ubuntu-%s" % self._to_version
         snaps = {'core18': ('stable', 'stable'),
-                 'gnome-3-28-1804': (from_branch, to_branch),
-                 'gtk-common-themes': (from_branch, to_branch),
-                 'gnome-calculator': (from_branch, to_branch),
-                 'gnome-characters': (from_branch, to_branch),
-                 'gnome-logs': (from_branch, to_branch),
-                 'gnome-system-monitor': (from_branch, to_branch)}
+                 'gnome-3-28-1804': (from_channel, to_channel),
+                 'gtk-common-themes': (from_channel, to_channel),
+                 'gnome-calculator': (from_channel, to_channel),
+                 'gnome-characters': (from_channel, to_channel),
+                 'gnome-logs': (from_channel, to_channel),
+                 'gnome-system-monitor': (from_channel, to_channel)}
         self._view.updateStatus(_("Checking for installed snaps"))
         for snap, (from_channel, to_channel) in snaps.items():
             snap_object = {}

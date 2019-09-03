@@ -348,32 +348,25 @@ class TestSnapQuirks(unittest.TestCase):
             q._snap_list,
             {'core18': {
                 'command': 'install', 'snap-id': '1234',
-                'channel': 'stable'
-                },
+                'channel': 'stable'},
              'gnome-3-28-1804': {
                 'command': 'install', 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'
-                },
+                'channel': 'stable/ubuntu-19.10'},
              'gtk-common-themes': {
                 'command': 'install', 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'
-                },
+                'channel': 'stable/ubuntu-19.10'},
              'gnome-calculator': {
                 'command': 'install', 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'
-                },
+                'channel': 'stable/ubuntu-19.10'},
              'gnome-characters': {
                 'command': 'install', 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'
-                },
+                'channel': 'stable/ubuntu-19.10'},
              'gnome-logs': {
                 'command': 'refresh',
-                'channel': 'stable/ubuntu-19.10'
-                },
+                'channel': 'stable/ubuntu-19.10'},
              'gnome-system-monitor': {
                 'command': 'refresh',
-                'channel': 'stable/ubuntu-19.10'
-                }})
+                'channel': 'stable/ubuntu-19.10'}})
 
     @mock.patch("DistUpgrade.DistUpgradeQuirks.get_arch")
     @mock.patch("urllib.request.urlopen")

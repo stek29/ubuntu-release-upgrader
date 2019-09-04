@@ -88,7 +88,7 @@ DEBRELEASE=$(LC_ALL=C dpkg-parsechangelog | sed -n -e '/^Distribution:/s/^Distri
 )
 
 # cleanup
-rm -rf utils/apt/lists utils/apt/*.bin
+rm -rf utils/apt/lists utils/apt/*.bin utils/apt/sources.list
 max_age=$(($(date +%s) - 3600))
 if [ $(stat -c "%Y" data/mirrors.cfg) -lt $max_age ]; then
     # echo "Running update mirrors"

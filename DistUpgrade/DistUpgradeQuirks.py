@@ -821,8 +821,7 @@ class DistUpgradeQuirks(object):
                  'gtk-common-themes': (from_channel, to_channel),
                  'gnome-calculator': (from_channel, to_channel),
                  'gnome-characters': (from_channel, to_channel),
-                 'gnome-logs': (from_channel, to_channel),
-                 'gnome-system-monitor': (from_channel, to_channel)}
+                 'gnome-logs': (from_channel, to_channel)}
         self._view.updateStatus(_("Checking for installed snaps"))
         for snap, (from_channel, to_channel) in snaps.items():
             snap_object = {}

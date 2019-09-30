@@ -113,6 +113,22 @@ class DistUpgradeQuirks(object):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.eoanPostInitialUpdate")
+        di = distro_info.UbuntuDistroInfo()
+        try:
+            self._from_version = \
+                di.version('%s' % self.controller.fromDist).split()[0]
+            self._to_version = \
+                di.version('%s' % self.controller.toDist).split()[0]
+        # Ubuntu 18.04's python3-distro-info does not have version
+        except AttributeError:
+            self._from_version = next(
+                (r.version for r in di.get_all("object")
+                 if r.series == self.controller.fromDist),
+                self.controller.fromDist).split()[0]
+            self._to_version = next(
+                (r.version for r in di.get_all("object")
+                 if r.series == self.controller.toDist),
+                self.controller.toDist).split()[0]
         self._test_and_fail_on_i386()
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
@@ -278,15 +294,20 @@ class DistUpgradeQuirks(object):
     def _test_and_fail_on_i386(self):
         """
         Test and fail if the package architecture is i386 as we
-        may drop support for this architecture.
+        have dropped support for this architecture.
         """
+        if self._from_version == '18.04':
+            updates_end = 'April 2023'
+        elif self._from_version == '19.04':
+            updates_end = 'January 2020'
         # check on i386 only
         if self.arch == "i386":
-            logging.error("package arch is i386")
-            summary = _("apt architecture is i386")
-            msg = _("Upgrades from 18.04 on the i386 "
-                    "architecture are not supported "
-                    "at this time.")
+            logging.error("apt architecture is i386")
+            summary = _("Sorry, no more upgrades for this system")
+            msg = _("There will not be any further Ubuntu releases "
+                    "for this system's 'i386' architecture.\n\n"
+                    "Updates for Ubuntu %s will continue until %s." %
+                    (self._from_version, updates_end))
             self._view.error(summary, msg)
             self.controller.abort()
 
@@ -796,22 +817,6 @@ class DistUpgradeQuirks(object):
             migration: version strings for upgrade (from and to) and the list
             of snaps (with actions).
         """
-        di = distro_info.UbuntuDistroInfo()
-        try:
-            self._from_version = \
-                di.version('%s' % self.controller.fromDist).split()[0]
-            self._to_version = \
-                di.version('%s' % self.controller.toDist).split()[0]
-        # Ubuntu 18.04's python3-distro-info does not have version
-        except AttributeError:
-            self._from_version = next(
-                (r.version for r in di.get_all("object")
-                 if r.series == self.controller.fromDist),
-                self.controller.fromDist).split()[0]
-            self._to_version = next(
-                (r.version for r in di.get_all("object")
-                 if r.series == self.controller.toDist),
-                self.controller.toDist).split()[0]
         self._snap_list = {}
         # gtk-common-themes isn't a package name but is this risky?
         from_channel = "stable/ubuntu-%s" % self._from_version

@@ -113,22 +113,7 @@ class DistUpgradeQuirks(object):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.eoanPostInitialUpdate")
-        di = distro_info.UbuntuDistroInfo()
-        try:
-            self._from_version = \
-                di.version('%s' % self.controller.fromDist).split()[0]
-            self._to_version = \
-                di.version('%s' % self.controller.toDist).split()[0]
-        # Ubuntu 18.04's python3-distro-info does not have version
-        except AttributeError:
-            self._from_version = next(
-                (r.version for r in di.get_all("object")
-                 if r.series == self.controller.fromDist),
-                self.controller.fromDist).split()[0]
-            self._to_version = next(
-                (r.version for r in di.get_all("object")
-                 if r.series == self.controller.toDist),
-                self.controller.toDist).split()[0]
+        self._get_from_and_to_version()
         self._test_and_fail_on_i386()
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
@@ -192,6 +177,24 @@ class DistUpgradeQuirks(object):
             if line:
                 lspci.add(line.split()[2])
         return lspci
+
+    def _get_from_and_to_version(self):
+        di = distro_info.UbuntuDistroInfo()
+        try:
+            self._from_version = \
+                di.version('%s' % self.controller.fromDist).split()[0]
+            self._to_version = \
+                di.version('%s' % self.controller.toDist).split()[0]
+        # Ubuntu 18.04's python3-distro-info does not have version
+        except AttributeError:
+            self._from_version = next(
+                (r.version for r in di.get_all("object")
+                 if r.series == self.controller.fromDist),
+                self.controller.fromDist).split()[0]
+            self._to_version = next(
+                (r.version for r in di.get_all("object")
+                 if r.series == self.controller.toDist),
+                self.controller.toDist).split()[0]
 
     def _test_and_warn_for_unity_3d_support(self):
         UNITY_SUPPORT_TEST = "/usr/lib/nux/unity_support_test"

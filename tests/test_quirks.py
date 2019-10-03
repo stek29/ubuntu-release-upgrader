@@ -330,8 +330,7 @@ class TestQuirks(unittest.TestCase):
 
 class TestSnapQuirks(unittest.TestCase):
 
-    @mock.patch("subprocess.Popen", MockPopenSnap)
-    def test_prepare_snap_replacement_data(self):
+    def test_get_from_and_to_version(self):
         # Prepare the state for testing
         controller = mock.Mock()
         controller.fromDist = 'disco'
@@ -339,9 +338,20 @@ class TestSnapQuirks(unittest.TestCase):
         config = mock.Mock()
         q = DistUpgradeQuirks(controller, config)
         # Call method under test
-        q._prepare_snap_replacement_data()
+        q._get_from_and_to_version()
         self.assertEqual(q._from_version, '19.04')
         self.assertEqual(q._to_version, '19.10')
+
+    @mock.patch("subprocess.Popen", MockPopenSnap)
+    def test_prepare_snap_replacement_data(self):
+        # Prepare the state for testing
+        controller = mock.Mock()
+        config = mock.Mock()
+        q = DistUpgradeQuirks(controller, config)
+        q._from_version = "19.04"
+        q._to_version = "19.10"
+        # Call method under test
+        q._prepare_snap_replacement_data()
         # Check if the right snaps have been detected as installed and
         # needing refresh and which ones need installation
         self.assertDictEqual(
@@ -362,9 +372,6 @@ class TestSnapQuirks(unittest.TestCase):
                 'command': 'install', 'snap-id': '1234',
                 'channel': 'stable/ubuntu-19.10'},
              'gnome-logs': {
-                'command': 'refresh',
-                'channel': 'stable/ubuntu-19.10'},
-             'gnome-system-monitor': {
                 'command': 'refresh',
                 'channel': 'stable/ubuntu-19.10'}})
 

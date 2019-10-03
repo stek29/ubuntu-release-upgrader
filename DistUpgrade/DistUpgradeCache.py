@@ -256,6 +256,20 @@ class MyCache(apt.Cache):
         """ get the size of the additional required space on the fs """
         return self._depcache.usr_size
     @property
+    def additional_required_space_for_snaps(self):
+        """ get the extra size needed to install the snap replacements """
+        try:
+            # update-manager uses DistUpgradeCache.MyCache as the base class
+            # of its own MyCache version - but without actually calling our
+            # constructor at all. This causes that the MyCache version from
+            # update-manager has no self.quirks attribute while still calling
+            # our default version of checkFreeSpace(). Since extra_snap_space
+            # is only used on dist-upgrades, let's just not care and return 0
+            # in this weird, undocumented case.
+            return self.quirks.extra_snap_space
+        except AttributeError:
+            return 0
+    @property
     def is_broken(self):
         """ is the cache broken """
         return self._depcache.broken_count > 0
@@ -1158,7 +1172,7 @@ class MyCache(apt.Cache):
         for (dir, size) in [(archivedir, self.required_download),
                             ("/usr", self.additional_required_space),
                             # this is only >0 for the deb-to-snap quirks
-                            ("/var", self.quirks.extra_snap_space),
+                            ("/var", self.additional_required_space_for_snaps),
                             # plus 50M safety buffer in /usr
                             ("/usr", 50*1024*1024),
                             ("/boot", space_in_boot),

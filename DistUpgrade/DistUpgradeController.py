@@ -360,13 +360,12 @@ class DistUpgradeController(object):
         fetcher.run()
 
     def _pythonSymlinkCheck(self):
-        """ sanity check that /usr/bin/python points to the default
+        """ sanity check that /usr/bin/python3 points to the default
             python version. Users tend to modify this symlink, which
             breaks stuff in obscure ways (Ubuntu #75557).
         """
         logging.debug("_pythonSymlinkCheck run")
-        binaries_and_dirnames = [("python", "python"), ("python2", "python"),
-                                 ("python3", "python3")]
+        binaries_and_dirnames = [("python3", "python3")]
         for binary, dirname in binaries_and_dirnames:
             debian_defaults = '/usr/share/%s/debian_defaults' % dirname
             if os.path.exists(debian_defaults):
@@ -384,8 +383,7 @@ class DistUpgradeController(object):
                 except OSError as e:
                     logging.error("os.readlink failed (%s)" % e)
                     return False
-                if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)) \
-                        and not (binary == 'python' and fs_default_version in ('python2', '/usr/bin/python2')):
+                if not fs_default_version in (expected_default, os.path.join('/usr/bin', expected_default)):
                     logging.debug("%s symlink points to: '%s', but expected is '%s' or '%s'" %
                                   (binary, fs_default_version, expected_default, os.path.join('/usr/bin', expected_default)))
                     return False

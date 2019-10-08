@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 #
 # FIXME: strip "TryExec" from the extracted menu files (and noDisplay)
 #

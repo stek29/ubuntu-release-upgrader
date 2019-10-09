@@ -474,7 +474,8 @@ class MyCache(apt.Cache):
             for section in self.config.getlist("Distro", "KeepInstalledSection"):
                 for pkg in self:
                     if (pkg.candidate and pkg.candidate.downloadable
-                        and pkg.marked_delete and pkg.section == section):
+                        and pkg.marked_delete
+                        and pkg.candidate.section == section):
                         self._keep_installed(pkg.name, "Distro KeepInstalledSection rule: %s" % section)
             for key in self.metapkgs:
                 if key in self and (self[key].is_installed or
@@ -483,7 +484,7 @@ class MyCache(apt.Cache):
                         for pkg in self:
                             if (pkg.candidate and pkg.candidate.downloadable
                                 and pkg.marked_delete and
-                                pkg.section == section):
+                                pkg.candidate.section == section):
                                 self._keep_installed(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
 
 
@@ -938,7 +939,7 @@ class MyCache(apt.Cache):
             return False
         # ensure we honor KeepInstalledSection here as well
         for section in self.config.getlist("Distro", "KeepInstalledSection"):
-            if pkgname in self and self[pkgname].section == section:
+            if pkgname in self and self[pkgname].candidate.section == section:
                 logging.debug("skipping '%s' (in KeepInstalledSection)" % pkgname)
                 return False
         # if we don't have the package anyway, we are fine (this can

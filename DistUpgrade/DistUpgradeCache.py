@@ -939,7 +939,7 @@ class MyCache(apt.Cache):
             return False
         # ensure we honor KeepInstalledSection here as well
         for section in self.config.getlist("Distro", "KeepInstalledSection"):
-            if pkgname in self and self[pkgname].candidate.section == section:
+            if pkgname in self and self[pkgname].installed.section == section:
                 logging.debug("skipping '%s' (in KeepInstalledSection)" % pkgname)
                 return False
         # if we don't have the package anyway, we are fine (this can

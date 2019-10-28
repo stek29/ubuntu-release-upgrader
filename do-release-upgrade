@@ -191,7 +191,10 @@ if __name__ == "__main__":
     reboot = False
     with open('/var/run/reboot-required.pkgs', 'rb') as f:
         for line in f:
-            if line == b'libc6\n':
+            # In certain cases, we need to reboot the system before proceeding
+            # with the dist upgrade after the kernel is upgraded as otherwise
+            # building of some dkms modules can fail.
+            if line == b'libc6\n' or line.startswith(b'linux-image-'):
                 reboot = True
                 break
     if reboot:

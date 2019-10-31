@@ -23,6 +23,8 @@ override_dh_auto_clean:
 		./DistUpgrade/$(DIST)  ./DistUpgrade/$(DIST).tar.gz \
 		 ./DistUpgrade/ubuntu-drivers-obsolete.pkgs ./po/mo
 
+binary: binary-arch binary-indep
+
 binary-indep:
 	dh $@ $(DH_ARGS)
 	# now the dist-upgrader special tarball
@@ -45,9 +47,11 @@ override_dh_auto_install:
 		LANG=C.UTF-8 LC_ALL=C.UTF-8 $$python setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb; \
 	done
 
-override_dh_python3:
+override_dh_python3-indep:
 	mkdir -p debian/ubuntu-release-upgrader-gtk/usr/bin
 	cp ./debian/ubuntu-release-upgrader-gtk/usr/lib/ubuntu-release-upgrader/check-new-release-gtk debian/ubuntu-release-upgrader-gtk/usr/bin
-	dh_python3
+	dh_python3 -i
 	rm ./debian/ubuntu-release-upgrader-gtk/usr/bin/check-new-release-gtk
 	rmdir debian/ubuntu-release-upgrader-gtk/usr/bin
+
+.PHONY: binary binary-indep

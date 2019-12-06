@@ -34,7 +34,7 @@ if [ -f "$stamp" ]; then
 		cat "$stamp"
 		echo
 	fi
-else
+elif [ "(id -u)" = 0 ]; then
 	# No cache at all, so update in the background
 	/usr/lib/ubuntu-release-upgrader/check-new-release -q > "$stamp" &
 fi

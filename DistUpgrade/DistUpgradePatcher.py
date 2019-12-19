@@ -73,7 +73,7 @@ def patch(orig, edpatch, result_md5sum=None):
             start = int(start_str)
             start -= 1
             # if we don't have end, set it to the next line
-            if end_str is "":
+            if end_str == "":
                 end = start + 1
             else:
                 end = int(end_str)

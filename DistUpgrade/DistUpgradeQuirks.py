@@ -841,14 +841,26 @@ class DistUpgradeQuirks(object):
             if re.search("^installed: ", snap_info[0], re.MULTILINE):
                 logging.debug("Snap %s is installed" % snap)
                 # its not tracking the release channel so don't refresh
-                if not re.search("^tracking:.*%s" % from_channel,
+                if not re.search(r"^tracking:.*%s" % from_channel,
                                  snap_info[0], re.MULTILINE):
                     logging.debug("Snap %s is not tracking the release channel"
                                   % snap)
                     continue
                 snap_object['command'] = 'refresh'
             else:
-                match = re.search("snap-id:\s*(\w*)", snap_info[0])
+                # Do not replace packages not installed
+                # core18, gnome-3-28-1804 and gtk-common-themes do not match
+                # any deb package so never marked for installation but
+                # they'll be installed by dependency when the first gnome
+                # package is installed
+                cache = self.controller.cache
+                if (snap not in cache or (snap in cache and
+                                          not cache[snap].is_installed)):
+                    logging.debug("Deb package %s is not installed. Skipping "
+                                  "snap package installation" % snap)
+                    continue
+
+                match = re.search(r"snap-id:\s*(\w*)", snap_info[0])
                 if not match:
                     logging.debug("Could not parse snap-id for the %s snap"
                                   % snap)

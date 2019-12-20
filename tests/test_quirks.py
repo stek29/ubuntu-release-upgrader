@@ -32,8 +32,8 @@ class MockPopenSnap():
 
     def communicate(self):
         snap_name = self.command[2]
-        if (snap_name == 'gnome-logs' or
-                snap_name == 'gnome-system-monitor'):
+        if snap_name == 'gnome-logs':
+            # Package to refresh
             return ["""
 name:      test-snap
 summary:   Test Snap
@@ -51,6 +51,42 @@ channels:
   beta:      3.33.89 2019-08-06 (459) 4MB -
   edge:      3.33.90 2019-08-06 (460) 4MB -
 installed:   3.32.1             (406) 4MB -
+"""]
+        elif "gnome-characters" in snap_name:
+            # Package installed but not tracking the release channel
+            return ["""
+name:      test-snap
+summary:   Test Snap
+publisher: Canonical
+license:   unset
+description: Some description
+commands:
+  - gnome-characters
+snap-id:      1234
+refresh-date: 2019-04-11
+channels:
+  stable:    3.32.1  2019-04-10 (406) 4MB -
+  candidate: 3.32.2  2019-06-26 (433) 4MB -
+  beta:      3.33.89 2019-08-06 (459) 4MB -
+  edge:      3.33.90 2019-08-06 (460) 4MB -
+installed:   3.32.1             (406) 4MB -
+"""]
+        elif "gtk-common-themes" in snap_name:
+            # Package installed but missing/invalid snap id
+            return ["""
+name:      test-snap
+summary:   Test Snap
+publisher: Canonical
+license:   unset
+description: Some description
+commands:
+  - gtk-common-themes
+refresh-date: 2019-04-11
+channels:
+  stable:    3.32.1  2019-04-10 (406) 4MB -
+  candidate: 3.32.2  2019-06-26 (433) 4MB -
+  beta:      3.33.89 2019-08-06 (459) 4MB -
+  edge:      3.33.90 2019-08-06 (460) 4MB -
 """]
         else:
             return ["""
@@ -352,9 +388,42 @@ class TestSnapQuirks(unittest.TestCase):
         q._from_version = "19.04"
         q._to_version = "19.10"
         # Call method under test
+
+        controller.cache = {
+            'core18':
+                make_mock_pkg(
+                    name="core18",
+                    is_installed=True),
+            'gnome-3-28-1804':
+                make_mock_pkg(
+                    name="gnome-3-28-1804",
+                    is_installed=True),
+            'gtk-common-themes':
+                make_mock_pkg(
+                    name="gtk-common-themes",
+                    is_installed=True),
+            'gnome-calculator':
+                make_mock_pkg(
+                    name="gnome-calculator",
+                    is_installed=True),
+            'gnome-characters':
+                make_mock_pkg(
+                    name="gnome-characters",
+                    is_installed=False),
+            'gnome-logs':
+                make_mock_pkg(
+                    name="gnome-logs",
+                    is_installed=False),
+            'snap-not-tracked':
+                make_mock_pkg(
+                    name="snap-not-tracked",
+                    is_installed=True),
+        }
+
         q._prepare_snap_replacement_data()
         # Check if the right snaps have been detected as installed and
         # needing refresh and which ones need installation
+        self.maxDiff = None
         self.assertDictEqual(
             q._snap_list,
             {'core18': {
@@ -363,13 +432,7 @@ class TestSnapQuirks(unittest.TestCase):
              'gnome-3-28-1804': {
                 'command': 'install', 'snap-id': '1234',
                 'channel': 'stable/ubuntu-19.10'},
-             'gtk-common-themes': {
-                'command': 'install', 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'},
              'gnome-calculator': {
-                'command': 'install', 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'},
-             'gnome-characters': {
                 'command': 'install', 'snap-id': '1234',
                 'channel': 'stable/ubuntu-19.10'},
              'gnome-logs': {

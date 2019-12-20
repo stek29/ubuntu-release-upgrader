@@ -123,12 +123,13 @@ def mock_urlopen_snap(req):
     return response_mock
 
 
-def make_mock_pkg(name, is_installed, candidate_rec):
+def make_mock_pkg(name, is_installed, candidate_rec=""):
     mock_pkg = mock.Mock()
     mock_pkg.name = name
     mock_pkg.is_installed = is_installed
-    mock_pkg.candidate = mock.Mock()
-    mock_pkg.candidate.record = candidate_rec
+    if candidate_rec:
+        mock_pkg.candidate = mock.Mock()
+        mock_pkg.candidate.record = candidate_rec
     return mock_pkg
 
 

@@ -6,7 +6,7 @@ set -e
 export LANG='C.UTF-8'
 
 dpkg-checkbuilddeps -d 'python3-apt, apt-btrfs-snapshot, parsewiki, python3-feedparser,
-			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose, pep8, python3-distutils-extra, python3-update-manager'
+			python3-mock, xvfb, gir1.2-gtk-3.0, python3-gi, python3-nose, pycodestyle, python3-distutils-extra, python3-update-manager'
 
 # make sure the DistUpgrade symlink is good LP: #1824430
 SYMLINK=$(readlink -q DistUpgrade/DistUpgrade)

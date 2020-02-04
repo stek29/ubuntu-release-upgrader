@@ -645,6 +645,9 @@ class MyCache(apt.Cache):
             # see if it all makes sense, if not this function raises
             self._verifyChanges()
 
+            if self.is_broken:
+                raise SystemError(_("Broken packages after upgrade: %s") % ", ".join(p for p in self if p.is_inst_broken or p.is_now_broken))
+
         except SystemError as e:
             # this should go into a finally: line, see below for the
             # rationale why it doesn't

@@ -475,9 +475,9 @@ class DistUpgradeQuirks(object):
                 res = self._view.askYesNoQuestion(
                     _("Connection to Snap Store failed"),
                     _("Your system does not have a connection to the Snap "
-                    "Store. For the best upgrade experience make sure "
-                    "that your system can connect to api.snapcraft.io.\n"
-                    "Do you still want to continue with the upgrade?")
+                      "Store. For the best upgrade experience make sure "
+                      "that your system can connect to api.snapcraft.io.\n"
+                      "Do you still want to continue with the upgrade?")
                 )
         # debug command not available
         elif 'error: unknown command' in connected[1]:

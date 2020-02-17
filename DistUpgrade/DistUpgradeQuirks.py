@@ -451,8 +451,8 @@ class DistUpgradeQuirks(object):
             old_lxd_deb_installed = False
             cache = self.controller.cache
             if 'lxd' in cache:
+                # epoch 1 is the transitional deb
                 if cache['lxd'].is_installed and not \
-                        # epoch 1 is the transitional deb
                         cache['lxd'].candidate.version.startswith("1:"):
                     logging.error("lxd is installed")
                     old_lxd_deb_installed = True

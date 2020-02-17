@@ -448,13 +448,37 @@ class DistUpgradeQuirks(object):
         # can't connect
         elif re.search("^ \*.*unreachable", connected[0], re.MULTILINE):
             logging.error("No snap store connectivity")
-            res = self._view.askYesNoQuestion(
-                _("Connection to Snap Store failed"),
-                _("Your system does not have a connection to the Snap "
-                  "Store. For the best upgrade experience make sure "
-                  "that your system can connect to api.snapcraft.io.\n"
-                  "Do you still want to continue with the upgrade?")
-            )
+            old_lxd_deb_installed = False
+            cache = self.controller.cache
+            if 'lxd' in cache:
+                if cache['lxd'].is_installed and not \
+                        # epoch 1 is the transitional deb
+                        cache['lxd'].candidate.version.startswith("1:"):
+                    logging.error("lxd is installed")
+                    old_lxd_deb_installed = True
+            if old_lxd_deb_installed:
+                summary = _("Connection to the Snap Store failed")
+                msg = _("You have the package lxd installed but your "
+                        "system is unable to reach the Snap Store. "
+                        "lxd is now provided via a snap and the release "
+                        "upgrade will fail if snapd is not functional. "
+                        "Please make sure you're connected to the "
+                        "Internet and update any firewall or proxy "
+                        "settings as needed so that you can reach "
+                        "api.snapcraft.io. If you are an enterprise "
+                        "with a firewall setup you may want to configure "
+                        "a Snap Store proxy."
+                        )
+                self._view.error(summary, msg)
+                self.controller.abort()
+            else:
+                res = self._view.askYesNoQuestion(
+                    _("Connection to Snap Store failed"),
+                    _("Your system does not have a connection to the Snap "
+                    "Store. For the best upgrade experience make sure "
+                    "that your system can connect to api.snapcraft.io.\n"
+                    "Do you still want to continue with the upgrade?")
+                )
         # debug command not available
         elif 'error: unknown command' in connected[1]:
             logging.error("snap debug command not available")

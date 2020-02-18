@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2020-02-04 18:14+0100\n"
+"POT-Creation-Date: 2020-02-17 14:33-0800\n"
 "PO-Revision-Date: 2019-06-18 17:53+0000\n"
 "Last-Translator: Brian Murray <brian@ubuntu.com>\n"
 "Language-Team: \n"
@@ -1169,11 +1169,26 @@ msgstr ""
 "\n"
 "Are you sure you want to continue?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:452
+#: ../DistUpgrade/DistUpgradeQuirks.py:460
+#, fuzzy
+msgid "Connection to the Snap Store failed"
+msgstr "Connection to Snap Store failed"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:461
+msgid ""
+"You have the package lxd installed but your system is unable to reach the "
+"Snap Store. lxd is now provided via a snap and the release upgrade will fail "
+"if snapd is not functional. Please make sure you're connected to the "
+"Internet and update any firewall or proxy settings as needed so that you can "
+"reach api.snapcraft.io. If you are an enterprise with a firewall setup you "
+"may want to configure a Snap Store proxy."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:476
 msgid "Connection to Snap Store failed"
 msgstr "Connection to Snap Store failed"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:453
+#: ../DistUpgrade/DistUpgradeQuirks.py:477
 msgid ""
 "Your system does not have a connection to the Snap Store. For the best "
 "upgrade experience make sure that your system can connect to api.snapcraft."
@@ -1185,11 +1200,11 @@ msgstr ""
 "io.\n"
 "Do you still want to continue with the upgrade?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:462
+#: ../DistUpgrade/DistUpgradeQuirks.py:486
 msgid "Outdated snapd package"
 msgstr "Outdated snapd package"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:463
+#: ../DistUpgrade/DistUpgradeQuirks.py:487
 msgid ""
 "Your system does not have the latest version of snapd. Please update the "
 "version of snapd on your system to improve the upgrade experience.\n"
@@ -1201,30 +1216,30 @@ msgstr ""
 
 #. now perform direct API calls to the store, requesting size
 #. information for each of the snaps needing installation
-#: ../DistUpgrade/DistUpgradeQuirks.py:486
+#: ../DistUpgrade/DistUpgradeQuirks.py:510
 msgid "Calculating snap size requirements"
 msgstr "Calculating snap size requirements"
 
 #. gtk-common-themes isn't a package name but is this risky?
-#: ../DistUpgrade/DistUpgradeQuirks.py:518
+#: ../DistUpgrade/DistUpgradeQuirks.py:542
 msgid "Processing snap replacements"
 msgstr "Processing snap replacements"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:525
+#: ../DistUpgrade/DistUpgradeQuirks.py:549
 #, python-format
 msgid "refreshing snap %s"
 msgstr "refreshing snap %s"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:527
+#: ../DistUpgrade/DistUpgradeQuirks.py:551
 #, python-format
 msgid "installing snap %s"
 msgstr "installing snap %s"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:554
+#: ../DistUpgrade/DistUpgradeQuirks.py:578
 msgid "PAE not enabled"
 msgstr "PAE not enabled"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:555
+#: ../DistUpgrade/DistUpgradeQuirks.py:579
 msgid ""
 "Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
 "non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
@@ -1236,7 +1251,7 @@ msgstr ""
 "you must enable PAE (if this is possible) see:\n"
 "http://help.ubuntu.com/community/EnablingPAE"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:833
+#: ../DistUpgrade/DistUpgradeQuirks.py:857
 msgid "Checking for installed snaps"
 msgstr "Checking for installed snaps"
 

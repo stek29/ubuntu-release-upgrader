@@ -414,6 +414,10 @@ class TestSnapQuirks(unittest.TestCase):
                 make_mock_pkg(
                     name="gnome-logs",
                     is_installed=False),
+            'gnome-software':
+                make_mock_pkg(
+                    name="gnome-software",
+                    is_installed=True),
             'snap-not-tracked':
                 make_mock_pkg(
                     name="snap-not-tracked",
@@ -427,17 +431,20 @@ class TestSnapQuirks(unittest.TestCase):
         self.assertDictEqual(
             q._snap_list,
             {'core18': {
-                'command': 'install', 'snap-id': '1234',
+                'command': 'install',
+                'deb': None, 'snap-id': '1234',
                 'channel': 'stable'},
-             'gnome-3-28-1804': {
-                'command': 'install', 'snap-id': '1234',
+             'gnome-3-34-1804': {
+                'command': 'install',
+                'deb': None, 'snap-id': '1234',
                 'channel': 'stable/ubuntu-19.10'},
-             'gnome-calculator': {
-                'command': 'install', 'snap-id': '1234',
+             'snap-store': {
+                'command': 'install',
+                'deb': 'gnome-software',
+                'snap-id': '1234',
                 'channel': 'stable/ubuntu-19.10'},
              'gnome-logs': {
-                'command': 'refresh',
-                'channel': 'stable/ubuntu-19.10'}})
+                'command': 'remove'}})
 
     @mock.patch("DistUpgrade.DistUpgradeQuirks.get_arch")
     @mock.patch("urllib.request.urlopen")
@@ -451,9 +458,12 @@ class TestSnapQuirks(unittest.TestCase):
         # separately.
         q._prepare_snap_replacement_data = mock.Mock()
         q._snap_list = {
-            'test-snap': {'command': 'install', 'snap-id': '2',
+            'test-snap': {'command': 'install',
+                          'deb': None, 'snap-id': '2',
                           'channel': 'stable/ubuntu-19.10'},
-            'gnome-calculator': {'command': 'install', 'snap-id': '1',
+            'gnome-calculator': {'command': 'install',
+                                 'deb': 'gnome-calculator',
+                                 'snap-id': '1',
                                  'channel': 'stable/ubuntu-19.10'},
             'gnome-system-monitor': {'command': 'refresh',
                                      'channel': 'stable/ubuntu-19.10'}
@@ -480,58 +490,70 @@ class TestSnapQuirks(unittest.TestCase):
                  'Snap-device-architecture': 'amd64'})
 
     @mock.patch("subprocess.run")
-    def test_replace_debs_with_snaps(self, run_mock):
+    def test_replace_debs_and_snaps(self, run_mock):
         controller = mock.Mock()
         config = mock.Mock()
         q = DistUpgradeQuirks(controller, config)
         q._snap_list = {
-            'core18': {'command': 'install', 'snap-id': '1234',
+            'core18': {'command': 'refresh',
                        'channel': 'stable'},
-            'gnome-3-28-1804': {'command': 'install', 'snap-id': '1234',
+            'gnome-3-28-1804': {'command': 'refresh',
                                 'channel': 'stable/ubuntu-19.10'},
-            'gtk-common-themes': {'command': 'install', 'snap-id': '1234',
+            'gtk-common-themes': {'command': 'refresh',
                                   'channel': 'stable/ubuntu-19.10'},
-            'gnome-calculator': {'command': 'install', 'snap-id': '1234',
-                                 'channel': 'stable/ubuntu-19.10'},
-            'gnome-characters': {'command': 'install', 'snap-id': '1234',
-                                 'channel': 'stable/ubuntu-19.10'},
-            'gnome-logs': {'command': 'refresh',
+            'gnome-calculator': {'command': 'remove'},
+            'gnome-characters': {'command': 'remove'},
+            'gnome-logs': {'command': 'install',
+                           'deb': 'gnome-logs',
+                           'snap-id': '1234',
                            'channel': 'stable/ubuntu-19.10'},
-            'gnome-system-monitor': {'command': 'refresh',
-                                     'channel': 'stable/ubuntu-19.10'}
+            'gnome-system-monitor': {'command': 'install',
+                                     'deb': 'gnome-system-monitor',
+                                     'snap-id': '1234',
+                                     'channel': 'stable/ubuntu-19.10'},
+            'snap-store': {'command': 'install',
+                           'deb': 'gnome-software',
+                           'snap-id': '1234',
+                           'channel': 'stable/ubuntu-19.10'}
         }
         q._to_version = "19.10"
-        q._replaceDebsWithSnaps()
+        q._replaceDebsAndSnaps()
         # Make sure all snaps have been handled
-        self.assertEqual(run_mock.call_count, 7)
+        self.assertEqual(run_mock.call_count, 8)
         snaps_refreshed = {}
         snaps_installed = {}
+        snaps_removed = []
         # Check if all the snaps that needed to be installed were installed
         # and those that needed a refresh - refreshed
         # At the same time, let's check that all the snaps were acted upon
         # while using the correct channel and branch
         for call in run_mock.call_args_list:
             args = call[0][0]
-            if args[1] == 'install':
-                snaps_installed[args[4]] = args[3]
-            else:
+            if args[1] == 'refresh':
                 snaps_refreshed[args[4]] = args[3]
+            elif args[1] == 'install':
+                snaps_installed[args[4]] = args[3]
+            elif args[1] == 'remove':
+                snaps_removed.append(args[2])
         self.assertDictEqual(
             snaps_refreshed,
-            {'gnome-logs': 'stable/ubuntu-19.10',
-             'gnome-system-monitor': 'stable/ubuntu-19.10'})
-        self.assertDictEqual(
-            snaps_installed,
             {'core18': 'stable',
              'gnome-3-28-1804': 'stable/ubuntu-19.10',
-             'gtk-common-themes': 'stable/ubuntu-19.10',
-             'gnome-calculator': 'stable/ubuntu-19.10',
-             'gnome-characters': 'stable/ubuntu-19.10'})
+             'gtk-common-themes': 'stable/ubuntu-19.10'})
+        self.assertDictEqual(
+            snaps_installed,
+            {'gnome-logs': 'stable/ubuntu-19.10',
+             'gnome-system-monitor': 'stable/ubuntu-19.10',
+             'snap-store': 'stable/ubuntu-19.10'})
+        self.assertListEqual(
+            snaps_removed,
+            ['gnome-calculator',
+             'gnome-characters'])
         # Make sure we marked the replaced ones for removal
         # Here we only check if the right number of 'packages' has been
         # added to the forced_obsoletes list - not all of those packages are
         # actual deb packages that will have to be removed during the upgrade
-        self.assertEqual(controller.forced_obsoletes.append.call_count, 5)
+        self.assertEqual(controller.forced_obsoletes.append.call_count, 3)
 
 
 if __name__ == "__main__":

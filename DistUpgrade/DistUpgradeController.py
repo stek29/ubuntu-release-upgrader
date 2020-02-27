@@ -1482,7 +1482,7 @@ class DistUpgradeController(object):
             progress.update((i/float(len(remove_candidates)))*100.0)
             if pkgname not in self.foreign_pkgs:
                 self._view.processEvents()
-                if not self.cache.tryMarkObsoleteForRemoval(pkgname, remove_candidates, self.foreign_pkgs):
+                if not self.cache.tryMarkObsoleteForRemoval(pkgname, remove_candidates, self.forced_obsoletes, self.foreign_pkgs):
                     logging.debug("'%s' scheduled for remove but not safe to remove, skipping", pkgname)
         logging.debug("Finish checking for obsolete pkgs")
         progress.done()

@@ -34,7 +34,8 @@ setup(name='ubuntu-release-upgrader',
                   ),
                   ('share/ubuntu-release-upgrader/',
                    glob.glob("data/*.cfg")+
-                   glob.glob("DistUpgrade/*.ui")
+                   glob.glob("DistUpgrade/*.ui")+
+                   ["DistUpgrade/deb2snap.json"]
                   ),
                   ('share/man/man8',
                    glob.glob('data/*.8')

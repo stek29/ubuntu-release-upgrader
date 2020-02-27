@@ -139,7 +139,7 @@ class DistUpgradeQuirks(object):
         if cache['ubuntu-desktop'].is_installed and \
                 cache['snapd'].is_installed and \
                 self._snap_list:
-            self._replaceDebsWithSnaps()
+            self._replaceDebsAndSnaps()
 
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
@@ -536,23 +536,28 @@ class DistUpgradeQuirks(object):
                 continue
             self.extra_snap_space += size
 
-    def _replaceDebsWithSnaps(self):
+    def _replaceDebsAndSnaps(self):
         """ install a snap and mark its corresponding package for removal """
-        # gtk-common-themes isn't a package name but is this risky?
         self._view.updateStatus(_("Processing snap replacements"))
         # _snap_list should be populated by the earlier
         # _calculateSnapSizeRequirements call.
         for snap, snap_object in self._snap_list.items():
             command = snap_object['command']
-            channel = snap_object['channel']
             if command == 'refresh':
                 self._view.updateStatus(_("refreshing snap %s" % snap))
+                popenargs = ["snap", command,
+                             "--channel", snap_object['channel'], snap]
+            elif command == 'remove':
+                self._view.updateStatus(_("removing snap %s" % snap))
+                popenargs = ["snap", command, snap]
             else:
                 self._view.updateStatus(_("installing snap %s" % snap))
+                popenargs = ["snap", command,
+                             "--channel", snap_object['channel'], snap]
             try:
                 self._view.processEvents()
                 proc = subprocess.run(
-                    ["snap", command, "--channel", channel, snap],
+                    popenargs,
                     stdout=subprocess.PIPE,
                     check=True)
                 self._view.processEvents()
@@ -561,8 +566,8 @@ class DistUpgradeQuirks(object):
                 continue
             if proc.returncode == 0:
                 logging.debug("%s of snap %s succeeded" % (command, snap))
-            if command == 'install':
-                self.controller.forced_obsoletes.append(snap)
+            if command == 'install' and snap_object['deb']:
+                self.controller.forced_obsoletes.append(snap_object['deb'])
 
     def _checkPae(self):
         " check PAE in /proc/cpuinfo "
@@ -844,18 +849,36 @@ class DistUpgradeQuirks(object):
             migration: version strings for upgrade (from and to) and the list
             of snaps (with actions).
         """
+        import json
         self._snap_list = {}
-        # gtk-common-themes isn't a package name but is this risky?
         from_channel = "stable/ubuntu-%s" % self._from_version
         to_channel = "stable/ubuntu-%s" % self._to_version
-        snaps = {'core18': ('stable', 'stable'),
-                 'gnome-3-28-1804': (from_channel, to_channel),
-                 'gtk-common-themes': (from_channel, to_channel),
-                 'gnome-calculator': (from_channel, to_channel),
-                 'gnome-characters': (from_channel, to_channel),
-                 'gnome-logs': (from_channel, to_channel)}
+        seeded_snaps = {}
+        unseeded_snaps = {}
+
+        try:
+            current_path = os.path.dirname(os.path.abspath(__file__))
+            d2s_file = open(current_path + '/deb2snap.json', 'r')
+            d2s = json.load(d2s_file)
+            d2s_file.close()
+
+            for snap in d2s["seeded"]:
+                seed = d2s["seeded"][snap]
+                deb = seed.get("deb", None)
+                from_chan = seed.get("from_channel", from_channel)
+                to_chan = seed.get("to_channel", to_channel)
+                seeded_snaps[snap] = (deb, from_chan, to_chan)
+
+            for snap in d2s["unseeded"]:
+                unseed = d2s["unseeded"][snap]
+                deb = unseed.get("deb", None)
+                from_chan = unseed.get("from_channel", from_channel)
+                unseeded_snaps[snap] = (deb, from_chan)
+        except Exception as e:
+            logging.warning("error reading deb2snap.json file (%s)" % e)
+
         self._view.updateStatus(_("Checking for installed snaps"))
-        for snap, (from_channel, to_channel) in snaps.items():
+        for snap, (deb, from_channel, to_channel) in seeded_snaps.items():
             snap_object = {}
             # check to see if the snap is already installed
             snap_info = subprocess.Popen(["snap", "info", snap],
@@ -873,15 +896,10 @@ class DistUpgradeQuirks(object):
                 snap_object['command'] = 'refresh'
             else:
                 # Do not replace packages not installed
-                # core18, gnome-3-28-1804 and gtk-common-themes do not match
-                # any deb package so never marked for installation but
-                # they'll be installed by dependency when the first gnome
-                # package is installed
                 cache = self.controller.cache
-                if (snap not in cache or (snap in cache and
-                                          not cache[snap].is_installed)):
+                if (deb and (deb not in cache or not cache[deb].is_installed)):
                     logging.debug("Deb package %s is not installed. Skipping "
-                                  "snap package installation" % snap)
+                                  "snap package %s installation" % (deb, snap))
                     continue
 
                 match = re.search(r"snap-id:\s*(\w*)", snap_info[0])
@@ -890,7 +908,51 @@ class DistUpgradeQuirks(object):
                                   % snap)
                     continue
                 snap_object['command'] = 'install'
+                snap_object['deb'] = deb
                 snap_object['snap-id'] = match[1]
             snap_object['channel'] = to_channel
             self._snap_list[snap] = snap_object
+        for snap, (deb, from_channel) in unseeded_snaps.items():
+            snap_object = {}
+            # check to see if the snap is already installed
+            snap_info = subprocess.Popen(["snap", "info", snap],
+                                         universal_newlines=True,
+                                         stdout=subprocess.PIPE).communicate()
+            self._view.processEvents()
+            if re.search("^installed: ", snap_info[0], re.MULTILINE):
+                logging.debug("Snap %s is installed" % snap)
+                # its not tracking the release channel so don't remove
+                if not re.search(r"^tracking:.*%s" % from_channel,
+                                 snap_info[0], re.MULTILINE):
+                    logging.debug("Snap %s is not tracking the release channel"
+                                  % snap)
+                    continue
+
+                snap_object['command'] = 'remove'
+
+                # check if this snap is being used by any other snaps
+                conns = subprocess.Popen(["snap", "connections", snap],
+                                         universal_newlines=True,
+                                         stdout=subprocess.PIPE).communicate()
+                self._view.processEvents()
+
+                for conn in conns[0].split('\n'):
+                    conn_cols = conn.split()
+                    if len(conn_cols) != 4:
+                        continue
+                    plug = conn_cols[1]
+                    slot = conn_cols[2]
+
+                    if slot.startswith(snap + ':'):
+                        plug_snap = plug.split(':')[0]
+                        if plug_snap != '-' and \
+                           plug_snap not in unseeded_snaps:
+                            logging.debug("Snap %s is being used by %s. "
+                                          "Switching it to stable track"
+                                          % (snap, plug_snap))
+                            snap_object['command'] = 'refresh'
+                            snap_object['channel'] = 'stable'
+                            break
+
+                self._snap_list[snap] = snap_object
         return self._snap_list

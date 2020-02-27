@@ -931,7 +931,7 @@ class MyCache(apt.Cache):
         return False
 
     @withResolverLog
-    def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, foreign_pkgs):
+    def tryMarkObsoleteForRemoval(self, pkgname, remove_candidates, forced_obsoletes, foreign_pkgs):
         #logging.debug("tryMarkObsoleteForRemoval(): %s" % pkgname)
         # sanity check, first see if it looks like a running kernel pkg
         if pkgname.endswith(self.uname):
@@ -957,8 +957,8 @@ class MyCache(apt.Cache):
         except configparser.NoOptionError:
             purge = False
 
-        # this is a delete candidate, only actually delete,
-        # if it dosn't remove other packages depending on it
+        # if this package has not been forced obsolete, only
+        # delete it if it doesn't remove other dependents
         # that are not obsolete as well
         actiongroup = apt_pkg.ActionGroup(self._depcache)
         # just make pyflakes shut up, later we should use
@@ -968,6 +968,8 @@ class MyCache(apt.Cache):
         try:
             self[pkgname].mark_delete(purge=purge)
             self.view.processEvents()
+            if pkgname in forced_obsoletes:
+                return True
             #logging.debug("marking '%s' for removal" % pkgname)
             for pkg in self.get_changes():
                 if (pkg.name not in remove_candidates or

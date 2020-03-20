@@ -69,11 +69,11 @@ def estimate_kernel_initrd_size_in_boot():
     if kernel == 0:
         logging.warning(
             "estimate_kernel_initrd_size_in_boot() returned '0' for kernel?")
-        kernel = 28*1024*1024
+        kernel = 16*1024*1024
     if initrd == 0:
         logging.warning(
             "estimate_kernel_initrd_size_in_boot() returned '0' for initrd?")
-        initrd = 45*1024*1024
+        initrd = 100*1024*1024
     # add small safety buffer
     kernel += 1*1024*1024
     # safety buffer as a percentage of the existing initrd's size

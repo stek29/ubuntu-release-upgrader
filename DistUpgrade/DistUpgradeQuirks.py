@@ -163,6 +163,7 @@ class DistUpgradeQuirks(object):
         """ run after calculating the dist-upgrade """
         logging.debug("running Quirks.PostDistUpgradeCache")
         self._install_linux_metapackage()
+        self._install_python_is_python2_but_deprecated()
 
     # helpers
     def _get_pci_ids(self):
@@ -832,6 +833,20 @@ class DistUpgradeQuirks(object):
                          linux_metapackage)
             reason = "linux metapackage may have been accidentally uninstalled"
             cache.mark_install(linux_metapackage, reason)
+
+    def _install_python_is_python2_but_deprecated(self):
+        """
+        Ensure the python-is-python2-but-deprecated is installed if
+        python-minimal was installed.
+        """
+        old = 'python-minimal'
+        new = 'python-is-python2-but-deprecated'
+        cache = self.controller.cache
+        if old in cache and cache[old].is_installed:
+            logging.info("installing %s because %s was installed" % (new, old))
+            reason = "%s was installed on the system" % old
+            if not cache.mark_install(new, reason):
+                logging.info("failed to install %s" % new)
 
     def ensure_recommends_are_installed_on_desktops(self):
         """ ensure that on a desktop install recommends are installed

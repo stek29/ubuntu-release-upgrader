@@ -836,11 +836,11 @@ class DistUpgradeQuirks(object):
 
     def _install_python_is_python2_but_deprecated(self):
         """
-        Ensure the python-is-python2-but-deprecated is installed if
-        python-minimal was installed.
+        Ensure the python-is-python2 is installed if python-minimal
+        was installed.
         """
         old = 'python-minimal'
-        new = 'python-is-python2-but-deprecated'
+        new = 'python-is-python2'
         cache = self.controller.cache
         if old in cache and cache[old].is_installed:
             logging.info("installing %s because %s was installed" % (new, old))

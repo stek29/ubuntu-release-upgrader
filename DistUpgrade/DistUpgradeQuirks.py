@@ -163,7 +163,7 @@ class DistUpgradeQuirks(object):
         """ run after calculating the dist-upgrade """
         logging.debug("running Quirks.PostDistUpgradeCache")
         self._install_linux_metapackage()
-        self._install_python_is_python2_but_deprecated()
+        self._install_python_is_python2()
 
     # helpers
     def _get_pci_ids(self):
@@ -834,7 +834,7 @@ class DistUpgradeQuirks(object):
             reason = "linux metapackage may have been accidentally uninstalled"
             cache.mark_install(linux_metapackage, reason)
 
-    def _install_python_is_python2_but_deprecated(self):
+    def _install_python_is_python2(self):
         """
         Ensure the python-is-python2 is installed if python-minimal
         was installed.

@@ -201,11 +201,11 @@ class GtkInstallProgressAdapter(InstallProgress):
         self.expander.set_sensitive(True)
         self.term.show()
         self.term.connect("contents-changed", self._on_term_content_changed)
-        # if no libgtk2-perl is installed show the terminal
+        # if no libgtk3-perl is installed show the terminal
         frontend= os.environ.get("DEBIAN_FRONTEND") or "gnome"
         if frontend == "gnome" and self._cache:
-            if (not "libgtk2-perl" in self._cache or
-                not self._cache["libgtk2-perl"].is_installed):
+            if (not "libgtk3-perl" in self._cache or
+                not self._cache["libgtk3-perl"].is_installed):
                 frontend = "dialog"
                 self.expander.set_expanded(True)
         self.env = ["VTE_PTY_KEEP_FD=%s"% self.writefd,

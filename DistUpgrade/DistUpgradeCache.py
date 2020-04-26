@@ -818,6 +818,9 @@ class MyCache(apt.Cache):
                         tasks[task].add(pkg.name)
         for task in tasks:
             installed = True
+            ignored_tasks = self.config.getlist("Distro", "IgnoredTasks")
+            if task in ignored_tasks:
+                installed = False
             for pkgname in tasks[task]:
                 if not self[pkgname].is_installed:
                     installed = False

@@ -28,13 +28,13 @@ rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 max_age=$(($(date +%s) - 3600))
 if [ $(stat -c '%Y' utils/demoted.cfg) -lt $max_age ]; then
     # echo "Running demotions"
-    (cd utils && ./demotions.py eoan focal > demoted.cfg)
+    (cd utils && ./demotions.py focal groovy > demoted.cfg)
 fi
 # when this gets enabled, make sure to add symlink in DistUpgrade
-if [ $(stat -c "%Y" utils/demoted.cfg.bionic) -lt $max_age ]; then
-    # echo "Running lts demotions"
-    (cd utils && ./demotions.py bionic focal > demoted.cfg.bionic)
-fi
+# if [ $(stat -c "%Y" utils/demoted.cfg.focal) -lt $max_age ]; then
+#     # echo "Running lts demotions"
+#     (cd utils && ./demotions.py focal  grovy > demoted.cfg.focal)
+# fi
 
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine

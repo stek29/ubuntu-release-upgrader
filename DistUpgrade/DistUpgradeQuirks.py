@@ -109,10 +109,10 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.PreCacheOpen")
 
     # individual quirks handler that run *after* the cache is opened
-    def focalPostInitialUpdate(self):
+    def groovyPostInitialUpdate(self):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
-        logging.debug("running Quirks.focalPostInitialUpdate")
+        logging.debug("running Quirks.groovyPostInitialUpdate")
         self._get_from_and_to_version()
         self._test_and_fail_on_i386()
         cache = self.controller.cache
@@ -129,8 +129,8 @@ class DistUpgradeQuirks(object):
         if self._snapstore_reachable:
             self._calculateSnapSizeRequirements()
 
-    def focalPostUpgrade(self):
-        logging.debug("running Quirks.focalPostUpgrade")
+    def groovyPostUpgrade(self):
+        logging.debug("running Quirks.groovyPostUpgrade")
         cache = self.controller.cache
         if 'ubuntu-desktop' not in cache or \
                 'snapd' not in cache:

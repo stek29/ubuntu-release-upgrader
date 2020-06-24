@@ -235,6 +235,8 @@ class InstallProgress(apt.progress.base.InstallProgress):
     logging.error("got an error from dpkg for pkg: '%s': '%s'" % (pkg, errormsg))
     if "/" in pkg:
       pkg = os.path.basename(pkg)
+    if pkg.split('-')[0].isdigit():
+      pkg = ('-').join(pkg.split('-')[1:])
     if "_" in pkg:
       pkg = pkg.split("_")[0]
     # now run apport

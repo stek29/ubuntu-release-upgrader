@@ -88,6 +88,8 @@ if __name__ == "__main__":
                 apt_pkg.config.set("APT::Architectures", arch)
                 cache = apt.Cache(apt.progress.base.OpProgress())
                 prog = apt.progress.base.AcquireProgress()
+                apt_pkg.config.set("Dir::Etc::Trusted",
+                                   "/usr/share/keyrings/ubuntu-archive-keyring.gpg")
                 cache.update(prog)
                 cache.open(apt.progress.base.OpProgress())
                 for pkg in cache:

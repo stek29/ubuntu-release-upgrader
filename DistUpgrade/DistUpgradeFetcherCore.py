@@ -84,8 +84,10 @@ class DistUpgradeFetcherCore(object):
         """
         gpg = ["apt-key"]
 
-        if keyring:
-            gpg += ["--keyring", keyring]
+        if not keyring:
+            keyring = '/usr/share/keyrings/ubuntu-archive-keyring.gpg'
+
+        gpg += ["--keyring", keyring]
 
         gpg += ["verify", signature, file]
         ret = subprocess.call(gpg, stderr=subprocess.PIPE)

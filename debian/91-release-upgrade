@@ -6,7 +6,7 @@ if [ "$(lsb_release -sd | cut -d' ' -f4)" = "(development" ]; then
 fi
 
 # if it is non-root user, skip
-if [ "$EUID" -ne 0 ]; then
+if [ $(id -u) -ne 0 ]; then
     exit 0
 fi
 

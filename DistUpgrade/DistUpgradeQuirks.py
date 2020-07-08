@@ -67,6 +67,8 @@ class DistUpgradeQuirks(object):
                         to set options that affect the cache
         - PostInitialUpdate: run *before* the sources.list is rewritten but
                              after an initial apt-get update
+        - PreDistUpgradeCache: run *right before* the dist-upgrade is
+                               calculated in the cache
         - PostDistUpgradeCache: run *after* the dist-upgrade was calculated
                                 in the cache
         - StartUpgrade: before the first package gets installed (but the
@@ -157,13 +159,19 @@ class DistUpgradeQuirks(object):
         self._pokeScreensaver()
         self._stopDocvertConverter()
 
+    # individual quirks handler that run *right before* the dist-upgrade
+    # is calculated in the cache
+    def PreDistUpgradeCache(self):
+        """ run right before calculating the dist-upgrade """
+        logging.debug("running Quirks.PreDistUpgradeCache")
+        self._install_python_is_python2()
+
     # individual quirks handler that run *after* the dist-upgrade was
     # calculated in the cache
     def PostDistUpgradeCache(self):
         """ run after calculating the dist-upgrade """
         logging.debug("running Quirks.PostDistUpgradeCache")
         self._install_linux_metapackage()
-        self._install_python_is_python2()
 
     # helpers
     def _get_pci_ids(self):
@@ -843,6 +851,10 @@ class DistUpgradeQuirks(object):
         new = 'python-is-python2'
         cache = self.controller.cache
         if old in cache and cache[old].is_installed:
+            logging.info("removing %s because %s is being installed" % (old, new))
+            reason = "%s is being installed on the system" % new
+            if not cache.mark_remove(old, reason):
+                logging.info("failed to remove %s", old)
             logging.info("installing %s because %s was installed" % (new, old))
             reason = "%s was installed on the system" % old
             if not cache.mark_install(new, reason):

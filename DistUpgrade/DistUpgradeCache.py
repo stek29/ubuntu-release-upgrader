@@ -488,6 +488,12 @@ class MyCache(apt.Cache):
                                 self._keep_installed(pkg.name, "%s KeepInstalledSection rule: %s" % (key, section))
 
 
+    def pre_upgrade_rule(self):
+        " run before the upgrade was done in the cache "
+        # run the quirks handlers
+        if not self.partialUpgrade:
+            self.quirks.run("PreDistUpgradeCache")
+
     def post_upgrade_rule(self):
         " run after the upgrade was done in the cache "
         for (rule, action) in [("Install", self.mark_install),
@@ -613,6 +619,9 @@ class MyCache(apt.Cache):
         try:
             # mvo: disabled as it casues to many errornous installs
             #self._apply_dselect_upgrade()
+
+            # run PreDistUpgradeCache quirks
+            self.pre_upgrade_rule()
 
             # upgrade (and make sure this way that the cache is ok)
             self.upgrade(True)

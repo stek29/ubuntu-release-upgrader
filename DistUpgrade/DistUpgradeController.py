@@ -132,11 +132,10 @@ class DistUpgradeController(object):
         # ConfigParser deals only with strings it seems *sigh*
         self.config.add_section("Options")
         self.config.set("Options","withNetwork", str(self.useNetwork))
+        self.config.set("Options","devRelease", "False")
         if self.options:
             if self.options.devel_release:
                 self.config.set("Options","devRelease", "True")
-        else:
-            self.config.set("Options","devRelease", "False")
 
         # some constants here
         self.fromDist = self.config.get("Sources","From")

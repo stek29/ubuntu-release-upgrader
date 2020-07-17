@@ -856,7 +856,8 @@ class DistUpgradeQuirks(object):
             reason = "%s was installed on the system" % old
             if not cache.mark_install(new, reason):
                 logging.info("failed to install %s" % new)
-            logging.info("removing %s because %s is being installed" % (old, new))
+            logging.info("removing %s because %s is being installed" %
+                         (old, new))
             reason = "%s is being installed on the system" % new
             if not cache.mark_remove(old, reason):
                 logging.info("failed to remove %s", old)

@@ -189,11 +189,11 @@ class testPreRequists(unittest.TestCase):
     def _verifySources(self, filename, expected):
         with open(filename) as f:
             sources_list = f.read()
-        for l in expected.split("\n"):
-            if l:
-                self.assertTrue(l in sources_list,
+        for line in expected.split("\n"):
+            if line:
+                self.assertTrue(line in sources_list,
                                 "expected entry '%s' in '%s' missing, "
-                                "got:\n%s" % (l, filename,
+                                "got:\n%s" % (line, filename,
                                               sources_list))
 
 

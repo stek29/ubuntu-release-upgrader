@@ -163,6 +163,7 @@ def make_mock_pkg(name, is_installed, candidate_rec=""):
     mock_pkg = mock.Mock()
     mock_pkg.name = name
     mock_pkg.is_installed = is_installed
+    mock_pkg.marked_install = False
     if candidate_rec:
         mock_pkg.candidate = mock.Mock()
         mock_pkg.candidate.record = candidate_rec
@@ -363,6 +364,75 @@ class TestQuirks(unittest.TestCase):
         ])
         pkgname = q._get_linux_metapackage(mock_cache, headers=False)
         self.assertEqual(pkgname, "linux-generic-lts-quantal")
+
+    def test_ros_installed_warning(self):
+        ros_packages = (
+            "ros-melodic-catkin",
+            "ros-noetic-rosboost-cfg",
+            "ros-foxy-rosclean",
+            "ros-kinetic-ros-environment",
+            "ros-dashing-ros-workspace")
+        for package_name in ros_packages:
+            mock_controller = mock.Mock()
+            mock_question = mock_controller._view.askYesNoQuestion
+            mock_question.return_value = True
+
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+            mock_cache = set([
+                make_mock_pkg(
+                    name=package_name,
+                    is_installed=True,
+                ),
+            ])
+            q._test_and_fail_if_ros_installed(mock_cache)
+            mock_question.assert_called_once_with(mock.ANY, mock.ANY)
+            self.assertFalse(len(mock_controller.abort.mock_calls))
+
+            mock_controller.reset_mock()
+            mock_question.reset_mock()
+            mock_question.return_value = False
+
+            mock_cache = set([
+                make_mock_pkg(
+                    name=package_name,
+                    is_installed=True,
+                ),
+            ])
+            q._test_and_fail_if_ros_installed(mock_cache)
+            mock_question.assert_called_once_with(mock.ANY, mock.ANY)
+            mock_controller.abort.assert_called_once_with()
+
+    def test_ros_not_installed_no_warning(self):
+        mock_controller = mock.Mock()
+        mock_question = mock_controller._view.askYesNoQuestion
+        mock_question.return_value = False
+
+        q = DistUpgradeQuirks(mock_controller, mock.Mock())
+        mock_cache = set([
+            make_mock_pkg(
+                name="ros-melodic-catkin",
+                is_installed=False,
+            ),
+            make_mock_pkg(
+                name="ros-noetic-rosboost-cfg",
+                is_installed=False,
+            ),
+            make_mock_pkg(
+                name="ros-foxy-rosclean",
+                is_installed=False,
+            ),
+            make_mock_pkg(
+                name="ros-kinetic-ros-environment",
+                is_installed=False,
+            ),
+            make_mock_pkg(
+                name="ros-dashing-ros-workspace",
+                is_installed=False,
+            ),
+        ])
+        q._test_and_fail_if_ros_installed(mock_cache)
+        self.assertFalse(len(mock_question.mock_calls))
+        self.assertFalse(len(mock_controller.abort.mock_calls))
 
 
 class TestSnapQuirks(unittest.TestCase):

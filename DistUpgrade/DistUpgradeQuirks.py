@@ -401,10 +401,14 @@ class DistUpgradeQuirks(object):
                 _("It appears that ROS is currently installed. Each ROS "
                   "release is very strict about the versions of Ubuntu "
                   "it supports, and Ubuntu upgrades can fail if that "
-                  "guidance isn't followed. Please ensure the ROS "
-                  "release you have installed supports the version of "
-                  "Ubuntu to which you're upgrading, or uninstall ROS "
-                  "before continuing.\n\n"
+                  "guidance isn't followed. Before continuing, please "
+                  "either uninstall ROS, or ensure the ROS release you "
+                  "have installed supports the version of Ubuntu to "
+                  "which you're upgrading.\n\n"
+                  "For ROS 1 releases, refer to REP 3:\n"
+                  "https://www.ros.org/reps/rep-0003.html\n\n"
+                  "For ROS 2 releases, refer to REP 2000:\n"
+                  "https://www.ros.org/reps/rep-2000.html\n\n"
                   "Are you sure you want to continue?"))
             if not res:
                 self.controller.abort()

@@ -388,12 +388,14 @@ class DistUpgradeQuirks(object):
 
         ros_is_installed = False
         for pkg in cache:
-            if not ros_is_installed:
-                for pattern in ros_package_patterns:
-                    if pattern.match(pkg.name):
-                        if pkg.is_installed or pkg.marked_install:
-                            ros_is_installed = True
-                        break
+            if ros_is_installed:
+                break
+
+            for pattern in ros_package_patterns:
+                if pattern.match(pkg.name):
+                    if pkg.is_installed or pkg.marked_install:
+                        ros_is_installed = True
+                    break
 
         if ros_is_installed:
             res = self._view.askYesNoQuestion(

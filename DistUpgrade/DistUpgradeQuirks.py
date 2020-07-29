@@ -114,7 +114,7 @@ class DistUpgradeQuirks(object):
     def PostInitialUpdate(self):
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.PostInitialUpdate")
-        self._test_and_fail_if_ros_installed(self.controller.cache)
+        self._test_and_warn_if_ros_installed(self.controller.cache)
 
     def groovyPostInitialUpdate(self):
         # PreCacheOpen would be better but controller.abort fails terribly
@@ -368,9 +368,9 @@ class DistUpgradeQuirks(object):
                 self.controller.abort()
             self._view.processEvents()
 
-    def _test_and_fail_if_ros_installed(self, cache):
+    def _test_and_warn_if_ros_installed(self, cache):
         """
-        Test and fail if ROS is installed. A given ROS release only
+        Test and warn if ROS is installed. A given ROS release only
         supports specific Ubuntu releases, and can cause the upgrade
         to fail in an overly-cryptic manner.
         """

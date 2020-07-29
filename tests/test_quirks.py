@@ -384,7 +384,7 @@ class TestQuirks(unittest.TestCase):
                     is_installed=True,
                 ),
             ])
-            q._test_and_fail_if_ros_installed(mock_cache)
+            q._test_and_warn_if_ros_installed(mock_cache)
             mock_question.assert_called_once_with(mock.ANY, mock.ANY)
             self.assertFalse(len(mock_controller.abort.mock_calls))
 
@@ -398,7 +398,7 @@ class TestQuirks(unittest.TestCase):
                     is_installed=True,
                 ),
             ])
-            q._test_and_fail_if_ros_installed(mock_cache)
+            q._test_and_warn_if_ros_installed(mock_cache)
             mock_question.assert_called_once_with(mock.ANY, mock.ANY)
             mock_controller.abort.assert_called_once_with()
 
@@ -430,7 +430,7 @@ class TestQuirks(unittest.TestCase):
                 is_installed=False,
             ),
         ])
-        q._test_and_fail_if_ros_installed(mock_cache)
+        q._test_and_warn_if_ros_installed(mock_cache)
         self.assertFalse(len(mock_question.mock_calls))
         self.assertFalse(len(mock_controller.abort.mock_calls))
 

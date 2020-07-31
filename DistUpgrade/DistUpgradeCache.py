@@ -140,6 +140,8 @@ class MyCache(apt.Cache):
         apt.Cache.__init__(self, progress)
         # a list of regexp that are not allowed to be removed
         self.removal_blacklist = config.getListFromFile("Distro", "RemovalBlacklistFile")
+        # the linux metapackage should not be removed
+        self.linux_metapackage = self.quirks._get_linux_metapackage(self, False)
         self.uname = Popen(["uname", "-r"], stdout=PIPE,
                            universal_newlines=True).communicate()[0].strip()
         self._initAptLog()
@@ -949,6 +951,9 @@ class MyCache(apt.Cache):
         if pkgname.endswith(self.uname):
             logging.debug("skipping running kernel pkg '%s'" % pkgname)
             return False
+        if pkgname == self.linux_metapackage:
+            logging.debug("skipping kernel metapackage '%s'" % pkgname)
+            return False
         if self._inRemovalBlacklist(pkgname):
             logging.debug("skipping '%s' (in removalBlacklist)" % pkgname)
             return False
@@ -986,7 +991,8 @@ class MyCache(apt.Cache):
             for pkg in self.get_changes():
                 if (pkg.name not in remove_candidates or
                       pkg.name in foreign_pkgs or
-                      self._inRemovalBlacklist(pkg.name)):
+                      self._inRemovalBlacklist(pkg.name) or
+                      pkg.name == self.linux_metapackage):
                     logging.debug("package '%s' produces an unwanted removal '%s', skipping" % (pkgname, pkg.name))
                     self.restore_snapshot()
                     return False

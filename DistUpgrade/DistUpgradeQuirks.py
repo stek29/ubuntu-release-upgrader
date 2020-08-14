@@ -111,18 +111,16 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.PreCacheOpen")
 
     # individual quirks handler that run *after* the cache is opened
-    def PostInitialUpdate(self):
-        """ run after the apt cache is opened the first time """
-        logging.debug("running Quirks.PostInitialUpdate")
-        self._test_and_warn_if_ros_installed(self.controller.cache)
-
     def groovyPostInitialUpdate(self):
         # PreCacheOpen would be better but controller.abort fails terribly
         """ run after the apt cache is opened the first time """
         logging.debug("running Quirks.groovyPostInitialUpdate")
         self._get_from_and_to_version()
         self._test_and_fail_on_i386()
+
         cache = self.controller.cache
+        self._test_and_warn_if_ros_installed(cache)
+
         if 'ubuntu-desktop' not in cache or \
                 'snapd' not in cache:
             logging.debug("package required for Quirk not in cache")

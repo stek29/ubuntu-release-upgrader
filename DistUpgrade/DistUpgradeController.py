@@ -799,7 +799,9 @@ class DistUpgradeController(object):
     def updateSourcesList(self):
         logging.debug("updateSourcesList()")
         self.sources = SourcesList(matcherPath=self.datadir)
-        
+        # backup first!
+        self.sources.backup(self.sources_backup_ext)
+
         if not any(e.type == "deb" and e.dist == self.fromDist for e in self.sources):
             res = self._view.askYesNoQuestion(_("No valid sources.list entry found"),
                              _("While scanning your repository "
@@ -810,8 +812,6 @@ class DistUpgradeController(object):
             if not res:
                 self.abort()
 
-        # backup first!
-        self.sources.backup(self.sources_backup_ext)
         if not self.rewriteSourcesList(mirror_check=True):
             logging.error("No valid mirror found")
             res = self._view.askYesNoQuestion(_("No valid mirror found"),

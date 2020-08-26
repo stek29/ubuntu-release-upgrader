@@ -117,7 +117,10 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.focalPostInitialUpdate")
         self._get_from_and_to_version()
         self._test_and_fail_on_i386()
+
         cache = self.controller.cache
+        self._test_and_warn_if_ros_installed(cache)
+
         if 'ubuntu-desktop' not in cache or \
                 'snapd' not in cache:
             logging.debug("package required for Quirk not in cache")
@@ -362,6 +365,53 @@ class DistUpgradeQuirks(object):
             if not res:
                 self.controller.abort()
             self._view.processEvents()
+
+    def _test_and_warn_if_ros_installed(self, cache):
+        """
+        Test and warn if ROS is installed. A given ROS release only
+        supports specific Ubuntu releases, and can cause the upgrade
+        to fail in an overly-cryptic manner.
+        """
+
+        # These are the root ROS 1 and 2 dependencies as of 07/27/2020
+        ros_package_patterns = set()
+        for package_name in (
+                "catkin",
+                "rosboost-cfg",
+                "rosclean",
+                "ros-environment",
+                "ros-workspace"):
+            ros_package_patterns.add(
+                re.compile("ros-[^\-]+-%s" % package_name))
+
+        ros_is_installed = False
+        for pkg in cache:
+            if ros_is_installed:
+                break
+
+            for pattern in ros_package_patterns:
+                if pattern.match(pkg.name):
+                    if pkg.is_installed or pkg.marked_install:
+                        ros_is_installed = True
+                    break
+
+        if ros_is_installed:
+            res = self._view.askYesNoQuestion(
+                _("The Robot Operating System (ROS) is installed"),
+                _("It appears that ROS is currently installed. Each ROS "
+                  "release is very strict about the versions of Ubuntu "
+                  "it supports, and Ubuntu upgrades can fail if that "
+                  "guidance isn't followed. Before continuing, please "
+                  "either uninstall ROS, or ensure the ROS release you "
+                  "have installed supports the version of Ubuntu to "
+                  "which you're upgrading.\n\n"
+                  "For ROS 1 releases, refer to REP 3:\n"
+                  "https://www.ros.org/reps/rep-0003.html\n\n"
+                  "For ROS 2 releases, refer to REP 2000:\n"
+                  "https://www.ros.org/reps/rep-2000.html\n\n"
+                  "Are you sure you want to continue?"))
+            if not res:
+                self.controller.abort()
 
     def _checkArmCPU(self):
         """

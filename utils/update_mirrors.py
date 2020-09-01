@@ -15,8 +15,8 @@ d = feedparser.parse("https://launchpad.net/ubuntu/+archivemirrors-rss")
 #pp  = pprint.PrettyPrinter(indent=4)
 #pp.pprint(d)
 
-# the first 24 lines are permanent
-permanent_lines = 24
+# the first 29 lines are permanent
+permanent_lines = 29
 lp_mirrors = set()
 new_mirrors = set()
 

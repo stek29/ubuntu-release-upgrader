@@ -1522,9 +1522,9 @@ class DistUpgradeController(object):
         Cache lock is released during script runs in the event that the
         PostInstallScripts require apt or dpkg changes.
         """
-        # now run the post-upgrade fixup scripts (if any)
         if self.cache:
             self.cache.release_lock()
+        # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             if not os.path.exists(script):
                 logging.warning("PostInstallScript: '%s' not found" % script)

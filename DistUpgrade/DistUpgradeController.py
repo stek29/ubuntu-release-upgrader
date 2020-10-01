@@ -1524,6 +1524,7 @@ class DistUpgradeController(object):
         """
         if self.cache:
             self.cache.release_lock()
+            self.cache.unlock_lists_dir()
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             if not os.path.exists(script):

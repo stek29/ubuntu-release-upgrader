@@ -912,7 +912,7 @@ class DistUpgradeQuirks(object):
             if old in cache and cache[old].is_installed:
                 if new:
                     logging.info("installing %s because %s was installed" %
-                                (new, old))
+                                 (new, old))
                     reason = "%s was installed on the system" % old
                     if not cache.mark_install(new, reason):
                         logging.info("failed to install %s" % new)

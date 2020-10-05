@@ -849,29 +849,35 @@ class DistUpgradeQuirks(object):
         if python-minimal was installed.
         """
         # python-dbg must come first for reasons unknown
-        replacements = [('python-dbg','python2-dbg'),
-                        ('python-minimal', 'python-is-python2')]
+        replacements = (('python-dbg', 'python2-dbg'),
+                        ('python-doc', 'python2-doc'),
+                        ('python-minimal', 'python-is-python2'),
+                        ('python-dev', None),
+                        ('libpython-dev', None),
+                        ('libpython-stdlib', None),
+                        ('libpython-dbg', None))
         cache = self.controller.cache
         for old, new in replacements:
             logging.info("checking for %s" % old)
             if old in cache and cache[old].is_installed:
-                logging.info("installing %s because %s was installed" %
-                             (new, old))
-                reason = "%s was installed on the system" % old
-                if not cache.mark_install(new, reason):
-                    logging.info("failed to install %s" % new)
+                if new:
+                    logging.info("installing %s because %s was installed" %
+                                (new, old))
+                    reason = "%s was installed on the system" % old
+                    if not cache.mark_install(new, reason):
+                        logging.info("failed to install %s" % new)
                 logging.info("removing %s because %s is being installed" %
                              (old, new))
                 reason = "%s is being installed on the system" % new
                 if not cache.mark_remove(old, reason):
                     logging.info("failed to remove %s", old)
 
-                # protect our decision to remove legacy 'python' (as a
-                # dependency of python-minimal, removed above)
-                py = 'python'
-                if py in cache and cache[py].marked_delete:
-                    resolver = apt.cache.ProblemResolver(cache)
-                    resolver.protect(cache[py])
+            # protect our decision to remove legacy 'python' (as a
+            # dependency of python-minimal, removed above)
+            py = 'python'
+            if py in cache and cache[py].marked_delete:
+                resolver = apt.cache.ProblemResolver(cache)
+                resolver.protect(cache[py])
 
     def ensure_recommends_are_installed_on_desktops(self):
         """ ensure that on a desktop install recommends are installed

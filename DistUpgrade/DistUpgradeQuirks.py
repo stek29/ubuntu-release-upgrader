@@ -902,7 +902,7 @@ class DistUpgradeQuirks(object):
         replacements = (('python-dbg', 'python2-dbg'),
                         ('python-doc', 'python2-doc'),
                         ('python-minimal', 'python-is-python2'),
-                        ('python-dev', None),
+                        ('python-dev', 'python-dev-is-python2'),
                         ('libpython-dev', None),
                         ('libpython-stdlib', None),
                         ('libpython-dbg', None))

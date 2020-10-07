@@ -898,22 +898,32 @@ class DistUpgradeQuirks(object):
         other package and the python-is-python2 package is installed instead,
         if python-minimal was installed.
         """
-        old = 'python-minimal'
-        new = 'python-is-python2'
+        # python-dbg must come first for reasons unknown
+        replacements = (('python-dbg', 'python2-dbg'),
+                        ('python-doc', 'python2-doc'),
+                        ('python-minimal', 'python-is-python2'),
+                        ('python-dev', 'python-dev-is-python2'),
+                        ('libpython-dev', None),
+                        ('libpython-stdlib', None),
+                        ('libpython-dbg', None))
         cache = self.controller.cache
-        if old in cache and cache[old].is_installed:
-            logging.info("installing %s because %s was installed" % (new, old))
-            reason = "%s was installed on the system" % old
-            if not cache.mark_install(new, reason):
-                logging.info("failed to install %s" % new)
-            logging.info("removing %s because %s is being installed" %
-                         (old, new))
-            reason = "%s is being installed on the system" % new
-            if not cache.mark_remove(old, reason):
-                logging.info("failed to remove %s", old)
+        for old, new in replacements:
+            logging.info("checking for %s" % old)
+            if old in cache and cache[old].is_installed:
+                if new:
+                    logging.info("installing %s because %s was installed" %
+                                 (new, old))
+                    reason = "%s was installed on the system" % old
+                    if not cache.mark_install(new, reason):
+                        logging.info("failed to install %s" % new)
+                logging.info("removing %s because %s is being installed" %
+                             (old, new))
+                reason = "%s is being installed on the system" % new
+                if not cache.mark_remove(old, reason):
+                    logging.info("failed to remove %s", old)
 
-            # protect our decision to remove legacy 'python' (as a dependency
-            # of python-minimal, removed above)
+            # protect our decision to remove legacy 'python' (as a
+            # dependency of python-minimal, removed above)
             py = 'python'
             if py in cache and cache[py].marked_delete:
                 resolver = apt.cache.ProblemResolver(cache)

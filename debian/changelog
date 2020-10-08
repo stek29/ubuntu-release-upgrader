@@ -1,8 +1,27 @@
-ubuntu-release-upgrader (1:20.04.27) focal; urgency=medium
+ubuntu-release-upgrader (1:20.04.28) focal; urgency=medium
 
+  [ Brian Murray ]
   * DistUpgrade/DistUpgradeQuirks.py: In addition to quirking python-minimal
     we also need to quirk python-dbg, python-doc, and python-dev.
     (LP: #1887544)
+  * drop changes to data/DistUpgrade.cfg.bionic regarding
+    gnome-software-plugin-snap as it failed verification.
+
+  [ Chad Smith ]
+  * data/mirrors.cfg: add all ubuntu-advantage services as valid mirrors.
+    This includes: fips, fips-updates, esm-infra, esm-apps and cc-eal and
+    Ubuntu Pro stable public PPA. (LP: #1893717)
+  * DistUpgrade/DistUpgradeController.py: release cache lock during
+    runPostInstallScripts (LP: #1897778)
+
+ -- Chad Smith <chad.smith@canonical.com>  Wed, 07 Oct 2020 10:49:37 -0600
+
+ubuntu-release-upgrader (1:20.04.27) focal; urgency=medium
+
+  * data/DistUpgrade.cfg.bionic: Add gnome-software-plugin-snap to
+    ForcedObsoletes for ubuntu-desktop and ubuntukylin-desktop only. This
+    allows multiple packages to be offered for removal after the upgrade
+    completes. (LP: #1894919)
 
  -- Brian Murray <brian@ubuntu.com>  Wed, 09 Sep 2020 11:27:27 -0700
 

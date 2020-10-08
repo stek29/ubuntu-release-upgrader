@@ -1518,7 +1518,13 @@ class DistUpgradeController(object):
         """ 
         scripts that are run in any case after the distupgrade finished 
         whether or not it was successful
+
+        Cache lock is released during script runs in the event that the
+        PostInstallScripts require apt or dpkg changes.
         """
+        if self.cache:
+            self.cache.release_lock()
+            self.cache.unlock_lists_dir()
         # now run the post-upgrade fixup scripts (if any)
         for script in self.config.getlist("Distro","PostInstallScripts"):
             if not os.path.exists(script):
@@ -1531,6 +1537,8 @@ class DistUpgradeController(object):
                 self._view.getTerminal().call([script], hidden=True)
             except Exception as e:
                 logging.error("got error from PostInstallScript %s (%s)" % (script, e))
+        if self.cache:
+            self.cache.get_lock()
 
     def abort(self):
         """ abort the upgrade, cleanup (as much as possible) """

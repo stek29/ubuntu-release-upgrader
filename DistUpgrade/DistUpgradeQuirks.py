@@ -816,7 +816,7 @@ class DistUpgradeQuirks(object):
         pattern = re.compile('(.+)-([0-9]+)-(.+)')
         match1 = pattern.match(term1)
         match2 = pattern.match(term2)
-        if match1:
+        if match1 and match2:
             term1 = '%s-%s' % (match1.group(1),
                                match1.group(2))
             term2 = '%s-%s' % (match2.group(1),

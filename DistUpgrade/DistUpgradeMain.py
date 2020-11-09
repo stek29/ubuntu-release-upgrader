@@ -54,8 +54,6 @@ from .DistUpgradeConfigParser import DistUpgradeConfig
 def do_commandline():
     " setup option parser and parse the commandline "
     parser = OptionParser()
-    parser.add_option("-c", "--cdrom", dest="cdromPath", default=None,
-                      help=_("Use the given path to search for a cdrom with upgradable packages"))
     parser.add_option("--have-prerequists", dest="havePrerequists",
                       action="store_true", default=False)
     parser.add_option("--with-network", dest="withNetwork",action="store_true")

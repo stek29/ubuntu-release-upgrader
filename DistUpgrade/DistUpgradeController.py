@@ -51,7 +51,6 @@ from .DistUpgradeView import Step
 from .DistUpgradeCache import MyCache
 from .DistUpgradeConfigParser import DistUpgradeConfig
 from .DistUpgradeQuirks import DistUpgradeQuirks
-from .DistUpgradeAptCdrom import AptCdrom
 
 # workaround broken relative import in python-apt (LP: #871007), we
 # want the local version of distinfo.py from oneiric, but because of
@@ -118,11 +117,6 @@ class DistUpgradeController(object):
             self.useNetwork = True
         else:
             self.useNetwork = self.options.withNetwork
-        if options:
-            cdrompath = options.cdromPath
-        else:
-            cdrompath = None
-        self.aptcdrom = AptCdrom(distUpgradeView, cdrompath)
 
         # the configuration
         self.config = DistUpgradeConfig(datadir)
@@ -459,30 +453,7 @@ class DistUpgradeController(object):
                       "Please make sure that the system directory is "
                       "writable.") % systemdir)
                 self.abort()
-            
 
-        # FIXME: we may try to find out a bit more about the network
-        # connection here and ask more  intelligent questions
-        if self.aptcdrom and self.options and self.options.withNetwork == None:
-            res = self._view.askYesNoQuestion(_("Include latest updates from the Internet?"),
-                                              _("The upgrade system can use the internet to "
-                                                "automatically download "
-                                                "the latest updates and install them during the "
-                                                "upgrade.  If you have a network connection this is "
-                                                "highly recommended.\n\n"
-                                                "The upgrade will take longer, but when "
-                                                "it is complete, your system will be fully up to "
-                                                "date.  You can choose not to do this, but you "
-                                                "should install the latest updates soon after "
-                                                "upgrading.\n"
-                                                "If you answer 'no' here, the network is not "
-                                                "used at all."),
-                                              'Yes')
-            self.useNetwork = res
-            self.config.set("Options","withNetwork", str(self.useNetwork))
-            logging.debug("useNetwork: '%s' (selected by user)" % res)
-            if res:
-                self._tryUpdateSelf()
         return True
 
     def _sourcesListEntryDownloadable(self, entry):
@@ -1545,8 +1516,6 @@ class DistUpgradeController(object):
         logging.debug("abort called")
         if hasattr(self, "sources"):
             self.sources.restore_backup(self.sources_backup_ext)
-        if hasattr(self, "aptcdrom"):
-            self.aptcdrom.restore_backup(self.sources_backup_ext)
         # generate a new cache
         self._view.updateStatus(_("Restoring original system state"))
         self._view.abort()
@@ -1717,40 +1686,6 @@ class DistUpgradeController(object):
         if not os.path.exists(backportsdir):
             os.mkdir(backportsdir)
         backportslist = self.config.getlist("PreRequists","Packages")
-
-        # FIXME: this needs to be ported
-        # if we have them on the CD we are fine
-        if self.aptcdrom and not self.useNetwork:
-            logging.debug("Searching for pre-requists on CDROM")
-            p = os.path.join(self.aptcdrom.cdrompath,
-                             "dists/stable/main/dist-upgrader/binary-%s/" % apt_pkg.config.find("APT::Architecture"))
-            found_pkgs = set()
-            for deb in glob.glob(p+"*_*.deb"):
-                logging.debug("found pre-req '%s' to '%s'" % (deb, backportsdir))
-                found_pkgs.add(os.path.basename(deb).split("_")[0])
-            # now check if we got all backports on the CD
-            if not set(backportslist).issubset(found_pkgs):
-                logging.error("Expected backports: '%s' but got '%s'" % (set(backportslist), found_pkgs))
-                return False
-            # now install them
-            self.cache.release_lock()
-            p = subprocess.Popen(
-                ["/usr/bin/dpkg", "-i", ] + glob.glob(p+"*_*.deb"),
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                universal_newlines=True)
-            res = None
-            while res is None:
-                res = p.poll()
-                self._view.pulseProgress()
-                time.sleep(0.02)
-            self._view.pulseProgress(finished=True)
-            self.cache.get_lock()
-            logging.info("installing backport debs exit code '%s'" % res)
-            logging.debug("dpkg output:\n%s" % p.communicate()[0])
-            if res != 0:
-                return False
-            # and re-start itself when it done
-            return self.setupRequiredBackports()
 
         # we support PreRequists/SourcesList-$arch sections here too
         # 
@@ -1932,13 +1867,6 @@ class DistUpgradeController(object):
         if not self.updateSourcesList():
             self.abort()
 
-        # add cdrom (if we have one)
-        if (self.aptcdrom and
-            not self.aptcdrom.add(self.sources_backup_ext)):
-            self._view.error(_("Failed to add the cdrom"),
-                             _("Sorry, adding the cdrom was not successful."))
-            self.abort()
-
         # then update the package index files
         if not self.doUpdate():
             self.abort()
@@ -2064,10 +1992,6 @@ class DistUpgradeController(object):
 
         # do post-upgrade stuff
         self.doPostUpgrade()
-
-        # comment out cdrom source
-        if self.aptcdrom:
-            self.aptcdrom.comment_out_cdrom_entry()
 
         # remove upgrade-available notice
         if os.path.exists("/var/lib/ubuntu-release-upgrader/release-upgrade-available"):

@@ -33,8 +33,6 @@ class DistUpgradeFetcherSelf(DistUpgradeFetcherCore):
         # possible to download self
         self.run_options += ["--with-network"]
         # make sure to run self with proper options
-        if options.cdromPath is not None:
-            self.run_options += ["--cdrom=%s" % options.cdromPath]
         if options.frontend is not None:
             self.run_options += ["--frontend=%s" % options.frontend]
 

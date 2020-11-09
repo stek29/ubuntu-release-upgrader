@@ -15,10 +15,6 @@ done
 
 #sudo rm -rf backports/ profile/ result/ tarball/ *.deb
 
-# automatically generate codename for the distro in the 
-# cdromupgrade script
-sed -i s/^CODENAME=.*/CODENAME=$DIST/ cdromupgrade
-
 # update po and copy the mo files
 (cd ../po; make update-po)
 cp -r ../po/mo .

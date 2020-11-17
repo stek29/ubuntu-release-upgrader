@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     nvidia = False
     try:
-        mods = [l.split()[0] for l in open('/proc/modules')]
+        mods = [line.split()[0] for line in open('/proc/modules')]
     except IOError:
         logging.info("Can't read /proc/modules")
         sys.exit(0)

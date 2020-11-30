@@ -38,7 +38,7 @@ import time
 import gettext
 from optparse import OptionParser
 
-from UpdateManager.Core.utils import init_proxy
+from UpdateManager.Core.utils import init_proxy, get_arch
 
 from DistUpgrade.DistUpgradeFetcher import DistUpgradeFetcherGtk
 from UpdateManager.MetaReleaseGObject import MetaRelease
@@ -73,6 +73,7 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
     self.options = options
     self.datadir = options.datadir
     self.new_dist = None
+    self.arch = get_arch()
     logging.debug("running with devel=%s proposed=%s" % (
             options.devel_release, options.proposed_release))
     m = MetaRelease(useDevelopmentRelease=options.devel_release,
@@ -109,9 +110,13 @@ class CheckNewReleaseGtk(SimpleGtkbuilderApp):
         subprocess.call(['update-manager', '--no-update'])
         Gtk.main_quit()
     else:
-        self.build_ui()
-        self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
-        self.window_main.show()
+        if self.arch == "i386":
+            logging.warning("There are no further Ubuntu releases for this systems 'i386' architecture.")
+            sys.exit()
+        else:
+            self.build_ui()
+            self.window_main.set_title(_("Ubuntu %(version)s Upgrade Available") % {'version': new_dist.version})
+            self.window_main.show()
 
   def close(self):
     self.window_main.destroy()

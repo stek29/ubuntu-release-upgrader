@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 import time
-from UpdateManager.Core.utils import init_proxy
+from UpdateManager.Core.utils import init_proxy, get_arch
 
 RELEASE_AVAILABLE=0
 NO_RELEASE_AVAILABLE=1
@@ -139,6 +139,14 @@ if __name__ == "__main__":
     print(_("Your Ubuntu release is not supported anymore."))
     print(_("For upgrade information, please visit:\n"
             "%(url)s\n") % { 'url' : url })
+
+  # LP: #1901725 useful in case we drop an arch in the future
+  # if get_arch() == "i386":
+  #   if not options.quiet:
+  #     print(_("There will not be any further Ubuntu releases "))
+  #     print(_("for this system's 'i386' architecture. Updates for "))
+  #     print(_("Ubuntu 18.04 LTS will continue until April 2023."))
+  #   sys.exit(NO_RELEASE_AVAILABLE)
 
   # now inform about a new release
   if m.new_dist is None:

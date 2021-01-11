@@ -204,6 +204,9 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         test that an upgrade from feisty with a sources.list containing
         hardy asks a question, and if continued, does something.
         """
+        arch = apt_pkg.config.find("APT::Architecture")
+        apt_pkg.config.set("APT::Architecture", "amd64")
+
         shutil.copy(os.path.join(self.testdir, "sources.list.hardy"),
                     os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
@@ -246,6 +249,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy main
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".hardy",
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
              ]))
+        apt_pkg.config.set("APT::Architecture", arch)
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
@@ -253,6 +257,8 @@ deb http://archive.ubuntu.com/ubuntu gutsy main
         """
         test sources.list rewrite of an obsolete mirror
         """
+        arch = apt_pkg.config.find("APT::Architecture")
+        apt_pkg.config.set("APT::Architecture", "amd64")
         shutil.copy(os.path.join(self.testdir, "sources.list.obsolete_mirror"),
                     os.path.join(self.testdir, "sources.list"))
         apt_pkg.config.set("Dir::Etc::sourcelist", "sources.list")
@@ -296,6 +302,7 @@ deb-src http://archive.ubuntu.com/ubuntu gutsy-security main restricted universe
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".obsolete_mirror",
              apt_pkg.config.find_file("Dir::Etc::sourcelist") + ".distUpgrade"
              ]))
+        apt_pkg.config.set("APT::Architecture", arch)
 
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_sources_list_no_template(self, mock_get_distro):

@@ -117,6 +117,7 @@ class DistUpgradeQuirks(object):
         logging.debug("running Quirks.hirsutePostInitialUpdate")
         self._get_from_and_to_version()
         self._test_and_fail_on_i386()
+        self._test_and_fail_on_aufs()
 
         cache = self.controller.cache
         self._test_and_warn_if_ros_installed(cache)
@@ -342,6 +343,27 @@ class DistUpgradeQuirks(object):
                       "minimal architecture. It is not possible to "
                       "upgrade your system to a new Ubuntu release "
                       "with this hardware."))
+                self.controller.abort()
+
+    def _test_and_fail_on_aufs(self):
+        """
+        Test and fail if docker has aufs graphdriver available
+        as it is deprecated after 20.04. Even if no containers are
+        currently running aufs, the upgrade could break existing
+        container images.
+        """
+        for aufs_dir in ("/var/snap/docker/common/var-lib-docker/aufs",
+                         "/var/lib/docker/aufs"):
+            if (os.path.exists(aufs_dir)):
+                logging.error("Docker config uses aufs")
+                summary = _("Sorry, this storage driver is not supported "
+                            "in newer kernels")
+                msg = _("There will not be any further Ubuntu releases "
+                        "that support the aufs storage driver.\n\n"
+                        "Please ensure that none of your containers are "
+                        "using the aufs storage driver, remove the directory "
+                        "%s and try again." % aufs_dir)
+                self._view.error(summary, msg)
                 self.controller.abort()
 
     def _test_and_warn_if_vserver(self):

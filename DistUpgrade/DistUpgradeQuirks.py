@@ -347,7 +347,7 @@ class DistUpgradeQuirks(object):
 
     def _test_and_fail_on_aufs(self):
         """
-        Test and fail if docker has aufs graphdriver available
+        Test and fail if docker has aufs storage driver available
         as it is deprecated after 20.04. Even if no containers are
         currently running aufs, the upgrade could break existing
         container images.
@@ -357,9 +357,10 @@ class DistUpgradeQuirks(object):
             if (os.path.exists(aufs_dir)):
                 logging.error("Docker config uses aufs")
                 summary = _("Sorry, this storage driver is not supported "
-                            "in newer kernels")
+                            "in kernels for newer releases")
                 msg = _("There will not be any further Ubuntu releases "
-                        "that support the aufs storage driver.\n\n"
+                        "that provide kernel support for the aufs "
+                        "storage driver.\n\n"
                         "Please ensure that none of your containers are "
                         "using the aufs storage driver, remove the directory "
                         "%s and try again." % aufs_dir)

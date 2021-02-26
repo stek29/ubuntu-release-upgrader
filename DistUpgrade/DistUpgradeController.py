@@ -2087,7 +2087,8 @@ class DistUpgradeController(object):
                     return
                 subprocess.Popen(["gnome-session-inhibit", "--inhibit",
                                   "idle", "--inhibit-only"],
-                                 env=self._user_env)
+                                 env=self._user_env,
+                                 stdout=subprocess.DEVNULL)
                 self._view.information(_("Lock screen disabled"),
                                        _("Your lock screen has been "
                                          "disabled and will remain "

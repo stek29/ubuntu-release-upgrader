@@ -1,9 +1,15 @@
 ubuntu-release-upgrader (1:21.04.5) UNRELEASED; urgency=medium
 
-  * DistUpgrade/DistUpgradeController.py: restore sources.list where possible
-    if a KeyboardInterrupt event is received. (LP: #1898026)
+  [ William 'jawn-smith' Wilson ]
   * Add quirk to block upgrade if docker containers are configured to use the
     aufs storage-driver (LP: #1907713)
+
+  [ Brian Murray ]
+  * DistUpgrade/DistUpgradeController.py: where possible restore sources.list
+    if a KeyboardInterrupt event is received. (LP: #1898026)
+  * DistUpgrade/DistUpgradeController.py: redirect the output of
+    gnome-session-inhibit to devnull so a message regarding Ctrl-C is not
+    displayed.
 
  -- William 'jawn-smith' Wilson <william.wilson@canonical.com>  Mon, 22 Feb 2021 16:16:48 -0600
 

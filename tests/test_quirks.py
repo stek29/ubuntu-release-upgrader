@@ -434,6 +434,16 @@ class TestQuirks(unittest.TestCase):
         self.assertFalse(len(mock_question.mock_calls))
         self.assertFalse(len(mock_controller.abort.mock_calls))
 
+    @mock.patch('os.path.exists')
+    def test_aufs_fail(self, mock_exists):
+        mock_exists.return_value = True
+        mock_controller = mock.Mock()
+
+        q = DistUpgradeQuirks(mock_controller, mock.Mock())
+
+        q._test_and_fail_on_aufs()
+        self.assertTrue(len(mock_controller.abort.mock_calls))
+
 
 class TestSnapQuirks(unittest.TestCase):
 

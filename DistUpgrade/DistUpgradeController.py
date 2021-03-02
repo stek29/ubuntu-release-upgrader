@@ -685,14 +685,13 @@ class DistUpgradeController(object):
                     self.sources_disabled = True
                     logging.debug("entry '%s' was disabled (unknown dist)" % get_string_with_no_auth_from_source_entry(entry))
 
-                # if we make it to this point, we have an official or third-party mirror
-                # XXX - is this still relevant?
-                # check if the arch is powerpc or sparc and if so, transition
-                # to ports.ubuntu.com (powerpc got demoted in gutsy, sparc
-                # in hardy)
+                # if we make it to this point, we have an official or
+                # third-party mirror check if the arch is one not on the main
+                # archive and if so, transition to ports.ubuntu.com
                 if (entry.type == "deb" and
                     not "ports.ubuntu.com" in entry.uri and
-                    (self.arch == "powerpc" or self.arch == "sparc")):
+                    (self.arch in ("arm64", "armhf", "ppc64el",
+                                   "riscv64", "s390x"))):
                     logging.debug("moving %s source entry to 'ports.ubuntu.com' " % self.arch)
                     entry.uri = "http://ports.ubuntu.com/ubuntu-ports/"
 

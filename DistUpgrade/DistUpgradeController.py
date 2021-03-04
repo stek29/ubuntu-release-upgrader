@@ -690,8 +690,7 @@ class DistUpgradeController(object):
                 # archive and if so, transition to ports.ubuntu.com
                 if (entry.type == "deb" and
                     not "ports.ubuntu.com" in entry.uri and
-                    (self.arch in ("arm64", "armhf", "ppc64el",
-                                   "riscv64", "s390x"))):
+                    (self.arch not in ("amd64", "i386"))):
                     logging.debug("moving %s source entry to 'ports.ubuntu.com' " % self.arch)
                     entry.uri = "http://ports.ubuntu.com/ubuntu-ports/"
 

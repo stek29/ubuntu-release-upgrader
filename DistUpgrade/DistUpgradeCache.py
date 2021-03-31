@@ -420,10 +420,10 @@ class MyCache(apt.Cache):
                 return False
         return True
 
-    def mark_install(self, pkg, reason=""):
+    def mark_install(self, pkg, reason="", **flags):
         logging.debug("Installing '%s' (%s)" % (pkg, reason))
         if pkg in self:
-            self[pkg].mark_install()
+            self[pkg].mark_install(**flags)
             if not (self[pkg].marked_install or self[pkg].marked_upgrade):
                 logging.error("Installing/upgrading '%s' failed" % pkg)
                 #raise SystemError("Installing '%s' failed" % pkg)
@@ -439,10 +439,10 @@ class MyCache(apt.Cache):
                 return False
         return True
 
-    def mark_remove(self, pkg, reason=""):
+    def mark_remove(self, pkg, reason="", **flags):
         logging.debug("Removing '%s' (%s)" % (pkg, reason))
         if pkg in self:
-            self[pkg].mark_delete()
+            self[pkg].mark_delete(**flags)
 
     def mark_purge(self, pkg, reason=""):
         logging.debug("Purging '%s' (%s)" % (pkg, reason))

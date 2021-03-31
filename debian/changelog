@@ -3,8 +3,12 @@ ubuntu-release-upgrader (1:21.04.6) UNRELEASED; urgency=medium
   * DistUpgrade/DistUpgradeController.py: If there is a sources.list entry for
     an arch which is on ports.ubuntu.com rewrite the uri so that ports is
     used. (LP: #1917220)
+  * DistUpgrade/DistUpgradeQuirks.py:  use apt's problem resolver to better
+    calculate upgrades where python is replaced by python-is-python2 thereby
+    resolving a host of upgrade failures. Thanks to Julian for the initial
+    patch. (LP: #1898152)
 
- -- Brian Murray <brian@ubuntu.com>  Tue, 02 Mar 2021 13:57:48 -0800
+ -- Brian Murray <brian@ubuntu.com>  Wed, 31 Mar 2021 09:18:47 -0700
 
 ubuntu-release-upgrader (1:21.04.5) hirsute; urgency=medium
 

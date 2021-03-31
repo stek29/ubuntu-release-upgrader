@@ -907,27 +907,38 @@ class DistUpgradeQuirks(object):
                         ('libpython-stdlib', None),
                         ('libpython-dbg', None))
         cache = self.controller.cache
+
+        # We run with auto_inst=False first to mark our explicit choices so it
+        # can guide the code with auto_inst=True when it makes decisions
+        for auto_inst in False, True:
+            for old, new in replacements:
+                logging.info("checking for %s (auto_inst=%s)" %
+                             (old, auto_inst))
+                if old in cache and cache[old].is_installed:
+                    if new:
+                        logging.info("installing %s because %s was installed" %
+                                     (new, old))
+                        reason = "%s was installed on the system" % old
+                        if not cache.mark_install(new, reason, auto_fix=False,
+                                                  auto_inst=auto_inst):
+                            logging.info("failed to install %s" % new)
+                    logging.info("removing %s because %s is being installed" %
+                                 (old, new))
+                    reason = "%s is being installed on the system" % new
+                    if not cache.mark_remove(old, reason, auto_fix=False):
+                        logging.info("failed to remove %s", old)
+
+        solver = apt.cache.ProblemResolver(cache)
+
         for old, new in replacements:
-            logging.info("checking for %s" % old)
             if old in cache and cache[old].is_installed:
                 if new:
-                    logging.info("installing %s because %s was installed" %
-                                 (new, old))
-                    reason = "%s was installed on the system" % old
-                    if not cache.mark_install(new, reason):
-                        logging.info("failed to install %s" % new)
-                logging.info("removing %s because %s is being installed" %
-                             (old, new))
-                reason = "%s is being installed on the system" % new
-                if not cache.mark_remove(old, reason):
-                    logging.info("failed to remove %s", old)
+                    solver.clear(cache[new])
+                    solver.protect(cache[new])
+                solver.clear(cache[old])
+                solver.remove(cache[old])
 
-            # protect our decision to remove legacy 'python' (as a
-            # dependency of python-minimal, removed above)
-            py = 'python'
-            if py in cache and cache[py].marked_delete:
-                resolver = apt.cache.ProblemResolver(cache)
-                resolver.protect(cache[py])
+        solver.resolve()
 
     def ensure_recommends_are_installed_on_desktops(self):
         """ ensure that on a desktop install recommends are installed

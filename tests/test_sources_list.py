@@ -28,6 +28,9 @@ import mock
 DistUpgradeConfigParser.CONFIG_OVERRIDE_DIR = None
 
 CURDIR = os.path.dirname(os.path.abspath(__file__))
+dpkg = subprocess.Popen(['dpkg', '--print-architecture'],
+                        stdout=subprocess.PIPE)
+ARCH = dpkg.communicate()[0].decode().strip()
 
 
 class TestComponentOrdering(unittest.TestCase):
@@ -120,13 +123,23 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 
         # now test the result
         #print(open(os.path.join(self.testdir,"sources.list")).read())
-        self._verifySources("""
+        if ARCH in ('amd64', 'i386'):
+            self._verifySources("""
 # main repo
 deb http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
-deb http://de.archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
+deb http://archive.ubuntu.com/ubuntu/ gutsy main restricted multiverse
 deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted multiverse
 deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
+""")
+        else:
+            self._verifySources("""
+# main repo
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy main restricted multiverse universe
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy main restricted multiverse
+deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security universe
 """)
         # check that the backup file was created correctly
         self.assertEqual(0, subprocess.call(
@@ -159,13 +172,23 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
 
         # now test the result
         #print(open(os.path.join(self.testdir,"sources.list")).read())
-        self._verifySources("""
+        if ARCH in ('amd64', 'i386'):
+            self._verifySources("""
 # main repo
 # deb http://archive.ubuntu.com/ubuntu feisty main restricted multiverse universe
-# deb http://de.archive.ubuntu.com/ubuntu/ feisty main restricted multiverse
+# deb http://archive.ubuntu.com/ubuntu/ feisty main restricted multiverse
 # deb-src http://archive.ubuntu.com/ubuntu feisty main restricted multiverse
 # deb http://security.ubuntu.com/ubuntu/ feisty-security main restricted
 # deb http://security.ubuntu.com/ubuntu/ feisty-security universe
+""")
+        else:
+            self._verifySources("""
+# main repo
+# deb http://ports.ubuntu.com/ubuntu-ports/ feisty main restricted multiverse universe
+# deb http://ports.ubuntu.com/ubuntu-ports/ feisty main restricted multiverse
+# deb-src http://archive.ubuntu.com/ubuntu feisty main restricted multiverse
+# deb http://ports.ubuntu.com/ubuntu-ports/ feisty-security main restricted
+# deb http://ports.ubuntu.com/ubuntu-ports/ feisty-security universe
 """)
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController.abort")
@@ -197,6 +220,7 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security universe
         self.assertTrue(mock_get_distro.called)
         self.assertTrue(v.askYesNoQuestion.called)
 
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_double_check_source_distribution_continue(self, mock_get_distro, mock_sourcesListEntryDownloadable):
@@ -251,6 +275,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy main
              ]))
         apt_pkg.config.set("APT::Architecture", arch)
 
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_sources_list_inactive_mirror(self, mock_get_distro, mock_sourcesListEntryDownloadable):
@@ -304,10 +329,11 @@ deb-src http://archive.ubuntu.com/ubuntu gutsy-security main restricted universe
              ]))
         apt_pkg.config.set("APT::Architecture", arch)
 
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_sources_list_no_template(self, mock_get_distro):
         """
-        test sources.list rewrite when there is no distro template
+        test sources.list rewrite for a mirror when there is no distro template
         """
         shutil.copy(os.path.join(self.testdir, "sources.list.obsolete_mirror"),
                     os.path.join(self.testdir, "sources.list"))
@@ -365,6 +391,7 @@ deb http://security.ubuntu.com/ubuntu gutsy-security main restricted # auto gene
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "extras was not for ports")
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     @mock.patch("DistUpgrade.DistUpgradeController.get_distro")
     def test_extras_removal(self, mock_get_distro, mock_sourcesListEntryDownloadable):
@@ -487,6 +514,7 @@ deb-src http://old-releases.ubuntu.com/ubuntu hoary main restricted multiverse
 deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted universe multiverse
 """)
 
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
     @unittest.skipUnless(url_downloadable(
         "http://us.archive.ubuntu.com/ubuntu", logging.debug),
         "Could not reach mirror")
@@ -515,6 +543,7 @@ deb-src http://us.archive.ubuntu.com/ubuntu precise main restricted multiverse
 deb http://us.archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 """)
 
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
     @unittest.skipUnless(url_downloadable(
         "https://mirrors.kernel.org/ubuntu", logging.debug),
         "Could not reach mirror")
@@ -558,12 +587,21 @@ deb https://mirrors.kernel.org/ubuntu bionic-security main restricted universe m
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
-        self._verifySources("""
+        if ARCH in ('amd64', 'i386'):
+            self._verifySources("""
 # main repo
 deb http://archive.ubuntu.com/ubuntu precise main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu precise main restricted multiverse
 
 deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+""")
+        else:
+            self._verifySources("""
+# main repo
+deb http://ports.ubuntu.com/ubuntu-ports/ precise main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu precise main restricted multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports/ precise-security main restricted universe multiverse
 """)
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
@@ -584,12 +622,7 @@ deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe m
         self.assertTrue(res)
 
         # now test the result
-        self._verifySources("""
-deb http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
-
-deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe multiverse
-
+        self._verifySourcesLine("""
 deb http://archive.canonical.com/ubuntu gutsy partner
 """)
 
@@ -612,7 +645,8 @@ deb http://archive.canonical.com/ubuntu gutsy partner
         self.assertTrue(res)
 
         # now test the result
-        self._verifySources("""
+        if ARCH in ('amd64', 'i386'):
+            self._verifySources("""
 deb http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
 
@@ -624,7 +658,21 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted universe m
 # commercial PPA
 deb https://user:pass@private-ppa.launchpad.net/commercial-ppa-uploaders gutsy main
 """)
+        else:
+            self._verifySources("""
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu gutsy main restricted multiverse
 
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted universe multiverse
+
+# random one
+# deb http://user:pass@private-ppa.launchpad.net/random-ppa gutsy main # disabled on upgrade to gutsy
+
+# commercial PPA
+deb https://user:pass@private-ppa.launchpad.net/commercial-ppa-uploaders gutsy main
+""")
+
+    @unittest.skipUnless(ARCH in ('amd64', 'i386'), "test is not arch specific")
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     def test_apt_cacher_and_apt_bittorent(self, mock_sourcesListEntryDownloadable):
         """
@@ -680,11 +728,7 @@ deb http://ppa.launchpad.net/random-ppa quantal main # ppa of Víctor R. Ruiz (v
         self.assertTrue(res)
 
         # verify it
-        self._verifySources("""
-deb http://archive.ubuntu.com/ubuntu gutsy main restricted
-deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
-deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
-# A PPA with a unicode comment
+        self._verifySourcesLine("""
 # deb http://ppa.launchpad.net/random-ppa quantal main # ppa of Víctor R. Ruiz (vrruiz) disabled on upgrade to gutsy
 """)
 
@@ -705,11 +749,19 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
         self.assertTrue(res)
 
         # verify it
-        self._verifySources("""
+        if ARCH in ('amd64', 'i386'):
+            self._verifySources("""
 deb http://192.168.1.1/ubuntu gutsy main restricted
 deb http://192.168.1.1/ubuntu gutsy-updates main restricted
 deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
 deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe multiverse
+""")
+        else:
+            self._verifySources("""
+deb http://192.168.1.1/ubuntu gutsy main restricted
+deb http://192.168.1.1/ubuntu gutsy-updates main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ gutsy-backports main restricted universe multiverse
 """)
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
@@ -732,10 +784,7 @@ deb http://archive.ubuntu.com/ubuntu gutsy-backports main restricted universe mu
         self.assertTrue(mock_sourcesListEntryDownloadable.called)
         self.assertTrue(res)
 
-        self._verifySources("""
-deb http://archive.ubuntu.com/ubuntu gutsy main restricted
-deb http://archive.ubuntu.com/ubuntu gutsy-updates main restricted
-deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
+        self._verifySourcesLine("""
 # deb http://archive.ubuntu.com/ubuntu gutsy-proposed universe main multiverse restricted #Not for humans during development stage of release gutsy
 """)
 
@@ -748,6 +797,15 @@ deb http://security.ubuntu.com/ubuntu/ gutsy-security main restricted
                 l in sources_list.split("\n"),
                 "expected entry '%s' in sources.list missing. got:\n'''%s'''" %
                 (l, sources_list))
+
+    def _verifySourcesLine(self, expected):
+        sources_file = apt_pkg.config.find_file("Dir::Etc::sourcelist")
+        with open(sources_file) as f:
+            sources_list = f.read()
+            self.assertTrue(
+                expected in sources_list,
+                "expected entry '%s' in sources.list missing. got:\n'''%s'''" %
+                 (expected.strip("\n"), sources_list))
 
     def _verifySources2Way(self, expected):
         self._verifySources(expected)

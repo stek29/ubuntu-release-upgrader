@@ -689,7 +689,8 @@ class DistUpgradeController(object):
                 # third-party mirror check if the arch is one not on the main
                 # archive and if so, transition to ports.ubuntu.com
                 if (entry.type == "deb" and
-                    not "ports.ubuntu.com" in entry.uri and
+                    ("archive.ubuntu.com" in entry.uri or
+                     "security.ubuntu.com" in entry.uri) and
                     (self.arch not in ("amd64", "i386"))):
                     logging.debug("moving %s source entry to 'ports.ubuntu.com' " % self.arch)
                     entry.uri = "http://ports.ubuntu.com/ubuntu-ports/"

@@ -122,12 +122,10 @@ class DistUpgradeQuirks(object):
         cache = self.controller.cache
         self._test_and_warn_if_ros_installed(cache)
 
-        if 'ubuntu-desktop' not in cache or \
-                'snapd' not in cache:
+        if 'snapd' not in cache:
             logging.debug("package required for Quirk not in cache")
             return
-        if cache['ubuntu-desktop'].is_installed and \
-                cache['snapd'].is_installed:
+        if cache['snapd'].is_installed:
             self._checkStoreConnectivity()
         # If the snap store is accessible, at the same time calculate the
         # extra size needed by to-be-installed snaps.  This also prepares
@@ -138,12 +136,10 @@ class DistUpgradeQuirks(object):
     def hirsutePostUpgrade(self):
         logging.debug("running Quirks.hirsutePostUpgrade")
         cache = self.controller.cache
-        if 'ubuntu-desktop' not in cache or \
-                'snapd' not in cache:
+        if 'snapd' not in cache:
             logging.debug("package required for Quirk not in cache")
             return
-        if cache['ubuntu-desktop'].is_installed and \
-                cache['snapd'].is_installed and \
+        if cache['snapd'].is_installed and \
                 self._snap_list:
             self._replaceDebsAndSnaps()
 
@@ -994,6 +990,10 @@ class DistUpgradeQuirks(object):
 
             for snap in d2s["seeded"]:
                 seed = d2s["seeded"][snap]
+                metapkg = seed.get("metapkg", None)
+                if metapkg and \
+                        self.controller.cache[metapkg].is_installed == False:
+                    continue
                 deb = seed.get("deb", None)
                 from_chan = seed.get("from_channel", from_channel)
                 to_chan = seed.get("to_channel", to_channel)
@@ -1002,6 +1002,10 @@ class DistUpgradeQuirks(object):
             for snap in d2s["unseeded"]:
                 unseed = d2s["unseeded"][snap]
                 deb = unseed.get("deb", None)
+                metapkg = unseed.get("metapkg", None)
+                if metapkg and \
+                        self.controller.cache[metapkg].is_installed == False:
+                    continue
                 from_chan = unseed.get("from_channel", from_channel)
                 unseeded_snaps[snap] = (deb, from_chan)
         except Exception as e:

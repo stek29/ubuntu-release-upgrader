@@ -981,19 +981,21 @@ class DistUpgradeQuirks(object):
         except Exception as e:
             logging.warning("error reading deb2snap.json file (%s)" % e)
 
+        snap_list = ''
         # list the installed snaps and add them to seeded ones
         snap_list = subprocess.Popen(["snap", "list"],
                                      universal_newlines=True,
                                      stdout=subprocess.PIPE).communicate()
-        # first line of output is a header and the last line is empty
-        snaps_installed = [line.split()[0]
-                           for line in snap_list[0].split('\n')[1:-1]]
+        if snap_list:
+            # first line of output is a header and the last line is empty
+            snaps_installed = [line.split()[0]
+                               for line in snap_list[0].split('\n')[1:-1]]
 
-        for snap in snaps_installed:
-            if snap in seeded_snaps or snap in unseeded_snaps:
-                continue
-            else:
-                seeded_snaps[snap] = (None, from_channel, to_channel)
+            for snap in snaps_installed:
+                if snap in seeded_snaps or snap in unseeded_snaps:
+                    continue
+                else:
+                    seeded_snaps[snap] = (None, from_channel, to_channel)
 
         self._view.updateStatus(_("Checking for installed snaps"))
         for snap, (deb, from_channel, to_channel) in seeded_snaps.items():

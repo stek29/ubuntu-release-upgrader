@@ -31,6 +31,8 @@ class MockPopenSnap():
         self.command = cmd
 
     def communicate(self):
+        if self.command[1] == "list":
+            return []
         snap_name = self.command[2]
         if snap_name == 'gnome-logs':
             # Package to refresh
@@ -470,6 +472,10 @@ class TestSnapQuirks(unittest.TestCase):
         # Call method under test
 
         controller.cache = {
+            'ubuntu-desktop':
+                make_mock_pkg(
+                    name="ubuntu-desktop",
+                    is_installed=True),
             'core18':
                 make_mock_pkg(
                     name="core18",
@@ -511,20 +517,20 @@ class TestSnapQuirks(unittest.TestCase):
         self.assertDictEqual(
             q._snap_list,
             {'core18': {
+                'channel': 'stable',
                 'command': 'install',
-                'deb': None, 'snap-id': '1234',
-                'channel': 'stable'},
+                'deb': None, 'snap-id': '1234'},
              'gnome-3-34-1804': {
+                'channel': 'stable/ubuntu-19.10',
                 'command': 'install',
-                'deb': None, 'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'},
+                'deb': None, 'snap-id': '1234'},
+             'gnome-logs': {
+                'command': 'remove'},
              'snap-store': {
+                'channel': 'stable/ubuntu-19.10',
                 'command': 'install',
                 'deb': 'gnome-software',
-                'snap-id': '1234',
-                'channel': 'stable/ubuntu-19.10'},
-             'gnome-logs': {
-                'command': 'remove'}})
+                'snap-id': '1234'}})
 
     @mock.patch("DistUpgrade.DistUpgradeQuirks.get_arch")
     @mock.patch("urllib.request.urlopen")

@@ -971,7 +971,7 @@ class DistUpgradeQuirks(object):
                 if metapkg not in self.controller.cache:
                     continue
                 if metapkg and \
-                        self.controller.cache[metapkg].is_installed == False:
+                        self.controller.cache[metapkg].is_installed is False:
                     continue
                 deb = seed.get("deb", None)
                 from_chan = seed.get("from_channel", from_channel)
@@ -985,7 +985,7 @@ class DistUpgradeQuirks(object):
                 if metapkg not in self.controller.cache:
                     continue
                 if metapkg and \
-                        self.controller.cache[metapkg].is_installed == False:
+                        self.controller.cache[metapkg].is_installed is False:
                     continue
                 from_chan = unseed.get("from_channel", from_channel)
                 unseeded_snaps[snap] = (deb, from_chan)
@@ -997,7 +997,7 @@ class DistUpgradeQuirks(object):
                                      universal_newlines=True,
                                      stdout=subprocess.PIPE).communicate()
         # first line of output is a header and the last line is empty
-        snaps_installed = [line.split()[0] \
+        snaps_installed = [line.split()[0]
                            for line in snap_list[0].split('\n')[1:-1]]
 
         for snap in snaps_installed:

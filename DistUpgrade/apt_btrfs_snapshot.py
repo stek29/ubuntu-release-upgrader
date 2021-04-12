@@ -73,11 +73,11 @@ class Fstab(list):
         super(Fstab, self).__init__()
 
         with open(fstab) as fstab_file:
-            for line in (l.strip() for l in fstab_file):
-                if line == "" or line.startswith("#"):
+            for stripped_line in (line.strip() for line in fstab_file):
+                if stripped_line == "" or stripped_line.startswith("#"):
                     continue
                 try:
-                    entry = FstabEntry.from_line(line)
+                    entry = FstabEntry.from_line(stripped_line)
                 except ValueError:
                     continue
                 self.append(entry)

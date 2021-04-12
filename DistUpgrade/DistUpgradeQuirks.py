@@ -968,6 +968,8 @@ class DistUpgradeQuirks(object):
             for snap in d2s["seeded"]:
                 seed = d2s["seeded"][snap]
                 metapkg = seed.get("metapkg", None)
+                if metapkg not in cache:
+                    continue
                 if metapkg and \
                         self.controller.cache[metapkg].is_installed == False:
                     continue
@@ -980,6 +982,8 @@ class DistUpgradeQuirks(object):
                 unseed = d2s["unseeded"][snap]
                 deb = unseed.get("deb", None)
                 metapkg = unseed.get("metapkg", None)
+                if metapkg not in cache:
+                    continue
                 if metapkg and \
                         self.controller.cache[metapkg].is_installed == False:
                     continue

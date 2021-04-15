@@ -446,6 +446,79 @@ class TestQuirks(unittest.TestCase):
         q._test_and_fail_on_aufs()
         self.assertTrue(len(mock_controller.abort.mock_calls))
 
+    def test_replace_fkms_overlay_no_config(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            mock_controller = mock.Mock()
+
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+
+            q._replace_fkms_overlay(boot_dir)
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+
+    def test_replace_fkms_overlay_no_changes(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            demo_config = ("# This is a demo boot config\n"
+                           "[pi4\n"
+                           "max_framebuffers=2\n"
+                           "[all]\n"
+                           "arm_64bit=1\n"
+                           "kernel=vmlinuz\n"
+                           "initramfs initrd.img followkernel\n")
+            with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
+                f.write(demo_config)
+
+            mock_controller = mock.Mock()
+
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+
+            q._replace_fkms_overlay(boot_dir)
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+            with open(os.path.join(boot_dir, 'config.txt')) as f:
+                self.assertTrue(f.read() == demo_config)
+
+    def test_replace_fkms_overlay_with_changes(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            demo_config = (
+                "# This is a demo boot config\n"
+                "[pi4\n"
+                "max_framebuffers=2\n"
+                "[all]\n"
+                "arm_64bit=1\n"
+                "kernel=vmlinuz\n"
+                "initramfs initrd.img followkernel\n"
+                "dtoverlay=vc4-fkms-v3d,cma-256\n"
+                "start_x=1\n"
+                "gpu_mem=256\n")
+            expected_config = (
+                "# This is a demo boot config\n"
+                "[pi4\n"
+                "max_framebuffers=2\n"
+                "[all]\n"
+                "arm_64bit=1\n"
+                "kernel=vmlinuz\n"
+                "initramfs initrd.img followkernel\n"
+                "# changed by do-release-upgrade (LP: #1923673)\n"
+                "#dtoverlay=vc4-fkms-v3d,cma-256\n"
+                "dtoverlay=vc4-kms-v3d,cma-256\n"
+                "# disabled by do-release-upgrade (LP: #1923673)\n"
+                "#start_x=1\n"
+                "# disabled by do-release-upgrade (LP: #1923673)\n"
+                "#gpu_mem=256\n")
+            with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
+                f.write(demo_config)
+
+            mock_controller = mock.Mock()
+
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+
+            q._replace_fkms_overlay(boot_dir)
+            self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+            with open(os.path.join(boot_dir, 'config.txt')) as f:
+                self.assertTrue(f.read() == expected_config)
+
 
 class TestSnapQuirks(unittest.TestCase):
 

@@ -142,6 +142,9 @@ class DistUpgradeQuirks(object):
         if cache['snapd'].is_installed and \
                 self._snap_list:
             self._replaceDebsAndSnaps()
+        if 'ubuntu-desktop-raspi' in cache:
+            if cache['ubuntu-desktop-rapsi'].is_installed:
+                self._replace_fkms_overlay()
 
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
@@ -1110,3 +1113,54 @@ class DistUpgradeQuirks(object):
 
                 self._snap_list[snap] = snap_object
         return self._snap_list
+
+    def _replace_fkms_overlay(self, boot_dir='/boot/firmware'):
+        failure_action = (
+            "you may need to replace the vc4-fkms-v3d overlay with "
+            "vc4-kms-v3d in config.txt on your boot partition")
+
+        try:
+            boot_config_filename = os.path.join(boot_dir, 'config.txt')
+            with open(boot_config_filename, 'r', encoding='utf-8') as f:
+                boot_config = f.read()
+        except FileNotFoundError:
+            logging.error("failed to open boot configuration in %s; %s",
+                          boot_config_filename, failure_action)
+            return
+
+        new_config = ''.join(
+            # startswith and replace used to cope with (and preserve) any
+            # trailing d-t parameters, and any use of the -pi4 suffix
+            '# changed by do-release-upgrade (LP: #1923673)\n#' + line +
+            line.replace('dtoverlay=vc4-fkms-v3d', 'dtoverlay=vc4-kms-v3d')
+            if line.startswith('dtoverlay=vc4-fkms-v3d') else
+            # camera firmware disabled due to incompatibility with "full" kms
+            # overlay; without the camera firmware active it's also better to
+            # disable gpu_mem leaving the default (64MB) to allow as much as
+            # possible for the KMS driver
+            '# disabled by do-release-upgrade (LP: #1923673)\n#' + line
+            if line.startswith('gpu_mem=') or line.rstrip() == 'start_x=1' else
+            line
+            for line in boot_config.splitlines(keepends=True)
+        )
+
+        if new_config == boot_config:
+            logging.warning("no fkms overlay or camera firmware line found "
+                            "in %s", boot_config_filename)
+            return
+
+        try:
+            boot_backup_filename = os.path.join(
+                boot_dir, 'config.txt.distUpgrade')
+            with open(boot_backup_filename, 'w', encoding='utf-8') as f:
+                f.write(boot_config)
+        except IOError as exc:
+            logging.error("unable to write boot config backup to %s: %s; %s",
+                          boot_backup_filename, exc, failure_action)
+            return
+        try:
+            with open(boot_config_filename, 'w', encoding='utf-8') as f:
+                f.write(new_config)
+        except IOError as exc:
+            logging.error("unable to write new boot config to %s: %s; %s",
+                          boot_config_filename, exc, failure_action)

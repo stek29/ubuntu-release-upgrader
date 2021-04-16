@@ -143,7 +143,7 @@ class DistUpgradeQuirks(object):
                 self._snap_list:
             self._replaceDebsAndSnaps()
         if 'ubuntu-desktop-raspi' in cache:
-            if cache['ubuntu-desktop-rapsi'].is_installed:
+            if cache['ubuntu-desktop-raspi'].is_installed:
                 self._replace_fkms_overlay()
 
     # individual quirks handler when the dpkg run is finished ---------

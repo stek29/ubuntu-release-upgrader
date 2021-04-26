@@ -1926,106 +1926,109 @@ class DistUpgradeController(object):
         if not self.doPostInitialUpdate():
             self.abort()
 
-        # update sources.list
-        self._view.setStep(Step.MODIFY_SOURCES)
-        self._view.updateStatus(_("Updating repository information"))
-        if not self.updateSourcesList():
-            self.abort()
-
-        # add cdrom (if we have one)
-        if (self.aptcdrom and
-            not self.aptcdrom.add(self.sources_backup_ext)):
-            self._view.error(_("Failed to add the cdrom"),
-                             _("Sorry, adding the cdrom was not successful."))
-            self.abort()
-
-        # then update the package index files
-        if not self.doUpdate():
-            self.abort()
-
-        # then open the cache (again)
-        self._view.updateStatus(_("Checking package manager"))
-        # if something fails here (e.g. locking the cache) we need to
-        # restore the system state (LP: #1052605)
-        self.openCache(restore_sources_list_on_fail=True)
-
-        # re-check server mode because we got new packages (it may happen
-        # that the system had no sources.list entries and therefore no
-        # desktop file information)
-        self.serverMode = self.cache.need_server_mode()
-        # do it here as we need to know if we are in server or client mode
-        self.quirks.ensure_recommends_are_installed_on_desktops()
-        # now check if we still have some key packages available/downloadable
-        # after the update - if not something went seriously wrong
-        # (this happend e.g. during the intrepid->jaunty upgrade for some
-        #  users when de.archive.ubuntu.com was overloaded)
-        for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
-            if (pkg not in self.cache or
-                not self.cache.anyVersionDownloadable(self.cache[pkg])):
-                # FIXME: we could offer to add default source entries here,
-                #        but we need to be careful to not duplicate them
-                #        (i.e. the error here could be something else than
-                #        missing sources entries but network errors etc)
-                logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg)
-                if pkg not in self.cache:
-                    logging.error("'%s' was not in the cache" % pkg)
-                if not self.cache.anyVersionDownloadable(self.cache[pkg]):
-                    logging.error("'%s' was not downloadable" % pkg)
-                self._view.error(_("Invalid package information"),
-                                 _("After updating your package "
-                                   "information, the essential package '%s' "
-                                   "could not be located. This may be "
-                                   "because you have no official mirrors "
-                                   "listed in your software sources, or "
-                                   "because of excessive load on the mirror "
-                                   "you are using. See /etc/apt/sources.list "
-                                   "for the current list of configured "
-                                   "software sources."
-                                   "\n"
-                                   "In the case of an overloaded mirror, you "
-                                   "may want to try the upgrade again later.")
-                                   % pkg)
-                if os.path.exists("/usr/bin/apport-bug"):
-                    subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
-                else:
-                    logging.error("Missing apport-bug, bug report not "
-                                  "autocreated")
+        try:
+            # update sources.list
+            self._view.setStep(Step.MODIFY_SOURCES)
+            self._view.updateStatus(_("Updating repository information"))
+            if not self.updateSourcesList():
                 self.abort()
 
-        # calc the dist-upgrade and see if the removals are ok/expected
-        # do the dist-upgrade
-        self._view.updateStatus(_("Calculating the changes"))
-        if not self.askDistUpgrade():
-            self.abort()
-        self._inhibitIdle()
+            # add cdrom (if we have one)
+            if (self.aptcdrom and
+                not self.aptcdrom.add(self.sources_backup_ext)):
+                self._view.error(_("Failed to add the cdrom"),
+                                 _("Sorry, adding the cdrom was not successful."))
+                self.abort()
 
-        # fetch the stuff
-        self._view.setStep(Step.FETCH)
-        self._view.updateStatus(_("Fetching"))
-        if not self.doDistUpgradeFetching():
-            self._enableAptCronJob()
-            self.abort()
+            # then update the package index files
+            if not self.doUpdate():
+                self.abort()
 
-        # simulate an upgrade
-        self._view.setStep(Step.INSTALL)
-        self._view.updateStatus(_("Upgrading"))
-        if not self.doDistUpgradeSimulation():
-            self._view.error(_("Upgrade infeasible"),
-                             _("The upgrade could not be completed, there "
-                               "were errors during the upgrade "
-                               "process."))
-            self.abort()
+            # then open the cache (again)
+            self._view.updateStatus(_("Checking package manager"))
+            # if something fails here (e.g. locking the cache) we need to
+            # restore the system state (LP: #1052605)
+            self.openCache(restore_sources_list_on_fail=True)
 
-        # Just upgrade libc6 first
-        self.cache.clear()
-        libc6_possible = False
-        try:
-            self.cache["libc6"].mark_install()
-            libc6_possible = True
-        except SystemError as e:
-            if "pkgProblemResolver" in str(e):
-                logging.debug("Unable to mark libc6 alone for install.")
-                pass
+            # re-check server mode because we got new packages (it may happen
+            # that the system had no sources.list entries and therefore no
+            # desktop file information)
+            self.serverMode = self.cache.need_server_mode()
+            # do it here as we need to know if we are in server or client mode
+            self.quirks.ensure_recommends_are_installed_on_desktops()
+            # now check if we still have some key packages available/downloadable
+            # after the update - if not something went seriously wrong
+            # (this happend e.g. during the intrepid->jaunty upgrade for some
+            #  users when de.archive.ubuntu.com was overloaded)
+            for pkg in self.config.getlist("Distro","BaseMetaPkgs"):
+                if (pkg not in self.cache or
+                    not self.cache.anyVersionDownloadable(self.cache[pkg])):
+                    # FIXME: we could offer to add default source entries here,
+                    #        but we need to be careful to not duplicate them
+                    #        (i.e. the error here could be something else than
+                    #        missing sources entries but network errors etc)
+                    logging.error("No '%s' available/downloadable after sources.list rewrite+update" % pkg)
+                    if pkg not in self.cache:
+                        logging.error("'%s' was not in the cache" % pkg)
+                    if not self.cache.anyVersionDownloadable(self.cache[pkg]):
+                        logging.error("'%s' was not downloadable" % pkg)
+                    self._view.error(_("Invalid package information"),
+                                     _("After updating your package "
+                                       "information, the essential package '%s' "
+                                       "could not be located. This may be "
+                                       "because you have no official mirrors "
+                                       "listed in your software sources, or "
+                                       "because of excessive load on the mirror "
+                                       "you are using. See /etc/apt/sources.list "
+                                       "for the current list of configured "
+                                       "software sources."
+                                       "\n"
+                                       "In the case of an overloaded mirror, you "
+                                       "may want to try the upgrade again later.")
+                                       % pkg)
+                    if os.path.exists("/usr/bin/apport-bug"):
+                        subprocess.Popen(["apport-bug", "ubuntu-release-upgrader-core"])
+                    else:
+                        logging.error("Missing apport-bug, bug report not "
+                                      "autocreated")
+                    self.abort()
+
+            # calc the dist-upgrade and see if the removals are ok/expected
+            # do the dist-upgrade
+            self._view.updateStatus(_("Calculating the changes"))
+            if not self.askDistUpgrade():
+                self.abort()
+            self._inhibitIdle()
+
+            # fetch the stuff
+            self._view.setStep(Step.FETCH)
+            self._view.updateStatus(_("Fetching"))
+            if not self.doDistUpgradeFetching():
+                self._enableAptCronJob()
+                self.abort()
+
+            # simulate an upgrade
+            self._view.setStep(Step.INSTALL)
+            self._view.updateStatus(_("Upgrading"))
+            if not self.doDistUpgradeSimulation():
+                self._view.error(_("Upgrade infeasible"),
+                                 _("The upgrade could not be completed, there "
+                                   "were errors during the upgrade "
+                                   "process."))
+                self.abort()
+
+            # Just upgrade libc6 first
+            self.cache.clear()
+            libc6_possible = False
+            try:
+                self.cache["libc6"].mark_install()
+                libc6_possible = True
+            except SystemError as e:
+                if "pkgProblemResolver" in str(e):
+                    logging.debug("Unable to mark libc6 alone for install.")
+                    pass
+        except KeyboardInterrupt:
+            self.abort()
 
         if libc6_possible:
             self._view.setStep(Step.INSTALL)
@@ -2151,7 +2154,8 @@ class DistUpgradeController(object):
                     return
                 subprocess.Popen(["gnome-session-inhibit", "--inhibit",
                                   "idle", "--inhibit-only"],
-                                 env=self._user_env)
+                                 env=self._user_env,
+                                 stdout=subprocess.DEVNULL)
                 self._view.information(_("Lock screen disabled"),
                                        _("Your lock screen has been "
                                          "disabled and will remain "

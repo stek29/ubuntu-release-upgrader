@@ -933,6 +933,11 @@ class DistUpgradeQuirks(object):
                     solver.protect(cache[new])
                 solver.clear(cache[old])
                 solver.remove(cache[old])
+        # protect our decision to remove legacy 'python' (as a
+        # dependency of python-minimal, removed above)
+        py = 'python'
+        if py in cache and cache[py].marked_delete:
+                solver.protect(cache[py])
 
         solver.resolve()
 

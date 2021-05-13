@@ -937,7 +937,7 @@ class DistUpgradeQuirks(object):
         # dependency of python-minimal, removed above)
         py = 'python'
         if py in cache and cache[py].marked_delete:
-                solver.protect(cache[py])
+            solver.protect(cache[py])
 
         solver.resolve()
 

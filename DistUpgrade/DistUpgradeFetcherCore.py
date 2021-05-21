@@ -27,12 +27,16 @@ import logging
 import tarfile
 import tempfile
 import shutil
+import socket
 import sys
 import subprocess
 from gettext import gettext as _
 from aptsources.sourceslist import SourcesList
+from urllib.request import urlopen
+from urllib.error import HTTPError
 
 from .utils import get_dist, url_downloadable, country_mirror
+from .DistUpgradeViewText import readline
 
 
 class DistUpgradeFetcherCore(object):
@@ -55,7 +59,28 @@ class DistUpgradeFetcherCore(object):
             sys.stderr.write(msg + "\n")
 
     def showReleaseNotes(self):
-        return True
+        if self.new_dist.releaseNotesURI is not None:
+            uri = self._expandUri(self.new_dist.releaseNotesURI)
+            timeout = socket.getdefaulttimeout()
+            try:
+                socket.setdefaulttimeout(5)
+                release_notes = urlopen(uri)
+                notes = release_notes.read().decode("UTF-8", "replace")
+            except HTTPError:
+                self.error(_("Could not find the release announcement"),
+                           _("The server may be overloaded."))
+                return False
+            except IOError:
+                self.error(_("Could not download the release announcement"),
+                           _("Please check your internet connection."))
+                return False
+        print()
+        print(notes)
+        print(_("Continue [yN] "), end="")
+        res = readline()
+        if res.strip().lower().startswith(_("y")):
+            return True
+        return False
 
     def error(self, summary, message):
         """ dummy implementation for error display, should be overwriten

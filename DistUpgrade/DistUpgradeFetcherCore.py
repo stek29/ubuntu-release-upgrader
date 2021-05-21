@@ -74,6 +74,7 @@ class DistUpgradeFetcherCore(object):
                 self.error(_("Could not download the release announcement"),
                            _("Please check your internet connection."))
                 return False
+            socket.setdefaulttimeout(timeout)
         print()
         print(notes)
         print(_("Continue [yN] "), end="")

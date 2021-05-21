@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: shotwell-0.7.2\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2021-04-28 11:08-0700\n"
+"POT-Creation-Date: 2021-05-21 15:02-0700\n"
 "PO-Revision-Date: 2019-02-10 12:11+0000\n"
 "Last-Translator: Istiak Ferdous <Unknown>\n"
 "Language-Team: Bengali <ankur-bd-l10n@googlegroups.com>\n"
@@ -797,26 +797,57 @@ msgid "Could not download the release notes"
 msgstr "রিলিজ নোট ডাউনলোড করা যায় নি"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:121
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:75
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:176
 msgid "Please check your internet connection."
 msgstr "অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:73
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:70
+#, fuzzy
+msgid "Could not find the release announcement"
+msgstr "রিলিজ নোট পাওয়া যায় নি"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:71
+#, fuzzy
+msgid "The server may be overloaded."
+msgstr "সার্ভারটি মনে হয় ব্যস্ত। "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:74
+#, fuzzy
+msgid "Could not download the release announcement"
+msgstr "রিলিজ নোট ডাউনলোড করা যায় নি"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:80
+#: ../DistUpgrade/DistUpgradeViewText.py:215
+#: ../DistUpgrade/DistUpgradeViewText.py:253
+#: ../DistUpgrade/DistUpgradeViewText.py:261
+msgid "Continue [yN] "
+msgstr "এগিয়ে যাওয়া [yN] "
+
+#. TRANSLATORS: the "y" is "yes"
+#. TRANSLATORS: first letter of a positive (yes) answer
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:82
+#: ../DistUpgrade/DistUpgradeViewText.py:219
+#: ../DistUpgrade/DistUpgradeViewText.py:264
+msgid "y"
+msgstr "হ্যাঁ"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:99
 #, python-format
 msgid "authenticate '%(file)s' against '%(signature)s' "
 msgstr "প্রমাণীকরণ '%(file)s' বিনিময়ে '%(signature)s' "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:99
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:125
 #, python-format
 msgid "extracting '%s'"
 msgstr "'%s' নিষ্কর্ষ করা হচ্ছে"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:120
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:121
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:146
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
 msgid "Could not run the upgrade tool"
 msgstr "আপগ্রেড টুলটি চালানো যায় নি"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:122
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug "
 "using the command 'ubuntu-bug ubuntu-release-upgrader-core'."
@@ -824,62 +855,62 @@ msgstr ""
 "এটি আপগ্রেড টুলের একটি বাগ হতে পারে। অনুগ্রহপূর্বক  'ubuntu-bug ubuntu-release-"
 "upgrader-core' কমান্ডটি ব্যবহার করে বাগটি রিপোর্ট করুন।"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:199
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:225
 msgid "Upgrade tool signature"
 msgstr "আপগ্রেড টুল স্বাক্ষর"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:206
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:232
 msgid "Upgrade tool"
 msgstr "আপগ্রেড টুল"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:240
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:266
 msgid "Failed to fetch"
 msgstr "আনতে ব্যর্থ"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:241
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:267
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr "আপগ্রেডটি আনতে ব্যর্থ। নেটওয়ার্কে কোন সমস্যা থাকতে পারে। "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:245
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:271
 msgid "Authentication failed"
 msgstr "অনমোদন প্রক্রিয়া ব্যর্থ"
 
 # snigdha
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:246
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:272
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
 msgstr ""
 "আপগ্রেড পরীক্ষা করা ব্যর্থ হয়েছে। নেটওয়ার্ক বা সার্ভারে কোনো সমস্যা হতে পারে। "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:251
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:277
 msgid "Failed to extract"
 msgstr "এক্সট্রাক্ট করতে ব্যর্থ"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:252
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:278
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
 msgstr "আপগ্রেডটি এক্সট্রাক্ট করতে ব্যর্থ। নেটওয়ার্ক অথবা সার্ভারে সমস্যা থাকতে পারে। "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:257
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:283
 msgid "Verification failed"
 msgstr "যাচাই ব্যর্থ"
 
 # snigdha
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:258
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:284
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
 msgstr ""
 "আপগ্রেড পরীক্ষা করা ব্যর্থ হয়েছে। নেটওয়ার্ক বা সার্ভারে কোনো সমস্যা থাকতে পারে। "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:272
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:278
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:298
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:304
 msgid "Can not run the upgrade"
 msgstr "আপগ্রেড চালানো যায় নি"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:273
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:299
 msgid ""
 "This usually is caused by a system where /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
@@ -887,7 +918,7 @@ msgstr ""
 "এটি সাধারণত সিস্টেম দিয়ে সংঘটিত হয়েছে যেখানে /tmp mounted noexec। অনুগ্রহ করে "
 "noexec ছাড়া পুনরায় মাউন্ট করুন এবং উন্নীত করণ আবার চালান।"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:279
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:305
 #, python-format
 msgid "The error message is '%s'."
 msgstr "ত্রুটি বার্তাটি হল '%s'।"
@@ -1667,21 +1698,8 @@ msgstr "চালিয়ে যেতে অনুগ্রহ করে [ENTER] 
 
 #: ../DistUpgrade/DistUpgradeViewText.py:215
 #: ../DistUpgrade/DistUpgradeViewText.py:253
-#: ../DistUpgrade/DistUpgradeViewText.py:261
-msgid "Continue [yN] "
-msgstr "এগিয়ে যাওয়া [yN] "
-
-#: ../DistUpgrade/DistUpgradeViewText.py:215
-#: ../DistUpgrade/DistUpgradeViewText.py:253
 msgid "Details [d]"
 msgstr "বিস্তারিত [d]"
-
-#. TRANSLATORS: the "y" is "yes"
-#. TRANSLATORS: first letter of a positive (yes) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:219
-#: ../DistUpgrade/DistUpgradeViewText.py:264
-msgid "y"
-msgstr "হ্যাঁ"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk(5)\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2021-04-28 11:08-0700\n"
+"POT-Creation-Date: 2021-05-21 15:02-0700\n"
 "PO-Revision-Date: 2019-07-12 15:58+0000\n"
 "Last-Translator: Юрій Олексійчук <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -863,26 +863,57 @@ msgid "Could not download the release notes"
 msgstr "Не вдалося завантажити примітки випуску."
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:121
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:75
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:176
 msgid "Please check your internet connection."
 msgstr "Будь ласка, перевірте ваше з'єднання з Інтернетом."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:73
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:70
+#, fuzzy
+msgid "Could not find the release announcement"
+msgstr "Не вдалося знайти примітки випуску."
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:71
+#, fuzzy
+msgid "The server may be overloaded."
+msgstr "Сервер може бути перенавантажений. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:74
+#, fuzzy
+msgid "Could not download the release announcement"
+msgstr "Не вдалося завантажити примітки випуску."
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:80
+#: ../DistUpgrade/DistUpgradeViewText.py:215
+#: ../DistUpgrade/DistUpgradeViewText.py:253
+#: ../DistUpgrade/DistUpgradeViewText.py:261
+msgid "Continue [yN] "
+msgstr "Продовжити [yN] "
+
+#. TRANSLATORS: the "y" is "yes"
+#. TRANSLATORS: first letter of a positive (yes) answer
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:82
+#: ../DistUpgrade/DistUpgradeViewText.py:219
+#: ../DistUpgrade/DistUpgradeViewText.py:264
+msgid "y"
+msgstr "y"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:99
 #, python-format
 msgid "authenticate '%(file)s' against '%(signature)s' "
 msgstr "автентифікувати '%(file)s' замість '%(signature)s' "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:99
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:125
 #, python-format
 msgid "extracting '%s'"
 msgstr "видобування '%s'"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:120
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:121
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:146
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
 msgid "Could not run the upgrade tool"
 msgstr "Неможливо провести апргрейд системи"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:122
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug "
 "using the command 'ubuntu-bug ubuntu-release-upgrader-core'."
@@ -891,28 +922,28 @@ msgstr ""
 "про цю помилку за допомогою команди 'ubuntu-bug ubuntu-release-upgrader-"
 "core'."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:199
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:225
 msgid "Upgrade tool signature"
 msgstr "Підпис інструменту оновлення"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:206
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:232
 msgid "Upgrade tool"
 msgstr "Інструмент оновлення"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:240
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:266
 msgid "Failed to fetch"
 msgstr "Не вдалося отримати"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:241
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:267
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr ""
 "Не вдалося отримати оновлення. Це може бути викликано проблемою у мережі. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:245
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:271
 msgid "Authentication failed"
 msgstr "Помилка аутентифікації"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:246
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:272
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -920,11 +951,11 @@ msgstr ""
 "Автентифікація оновлення зазнала краху. Це може бути викликано проблемою з "
 "мережею або сервером. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:251
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:277
 msgid "Failed to extract"
 msgstr "Не вдалося розпакувати"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:252
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:278
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -932,11 +963,11 @@ msgstr ""
 "Не вдалося розпакувати оновлення. Можливо, виникла проблема в мережі або на "
 "сервері. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:257
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:283
 msgid "Verification failed"
 msgstr "Перевірка не вдала"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:258
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:284
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
@@ -944,12 +975,12 @@ msgstr ""
 "Не вдалося перевірити наявність оновлень. Можливо, виникла проблема в мережі "
 "або на сервері. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:272
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:278
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:298
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:304
 msgid "Can not run the upgrade"
 msgstr "Не вдається почати оновлення"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:273
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:299
 msgid ""
 "This usually is caused by a system where /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
@@ -957,7 +988,7 @@ msgstr ""
 "Це, зазвичай, виникає в системах з /tmp змонтованому з noexec. Перемонтуйте, "
 "будь-ласка, без noexec та виконайте оновлення знов."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:279
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:305
 #, python-format
 msgid "The error message is '%s'."
 msgstr "Повідомлення про помилку: '%s'."
@@ -1753,21 +1784,8 @@ msgstr "Щоб продовжити натисніть [ENTER]"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:215
 #: ../DistUpgrade/DistUpgradeViewText.py:253
-#: ../DistUpgrade/DistUpgradeViewText.py:261
-msgid "Continue [yN] "
-msgstr "Продовжити [yN] "
-
-#: ../DistUpgrade/DistUpgradeViewText.py:215
-#: ../DistUpgrade/DistUpgradeViewText.py:253
 msgid "Details [d]"
 msgstr "Подробиці [d]"
-
-#. TRANSLATORS: the "y" is "yes"
-#. TRANSLATORS: first letter of a positive (yes) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:219
-#: ../DistUpgrade/DistUpgradeViewText.py:264
-msgid "y"
-msgstr "y"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer

@@ -72,6 +72,10 @@ class TestDistUpgradeFetcherCore(DistUpgradeFetcherCore):
         " do not actually run the upgrader here "
         return True
 
+    def showReleaseNotes(self):
+        " do not display the release notes here "
+        return True
+
 
 class TestDistUpgradeFetcherCoreTestCase(unittest.TestCase):
     testdir = os.path.join(CURDIR, "data-sources-list-test/")

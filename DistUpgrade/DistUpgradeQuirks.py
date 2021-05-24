@@ -450,6 +450,19 @@ class DistUpgradeQuirks(object):
             return False
         return True
 
+    def _readDMIVendor(self):
+        """
+        read /sys/class/dmi/id/sys_vendor in case there are
+        system specific issues with upgrading e.g LP: #1928434
+        """
+        logging.debug("checking for system vendor")
+        if not os.path.exists("/sys/class/dmi/id/sys_vendor"):
+            logging.error("cannot open /sys/class/dmi/id/sys_vendor")
+            return ''
+        with open("/sys/class/dmi/id/sys_vendor") as f:
+            vendor = f.read()
+        return vendor
+
     def _stopApparmor(self):
         """ /etc/init.d/apparmor stop (see bug #559433)"""
         if os.path.exists("/etc/init.d/apparmor"):

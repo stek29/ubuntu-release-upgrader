@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2021-05-11 15:02-0700\n"
+"POT-Creation-Date: 2021-05-26 11:48-0700\n"
 "PO-Revision-Date: 2013-05-22 11:00+0000\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <nn@li.org>\n"
@@ -761,53 +761,84 @@ msgid "Could not download the release notes"
 msgstr "Klarte ikkje å lasta ned versjonsnotata"
 
 #: ../DistUpgrade/DistUpgradeFetcher.py:121
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:75
 #: ../DistUpgrade/DistUpgradeFetcherKDE.py:176
 msgid "Please check your internet connection."
 msgstr "Sjekk internettilkoplinga di."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:73
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:70
+#, fuzzy
+msgid "Could not find the release announcement"
+msgstr "Klarte ikkje å finna versjonsnotata"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:71
+#, fuzzy
+msgid "The server may be overloaded."
+msgstr "Tenaren kan vera overbelasta. "
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:74
+#, fuzzy
+msgid "Could not download the release announcement"
+msgstr "Klarte ikkje å lasta ned versjonsnotata"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:80
+#: ../DistUpgrade/DistUpgradeViewText.py:215
+#: ../DistUpgrade/DistUpgradeViewText.py:253
+#: ../DistUpgrade/DistUpgradeViewText.py:261
+msgid "Continue [yN] "
+msgstr "Hald fram [jN] "
+
+#. TRANSLATORS: the "y" is "yes"
+#. TRANSLATORS: first letter of a positive (yes) answer
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:82
+#: ../DistUpgrade/DistUpgradeViewText.py:219
+#: ../DistUpgrade/DistUpgradeViewText.py:264
+msgid "y"
+msgstr "j"
+
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:99
 #, python-format
 msgid "authenticate '%(file)s' against '%(signature)s' "
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:99
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:125
 #, python-format
 msgid "extracting '%s'"
 msgstr "pakkar ut «%s»"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:120
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:121
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:146
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:147
 msgid "Could not run the upgrade tool"
 msgstr "Klarte ikkje å køyra oppgraderingsverktøyet"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:122
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:148
 msgid ""
 "This is most likely a bug in the upgrade tool. Please report it as a bug "
 "using the command 'ubuntu-bug ubuntu-release-upgrader-core'."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:199
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:225
 msgid "Upgrade tool signature"
 msgstr "Signaturen til oppgraderingsvertøyet"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:206
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:232
 msgid "Upgrade tool"
 msgstr "Oppgraderingsvertøy"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:240
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:266
 msgid "Failed to fetch"
 msgstr "Klarte ikkje å henta"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:241
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:267
 msgid "Fetching the upgrade failed. There may be a network problem. "
 msgstr ""
 "Klarte ikkje å henta oppgraderinga. Det kan vera eit nettverksproblem. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:245
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:271
 msgid "Authentication failed"
 msgstr "Å stadfesta identiteten mislukkast"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:246
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:272
 msgid ""
 "Authenticating the upgrade failed. There may be a problem with the network "
 "or with the server. "
@@ -815,11 +846,11 @@ msgstr ""
 "Klarte ikkje å stadfesta identiteten til oppgraderinga. Det kan vere feil "
 "med nettverket eller tenaren. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:251
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:277
 msgid "Failed to extract"
 msgstr "Mislukkast i å pakka ut"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:252
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:278
 msgid ""
 "Extracting the upgrade failed. There may be a problem with the network or "
 "with the server. "
@@ -827,11 +858,11 @@ msgstr ""
 "Klarte ikkje å pakka ut oppgraderinga. Det kan vera eit problem med "
 "netverket eller tenaren. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:257
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:283
 msgid "Verification failed"
 msgstr "Verifiseringsfeil"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:258
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:284
 msgid ""
 "Verifying the upgrade failed.  There may be a problem with the network or "
 "with the server. "
@@ -839,12 +870,12 @@ msgstr ""
 "Å verifisera oppgraderinga mislukkast. Det kan vera ein feil med nettverket "
 "eller tenaren. "
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:272
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:278
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:298
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:304
 msgid "Can not run the upgrade"
 msgstr "Klarte ikkje å køyra oppgradering"
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:273
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:299
 msgid ""
 "This usually is caused by a system where /tmp is mounted noexec. Please "
 "remount without noexec and run the upgrade again."
@@ -852,7 +883,7 @@ msgstr ""
 "Dette skjer vanlegvis i system der mappa /tmp er montert med køyreløyve. "
 "Monter på nytt utan køyreløyve og køyr oppgraderinga på nytt."
 
-#: ../DistUpgrade/DistUpgradeFetcherCore.py:279
+#: ../DistUpgrade/DistUpgradeFetcherCore.py:305
 #, python-format
 msgid "The error message is '%s'."
 msgstr "Feilmeldinga er «%s»."
@@ -905,11 +936,11 @@ msgstr "Sett '%s' i stasjonen '%s'"
 msgid "Media Change"
 msgstr "Medieendring"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:230
+#: ../DistUpgrade/DistUpgradeQuirks.py:231
 msgid "Your graphics hardware may not be fully supported in Ubuntu 14.04."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:232
+#: ../DistUpgrade/DistUpgradeQuirks.py:233
 msgid ""
 "Running the 'unity' desktop environment is not fully supported by your "
 "graphics hardware. You will maybe end up in a very slow environment after "
@@ -919,11 +950,11 @@ msgid ""
 "upgrade?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:256
+#: ../DistUpgrade/DistUpgradeQuirks.py:257
 msgid "Your graphics hardware may not be fully supported in Ubuntu 12.04 LTS."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:258
+#: ../DistUpgrade/DistUpgradeQuirks.py:259
 msgid ""
 "The support in Ubuntu 12.04 LTS for your Intel graphics hardware is limited "
 "and you may encounter problems after the upgrade. For more information see "
@@ -931,7 +962,7 @@ msgid ""
 "continue with the upgrade?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:278
+#: ../DistUpgrade/DistUpgradeQuirks.py:279
 msgid ""
 "Upgrading may reduce desktop effects, and performance in games and other "
 "graphically intensive programs."
@@ -939,7 +970,7 @@ msgstr ""
 "Å oppgradera kan redusera skrivebordseffekter, samt ytinga i spel og andre "
 "grafikkintensive program."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:282
+#: ../DistUpgrade/DistUpgradeQuirks.py:283
 msgid ""
 "This computer is currently using the AMD 'fglrx' graphics driver. No version "
 "of this driver is available that works with your hardware in Ubuntu 10.04 "
@@ -950,11 +981,11 @@ msgstr ""
 "Datamaskina brukar AMD «fglrx»-grafikkdrivaren. Ingen tilgjengelege "
 "versjonar av denne drivaren verkar med maskinvaren din i Ubuntu 10.04 LTS."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:321
+#: ../DistUpgrade/DistUpgradeQuirks.py:322
 msgid "Sorry, no more upgrades for this system"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:322
+#: ../DistUpgrade/DistUpgradeQuirks.py:323
 #, python-format
 msgid ""
 "There will not be any further Ubuntu releases for this system's 'i386' "
@@ -963,11 +994,11 @@ msgid ""
 "Updates for Ubuntu %s will continue until %s."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:337
+#: ../DistUpgrade/DistUpgradeQuirks.py:338
 msgid "No ARMv6 CPU"
 msgstr "Ingen ARMv6-prosessor"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:338
+#: ../DistUpgrade/DistUpgradeQuirks.py:339
 msgid ""
 "Your system uses an ARM CPU that is older than the ARMv6 architecture. All "
 "packages in karmic were built with optimizations requiring ARMv6 as the "
@@ -978,12 +1009,12 @@ msgstr ""
 "pakkane i karmic krev minimum ARMv6. Det er ikkje mogleg å oppgradera "
 "systemet ditt til den nyaste Ubuntu-utgjevinga med den noverande maskinvaren."
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:358
+#: ../DistUpgrade/DistUpgradeQuirks.py:359
 msgid ""
 "Sorry, this storage driver is not supported in kernels for newer releases"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:360
+#: ../DistUpgrade/DistUpgradeQuirks.py:361
 #, python-format
 msgid ""
 "There will not be any further Ubuntu releases that provide kernel support "
@@ -993,11 +1024,25 @@ msgid ""
 "driver, remove the directory %s and try again."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:380
+#: ../DistUpgrade/DistUpgradeQuirks.py:383
+#, fuzzy
+msgid "An upgrade is not possible at this time"
+msgstr "Å oppgradere til ny utgåve er ikkje mogleg akkurat no"
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:384
+msgid ""
+"Due to a bug in shim, LP: #1928434, upgrades are not currently safe for your "
+"hardware.\n"
+"\n"
+"Once that bug has been resolved you will be able to upgrade to the next "
+"release of Ubuntu."
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:402
 msgid "No init available"
 msgstr "Ingen oppstartsprogram (init) er tilgjengelege"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:381
+#: ../DistUpgrade/DistUpgradeQuirks.py:403
 msgid ""
 "Your system appears to be a virtualised environment without an init daemon, "
 "e.g. Linux-VServer. Ubuntu 10.04 LTS cannot function within this type of "
@@ -1013,11 +1058,11 @@ msgstr ""
 "\n"
 "Er du sikker på at du vil halda fram?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:422
+#: ../DistUpgrade/DistUpgradeQuirks.py:444
 msgid "The Robot Operating System (ROS) is installed"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:423
+#: ../DistUpgrade/DistUpgradeQuirks.py:445
 msgid ""
 "It appears that ROS is currently installed. Each ROS release is very strict "
 "about the versions of Ubuntu it supports, and Ubuntu upgrades can fail if "
@@ -1034,12 +1079,12 @@ msgid ""
 "Are you sure you want to continue?"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:541
+#: ../DistUpgrade/DistUpgradeQuirks.py:576
 #, fuzzy
 msgid "Connection to the Snap Store failed"
 msgstr "Klarte ikkje kopla til Snap Store"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:542
+#: ../DistUpgrade/DistUpgradeQuirks.py:577
 msgid ""
 "You have the package lxd installed but your system is unable to reach the "
 "Snap Store. lxd is now provided via a snap and the release upgrade will fail "
@@ -1049,11 +1094,11 @@ msgid ""
 "may want to configure a Snap Store proxy."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:557
+#: ../DistUpgrade/DistUpgradeQuirks.py:592
 msgid "Connection to Snap Store failed"
 msgstr "Klarte ikkje kopla til Snap Store"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:558
+#: ../DistUpgrade/DistUpgradeQuirks.py:593
 msgid ""
 "Your system does not have a connection to the Snap Store. For the best "
 "upgrade experience make sure that your system can connect to api.snapcraft."
@@ -1064,11 +1109,11 @@ msgstr ""
 "oppgradering bør du stadfesta at systemet kan kopla til api.snapcraft.io.\n"
 "Vil du likevel halda fram med oppgraderinga?"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:567
+#: ../DistUpgrade/DistUpgradeQuirks.py:602
 msgid "Outdated snapd package"
 msgstr "Utdatert snapd-pakke"
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:568
+#: ../DistUpgrade/DistUpgradeQuirks.py:603
 msgid ""
 "Your system does not have the latest version of snapd. Please update the "
 "version of snapd on your system to improve the upgrade experience.\n"
@@ -1080,34 +1125,34 @@ msgstr ""
 
 #. now perform direct API calls to the store, requesting size
 #. information for each of the snaps needing installation
-#: ../DistUpgrade/DistUpgradeQuirks.py:591
+#: ../DistUpgrade/DistUpgradeQuirks.py:626
 msgid "Calculating snap size requirements"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:622
+#: ../DistUpgrade/DistUpgradeQuirks.py:657
 msgid "Processing snap replacements"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:628
+#: ../DistUpgrade/DistUpgradeQuirks.py:663
 #, python-format
 msgid "refreshing snap %s"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:632
+#: ../DistUpgrade/DistUpgradeQuirks.py:667
 #, python-format
 msgid "removing snap %s"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:635
+#: ../DistUpgrade/DistUpgradeQuirks.py:670
 #, python-format
 msgid "installing snap %s"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:664
+#: ../DistUpgrade/DistUpgradeQuirks.py:699
 msgid "PAE not enabled"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:665
+#: ../DistUpgrade/DistUpgradeQuirks.py:700
 msgid ""
 "Your system uses a CPU that does not have PAE enabled. Ubuntu only supports "
 "non-PAE systems up to Ubuntu 12.04. To upgrade to a later version of Ubuntu, "
@@ -1115,7 +1160,7 @@ msgid ""
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:1037
+#: ../DistUpgrade/DistUpgradeQuirks.py:1072
 msgid "Checking for installed snaps"
 msgstr "Sjekkar installerte snap-pakkar"
 
@@ -1617,21 +1662,8 @@ msgstr "Trykk Enter for å halda fram"
 
 #: ../DistUpgrade/DistUpgradeViewText.py:215
 #: ../DistUpgrade/DistUpgradeViewText.py:253
-#: ../DistUpgrade/DistUpgradeViewText.py:261
-msgid "Continue [yN] "
-msgstr "Hald fram [jN] "
-
-#: ../DistUpgrade/DistUpgradeViewText.py:215
-#: ../DistUpgrade/DistUpgradeViewText.py:253
 msgid "Details [d]"
 msgstr "Detaljar [d]"
-
-#. TRANSLATORS: the "y" is "yes"
-#. TRANSLATORS: first letter of a positive (yes) answer
-#: ../DistUpgrade/DistUpgradeViewText.py:219
-#: ../DistUpgrade/DistUpgradeViewText.py:264
-msgid "y"
-msgstr "j"
 
 #. TRANSLATORS: the "n" is "no"
 #. TRANSLATORS: first letter of a negative (no) answer

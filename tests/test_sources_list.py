@@ -483,7 +483,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted univers
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
         for scheme in ["http"]:
-            entry = "deb %s://archive.ubuntu.com/ubuntu/ precise main universe restricted multiverse" % scheme
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ focal main universe restricted multiverse" % scheme
             self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)),
                             "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
@@ -530,17 +530,17 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted univers
                            os.path.join(self.testdir, "sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        d.fromDist = "oneiric"
-        d.toDist = "precise"
+        d.fromDist = "eoan"
+        d.toDist = "focal"
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
         self._verifySources("""
 # main repo
-deb http://us.archive.ubuntu.com/ubuntu precise main restricted multiverse universe
-deb-src http://us.archive.ubuntu.com/ubuntu precise main restricted multiverse
+deb http://us.archive.ubuntu.com/ubuntu focal main restricted multiverse universe
+deb-src http://us.archive.ubuntu.com/ubuntu focal main restricted multiverse
 
-deb http://us.archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+deb http://us.archive.ubuntu.com/ubuntu focal-security main restricted universe multiverse
 """)
 
     @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
@@ -582,18 +582,18 @@ deb https://mirrors.kernel.org/ubuntu bionic-security main restricted universe m
                            os.path.join(self.testdir, "sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        d.fromDist = "oneiric"
-        d.toDist = "precise"
+        d.fromDist = "eoan"
+        d.toDist = "focal"
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
         if ARCH in ('amd64', 'i386'):
             self._verifySources("""
 # main repo
-deb http://archive.ubuntu.com/ubuntu precise main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu precise main restricted multiverse
+deb http://archive.ubuntu.com/ubuntu focal main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu focal main restricted multiverse
 
-deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu focal-security main restricted universe multiverse
 """)
         else:
             self._verifySources("""

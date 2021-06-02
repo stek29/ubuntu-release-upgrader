@@ -598,10 +598,10 @@ deb http://archive.ubuntu.com/ubuntu focal-security main restricted universe mul
         else:
             self._verifySources("""
 # main repo
-deb http://ports.ubuntu.com/ubuntu-ports/ precise main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu precise main restricted multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu focal main restricted multiverse
 
-deb http://ports.ubuntu.com/ubuntu-ports/ precise-security main restricted universe multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted universe multiverse
 """)
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")

@@ -587,6 +587,8 @@ class DistUpgradeQuirks(object):
         elif 'error: access denied' in connected[1]:
             res = False
             logging.error("Not running as root!")
+        else:
+            logging.error("Unhandled error connecting to the snap store.")
         if not res:
             self.controller.abort()
 

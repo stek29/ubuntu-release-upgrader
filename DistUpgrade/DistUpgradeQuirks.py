@@ -372,10 +372,10 @@ class DistUpgradeQuirks(object):
         Check to see if the system vendor is Apple and if so do not allow the
         system to be upgraded. LP: #1928434
         """
+        if not os.path.exists("/sys/firmware/efi"):
+            return
         vendor = self._readDMIVendor()
-        if vendor == '':
-            logging.error("System vendor is unknown")
-        elif vendor.startswith('Apple Inc.') or \
+        if vendor.startswith('Apple Inc.') or \
                 vendor.startswith('Apple Computer, Inc.'):
             logging.error("System vendor is Apple")
         else:

@@ -3,11 +3,11 @@
 
 from __future__ import print_function
 
+import apt_pkg
+import distro_info
 import os
-
 import shutil
 import subprocess
-import apt_pkg
 import unittest
 from DistUpgrade.DistUpgradeController import (
     DistUpgradeController,
@@ -31,6 +31,9 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 dpkg = subprocess.Popen(['dpkg', '--print-architecture'],
                         stdout=subprocess.PIPE)
 ARCH = dpkg.communicate()[0].decode().strip()
+di = distro_info.UbuntuDistroInfo()
+LTSES = [supported for supported in di.supported()
+         if di.is_lts(supported)]
 
 
 class TestComponentOrdering(unittest.TestCase):
@@ -482,8 +485,10 @@ deb http://ports.ubuntu.com/ubuntu-ports/ hardy-security main restricted univers
         from aptsources.sourceslist import SourceEntry
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
+        to_dist = LTSES[-2]
         for scheme in ["http"]:
-            entry = "deb %s://archive.ubuntu.com/ubuntu/ focal main universe restricted multiverse" % scheme
+            entry = "deb %s://archive.ubuntu.com/ubuntu/ %s main universe restricted multiverse" % \
+                    (scheme, to_dist)
             self.assertTrue(d._sourcesListEntryDownloadable(SourceEntry(entry)),
                             "entry '%s' not downloadable" % entry)
             entry = "deb %s://archive.ubuntu.com/ubuntu/ warty main universe restricted multiverse" % scheme
@@ -523,25 +528,33 @@ deb http://old-releases.ubuntu.com/ubuntu hoary-security main restricted univers
         # Use us.archive.ubuntu.com, because it is available in Canonical's
         # data center, unlike most mirrors.  This lets this test pass when
         # when run in their Jenkins test environment.
+        to_dist = LTSES[-2]
+        from_dist = di.all[di.all.index(to_dist) - 1]
         os.environ["LANG"] = "en_US.UTF-8"
-        shutil.copy(os.path.join(self.testdir, "sources.list.EOL2Supported"),
-                    os.path.join(self.testdir, "sources.list"))
+        with open(os.path.join(self.testdir, "sources.list"), "w") as f:
+            f.write("""
+# main repo
+deb http://old-releases.ubuntu.com/ubuntu %s main restricted multiverse universe
+deb-src http://old-releases.ubuntu.com/ubuntu %s main restricted multiverse
+
+deb http://old-releases.ubuntu.com/ubuntu %s-security main restricted
+""" % (from_dist, from_dist, from_dist))
         apt_pkg.config.set("Dir::Etc::sourceparts",
                            os.path.join(self.testdir, "sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        d.fromDist = "eoan"
-        d.toDist = "focal"
+        d.fromDist = from_dist
+        d.toDist = to_dist
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
         self._verifySources("""
 # main repo
-deb http://us.archive.ubuntu.com/ubuntu focal main restricted multiverse universe
-deb-src http://us.archive.ubuntu.com/ubuntu focal main restricted multiverse
+deb http://us.archive.ubuntu.com/ubuntu %s main restricted multiverse universe
+deb-src http://us.archive.ubuntu.com/ubuntu %s main restricted multiverse
 
-deb http://us.archive.ubuntu.com/ubuntu focal-security main restricted universe multiverse
-""")
+deb http://us.archive.ubuntu.com/ubuntu %s-security main restricted universe multiverse
+""" % (to_dist, to_dist, to_dist))
 
     @unittest.skipUnless(ARCH in ('amd64', 'i386'), "ports are not mirrored")
     @unittest.skipUnless(url_downloadable(
@@ -573,36 +586,44 @@ deb https://mirrors.kernel.org/ubuntu bionic-security main restricted universe m
 
     def testEOL2SupportedUpgrade(self):
         " test upgrade from a EOL release to a supported release "
+        to_dist = LTSES[-2]
+        from_dist = di.all[di.all.index(to_dist) - 1]
         os.environ["LANG"] = "C"
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        shutil.copy(os.path.join(self.testdir, "sources.list.EOL2Supported"),
-                    os.path.join(self.testdir, "sources.list"))
+        with open(os.path.join(self.testdir, "sources.list"), "w") as f:
+            f.write("""
+# main repo
+deb http://old-releases.ubuntu.com/ubuntu %s main restricted multiverse universe
+deb-src http://old-releases.ubuntu.com/ubuntu %s main restricted multiverse
+
+deb http://old-releases.ubuntu.com/ubuntu %s-security main restricted
+""" % (from_dist, from_dist, from_dist))
         apt_pkg.config.set("Dir::Etc::sourceparts",
                            os.path.join(self.testdir, "sources.list.d"))
         v = DistUpgradeViewNonInteractive()
         d = DistUpgradeController(v, datadir=self.testdir)
-        d.fromDist = "eoan"
-        d.toDist = "focal"
+        d.fromDist = from_dist
+        d.toDist = to_dist
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
         if ARCH in ('amd64', 'i386'):
             self._verifySources("""
 # main repo
-deb http://archive.ubuntu.com/ubuntu focal main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu focal main restricted multiverse
+deb http://archive.ubuntu.com/ubuntu %s main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu %s main restricted multiverse
 
-deb http://archive.ubuntu.com/ubuntu focal-security main restricted universe multiverse
-""")
+deb http://archive.ubuntu.com/ubuntu %s-security main restricted universe multiverse
+""" % (to_dist, to_dist, to_dist))
         else:
             self._verifySources("""
 # main repo
-deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu focal main restricted multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ %s main restricted multiverse universe
+deb-src http://archive.ubuntu.com/ubuntu %s main restricted multiverse
 
-deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted universe multiverse
-""")
+deb http://ports.ubuntu.com/ubuntu-ports/ %s-security main restricted universe multiverse
+""" % (to_dist, to_dist, to_dist))
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")
     def test_partner_update(self, mock_sourcesListEntryDownloadable):

@@ -660,10 +660,6 @@ class MyCache(apt.Cache):
                 raise SystemError(_("Broken packages after upgrade: %s") % ", ".join(p.name for p in self if p.is_inst_broken or p.is_now_broken))
 
         except SystemError as e:
-            # this should go into a finally: line, see below for the
-            # rationale why it doesn't
-            lock.release()
-            t.join()
             # the most likely problem is the 3rd party pkgs so don't address
             # foreignPkgs and devRelease being True
             details =  _("An unresolvable problem occurred while "
@@ -703,12 +699,10 @@ class MyCache(apt.Cache):
             # the withResolverLog decorator
             self._startAptResolverLog()
             return False
-        # would be nice to be able to use finally: here, but we need
-        # to run on python2.4 too
-        #finally:
-        # wait for the gui-update thread to exit
-        lock.release()
-        t.join()
+        finally:
+            # wait for the gui-update thread to exit
+            lock.release()
+            t.join()
 
         # check the trust of the packages that are going to change
         untrusted = []

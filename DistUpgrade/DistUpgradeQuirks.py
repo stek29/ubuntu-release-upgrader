@@ -163,7 +163,7 @@ class DistUpgradeQuirks(object):
     def PreDistUpgradeCache(self):
         """ run right before calculating the dist-upgrade """
         logging.debug("running Quirks.PreDistUpgradeCache")
-        self._install_python_is_python2()
+        # self._install_python_is_python2()
 
     # individual quirks handler that run *after* the dist-upgrade was
     # calculated in the cache
@@ -929,8 +929,34 @@ class DistUpgradeQuirks(object):
         for old, new in replacements:
             if old in cache and cache[old].is_installed:
                 if new:
-                    solver.clear(cache[new])
-                    solver.protect(cache[new])
+                    if new not in cache:
+                        old_inst = [old for old, new in replacements if old
+                                    in cache and cache[old].is_installed]
+                        summary = _("universe component not enabled")
+                        msg = _("You have the package %s installed which "
+                                "is a python2 package. python2 has been "
+                                "deprecated in Ubuntu 20.04 LTS and is now "
+                                "available from the universe component of "
+                                "the Ubuntu archive. To ensure any existing "
+                                "third party code you have installed "
+                                "continues to work the release upgrade "
+                                "process would install %s for you. However, "
+                                "the universe component of the archive is not "
+                                "enabled on this system. For the upgrade "
+                                "process to proceed you should either enable "
+                                "the universe component in "
+                                "/etc/apt/sources.list or remove %s"
+                                % (old, new, ', '.join(old_inst))
+                                )
+                        logging.info(summary)
+                        # necessary to make the error text available again on
+                        # stdout for the text frontend
+                        cache._stopAptResolverLog()
+                        self._view.error(summary, msg)
+                        self.controller.abort()
+                    else:
+                        solver.clear(cache[new])
+                        solver.protect(cache[new])
                 solver.clear(cache[old])
                 solver.remove(cache[old])
         # protect our decision to remove legacy 'python' (as a

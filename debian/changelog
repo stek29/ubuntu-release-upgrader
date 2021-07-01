@@ -1,3 +1,13 @@
+ubuntu-release-upgrader (1:20.04.34) UNRELEASED; urgency=medium
+
+  * DistUpgrade/DistUpgradeQuirks.py: If universe is not enabled and the
+    upgrader is trying to transition from python to python2 produce an error
+    message and exit the upgrade process. (LP: #1924604)
+  * DistUpgrade/DistUpgradeCache.py: switch to using finally in distUpgrade so
+    that error messages in the above quirk will be visible.
+
+ -- Brian Murray <brian@ubuntu.com>  Wed, 30 Jun 2021 17:08:44 -0700
+
 ubuntu-release-upgrader (1:20.04.33) focal; urgency=medium
 
   * DistUpgrade/DistUpgradeController.py: restore sources.list where possible

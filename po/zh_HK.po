@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: update-manager 0.41.1\n"
 "Report-Msgid-Bugs-To: sebastian.heinlein@web.de\n"
-"POT-Creation-Date: 2021-05-13 16:32-0700\n"
+"POT-Creation-Date: 2021-07-01 11:51-0700\n"
 "PO-Revision-Date: 2019-06-18 17:55+0000\n"
 "Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: Chinese (Hong Kong) <zh_HK@li.org>\n"
@@ -105,14 +105,14 @@ msgstr "損毀的套件"
 
 #. the most likely problem is the 3rd party pkgs so don't address
 #. foreignPkgs and devRelease being True
-#: ../DistUpgrade/DistUpgradeCache.py:669
+#: ../DistUpgrade/DistUpgradeCache.py:665
 msgid ""
 "An unresolvable problem occurred while calculating the upgrade.\n"
 "\n"
 " "
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:672
+#: ../DistUpgrade/DistUpgradeCache.py:668
 msgid ""
 "This was likely caused by:\n"
 " * Unofficial software packages not provided by Ubuntu\n"
@@ -122,7 +122,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:680
+#: ../DistUpgrade/DistUpgradeCache.py:676
 msgid ""
 "This was caused by:\n"
 " * Upgrading to a pre-release version of Ubuntu\n"
@@ -130,32 +130,32 @@ msgid ""
 "please try again later.\n"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:687
+#: ../DistUpgrade/DistUpgradeCache.py:683
 msgid "This is most likely a transient problem, please try again later."
 msgstr "這通常只是暫時性的問題。請稍候再試。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:690
+#: ../DistUpgrade/DistUpgradeCache.py:686
 msgid ""
 "If none of this applies, then please report this bug using the command "
 "'ubuntu-bug ubuntu-release-upgrader-core' in a terminal. "
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:692
+#: ../DistUpgrade/DistUpgradeCache.py:688
 msgid ""
 "If you want to investigate this yourself the log files in '/var/log/dist-"
 "upgrade' will contain details about the upgrade. Specifically, look at 'main."
 "log' and 'apt.log'."
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeCache.py:698
+#: ../DistUpgrade/DistUpgradeCache.py:694
 msgid "Could not calculate the upgrade"
 msgstr "無法為升級進行推算"
 
-#: ../DistUpgrade/DistUpgradeCache.py:757
+#: ../DistUpgrade/DistUpgradeCache.py:751
 msgid "Error authenticating some packages"
 msgstr "核證一些套件時發生錯誤"
 
-#: ../DistUpgrade/DistUpgradeCache.py:758
+#: ../DistUpgrade/DistUpgradeCache.py:752
 msgid ""
 "It was not possible to authenticate some packages. This may be a transient "
 "network problem. You may want to try again later. See below for a list of "
@@ -164,28 +164,28 @@ msgstr ""
 "系統無法核證一些套件。這可能是由於短暫的網絡問題；您可以稍後再試。以下為未能"
 "核證的套件。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:779
+#: ../DistUpgrade/DistUpgradeCache.py:773
 #, python-format
 msgid ""
 "The package '%s' is marked for removal but it is in the removal blacklist."
 msgstr "套件「%s」標記作移除，但它在移除黑名單中。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:785
+#: ../DistUpgrade/DistUpgradeCache.py:779
 #, python-format
 msgid "The essential package '%s' is marked for removal."
 msgstr "必備套件「%s」被標記作移除。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:794
+#: ../DistUpgrade/DistUpgradeCache.py:788
 #, python-format
 msgid "Trying to install blacklisted version '%s'"
 msgstr "正在嘗試安裝已列入黑名單的「%s」版本"
 
-#: ../DistUpgrade/DistUpgradeCache.py:916
+#: ../DistUpgrade/DistUpgradeCache.py:910
 #, python-format
 msgid "Can't install '%s'"
 msgstr "無法安裝「%s」"
 
-#: ../DistUpgrade/DistUpgradeCache.py:917
+#: ../DistUpgrade/DistUpgradeCache.py:911
 msgid ""
 "It was impossible to install a required package. Please report this as a bug "
 "using 'ubuntu-bug ubuntu-release-upgrader-core' in a terminal."
@@ -193,11 +193,11 @@ msgstr ""
 "無法安裝所需套件。請在終端機使用「ubuntu-bug ubuntu-release-upgrader-core」報"
 "告此問題。"
 
-#: ../DistUpgrade/DistUpgradeCache.py:928
+#: ../DistUpgrade/DistUpgradeCache.py:922
 msgid "Can't guess meta-package"
 msgstr "無法估計元套件 (meta-package)"
 
-#: ../DistUpgrade/DistUpgradeCache.py:929
+#: ../DistUpgrade/DistUpgradeCache.py:923
 #, python-format
 msgid ""
 "Your system does not contain a %s or %s package and it was not possible to "
@@ -1134,7 +1134,23 @@ msgid ""
 "http://help.ubuntu.com/community/EnablingPAE"
 msgstr ""
 
-#: ../DistUpgrade/DistUpgradeQuirks.py:1016
+#: ../DistUpgrade/DistUpgradeQuirks.py:935
+msgid "universe component not enabled"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:936
+#, python-format
+msgid ""
+"You have the package %s installed which is a python2 package. python2 has "
+"been deprecated in Ubuntu 20.04 LTS and is now available from the universe "
+"component of the Ubuntu archive. To ensure any existing third party code you "
+"have installed continues to work the release upgrade process would install "
+"%s for you. However, the universe component of the archive is not enabled on "
+"this system. For the upgrade process to proceed you should either enable the "
+"universe component in /etc/apt/sources.list or remove %s"
+msgstr ""
+
+#: ../DistUpgrade/DistUpgradeQuirks.py:1042
 msgid "Checking for installed snaps"
 msgstr ""
 

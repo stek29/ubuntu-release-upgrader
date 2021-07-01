@@ -163,7 +163,7 @@ class DistUpgradeQuirks(object):
     def PreDistUpgradeCache(self):
         """ run right before calculating the dist-upgrade """
         logging.debug("running Quirks.PreDistUpgradeCache")
-        # self._install_python_is_python2()
+        self._install_python_is_python2()
 
     # individual quirks handler that run *after* the dist-upgrade was
     # calculated in the cache

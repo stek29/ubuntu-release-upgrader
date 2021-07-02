@@ -575,21 +575,12 @@ deb http://old-releases.ubuntu.com/ubuntu %s-security main restricted
         d.openCache(lock=False)
         res = d.updateSourcesList()
         self.assertTrue(res)
-        if ARCH in ('amd64', 'i386'):
-            self._verifySources("""
+        self._verifySources("""
 # main repo
 deb http://archive.ubuntu.com/ubuntu %s main restricted multiverse universe
 deb-src http://archive.ubuntu.com/ubuntu %s main restricted multiverse
 
 deb http://archive.ubuntu.com/ubuntu %s-security main restricted universe multiverse
-""" % (to_dist, to_dist, to_dist))
-        else:
-            self._verifySources("""
-# main repo
-deb http://ports.ubuntu.com/ubuntu-ports/ %s main restricted multiverse universe
-deb-src http://archive.ubuntu.com/ubuntu %s main restricted multiverse
-
-deb http://ports.ubuntu.com/ubuntu-ports/ %s-security main restricted universe multiverse
 """ % (to_dist, to_dist, to_dist))
 
     @mock.patch("DistUpgrade.DistUpgradeController.DistUpgradeController._sourcesListEntryDownloadable")

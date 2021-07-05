@@ -118,7 +118,6 @@ class DistUpgradeQuirks(object):
         self._get_from_and_to_version()
         self._test_and_fail_on_i386()
         self._test_and_fail_on_aufs()
-        self._test_and_fail_on_apple()
 
         cache = self.controller.cache
         self._test_and_warn_if_ros_installed(cache)
@@ -366,27 +365,6 @@ class DistUpgradeQuirks(object):
                         "%s and try again." % aufs_dir)
                 self._view.error(summary, msg)
                 self.controller.abort()
-
-    def _test_and_fail_on_apple(self):
-        """
-        Check to see if the system vendor is Apple and if so do not allow the
-        system to be upgraded. LP: #1928434
-        """
-        if not os.path.exists("/sys/firmware/efi"):
-            return
-        vendor = self._readDMIVendor()
-        if vendor.startswith('Apple Inc.') or \
-                vendor.startswith('Apple Computer, Inc.'):
-            logging.error("System vendor is Apple")
-        else:
-            return
-        summary = _("An upgrade is not possible at this time")
-        msg = _("Due to a bug in shim, LP: #1928434, upgrades are not "
-                "currently safe for your hardware.\n\n"
-                "Once that bug has been resolved you will be able to "
-                "upgrade to the next release of Ubuntu.")
-        self._view.error(summary, msg)
-        self.controller.abort()
 
     def _test_and_warn_if_vserver(self):
         """

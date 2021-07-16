@@ -1,5 +1,7 @@
 ubuntu-release-upgrader (1:21.04.15) UNRELEASED; urgency=medium
 
+  * check-new-release-gtk: use gi.require_version('Gtk', '3.0') to ensure we
+    load the right version. (LP: #1936698)
   * tests/test_sources_list.py: use distro_info to set releases when
     performing some upgrade tests which fixes test failures when precise
     was moved to old-releases, additionally fix some tests for ports.

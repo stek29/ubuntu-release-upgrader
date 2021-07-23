@@ -25,16 +25,12 @@ rm -f ./tests/data-sources-list-test/apt.log
 rm -f ./tests/data-sources-list-test/Ubuntu.mirrors
 
 # update demotions
-max_age=$(($(date +%s) - 3600))
-if [ $(stat -c '%Y' utils/demoted.cfg) -lt $max_age ]; then
-    # echo "Running demotions"
-    (cd utils && ./demotions.py hirsute impish > demoted.cfg)
-fi
+# echo "Running demotions"
+(cd utils && ./demotions.py hirsute impish > demoted.cfg)
+
 # when this gets enabled, make sure to add symlink in DistUpgrade
-if [ $(stat -c "%Y" utils/demoted.cfg.focal) -lt $max_age ]; then
-    # echo "Running lts demotions"
-    (cd utils && ./demotions.py focal impish > demoted.cfg.focal)
-fi
+# echo "Running lts demotions"
+(cd utils && ./demotions.py focal impish > demoted.cfg.focal)
 
 # update apt_btrfs_snapshot.py copy, this needs an installed
 # apt-btrfs-snapshot on the build machine
@@ -89,11 +85,8 @@ DEBRELEASE=$(LC_ALL=C dpkg-parsechangelog | sed -n -e '/^Distribution:/s/^Distri
 
 # cleanup
 rm -rf utils/apt/lists utils/apt/*.bin utils/apt/sources.list
-max_age=$(($(date +%s) - 3600))
-if [ $(stat -c "%Y" data/mirrors.cfg) -lt $max_age ]; then
-    # echo "Running update mirrors"
-    (cd utils && ./update_mirrors.py ../data/mirrors.cfg)
-fi
+# echo "Running update mirrors"
+(cd utils && ./update_mirrors.py ../data/mirrors.cfg)
 
 # update version
 DEBVER=$(LC_ALL=C dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p' | sed s/.*://)

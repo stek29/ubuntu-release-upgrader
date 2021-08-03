@@ -145,6 +145,9 @@ class DistUpgradeQuirks(object):
         if 'ubuntu-desktop-raspi' in cache:
             if cache['ubuntu-desktop-raspi'].is_installed:
                 self._replace_fkms_overlay()
+        if 'linux-firmware-raspi2' in cache:
+            if cache['linux-firmware-raspi2'].is_installed:
+                self._remove_uboot_on_rpi()
 
     # individual quirks handler when the dpkg run is finished ---------
     def PostCleanup(self):
@@ -1193,6 +1196,136 @@ class DistUpgradeQuirks(object):
         try:
             boot_backup_filename = os.path.join(
                 boot_dir, 'config.txt.distUpgrade')
+            with open(boot_backup_filename, 'w', encoding='utf-8') as f:
+                f.write(boot_config)
+        except IOError as exc:
+            logging.error("unable to write boot config backup to %s: %s; %s",
+                          boot_backup_filename, exc, failure_action)
+            return
+        try:
+            with open(boot_config_filename, 'w', encoding='utf-8') as f:
+                f.write(new_config)
+        except IOError as exc:
+            logging.error("unable to write new boot config to %s: %s; %s",
+                          boot_config_filename, exc, failure_action)
+
+    def _remove_uboot_on_rpi(self, boot_dir='/boot/firmware'):
+        failure_action = (
+            "you may need to replace u_boot_* with vmlinuz, and add "
+            "'initramfs initrd.img followkernel' to config.txt on your boot "
+            "partition; see LP: #1936401 for further details")
+        change_prefix = '# commented by do-release-upgrade (LP: #1936401)'
+        added_prefix = '# added by do-release-upgrade (LP: #1936401)'
+        merge_prefix = '# merged from {} by do-release-upgrade (LP: #1936401)'
+
+        try:
+            boot_config_filename = os.path.join(boot_dir, 'config.txt')
+            with open(boot_config_filename, 'r', encoding='utf-8') as f:
+                boot_config = f.read()
+        except FileNotFoundError:
+            logging.error("failed to open boot configuration in %s; %s",
+                          boot_config_filename, failure_action)
+            return
+
+        def replace_uboot(lines):
+            result = []
+            removed_uboot = added_kernel = False
+            for line in lines:
+                if line == '[all]':
+                    # Add the vmlinuz kernel and initrd.img to the first
+                    # encountered [all] section, just in case the user has any
+                    # custom kernel overrides later in the sequence
+                    result.append(line)
+                    if not added_kernel:
+                        result.append(added_prefix)
+                        result.append('kernel=vmlinuz')
+                        result.append('initramfs initrd.img followkernel')
+                        added_kernel = True
+                elif line.startswith('device_tree_address='):
+                    # Disable any device_tree_address= line (leave the boot
+                    # firmware to place this rather than risk trampling over it
+                    # with kernel/initrd)
+                    result.append(change_prefix)
+                    result.append('#' + line)
+                elif line.startswith('kernel=uboot_rpi_'):
+                    # Disable all kernel=uboot_rpi_* lines found in the
+                    # configuration
+                    removed_uboot = True
+                    result.append(change_prefix)
+                    result.append('#' + line)
+                else:
+                    result.append(line)
+            # We don't *want* to touch the config unless we absolutely have to,
+            # and the user may have already performed this conversion (e.g. to
+            # take advantage of USB MSD boot), or otherwise customized their
+            # boot configuration. Hence, if we didn't find (and remove) any
+            # u-boot entries, assume the kernel/initrd config was already fine
+            # and return the verbatim config
+            if removed_uboot:
+                if not added_kernel:
+                    result.append(added_prefix)
+                    result.append('[all]')
+                    result.append('kernel=vmlinuz')
+                    result.append('initramfs initrd.img followkernel')
+                return result
+            else:
+                return lines
+
+        def merge_includes(lines):
+            result = []
+            skip_comments = True
+            found_includes = False
+            for line in lines:
+                # Skip the initial comment block warning that config.txt is not
+                # to be edited (the usercfg.txt and syscfg.txt files were
+                # merged in the groovy release, but not for upgraders)
+                if line.startswith('#') and skip_comments:
+                    continue
+                skip_comments = False
+                if line in ('include syscfg.txt', 'include usercfg.txt'):
+                    # Merge the usercfg.txt and syscfg.txt configuration files
+                    # into config.txt, skipping the initial comments. Note that
+                    # we don't bother with other includes the user has added
+                    # themselves (as they presumably want to keep those)
+                    found_includes = True
+                    included_filename = line.split(maxsplit=1)[1]
+                    result.append(merge_prefix.format(included_filename))
+                    included_filename = os.path.join(boot_dir,
+                                                     included_filename)
+                    skip_comments = True
+                    with open(included_filename, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            if line.startswith('#') and skip_comments:
+                                continue
+                            skip_comments = False
+                            result.append(line.rstrip())
+                    target_filename = included_filename + '.distUpgrade'
+                    try:
+                        os.rename(included_filename, target_filename)
+                    except IOError as exc:
+                        logging.error("failed to move included configuration "
+                                      "from %s to %s; %s", included_filename,
+                                      target_filename, exc)
+                else:
+                    result.append(line)
+            # Again, if we found no includes, return the original verbatim
+            # (i.e. with initial comments intact)
+            if found_includes:
+                return result
+            else:
+                return lines
+
+        lines = [line.rstrip() for line in boot_config.splitlines()]
+        lines = merge_includes(replace_uboot(lines))
+        new_config = ''.join(line + '\n' for line in lines)
+
+        if new_config == boot_config:
+            logging.warning("no u-boot removal performed in %s",
+                            boot_config_filename)
+            return
+
+        try:
+            boot_backup_filename = boot_config_filename + '.distUpgrade'
             with open(boot_backup_filename, 'w', encoding='utf-8') as f:
                 f.write(boot_config)
         except IOError as exc:

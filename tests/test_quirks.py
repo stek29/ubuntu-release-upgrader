@@ -458,13 +458,14 @@ class TestQuirks(unittest.TestCase):
 
     def test_replace_fkms_overlay_no_changes(self):
         with tempfile.TemporaryDirectory() as boot_dir:
-            demo_config = ("# This is a demo boot config\n"
-                           "[pi4\n"
-                           "max_framebuffers=2\n"
-                           "[all]\n"
-                           "arm_64bit=1\n"
-                           "kernel=vmlinuz\n"
-                           "initramfs initrd.img followkernel\n")
+            demo_config = """\
+# This is a demo boot config
+[pi4]
+max_framebuffers=2
+[all]
+arm_64bit=1
+kernel=vmlinuz
+initramfs initrd.img followkernel"""
             with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
                 f.write(demo_config)
 
@@ -480,32 +481,34 @@ class TestQuirks(unittest.TestCase):
 
     def test_replace_fkms_overlay_with_changes(self):
         with tempfile.TemporaryDirectory() as boot_dir:
-            demo_config = (
-                "# This is a demo boot config\n"
-                "[pi4\n"
-                "max_framebuffers=2\n"
-                "[all]\n"
-                "arm_64bit=1\n"
-                "kernel=vmlinuz\n"
-                "initramfs initrd.img followkernel\n"
-                "dtoverlay=vc4-fkms-v3d,cma-256\n"
-                "start_x=1\n"
-                "gpu_mem=256\n")
-            expected_config = (
-                "# This is a demo boot config\n"
-                "[pi4\n"
-                "max_framebuffers=2\n"
-                "[all]\n"
-                "arm_64bit=1\n"
-                "kernel=vmlinuz\n"
-                "initramfs initrd.img followkernel\n"
-                "# changed by do-release-upgrade (LP: #1923673)\n"
-                "#dtoverlay=vc4-fkms-v3d,cma-256\n"
-                "dtoverlay=vc4-kms-v3d,cma-256\n"
-                "# disabled by do-release-upgrade (LP: #1923673)\n"
-                "#start_x=1\n"
-                "# disabled by do-release-upgrade (LP: #1923673)\n"
-                "#gpu_mem=256\n")
+            demo_config = """\
+# This is a demo boot config
+[pi4]
+max_framebuffers=2
+[all]
+arm_64bit=1
+kernel=vmlinuz
+initramfs initrd.img followkernel
+dtoverlay=vc4-fkms-v3d,cma-256
+start_x=1
+gpu_mem=256
+"""
+            expected_config = """\
+# This is a demo boot config
+[pi4]
+max_framebuffers=2
+[all]
+arm_64bit=1
+kernel=vmlinuz
+initramfs initrd.img followkernel
+# changed by do-release-upgrade (LP: #1923673)
+#dtoverlay=vc4-fkms-v3d,cma-256
+dtoverlay=vc4-kms-v3d,cma-256
+# disabled by do-release-upgrade (LP: #1923673)
+#start_x=1
+# disabled by do-release-upgrade (LP: #1923673)
+#gpu_mem=256
+"""
             with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
                 f.write(demo_config)
 
@@ -518,6 +521,203 @@ class TestQuirks(unittest.TestCase):
                 boot_dir, 'config.txt.distUpgrade')))
             with open(os.path.join(boot_dir, 'config.txt')) as f:
                 self.assertTrue(f.read() == expected_config)
+
+    def test_remove_uboot_no_config(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            mock_controller = mock.Mock()
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+            q._remove_uboot_on_rpi(boot_dir)
+
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+
+    def test_remove_uboot_no_changes(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            native_config = """\
+# This is a demo boot config with a comment at the start that should not
+# be removed
+
+[pi4]
+max_framebuffers=2
+
+[all]
+arm_64bit=1
+kernel=vmlinuz
+initramfs initrd.img followkernel
+
+# This is a user-added include that should not be merged
+include custom.txt
+"""
+            custom_config = """\
+# This is the custom included configuration file
+
+hdmi_group=1
+hdmi_mode=4
+"""
+            with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
+                f.write(native_config)
+            with open(os.path.join(boot_dir, 'custom.txt'), 'w') as f:
+                f.write(custom_config)
+
+            mock_controller = mock.Mock()
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+            q._remove_uboot_on_rpi(boot_dir)
+
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'custom.txt.distUpgrade')))
+            with open(os.path.join(boot_dir, 'config.txt')) as f:
+                self.assertTrue(f.read() == native_config)
+            with open(os.path.join(boot_dir, 'custom.txt')) as f:
+                self.assertTrue(f.read() == custom_config)
+
+    def test_remove_uboot_with_changes(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            config_txt = """\
+# This is a warning that you should not edit this file. The upgrade should
+# remove this comment
+
+[pi4]
+# This is a comment that should be included
+kernel=uboot_rpi_4.bin
+max_framebuffers=2
+
+[pi2]
+kernel=uboot_rpi_2.bin
+
+[pi3]
+kernel=uboot_rpi_3.bin
+
+[all]
+arm_64bit=1
+device_tree_address=0x3000000
+include syscfg.txt
+include usercfg.txt
+dtoverlay=vc4-fkms-v3d,cma-256
+include custom.txt
+"""
+            usercfg_txt = """\
+# Another chunk of warning text that should be skipped
+"""
+            syscfg_txt = """\
+# Yet more warnings to exclude
+dtparam=audio=on
+dtparam=spi=on
+enable_uart=1
+"""
+            custom_txt = """\
+# This is a user-added file that should be left alone by the upgrade
+[gpio4=1]
+kernel=custom
+"""
+            expected_config_txt = """\
+
+[pi4]
+# This is a comment that should be included
+# commented by do-release-upgrade (LP: #1936401)
+#kernel=uboot_rpi_4.bin
+max_framebuffers=2
+
+[pi2]
+# commented by do-release-upgrade (LP: #1936401)
+#kernel=uboot_rpi_2.bin
+
+[pi3]
+# commented by do-release-upgrade (LP: #1936401)
+#kernel=uboot_rpi_3.bin
+
+[all]
+# added by do-release-upgrade (LP: #1936401)
+kernel=vmlinuz
+initramfs initrd.img followkernel
+arm_64bit=1
+# commented by do-release-upgrade (LP: #1936401)
+#device_tree_address=0x3000000
+# merged from syscfg.txt by do-release-upgrade (LP: #1936401)
+dtparam=audio=on
+dtparam=spi=on
+enable_uart=1
+# merged from usercfg.txt by do-release-upgrade (LP: #1936401)
+dtoverlay=vc4-fkms-v3d,cma-256
+include custom.txt
+"""
+            with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
+                f.write(config_txt)
+            with open(os.path.join(boot_dir, 'syscfg.txt'), 'w') as f:
+                f.write(syscfg_txt)
+            with open(os.path.join(boot_dir, 'usercfg.txt'), 'w') as f:
+                f.write(usercfg_txt)
+            with open(os.path.join(boot_dir, 'custom.txt'), 'w') as f:
+                f.write(custom_txt)
+
+            mock_controller = mock.Mock()
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+            q._remove_uboot_on_rpi(boot_dir)
+
+            self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+            self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'syscfg.txt.distUpgrade')))
+            self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'usercfg.txt.distUpgrade')))
+            self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'custom.txt')))
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'syscfg.txt')))
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'usercfg.txt')))
+            self.assertFalse(os.path.exists(os.path.join(
+                boot_dir, 'custom.txt.distUpgrade')))
+            with open(os.path.join(boot_dir, 'config.txt')) as f:
+                self.assertTrue(f.read() == expected_config_txt)
+            with open(os.path.join(boot_dir, 'custom.txt')) as f:
+                self.assertTrue(f.read() == custom_txt)
+
+    def test_remove_uboot_no_all_section(self):
+        with tempfile.TemporaryDirectory() as boot_dir:
+            config_txt = """\
+arm_64bit=1
+device_tree_address=0x3000000
+
+[pi4]
+# This is a comment that should be included
+kernel=uboot_rpi_4.bin
+max_framebuffers=2
+
+[pi3]
+kernel=uboot_rpi_3.bin
+"""
+            expected_config_txt = """\
+arm_64bit=1
+# commented by do-release-upgrade (LP: #1936401)
+#device_tree_address=0x3000000
+
+[pi4]
+# This is a comment that should be included
+# commented by do-release-upgrade (LP: #1936401)
+#kernel=uboot_rpi_4.bin
+max_framebuffers=2
+
+[pi3]
+# commented by do-release-upgrade (LP: #1936401)
+#kernel=uboot_rpi_3.bin
+# added by do-release-upgrade (LP: #1936401)
+[all]
+kernel=vmlinuz
+initramfs initrd.img followkernel
+"""
+            with open(os.path.join(boot_dir, 'config.txt'), 'w') as f:
+                f.write(config_txt)
+
+            mock_controller = mock.Mock()
+            q = DistUpgradeQuirks(mock_controller, mock.Mock())
+            q._remove_uboot_on_rpi(boot_dir)
+
+            self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'config.txt.distUpgrade')))
+            with open(os.path.join(boot_dir, 'config.txt')) as f:
+                self.assertTrue(f.read() == expected_config_txt)
 
 
 class TestSnapQuirks(unittest.TestCase):

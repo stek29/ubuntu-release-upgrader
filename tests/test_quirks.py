@@ -662,6 +662,8 @@ include custom.txt
             self.assertTrue(os.path.exists(os.path.join(
                 boot_dir, 'usercfg.txt.distUpgrade')))
             self.assertTrue(os.path.exists(os.path.join(
+                boot_dir, 'config.txt')))
+            self.assertTrue(os.path.exists(os.path.join(
                 boot_dir, 'custom.txt')))
             self.assertFalse(os.path.exists(os.path.join(
                 boot_dir, 'syscfg.txt')))

@@ -1160,7 +1160,7 @@ class DistUpgradeQuirks(object):
 
     def _replace_fkms_overlay(self, boot_dir='/boot/firmware'):
         failure_action = (
-            "you may need to replace the vc4-fkms-v3d overlay with "
+            "You may need to replace the vc4-fkms-v3d overlay with "
             "vc4-kms-v3d in config.txt on your boot partition")
 
         try:
@@ -1210,10 +1210,13 @@ class DistUpgradeQuirks(object):
                           boot_config_filename, exc, failure_action)
 
     def _remove_uboot_on_rpi(self, boot_dir='/boot/firmware'):
+        kernel_line = 'kernel=vmlinuz'
+        initramfs_line = 'initramfs initrd.img followkernel' 
         failure_action = (
-            "you may need to replace u_boot_* with vmlinuz, and add "
-            "'initramfs initrd.img followkernel' to config.txt on your boot "
+            "You may need to replace u_boot_* with vmlinuz, and add "
+            "{initramfs_line!r} to config.txt on your boot "
             "partition; see LP: #1936401 for further details")
+        failure_action = failure_action.format(initramfs_line=initramfs_line)
         change_prefix = '# commented by do-release-upgrade (LP: #1936401)'
         added_prefix = '# added by do-release-upgrade (LP: #1936401)'
         merge_prefix = '# merged from {} by do-release-upgrade (LP: #1936401)'
@@ -1238,8 +1241,8 @@ class DistUpgradeQuirks(object):
                     result.append(line)
                     if not added_kernel:
                         result.append(added_prefix)
-                        result.append('kernel=vmlinuz')
-                        result.append('initramfs initrd.img followkernel')
+                        result.append(kernel_line)
+                        result.append(initramfs_line)
                         added_kernel = True
                 elif line.startswith('device_tree_address='):
                     # Disable any device_tree_address= line (leave the boot
@@ -1265,8 +1268,8 @@ class DistUpgradeQuirks(object):
                 if not added_kernel:
                     result.append(added_prefix)
                     result.append('[all]')
-                    result.append('kernel=vmlinuz')
-                    result.append('initramfs initrd.img followkernel')
+                    result.append(kernel_line)
+                    result.append(initramfs_line)
                 return result
             else:
                 return lines
@@ -1316,7 +1319,7 @@ class DistUpgradeQuirks(object):
                 return lines
 
         lines = [line.rstrip() for line in boot_config.splitlines()]
-        lines = merge_includes(replace_uboot(lines))
+        lines = replace_uboot(merge_includes(lines))
         new_config = ''.join(line + '\n' for line in lines)
 
         if new_config == boot_config:

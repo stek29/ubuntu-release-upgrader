@@ -755,6 +755,10 @@ class TestSnapQuirks(unittest.TestCase):
                 make_mock_pkg(
                     name="core18",
                     is_installed=True),
+            'firefox':
+                make_mock_pkg(
+                    name="firefox",
+                    is_installed=True),
             'gnome-3-28-1804':
                 make_mock_pkg(
                     name="gnome-3-28-1804",
@@ -795,7 +799,16 @@ class TestSnapQuirks(unittest.TestCase):
                 'channel': 'stable',
                 'command': 'install',
                 'deb': None, 'snap-id': '1234'},
+             'firefox': {
+                'channel': 'stable/ubuntu-19.10',
+                'command': 'install',
+                'deb': 'firefox',
+                'snap-id': '1234'},
              'gnome-3-34-1804': {
+                'channel': 'stable/ubuntu-19.10',
+                'command': 'install',
+                'deb': None, 'snap-id': '1234'},
+             'gnome-3-38-2004': {
                 'channel': 'stable/ubuntu-19.10',
                 'command': 'install',
                 'deb': None, 'snap-id': '1234'},

@@ -59,6 +59,8 @@ class DistUpgradeFetcherCore(object):
             sys.stderr.write(msg + "\n")
 
     def showReleaseNotes(self):
+        if '--frontend=DistUpgradeViewNonInteractive' in self.run_options:
+            return True
         if self.new_dist.releaseNotesURI is not None:
             uri = self._expandUri(self.new_dist.releaseNotesURI)
             timeout = socket.getdefaulttimeout()
